@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
 
 export const metadata: Metadata = {
-  title: 'OptometryConnect',
+  title: 'OptoConnect',
   description: 'A directory for optometry students and professionals to connect.',
 };
 

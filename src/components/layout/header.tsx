@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Eye } from 'lucide-react';
+import { Eye, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function Header() {
@@ -10,12 +10,15 @@ export function Header() {
           <div className="bg-primary/10 p-2 rounded-lg">
             <Eye className="h-6 w-6 text-primary" />
           </div>
-          <span className="font-headline hidden sm:inline">OptometryConnect</span>
+          <span className="font-headline hidden sm:inline">OptoConnect</span>
         </Link>
         <div className="flex items-center gap-2">
-            {/* Future auth buttons can go here */}
-            {/* <Button variant="ghost">Log In</Button>
-            <Button>Sign Up</Button> */}
+            <Button asChild>
+              <Link href="/join">
+                <UserPlus />
+                Join Directory
+              </Link>
+            </Button>
         </div>
       </div>
     </header>

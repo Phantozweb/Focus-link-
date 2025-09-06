@@ -1,4 +1,4 @@
-# OptometryConnect
+# OptoConnect
 
 This is a Next.js application that serves as a directory for optometry students and professionals to connect.
 
