@@ -4,6 +4,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,6 +24,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const workExperienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -77,6 +79,8 @@ const formSchema = z.object({
 
 export default function JoinPage() {
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState('individual');
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -115,6 +119,16 @@ export default function JoinPage() {
 
   const avatarRef = form.register("avatar");
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    // Reset type when switching tabs to avoid invalid combinations
+    if (value === 'individual') {
+      form.setValue('type', 'Student');
+    } else {
+      form.setValue('type', 'Association');
+    }
+  }
+
   return (
     <div className="container mx-auto max-w-3xl py-12 px-4 sm:px-6 lg:px-8">
       <Card>
@@ -125,46 +139,57 @@ export default function JoinPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="space-y-6">
-                <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Basic Information</h3>
+             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="individual">Individual</TabsTrigger>
+                <TabsTrigger value="organization">Organization</TabsTrigger>
+              </TabsList>
+
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 
-                 <FormField
+                <FormField
                   control={form.control}
                   name="type"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
                       <FormLabel>I am a...</FormLabel>
-                      <FormControl>
+                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                           className="flex flex-wrap gap-4"
                         >
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Student" /></FormControl>
-                            <FormLabel className="font-normal">Student</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Optometrist" /></FormControl>
-                            <FormLabel className="font-normal">Optometrist</FormLabel>
-                          </FormItem>
-                           <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Academic" /></FormControl>
-                            <FormLabel className="font-normal">Academic / Lecturer</FormLabel>
-                          </FormItem>
-                           <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Researcher" /></FormControl>
-                            <FormLabel className="font-normal">Researcher</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Association" /></FormControl>
-                            <FormLabel className="font-normal">Association</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="College" /></FormControl>
-                            <FormLabel className="font-normal">College / University</FormLabel>
-                          </FormItem>
+                          {activeTab === 'individual' ? (
+                            <>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Student" /></FormControl>
+                                <FormLabel className="font-normal">Student</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Optometrist" /></FormControl>
+                                <FormLabel className="font-normal">Optometrist</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Academic" /></FormControl>
+                                <FormLabel className="font-normal">Academic / Lecturer</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Researcher" /></FormControl>
+                                <FormLabel className="font-normal">Researcher</FormLabel>
+                              </FormItem>
+                            </>
+                          ) : (
+                            <>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Association" /></FormControl>
+                                <FormLabel className="font-normal">Association</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="College" /></FormControl>
+                                <FormLabel className="font-normal">College / University</FormLabel>
+                              </FormItem>
+                            </>
+                          )}
                         </RadioGroup>
                       </FormControl>
                       <FormMessage />
@@ -172,228 +197,210 @@ export default function JoinPage() {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isIndividual ? 'Full Name' : 'Organization Name'}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={isIndividual ? "e.g. Dr. Jane Doe" : "e.g. National Optometry Board"} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="avatar"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isIndividual ? 'Profile Picture' : 'Logo'}</FormLabel>
-                      <FormControl>
-                        <Input type="file" accept="image/*" {...avatarRef} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-
-                <FormField
-                  control={form.control}
-                  name="experience"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isIndividual ? 'Experience Level (Headline)' : 'Tagline'}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={isIndividual ? "e.g. 3rd Year Student or 10+ years in Pediatric Optometry" : "e.g. Advancing the Profession of Optometry"}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Location</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g. New York, NY" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isIndividual ? 'Bio' : 'Description'}</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder={isIndividual ? "Tell us a little bit about yourself, your passions, and your goals." : "Describe your organization's mission and values."}
-                          className="resize-none"
-                          rows={5}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {isIndividual && (
-                <>
-                  <Separator />
-
-                  {/* Work Experience Section */}
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Work Experience</h3>
-                    {workFields.map((field, index) => (
-                      <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
-                        <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeWork(index)}>
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Remove experience</span>
-                          </Button>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={form.control} name={`workExperience.${index}.title`} render={({ field }) => (
-                              <FormItem><FormLabel>Job Title</FormLabel><FormControl><Input {...field} placeholder="e.g. Associate Optometrist" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name={`workExperience.${index}.company`} render={({ field }) => (
-                              <FormItem><FormLabel>Company</FormLabel><FormControl><Input {...field} placeholder="e.g. City Eye Care" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name={`workExperience.${index}.startDate`} render={({ field }) => (
-                              <FormItem><FormLabel>Start Date</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. Jan 2020" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name={`workExperience.${index}.endDate`} render={({ field }) => (
-                              <FormItem><FormLabel>End Date</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. Present" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                          </div>
-                          <FormField control={form.control} name={`workExperience.${index}.description`} render={({ field }) => (
-                              <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} placeholder="Describe your responsibilities and achievements."/></FormControl><FormMessage /></FormItem>
-                          )} />
-                      </div>
-                    ))}
-                    <Button type="button" variant="outline" onClick={() => addWork({ title: '', company: '', startDate: '', endDate: '', description: '' })}>
-                      <PlusCircle className="mr-2" /> Add Experience
-                    </Button>
-                  </div>
-
-                  <Separator />
-
-                  {/* Education Section */}
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Education</h3>
-                    {eduFields.map((field, index) => (
-                      <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
-                        <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeEdu(index)}>
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Remove education</span>
-                          </Button>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={form.control} name={`education.${index}.school`} render={({ field }) => (
-                                <FormItem><FormLabel>School / University</FormLabel><FormControl><Input {...field} placeholder="e.g. SUNY College of Optometry" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name={`education.${index}.degree`} render={({ field }) => (
-                              <FormItem><FormLabel>Degree</FormLabel><FormControl><Input {...field} placeholder="e.g. Doctor of Optometry (OD)" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name={`education.${index}.fieldOfStudy`} render={({ field }) => (
-                              <FormItem><FormLabel>Field of Study</FormLabel><FormControl><Input {...field} placeholder="e.g. Optometry" /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <div className="grid grid-cols-2 gap-4">
-                              <FormField control={form.control} name={`education.${index}.startYear`} render={({ field }) => (
-                                  <FormItem><FormLabel>Start Year</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. 2021" /></FormControl><FormMessage /></FormItem>
-                              )} />
-                              <FormField control={form.control} name={`education.${index}.endYear`} render={({ field }) => (
-                                <FormItem><FormLabel>End Year</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. 2025" /></FormControl><FormMessage /></FormItem>
-                              )} />
-                            </div>
-                          </div>
-                      </div>
-                    ))}
-                    <Button type="button" variant="outline" onClick={() => addEdu({ school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' })}>
-                      <PlusCircle className="mr-2" /> Add Education
-                    </Button>
-                  </div>
-                </>
-              )}
-
-               <Separator />
-              
-               <div className="space-y-6">
-                <h3 className="text-lg font-medium leading-6 text-foreground font-headline">{isIndividual ? 'Skills & Links' : 'Details & Links'}</h3>
-                
-                {/* Skills Section */}
-                <div className="space-y-4">
-                  <FormLabel>{isIndividual ? 'Skills' : 'Focus Areas'}</FormLabel>
-                   <FormDescription>
-                    {isIndividual ? 'List your key skills. Click the button to add more.' : 'List your main areas of focus (e.g., Continuing Education, Advocacy, Student Resources).'}
-                   </FormDescription>
-                  {skillFields.map((field, index) => (
-                    <FormField
-                      key={field.id}
-                      control={form.control}
-                      name={`skills.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <div className="flex items-center gap-2">
-                            <FormControl>
-                              <Input placeholder={isIndividual ? "e.g. Pediatric Optometry" : "e.g. Continuing Education"} {...field} />
-                            </FormControl>
-                            <Button type="button" variant="ghost" size="icon" onClick={() => removeSkill(index)} disabled={skillFields.length <= 1}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                  <Button type="button" variant="outline" onClick={() => addSkill({ value: '' })}>
-                    <PlusCircle className="mr-2" /> {isIndividual ? 'Add Skill' : 'Add Focus Area'}
-                  </Button>
-                </div>
-
-
-                <FormField
-                  control={form.control}
-                  name="interests"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isIndividual ? 'Interests' : 'Keywords'}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={isIndividual ? "e.g. Community Health, Clinical Research" : "e.g. Conference, Accreditation, Research Grants"}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Please provide a comma-separated list.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {isIndividual && (
-                   <FormField
+                <div className="space-y-6">
+                  <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Basic Information</h3>
+                  
+                  <FormField
                     control={form.control}
-                    name="languages"
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Languages</FormLabel>
+                        <FormLabel>{isIndividual ? 'Full Name' : 'Organization Name'}</FormLabel>
+                        <FormControl>
+                          <Input placeholder={isIndividual ? "e.g. Dr. Jane Doe" : "e.g. National Optometry Board"} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="avatar"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{isIndividual ? 'Profile Picture' : 'Logo'}</FormLabel>
+                        <FormControl>
+                          <Input type="file" accept="image/*" {...avatarRef} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+
+                  <FormField
+                    control={form.control}
+                    name="experience"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{isIndividual ? 'Experience Level (Headline)' : 'Tagline'}</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="e.g. English, Spanish"
+                            placeholder={isIndividual ? "e.g. 3rd Year Student or 10+ years in Pediatric Optometry" : "e.g. Advancing the Profession of Optometry"}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Location</FormLabel>
+                        <FormControl>
+                          <Input placeholder="e.g. New York, NY" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="bio"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{isIndividual ? 'Bio' : 'Description'}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder={isIndividual ? "Tell us a little bit about yourself, your passions, and your goals." : "Describe your organization's mission and values."}
+                            className="resize-none"
+                            rows={5}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {isIndividual && (
+                  <>
+                    <Separator />
+
+                    {/* Work Experience Section */}
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Work Experience</h3>
+                      {workFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
+                          <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeWork(index)}>
+                              <Trash2 className="h-4 w-4" />
+                              <span className="sr-only">Remove experience</span>
+                            </Button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <FormField control={form.control} name={`workExperience.${index}.title`} render={({ field }) => (
+                                <FormItem><FormLabel>Job Title</FormLabel><FormControl><Input {...field} placeholder="e.g. Associate Optometrist" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name={`workExperience.${index}.company`} render={({ field }) => (
+                                <FormItem><FormLabel>Company</FormLabel><FormControl><Input {...field} placeholder="e.g. City Eye Care" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name={`workExperience.${index}.startDate`} render={({ field }) => (
+                                <FormItem><FormLabel>Start Date</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. Jan 2020" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name={`workExperience.${index}.endDate`} render={({ field }) => (
+                                <FormItem><FormLabel>End Date</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. Present" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                            </div>
+                            <FormField control={form.control} name={`workExperience.${index}.description`} render={({ field }) => (
+                                <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} placeholder="Describe your responsibilities and achievements."/></FormControl><FormMessage /></FormItem>
+                            )} />
+                        </div>
+                      ))}
+                      <Button type="button" variant="outline" onClick={() => addWork({ title: '', company: '', startDate: '', endDate: '', description: '' })}>
+                        <PlusCircle className="mr-2" /> Add Experience
+                      </Button>
+                    </div>
+
+                    <Separator />
+
+                    {/* Education Section */}
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Education</h3>
+                      {eduFields.map((field, index) => (
+                        <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
+                          <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeEdu(index)}>
+                              <Trash2 className="h-4 w-4" />
+                              <span className="sr-only">Remove education</span>
+                            </Button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <FormField control={form.control} name={`education.${index}.school`} render={({ field }) => (
+                                  <FormItem><FormLabel>School / University</FormLabel><FormControl><Input {...field} placeholder="e.g. SUNY College of Optometry" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name={`education.${index}.degree`} render={({ field }) => (
+                                <FormItem><FormLabel>Degree</FormLabel><FormControl><Input {...field} placeholder="e.g. Doctor of Optometry (OD)" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name={`education.${index}.fieldOfStudy`} render={({ field }) => (
+                                <FormItem><FormLabel>Field of Study</FormLabel><FormControl><Input {...field} placeholder="e.g. Optometry" /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <div className="grid grid-cols-2 gap-4">
+                                <FormField control={form.control} name={`education.${index}.startYear`} render={({ field }) => (
+                                    <FormItem><FormLabel>Start Year</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. 2021" /></FormControl><FormMessage /></FormItem>
+                                )} />
+                                <FormField control={form.control} name={`education.${index}.endYear`} render={({ field }) => (
+                                  <FormItem><FormLabel>End Year</FormLabel><FormControl><Input type="text" {...field} placeholder="e.g. 2025" /></FormControl><FormMessage /></FormItem>
+                                )} />
+                              </div>
+                            </div>
+                        </div>
+                      ))}
+                      <Button type="button" variant="outline" onClick={() => addEdu({ school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' })}>
+                        <PlusCircle className="mr-2" /> Add Education
+                      </Button>
+                    </div>
+                  </>
+                )}
+
+                <Separator />
+                
+                <div className="space-y-6">
+                  <h3 className="text-lg font-medium leading-6 text-foreground font-headline">{isIndividual ? 'Skills & Links' : 'Details & Links'}</h3>
+                  
+                  {/* Skills Section */}
+                  <div className="space-y-4">
+                    <FormLabel>{isIndividual ? 'Skills' : 'Focus Areas'}</FormLabel>
+                    <FormDescription>
+                      {isIndividual ? 'List your key skills. Click the button to add more.' : 'List your main areas of focus (e.g., Continuing Education, Advocacy, Student Resources).'}
+                    </FormDescription>
+                    {skillFields.map((field, index) => (
+                      <FormField
+                        key={field.id}
+                        control={form.control}
+                        name={`skills.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex items-center gap-2">
+                              <FormControl>
+                                <Input placeholder={isIndividual ? "e.g. Pediatric Optometry" : "e.g. Continuing Education"} {...field} />
+                              </FormControl>
+                              <Button type="button" variant="ghost" size="icon" onClick={() => removeSkill(index)} disabled={skillFields.length <= 1}>
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                    <Button type="button" variant="outline" onClick={() => addSkill({ value: '' })}>
+                      <PlusCircle className="mr-2" /> {isIndividual ? 'Add Skill' : 'Add Focus Area'}
+                    </Button>
+                  </div>
+
+
+                  <FormField
+                    control={form.control}
+                    name="interests"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{isIndividual ? 'Interests' : 'Keywords'}</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={isIndividual ? "e.g. Community Health, Clinical Research" : "e.g. Conference, Accreditation, Research Grants"}
                             {...field}
                           />
                         </FormControl>
@@ -404,49 +411,71 @@ export default function JoinPage() {
                       </FormItem>
                     )}
                   />
-                )}
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isOrg ? 'Contact Email' : 'Email'} (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder={isOrg ? "info@example.com" : "jane.doe@example.com"}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  {isIndividual && (
+                    <FormField
+                      control={form.control}
+                      name="languages"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Languages</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. English, Spanish"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Please provide a comma-separated list.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   )}
-                />
 
-                <FormField
-                  control={form.control}
-                  name="linkedin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{isIndividual ? 'LinkedIn Profile URL' : 'Website URL'} (Optional)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={isIndividual ? "e.g. https://linkedin.com/in/janedoe" : "e.g. https://example.com"}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-               </div>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{isOrg ? 'Contact Email' : 'Email'} (Optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder={isOrg ? "info@example.com" : "jane.doe@example.com"}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="linkedin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{isIndividual ? 'LinkedIn Profile URL' : 'Website URL'} (Optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={isIndividual ? "e.g. https://linkedin.com/in/janedoe" : "e.g. https://example.com"}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
 
-              <Button type="submit" size="lg" className="w-full">
-                Submit for Review
-              </Button>
-            </form>
+                <Button type="submit" size="lg" className="w-full">
+                  Submit for Review
+                </Button>
+              </form>
+            </Tabs>
           </Form>
         </CardContent>
       </Card>
