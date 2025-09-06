@@ -118,20 +118,20 @@ export default function Home() {
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Filter by Location</label>
-            <Select value={locationFilter} onValueChange={(value) => { setLocationFilter(value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+            <Select value={locationFilter} onValueChange={(value) => { setLocationFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
               <SelectTrigger><SelectValue placeholder="All Locations" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Locations</SelectItem>
+                <SelectItem value="all">All Locations</SelectItem>
                 {locations.map(loc => <SelectItem key={loc} value={loc}>{loc}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Filter by Type</label>
-            <Select value={userTypeFilter} onValueChange={(value) => { setUserTypeFilter(value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+            <Select value={userTypeFilter} onValueChange={(value) => { setUserTypeFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
               <SelectTrigger><SelectValue placeholder="All Users" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Users</SelectItem>
+                <SelectItem value="all">All Users</SelectItem>
                 <SelectItem value="Optometrist">Optometrists</SelectItem>
                 <SelectItem value="Student">Students</SelectItem>
               </SelectContent>
@@ -139,10 +139,10 @@ export default function Home() {
           </div>
           <div className="space-y-2">
              <label className="text-sm font-medium">Filter by Specialty</label>
-            <Select value={specialtyFilter} onValueChange={(value) => { setSpecialtyFilter(value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+            <Select value={specialtyFilter} onValueChange={(value) => { setSpecialtyFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
               <SelectTrigger><SelectValue placeholder="All Specialties" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Specialties</SelectItem>
+                <SelectItem value="all">All Specialties</SelectItem>
                 {allSpecialties.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
               </SelectContent>
             </Select>
