@@ -28,6 +28,7 @@ const formSchema = z.object({
   type: z.enum(['Student', 'Optometrist'], {
     required_error: 'You need to select a profile type.',
   }),
+  avatar: z.any().refine(files => files?.length === 1, 'Avatar is required.'),
   registeredNumber: z.string().min(2, {
     message: 'Registration number must be at least 2 characters.',
   }),
@@ -77,6 +78,8 @@ export default function JoinPage() {
     form.reset();
   }
 
+  const avatarRef = form.register("avatar");
+
   return (
     <div className="container mx-auto max-w-2xl py-12 px-4 sm:px-6 lg:px-8">
       <Card>
@@ -96,6 +99,20 @@ export default function JoinPage() {
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. Dr. Jane Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="avatar"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Profile Picture</FormLabel>
+                    <FormControl>
+                      <Input type="file" accept="image/*" {...avatarRef} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
