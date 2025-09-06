@@ -40,27 +40,26 @@ const educationSchema = z.object({
   endYear: z.string().min(4, 'End year is required'),
 });
 
+const skillSchema = z.object({
+  value: z.string().min(1, 'Skill cannot be empty'),
+});
+
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Name must be at least 2 characters.',
   }),
-  type: z.enum(['Student', 'Optometrist'], {
+  type: z.enum(['Student', 'Optometrist', 'Academic', 'Researcher'], {
     required_error: 'You need to select a profile type.',
   }),
   avatar: z.any().refine(files => files?.length === 1, 'Avatar is required.'),
-  registeredNumber: z.string().min(2, {
-    message: 'Registration number must be at least 2 characters.',
-  }),
   experience: z.string().min(2, {
     message: 'Experience must be at least 2 characters.',
   }),
   location: z.string().min(2, {
     message: 'Location must be at least 2 characters.',
   }),
-  specialties: z.string().min(2, {
-    message: 'Please list at least one specialty.',
-  }),
+  skills: z.array(skillSchema).min(1, 'Please list at least one skill.'),
   interests: z.string().min(2, {
     message: 'Please list at least one interest.',
   }),
@@ -83,10 +82,9 @@ export default function JoinPage() {
     defaultValues: {
       name: '',
       type: 'Student',
-      registeredNumber: '',
       experience: '',
       location: '',
-      specialties: '',
+      skills: [{ value: '' }],
       interests: '',
       languages: '',
       bio: '',
@@ -99,6 +97,7 @@ export default function JoinPage() {
 
   const { fields: workFields, add: addWork, remove: removeWork } = useDynamicFields(form, 'workExperience');
   const { fields: eduFields, add: addEdu, remove: removeEdu } = useDynamicFields(form, 'education');
+  const { fields: skillFields, add: addSkill, remove: removeSkill } = useDynamicFields(form, 'skills');
 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -163,7 +162,7 @@ export default function JoinPage() {
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-row space-x-4"
+                          className="flex flex-wrap gap-4"
                         >
                           <FormItem className="flex items-center space-x-2 space-y-0">
                             <FormControl>
@@ -179,21 +178,23 @@ export default function JoinPage() {
                               Optometrist
                             </FormLabel>
                           </FormItem>
+                           <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Academic" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Academic / Lecturer
+                            </FormLabel>
+                          </FormItem>
+                           <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Researcher" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Researcher
+                            </FormLabel>
+                          </FormItem>
                         </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="registeredNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Registration / Student Number</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g. OD-12345" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -326,25 +327,38 @@ export default function JoinPage() {
               
                <div className="space-y-6">
                 <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Skills & Links</h3>
-                <FormField
-                  control={form.control}
-                  name="specialties"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Specialties</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="e.g. Pediatric Optometry, Vision Therapy"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Please provide a comma-separated list.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
+                {/* Skills Section */}
+                <div className="space-y-4">
+                  <FormLabel>Skills</FormLabel>
+                   <FormDescription>
+                    List your key skills. Click the button to add more.
+                   </FormDescription>
+                  {skillFields.map((field, index) => (
+                    <FormField
+                      key={field.id}
+                      control={form.control}
+                      name={`skills.${index}.value`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="flex items-center gap-2">
+                            <FormControl>
+                              <Input placeholder="e.g. Pediatric Optometry" {...field} />
+                            </FormControl>
+                            <Button type="button" variant="ghost" size="icon" onClick={() => removeSkill(index)} disabled={skillFields.length <= 1}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                  <Button type="button" variant="outline" onClick={() => addSkill({ value: '' })}>
+                    <PlusCircle className="mr-2" /> Add Skill
+                  </Button>
+                </div>
+
 
                 <FormField
                   control={form.control}
@@ -433,5 +447,3 @@ export default function JoinPage() {
     </div>
   );
 }
-
-    

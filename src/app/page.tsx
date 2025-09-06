@@ -13,12 +13,12 @@ import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const locations = Array.from(new Set(allUsers.map((user) => user.location)));
-const allSpecialties = Array.from(new Set(allUsers.flatMap((user) => user.specialties)));
+const allSkills = Array.from(new Set(allUsers.flatMap((user) => user.skills)));
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
-  const [specialtyFilter, setSpecialtyFilter] = useState('');
+  const [skillFilter, setSkillFilter] = useState('');
   const [userTypeFilter, setUserTypeFilter] = useState('');
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [displayedUsers, setDisplayedUsers] = useState<UserProfile[]>(allUsers);
@@ -34,10 +34,10 @@ export default function Home() {
       const nameMatch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
       const locationMatch = locationFilter ? user.location === locationFilter : true;
       const typeMatch = userTypeFilter ? user.type === userTypeFilter : true;
-      const specialtyMatch = specialtyFilter ? user.specialties.includes(specialtyFilter) : true;
-      return nameMatch && locationMatch && typeMatch && specialtyMatch;
+      const skillMatch = skillFilter ? user.skills.includes(skillFilter) : true;
+      return nameMatch && locationMatch && typeMatch && skillMatch;
     });
-  }, [searchQuery, locationFilter, specialtyFilter, userTypeFilter, displayedUsers, isShowingSuggestions]);
+  }, [searchQuery, locationFilter, skillFilter, userTypeFilter, displayedUsers, isShowingSuggestions]);
   
   const handleGetSuggestions = async () => {
     setIsLoadingSuggestions(true);
@@ -82,7 +82,7 @@ export default function Home() {
   const clearFilters = () => {
     setSearchQuery('');
     setLocationFilter('');
-    setSpecialtyFilter('');
+    setSkillFilter('');
     setUserTypeFilter('');
     setDisplayedUsers(allUsers);
     setIsShowingSuggestions(false);
@@ -134,16 +134,18 @@ export default function Home() {
                 <SelectItem value="all">All Users</SelectItem>
                 <SelectItem value="Optometrist">Optometrists</SelectItem>
                 <SelectItem value="Student">Students</SelectItem>
+                <SelectItem value="Academic">Academics</SelectItem>
+                <SelectItem value="Researcher">Researchers</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-             <label className="text-sm font-medium">Filter by Specialty</label>
-            <Select value={specialtyFilter} onValueChange={(value) => { setSpecialtyFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
-              <SelectTrigger><SelectValue placeholder="All Specialties" /></SelectTrigger>
+             <label className="text-sm font-medium">Filter by Skill</label>
+            <Select value={skillFilter} onValueChange={(value) => { setSkillFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+              <SelectTrigger><SelectValue placeholder="All Skills" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Specialties</SelectItem>
-                {allSpecialties.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
+                <SelectItem value="all">All Skills</SelectItem>
+                {allSkills.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
@@ -157,7 +159,7 @@ export default function Home() {
             )}
             Suggest Connections
           </Button>
-          {(isShowingSuggestions || locationFilter || specialtyFilter || searchQuery || userTypeFilter) && (
+          {(isShowingSuggestions || locationFilter || skillFilter || searchQuery || userTypeFilter) && (
             <Button variant="outline" onClick={clearFilters}>Clear</Button>
           )}
         </div>

@@ -4,7 +4,7 @@ import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Briefcase, MapPin, ArrowRight } from 'lucide-react';
+import { Briefcase, MapPin, ArrowRight, Lightbulb } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface ProfileCardProps {
@@ -37,10 +37,10 @@ export function ProfileCard({ user }: ProfileCardProps) {
                 <span>{user.experience}</span>
             </div>
             <div className="pt-2">
-                <p className="text-xs font-semibold text-muted-foreground mb-2">Specialties & Interests</p>
+                <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1"><Lightbulb className="h-3 w-3" /> Top Skills</p>
                 <div className="flex flex-wrap gap-2">
-                    {user.specialties.slice(0, 2).map((specialty) => (
-                        <Badge key={specialty} variant="outline" className="text-xs">{specialty}</Badge>
+                    {user.skills.slice(0, 2).map((skill) => (
+                        <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
                     ))}
                 </div>
             </div>

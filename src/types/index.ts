@@ -17,11 +17,10 @@ export type Education = {
 export type UserProfile = {
   id: string;
   name: string;
-  type: 'Optometrist' | 'Student';
-  registeredNumber: string;
+  type: 'Optometrist' | 'Student' | 'Academic' | 'Researcher';
   experience: string;
   location: string;
-  specialties: string[];
+  skills: string[];
   interests: string[];
   bio: string;
   links: {

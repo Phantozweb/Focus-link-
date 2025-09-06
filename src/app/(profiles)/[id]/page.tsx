@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -99,13 +99,6 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
-                        <Stethoscope className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                        <div>
-                          <h3 className="font-semibold">Registration</h3>
-                          <p className="text-muted-foreground">{user.registeredNumber}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-4">
                         <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                         <div>
                           <h3 className="font-semibold">Location</h3>
@@ -153,13 +146,13 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                 )}
               
                 <section>
-                  <h2 className="text-xl font-bold font-headline mb-4">Specialties & Interests</h2>
+                  <h2 className="text-xl font-bold font-headline mb-4">Skills & Interests</h2>
                    <div className="mb-6">
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                          <Stethoscope className="h-5 w-5 text-accent" /> Specialties
+                          <Lightbulb className="h-5 w-5 text-accent" /> Skills
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {user.specialties.map(specialty => <Badge key={specialty} variant="secondary" className="text-sm py-1 px-3">{specialty}</Badge>)}
+                        {user.skills.map(skill => <Badge key={skill} variant="secondary" className="text-sm py-1 px-3">{skill}</Badge>)}
                       </div>
                     </div>
                     <div>
