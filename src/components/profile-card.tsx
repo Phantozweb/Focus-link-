@@ -4,7 +4,7 @@ import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Briefcase, MapPin, ArrowRight, Lightbulb, Building, Award, Stethoscope } from 'lucide-react';
+import { Briefcase, MapPin, ArrowRight, Lightbulb, Building, Award, Stethoscope, Hospital, Glasses } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface ProfileCardProps {
@@ -19,6 +19,8 @@ const getBadgeVariant = (type: UserProfile['type']) => {
       return 'secondary';
     case 'Association':
     case 'College':
+    case 'Hospital':
+    case 'Optical':
       return 'outline';
     default:
       return 'default';
@@ -29,12 +31,14 @@ const getIcon = (type: UserProfile['type']) => {
   switch(type) {
     case 'Association': return <Award className="h-4 w-4 flex-shrink-0" />;
     case 'College': return <Building className="h-4 w-4 flex-shrink-0" />;
+    case 'Hospital': return <Hospital className="h-4 w-4 flex-shrink-0" />;
+    case 'Optical': return <Glasses className="h-4 w-4 flex-shrink-0" />;
     default: return <Briefcase className="h-4 w-4 flex-shrink-0" />;
   }
 }
 
 export function ProfileCard({ user }: ProfileCardProps) {
-  const isOrg = user.type === 'Association' || user.type === 'College';
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(user.type);
 
   return (
     <Link href={`/${user.id}`} className="group">

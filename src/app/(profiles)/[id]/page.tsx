@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -49,7 +49,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
   }
   
   const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(user.type);
-  const isOrg = ['Association', 'College'].includes(user.type);
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(user.type);
 
   return (
     <div className="bg-muted/40">

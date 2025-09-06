@@ -227,4 +227,40 @@ export const users: UserProfile[] = [
     education: [],
     languages: []
   },
+  {
+    id: '11',
+    name: 'Metropolitan General Hospital',
+    type: 'Hospital',
+    experience: 'Comprehensive Ophthalmic Services',
+    location: 'Houston, TX',
+    skills: ['Cataract Surgery', 'Glaucoma Treatment', 'Retinal Disorders', 'Emergency Eye Care'],
+    interests: ['Patient Care', 'Surgical Excellence', 'Community Outreach'],
+    bio: 'A leading hospital providing state-of-the-art ophthalmic services. Our team of dedicated ophthalmologists and optometrists offers comprehensive eye care, from routine exams to complex surgical procedures.',
+    links: {
+      linkedin: 'https://example.com/hospital',
+      email: 'eye.care@metropolitan.org',
+    },
+    avatarUrl: 'https://picsum.photos/128/128?random=11',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
+  {
+    id: '12',
+    name: 'The Visionary Optique',
+    type: 'Optical',
+    experience: 'Designer Eyewear & Advanced Lens Technology',
+    location: 'Los Angeles, CA',
+    skills: ['Luxury Eyewear', 'Custom Lens Fitting', 'Contact Lens Services'],
+    interests: ['Fashion', 'Optical Technology', 'Personalized Service'],
+    bio: 'An exclusive optical boutique offering a curated selection of designer eyewear and the latest in lens technology. Our experienced opticians provide personalized consultations to ensure perfect vision and style.',
+    links: {
+      linkedin: 'https://example.com/optical',
+      email: 'contact@visionaryoptique.com',
+    },
+    avatarUrl: 'https://picsum.photos/128/128?random=12',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
 ];

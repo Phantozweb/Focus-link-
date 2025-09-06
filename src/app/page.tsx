@@ -161,6 +161,8 @@ export default function Home() {
                     <SelectItem value="Researcher">Researchers</SelectItem>
                     <SelectItem value="Association">Associations</SelectItem>
                     <SelectItem value="College">Colleges & Universities</SelectItem>
+                    <SelectItem value="Hospital">Hospitals</SelectItem>
+                    <SelectItem value="Optical">Optical Practices</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
