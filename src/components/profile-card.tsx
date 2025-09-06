@@ -4,7 +4,7 @@ import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Briefcase, MapPin, ArrowRight, Lightbulb, Building, Award } from 'lucide-react';
+import { Briefcase, MapPin, ArrowRight, Lightbulb, Building, Award, Stethoscope } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface ProfileCardProps {

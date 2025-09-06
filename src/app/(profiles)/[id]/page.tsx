@@ -160,7 +160,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                          <Building className="h-5 w-5 text-accent" /> {isIndividual ? 'Interests' : 'Keywords'}
+                          <Stethoscope className="h-5 w-5 text-accent" /> {isIndividual ? 'Interests' : 'Keywords'}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {user.interests.map(interest => <Badge key={interest} variant="outline" className="text-sm py-1 px-3">{interest}</Badge>)}
