@@ -129,6 +129,50 @@ export default function JoinPage() {
     }
   }
 
+  const getOrgSpecificLabel = (field: 'skills' | 'interests') => {
+    if (field === 'skills') {
+      switch (profileType) {
+        case 'Hospital': return 'Services Offered';
+        case 'Optical': return 'Brands Carried';
+        case 'College':
+        case 'Association':
+        default: return 'Focus Areas';
+      }
+    }
+    if (field === 'interests') {
+       switch (profileType) {
+        case 'Hospital': return 'Specialties';
+        case 'Optical': return 'Styles & Services';
+        case 'College': return 'Programs & Research';
+        case 'Association':
+        default: return 'Keywords';
+      }
+    }
+    return '';
+  }
+
+  const getOrgSpecificPlaceholder = (field: 'skills' | 'interests') => {
+     if (field === 'skills') {
+      switch (profileType) {
+        case 'Hospital': return 'e.g. Cataract Surgery';
+        case 'Optical': return 'e.g. Ray-Ban';
+        case 'College':
+        case 'Association':
+        default: return 'e.g. Continuing Education';
+      }
+    }
+    if (field === 'interests') {
+       switch (profileType) {
+        case 'Hospital': return 'e.g. Glaucoma, Pediatrics';
+        case 'Optical': return 'e.g. Luxury Frames, Lens Fitting';
+        case 'College': return 'e.g. OD Program, Vision Science';
+        case 'Association':
+        default: return 'e.g. Conference, Advocacy';
+      }
+    }
+    return '';
+  }
+
   return (
     <div className="container mx-auto max-w-3xl py-12 px-4 sm:px-6 lg:px-8">
       <Card>
@@ -370,9 +414,9 @@ export default function JoinPage() {
                   
                   {/* Skills Section */}
                   <div className="space-y-4">
-                    <FormLabel>{isIndividual ? 'Skills' : 'Focus Areas'}</FormLabel>
+                    <FormLabel>{isIndividual ? 'Skills' : getOrgSpecificLabel('skills')}</FormLabel>
                     <FormDescription>
-                      {isIndividual ? 'List your key skills. Click the button to add more.' : 'List your main areas of focus (e.g., Continuing Education, Advocacy, Student Resources).'}
+                      {isIndividual ? 'List your key skills. Click the button to add more.' : `List your main ${getOrgSpecificLabel('skills').toLowerCase()}.`}
                     </FormDescription>
                     {skillFields.map((field, index) => (
                       <FormField
@@ -383,7 +427,7 @@ export default function JoinPage() {
                           <FormItem>
                             <div className="flex items-center gap-2">
                               <FormControl>
-                                <Input placeholder={isIndividual ? "e.g. Pediatric Optometry" : "e.g. Continuing Education"} {...field} />
+                                <Input placeholder={isIndividual ? "e.g. Pediatric Optometry" : getOrgSpecificPlaceholder('skills')} {...field} />
                               </FormControl>
                               <Button type="button" variant="ghost" size="icon" onClick={() => removeSkill(index)} disabled={skillFields.length <= 1}>
                                 <Trash2 className="h-4 w-4" />
@@ -395,7 +439,7 @@ export default function JoinPage() {
                       />
                     ))}
                     <Button type="button" variant="outline" onClick={() => addSkill({ value: '' })}>
-                      <PlusCircle className="mr-2" /> {isIndividual ? 'Add Skill' : 'Add Focus Area'}
+                      <PlusCircle className="mr-2" /> {isIndividual ? 'Add Skill' : `Add ${getOrgSpecificLabel('skills')}`}
                     </Button>
                   </div>
 
@@ -405,10 +449,10 @@ export default function JoinPage() {
                     name="interests"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{isIndividual ? 'Interests' : 'Keywords'}</FormLabel>
+                        <FormLabel>{isIndividual ? 'Interests' : getOrgSpecificLabel('interests')}</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={isIndividual ? "e.g. Community Health, Clinical Research" : "e.g. Conference, Accreditation, Research Grants"}
+                            placeholder={isIndividual ? "e.g. Community Health, Clinical Research" : getOrgSpecificPlaceholder('interests')}
                             {...field}
                           />
                         </FormControl>

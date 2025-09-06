@@ -51,6 +51,39 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
   const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(user.type);
   const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(user.type);
 
+  const getOrgIcon = () => {
+    switch (user.type) {
+        case 'Hospital': return <Hospital className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
+        case 'Optical': return <Glasses className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
+        case 'Association': return <Globe className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
+        case 'College': return <Building className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
+        default: return <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
+    }
+  }
+  
+  const getOrgSpecificTitle = (type: 'skills' | 'interests') => {
+     if (type === 'skills') {
+      switch (user.type) {
+        case 'Hospital': return 'Services';
+        case 'Optical': return 'Brands';
+        case 'Association':
+        case 'College': 
+        default: return 'Focus Areas';
+      }
+    }
+    if (type === 'interests') {
+       switch (user.type) {
+        case 'Hospital': return 'Specialties';
+        case 'Optical': return 'Styles';
+        case 'Association':
+        case 'College': 
+        default: return 'Keywords';
+      }
+    }
+    return '';
+  }
+
+
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
@@ -95,7 +128,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   <h2 className="text-xl font-bold font-headline mb-4">Details</h2>
                   <div className="space-y-4">
                       <div className="flex items-start gap-4">
-                        <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        {isOrg ? getOrgIcon() : <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />}
                         <div>
                           <h3 className="font-semibold">Role</h3>
                           <p className="text-muted-foreground">{user.type}</p>
@@ -152,7 +185,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   <h2 className="text-xl font-bold font-headline mb-4">{isIndividual ? 'Skills & Interests' : 'Focus Areas & Keywords'}</h2>
                    <div className="mb-6">
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                          <Lightbulb className="h-5 w-5 text-accent" /> {isIndividual ? 'Skills' : 'Focus Areas'}
+                          <Lightbulb className="h-5 w-5 text-accent" /> {isIndividual ? 'Skills' : getOrgSpecificTitle('skills')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {user.skills.map(skill => <Badge key={skill} variant="secondary" className="text-sm py-1 px-3">{skill}</Badge>)}
@@ -160,7 +193,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                          <Stethoscope className="h-5 w-5 text-accent" /> {isIndividual ? 'Interests' : 'Keywords'}
+                          <Stethoscope className="h-5 w-5 text-accent" /> {isIndividual ? 'Interests' : getOrgSpecificTitle('interests')}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {user.interests.map(interest => <Badge key={interest} variant="outline" className="text-sm py-1 px-3">{interest}</Badge>)}
