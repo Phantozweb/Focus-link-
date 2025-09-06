@@ -16,6 +16,32 @@ export const users: UserProfile[] = [
       email: 'e.reed@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=1',
+    workExperience: [
+      {
+        title: 'Lead Optometrist',
+        company: 'NY Vision Associates',
+        startDate: 'Jan 2010',
+        endDate: 'Present',
+        description: 'Leading a team of optometrists and managing complex pediatric vision cases.'
+      },
+      {
+        title: 'Associate Optometrist',
+        company: 'City Eye Care',
+        startDate: 'Aug 2007',
+        endDate: 'Dec 2009',
+        description: 'Provided comprehensive eye care services with a focus on family practice.'
+      }
+    ],
+    education: [
+      {
+        school: 'SUNY College of Optometry',
+        degree: 'Doctor of Optometry (OD)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2003',
+        endYear: '2007'
+      }
+    ],
+    languages: ['English', 'Spanish']
   },
   {
     id: '2',
@@ -32,6 +58,25 @@ export const users: UserProfile[] = [
       email: 's.chen@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=2',
+    workExperience: [
+      {
+        title: 'Optometrist & Founder',
+        company: 'Bay Area Dry Eye Center',
+        startDate: 'Jun 2015',
+        endDate: 'Present',
+        description: 'Established a specialty clinic for dry eye and ocular surface disease.'
+      }
+    ],
+    education: [
+      {
+        school: 'UC Berkeley School of Optometry',
+        degree: 'Doctor of Optometry (OD)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2010',
+        endYear: '2014'
+      }
+    ],
+    languages: ['English', 'Mandarin']
   },
   {
     id: '3',
@@ -48,6 +93,17 @@ export const users: UserProfile[] = [
       email: 'm.garcia@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=3',
+    workExperience: [],
+    education: [
+       {
+        school: 'Nova Southeastern University',
+        degree: 'Doctor of Optometry (OD)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2021',
+        endYear: '2025 (Expected)'
+      }
+    ],
+    languages: ['English', 'Spanish']
   },
   {
     id: '4',
@@ -64,6 +120,9 @@ export const users: UserProfile[] = [
       email: 'b.carter@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=4',
+    workExperience: [],
+    education: [],
+    languages: ['English']
   },
   {
     id: '5',
@@ -80,6 +139,9 @@ export const users: UserProfile[] = [
       email: 'l.johnson@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=5',
+    workExperience: [],
+    education: [],
+    languages: ['English']
   },
   {
     id: '6',
@@ -96,6 +158,9 @@ export const users: UserProfile[] = [
       email: 'c.adams@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=6',
+    workExperience: [],
+    education: [],
+    languages: ['English']
   },
   {
     id: '7',
@@ -111,6 +176,9 @@ export const users: UserProfile[] = [
       email: 'k.tanaka@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=7',
+    workExperience: [],
+    education: [],
+    languages: ['English', 'Japanese']
   },
   {
     id: '8',
@@ -127,5 +195,8 @@ export const users: UserProfile[] = [
       email: 'a.khan@example.com',
     },
     avatarUrl: 'https://picsum.photos/128/128?random=8',
+    workExperience: [],
+    education: [],
+    languages: ['English', 'Urdu']
   },
 ];

@@ -1,3 +1,19 @@
+export type WorkExperience = {
+  title: string;
+  company: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+};
+
+export type Education = {
+  school: string;
+  degree: string;
+  fieldOfStudy: string;
+  startYear: string;
+  endYear: string;
+};
+
 export type UserProfile = {
   id: string;
   name: string;
@@ -13,4 +29,7 @@ export type UserProfile = {
     email?: string;
   };
   avatarUrl: string;
+  workExperience: WorkExperience[];
+  education: Education[];
+  languages: string[];
 };
