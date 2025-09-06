@@ -11,6 +11,8 @@ import { ProfileCard } from '@/components/profile-card';
 import { Loader2, Search, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
 const locations = Array.from(new Set(allUsers.map((user) => user.location)));
 const allSkills = Array.from(new Set(allUsers.flatMap((user) => user.skills)));
@@ -90,116 +92,130 @@ export default function Home() {
 
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="text-center py-8">
-        <h1 className="text-4xl font-headline font-bold text-primary tracking-tight sm:text-5xl lg:text-6xl">Find Your Connection</h1>
-        <p className="mt-4 text-lg text-foreground/80">
-          Discover and connect with professionals, students, and organizations in the optometry field.
-        </p>
-      </div>
-
-      <div className="p-6 bg-card rounded-lg shadow-sm border mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-          <div className="space-y-2">
-            <label htmlFor="search" className="text-sm font-medium">Search by Name</label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                id="search"
-                placeholder="e.g. Dr. Jane Doe"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  if (isShowingSuggestions) setIsShowingSuggestions(false);
-                }}
-                className="pl-10"
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Filter by Location</label>
-            <Select value={locationFilter} onValueChange={(value) => { setLocationFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
-              <SelectTrigger><SelectValue placeholder="All Locations" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
-                {locations.map(loc => <SelectItem key={loc} value={loc}>{loc}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Filter by Type</label>
-            <Select value={userTypeFilter} onValueChange={(value) => { setUserTypeFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
-              <SelectTrigger><SelectValue placeholder="All Users" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Users</SelectItem>
-                <SelectItem value="Optometrist">Optometrists</SelectItem>
-                <SelectItem value="Student">Students</SelectItem>
-                <SelectItem value="Academic">Academics</SelectItem>
-                <SelectItem value="Researcher">Researchers</SelectItem>
-                <SelectItem value="Association">Associations</SelectItem>
-                <SelectItem value="College">Colleges & Universities</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-             <label className="text-sm font-medium">Filter by Skill / Focus Area</label>
-            <Select value={skillFilter} onValueChange={(value) => { setSkillFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
-              <SelectTrigger><SelectValue placeholder="All Skills" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Skills</SelectItem>
-                {allSkills.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
-              </SelectContent>
-            </Select>
+    <>
+      {/* Hero Section */}
+      <section className="bg-primary/10 py-20 md:py-32">
+        <div className="container mx-auto text-center">
+          <h1 className="text-4xl font-headline font-bold text-primary tracking-tight sm:text-5xl lg:text-6xl">
+            The Future of Optometry, Connected.
+          </h1>
+          <p className="mt-6 text-lg max-w-2xl mx-auto text-foreground/80">
+            Discover professionals, students, and organizations. A dedicated directory for the optometry community to thrive together.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" asChild>
+              <Link href="/join">Become a Member</Link>
+            </Button>
+            <Button size="lg" variant="outline" onClick={handleGetSuggestions} disabled={isLoadingSuggestions}>
+              {isLoadingSuggestions ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 h-4 w-4" />
+              )}
+              AI Connection Suggestions
+            </Button>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-4 mt-6">
-          <Button onClick={handleGetSuggestions} disabled={isLoadingSuggestions}>
-            {isLoadingSuggestions ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Sparkles className="mr-2 h-4 w-4" />
+      </section>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Filter Section */}
+        <Card className="mb-8 shadow-lg -mt-32 border-none bg-card">
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+              <div className="space-y-2">
+                <label htmlFor="search" className="text-sm font-medium">Search by Name</label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    id="search"
+                    placeholder="e.g. Dr. Jane Doe"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      if (isShowingSuggestions) setIsShowingSuggestions(false);
+                    }}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Location</label>
+                <Select value={locationFilter} onValueChange={(value) => { setLocationFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+                  <SelectTrigger><SelectValue placeholder="All Locations" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Locations</SelectItem>
+                    {locations.map(loc => <SelectItem key={loc} value={loc}>{loc}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Profile Type</label>
+                <Select value={userTypeFilter} onValueChange={(value) => { setUserTypeFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+                  <SelectTrigger><SelectValue placeholder="All Users" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Users</SelectItem>
+                    <SelectItem value="Optometrist">Optometrists</SelectItem>
+                    <SelectItem value="Student">Students</SelectItem>
+                    <SelectItem value="Academic">Academics</SelectItem>
+                    <SelectItem value="Researcher">Researchers</SelectItem>
+                    <SelectItem value="Association">Associations</SelectItem>
+                    <SelectItem value="College">Colleges & Universities</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                 <label className="text-sm font-medium">Skill / Focus Area</label>
+                <Select value={skillFilter} onValueChange={(value) => { setSkillFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
+                  <SelectTrigger><SelectValue placeholder="All Skills" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Skills</SelectItem>
+                    {allSkills.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+             {(isShowingSuggestions || locationFilter || skillFilter || searchQuery || userTypeFilter) && (
+              <div className="flex justify-center mt-4">
+                <Button variant="ghost" onClick={clearFilters}>Clear Filters</Button>
+              </div>
             )}
-            Suggest Connections for Students
-          </Button>
-          {(isShowingSuggestions || locationFilter || skillFilter || searchQuery || userTypeFilter) && (
-            <Button variant="outline" onClick={clearFilters}>Clear</Button>
-          )}
-        </div>
+          </CardContent>
+        </Card>
+
+        {isShowingSuggestions && (
+          <Alert className="mb-8 bg-primary/10 border-primary/20">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <AlertTitle className="text-primary font-headline">AI-Powered Suggestions</AlertTitle>
+            <AlertDescription>
+              Showing connections suggested for a student interested in Pediatric Optometry.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {isLoadingSuggestions ? (
+          <div className="text-center p-8">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+            <p className="mt-2 text-muted-foreground">Generating AI suggestions...</p>
+          </div>
+        ) : (
+          <>
+            {filteredUsers.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredUsers.map((user) => (
+                  <ProfileCard key={user.id} user={user} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16 px-6 bg-card rounded-lg shadow-sm border">
+                <h3 className="text-xl font-semibold">No Profiles Found</h3>
+                <p className="text-muted-foreground mt-2">Try adjusting your search or filters, or clear them to see all profiles.</p>
+                <Button variant="outline" className="mt-4" onClick={clearFilters}>Clear Filters</Button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-
-      {isShowingSuggestions && (
-        <Alert className="mb-8 bg-primary/10 border-primary/20">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <AlertTitle className="text-primary font-headline">AI-Powered Suggestions</AlertTitle>
-          <AlertDescription>
-            Showing connections suggested for a student interested in Pediatric Optometry.
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {isLoadingSuggestions ? (
-        <div className="text-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-          <p className="mt-2 text-muted-foreground">Generating AI suggestions...</p>
-        </div>
-      ) : (
-        <>
-          {filteredUsers.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredUsers.map((user) => (
-                <ProfileCard key={user.id} user={user} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 px-6 bg-card rounded-lg shadow-sm border">
-              <h3 className="text-xl font-semibold">No Profiles Found</h3>
-              <p className="text-muted-foreground mt-2">Try adjusting your search or filters, or clear them to see all profiles.</p>
-              <Button variant="outline" className="mt-4" onClick={clearFilters}>Clear Filters</Button>
-            </div>
-          )}
-        </>
-      )}
-
-    </div>
+    </>
   );
 }
