@@ -1,6 +1,5 @@
 import { users } from '@/lib/data';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,18 +50,22 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
 
   return (
     <div className="bg-muted/40">
-      <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1 space-y-8">
-            <Card>
-              <CardContent className="p-6 text-center">
-                  <Avatar className="h-32 w-32 border-4 border-background bg-background shadow-lg mx-auto -mt-20">
-                    <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint="portrait person" />
-                    <AvatarFallback className="text-5xl">{user.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <h1 className="text-2xl font-bold font-headline mt-4">{user.name}</h1>
-                  <p className="text-md text-muted-foreground">{user.experience}</p>
-                   <div className="flex items-center justify-center gap-2 mt-4">
+      <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="overflow-hidden">
+          <div className="relative h-48 w-full bg-primary/10">
+            {/* Placeholder for a banner image */}
+          </div>
+          <CardContent className="p-0">
+            <div className="p-6 sm:p-8 -mt-24">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
+                <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
+                  <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint="portrait person" />
+                  <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
+                  <h1 className="text-3xl font-bold font-headline">{user.name}</h1>
+                  <p className="text-lg text-muted-foreground">{user.experience}</p>
+                   <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                     {user.links.email && (
                       <Button asChild variant="outline" size="icon">
                         <a href={`mailto:${user.links.email}`} aria-label="Email">
@@ -78,90 +81,80 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                       </Button>
                     )}
                   </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                  <div className="flex items-start gap-4">
-                  <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold">Role</h3>
-                    <p className="text-muted-foreground">{user.type}</p>
-                  </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <Stethoscope className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold">Registration</h3>
-                    <p className="text-muted-foreground">{user.registeredNumber}</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 sm:p-8 pt-0">
+              {/* Left Column / Details */}
+              <div className="lg:col-span-1 space-y-6">
+                <section>
+                  <h2 className="text-xl font-bold font-headline mb-4">Details</h2>
+                  <div className="space-y-4">
+                      <div className="flex items-start gap-4">
+                        <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-semibold">Role</h3>
+                          <p className="text-muted-foreground">{user.type}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <Stethoscope className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-semibold">Registration</h3>
+                          <p className="text-muted-foreground">{user.registeredNumber}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-semibold">Location</h3>
+                          <p className="text-muted-foreground">{user.location}</p>
+                        </div>
+                      </div>
+                      {user.languages.length > 0 && (
+                        <div className="flex items-start gap-4">
+                          <Languages className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold">Languages</h3>
+                            <p className="text-muted-foreground">{user.languages.join(', ')}</p>
+                          </div>
+                        </div>
+                      )}
                   </div>
-                </div>
-                 <div className="flex items-start gap-4">
-                  <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold">Location</h3>
-                    <p className="text-muted-foreground">{user.location}</p>
-                  </div>
-                </div>
-                {user.languages.length > 0 && (
-                  <div className="flex items-start gap-4">
-                    <Languages className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold">Languages</h3>
-                      <p className="text-muted-foreground">{user.languages.join(', ')}</p>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-          <div className="md:col-span-2 space-y-8">
-             <Card className="overflow-hidden">
-                <div className="relative h-32 w-full bg-primary/10" />
-             </Card>
-            <div className="space-y-8 -mt-[140px] px-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>About</CardTitle>
-                </CardHeader>
-                <CardContent>
+                </section>
+              </div>
+
+              {/* Right Column / Main Content */}
+              <div className="lg:col-span-2 space-y-8">
+                <section>
+                  <h2 className="text-xl font-bold font-headline mb-4">About</h2>
                   <p className="text-foreground/80 whitespace-pre-wrap">{user.bio}</p>
                   <Separator className="my-6" />
                   <ProfileSummary bio={user.bio} />
-                </CardContent>
-              </Card>
-
-              {user.workExperience.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Experience</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {user.workExperience.map((exp, index) => <ExperienceItem key={index} experience={exp} />)}
-                  </CardContent>
-                </Card>
-              )}
+                </section>
+                
+                {user.workExperience.length > 0 && (
+                   <section>
+                    <h2 className="text-xl font-bold font-headline mb-4">Experience</h2>
+                    <div className="space-y-6">
+                      {user.workExperience.map((exp, index) => <ExperienceItem key={index} experience={exp} />)}
+                    </div>
+                  </section>
+                )}
+                
+                {user.education.length > 0 && (
+                   <section>
+                    <h2 className="text-xl font-bold font-headline mb-4">Education</h2>
+                    <div className="space-y-6">
+                      {user.education.map((edu, index) => <EducationItem key={index} education={edu} />)}
+                    </div>
+                  </section>
+                )}
               
-              {user.education.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Education</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {user.education.map((edu, index) => <EducationItem key={index} education={edu} />)}
-                  </CardContent>
-                </Card>
-              )}
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Specialties & Interests</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="mb-6">
+                <section>
+                  <h2 className="text-xl font-bold font-headline mb-4">Specialties & Interests</h2>
+                   <div className="mb-6">
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
                           <Stethoscope className="h-5 w-5 text-accent" /> Specialties
                       </h3>
@@ -177,12 +170,11 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                         {user.interests.map(interest => <Badge key={interest} variant="outline" className="text-sm py-1 px-3">{interest}</Badge>)}
                       </div>
                     </div>
-                </CardContent>
-              </Card>
-
+                </section>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
