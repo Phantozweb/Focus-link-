@@ -94,7 +94,7 @@ export default function Home() {
       <div className="text-center py-8">
         <h1 className="text-4xl font-headline font-bold text-primary tracking-tight sm:text-5xl lg:text-6xl">Find Your Connection</h1>
         <p className="mt-4 text-lg text-foreground/80">
-          Discover and connect with optometrists and students from around the world.
+          Discover and connect with professionals, students, and organizations in the optometry field.
         </p>
       </div>
 
@@ -136,11 +136,13 @@ export default function Home() {
                 <SelectItem value="Student">Students</SelectItem>
                 <SelectItem value="Academic">Academics</SelectItem>
                 <SelectItem value="Researcher">Researchers</SelectItem>
+                <SelectItem value="Association">Associations</SelectItem>
+                <SelectItem value="College">Colleges & Universities</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-             <label className="text-sm font-medium">Filter by Skill</label>
+             <label className="text-sm font-medium">Filter by Skill / Focus Area</label>
             <Select value={skillFilter} onValueChange={(value) => { setSkillFilter(value === 'all' ? '' : value); if (isShowingSuggestions) setIsShowingSuggestions(false); }}>
               <SelectTrigger><SelectValue placeholder="All Skills" /></SelectTrigger>
               <SelectContent>
@@ -157,7 +159,7 @@ export default function Home() {
             ) : (
               <Sparkles className="mr-2 h-4 w-4" />
             )}
-            Suggest Connections
+            Suggest Connections for Students
           </Button>
           {(isShowingSuggestions || locationFilter || skillFilter || searchQuery || userTypeFilter) && (
             <Button variant="outline" onClick={clearFilters}>Clear</Button>

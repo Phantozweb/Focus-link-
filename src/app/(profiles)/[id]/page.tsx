@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -47,6 +47,9 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
   if (!user) {
     notFound();
   }
+  
+  const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(user.type);
+  const isOrg = ['Association', 'College'].includes(user.type);
 
   return (
     <div className="bg-muted/40">
@@ -59,7 +62,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
             <div className="p-6 sm:p-8 -mt-24">
               <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                 <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
-                  <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint="portrait person" />
+                  <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={isOrg ? "logo building" : "portrait person"} />
                   <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
@@ -75,8 +78,8 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     )}
                     {user.links.linkedin && (
                       <Button asChild variant="outline" size="icon">
-                        <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                          <Linkedin className="h-5 w-5" />
+                        <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={isIndividual ? "LinkedIn" : "Website"}>
+                          {isIndividual ? <Linkedin className="h-5 w-5" /> : <Globe className="h-5 w-5" />}
                         </a>
                       </Button>
                     )}
@@ -105,7 +108,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                           <p className="text-muted-foreground">{user.location}</p>
                         </div>
                       </div>
-                      {user.languages.length > 0 && (
+                      {isIndividual && user.languages.length > 0 && (
                         <div className="flex items-start gap-4">
                           <Languages className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                           <div>
@@ -127,7 +130,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   <ProfileSummary bio={user.bio} />
                 </section>
                 
-                {user.workExperience.length > 0 && (
+                {isIndividual && user.workExperience.length > 0 && (
                    <section>
                     <h2 className="text-xl font-bold font-headline mb-4">Experience</h2>
                     <div className="space-y-6">
@@ -136,7 +139,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   </section>
                 )}
                 
-                {user.education.length > 0 && (
+                {isIndividual && user.education.length > 0 && (
                    <section>
                     <h2 className="text-xl font-bold font-headline mb-4">Education</h2>
                     <div className="space-y-6">
@@ -146,10 +149,10 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                 )}
               
                 <section>
-                  <h2 className="text-xl font-bold font-headline mb-4">Skills & Interests</h2>
+                  <h2 className="text-xl font-bold font-headline mb-4">{isIndividual ? 'Skills & Interests' : 'Focus Areas & Keywords'}</h2>
                    <div className="mb-6">
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                          <Lightbulb className="h-5 w-5 text-accent" /> Skills
+                          <Lightbulb className="h-5 w-5 text-accent" /> {isIndividual ? 'Skills' : 'Focus Areas'}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {user.skills.map(skill => <Badge key={skill} variant="secondary" className="text-sm py-1 px-3">{skill}</Badge>)}
@@ -157,7 +160,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                          <Building className="h-5 w-5 text-accent" /> Interests
+                          <Building className="h-5 w-5 text-accent" /> {isIndividual ? 'Interests' : 'Keywords'}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {user.interests.map(interest => <Badge key={interest} variant="outline" className="text-sm py-1 px-3">{interest}</Badge>)}

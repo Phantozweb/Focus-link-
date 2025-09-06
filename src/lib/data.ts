@@ -191,4 +191,40 @@ export const users: UserProfile[] = [
     education: [],
     languages: ['English', 'Urdu']
   },
+  {
+    id: '9',
+    name: 'American Optometric Association',
+    type: 'Association',
+    experience: 'Leading authority on quality eye care',
+    location: 'St. Louis, MO',
+    skills: ['Advocacy', 'Continuing Education', 'Practice Management'],
+    interests: ['Public Health', 'Legislation', 'Member Resources'],
+    bio: 'The American Optometric Association (AOA) is the leading professional organization for optometrists, optometry students, and paraoptometric assistants and technicians. The AOA and its affiliates work to provide the public with quality vision and eye care.',
+    links: {
+      linkedin: 'https://www.aoa.org/',
+      email: 'info@aoa.org',
+    },
+    avatarUrl: 'https://picsum.photos/128/128?random=9',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
+  {
+    id: '10',
+    name: 'UC Berkeley School of Optometry',
+    type: 'College',
+    experience: 'Excellence in education, research, and patient care',
+    location: 'Berkeley, CA',
+    skills: ['Graduate Education', 'Clinical Training', 'Vision Science Research'],
+    interests: ['OD Program', 'PhD Program', 'Residency Programs'],
+    bio: 'The Herbert Wertheim School of Optometry & Vision Science at the University of California, Berkeley is a world-renowned center for clinical and vision science research.',
+    links: {
+      linkedin: 'https://optometry.berkeley.edu/',
+      email: 'optometry@berkeley.edu',
+    },
+    avatarUrl: 'https://picsum.photos/128/128?random=10',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
 ];
