@@ -75,18 +75,18 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Find Your Next Opportunity in Eye Care</h1>
           <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">The world's largest eye care community to find, connect, and grow. Search for professionals, organizations, and resources.</p>
-          <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200 mx-auto">
+          <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
            <div className="flex flex-col md:flex-row gap-2 items-center">
              <div className="flex-grow w-full">
                 <label className="relative flex items-center">
                  <Search className="absolute left-3 text-gray-500 h-5 w-5" />
-                 <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
+                 <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
                </label>
              </div>
              
              <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="w-full md:w-auto h-12">
+                <Button variant="secondary" className="w-full md:w-auto h-12 text-primary hover:bg-gray-200">
                   <SlidersHorizontal className="mr-2 h-5 w-5" />
                   Filters
                 </Button>
@@ -142,7 +142,7 @@ export default function Home() {
               </DialogContent>
             </Dialog>
 
-             <Button className="w-full md:w-auto h-12" onClick={handleSearch}>Search</Button>
+             <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>Search</Button>
            </div>
          </div>
         </div>
@@ -323,6 +323,5 @@ export default function Home() {
     </div>
   );
 }
-
     
     
