@@ -86,7 +86,7 @@ export default function Home() {
              
              <Dialog>
               <DialogTrigger asChild>
-                <Button variant="secondary" className="w-full md:w-auto h-12 text-primary hover:bg-gray-200">
+                <Button className="w-full md:w-auto h-12 bg-white/90 text-primary hover:bg-white">
                   <SlidersHorizontal className="mr-2 h-5 w-5" />
                   Filters
                 </Button>
@@ -307,7 +307,7 @@ export default function Home() {
                         </div>
                         <div className="p-4 border-t bg-muted/50 mt-auto">
                            <Button asChild className="w-full">
-                              <Link href={`/${student.id}`}>View Profile</Link>
+                              <Link href={`/profile/${student.id}`}>View Profile</Link>
                             </Button>
                         </div>
                      </Card>

@@ -3,7 +3,7 @@
 'use client';
 
 import { users } from '@/lib/data';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound, useRouter }dfrom 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

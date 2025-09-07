@@ -51,7 +51,7 @@ export function ProfileCard({ user }: ProfileCardProps) {
               <p className="text-sm text-gray-500 flex-grow mt-2">{user.bio.substring(0,100)}...</p>
               <div className="flex gap-2 mt-4">
                   <Button asChild className="h-10 flex-1" variant="outline">
-                    <Link href={`/${user.id}`}>View Profile</Link>
+                    <Link href={`/profile/${user.id}`}>View Profile</Link>
                   </Button>
               </div>
           </div>
@@ -78,7 +78,7 @@ export function ProfileCard({ user }: ProfileCardProps) {
         </div>
         <div className="flex gap-2 mt-4">
            <Button asChild className="h-10 flex-1" variant="outline">
-              <Link href={`/${user.id}`}>View Profile</Link>
+              <Link href={`/profile/${user.id}`}>View Profile</Link>
             </Button>
         </div>
       </div>
