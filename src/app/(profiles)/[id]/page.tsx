@@ -206,11 +206,13 @@ function AssociationProfile({ user }: { user: UserProfile }) {
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <Button asChild>
-                  <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Join</a>
+                  <a href="#">Join</a>
                 </Button>
+                {user.links.linkedin && (
                 <Button asChild variant="secondary">
-                   <a href={`mailto:${user.links.email}`}>Contact</a>
+                   <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
                 </Button>
+                )}
               </div>
             </div>
             <div className="mt-6">
