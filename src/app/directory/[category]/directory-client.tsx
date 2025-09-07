@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition, useMemo } from 'react';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,12 +14,13 @@ import type { UserProfile } from '@/types';
 export function DirectoryClient({ allUsers, title, category }: { allUsers: UserProfile[], title: string, category: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
   const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
 
   const createQueryString = (newParams: Record<string, string>) => {
-    const currentParams = new URLSearchParams(searchParams);
+    const currentParams = new URLSearchParams(Array.from(searchParams.entries()));
     for (const [key, value] of Object.entries(newParams)) {
       if (value === 'all' || !value) {
         currentParams.delete(key);
@@ -31,39 +32,42 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   };
 
   const handleSearch = () => {
-    const queryString = createQueryString({
-      q: searchTerm,
-      country: selectedCountry,
+     startTransition(() => {
+      const queryString = createQueryString({
+        q: searchTerm,
+        country: selectedCountry,
+      });
+      router.push(`/directory/${category}?${queryString}`);
     });
-    router.push(`/directory/${category}?${queryString}`);
   };
 
   const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedCountry('all');
-    router.push(`/directory/${category}`);
+    startTransition(() => {
+      setSearchTerm('');
+      setSelectedCountry('all');
+      router.push(`/directory/${category}`);
+    });
   };
 
-  const clinicTypes: UserProfile['type'][] = ['Hospital', 'Optical'];
-  const professionalTypes: UserProfile['type'][] = ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'];
-
-  const filteredUsers = allUsers.filter(user => {
+  const filteredUsers = useMemo(() => {
     const searchParam = searchParams.get('q');
     const countryParam = searchParams.get('country');
 
-    const matchesSearch = !searchParam ||
-      user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
-      (user.skills && user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase()))) ||
-      (user.interests && user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase())));
-    
-    const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
+    return allUsers.filter(user => {
+      const matchesSearch = !searchParam ||
+        user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
+        (user.skills && user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase()))) ||
+        (user.interests && user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase())));
+      
+      const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
 
-    return matchesSearch && matchesCountry;
-  });
+      return matchesSearch && matchesCountry;
+    });
+  }, [allUsers, searchParams]);
+
 
   return (
     <div className="bg-background">
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
             <Button variant="outline" onClick={() => router.push('/directory')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -93,13 +97,14 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
                               onChange={(e) => setSearchTerm(e.target.value)}
                               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                               className="pl-10"
+                              disabled={isPending}
                           />
                       </div>
                   </div>
                   
                   <div>
                     <label htmlFor="country" className="sr-only">Country</label>
-                    <Select onValueChange={(v) => setSelectedCountry(v)} value={selectedCountry}>
+                    <Select onValueChange={(v) => setSelectedCountry(v)} value={selectedCountry} disabled={isPending}>
                       <SelectTrigger id="country">
                         <SelectValue placeholder="Select a country" />
                       </SelectTrigger>
@@ -116,8 +121,8 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
                 </div>
 
                 <div className="space-y-2">
-                  <Button onClick={handleSearch} className="w-full">Apply Filters</Button>
-                  <Button onClick={clearFilters} variant="outline" className="w-full">
+                  <Button onClick={handleSearch} className="w-full" disabled={isPending}>Apply Filters</Button>
+                  <Button onClick={clearFilters} variant="outline" className="w-full" disabled={isPending}>
                     Clear Filters
                   </Button>
                 </div>
@@ -143,7 +148,6 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
             </div>
           </main>
         </div>
-      </div>
     </div>
   );
 }
