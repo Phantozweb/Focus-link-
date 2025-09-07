@@ -9,20 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Search, SlidersHorizontal } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import type { UserProfile } from '@/types';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState('all');
   const [selectedCountry, setSelectedCountry] = useState('all');
 
   const handleTypeChange = (type: string) => {
-    setSelectedTypes(prev =>
-      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
-    );
+    setSelectedType(type);
   };
 
   const handleCountryChange = (country: string) => {
@@ -35,7 +32,7 @@ export default function DirectoryPage() {
       user.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
       user.interests.some(interest => interest.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(user.type);
+    const matchesType = selectedType === 'all' || user.type === selectedType;
 
     const matchesCountry = selectedCountry === 'all' || user.location.toLowerCase().includes(selectedCountry.toLowerCase());
 
@@ -72,23 +69,19 @@ export default function DirectoryPage() {
               {/* Profile Type Filter */}
               <div>
                 <h4 className="font-semibold mb-3">Profile Type</h4>
-                <div className="space-y-2">
-                  {profileTypes.map(type => (
-                    <div key={type} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`type-${type}`}
-                        checked={selectedTypes.includes(type)}
-                        onCheckedChange={() => handleTypeChange(type)}
-                      />
-                      <label
-                        htmlFor={`type-${type}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
+                <Select onValueChange={handleTypeChange} value={selectedType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a profile type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    {profileTypes.map(type => (
+                      <SelectItem key={type} value={type}>
                         {type}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Country Filter */}
@@ -109,7 +102,7 @@ export default function DirectoryPage() {
                 </Select>
               </div>
 
-              <Button onClick={() => { setSelectedTypes([]); setSelectedCountry('all'); setSearchTerm(''); }} variant="outline" className="w-full">
+              <Button onClick={() => { setSelectedType('all'); setSelectedCountry('all'); setSearchTerm(''); }} variant="outline" className="w-full">
                 Clear Filters
               </Button>
             </div>
