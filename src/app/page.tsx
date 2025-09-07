@@ -75,11 +75,7 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Find Your Next Opportunity in Eye Care</h1>
           <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">The world's largest eye care community to find, connect, and grow. Search for professionals, organizations, and resources.</p>
-        </div>
-      </section>
-
-      <section className="container mx-auto px-4 -mt-12">
-         <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200 mx-auto">
+          <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200 mx-auto">
            <div className="flex flex-col md:flex-row gap-2 items-center">
              <div className="flex-grow w-full">
                 <label className="relative flex items-center">
@@ -149,6 +145,7 @@ export default function Home() {
              <Button className="w-full md:w-auto h-12" onClick={handleSearch}>Search</Button>
            </div>
          </div>
+        </div>
       </section>
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
@@ -327,4 +324,5 @@ export default function Home() {
   );
 }
 
+    
     
