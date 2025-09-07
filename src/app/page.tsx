@@ -5,7 +5,7 @@ import { users as allUsers } from '@/lib/data';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Globe, Search, SlidersHorizontal, ArrowRight, Calendar, Video, Users as UsersIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -70,17 +70,17 @@ export default function Home() {
   ]
 
   return (
-    <main>
+    <div className="bg-muted/40">
        <section className="relative py-20 md:py-28 bg-white">
-        <div className="container mx-auto px-4 text-center text-gray-800">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Find Your Next Opportunity in Eye Care</h1>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600 mx-auto">Search for professionals, organizations, and resources in the eye care community.</p>
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800 font-headline">Find Your Next Opportunity in Eye Care</h1>
+          <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600 mx-auto">The world's largest eye care community to find, connect, and grow. Search for professionals, organizations, and resources.</p>
             <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200 mx-auto">
                <div className="flex flex-col md:flex-row gap-2 items-center">
                  <div className="flex-grow w-full">
                     <label className="relative flex items-center">
                      <Search className="absolute left-3 text-gray-500 h-5 w-5" />
-                     <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
+                     <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
                    </label>
                  </div>
                  
@@ -148,183 +148,178 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="px-4 md:px-10 lg:px-20 py-16 bg-white">
-        <div className="space-y-16">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
+        
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Professionals</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/professionals">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Professionals</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/professionals">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-            <div className="relative">
-              <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {professionals.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {professionals.map((user) => (
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <ProfileCard user={user} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+            </Carousel>
           </section>
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Associations</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/associations">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/associations">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-             <div className="relative">
-               <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {associations.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+             <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {associations.map((user) => (
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <ProfileCard user={user} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+            </Carousel>
           </section>
           
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Colleges & Schools</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/colleges">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Colleges & Schools</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/colleges">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-             <div className="relative">
-               <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {colleges.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
-          </section>
-          
-          <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Communities</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/associations">View All</a>
-            </div>
-             <div className="relative">
-               <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {associations.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+             <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {colleges.map((user) => (
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <ProfileCard user={user} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+            </Carousel>
           </section>
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Eye Care Clinics &amp; Opticals</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/clinics">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Eye Care Clinics & Opticals</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/clinics">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-            <div className="relative">
-              <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {clinicsAndOpticals.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {clinicsAndOpticals.map((user) => (
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <ProfileCard user={user} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+            </Carousel>
           </section>
           
            <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Industry Partners</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/industry">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Industry Partners</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/industry">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-            <div className="relative">
-              <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {industry.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {industry.map((user) => (
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <ProfileCard user={user} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translatey-1/2" />
+            </Carousel>
           </section>
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Events &amp; Webinars</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Events & Webinars</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="#">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-             <div className="relative">
-              <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {events.map((event, index) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                        <Image src={event.image} alt={event.title} width={400} height={200} className="w-full h-40 object-cover" data-ai-hint="conference room" />
-                        <CardContent className="p-4 flex flex-col flex-grow">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                            {event.icon}
-                            <span>{event.type}</span>
-                            <span className="mx-1">•</span>
-                            <span>{event.date}</span>
-                          </div>
-                          <h3 className="text-lg font-bold text-slate-800 flex-grow">{event.title}</h3>
-                          <Button asChild variant="link" className="p-0 h-auto justify-start mt-4 text-primary">
-                            <Link href="#">Register Now <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+             <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {events.map((event, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                      <Image src={event.image} alt={event.title} width={400} height={200} className="w-full h-40 object-cover" data-ai-hint="conference room" />
+                      <CardContent className="p-4 flex flex-col flex-grow">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                          {event.icon}
+                          <span>{event.type}</span>
+                          <span className="mx-1">•</span>
+                          <span>{event.date}</span>
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800 flex-grow">{event.title}</h3>
+                        <Button asChild variant="link" className="p-0 h-auto justify-start mt-4 text-primary">
+                          <Link href="#">Register Now <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+            </Carousel>
           </section>
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Student Directory</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/students">View All</a>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Student Directory</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/students">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
             </div>
-            <div className="relative">
-              <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {students.map((student) => (
-                    <CarouselItem key={student.id} className="md:basis-1/2 lg:basis-1/4 pl-4">
-                       <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
-                          <div className="p-6 flex flex-col items-center flex-grow">
-                            <Avatar className="h-24 w-24 mb-4">
-                              <AvatarImage src={student.avatarUrl} alt={student.name} data-ai-hint="portrait person" />
-                              <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <h3 className="text-lg font-bold text-slate-800">{student.name}</h3>
-                            <p className="text-sm text-cyan-600">{student.education[0]?.school || 'Optometry Student'}</p>
-                            <p className="text-sm text-muted-foreground mt-2 flex-grow">{student.bio.substring(0,80)}...</p>
-                          </div>
-                          <div className="p-4 border-t mt-auto">
-                             <Button asChild className="w-full">
-                                <Link href={`/${student.id}`}>View Profile</Link>
-                              </Button>
-                          </div>
-                       </Card>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {students.map((student) => (
+                  <CarouselItem key={student.id} className="basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
+                     <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
+                        <div className="p-6 flex flex-col items-center flex-grow">
+                          <Avatar className="h-24 w-24 mb-4 border-2 border-background shadow-md">
+                            <AvatarImage src={student.avatarUrl} alt={student.name} data-ai-hint="portrait person" />
+                            <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <h3 className="text-lg font-bold text-slate-800">{student.name}</h3>
+                          <p className="text-sm text-primary">{student.education[0]?.school || 'Optometry Student'}</p>
+                          <p className="text-sm text-muted-foreground mt-2 flex-grow">{student.bio.substring(0,80)}...</p>
+                        </div>
+                        <div className="p-4 border-t bg-muted/50 mt-auto">
+                           <Button asChild className="w-full">
+                              <Link href={`/${student.id}`}>View Profile</Link>
+                            </Button>
+                        </div>
+                     </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+            </Carousel>
           </section>
 
-        </div>
       </div>
-    </main>
+    </div>
   );
 }
