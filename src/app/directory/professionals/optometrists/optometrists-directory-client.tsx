@@ -53,11 +53,9 @@ export function OptometristsDirectoryClient({ allUsers }: { allUsers: UserProfil
       user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase())) ||
       user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase()));
 
-    const matchesCategory = user.type === 'Optometrist';
-
     const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
 
-    return matchesSearch && matchesCategory && matchesCountry;
+    return matchesSearch && matchesCountry;
   });
 
   return (

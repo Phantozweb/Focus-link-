@@ -53,11 +53,9 @@ export function OphthalmologistsDirectoryClient({ allUsers }: { allUsers: UserPr
       user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase())) ||
       user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase()));
 
-    const matchesCategory = user.type === 'Ophthalmologist';
-
     const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
 
-    return matchesSearch && matchesCategory && matchesCountry;
+    return matchesSearch && matchesCountry;
   });
 
   return (

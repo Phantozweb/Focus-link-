@@ -11,7 +11,7 @@ import { Search, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { UserProfile } from '@/types';
 
-export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[] }) {
+export function DirectoryClient({ allUsers, title, category }: { allUsers: UserProfile[], title: string, category: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -35,14 +35,17 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
       q: searchTerm,
       country: selectedCountry,
     });
-    router.push(`/directory/professionals/opticians?${queryString}`);
+    router.push(`/directory/${category}?${queryString}`);
   };
 
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCountry('all');
-    router.push(`/directory/professionals/opticians`);
+    router.push(`/directory/${category}`);
   };
+
+  const clinicTypes: UserProfile['type'][] = ['Hospital', 'Optical'];
+  const professionalTypes: UserProfile['type'][] = ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'];
 
   const filteredUsers = allUsers.filter(user => {
     const searchParam = searchParams.get('q');
@@ -50,9 +53,9 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
 
     const matchesSearch = !searchParam ||
       user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
-      user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase())) ||
-      user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase()));
-
+      (user.skills && user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase()))) ||
+      (user.interests && user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase())));
+    
     const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
 
     return matchesSearch && matchesCountry;
@@ -62,9 +65,9 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
     <div className="bg-background">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-            <Button variant="outline" onClick={() => router.push('/directory/professionals')}>
+            <Button variant="outline" onClick={() => router.push('/directory')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Professionals
+                Back to Directory Hub
             </Button>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -124,7 +127,7 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
 
           <main className="lg:col-span-3">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold font-headline">Optician Directory</h1>
+              <h1 className="text-3xl font-bold font-headline">{title}</h1>
               <p className="text-muted-foreground mt-1">
                 Showing {filteredUsers.length} of {allUsers.length} results.
               </p>
