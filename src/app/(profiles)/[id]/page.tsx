@@ -1,10 +1,12 @@
 
+'use client';
+
 import { users } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -43,9 +45,13 @@ function EducationItem({ education }: { education: Education }) {
 }
 
 function StudentProfile({ user }: { user: UserProfile }) {
+  const router = useRouter();
+
   const totalExperienceYears = user.workExperience.reduce((acc, exp) => {
+    // A simple calculation, assuming start and end are just years for now
     const start = new Date(exp.startDate);
     const end = exp.endDate.toLowerCase() === 'present' ? new Date() : new Date(exp.endDate);
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return acc;
     const diff = end.getTime() - start.getTime();
     return acc + diff / (1000 * 60 * 60 * 24 * 365.25);
   }, 0);
@@ -169,6 +175,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
 }
 
 export default function ProfilePage({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const user = users.find((u) => u.id === params.id);
 
   if (!user) {
@@ -221,6 +228,10 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
+        <Button variant="outline" onClick={() => router.back()} className="mb-4">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
         <Card className="overflow-hidden">
           <div className="relative h-48 w-full bg-primary/10">
             {/* Placeholder for a banner image */}
