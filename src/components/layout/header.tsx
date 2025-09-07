@@ -17,6 +17,7 @@ export function Header() {
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/">Home</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/directory">Directory</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/about">About Us</Link>
+                <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/contact">Contact</Link>
             </nav>
         </div>
         <div className="flex flex-1 justify-end gap-4">
@@ -48,6 +49,11 @@ export function Header() {
                      <SheetClose asChild>
                         <Link href="/about" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
                           <span className="material-symbols-outlined">info</span> About
+                        </Link>
+                    </SheetClose>
+                     <SheetClose asChild>
+                        <Link href="/contact" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                          <span className="material-symbols-outlined">email</span> Contact
                         </Link>
                     </SheetClose>
                     <SheetClose asChild>

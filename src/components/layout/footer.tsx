@@ -12,25 +12,25 @@ export function Footer() {
             <div>
                 <h4 className="font-semibold mb-3">For Professionals</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
-                    <li><Link className="hover:text-white" href="/join">Claim Your Profile</Link></li>
+                    <li><Link className="hover:text-white" href="/join">Create a Profile</Link></li>
                     <li><Link className="hover:text-white" href="/join">List Your Clinic</Link></li>
-                    <li><Link className="hover:text-white" href="#">Advertise</Link></li>
+                    <li><Link className="hover:text-white" href="/contact">Advertise</Link></li>
                 </ul>
             </div>
             <div>
-                <h4 className="font-semibold mb-3">Resources</h4>
+                <h4 className="font-semibold mb-3">Community</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
                     <li><a className="hover:text-white" href="#">Articles</a></li>
-                    <li><a className="hover:text-white" href="#">Journals</a></li>
                     <li><a className="hover:text-white" href="#">Events</a></li>
+                    <li><Link className="hover:text-white" href="/directory">Directory</Link></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-3">Company</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
                     <li><Link className="hover:text-white" href="/about">About Us</Link></li>
-                    <li><a className="hover:text-white" href="#">Contact</a></li>
-                    <li><a className="hover:text-white" href="#">Terms of Service</a></li>
+                    <li><Link className="hover:text-white" href="/contact">Contact</Link></li>
+                    <li><Link className="hover:text-white" href="/terms">Terms of Service</Link></li>
                 </ul>
             </div>
         </div>
