@@ -316,9 +316,9 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 }
 
 
-export default function ProfilePage({ params }: { params: { id: string } }) {
+export default function ProfilePage({ params: { id } }: { params: { id: string } }) {
   const router = useRouter();
-  const user = users.find((u) => u.id === params.id);
+  const user = users.find((u) => u.id === id);
 
   if (!user) {
     notFound();
