@@ -17,7 +17,7 @@ export type Education = {
 export type UserProfile = {
   id: string;
   name: string;
-  type: 'Optometrist' | 'Student' | 'Academic' | 'Researcher' | 'Association' | 'College' | 'Hospital' | 'Optical';
+  type: 'Optometrist' | 'Student' | 'Academic' | 'Researcher' | 'Association' | 'College' | 'Hospital' | 'Optical' | 'Industry';
   experience: string;
   location: string;
   skills: string[];

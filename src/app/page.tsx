@@ -5,16 +5,19 @@ import { users as allUsers } from '@/lib/data';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Image from 'next/image';
 
 export default function Home() {
-  const professionals = allUsers.filter(u => u.type === 'Optometrist' || u.type === 'Academic' || u.type === 'Researcher').slice(0, 4);
-  const organizations = allUsers.filter(u => u.type === 'Association' || u.type === 'College').slice(0, 3);
-  const clinicsAndOpticals = allUsers.filter(u => u.type === 'Hospital' || u.type === 'Optical').slice(0, 3);
+  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
+  const organizations = allUsers.filter(u => ['Association', 'College'].includes(u.type)).slice(0, 6);
+  const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type)).slice(0, 6);
   const students = allUsers.filter(u => u.type === 'Student').slice(0, 4);
+  const industry = allUsers.filter(u => u.type === 'Industry').slice(0, 6);
 
   return (
     <main>
-      <section className="relative py-20 md:py-28 bg-white">
+       <section className="relative py-20 md:py-28 bg-white">
         <div className="container mx-auto px-4 text-left text-gray-800">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Find Your Next Opportunity in Eye Care</h1>
           <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600">Search for professionals, organizations, and resources in the optometry community.</p>
@@ -50,10 +53,16 @@ export default function Home() {
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Professionals</h2>
               <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {professionals.map((user) => (
-                  <ProfileCard key={user.id} user={user} />
-                ))}
+            <div className="relative">
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {professionals.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
           </section>
 
@@ -62,10 +71,16 @@ export default function Home() {
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Associations &amp; Colleges</h2>
               <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {organizations.map((user) => (
-                  <ProfileCard key={user.id} user={user} />
-                ))}
+             <div className="relative">
+               <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {organizations.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
           </section>
 
@@ -74,13 +89,37 @@ export default function Home() {
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Eye Care Clinics &amp; Opticals</h2>
               <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {clinicsAndOpticals.map((user) => (
-                  <ProfileCard key={user.id} user={user} />
-                ))}
+            <div className="relative">
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {clinicsAndOpticals.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
           </section>
           
+           <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Industry Partners</h2>
+              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+            </div>
+            <div className="relative">
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {industry.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </section>
+
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Events &amp; Webinars</h2>
@@ -123,7 +162,7 @@ export default function Home() {
               {students.map(student => (
                   <div key={student.id} className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg text-center">
                     <div className="p-6 flex flex-col items-center">
-                      <img alt={student.name} className="w-32 h-32 rounded-full object-cover mb-4" src={student.avatarUrl} data-ai-hint="portrait person" />
+                      <Image alt={student.name} className="w-32 h-32 rounded-full object-cover mb-4" src={student.avatarUrl} width={128} height={128} data-ai-hint="portrait person" />
                       <h3 className="text-slate-800 text-lg font-bold">{student.name}</h3>
                       <p className="text-gray-500 text-sm">{student.education[0]?.school || 'Optometry Student'}</p>
                       <p className="text-gray-500 text-sm">Class of {student.education[0]?.endYear || '2025'}</p>

@@ -14,7 +14,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/evelynreed',
       email: 'e.reed@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=1',
+    avatarUrl: 'https://picsum.photos/seed/1/400/400',
     workExperience: [
       {
         title: 'Lead Optometrist',
@@ -55,7 +55,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/samuelchen',
       email: 's.chen@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=2',
+    avatarUrl: 'https://picsum.photos/seed/2/400/400',
     workExperience: [
       {
         title: 'Optometrist & Founder',
@@ -89,7 +89,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/mariagarcia',
       email: 'm.garcia@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=3',
+    avatarUrl: 'https://picsum.photos/seed/3/400/400',
     workExperience: [],
     education: [
        {
@@ -115,7 +115,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/bencarter',
       email: 'b.carter@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=4',
+    avatarUrl: 'https://picsum.photos/seed/4/400/400',
     workExperience: [],
     education: [],
     languages: ['English']
@@ -133,7 +133,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/liamjohnson',
       email: 'l.johnson@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=5',
+    avatarUrl: 'https://picsum.photos/seed/5/400/400',
     workExperience: [],
     education: [],
     languages: ['English']
@@ -151,7 +151,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/chloeadams',
       email: 'c.adams@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=6',
+    avatarUrl: 'https://picsum.photos/seed/6/400/400',
     workExperience: [],
     education: [],
     languages: ['English']
@@ -168,7 +168,7 @@ export const users: UserProfile[] = [
     links: {
       email: 'k.tanaka@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=7',
+    avatarUrl: 'https://picsum.photos/seed/7/400/400',
     workExperience: [],
     education: [],
     languages: ['English', 'Japanese']
@@ -186,7 +186,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://linkedin.com/in/aishakhan',
       email: 'a.khan@example.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=8',
+    avatarUrl: 'https://picsum.photos/seed/8/400/400',
     workExperience: [],
     education: [],
     languages: ['English', 'Urdu']
@@ -204,7 +204,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://www.aoa.org/',
       email: 'info@aoa.org',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=9',
+    avatarUrl: 'https://picsum.photos/seed/9/400/400',
     workExperience: [],
     education: [],
     languages: []
@@ -222,7 +222,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://optometry.berkeley.edu/',
       email: 'optometry@berkeley.edu',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=10',
+    avatarUrl: 'https://picsum.photos/seed/10/400/400',
     workExperience: [],
     education: [],
     languages: []
@@ -240,7 +240,7 @@ export const users: UserProfile[] = [
       linkedin: 'https://example.com/hospital',
       email: 'eye.care@metropolitan.org',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=11',
+    avatarUrl: 'https://picsum.photos/seed/11/400/400',
     workExperience: [],
     education: [],
     languages: []
@@ -258,7 +258,61 @@ export const users: UserProfile[] = [
       linkedin: 'https://example.com/optical',
       email: 'contact@visionaryoptique.com',
     },
-    avatarUrl: 'https://picsum.photos/128/128?random=12',
+    avatarUrl: 'https://picsum.photos/seed/12/400/400',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
+  {
+    id: '13',
+    name: 'Visionary Lens Corp.',
+    type: 'Industry',
+    experience: 'Leading manufacturer of innovative contact lens technologies',
+    location: 'Global',
+    skills: ['Contact Lenses', 'Material Science', 'Optical Engineering'],
+    interests: ['R&D', 'Sustainability', 'Partnerships'],
+    bio: 'A global leader in the development and manufacturing of cutting-edge contact lenses and vision care products.',
+    links: {
+      linkedin: 'https://example.com/visionary-lens',
+      email: 'partners@visionarylens.com',
+    },
+    avatarUrl: 'https://picsum.photos/seed/13/400/400',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
+  {
+    id: '14',
+    name: 'Ophthalmic Solutions Inc.',
+    type: 'Industry',
+    experience: 'Providing cutting-edge diagnostic equipment',
+    location: 'Boston, MA',
+    skills: ['Diagnostic Imaging', 'Ophthalmic Instruments', 'Surgical Equipment'],
+    interests: ['Telehealth', 'AI in Diagnostics', 'Clinical Trials'],
+    bio: 'Delivering state-of-the-art diagnostic and surgical equipment to eye care professionals worldwide.',
+    links: {
+      linkedin: 'https://example.com/oph-solutions',
+      email: 'sales@oph-solutions.com',
+    },
+    avatarUrl: 'https://picsum.photos/seed/14/400/400',
+    workExperience: [],
+    education: [],
+    languages: []
+  },
+  {
+    id: '15',
+    name: 'FrameWorks Eyewear',
+    type: 'Industry',
+    experience: 'Stylish and affordable eyewear for every lifestyle',
+    location: 'Milan, Italy',
+    skills: ['Eyewear Design', 'Fashion Trends', 'Retail Solutions'],
+    interests: ['Independent Opticians', 'Sustainable Materials', 'Brand Collaborations'],
+    bio: 'A design house that creates and distributes fashionable and high-quality eyewear to a global market.',
+    links: {
+      linkedin: 'https://example.com/frameworks',
+      email: 'info@frameworks.com',
+    },
+    avatarUrl: 'https://picsum.photos/seed/15/400/400',
     workExperience: [],
     education: [],
     languages: []

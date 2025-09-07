@@ -51,7 +51,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Name must be at least 2 characters.',
   }),
-  type: z.enum(['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical'], {
+  type: z.enum(['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'], {
     required_error: 'You need to select a profile type.',
   }),
   avatar: z.any().refine(files => files?.length === 1, 'Avatar is required.'),
@@ -105,7 +105,7 @@ export default function JoinPage() {
 
   const profileType = form.watch('type');
   const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(profileType);
-  const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(profileType);
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -134,6 +134,7 @@ export default function JoinPage() {
       switch (profileType) {
         case 'Hospital': return 'Services Offered';
         case 'Optical': return 'Brands Carried';
+        case 'Industry': return 'Products & Services';
         case 'College':
         case 'Association':
         default: return 'Focus Areas';
@@ -143,6 +144,7 @@ export default function JoinPage() {
        switch (profileType) {
         case 'Hospital': return 'Specialties';
         case 'Optical': return 'Styles & Services';
+        case 'Industry': return 'Market Focus';
         case 'College': return 'Programs & Research';
         case 'Association':
         default: return 'Keywords';
@@ -156,6 +158,7 @@ export default function JoinPage() {
       switch (profileType) {
         case 'Hospital': return 'e.g. Cataract Surgery';
         case 'Optical': return 'e.g. Ray-Ban';
+        case 'Industry': return 'e.g. Ophthalmic Lenses';
         case 'College':
         case 'Association':
         default: return 'e.g. Continuing Education';
@@ -165,6 +168,7 @@ export default function JoinPage() {
        switch (profileType) {
         case 'Hospital': return 'e.g. Glaucoma, Pediatrics';
         case 'Optical': return 'e.g. Luxury Frames, Lens Fitting';
+        case 'Industry': return 'e.g. Medical Devices';
         case 'College': return 'e.g. OD Program, Vision Science';
         case 'Association':
         default: return 'e.g. Conference, Advocacy';
@@ -239,6 +243,10 @@ export default function JoinPage() {
                               <FormItem className="flex items-center space-x-2 space-y-0">
                                 <FormControl><RadioGroupItem value="Optical" /></FormControl>
                                 <FormLabel className="font-normal">Optical Practice / Store</FormLabel>
+                              </FormItem>
+                               <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Industry" /></FormControl>
+                                <FormLabel className="font-normal">Industry Partner</FormLabel>
                               </FormItem>
                             </>
                           )}

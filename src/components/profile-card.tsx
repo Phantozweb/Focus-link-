@@ -21,14 +21,15 @@ const getBadgeVariant = (type: UserProfile['type']) => {
     case 'Association':
     case 'College':
     case 'Hospital':
-    case 'Optical': return 'outline';
+    case 'Optical':
+    case 'Industry': return 'outline';
     default: return 'default';
   }
 }
 
 
 export function ProfileCard({ user }: ProfileCardProps) {
-  const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(user.type);
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
   
   if(isOrg) {
     return (

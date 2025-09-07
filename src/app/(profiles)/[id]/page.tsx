@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -49,7 +49,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
   }
   
   const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(user.type);
-  const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(user.type);
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
 
   const getOrgIcon = () => {
     switch (user.type) {
@@ -57,6 +57,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
         case 'Optical': return <Glasses className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
         case 'Association': return <Globe className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
         case 'College': return <Building className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
+        case 'Industry': return <Factory className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
         default: return <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />;
     }
   }
@@ -66,6 +67,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
       switch (user.type) {
         case 'Hospital': return 'Services';
         case 'Optical': return 'Brands';
+        case 'Industry': return 'Products & Services';
         case 'Association':
         case 'College': 
         default: return 'Focus Areas';
@@ -75,6 +77,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
        switch (user.type) {
         case 'Hospital': return 'Specialties';
         case 'Optical': return 'Styles';
+        case 'Industry': return 'Market Focus';
         case 'Association':
         case 'College': 
         default: return 'Keywords';
