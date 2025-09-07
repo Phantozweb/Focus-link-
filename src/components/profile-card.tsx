@@ -30,14 +30,15 @@ const getBadgeVariant = (type: UserProfile['type']) => {
 
 export function ProfileCard({ user }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
-  
-  if(isOrg) {
+  const isProfessional = ['Optometrist', 'Academic', 'Researcher'].includes(user.type);
+
+  if(isOrg || isProfessional) {
     return (
        <div className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg h-full">
           <div className="relative">
-              <Image alt={`${user.name} Banner`} className="w-full h-24 object-cover rounded-t-lg" src={`https://picsum.photos/seed/${user.id}b/400/100`} width={400} height={100} data-ai-hint="office building" />
+              <Image alt={`${user.name} Banner`} className="w-full h-24 object-cover rounded-t-lg" src={`https://picsum.photos/seed/${user.id}b/400/100`} width={400} height={100} data-ai-hint={isOrg ? "office building" : "abstract pattern"} />
               <Avatar className="w-20 h-20 rounded-full object-cover absolute -bottom-10 left-6 border-4 border-white shadow-md">
-                <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint="logo building" />
+                <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={isOrg ? "logo building" : "portrait person"} />
                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
           </div>
@@ -46,6 +47,7 @@ export function ProfileCard({ user }: ProfileCardProps) {
                 {user.name}
                 {user.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
               </h3>
+              <p className="text-sm text-cyan-600">{user.experience}</p>
               <p className="text-sm text-gray-500 flex-grow mt-2">{user.bio.substring(0,100)}...</p>
               <div className="flex gap-2 mt-4">
                   <Button asChild className="h-10 flex-1" variant="outline">
@@ -57,6 +59,7 @@ export function ProfileCard({ user }: ProfileCardProps) {
     )
   }
 
+  // This will now only apply to Students
   return (
     <div className="group flex flex-col sm:flex-row rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg h-full">
       <div className="w-full sm:w-1/3">
