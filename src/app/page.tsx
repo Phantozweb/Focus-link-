@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Image from 'next/image';
+import { Globe, Search, MapPin, Building, Users, Briefcase } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { countries } from '@/lib/countries';
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
@@ -21,28 +24,53 @@ export default function Home() {
         <div className="container mx-auto px-4 text-left text-gray-800">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Find Your Next Opportunity in Eye Care</h1>
           <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600">Search for professionals, organizations, and resources in the optometry community.</p>
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="w-full max-w-4xl bg-white p-4 rounded-lg shadow-lg border border-gray-200 flex-grow">
-              <div className="flex flex-col md:flex-row gap-2">
-                <div className="flex-grow">
-                  <label className="relative flex items-center">
-                    <span className="material-symbols-outlined absolute left-3 text-gray-500">search</span>
-                    <input className="form-input w-full pl-10 pr-4 py-2.5 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500" placeholder="Professionals, associations, colleges..."/>
+           <div className="w-full max-w-4xl bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+                <div className="lg:col-span-2">
+                   <label className="relative flex items-center">
+                    <Search className="absolute left-3 text-gray-500 h-5 w-5" />
+                    <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
                   </label>
                 </div>
-                <div className="flex-grow">
-                  <label className="relative flex items-center">
-                    <span className="material-symbols-outlined absolute left-3 text-gray-500">location_on</span>
-                    <input className="form-input w-full pl-10 pr-4 py-2.5 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500" placeholder="Location"/>
-                  </label>
+                <div>
+                   <Select>
+                    <SelectTrigger className="w-full h-12 pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500">
+                      <Briefcase className="absolute left-3 text-gray-500 h-5 w-5" />
+                      <SelectValue placeholder="Profile Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Profiles</SelectItem>
+                      <SelectItem value="student">Student</SelectItem>
+                      <SelectItem value="optometrist">Optometrist</SelectItem>
+                       <SelectItem value="academic">Academic / Researcher</SelectItem>
+                      <SelectItem value="association">Association</SelectItem>
+                      <SelectItem value="college">College / University</SelectItem>
+                      <SelectItem value="hospital">Hospital / Clinic</SelectItem>
+                      <SelectItem value="optical">Optical</SelectItem>
+                      <SelectItem value="industry">Industry</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <button className="w-full md:w-auto flex items-center justify-center h-11 px-8 bg-cyan-600 text-white font-bold rounded-md hover:bg-cyan-700 transition-colors">Search</button>
+                <div>
+                   <Select>
+                    <SelectTrigger className="w-full h-12 pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500">
+                       <Globe className="absolute left-3 text-gray-500 h-5 w-5" />
+                      <SelectValue placeholder="Country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                       {countries.map(country => (
+                        <SelectItem key={country.code} value={country.code}>
+                          {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex justify-end mt-4">
+                 <button className="w-full md:w-auto flex items-center justify-center h-11 px-8 bg-cyan-600 text-white font-bold rounded-md hover:bg-cyan-700 transition-colors">Search</button>
               </div>
             </div>
-             <Button size="lg" asChild className="shadow-lg bg-cyan-600 hover:bg-cyan-700 text-lg">
-                <Link href="/join">Join the Directory</Link>
-             </Button>
-          </div>
         </div>
       </section>
 
