@@ -192,7 +192,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
           Back
         </Button>
       <div className="relative h-48 md:h-64 w-full">
-        <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} layout="fill" objectFit="cover" data-ai-hint="office building"/>
+        <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} fill objectFit="cover" data-ai-hint="office building"/>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10">
