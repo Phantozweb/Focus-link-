@@ -6,7 +6,7 @@ export function Footer() {
      <footer className="bg-slate-800 text-white py-12 px-10 md:px-20 lg:px-40">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-                <h3 className="font-bold text-lg mb-4">OptoConnect</h3>
+                <h3 className="font-bold text-lg mb-4">FocusLink</h3>
                 <p className="text-gray-400 text-sm">Connecting the world of vision care.</p>
             </div>
             <div>
@@ -35,7 +35,7 @@ export function Footer() {
             </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-sm">
-            <p>© 2024 OptoConnect. All rights reserved.</p>
+            <p>© 2024 FocusLink. All rights reserved.</p>
         </div>
     </footer>
   );

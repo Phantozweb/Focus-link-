@@ -7,8 +7,8 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'OptoConnect',
-  description: 'A directory for optometry students and professionals to connect.',
+  title: 'FocusLink',
+  description: 'The world\'s largest eye care community to find, connect, and grow.',
 };
 
 export default function RootLayout({
