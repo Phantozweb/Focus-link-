@@ -13,7 +13,7 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent className="text-lg text-foreground/80 space-y-6">
           <p>
-            Welcome to <strong>OptoConnect</strong>, the premier digital directory designed exclusively for the optometry community. Our mission is to foster connections, facilitate collaboration, and empower professionals and students across the field of eye care.
+            Welcome to <strong>OptoConnect</strong>, the premier digital directory designed exclusively for the eye care community. Our mission is to foster connections, facilitate collaboration, and empower professionals and students across the field of eye care.
           </p>
           <p>
             In an ever-evolving industry, staying connected is more important than ever. OptoConnect provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
@@ -28,7 +28,7 @@ export default function AboutPage() {
             <li><strong>Inclusive Community:</strong> We welcome everyone from individual practitioners and students to large associations, colleges, hospitals, and optical practices.</li>
           </ul>
           <p>
-            Join us in building the future of optometry, connected.
+            Join us in building the future of eye care, connected.
           </p>
         </CardContent>
       </Card>

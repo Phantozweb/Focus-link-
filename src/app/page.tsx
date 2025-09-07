@@ -33,7 +33,7 @@ export default function Home() {
        <section className="relative py-20 md:py-28 bg-white">
         <div className="container mx-auto px-4 text-left text-gray-800">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Find Your Next Opportunity in Eye Care</h1>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600">Search for professionals, organizations, and resources in the optometry community.</p>
+          <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600">Search for professionals, organizations, and resources in the eye care community.</p>
             <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200">
                <div className="flex flex-col md:flex-row gap-2 items-center">
                  <div className="flex-grow w-full">
