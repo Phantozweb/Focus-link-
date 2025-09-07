@@ -25,6 +25,8 @@ import { useDynamicFields } from '@/hooks/use-dynamic-fields';
 import { PlusCircle, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
+import Link from 'next/link';
 
 const workExperienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -73,6 +75,9 @@ const formSchema = z.object({
   linkedin: z.string().url().optional().or(z.literal('')),
   workExperience: z.array(workExperienceSchema).optional(),
   education: z.array(educationSchema).optional(),
+  consent: z.boolean().refine(val => val === true, {
+    message: 'You must agree to the terms to create a profile.',
+  }),
 });
 
 export default function JoinPage() {
@@ -94,6 +99,7 @@ export default function JoinPage() {
       linkedin: '',
       workExperience: [],
       education: [],
+      consent: false,
     },
   });
 
@@ -527,6 +533,32 @@ export default function JoinPage() {
                     )}
                   />
                 </div>
+
+                <Separator />
+
+                <FormField
+                  control={form.control}
+                  name="consent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>
+                          Agree to Terms
+                        </FormLabel>
+                        <FormDescription>
+                           I agree that my contact information (email and LinkedIn) will be displayed on my public profile to connect with others.
+                        </FormDescription>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
 
 
                 <Button type="submit" size="lg" className="w-full">
