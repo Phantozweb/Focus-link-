@@ -31,7 +31,7 @@ export default function Home() {
   const handleSearch = () => {
     // In a real app, you'd collect filter values from state
     // and pass them as query params to the directory page.
-    router.push('/directory');
+    router.push('/directory/all');
   }
 
   const events = [
@@ -153,7 +153,7 @@ export default function Home() {
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Professionals</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/professionals">View All</a>
             </div>
             <div className="relative">
               <Carousel opts={{ align: "start" }} className="w-full">
@@ -171,7 +171,7 @@ export default function Home() {
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Associations</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/associations">View All</a>
             </div>
              <div className="relative">
                <Carousel opts={{ align: "start" }} className="w-full">
@@ -189,7 +189,7 @@ export default function Home() {
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Colleges & Schools</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/colleges">View All</a>
             </div>
              <div className="relative">
                <Carousel opts={{ align: "start" }} className="w-full">
@@ -207,7 +207,7 @@ export default function Home() {
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Communities</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/associations">View All</a>
             </div>
              <div className="relative">
                <Carousel opts={{ align: "start" }} className="w-full">
@@ -225,7 +225,7 @@ export default function Home() {
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Eye Care Clinics &amp; Opticals</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/clinics">View All</a>
             </div>
             <div className="relative">
               <Carousel opts={{ align: "start" }} className="w-full">
@@ -243,7 +243,7 @@ export default function Home() {
            <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Industry Partners</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/industry">View All</a>
             </div>
             <div className="relative">
               <Carousel opts={{ align: "start" }} className="w-full">
@@ -293,7 +293,7 @@ export default function Home() {
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Student Directory</h2>
-              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+              <a className="text-cyan-600 font-semibold hover:underline" href="/directory/students">View All</a>
             </div>
             <div className="relative">
               <Carousel opts={{ align: "start" }} className="w-full">

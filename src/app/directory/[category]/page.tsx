@@ -1,0 +1,198 @@
+
+'use client';
+
+import { useState } from 'react';
+import { users as allUsers } from '@/lib/data';
+import { ProfileCard } from '@/components/profile-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { countries } from '@/lib/countries';
+import { Search, SlidersHorizontal } from 'lucide-react';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
+
+export default function DirectoryCategoryPage() {
+  const router = useRouter();
+  const params = useParams();
+  const searchParams = useSearchParams();
+
+  const category = (params.category as string) || 'all';
+
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
+  const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
+
+  const createQueryString = (newParams: Record<string, string>) => {
+    const currentParams = new URLSearchParams(searchParams);
+    for (const [key, value] of Object.entries(newParams)) {
+      if (value === 'all' || !value) {
+        currentParams.delete(key);
+      } else {
+        currentParams.set(key, value);
+      }
+    }
+    return currentParams.toString();
+  };
+
+  const handleSearch = () => {
+    const queryString = createQueryString({
+      q: searchTerm,
+      country: selectedCountry,
+    });
+    router.push(`/directory/${category}?${queryString}`);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedCountry('all');
+    router.push(`/directory/${category}`);
+  };
+
+  const filteredUsers = allUsers.filter(user => {
+    const searchParam = searchParams.get('q');
+    const countryParam = searchParams.get('country');
+
+    const matchesSearch = !searchParam ||
+      user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
+      user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase())) ||
+      user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase()));
+
+    const professionalTypes = ['Optometrist', 'Academic', 'Researcher'];
+    const clinicTypes = ['Hospital', 'Optical'];
+
+    let matchesCategory = false;
+    switch (category) {
+        case 'all':
+            matchesCategory = true;
+            break;
+        case 'professionals':
+            matchesCategory = professionalTypes.includes(user.type);
+            break;
+        case 'students':
+            matchesCategory = user.type === 'Student';
+            break;
+        case 'associations':
+            matchesCategory = user.type === 'Association';
+            break;
+        case 'colleges':
+            matchesCategory = user.type === 'College';
+            break;
+        case 'clinics':
+            matchesCategory = clinicTypes.includes(user.type);
+            break;
+        case 'industry':
+            matchesCategory = user.type === 'Industry';
+            break;
+    }
+
+    const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
+
+    return matchesSearch && matchesCategory && matchesCountry;
+  });
+
+  const getTitle = () => {
+      switch(category) {
+          case 'all': return 'All Profiles';
+          case 'professionals': return 'Professionals';
+          case 'students': return 'Students';
+          case 'associations': return 'Associations';
+          case 'colleges': return 'Colleges & Schools';
+          case 'clinics': return 'Clinics & Opticals';
+          case 'industry': return 'Industry Partners';
+          default: return 'Directory';
+      }
+  }
+
+  return (
+    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mb-8">
+          <Button variant="outline" onClick={() => router.push('/directory')}>
+              Back to Directory Hub
+          </Button>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <aside className="lg:col-span-1">
+          <div className="sticky top-24">
+            <div className="space-y-6 p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+              <h3 className="text-xl font-semibold flex items-center gap-2">
+                <SlidersHorizontal className="h-5 w-5" />
+                Filters
+              </h3>
+
+              <div className="space-y-4">
+                <div>
+                    <label htmlFor="search" className="sr-only">Search</label>
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <Search className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <Input
+                            id="search"
+                            placeholder="Keyword..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                            className="pl-10"
+                        />
+                    </div>
+                </div>
+                
+                <div>
+                  <label htmlFor="country" className="sr-only">Country</label>
+                  <Select onValueChange={(v) => setSelectedCountry(v)} value={selectedCountry}>
+                    <SelectTrigger id="country">
+                      <SelectValue placeholder="Select a country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Countries</SelectItem>
+                      {countries.map(country => (
+                        <SelectItem key={country.code} value={country.name.toLowerCase()}>
+                          {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Button onClick={handleSearch} className="w-full">Apply Filters</Button>
+                <Button onClick={clearFilters} variant="outline" className="w-full">
+                  Clear Filters
+                </Button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <main className="lg:col-span-3">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold font-headline">{getTitle()}</h1>
+            <p className="text-muted-foreground">
+              Showing {filteredUsers.length} of {allUsers.filter(u => {
+                  const professionalTypes = ['Optometrist', 'Academic', 'Researcher'];
+                  const clinicTypes = ['Hospital', 'Optical'];
+                  if(category === 'all') return true;
+                  if(category === 'professionals') return professionalTypes.includes(u.type);
+                  if(category === 'students') return u.type === 'Student';
+                  if(category === 'associations') return u.type === 'Association';
+                  if(category === 'colleges') return u.type === 'College';
+                  if(category === 'clinics') return clinicTypes.includes(u.type);
+                  if(category === 'industry') return u.type === 'Industry';
+                  return false;
+              }).length} results.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map(user => <ProfileCard key={user.id} user={user} />)
+            ) : (
+              <div className="md:col-span-2 text-center py-16">
+                <p className="text-lg text-muted-foreground">No profiles match your criteria.</p>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
