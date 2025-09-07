@@ -17,13 +17,17 @@ const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('all');
 
   const handleTypeChange = (type: string) => {
     setSelectedTypes(prev =>
       prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
   };
+
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+  }
 
   const filteredUsers = allUsers.filter(user => {
     const matchesSearch =
@@ -33,7 +37,7 @@ export default function DirectoryPage() {
 
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(user.type);
 
-    const matchesCountry = selectedCountry === '' || user.location.toLowerCase().includes(selectedCountry.toLowerCase());
+    const matchesCountry = selectedCountry === 'all' || user.location.toLowerCase().includes(selectedCountry.toLowerCase());
 
     return matchesSearch && matchesType && matchesCountry;
   });
@@ -90,12 +94,12 @@ export default function DirectoryPage() {
               {/* Country Filter */}
               <div>
                 <h4 className="font-semibold mb-3">Country</h4>
-                <Select onValueChange={setSelectedCountry} value={selectedCountry}>
+                <Select onValueChange={handleCountryChange} value={selectedCountry}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a country" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Countries</SelectItem>
+                    <SelectItem value="all">All Countries</SelectItem>
                     {countries.map(country => (
                       <SelectItem key={country.code} value={country.name.toLowerCase()}>
                         {country.name}
@@ -105,7 +109,7 @@ export default function DirectoryPage() {
                 </Select>
               </div>
 
-              <Button onClick={() => { setSelectedTypes([]); setSelectedCountry(''); setSearchTerm(''); }} variant="outline" className="w-full">
+              <Button onClick={() => { setSelectedTypes([]); setSelectedCountry('all'); setSearchTerm(''); }} variant="outline" className="w-full">
                 Clear Filters
               </Button>
             </div>
