@@ -67,10 +67,20 @@ function StudentProfile({ user }: { user: UserProfile }) {
                   <p className="text-sm text-gray-500">{user.location}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button>
-                    <UserPlus className="mr-2" /> Connect
-                  </Button>
-                  <Button variant="outline">Portfolio</Button>
+                  {user.links.email && (
+                    <Button asChild>
+                      <a href={`mailto:${user.links.email}`}>
+                        <Mail className="mr-2" /> Email
+                      </a>
+                    </Button>
+                  )}
+                  {user.links.linkedin && (
+                    <Button asChild variant="outline">
+                      <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">
+                         <Linkedin className="mr-2" /> LinkedIn
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </div>
               <p className="mt-4 text-base text-gray-700">{user.bio}</p>
