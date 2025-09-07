@@ -3,7 +3,7 @@
 'use client';
 
 import { users } from '@/lib/data';
-import { notFound, useRouter }dfrom 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -316,9 +316,9 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 }
 
 
-export default function ProfilePage({ params: { id } }: { params: { id: string } }) {
+export default function ProfilePage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const user = users.find((u) => u.id === id);
+  const user = users.find((u) => u.id === params.id);
 
   if (!user) {
     notFound();
