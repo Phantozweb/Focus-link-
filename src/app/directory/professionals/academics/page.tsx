@@ -9,22 +9,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Search, SlidersHorizontal, ArrowLeft } from 'lucide-react';
-import { useRouter, useParams, useSearchParams, notFound } from 'next/navigation';
-import type { UserProfile } from '@/types';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function DirectoryCategoryPage() {
+export default function AcademicsDirectoryPage() {
   const router = useRouter();
-  const params = useParams();
   const searchParams = useSearchParams();
-
-  const category = (params.category as string) || 'all';
-  
-  const validCategories = ['students', 'associations', 'colleges', 'clinics', 'industry', 'all'];
-  if (!validCategories.includes(category) && category !== 'professionals') {
-    // The professionals page has its own file now
-    notFound();
-  }
-
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
   const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
@@ -46,42 +35,16 @@ export default function DirectoryCategoryPage() {
       q: searchTerm,
       country: selectedCountry,
     });
-    router.push(`/directory/${category}?${queryString}`);
+    router.push(`/directory/professionals/academics?${queryString}`);
   };
 
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCountry('all');
-    router.push(`/directory/${category}`);
+    router.push(`/directory/professionals/academics`);
   };
-  
-  const clinicTypes: UserProfile['type'][] = ['Hospital', 'Optical'];
-  
-  const initialFilteredUsers = allUsers.filter(user => {
-      let matchesCategory = false;
-      switch (category) {
-        case 'students':
-          matchesCategory = user.type === 'Student';
-          break;
-        case 'associations':
-          matchesCategory = user.type === 'Association';
-          break;
-        case 'colleges':
-          matchesCategory = user.type === 'College';
-          break;
-        case 'clinics':
-          matchesCategory = clinicTypes.includes(user.type);
-          break;
-        case 'industry':
-          matchesCategory = user.type === 'Industry';
-          break;
-        case 'all':
-        default:
-          matchesCategory = true;
-          break;
-      }
-      return matchesCategory;
-  })
+
+  const initialFilteredUsers = allUsers.filter(user => user.type === 'Academic');
 
   const filteredUsers = allUsers.filter(user => {
     const searchParam = searchParams.get('q');
@@ -91,54 +54,21 @@ export default function DirectoryCategoryPage() {
       user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
       user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase())) ||
       user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase()));
-    
-    let matchesCategory = false;
-    switch (category) {
-        case 'students':
-            matchesCategory = user.type === 'Student';
-            break;
-        case 'associations':
-            matchesCategory = user.type === 'Association';
-            break;
-        case 'colleges':
-            matchesCategory = user.type === 'College';
-            break;
-        case 'clinics':
-            matchesCategory = clinicTypes.includes(user.type);
-            break;
-        case 'industry':
-            matchesCategory = user.type === 'Industry';
-            break;
-        case 'all':
-        default:
-          matchesCategory = true;
-          break;
-    }
+
+    const matchesCategory = user.type === 'Academic';
 
     const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
 
     return matchesSearch && matchesCategory && matchesCountry;
   });
 
-  const getTitle = () => {
-      switch(category) {
-          case 'students': return 'Students';
-          case 'associations': return 'Associations';
-          case 'colleges': return 'Colleges & Schools';
-          case 'clinics': return 'Clinics & Opticals';
-          case 'industry': return 'Industry Partners';
-          case 'all':
-          default: return 'All Profiles';
-      }
-  }
-
   return (
     <div className="bg-background">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-            <Button variant="outline" onClick={() => router.push('/directory')}>
+            <Button variant="outline" onClick={() => router.push('/directory/professionals')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Directory Hub
+                Back to Professionals
             </Button>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -198,7 +128,7 @@ export default function DirectoryCategoryPage() {
 
           <main className="lg:col-span-3">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold font-headline">{getTitle()}</h1>
+              <h1 className="text-3xl font-bold font-headline">Academics Directory</h1>
               <p className="text-muted-foreground mt-1">
                 Showing {filteredUsers.length} of {initialFilteredUsers.length} results.
               </p>
@@ -218,4 +148,3 @@ export default function DirectoryCategoryPage() {
     </div>
   );
 }
-
