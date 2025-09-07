@@ -75,5 +75,3 @@ export function ProfileCard({ user }: ProfileCardProps) {
     </div>
   )
 }
-
-    
