@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
         ...config.resolve.fallback,
         fs: false,
       };
+
+      // Mark Genkit-related packages as external to prevent them from being bundled on the client.
+      config.externals = [
+        ...config.externals,
+        /@genkit-ai\/.*/,
+        /zod/,
+        /genkit/,
+      ];
     }
 
     return config;
