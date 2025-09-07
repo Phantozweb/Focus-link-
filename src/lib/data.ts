@@ -40,7 +40,8 @@ export const users: UserProfile[] = [
         endYear: '2007'
       }
     ],
-    languages: ['English', 'Spanish']
+    languages: ['English', 'Spanish'],
+    verified: true,
   },
   {
     id: '2',
@@ -74,7 +75,8 @@ export const users: UserProfile[] = [
         endYear: '2014'
       }
     ],
-    languages: ['English', 'Mandarin']
+    languages: ['English', 'Mandarin'],
+    verified: true,
   },
   {
     id: '3',
@@ -207,7 +209,8 @@ export const users: UserProfile[] = [
     avatarUrl: 'https://picsum.photos/seed/9/400/400',
     workExperience: [],
     education: [],
-    languages: []
+    languages: [],
+    verified: true,
   },
   {
     id: '10',
@@ -225,7 +228,8 @@ export const users: UserProfile[] = [
     avatarUrl: 'https://picsum.photos/seed/10/400/400',
     workExperience: [],
     education: [],
-    languages: []
+    languages: [],
+    verified: true,
   },
   {
     id: '11',
@@ -279,7 +283,8 @@ export const users: UserProfile[] = [
     avatarUrl: 'https://picsum.photos/seed/13/400/400',
     workExperience: [],
     education: [],
-    languages: []
+    languages: [],
+    verified: true,
   },
   {
     id: '14',

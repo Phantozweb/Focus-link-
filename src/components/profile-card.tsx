@@ -5,7 +5,7 @@ import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Mail, Phone, Linkedin, Globe } from 'lucide-react';
+import { ArrowRight, Mail, Phone, Linkedin, Globe, CheckCircle2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
@@ -42,7 +42,10 @@ export function ProfileCard({ user }: ProfileCardProps) {
               </Avatar>
           </div>
           <div className="flex flex-1 flex-col p-6 pt-16">
-              <h3 className="text-lg font-bold text-slate-800">{user.name}</h3>
+              <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                {user.name}
+                {user.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
+              </h3>
               <p className="text-sm text-gray-500 flex-grow mt-2">{user.bio.substring(0,100)}...</p>
               <div className="flex gap-2 mt-4">
                   <Button asChild className="h-10 flex-1" variant="outline">
@@ -60,7 +63,10 @@ export function ProfileCard({ user }: ProfileCardProps) {
         <Image alt={user.name} className="w-full h-full object-cover rounded-t-lg sm:rounded-l-lg sm:rounded-t-none" src={user.avatarUrl} width={200} height={300} data-ai-hint="portrait person" />
       </div>
       <div className="flex flex-1 flex-col p-6 w-full sm:w-2/3">
-        <h3 className="text-lg font-bold text-slate-800">{user.name}</h3>
+        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+          {user.name}
+          {user.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
+        </h3>
         <p className="text-sm text-cyan-600">{user.experience}</p>
         <p className="mt-2 text-sm text-gray-500 flex-grow">{user.bio.substring(0, 70)}...</p>
         <div className="mt-4 space-y-2">

@@ -7,7 +7,7 @@ import { notFound, useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -73,7 +73,10 @@ function StudentProfile({ user }: { user: UserProfile }) {
             <div className="mt-4 flex-grow sm:mt-0">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                 <div className="mb-4 sm:mb-0">
-                  <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    {user.name}
+                    {user.verified && <CheckCircle2 className="h-6 w-6 text-primary" />}
+                  </h1>
                   <p className="text-md text-gray-600">{user.experience} at {user.education[0]?.school}</p>
                   <p className="text-sm text-gray-500">{user.location}</p>
                 </div>
@@ -199,7 +202,10 @@ function AssociationProfile({ user }: { user: UserProfile }) {
               <div className="flex flex-col sm:flex-row items-start gap-4">
                 <Image src={user.avatarUrl} alt={`${user.name} logo`} width={128} height={128} className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-sm border-4 border-white" data-ai-hint="logo building" />
                 <div className="flex flex-col gap-1 pt-2">
-                  <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight">{user.name}</h1>
+                  <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
+                    {user.name}
+                    {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                  </h1>
                   <p className="text-gray-500">{user.experience}</p>
                   <p className="text-gray-500">{user.skills.length * 1000 + 2345} members</p>
                 </div>
@@ -381,7 +387,10 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
-                  <h1 className="text-3xl font-bold font-headline">{user.name}</h1>
+                  <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
+                    {user.name}
+                    {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                  </h1>
                   <p className="text-lg text-muted-foreground">{user.experience}</p>
                    <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                     {user.links.email && (

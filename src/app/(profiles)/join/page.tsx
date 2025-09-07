@@ -65,9 +65,7 @@ const formSchema = z.object({
   interests: z.string().min(2, {
     message: 'Please list at least one interest.',
   }),
-  languages: z.string().min(2, {
-    message: 'Please list at least one language.',
-  }),
+  languages: z.string().optional(),
   bio: z.string().min(10, {
     message: 'Bio must be at least 10 characters.',
   }),
@@ -520,7 +518,7 @@ export default function JoinPage() {
                         <FormLabel>{isIndividual ? 'LinkedIn Profile URL' : 'Website URL'} (Optional)</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={isIndividual ? "e.g. https://linkedin.com/in/janedoe" : "e.g. https://example.com"}
+                            placeholder={isIndividual ? "https://linkedin.com/in/janedoe" : "https://example.com"}
                             {...field}
                           />
                         </FormControl>

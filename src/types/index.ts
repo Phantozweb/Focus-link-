@@ -32,4 +32,5 @@ export type UserProfile = {
   workExperience: WorkExperience[];
   education: Education[];
   languages: string[];
+  verified?: boolean;
 };
