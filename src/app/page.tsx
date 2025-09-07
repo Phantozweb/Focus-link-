@@ -86,7 +86,7 @@ export default function Home() {
              
              <Dialog>
               <DialogTrigger asChild>
-                <Button className="w-full md:w-auto h-12 bg-white/90 text-primary hover:bg-white">
+                <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200">
                   <SlidersHorizontal className="mr-2 h-5 w-5" />
                   Filters
                 </Button>
@@ -324,4 +324,6 @@ export default function Home() {
   );
 }
     
+    
+
     
