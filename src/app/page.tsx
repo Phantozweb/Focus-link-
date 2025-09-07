@@ -7,17 +7,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, Calendar, Video, Users as UsersIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
+import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
   const organizations = allUsers.filter(u => ['Association', 'College'].includes(u.type)).slice(0, 6);
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type)).slice(0, 6);
-  const students = allUsers.filter(u => u.type === 'Student').slice(0, 4);
+  const students = allUsers.filter(u => u.type === 'Student').slice(0, 6);
   const industry = allUsers.filter(u => u.type === 'Industry').slice(0, 6);
   const router = useRouter();
 
@@ -27,6 +29,41 @@ export default function Home() {
     // and pass them as query params to the directory page.
     router.push('/directory');
   }
+
+  const events = [
+    {
+      date: 'Oct 25, 2024',
+      title: 'Advances in Glaucoma Management',
+      description: 'Join our webinar to learn about the latest treatment options for glaucoma.',
+      type: 'Webinar',
+      icon: <Video className="h-5 w-5 text-primary" />,
+      image: 'https://picsum.photos/seed/event1/400/200'
+    },
+    {
+      date: 'Nov 12, 2024',
+      title: 'Pediatric Vision Screening Workshop',
+      description: 'A hands-on workshop for professionals on effective pediatric vision screening.',
+       type: 'Workshop',
+       icon: <Calendar className="h-5 w-5 text-primary" />,
+       image: 'https://picsum.photos/seed/event2/400/200'
+    },
+    {
+      date: 'Dec 01, 2024',
+      title: 'The Future of Contact Lens Technology',
+      description: 'Explore innovative materials and designs in contact lenses with industry leaders.',
+       type: 'Conference',
+       icon: <UsersIcon className="h-5 w-5 text-primary" />,
+       image: 'https://picsum.photos/seed/event3/400/200'
+    },
+     {
+      date: 'Dec 15, 2024',
+      title: 'AI in Eye Care Diagnostics',
+      description: 'Discover how artificial intelligence is revolutionizing diagnostics in eye care.',
+       type: 'Webinar',
+       icon: <Video className="h-5 w-5 text-primary" />,
+       image: 'https://picsum.photos/seed/event4/400/200'
+    },
+  ]
 
   return (
     <main>
@@ -188,56 +225,63 @@ export default function Home() {
               <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Events &amp; Webinars</h2>
               <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1 bg-white">
-                <div className="p-6">
-                  <p className="text-sm text-cyan-600 font-semibold">Oct 25, 2024</p>
-                  <h3 className="text-slate-800 text-xl font-bold mt-2 mb-2">Advances in Glaucoma Management</h3>
-                  <p className="text-gray-500 text-sm mb-4">Join our webinar to learn about the latest treatment options for glaucoma.</p>
-                  <a className="font-semibold text-cyan-600 hover:underline" href="#">Register Now <span className="material-symbols-outlined text-sm align-middle">arrow_forward</span></a>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1 bg-white">
-                <div className="p-6">
-                  <p className="text-sm text-cyan-600 font-semibold">Nov 12, 2024</p>
-                  <h3 className="text-slate-800 text-xl font-bold mt-2 mb-2">Pediatric Vision Screening Workshop</h3>
-                  <p className="text-gray-500 text-sm mb-4">A hands-on workshop for professionals on effective pediatric vision screening.</p>
-                  <a className="font-semibold text-cyan-600 hover:underline" href="#">Register Now <span className="material-symbols-outlined text-sm align-middle">arrow_forward</span></a>
-                </div>
-              </div>
-              <div className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1 bg-white">
-                <div className="p-6">
-                  <p className="text-sm text-cyan-600 font-semibold">Dec 01, 2024</p>
-                  <h3 className="text-slate-800 text-xl font-bold mt-2 mb-2">The Future of Contact Lens Technology</h3>
-                  <p className="text-gray-500 text-sm mb-4">Explore innovative materials and designs in contact lenses with industry leaders.</p>
-                  <a className="font-semibold text-cyan-600 hover:underline" href="#">Register Now <span className="material-symbols-outlined text-sm align-middle">arrow_forward</span></a>
-                </div>
-              </div>
+             <div className="relative">
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {events.map((event, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                        <Image src={event.image} alt={event.title} width={400} height={200} className="w-full h-40 object-cover" data-ai-hint="conference room" />
+                        <CardContent className="p-4 flex flex-col flex-grow">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                            {event.icon}
+                            <span>{event.type}</span>
+                            <span className="mx-1">•</span>
+                            <span>{event.date}</span>
+                          </div>
+                          <h3 className="text-lg font-bold text-slate-800 flex-grow">{event.title}</h3>
+                          <Button asChild variant="link" className="p-0 h-auto justify-start mt-4 text-primary">
+                            <Link href="#">Register Now <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
           </section>
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Students List Directory</h2>
+              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Student Directory</h2>
               <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {students.map(student => (
-                  <div key={student.id} className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg text-center">
-                    <div className="p-6 flex flex-col items-center">
-                      <Image alt={student.name} className="w-32 h-32 rounded-full object-cover mb-4" src={student.avatarUrl} width={128} height={128} data-ai-hint="portrait person" />
-                      <h3 className="text-slate-800 text-lg font-bold">{student.name}</h3>
-                      <p className="text-gray-500 text-sm">{student.education[0]?.school || 'Optometry Student'}</p>
-                      <p className="text-gray-500 text-sm">Class of {student.education[0]?.endYear || '2025'}</p>
-                      <p className="mt-2 text-sm text-gray-500 flex-grow px-4">{student.bio.substring(0,100)}</p>
-                    </div>
-                    <div className="flex gap-2 p-4 pt-0 mt-auto">
-                        <Button asChild className="h-10 flex-1 bg-cyan-600 hover:bg-cyan-700">
-                          <Link href={`/${student.id}`}>View Profile</Link>
-                        </Button>
-                    </div>
-                  </div>
-              ))}
+            <div className="relative">
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {students.map((student) => (
+                    <CarouselItem key={student.id} className="md:basis-1/2 lg:basis-1/4 pl-4">
+                       <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
+                          <div className="p-6 flex flex-col items-center flex-grow">
+                            <Avatar className="h-24 w-24 mb-4">
+                              <AvatarImage src={student.avatarUrl} alt={student.name} data-ai-hint="portrait person" />
+                              <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <h3 className="text-lg font-bold text-slate-800">{student.name}</h3>
+                            <p className="text-sm text-cyan-600">{student.education[0]?.school || 'Optometry Student'}</p>
+                            <p className="text-sm text-muted-foreground mt-2 flex-grow">{student.bio.substring(0,80)}...</p>
+                          </div>
+                          <div className="p-4 border-t mt-auto">
+                             <Button asChild className="w-full">
+                                <Link href={`/${student.id}`}>View Profile</Link>
+                              </Button>
+                          </div>
+                       </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
           </section>
 
