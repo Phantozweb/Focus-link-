@@ -20,7 +20,6 @@ export function Header() {
         </div>
         <div className="flex flex-1 justify-end gap-4">
             <div className="flex gap-2">
-                <Button variant="ghost" className="hidden md:flex">Login</Button>
                 <Button asChild className="bg-cyan-600 hover:bg-cyan-700">
                   <Link href="/join">Join</Link>
                 </Button>
