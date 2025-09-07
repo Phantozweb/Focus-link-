@@ -7,9 +7,11 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, MapPin, Building, Users, Briefcase } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
@@ -17,6 +19,14 @@ export default function Home() {
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type)).slice(0, 6);
   const students = allUsers.filter(u => u.type === 'Student').slice(0, 4);
   const industry = allUsers.filter(u => u.type === 'Industry').slice(0, 6);
+  const router = useRouter();
+
+
+  const handleSearch = () => {
+    // In a real app, you'd collect filter values from state
+    // and pass them as query params to the directory page.
+    router.push('/directory');
+  }
 
   return (
     <main>
@@ -24,53 +34,78 @@ export default function Home() {
         <div className="container mx-auto px-4 text-left text-gray-800">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Find Your Next Opportunity in Eye Care</h1>
           <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600">Search for professionals, organizations, and resources in the optometry community.</p>
-           <div className="w-full max-w-4xl bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
-                <div className="lg:col-span-2">
-                   <label className="relative flex items-center">
-                    <Search className="absolute left-3 text-gray-500 h-5 w-5" />
-                    <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
-                  </label>
-                </div>
-                <div>
-                   <Select>
-                    <SelectTrigger className="w-full h-12 pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500">
-                      <Briefcase className="absolute left-3 text-gray-500 h-5 w-5" />
-                      <SelectValue placeholder="Profile Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Profiles</SelectItem>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="optometrist">Optometrist</SelectItem>
-                       <SelectItem value="academic">Academic / Researcher</SelectItem>
-                      <SelectItem value="association">Association</SelectItem>
-                      <SelectItem value="college">College / University</SelectItem>
-                      <SelectItem value="hospital">Hospital / Clinic</SelectItem>
-                      <SelectItem value="optical">Optical</SelectItem>
-                      <SelectItem value="industry">Industry</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                   <Select>
-                    <SelectTrigger className="w-full h-12 pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500">
-                       <Globe className="absolute left-3 text-gray-500 h-5 w-5" />
-                      <SelectValue placeholder="Country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                       {countries.map(country => (
-                        <SelectItem key={country.code} value={country.code}>
-                          {country.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="flex justify-end mt-4">
-                 <button className="w-full md:w-auto flex items-center justify-center h-11 px-8 bg-cyan-600 text-white font-bold rounded-md hover:bg-cyan-700 transition-colors">Search</button>
-              </div>
-            </div>
+            <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200">
+               <div className="flex flex-col md:flex-row gap-2 items-center">
+                 <div className="flex-grow w-full">
+                    <label className="relative flex items-center">
+                     <Search className="absolute left-3 text-gray-500 h-5 w-5" />
+                     <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-gray-100 text-gray-800 border-gray-300 focus:ring-cyan-500 focus:border-cyan-500 placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
+                   </label>
+                 </div>
+                 
+                 <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full md:w-auto h-12">
+                      <SlidersHorizontal className="mr-2 h-5 w-5" />
+                      Filters
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Advanced Search Filters</DialogTitle>
+                       <DialogDescription>
+                        Refine your search to find the perfect connection.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                       <div className="grid grid-cols-4 items-center gap-4">
+                        <label className="text-right">Type</label>
+                        <div className="col-span-3">
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a profile type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Profiles</SelectItem>
+                              <SelectItem value="student">Student</SelectItem>
+                              <SelectItem value="optometrist">Optometrist</SelectItem>
+                              <SelectItem value="academic">Academic / Researcher</SelectItem>
+                              <SelectItem value="association">Association</SelectItem>
+                              <SelectItem value="college">College / University</SelectItem>
+                              <SelectItem value="hospital">Hospital / Clinic</SelectItem>
+                              <SelectItem value="optical">Optical</SelectItem>
+                              <SelectItem value="industry">Industry</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <label className="text-right">Country</label>
+                         <div className="col-span-3">
+                          <Select>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a country" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {countries.map(country => (
+                                <SelectItem key={country.code} value={country.code}>
+                                  {country.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                     <Button type="submit" onClick={handleSearch} className="w-full">
+                        Show Results
+                      </Button>
+                  </DialogContent>
+                </Dialog>
+
+                 <Button className="w-full md:w-auto h-12" onClick={handleSearch}>Search</Button>
+               </div>
+             </div>
         </div>
       </section>
 
