@@ -1,11 +1,13 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Briefcase, MapPin, ArrowRight, Lightbulb, Building, Award, Stethoscope, Hospital, Glasses } from 'lucide-react';
+import { ArrowRight, Mail, Phone, Linkedin, Globe } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 
 interface ProfileCardProps {
   user: UserProfile;
@@ -13,75 +15,65 @@ interface ProfileCardProps {
 
 const getBadgeVariant = (type: UserProfile['type']) => {
   switch(type) {
-    case 'Student':
-    case 'Academic':
-    case 'Researcher':
-      return 'secondary';
+    case 'Student': return 'secondary';
+    case 'Academic': return 'secondary';
+    case 'Researcher': return 'secondary';
     case 'Association':
     case 'College':
     case 'Hospital':
-    case 'Optical':
-      return 'outline';
-    default:
-      return 'default';
+    case 'Optical': return 'outline';
+    default: return 'default';
   }
 }
 
-const getIcon = (type: UserProfile['type']) => {
-  switch(type) {
-    case 'Association': return <Award className="h-4 w-4 flex-shrink-0" />;
-    case 'College': return <Building className="h-4 w-4 flex-shrink-0" />;
-    case 'Hospital': return <Hospital className="h-4 w-4 flex-shrink-0" />;
-    case 'Optical': return <Glasses className="h-4 w-4 flex-shrink-0" />;
-    default: return <Briefcase className="h-4 w-4 flex-shrink-0" />;
-  }
-}
 
 export function ProfileCard({ user }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical'].includes(user.type);
+  
+  if(isOrg) {
+    return (
+       <div className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg h-full">
+          <div className="relative">
+              <Image alt={`${user.name} Banner`} className="w-full h-24 object-cover rounded-t-lg" src={`https://picsum.photos/seed/${user.id}b/400/100`} width={400} height={100} data-ai-hint="office building" />
+              <Avatar className="w-20 h-20 rounded-full object-cover absolute -bottom-10 left-6 border-4 border-white shadow-md">
+                <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint="logo building" />
+                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+          </div>
+          <div className="flex flex-1 flex-col p-6 pt-16">
+              <h3 className="text-lg font-bold text-slate-800">{user.name}</h3>
+              <p className="text-sm text-gray-500 flex-grow mt-2">{user.bio.substring(0,100)}...</p>
+              <div className="flex gap-2 mt-4">
+                  <Button asChild className="h-10 flex-1" variant="outline">
+                    <Link href={`/${user.id}`}>View Profile</Link>
+                  </Button>
+              </div>
+          </div>
+      </div>
+    )
+  }
 
   return (
-    <Link href={`/${user.id}`} className="group">
-      <Card className="h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
-        <CardHeader className="flex flex-row items-center gap-4">
-            <Avatar className="h-16 w-16 border-2 border-primary/20">
-              <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={isOrg ? "logo building" : "portrait person"}/>
-              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <CardTitle className="font-headline text-xl">{user.name}</CardTitle>
-              <CardDescription>
-                <Badge variant={getBadgeVariant(user.type)} className="mt-1">{user.type}</Badge>
-              </CardDescription>
-            </div>
-        </CardHeader>
-        <CardContent className="flex-grow space-y-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 flex-shrink-0"/>
-                <span>{user.location}</span>
-            </div>
-            <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                {getIcon(user.type)}
-                <span>{user.experience}</span>
-            </div>
-            <div className="pt-2">
-                <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1">
-                  <Lightbulb className="h-3 w-3" /> {isOrg ? 'Focus Areas' : 'Top Skills'}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                    {user.skills.slice(0, 2).map((skill) => (
-                        <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
-                    ))}
-                </div>
-            </div>
-        </CardContent>
-        <CardFooter>
-            <Button variant="ghost" className="w-full justify-between">
-                View Profile
-                <ArrowRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+    <div className="group flex flex-col sm:flex-row rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg h-full">
+      <div className="w-full sm:w-1/3">
+        <Image alt={user.name} className="w-full h-full object-cover rounded-t-lg sm:rounded-l-lg sm:rounded-t-none" src={user.avatarUrl} width={200} height={300} data-ai-hint="portrait person" />
+      </div>
+      <div className="flex flex-1 flex-col p-6 w-full sm:w-2/3">
+        <h3 className="text-lg font-bold text-slate-800">{user.name}</h3>
+        <p className="text-sm text-cyan-600">{user.experience}</p>
+        <p className="mt-2 text-sm text-gray-500 flex-grow">{user.bio.substring(0, 70)}...</p>
+        <div className="mt-4 space-y-2">
+           {user.links.email && <a className="flex items-center text-sm text-gray-600 hover:text-cyan-600" href={`mailto:${user.links.email}`}><Mail className="mr-2 h-4 w-4" /> {user.links.email}</a>}
+           {user.links.linkedin && <a className="flex items-center text-sm text-gray-600 hover:text-cyan-600" href={user.links.linkedin}><Linkedin className="mr-2 h-4 w-4" /> LinkedIn</a>}
+        </div>
+        <div className="flex gap-2 mt-4">
+           <Button asChild className="h-10 flex-1" variant="outline">
+              <Link href={`/${user.id}`}>View Profile</Link>
             </Button>
-        </CardFooter>
-      </Card>
-    </Link>
-  );
+        </div>
+      </div>
+    </div>
+  )
 }
+
+    

@@ -1,4 +1,6 @@
+
 import type {Config} from 'tailwindcss';
+const colors = require('tailwindcss/colors')
 
 export default {
   darkMode: ['class'],
@@ -17,11 +19,12 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Roboto', 'sans-serif'],
-        headline: ['PT Sans', 'sans-serif'],
-        code: ['monospace'],
+        sans: ['Public Sans', 'Noto Sans', 'sans-serif'],
+        headline: ['Public Sans', 'Noto Sans', 'sans-serif'],
       },
       colors: {
+        slate: colors.slate,
+        cyan: colors.cyan,
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -92,5 +95,7 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/forms')],
 } satisfies Config;
+
+    

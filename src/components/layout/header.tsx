@@ -1,55 +1,62 @@
+
 import Link from 'next/link';
-import { Eye, Menu, Info, UserPlus } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
 
 export function Header() {
   return (
-    <header className="bg-background border-b sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
-        <Link href="/" className="flex items-center gap-3 text-primary font-bold text-xl transition-opacity hover:opacity-80">
-          <div className="bg-primary/10 p-2 rounded-lg">
-            <Eye className="h-6 w-6 text-primary" />
-          </div>
-          <span className="font-headline text-2xl">OptoConnect</span>
-        </Link>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          <Link href="/about" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-            About
-          </Link>
-          <Button asChild>
-            <Link href="/join">Become a Member</Link>
-          </Button>
-        </nav>
-
-        {/* Mobile Navigation */}
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <nav className="flex flex-col gap-6 pt-8">
-                <SheetClose asChild>
-                    <Link href="/about" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
-                      <Info /> About
-                    </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                    <Link href="/join" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
-                      <UserPlus /> Join Directory
-                    </Link>
-                </SheetClose>
-              </nav>
-            </SheetContent>
-          </Sheet>
+    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 fixed w-full z-40 top-0">
+        <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-3 text-slate-800">
+                <span className="material-symbols-outlined text-3xl text-cyan-600">
+                remove_red_eye
+                </span>
+                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">OptoConnect</h2>
+            </Link>
+            <nav className="hidden md:flex items-center gap-6">
+                <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/">Home</Link>
+                <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/about">About Us</Link>
+            </nav>
         </div>
-      </div>
+        <div className="flex flex-1 justify-end gap-4">
+            <div className="flex gap-2">
+                <Button variant="ghost" className="hidden md:flex">Login</Button>
+                <Button asChild className="bg-cyan-600 hover:bg-cyan-700">
+                  <Link href="/join">Join</Link>
+                </Button>
+            </div>
+             <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon">
+                     <span className="material-symbols-outlined">menu</span>
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <nav className="flex flex-col gap-6 pt-8">
+                    <SheetClose asChild>
+                        <Link href="/" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                          <span className="material-symbols-outlined">home</span> Home
+                        </Link>
+                    </SheetClose>
+                     <SheetClose asChild>
+                        <Link href="/about" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                          <span className="material-symbols-outlined">info</span> About
+                        </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                        <Link href="/join" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                          <span className="material-symbols-outlined">person_add</span> Join Directory
+                        </Link>
+                    </SheetClose>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </div>
+        </div>
     </header>
   );
 }
+
+    
