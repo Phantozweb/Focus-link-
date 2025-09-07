@@ -14,6 +14,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { UserProfile } from '@/types';
+
+const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
@@ -69,10 +72,10 @@ export default function Home() {
   return (
     <main>
        <section className="relative py-20 md:py-28 bg-white">
-        <div className="container mx-auto px-4 text-left text-gray-800">
+        <div className="container mx-auto px-4 text-center text-gray-800">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-slate-800">Find Your Next Opportunity in Eye Care</h1>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600">Search for professionals, organizations, and resources in the eye care community.</p>
-            <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200">
+          <p className="text-lg md:text-xl mb-8 max-w-3xl text-slate-600 mx-auto">Search for professionals, organizations, and resources in the eye care community.</p>
+            <div className="w-full max-w-2xl bg-white p-2 rounded-lg shadow-lg border border-gray-200 mx-auto">
                <div className="flex flex-col md:flex-row gap-2 items-center">
                  <div className="flex-grow w-full">
                     <label className="relative flex items-center">
@@ -105,14 +108,11 @@ export default function Home() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="all">All Profiles</SelectItem>
-                              <SelectItem value="student">Student</SelectItem>
-                              <SelectItem value="optometrist">Optometrist</SelectItem>
-                              <SelectItem value="academic">Academic / Researcher</SelectItem>
-                              <SelectItem value="association">Association</SelectItem>
-                              <SelectItem value="college">College / University</SelectItem>
-                              <SelectItem value="hospital">Hospital / Clinic</SelectItem>
-                              <SelectItem value="optical">Optical</SelectItem>
-                              <SelectItem value="industry">Industry</SelectItem>
+                               {profileTypes.map(type => (
+                                <SelectItem key={type} value={type}>
+                                  {type}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
@@ -125,8 +125,9 @@ export default function Home() {
                               <SelectValue placeholder="Select a country" />
                             </SelectTrigger>
                             <SelectContent>
+                              <SelectItem value="all">All Countries</SelectItem>
                               {countries.map(country => (
-                                <SelectItem key={country.code} value={country.code}>
+                                <SelectItem key={country.code} value={country.name.toLowerCase()}>
                                   {country.name}
                                 </SelectItem>
                               ))}
@@ -327,5 +328,3 @@ export default function Home() {
     </main>
   );
 }
-
-    
