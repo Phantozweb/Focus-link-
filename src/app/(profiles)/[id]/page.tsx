@@ -1,13 +1,15 @@
+
 import { users } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { Education, WorkExperience } from '@/types';
+import type { Education, WorkExperience, UserProfile } from '@/types';
+import Image from 'next/image';
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
   return (
@@ -40,12 +42,131 @@ function EducationItem({ education }: { education: Education }) {
   )
 }
 
+function StudentProfile({ user }: { user: UserProfile }) {
+  const totalExperienceYears = user.workExperience.reduce((acc, exp) => {
+    const start = new Date(exp.startDate);
+    const end = exp.endDate.toLowerCase() === 'present' ? new Date() : new Date(exp.endDate);
+    const diff = end.getTime() - start.getTime();
+    return acc + diff / (1000 * 60 * 60 * 24 * 365.25);
+  }, 0);
+
+  return (
+     <main className="flex flex-1 justify-center py-8 bg-gray-50">
+      <div className="flex w-full max-w-4xl flex-col gap-8">
+        <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+          <div className="flex flex-col p-6 sm:flex-row sm:items-start sm:gap-6">
+             <Avatar className="relative size-32 shrink-0 rounded-full border-4 border-white shadow-md">
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
+             </Avatar>
+            <div className="mt-4 flex-grow sm:mt-0">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                <div className="mb-4 sm:mb-0">
+                  <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                  <p className="text-md text-gray-600">{user.experience} at {user.education[0]?.school}</p>
+                  <p className="text-sm text-gray-500">{user.location}</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button>
+                    <UserPlus className="mr-2" /> Connect
+                  </Button>
+                  <Button variant="outline">Portfolio</Button>
+                </div>
+              </div>
+              <p className="mt-4 text-base text-gray-700">{user.bio}</p>
+            </div>
+          </div>
+        </div>
+
+        {user.workExperience.length > 0 && (
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">Experience</h2>
+               <span className="text-sm font-medium text-gray-600">Total Experience: {Math.floor(totalExperienceYears)} years</span>
+            </div>
+            <div className="mt-6 space-y-6">
+              {user.workExperience.map((exp, index) => (
+                <div key={index} className="flex gap-4">
+                  <div className="flex size-12 items-center justify-center rounded-lg bg-gray-100">
+                     <Briefcase className="h-7 w-7 text-gray-500" />
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-base font-semibold text-gray-800">{exp.title}</h3>
+                    <p className="text-sm text-gray-600">{exp.company}</p>
+                    <p className="text-sm text-gray-500">{exp.startDate} - {exp.endDate}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {user.education.length > 0 && (
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900">Education</h2>
+            <div className="mt-6 space-y-6">
+              {user.education.map((edu, index) => (
+                 <div key={index} className="flex items-start gap-4">
+                    <div className="flex size-12 items-center justify-center rounded-lg bg-gray-100">
+                        <GraduationCap className="h-7 w-7 text-gray-500" />
+                    </div>
+                    <div className="flex-grow">
+                        <h3 className="text-base font-semibold text-gray-800">{edu.school}</h3>
+                        <p className="text-sm text-gray-600">{edu.degree}, {edu.fieldOfStudy}</p>
+                        <p className="text-sm text-gray-500">{edu.startYear} - {edu.endYear}</p>
+                    </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {user.skills.length > 0 && (
+            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-bold text-gray-900">Skills</h2>
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {user.skills.map((skill, index) => (
+                        <span key={index} className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">{skill}</span>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {user.languages.length > 0 && (
+            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-bold text-gray-900">Languages</h2>
+                <div className="mt-4 space-y-2">
+                    {user.languages.map((lang, index) => (
+                        <p key={index} className="text-base text-gray-800">{lang}</p>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {user.interests.length > 0 && (
+            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-bold text-gray-900">Areas of Interest</h2>
+                <div className="mt-4 flex flex-wrap gap-2">
+                     {user.interests.map((interest, index) => (
+                        <span key={index} className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">{interest}</span>
+                    ))}
+                </div>
+            </div>
+        )}
+      </div>
+    </main>
+  )
+}
 
 export default function ProfilePage({ params }: { params: { id: string } }) {
   const user = users.find((u) => u.id === params.id);
 
   if (!user) {
     notFound();
+  }
+
+  if (user.type === 'Student') {
+    return <StudentProfile user={user} />;
   }
   
   const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(user.type);
