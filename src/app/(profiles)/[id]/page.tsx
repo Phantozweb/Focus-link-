@@ -59,7 +59,11 @@ function StudentProfile({ user }: { user: UserProfile }) {
 
   return (
      <main className="flex flex-1 justify-center py-8 bg-gray-50">
-      <div className="flex w-full max-w-4xl flex-col gap-8">
+        <Button variant="outline" onClick={() => router.back()} className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
+      <div className="flex w-full max-w-4xl flex-col gap-8 px-4">
         <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
           <div className="flex flex-col p-6 sm:flex-row sm:items-start sm:gap-6">
              <Avatar className="relative size-32 shrink-0 rounded-full border-4 border-white shadow-md">
@@ -180,22 +184,22 @@ function AssociationProfile({ user }: { user: UserProfile }) {
   
   return (
     <div className="flex-1 bg-gray-50">
-        <Button variant="outline" onClick={() => router.back()} className="mb-4 ml-10 mt-4">
+        <Button variant="outline" onClick={() => router.back()} className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-      <div className="relative h-64 w-full">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('https://picsum.photos/seed/${user.id}b/1200/300')` }} data-ai-hint="office building"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+      <div className="relative h-48 md:h-64 w-full">
+        <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} layout="fill" objectFit="cover" data-ai-hint="office building"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
       </div>
-      <div className="px-40 pb-10">
-        <div className="mx-auto max-w-[960px] -mt-16">
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <div className="flex w-full flex-col gap-6 md:flex-row md:items-start md:justify-between">
-              <div className="flex items-start gap-6">
-                <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-md h-32 w-32 shadow-sm border-4 border-white" style={{ backgroundImage: `url('${user.avatarUrl}')` }} data-ai-hint="logo building"></div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="max-w-5xl mx-auto -mt-16">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-md">
+            <div className="flex w-full flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                <Image src={user.avatarUrl} alt={`${user.name} logo`} width={128} height={128} className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-sm border-4 border-white" data-ai-hint="logo building" />
                 <div className="flex flex-col gap-1 pt-2">
-                  <h1 className="text-slate-800 text-2xl font-bold leading-tight tracking-tight">{user.name}</h1>
+                  <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight">{user.name}</h1>
                   <p className="text-gray-500">{user.experience}</p>
                   <p className="text-gray-500">{user.skills.length * 1000 + 2345} members</p>
                 </div>
