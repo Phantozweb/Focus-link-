@@ -30,7 +30,7 @@ const getBadgeVariant = (type: UserProfile['type']) => {
 
 export function ProfileCard({ user }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
-  const isProfessional = ['Optometrist', 'Academic', 'Researcher'].includes(user.type);
+  const isProfessional = ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(user.type);
 
   if(isOrg || isProfessional) {
     return (

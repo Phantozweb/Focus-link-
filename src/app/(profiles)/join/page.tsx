@@ -53,7 +53,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: 'Name must be at least 2 characters.',
   }),
-  type: z.enum(['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'], {
+  type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'], {
     required_error: 'You need to select a profile type.',
   }),
   avatar: z.any().refine(files => files?.length === 1, 'Avatar is required.'),
@@ -108,7 +108,7 @@ export default function JoinPage() {
   const { fields: skillFields, add: addSkill, remove: removeSkill } = useDynamicFields(form, 'skills');
 
   const profileType = form.watch('type');
-  const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher'].includes(profileType);
+  const isIndividual = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(profileType);
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
 
 
@@ -220,6 +220,14 @@ export default function JoinPage() {
                               <FormItem className="flex items-center space-x-2 space-y-0">
                                 <FormControl><RadioGroupItem value="Optometrist" /></FormControl>
                                 <FormLabel className="font-normal">Optometrist</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Ophthalmologist" /></FormControl>
+                                <FormLabel className="font-normal">Ophthalmologist</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl><RadioGroupItem value="Optician" /></FormControl>
+                                <FormLabel className="font-normal">Optician</FormLabel>
                               </FormItem>
                               <FormItem className="flex items-center space-x-2 space-y-0">
                                 <FormControl><RadioGroupItem value="Academic" /></FormControl>

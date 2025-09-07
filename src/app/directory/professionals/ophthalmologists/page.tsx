@@ -11,7 +11,7 @@ import { countries } from '@/lib/countries';
 import { Search, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function ResearchersDirectoryPage() {
+export default function OphthalmologistsDirectoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -35,16 +35,16 @@ export default function ResearchersDirectoryPage() {
       q: searchTerm,
       country: selectedCountry,
     });
-    router.push(`/directory/professionals/researchers?${queryString}`);
+    router.push(`/directory/professionals/ophthalmologists?${queryString}`);
   };
 
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCountry('all');
-    router.push(`/directory/professionals/researchers`);
+    router.push(`/directory/professionals/ophthalmologists`);
   };
 
-  const initialFilteredUsers = allUsers.filter(user => user.type === 'Researcher');
+  const initialFilteredUsers = allUsers.filter(user => user.type === 'Ophthalmologist');
 
   const filteredUsers = allUsers.filter(user => {
     const searchParam = searchParams.get('q');
@@ -55,7 +55,7 @@ export default function ResearchersDirectoryPage() {
       user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase())) ||
       user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase()));
 
-    const matchesCategory = user.type === 'Researcher';
+    const matchesCategory = user.type === 'Ophthalmologist';
 
     const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
 
@@ -128,7 +128,7 @@ export default function ResearchersDirectoryPage() {
 
           <main className="lg:col-span-3">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold font-headline">Researcher Directory</h1>
+              <h1 className="text-3xl font-bold font-headline">Ophthalmologist Directory</h1>
               <p className="text-muted-foreground mt-1">
                 Showing {filteredUsers.length} of {initialFilteredUsers.length} results.
               </p>

@@ -332,7 +332,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
     return <AssociationProfile user={user} />;
   }
 
-  const isIndividual = ['Optometrist', 'Academic', 'Researcher'].includes(user.type);
+  const isIndividual = ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(user.type);
   const isOrg = ['College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
 
   const getOrgIcon = () => {
