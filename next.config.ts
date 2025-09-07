@@ -36,7 +36,6 @@ const nextConfig: NextConfig = {
       config.externals = [
         ...config.externals,
         /@genkit-ai\/.*/,
-        /zod/,
         /genkit/,
       ];
     }
