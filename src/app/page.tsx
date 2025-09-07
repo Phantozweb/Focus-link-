@@ -17,7 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
-  const organizations = allUsers.filter(u => ['Association', 'College'].includes(u.type)).slice(0, 6);
+  const associations = allUsers.filter(u => u.type === 'Association').slice(0, 6);
+  const colleges = allUsers.filter(u => u.type === 'College').slice(0, 6);
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type)).slice(0, 6);
   const students = allUsers.filter(u => u.type === 'Student').slice(0, 6);
   const industry = allUsers.filter(u => u.type === 'Industry').slice(0, 6);
@@ -168,13 +169,49 @@ export default function Home() {
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Associations &amp; Colleges</h2>
+              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Associations</h2>
               <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
             </div>
              <div className="relative">
                <Carousel opts={{ align: "start" }} className="w-full">
                 <CarouselContent className="-ml-4">
-                  {organizations.map((user) => (
+                  {associations.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </section>
+          
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Colleges & Schools</h2>
+              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+            </div>
+             <div className="relative">
+               <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {colleges.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </section>
+          
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold leading-tight tracking-tight">Featured Communities</h2>
+              <a className="text-cyan-600 font-semibold hover:underline" href="#">View All</a>
+            </div>
+             <div className="relative">
+               <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {associations.map((user) => (
                     <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                       <ProfileCard user={user} />
                     </CarouselItem>
@@ -290,3 +327,5 @@ export default function Home() {
     </main>
   );
 }
+
+    
