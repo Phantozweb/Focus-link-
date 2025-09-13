@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, Calendar, Video, Users as UsersIcon } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, Calendar, Video, Users as UsersIcon, CheckCircle2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -301,7 +301,10 @@ export default function Home() {
                             <AvatarImage src={student.avatarUrl} alt={student.name} data-ai-hint="portrait person" />
                             <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          <h3 className="text-lg font-bold text-slate-800">{student.name}</h3>
+                          <h3 className="text-lg font-bold text-slate-800 flex items-center justify-center gap-2">
+                            {student.name}
+                            {student.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                          </h3>
                           <p className="text-sm text-primary">{student.education[0]?.school || 'Optometry Student'}</p>
                           <p className="text-sm text-muted-foreground mt-2 flex-grow">{student.bio.substring(0,80)}...</p>
                         </div>

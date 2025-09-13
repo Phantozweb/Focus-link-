@@ -22,7 +22,7 @@ function ExperienceItem({ experience }: { experience: WorkExperience }) {
       <div>
          <div className="flex items-baseline gap-x-2">
             <h4 className="font-semibold text-lg">{experience.title}</h4>
-            {experience.duration && <span className="text-sm text-muted-foreground">{experience.duration}</span>}
+            {experience.duration && <span className="text-sm text-muted-foreground">({experience.duration})</span>}
         </div>
         <p className="text-muted-foreground">{experience.company}</p>
         <p className="text-sm text-muted-foreground">{experience.startDate} - {experience.endDate}</p>
@@ -131,7 +131,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
               <div className="lg:col-span-2 space-y-8">
                 <section>
                   <h2 className="text-xl font-bold font-headline mb-4">About</h2>
-                  <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\\n/g, '<br />') }} />
+                  <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                 </section>
                 
                 {user.workExperience.length > 0 && (

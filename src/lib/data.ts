@@ -125,9 +125,9 @@ I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed 
 
 I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
 
-"Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact."
+**"Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact."**
 
-A special thanks to Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam), whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.
+A special thanks to **Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam)**, whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.
 
 Let’s connect and co-create the future of optometry through bold ideas, smart tools, and a vision that empowers everyone.`,
     links: {
@@ -179,7 +179,8 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     ],
     education: [
       {
-        school: 'Alagappa University, Karaikudi',
+        school: 'VK College of Optometry',
+        university: 'Alagappa University, Karaikudi',
         degree: 'B.Sc. Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2023',

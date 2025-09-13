@@ -14,6 +14,7 @@ export type Education = {
   fieldOfStudy: string;
   startYear: string;
   endYear: string;
+  university?: string;
 };
 
 export type UserProfile = {
