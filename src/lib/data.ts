@@ -134,7 +134,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
       linkedin: 'https://www.linkedin.com/in/janarthan-v',
       email: 'janarthanv@outlook.com',
     },
-    avatarUrl: 'https://picsum.photos/seed/19/400/400',
+    avatarUrl: 'https://iili.io/KTpEi9s.md.jpg',
     workExperience: [
       {
         title: 'Founder',
@@ -463,3 +463,5 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     languages: ['English'],
   },
 ];
+
+    
