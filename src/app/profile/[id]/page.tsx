@@ -12,7 +12,6 @@ import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
 import Image from 'next/image';
-import { use } from 'react';
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
   return (
@@ -318,7 +317,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams();
-  const id = use(params).id as string;
+  const id = params.id as string;
   const user = users.find((u) => u.id === id);
 
   if (!user) {
