@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/types';
+import { useState } from 'react';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
@@ -27,11 +28,23 @@ export default function Home() {
   const industry = allUsers.filter(u => u.type === 'Industry').slice(0, 6);
   const router = useRouter();
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterCountry, setFilterCountry] = useState('all');
+
 
   const handleSearch = () => {
-    // In a real app, you'd collect filter values from state
-    // and pass them as query params to the directory page.
-    router.push('/directory/all');
+    const params = new URLSearchParams();
+    if (searchTerm) {
+      params.set('q', searchTerm);
+    }
+    if (filterCountry !== 'all') {
+      params.set('country', filterCountry);
+    }
+
+    const category = filterType !== 'all' ? filterType.toLowerCase() + 's' : 'all';
+    
+    router.push(`/directory/${category}?${params.toString()}`);
   }
 
   const events = [
@@ -80,7 +93,13 @@ export default function Home() {
              <div className="flex-grow w-full">
                 <label className="relative flex items-center">
                  <Search className="absolute left-3 text-gray-500 h-5 w-5" />
-                 <input className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" placeholder="Search by name, skill, or keyword..."/>
+                 <input 
+                    className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" 
+                    placeholder="Search by name, skill, or keyword..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  />
                </label>
              </div>
              
@@ -102,7 +121,7 @@ export default function Home() {
                    <div className="grid grid-cols-4 items-center gap-4">
                     <label className="text-right">Type</label>
                     <div className="col-span-3">
-                      <Select>
+                      <Select onValueChange={setFilterType} value={filterType}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a profile type" />
                         </SelectTrigger>
@@ -120,7 +139,7 @@ export default function Home() {
                   <div className="grid grid-cols-4 items-center gap-4">
                     <label className="text-right">Country</label>
                      <div className="col-span-3">
-                      <Select>
+                      <Select onValueChange={setFilterCountry} value={filterCountry}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a country" />
                         </SelectTrigger>
@@ -330,3 +349,4 @@ export default function Home() {
     
 
     
+

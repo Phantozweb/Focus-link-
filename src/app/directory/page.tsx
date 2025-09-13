@@ -4,14 +4,14 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { Briefcase, GraduationCap, Building, Hospital, Users, Factory } from 'lucide-react';
+import { Briefcase, GraduationCap, Building, Hospital, Users, Factory, Microscope, BookOpen, Stethoscope, Handshake } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const categoryLinks = [
     { name: 'Students', icon: <GraduationCap className="h-8 w-8 text-primary" />, href: '/directory/students', description: 'Find the next generation of talent.' },
-    { name: 'Professionals', icon: <Briefcase className="h-8 w-8 text-primary" />, href: '/directory/professionals', description: 'Connect with experienced ODs, Academics, and Researchers.' },
-    { name: 'Associations', icon: <Users className="h-8 w-8 text-primary" />, href: '/directory/associations', description: 'Explore leading professional organizations.' },
-    { name: 'Colleges & Schools', icon: <Building className="h-8 w-8 text-primary" />, href: '/directory/colleges', description: 'Discover top-tier educational institutions.' },
+    { name: 'Professionals', icon: <Stethoscope className="h-8 w-8 text-primary" />, href: '/directory/professionals', description: 'Connect with experienced ODs, MDs, and Opticians.' },
+    { name: 'Associations', icon: <Handshake className="h-8 w-8 text-primary" />, href: '/directory/associations', description: 'Explore leading professional organizations.' },
+    { name: 'Colleges & Schools', icon: <BookOpen className="h-8 w-8 text-primary" />, href: '/directory/colleges', description: 'Discover top-tier educational institutions.' },
     { name: 'Clinics & Opticals', icon: <Hospital className="h-8 w-8 text-primary" />, href: '/directory/clinics', description: 'Find top-rated practices and eye care centers.' },
     { name: 'Industry Partners', icon: <Factory className="h-8 w-8 text-primary" />, href: '/directory/industry', description: 'Connect with industry leaders and innovators.' },
 ];
