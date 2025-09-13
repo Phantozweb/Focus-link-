@@ -13,6 +13,7 @@ import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
 import Image from 'next/image';
+import { use } from 'react';
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
   return (
@@ -48,137 +49,135 @@ function EducationItem({ education }: { education: Education }) {
 function StudentProfile({ user }: { user: UserProfile }) {
   const router = useRouter();
 
-  const totalExperienceYears = user.workExperience.reduce((acc, exp) => {
-    // A simple calculation, assuming start and end are just years for now
-    const start = new Date(exp.startDate);
-    const end = exp.endDate.toLowerCase() === 'present' ? new Date() : new Date(exp.endDate);
-    if (isNaN(start.getTime()) || isNaN(end.getTime())) return acc;
-    const diff = end.getTime() - start.getTime();
-    return acc + diff / (1000 * 60 * 60 * 24 * 365.25);
-  }, 0);
-
   return (
-     <main className="flex flex-1 justify-center py-8 bg-gray-50">
-        <Button variant="outline" onClick={() => router.back()} className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
+    <div className="bg-muted/40">
+      <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
+        <Button variant="outline" onClick={() => router.back()} className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-      <div className="flex w-full max-w-4xl flex-col gap-8 px-4">
-        <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
-          <div className="flex flex-col p-6 sm:flex-row sm:items-start sm:gap-6">
-             <Avatar className="relative size-32 shrink-0 rounded-full border-4 border-white shadow-md">
-                <AvatarImage src={user.avatarUrl} alt={user.name} />
-                <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
-             </Avatar>
-            <div className="mt-4 flex-grow sm:mt-0">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                <div className="mb-4 sm:mb-0">
-                  <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <Card className="overflow-hidden">
+          <div className="relative h-48 w-full bg-primary/10">
+            {/* Placeholder for a banner image */}
+          </div>
+          <CardContent className="p-0">
+            <div className="p-6 sm:p-8 -mt-24">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
+                <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
+                  <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={"portrait person"} />
+                  <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
+                  <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
                     {user.name}
-                    {user.verified && <CheckCircle2 className="h-6 w-6 text-primary" />}
+                    {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
                   </h1>
-                  <p className="text-md text-gray-600">{user.experience} at {user.education[0]?.school}</p>
-                  <p className="text-sm text-gray-500">{user.location}</p>
-                </div>
-                <div className="flex gap-2">
-                  {user.links.email && (
-                    <Button asChild>
-                      <a href={`mailto:${user.links.email}`}>
-                        <Mail className="mr-2" /> Email
-                      </a>
-                    </Button>
-                  )}
-                  {user.links.linkedin && (
-                    <Button asChild variant="outline">
-                      <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">
-                         <Linkedin className="mr-2" /> LinkedIn
-                      </a>
-                    </Button>
-                  )}
+                  <p className="text-lg text-muted-foreground">{user.experience}</p>
+                   <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
+                    {user.links.email && (
+                      <Button asChild variant="outline" size="icon">
+                        <a href={`mailto:${user.links.email}`} aria-label="Email">
+                          <Mail className="h-5 w-5" />
+                        </a>
+                      </Button>
+                    )}
+                    {user.links.linkedin && (
+                      <Button asChild variant="outline" size="icon">
+                        <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={"LinkedIn"}>
+                          <Linkedin className="h-5 w-5" />
+                        </a>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
-              <p className="mt-4 text-base text-gray-700">{user.bio}</p>
             </div>
-          </div>
-        </div>
-
-        {user.workExperience.length > 0 && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">Experience</h2>
-               <span className="text-sm font-medium text-gray-600">Total Experience: {Math.floor(totalExperienceYears)} years</span>
-            </div>
-            <div className="mt-6 space-y-6">
-              {user.workExperience.map((exp, index) => (
-                <div key={index} className="flex gap-4">
-                  <div className="flex size-12 items-center justify-center rounded-lg bg-gray-100">
-                     <Briefcase className="h-7 w-7 text-gray-500" />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 sm:p-8 pt-0">
+              {/* Left Column / Details */}
+              <div className="lg:col-span-1 space-y-6">
+                <section>
+                  <h2 className="text-xl font-bold font-headline mb-4">Details</h2>
+                  <div className="space-y-4">
+                      <div className="flex items-start gap-4">
+                        <Briefcase className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-semibold">Role</h3>
+                          <p className="text-muted-foreground">{user.type}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-semibold">Location</h3>
+                          <p className="text-muted-foreground">{user.location}</p>
+                        </div>
+                      </div>
+                      {user.languages.length > 0 && (
+                        <div className="flex items-start gap-4">
+                          <Languages className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                          <div>
+                            <h3 className="font-semibold">Languages</h3>
+                            <p className="text-muted-foreground">{user.languages.join(', ')}</p>
+                          </div>
+                        </div>
+                      )}
                   </div>
-                  <div className="flex-grow">
-                    <h3 className="text-base font-semibold text-gray-800">{exp.title}</h3>
-                    <p className="text-sm text-gray-600">{exp.company}</p>
-                    <p className="text-sm text-gray-500">{exp.startDate} - {exp.endDate}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+                </section>
+              </div>
 
-        {user.education.length > 0 && (
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900">Education</h2>
-            <div className="mt-6 space-y-6">
-              {user.education.map((edu, index) => (
-                 <div key={index} className="flex items-start gap-4">
-                    <div className="flex size-12 items-center justify-center rounded-lg bg-gray-100">
-                        <GraduationCap className="h-7 w-7 text-gray-500" />
+              {/* Right Column / Main Content */}
+              <div className="lg:col-span-2 space-y-8">
+                <section>
+                  <h2 className="text-xl font-bold font-headline mb-4">About</h2>
+                  <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />') }} />
+                  <Separator className="my-6" />
+                  <ProfileSummary bio={user.bio} />
+                </section>
+                
+                {user.workExperience.length > 0 && (
+                   <section>
+                    <h2 className="text-xl font-bold font-headline mb-4">Experience</h2>
+                    <div className="space-y-6">
+                      {user.workExperience.map((exp, index) => <ExperienceItem key={index} experience={exp} />)}
                     </div>
-                    <div className="flex-grow">
-                        <h3 className="text-base font-semibold text-gray-800">{edu.school}</h3>
-                        <p className="text-sm text-gray-600">{edu.degree}, {edu.fieldOfStudy}</p>
-                        <p className="text-sm text-gray-500">{edu.startYear} - {edu.endYear}</p>
+                  </section>
+                )}
+                
+                {user.education.length > 0 && (
+                   <section>
+                    <h2 className="text-xl font-bold font-headline mb-4">Education</h2>
+                    <div className="space-y-6">
+                      {user.education.map((edu, index) => <EducationItem key={index} education={edu} />)}
                     </div>
-                </div>
-              ))}
+                  </section>
+                )}
+              
+                <section>
+                  <h2 className="text-xl font-bold font-headline mb-4">Skills & Interests</h2>
+                   <div className="mb-6">
+                      <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                          <Lightbulb className="h-5 w-5 text-accent" /> Skills
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {user.skills.map(skill => <Badge key={skill} variant="secondary" className="text-sm py-1 px-3">{skill}</Badge>)}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                          <Stethoscope className="h-5 w-5 text-accent" /> Interests
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {user.interests.map(interest => <Badge key={interest} variant="outline" className="text-sm py-1 px-3">{interest}</Badge>)}
+                      </div>
+                    </div>
+                </section>
+              </div>
             </div>
-          </div>
-        )}
-        
-        {user.skills.length > 0 && (
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-900">Skills</h2>
-                <div className="mt-4 flex flex-wrap gap-2">
-                    {user.skills.map((skill, index) => (
-                        <span key={index} className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">{skill}</span>
-                    ))}
-                </div>
-            </div>
-        )}
-
-        {user.languages.length > 0 && (
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-900">Languages</h2>
-                <div className="mt-4 space-y-2">
-                    {user.languages.map((lang, index) => (
-                        <p key={index} className="text-base text-gray-800">{lang}</p>
-                    ))}
-                </div>
-            </div>
-        )}
-
-        {user.interests.length > 0 && (
-            <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-900">Areas of Interest</h2>
-                <div className="mt-4 flex flex-wrap gap-2">
-                     {user.interests.map((interest, index) => (
-                        <span key={index} className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">{interest}</span>
-                    ))}
-                </div>
-            </div>
-        )}
+          </CardContent>
+        </Card>
       </div>
-    </main>
+    </div>
   )
 }
 
@@ -319,7 +318,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams();
-  const id = params.id as string;
+  const id = use(Promise.resolve(params.id as string));
   const user = users.find((u) => u.id === id);
 
   if (!user) {
