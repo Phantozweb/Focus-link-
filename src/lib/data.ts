@@ -1,3 +1,4 @@
+
 import type { UserProfile } from '@/types';
 
 export const users: UserProfile[] = [
@@ -103,6 +104,87 @@ export const users: UserProfile[] = [
       }
     ],
     languages: ['English', 'Spanish']
+  },
+    {
+    id: '19',
+    name: 'Janarthan Veeramani',
+    type: 'Student',
+    experience: 'Founder of Focus-IN | Head of Administration at Optobharat | B.Optom Student',
+    location: 'Coimbatore, Tamil Nadu, India',
+    skills: [
+      'Administration', 'Keratometry', 'Scientific Writing', 'Business Ownership', 'Start-up Leadership', 'Team Leadership', 
+      'Organization Skills', 'Project Management', 'Event Planning', 'Optometry', 'Creativity Skills', 'Artificial Intelligence (AI)',
+      'Microsoft Excel', 'Pediatric Vision Screening', 'Clinical Patient Counseling', 'Visual Acuity Testing'
+    ],
+    interests: ['AI in Optometry', 'Visual Telepathy', 'Bionic Eyes', 'Entrepreneurship', 'Student Collaboration'],
+    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student at VK College of Optometry, on a mission to make eye care smarter, more accessible, and deeply human-centered.
+
+My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration.
+
+I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India.
+
+As the South India Director of OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
+
+I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
+
+Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact.
+
+A special thanks to Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam), whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.
+
+Let’s connect and co-create the future of optometry through bold ideas, smart tools, and a vision that empowers everyone.`,
+    links: {
+      linkedin: 'https://linkedin.com/in/janarthanveeramani',
+      email: 'janarthan@example.com',
+    },
+    avatarUrl: 'https://picsum.photos/seed/19/400/400',
+    workExperience: [
+      {
+        title: 'Founder',
+        company: 'Focus-IN',
+        startDate: 'Jul 2024',
+        endDate: 'Present',
+        description: 'Business Ownership and Start-up Leadership.'
+      },
+       {
+        title: 'Head of Administration',
+        company: 'OPTOBHARAT',
+        startDate: 'Jul 2025',
+        endDate: 'Present',
+        description: 'Administration.'
+      },
+      {
+        title: 'Managing Director of Southern Region',
+        company: 'OPTOBHARAT',
+        startDate: 'Mar 2025',
+        endDate: 'Jul 2025',
+        description: 'I help connect optometry students from different colleges, support teamwork, and create growth opportunities. My role includes Organization Skills, Team Leadership and +2 skills'
+      },
+      {
+        title: 'Student',
+        company: 'Lotus Eye Hospital and Institute',
+        startDate: 'Aug 2023',
+        endDate: 'May 2025',
+        description: 'Gained knowledge and skills in vision care, diagnostic techniques, and patient management.'
+      }
+    ],
+    education: [
+      {
+        school: 'VK College of Optometry',
+        degree: 'B.Sc. Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2025',
+        endYear: 'Present'
+      },
+       {
+        school: 'Lotus Eye Hospital and Institute',
+        degree: 'Diploma in Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2023',
+        endYear: '2025'
+      }
+    ],
+    languages: ['English', 'German', 'Tamil'],
+    verified: true,
   },
   {
     id: '4',
