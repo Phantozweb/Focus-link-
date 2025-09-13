@@ -105,7 +105,7 @@ export const users: UserProfile[] = [
     ],
     languages: ['English', 'Spanish']
   },
-    {
+  {
     id: '19',
     name: 'Janarthan Veeramani',
     type: 'Student',
@@ -117,15 +117,13 @@ export const users: UserProfile[] = [
       'Microsoft Excel', 'Pediatric Vision Screening', 'Clinical Patient Counseling', 'Visual Acuity Testing'
     ],
     interests: ['AI in Optometry', 'Visual Telepathy', 'Bionic Eyes', 'Entrepreneurship', 'Student Collaboration'],
-    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student at VK College of Optometry, on a mission to make eye care smarter, more accessible, and deeply human-centered.
+    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student on a mission to make eye care smarter, more accessible, and deeply human-centered.
 
 My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration.
 
-I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India. As the South India Director of OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
+I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India. As the Head of Administration at OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
 
-I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
-
-Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact.
+I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect. Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact.
 
 A special thanks to Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam), whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.
 
@@ -160,22 +158,22 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     ],
     education: [
       {
-        school: 'Alagappa University',
+        school: 'Alagappa University, Karaikudi',
         degree: 'B.Sc. Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2023',
-        endYear: 'Present'
+        endYear: '2027 (Expected)'
       },
       {
-        school: 'VK College of Optometry',
-        degree: 'Collaborative B.Sc. Optometry Program',
+        school: 'VK College of Optometry, Madurai',
+        degree: 'Collaborative Program - 3rd Year',
         fieldOfStudy: 'Optometry',
         startYear: '2025',
         endYear: 'Present'
       },
        {
-        school: 'Lotus Eye Hospital and Institute',
-        degree: 'Collaborative B.Sc. Optometry Program (incomplete)',
+        school: 'Lotus Eye Hospital and Institute, Coimbatore',
+        degree: 'Collaborative Program - Years 1 & 2',
         fieldOfStudy: 'Optometry',
         startYear: '2023',
         endYear: '2025'
