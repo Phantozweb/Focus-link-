@@ -154,7 +154,21 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         startDate: 'Mar 2025',
         endDate: 'Jul 2025',
         description: 'Connected optometry students, supported teamwork, and created growth opportunities for the community.'
-      }
+      },
+      {
+        title: 'Student',
+        company: 'VK College of Optometry',
+        startDate: 'May 2025',
+        endDate: 'Present',
+        description: 'Continuing my third year of the B.Sc. Optometry program.'
+      },
+      {
+        title: 'Student',
+        company: 'Lotus Eye Hospital and Institute',
+        startDate: 'Aug 2023',
+        endDate: 'May 2025',
+        description: 'Completed the first two years of the B.Sc. Optometry collaborative program.'
+      },
     ],
     education: [
       {
@@ -163,20 +177,6 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         fieldOfStudy: 'Optometry',
         startYear: '2023',
         endYear: '2027 (Expected)'
-      },
-      {
-        school: 'VK College of Optometry, Madurai',
-        degree: 'Collaborative Program - 3rd Year',
-        fieldOfStudy: 'Optometry',
-        startYear: '2025',
-        endYear: 'Present'
-      },
-       {
-        school: 'Lotus Eye Hospital and Institute, Coimbatore',
-        degree: 'Collaborative Program - Years 1 & 2',
-        fieldOfStudy: 'Optometry',
-        startYear: '2023',
-        endYear: '2025'
       }
     ],
     languages: ['English', 'German', 'Tamil'],
