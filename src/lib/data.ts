@@ -109,8 +109,8 @@ export const users: UserProfile[] = [
     id: '19',
     name: 'Janarthan Veeramani',
     type: 'Student',
-    experience: 'Founder of Focus-IN | Head of Administration at Optobharat | B.Optom Student',
-    location: 'Coimbatore, Tamil Nadu, India',
+    experience: 'Founder, Focus-IN | B.Optom Student',
+    location: 'Madurai, Tamil Nadu, India',
     skills: [
       'Administration', 'Keratometry', 'Scientific Writing', 'Business Ownership', 'Start-up Leadership', 'Team Leadership', 
       'Organization Skills', 'Project Management', 'Event Planning', 'Optometry', 'Creativity Skills', 'Artificial Intelligence (AI)',
@@ -121,9 +121,7 @@ export const users: UserProfile[] = [
 
 My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration.
 
-I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India.
-
-As the South India Director of OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
+I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India. As the South India Director of OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
 
 I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
 
@@ -143,41 +141,41 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         company: 'Focus-IN',
         startDate: 'Jul 2024',
         endDate: 'Present',
-        description: 'Business Ownership and Start-up Leadership.'
+        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners.'
       },
        {
         title: 'Head of Administration',
-        company: 'OPTOBHARAT',
+        company: 'OptoBharat',
         startDate: 'Jul 2025',
         endDate: 'Present',
-        description: 'Administration.'
+        description: 'Leading administrative functions for a national student-led organization.'
       },
       {
         title: 'Managing Director of Southern Region',
-        company: 'OPTOBHARAT',
+        company: 'OptoBharat',
         startDate: 'Mar 2025',
         endDate: 'Jul 2025',
-        description: 'I help connect optometry students from different colleges, support teamwork, and create growth opportunities. My role includes Organization Skills, Team Leadership and +2 skills'
-      },
-      {
-        title: 'Student',
-        company: 'Lotus Eye Hospital and Institute',
-        startDate: 'Aug 2023',
-        endDate: 'May 2025',
-        description: 'Gained knowledge and skills in vision care, diagnostic techniques, and patient management.'
+        description: 'Connected optometry students, supported teamwork, and created growth opportunities for the community.'
       }
     ],
     education: [
       {
-        school: 'VK College of Optometry',
+        school: 'Alagappa University',
         degree: 'B.Sc. Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2023',
+        endYear: 'Present'
+      },
+      {
+        school: 'VK College of Optometry',
+        degree: 'Collaborative B.Sc. Optometry Program',
         fieldOfStudy: 'Optometry',
         startYear: '2025',
         endYear: 'Present'
       },
        {
         school: 'Lotus Eye Hospital and Institute',
-        degree: 'Diploma in Optometry',
+        degree: 'Collaborative B.Sc. Optometry Program (incomplete)',
         fieldOfStudy: 'Optometry',
         startYear: '2023',
         endYear: '2025'
