@@ -5,6 +5,7 @@ export type WorkExperience = {
   startDate: string;
   endDate: string;
   description: string;
+  duration?: string;
 };
 
 export type Education = {
@@ -34,4 +35,3 @@ export type UserProfile = {
   languages: string[];
   verified?: boolean;
 };
-

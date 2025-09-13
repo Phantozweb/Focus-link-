@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { ProfileSummary } from '@/components/profile-summary';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
 import Image from 'next/image';
@@ -22,8 +21,9 @@ function ExperienceItem({ experience }: { experience: WorkExperience }) {
         <Briefcase className="h-7 w-7 text-muted-foreground" />
       </div>
       <div>
-         <div className="flex items-center gap-x-2">
+         <div className="flex items-baseline gap-x-2">
             <h4 className="font-semibold text-lg">{experience.title}</h4>
+            {experience.duration && <span className="text-sm text-muted-foreground">{experience.duration}</span>}
         </div>
         <p className="text-muted-foreground">{experience.company}</p>
         <p className="text-sm text-muted-foreground">{experience.startDate} - {experience.endDate}</p>
@@ -132,7 +132,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
               <div className="lg:col-span-2 space-y-8">
                 <section>
                   <h2 className="text-xl font-bold font-headline mb-4">About</h2>
-                  <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />') }} />
+                  <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\\n/g, '<br />') }} />
                 </section>
                 
                 {user.workExperience.length > 0 && (
@@ -318,7 +318,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams();
-  const id = params.id as string;
+  const id = use(params).id as string;
   const user = users.find((u) => u.id === id);
 
   if (!user) {
@@ -451,8 +451,6 @@ export default function ProfilePage() {
                 <section>
                   <h2 className="text-xl font-bold font-headline mb-4">About</h2>
                   <p className="text-foreground/80 whitespace-pre-wrap">{user.bio}</p>
-                  <Separator className="my-6" />
-                  <ProfileSummary bio={user.bio} />
                 </section>
                 
                 {isIndividual && user.workExperience.length > 0 && (

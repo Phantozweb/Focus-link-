@@ -141,35 +141,40 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         company: 'Focus-IN',
         startDate: 'Jul 2024',
         endDate: 'Present',
-        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners. (1 yr 3 mos)'
+        duration: '1 yr 3 mos',
+        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners.'
       },
        {
         title: 'Head of Administration',
         company: 'OptoBharat',
         startDate: 'Jul 2025',
         endDate: 'Present',
-        description: 'Leading administrative functions for a national student-led organization. (3 mos)'
+        duration: '3 mos',
+        description: 'Leading administrative functions for a national student-led organization.'
       },
       {
         title: 'Managing Director of Southern Region',
         company: 'OptoBharat',
         startDate: 'Mar 2025',
         endDate: 'Jul 2025',
-        description: 'Connected optometry students, supported teamwork, and created growth opportunities for the community. (5 mos)'
+        duration: '5 mos',
+        description: 'Connected optometry students, supported teamwork, and created growth opportunities for the community.'
       },
       {
         title: 'Student',
         company: 'VK College of Optometry',
         startDate: 'May 2025',
         endDate: 'Present',
-        description: 'Continuing my third year of the B.Sc. Optometry program. (5 mos)'
+        duration: '5 mos',
+        description: 'Continuing my third year of the B.Sc. Optometry program.'
       },
       {
         title: 'Student',
         company: 'Lotus Eye Hospital and Institute',
         startDate: 'Aug 2023',
         endDate: 'May 2025',
-        description: 'Completed the first two years of the B.Sc. Optometry collaborative program. (1 yr 10 mos)'
+        duration: '1 yr 10 mos',
+        description: 'Completed the first two years of the B.Sc. Optometry collaborative program.'
       },
     ],
     education: [
