@@ -109,7 +109,7 @@ export const users: UserProfile[] = [
     id: '19',
     name: 'Janarthan Veeramani',
     type: 'Student',
-    experience: 'Founder, Focus-IN | B.Optom Student',
+    experience: 'Founder of Focus-IN | Head of Administration at Optobharat | B.Optom Student',
     location: 'Madurai, Tamil Nadu, India',
     skills: [
       'Administration', 'Keratometry', 'Scientific Writing', 'Business Ownership', 'Start-up Leadership', 'Team Leadership', 
@@ -117,20 +117,22 @@ export const users: UserProfile[] = [
       'Microsoft Excel', 'Pediatric Vision Screening', 'Clinical Patient Counseling', 'Visual Acuity Testing'
     ],
     interests: ['AI in Optometry', 'Visual Telepathy', 'Bionic Eyes', 'Entrepreneurship', 'Student Collaboration'],
-    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student on a mission to make eye care smarter, more accessible, and deeply human-centered.
+    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student, on a mission to make eye care smarter, more accessible, and deeply human-centered.
 
 My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration.
 
 I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India. As the Head of Administration at OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
 
-I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect. Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact.
+I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
+
+"Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact."
 
 A special thanks to Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam), whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.
 
 Let’s connect and co-create the future of optometry through bold ideas, smart tools, and a vision that empowers everyone.`,
     links: {
-      linkedin: 'https://linkedin.com/in/janarthanveeramani',
-      email: 'janarthan@example.com',
+      linkedin: 'https://www.linkedin.com/in/janarthan-v',
+      email: 'janarthanv@outlook.com',
     },
     avatarUrl: 'https://picsum.photos/seed/19/400/400',
     workExperience: [
@@ -139,35 +141,35 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         company: 'Focus-IN',
         startDate: 'Jul 2024',
         endDate: 'Present',
-        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners.'
+        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners. (1 yr 3 mos)'
       },
        {
         title: 'Head of Administration',
         company: 'OptoBharat',
         startDate: 'Jul 2025',
         endDate: 'Present',
-        description: 'Leading administrative functions for a national student-led organization.'
+        description: 'Leading administrative functions for a national student-led organization. (3 mos)'
       },
       {
         title: 'Managing Director of Southern Region',
         company: 'OptoBharat',
         startDate: 'Mar 2025',
         endDate: 'Jul 2025',
-        description: 'Connected optometry students, supported teamwork, and created growth opportunities for the community.'
+        description: 'Connected optometry students, supported teamwork, and created growth opportunities for the community. (5 mos)'
       },
       {
         title: 'Student',
         company: 'VK College of Optometry',
         startDate: 'May 2025',
         endDate: 'Present',
-        description: 'Continuing my third year of the B.Sc. Optometry program.'
+        description: 'Continuing my third year of the B.Sc. Optometry program. (5 mos)'
       },
       {
         title: 'Student',
         company: 'Lotus Eye Hospital and Institute',
         startDate: 'Aug 2023',
         endDate: 'May 2025',
-        description: 'Completed the first two years of the B.Sc. Optometry collaborative program.'
+        description: 'Completed the first two years of the B.Sc. Optometry collaborative program. (1 yr 10 mos)'
       },
     ],
     education: [
@@ -179,7 +181,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         endYear: '2027 (Expected)'
       }
     ],
-    languages: ['English', 'German', 'Tamil'],
+    languages: ['English (Professional working proficiency)', 'German (Elementary proficiency)', 'Tamil (Native or bilingual proficiency)'],
     verified: true,
   },
   {
