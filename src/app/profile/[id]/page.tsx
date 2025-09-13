@@ -22,7 +22,9 @@ function ExperienceItem({ experience }: { experience: WorkExperience }) {
         <Briefcase className="h-7 w-7 text-muted-foreground" />
       </div>
       <div>
-        <h4 className="font-semibold text-lg">{experience.title}</h4>
+         <div className="flex items-center gap-x-2">
+            <h4 className="font-semibold text-lg">{experience.title}</h4>
+        </div>
         <p className="text-muted-foreground">{experience.company}</p>
         <p className="text-sm text-muted-foreground">{experience.startDate} - {experience.endDate}</p>
         <p className="text-foreground/80 mt-2">{experience.description}</p>
@@ -131,8 +133,6 @@ function StudentProfile({ user }: { user: UserProfile }) {
                 <section>
                   <h2 className="text-xl font-bold font-headline mb-4">About</h2>
                   <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />') }} />
-                  <Separator className="my-6" />
-                  <ProfileSummary bio={user.bio} />
                 </section>
                 
                 {user.workExperience.length > 0 && (
@@ -318,7 +318,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams();
-  const id = use(Promise.resolve(params.id as string));
+  const id = params.id as string;
   const user = users.find((u) => u.id === id);
 
   if (!user) {
