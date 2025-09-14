@@ -65,7 +65,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
             <div className="p-6 sm:p-8 -mt-24">
               <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                 <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
-                  <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={"portrait person"} />
+                  <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"portrait person"} />
                   <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
@@ -383,7 +383,7 @@ export default function ProfilePage() {
             <div className="p-6 sm:p-8 -mt-24">
               <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                 <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
-                  <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={isOrg ? "logo building" : "portrait person"} />
+                  <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={isOrg ? "logo building" : "portrait person"} />
                   <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
