@@ -22,7 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
-import { PlusCircle, Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -47,7 +47,6 @@ const educationSchema = z.object({
 const skillSchema = z.object({
   value: z.string().min(1, 'Skill cannot be empty'),
 });
-
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -80,9 +79,20 @@ const formSchema = z.object({
   }),
 });
 
+const fileToBase64 = (file: File): Promise<{ base64: string; type: string; name: string }> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve({ base64: reader.result as string, type: file.type, name: file.name });
+    reader.onerror = error => reject(error);
+  });
+};
+
+
 export default function JoinPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('individual');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,20 +122,71 @@ export default function JoinPage() {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
 
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: 'Form Submitted!',
-      description: 'Your profile has been submitted for review.',
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    
+    // --- Prepare data for Apps Script ---
+    const now = new Date();
+    const profileId = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getFullYear()}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+    
+    let avatarData = null;
+    if (values.avatar && values.avatar.length > 0) {
+      try {
+        avatarData = await fileToBase64(values.avatar[0]);
+      } catch (error) {
+        console.error("Error converting image to Base64:", error);
+        toast({
+          variant: 'destructive',
+          title: 'Image Processing Error',
+          description: 'Could not process the uploaded image. Please try a different file.',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+    }
+    
+    const submissionData = {
+      profileId,
+      ...values,
+      avatar: avatarData,
+    };
+    
+    // IMPORTANT: Replace with your Apps Script Web App URL
+    const appsScriptUrl = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+
+    try {
+      const response = await fetch(appsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors', // Important for simple Apps Script POST requests
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      // no-cors mode means we can't read the response, but we assume success if no network error
+      toast({
+        title: 'Form Submitted!',
+        description: 'Your profile has been successfully submitted for review.',
+      });
+      form.reset();
+
+    } catch (error) {
+      console.error('Submission Error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Submission Failed',
+        description: 'There was an error submitting your profile. Please try again later.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const avatarRef = form.register("avatar");
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    // Reset type when switching tabs to avoid invalid combinations
     if (value === 'individual') {
       form.setValue('type', 'Student');
     } else {
@@ -355,7 +416,6 @@ export default function JoinPage() {
                   <>
                     <Separator />
 
-                    {/* Work Experience Section */}
                     <div className="space-y-6">
                       <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Work Experience</h3>
                       {workFields.map((field, index) => (
@@ -390,7 +450,6 @@ export default function JoinPage() {
 
                     <Separator />
 
-                    {/* Education Section */}
                     <div className="space-y-6">
                       <h3 className="text-lg font-medium leading-6 text-foreground font-headline">Education</h3>
                       {eduFields.map((field, index) => (
@@ -432,7 +491,6 @@ export default function JoinPage() {
                 <div className="space-y-6">
                   <h3 className="text-lg font-medium leading-6 text-foreground font-headline">{isIndividual ? 'Skills & Links' : 'Details & Links'}</h3>
                   
-                  {/* Skills Section */}
                   <div className="space-y-4">
                     <FormLabel>{isIndividual ? 'Skills' : getOrgSpecificLabel('skills')}</FormLabel>
                     <FormDescription>
@@ -569,8 +627,15 @@ export default function JoinPage() {
                 />
 
 
-                <Button type="submit" size="lg" className="w-full">
-                  Submit for Review
+                <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                   {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit for Review'
+                  )}
                 </Button>
               </form>
             </Tabs>
@@ -580,3 +645,5 @@ export default function JoinPage() {
     </div>
   );
 }
+
+    
