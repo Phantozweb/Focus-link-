@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, Calendar, Video, Users as UsersIcon, CheckCircle2 } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -17,10 +17,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/types';
 import { useState } from 'react';
 
-const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
+const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
+
+const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaText: string, ctaLink: string, icon: React.ReactNode }) => (
+    <div className="text-center p-8 bg-card rounded-lg shadow-sm border-2 border-dashed flex flex-col items-center justify-center h-full">
+        <div className="mb-4 text-muted-foreground">{icon}</div>
+        <h3 className="font-semibold text-xl text-card-foreground mb-2">{title}</h3>
+        <p className="text-muted-foreground text-sm mb-4">Be the first to represent your category.</p>
+        <Button asChild>
+            <Link href={ctaLink}>{ctaText}</Link>
+        </Button>
+    </div>
+);
+
 
 export default function Home() {
-  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type));
+  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
   const associations = allUsers.filter(u => u.type === 'Association');
   const colleges = allUsers.filter(u => u.type === 'College');
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
@@ -42,45 +54,24 @@ export default function Home() {
       params.set('country', filterCountry);
     }
 
-    const category = filterType !== 'all' ? filterType.toLowerCase() + 's' : 'all';
+    const categoryMap = {
+        'Student': 'students',
+        'Optometrist': 'professionals',
+        'Ophthalmologist': 'professionals',
+        'Optician': 'professionals',
+        'Academic': 'professionals',
+        'Researcher': 'professionals',
+        'Association': 'associations',
+        'College': 'colleges',
+        'Hospital': 'clinics',
+        'Optical': 'clinics',
+        'Industry': 'industry',
+    }
+    
+    const category = filterType !== 'all' ? (categoryMap[filterType as keyof typeof categoryMap] || 'all') : 'all';
     
     router.push(`/directory/${category}?${params.toString()}`);
   }
-
-  const events = [
-    {
-      date: 'Oct 25, 2024',
-      title: 'Advances in Glaucoma Management',
-      description: 'Join our webinar to learn about the latest treatment options for glaucoma.',
-      type: 'Webinar',
-      icon: <Video className="h-5 w-5 text-primary" />,
-      image: 'https://picsum.photos/seed/event1/400/200'
-    },
-    {
-      date: 'Nov 12, 2024',
-      title: 'Pediatric Vision Screening Workshop',
-      description: 'A hands-on workshop for professionals on effective pediatric vision screening.',
-       type: 'Workshop',
-       icon: <Calendar className="h-5 w-5 text-primary" />,
-       image: 'https://picsum.photos/seed/event2/400/200'
-    },
-    {
-      date: 'Dec 01, 2024',
-      title: 'The Future of Contact Lens Technology',
-      description: 'Explore innovative materials and designs in contact lenses with industry leaders.',
-       type: 'Conference',
-       icon: <UsersIcon className="h-5 w-5 text-primary" />,
-       image: 'https://picsum.photos/seed/event3/400/200'
-    },
-     {
-      date: 'Dec 15, 2024',
-      title: 'AI in Eye Care Diagnostics',
-      description: 'Discover how artificial intelligence is revolutionizing diagnostics in eye care.',
-       type: 'Webinar',
-       icon: <Video className="h-5 w-5 text-primary" />,
-       image: 'https://picsum.photos/seed/event4/400/200'
-    },
-  ]
 
   return (
     <div className="bg-muted/40">
@@ -184,123 +175,125 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
-            </Carousel>
-          </section>}
-
-          {associations.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
-              <Button asChild variant="link" className="text-primary pr-0">
-                <Link href="/directory/associations">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-            </div>
-             <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
-                {associations.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <ProfileCard user={user} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
-            </Carousel>
-          </section>}
-          
-          {colleges.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Colleges & Schools</h2>
-              <Button asChild variant="link" className="text-primary pr-0">
-                <Link href="/directory/colleges">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-            </div>
-             <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
-                {colleges.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <ProfileCard user={user} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
-            </Carousel>
-          </section>}
-
-          {clinicsAndOpticals.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Eye Care Clinics & Opticals</h2>
-              <Button asChild variant="link" className="text-primary pr-0">
-                <Link href="/directory/clinics">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-            </div>
-            <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
-                {clinicsAndOpticals.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <ProfileCard user={user} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
-            </Carousel>
-          </section>}
-          
-           {industry.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Industry Partners</h2>
-              <Button asChild variant="link" className="text-primary pr-0">
-                <Link href="/directory/industry">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-            </div>
-            <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
-                {industry.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <ProfileCard user={user} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translatey-1/2" />
+              <CarouselPrevious />
+              <CarouselNext />
             </Carousel>
           </section>}
 
           <section>
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Events & Webinars</h2>
-              <Button asChild variant="link" className="text-primary pr-0">
-                <Link href="#">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
+              {associations.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/associations">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>}
             </div>
-             <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
-                {events.map((event, index) => (
-                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                      <Image src={event.image} alt={event.title} width={400} height={200} className="w-full h-40 object-cover" data-ai-hint="conference room" />
-                      <CardContent className="p-4 flex flex-col flex-grow">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                          {event.icon}
-                          <span>{event.type}</span>
-                          <span className="mx-1">•</span>
-                          <span>{event.date}</span>
-                        </div>
-                        <h3 className="text-lg font-bold text-slate-800 flex-grow">{event.title}</h3>
-                        <Button asChild variant="link" className="p-0 h-auto justify-start mt-4 text-primary">
-                          <Link href="#">Register Now <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
-            </Carousel>
+             {associations.length > 0 ? (
+                <Carousel opts={{ align: "start" }} className="w-full">
+                    <CarouselContent className="-ml-4">
+                        {associations.map((user) => (
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                            <ProfileCard user={user} />
+                        </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                </Carousel>
+             ) : (
+                <EmptyStateCTA
+                    title="No Associations Found"
+                    ctaText="Be the First to Join!"
+                    ctaLink="/join"
+                    icon={<UserPlus className="h-12 w-12" />}
+                />
+             )}
+          </section>
+          
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Colleges & Schools</h2>
+               {colleges.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/colleges">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>}
+            </div>
+             {colleges.length > 0 ? (
+                <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                    {colleges.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <ProfileCard user={user} />
+                    </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+                </Carousel>
+             ) : (
+                <EmptyStateCTA
+                    title="No Colleges Found"
+                    ctaText="List Your Institution"
+                    ctaLink="/join"
+                    icon={<Building className="h-12 w-12" />}
+                />
+             )}
+          </section>
+
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Eye Care Clinics & Opticals</h2>
+              {clinicsAndOpticals.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/clinics">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>}
+            </div>
+            {clinicsAndOpticals.length > 0 ? (
+                <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                    {clinicsAndOpticals.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <ProfileCard user={user} />
+                    </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+                </Carousel>
+            ) : (
+                <EmptyStateCTA
+                    title="No Clinics Found"
+                    ctaText="Add Your Practice"
+                    ctaLink="/join"
+                    icon={<Hospital className="h-12 w-12" />}
+                />
+            )}
+          </section>
+          
+           <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Industry Partners</h2>
+              {industry.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/industry">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>}
+            </div>
+            {industry.length > 0 ? (
+                <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                    {industry.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <ProfileCard user={user} />
+                    </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+                </Carousel>
+            ) : (
+                 <EmptyStateCTA
+                    title="No Industry Partners Found"
+                    ctaText="Join as a Partner"
+                    ctaLink="/join"
+                    icon={<Factory className="h-12 w-12" />}
+                />
+            )}
           </section>
 
           {students.length > 0 && <section>
@@ -317,7 +310,7 @@ export default function Home() {
                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
                         <div className="p-6 flex flex-col items-center flex-grow">
                           <Avatar className="h-24 w-24 mb-4 border-2 border-background shadow-md">
-                            <AvatarImage src={student.avatarUrl} alt={student.name} data-ai-hint="portrait person" />
+                            <AvatarImage src={student.avatarUrl} alt={student.name} className="object-cover" data-ai-hint="portrait person" />
                             <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <h3 className="text-lg font-bold text-slate-800 flex items-center justify-center gap-2">
@@ -336,8 +329,8 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
+              <CarouselPrevious />
+              <CarouselNext />
             </Carousel>
           </section>}
 
@@ -351,3 +344,6 @@ export default function Home() {
     
 
 
+
+
+    
