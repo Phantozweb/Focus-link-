@@ -173,7 +173,6 @@ export default function JoinPage() {
     try {
       const response = await fetch(appsScriptUrl, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
