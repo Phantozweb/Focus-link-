@@ -149,7 +149,6 @@ export default function JoinPage() {
       skills: values.skills.map(s => s.value),
       interests: values.interests.split(',').map(i => i.trim()),
       email: values.email,
-      website: values.linkedin, // Use 'linkedin' field for website for orgs
     };
 
     if (isIndividual) {
@@ -157,6 +156,8 @@ export default function JoinPage() {
       details.workExperience = values.workExperience;
       details.education = values.education;
       details.linkedin = values.linkedin;
+    } else {
+      details.website = values.linkedin;
     }
 
     const submissionData = {
@@ -167,23 +168,27 @@ export default function JoinPage() {
       details: details,
     };
     
-    // IMPORTANT: Replace with your Apps Script Web App URL
     const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyFY4Z_7REMcXyLr8OZbgGfJce5m2S4TO-Mi-NViUQdjtgcO28YTYHvTb_Q65oGwMs9/exec';
 
     try {
       const response = await fetch(appsScriptUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(submissionData),
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
       });
 
-      toast({
-        title: 'Form Submitted!',
-        description: 'Your profile has been successfully submitted for review.',
-      });
-      form.reset();
+      if (response.type === 'opaque' || response.ok) {
+        toast({
+          title: 'Form Submitted!',
+          description: 'Your profile has been successfully submitted for review.',
+        });
+        form.reset();
+      } else {
+         const errorData = await response.json();
+         throw new Error(errorData.message || 'An unknown error occurred.');
+      }
 
     } catch (error) {
       console.error('Submission Error:', error);
@@ -661,3 +666,5 @@ export default function JoinPage() {
     </div>
   );
 }
+
+    
