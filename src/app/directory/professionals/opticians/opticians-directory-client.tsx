@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
-import { Search, SlidersHorizontal, ArrowLeft } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowLeft, Map } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { UserProfile } from '@/types';
 
@@ -17,6 +17,8 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
   const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
+  const [sortedUsers, setSortedUsers] = useState<UserProfile[]>(allUsers);
+  const [isSorted, setIsSorted] = useState(false);
 
   const createQueryString = (newParams: Record<string, string>) => {
     const currentParams = new URLSearchParams(searchParams);
@@ -38,13 +40,23 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
     router.push(`/directory/professionals/opticians?${queryString}`);
   };
 
+  const sortByCountry = () => {
+    const usersToSort = [...filteredUsers];
+    usersToSort.sort((a, b) => a.location.localeCompare(b.location));
+    setSortedUsers(usersToSort);
+    setIsSorted(true);
+  };
+
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCountry('all');
+    setIsSorted(false);
+    setSortedUsers(allUsers);
     router.push(`/directory/professionals/opticians`);
   };
 
   const filteredUsers = allUsers.filter(user => {
+    const usersToFilter = isSorted ? sortedUsers : allUsers;
     const searchParam = searchParams.get('q');
     const countryParam = searchParams.get('country');
 
@@ -110,6 +122,12 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                    <Button onClick={sortByCountry} variant="secondary" className="w-full">
+                        <Map className="mr-2 h-4 w-4" /> Sort by Country
+                    </Button>
                 </div>
 
                 <div className="space-y-2">

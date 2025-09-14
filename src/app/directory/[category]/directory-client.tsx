@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
-import { Search, SlidersHorizontal, ArrowLeft } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowLeft, Map } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { UserProfile } from '@/types';
 
@@ -18,6 +18,8 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
   const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
+  const [sortedUsers, setSortedUsers] = useState<UserProfile[]>(allUsers);
+  const [isSorted, setIsSorted] = useState(false);
 
   const createQueryString = (newParams: Record<string, string>) => {
     const currentParams = new URLSearchParams(Array.from(searchParams.entries()));
@@ -40,11 +42,20 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
       router.push(`/directory/${category}?${queryString}`);
     });
   };
+  
+  const sortByCountry = () => {
+    const usersToSort = [...filteredUsers];
+    usersToSort.sort((a, b) => a.location.localeCompare(b.location));
+    setSortedUsers(usersToSort);
+    setIsSorted(true);
+  };
 
   const clearFilters = () => {
     startTransition(() => {
       setSearchTerm('');
       setSelectedCountry('all');
+      setIsSorted(false);
+      setSortedUsers(allUsers);
       router.push(`/directory/${category}`);
     });
   };
@@ -53,7 +64,9 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
     const searchParam = searchParams.get('q');
     const countryParam = searchParams.get('country');
 
-    return allUsers.filter(user => {
+    const usersToFilter = isSorted ? sortedUsers : allUsers;
+
+    return usersToFilter.filter(user => {
       const matchesSearch = !searchParam ||
         user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
         (user.skills && user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase()))) ||
@@ -63,7 +76,7 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
 
       return matchesSearch && matchesCountry;
     });
-  }, [allUsers, searchParams]);
+  }, [allUsers, searchParams, isSorted, sortedUsers]);
 
 
   return (
@@ -118,6 +131,12 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+                
+                <div className="space-y-2">
+                    <Button onClick={sortByCountry} variant="secondary" className="w-full">
+                        <Map className="mr-2 h-4 w-4" /> Sort by Country
+                    </Button>
                 </div>
 
                 <div className="space-y-2">
