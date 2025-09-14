@@ -20,12 +20,12 @@ import { useState } from 'react';
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
 export default function Home() {
-  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type)).slice(0, 6);
-  const associations = allUsers.filter(u => u.type === 'Association').slice(0, 6);
-  const colleges = allUsers.filter(u => u.type === 'College').slice(0, 6);
-  const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type)).slice(0, 6);
-  const students = allUsers.filter(u => u.type === 'Student').slice(0, 6);
-  const industry = allUsers.filter(u => u.type === 'Industry').slice(0, 6);
+  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher'].includes(u.type));
+  const associations = allUsers.filter(u => u.type === 'Association');
+  const colleges = allUsers.filter(u => u.type === 'College');
+  const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
+  const students = allUsers.filter(u => u.type === 'Student');
+  const industry = allUsers.filter(u => u.type === 'Industry');
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -169,7 +169,7 @@ export default function Home() {
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
         
-          <section>
+          {professionals.length > 0 && <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Professionals</h2>
               <Button asChild variant="link" className="text-primary pr-0">
@@ -187,9 +187,9 @@ export default function Home() {
               <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
             </Carousel>
-          </section>
+          </section>}
 
-          <section>
+          {associations.length > 0 && <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
               <Button asChild variant="link" className="text-primary pr-0">
@@ -207,9 +207,9 @@ export default function Home() {
               <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
             </Carousel>
-          </section>
+          </section>}
           
-          <section>
+          {colleges.length > 0 && <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Colleges & Schools</h2>
               <Button asChild variant="link" className="text-primary pr-0">
@@ -227,9 +227,9 @@ export default function Home() {
               <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
             </Carousel>
-          </section>
+          </section>}
 
-          <section>
+          {clinicsAndOpticals.length > 0 && <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Eye Care Clinics & Opticals</h2>
               <Button asChild variant="link" className="text-primary pr-0">
@@ -247,9 +247,9 @@ export default function Home() {
               <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
             </Carousel>
-          </section>
+          </section>}
           
-           <section>
+           {industry.length > 0 && <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Industry Partners</h2>
               <Button asChild variant="link" className="text-primary pr-0">
@@ -267,7 +267,7 @@ export default function Home() {
               <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translatey-1/2" />
             </Carousel>
-          </section>
+          </section>}
 
           <section>
             <div className="flex justify-between items-center mb-8">
@@ -303,7 +303,7 @@ export default function Home() {
             </Carousel>
           </section>
 
-          <section>
+          {students.length > 0 && <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Student Directory</h2>
               <Button asChild variant="link" className="text-primary pr-0">
@@ -339,7 +339,7 @@ export default function Home() {
               <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
             </Carousel>
-          </section>
+          </section>}
 
       </div>
     </div>
@@ -349,4 +349,5 @@ export default function Home() {
     
 
     
+
 

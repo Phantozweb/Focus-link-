@@ -20,10 +20,10 @@ const professionalCategories = [
 
 export default function ProfessionalsPage() {
   const router = useRouter();
-  const optometrists = allUsers.filter(u => u.type === 'Optometrist').slice(0, 6);
-  const ophthalmologists = allUsers.filter(u => u.type === 'Ophthalmologist').slice(0, 6);
-  const opticians = allUsers.filter(u => u.type === 'Optician').slice(0, 6);
-  const academics = allUsers.filter(u => u.type === 'Academic').slice(0, 6);
+  const optometrists = allUsers.filter(u => u.type === 'Optometrist');
+  const ophthalmologists = allUsers.filter(u => u.type === 'Ophthalmologist');
+  const opticians = allUsers.filter(u => u.type === 'Optician');
+  const academics = allUsers.filter(u => u.type === 'Academic');
 
   return (
     <div className="bg-muted/40">
@@ -49,7 +49,7 @@ export default function ProfessionalsPage() {
               </div>
             </section>
 
-            <section>
+            {optometrists.length > 0 && <section>
                 <div className="flex justify-between items-center mb-8">
                 <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Optometrists</h2>
                 <Button asChild variant="link" className="text-primary pr-0">
@@ -67,9 +67,9 @@ export default function ProfessionalsPage() {
                 <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
                 <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
                 </Carousel>
-            </section>
+            </section>}
             
-            <section>
+            {ophthalmologists.length > 0 && <section>
                 <div className="flex justify-between items-center mb-8">
                 <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Ophthalmologists</h2>
                 <Button asChild variant="link" className="text-primary pr-0">
@@ -87,9 +87,9 @@ export default function ProfessionalsPage() {
                 <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
                 <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
                 </Carousel>
-            </section>
+            </section>}
             
-            <section>
+            {opticians.length > 0 && <section>
                 <div className="flex justify-between items-center mb-8">
                 <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Opticians</h2>
                 <Button asChild variant="link" className="text-primary pr-0">
@@ -107,9 +107,9 @@ export default function ProfessionalsPage() {
                 <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
                 <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
                 </Carousel>
-            </section>
+            </section>}
 
-             <section>
+             {academics.length > 0 && <section>
                 <div className="flex justify-between items-center mb-8">
                 <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Academics</h2>
                 <Button asChild variant="link" className="text-primary pr-0">
@@ -127,7 +127,7 @@ export default function ProfessionalsPage() {
                 <CarouselPrevious className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2" />
                 <CarouselNext className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2" />
                 </Carousel>
-            </section>
+            </section>}
         </div>
     </div>
   );
