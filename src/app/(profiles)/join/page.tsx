@@ -168,7 +168,7 @@ export default function JoinPage() {
     };
     
     // IMPORTANT: Replace with your Apps Script Web App URL
-    const appsScriptUrl = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyFY4Z_7REMcXyLr8OZbgGfJce5m2S4TO-Mi-NViUQdjtgcO28YTYHvTb_Q65oGwMs9/exec';
 
     try {
       const response = await fetch(appsScriptUrl, {
@@ -662,5 +662,3 @@ export default function JoinPage() {
     </div>
   );
 }
-
-    
