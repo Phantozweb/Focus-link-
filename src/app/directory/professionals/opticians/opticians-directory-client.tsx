@@ -40,7 +40,7 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
     router.push(`/directory/professionals/opticians?${queryString}`);
   };
 
-  const sortByCountry = () => {
+  const sortByLocation = () => {
     const usersToSort = [...filteredUsers];
     usersToSort.sort((a, b) => a.location.localeCompare(b.location));
     setSortedUsers(usersToSort);
@@ -125,8 +125,8 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
                 </div>
 
                 <div className="space-y-2">
-                    <Button onClick={sortByCountry} variant="secondary" className="w-full">
-                        <Map className="mr-2 h-4 w-4" /> Sort by Country
+                    <Button onClick={sortByLocation} variant="secondary" className="w-full">
+                        <Map className="mr-2 h-4 w-4" /> Sort by Location
                     </Button>
                 </div>
 
