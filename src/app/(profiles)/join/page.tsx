@@ -79,15 +79,6 @@ const formSchema = z.object({
   }),
 });
 
-const fileToBase64 = (file: File): Promise<{ base64: string; type: string; name: string }> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve({ base64: reader.result as string, type: file.type, name: file.name });
-    reader.onerror = error => reject(error);
-  });
-};
-
 
 export default function JoinPage() {
   const { toast } = useToast();
@@ -126,78 +117,88 @@ export default function JoinPage() {
     const now = new Date();
     const profileId = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getFullYear()}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
     
-    let avatarData = null;
-    if (values.avatar && values.avatar.length > 0) {
-      try {
-        avatarData = await fileToBase64(values.avatar[0]);
-      } catch (error) {
-        console.error("Error converting image to Base64:", error);
-        toast({
-          variant: 'destructive',
-          title: 'Image Processing Error',
-          description: 'Could not process the uploaded image. Please try a different file.',
+    const webhookUrl = 'https://discord.com/api/webhooks/1416675826577182780/gxAG9Kz0YJB1v9dRRA0TRMs2oDXH6CLOomD_qqzPjab0Iy78oWQ64n3bDc1tFnL-oa-k';
+
+    const formData = new FormData();
+    
+    // Create the embed object
+    const embed = {
+      title: `New Profile Submission: ${values.name}`,
+      color: 3447003, // A nice blue color
+      fields: [
+        { name: 'Profile Type', value: values.type, inline: true },
+        { name: 'Location', value: values.location, inline: true },
+        { name: 'Headline/Tagline', value: values.experience },
+        { name: 'Bio/Description', value: values.bio },
+        { name: `Skills / ${getOrgSpecificLabel('skills')}`, value: values.skills.map(s => s.value).join(', ') },
+        { name: `Interests / ${getOrgSpecificLabel('interests')}`, value: values.interests },
+      ],
+      footer: {
+        text: `Profile ID: ${profileId}`
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    if (values.email) {
+      embed.fields.push({ name: 'Email', value: values.email, inline: true });
+    }
+    if (values.linkedin) {
+       embed.fields.push({ name: isIndividual ? 'LinkedIn' : 'Website', value: values.linkedin, inline: true });
+    }
+
+    if (isIndividual) {
+      if (values.languages) {
+        embed.fields.push({ name: 'Languages', value: values.languages, inline: true });
+      }
+      if (values.workExperience && values.workExperience.length > 0) {
+        embed.fields.push({
+          name: 'Work Experience',
+          value: values.workExperience.map(w => `**${w.title}** at ${w.company} (${w.startDate} - ${w.endDate})`).join('\n')
         });
-        setIsSubmitting(false);
-        return;
+      }
+      if (values.education && values.education.length > 0) {
+        embed.fields.push({
+          name: 'Education',
+          value: values.education.map(e => `**${e.degree}** from ${e.school} (${e.startYear} - ${e.endYear})`).join('\n')
+        });
       }
     }
     
-    let details: any = {
-      experience: values.experience,
-      location: values.location,
-      bio: values.bio,
-      skills: values.skills.map(s => s.value),
-      interests: values.interests.split(',').map(i => i.trim()),
-      email: values.email,
-    };
-
-    if (isIndividual) {
-      details.languages = values.languages?.split(',').map(l => l.trim());
-      details.workExperience = values.workExperience;
-      details.education = values.education;
-      details.linkedin = values.linkedin;
-    } else {
-      details.website = values.linkedin;
+    formData.append('payload_json', JSON.stringify({ embeds: [embed] }));
+    
+    if (values.avatar && values.avatar.length > 0) {
+       formData.append('file', values.avatar[0]);
     }
 
-    const submissionData = {
-      profileId,
-      name: values.name,
-      type: values.type,
-      avatar: avatarData,
-      details: details,
-    };
-    
-    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyFY4Z_7REMcXyLr8OZbgGfJce5m2S4TO-Mi-NViUQdjtgcO28YTYHvTb_Q65oGwMs9/exec';
-
     try {
-      await fetch(appsScriptUrl, {
+      const response = await fetch(webhookUrl, {
         method: 'POST',
-        body: JSON.stringify(submissionData),
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
-        },
+        body: formData,
       });
-      // Because of Google Script's CORS redirect, a successful submission
-      // might throw a network error. We will assume success here and let
-      // the catch block handle true failures if they occur in other contexts.
-      toast({
-        title: 'Form Submitted!',
-        description: 'Your profile has been successfully submitted for review.',
-      });
-      form.reset();
 
+      if (response.ok) {
+        toast({
+          title: 'Form Submitted!',
+          description: 'Your profile has been successfully sent for review.',
+        });
+        form.reset();
+      } else {
+        // Discord returns error details in the body
+        const errorData = await response.json();
+        console.error('Discord Webhook Error:', errorData);
+        toast({
+          variant: 'destructive',
+          title: 'Submission Failed',
+          description: 'Could not send data to the server. Please try again.',
+        });
+      }
     } catch (error) {
       console.error('Submission Error:', error);
-       // This block will catch network errors. Since a successful submission to Google Apps Script
-       // via `fetch` from a different origin can result in an opaque redirect that looks like a
-       // network error, we show a success message as the most likely outcome.
-       // A true failure (like the script URL being wrong) will also land here.
       toast({
-        title: 'Form Submitted!',
-        description: 'Your profile has been successfully submitted for review. Thank you.',
+        variant: 'destructive',
+        title: 'Submission Failed',
+        description: 'A network error occurred. Please check your connection and try again.',
       });
-       form.reset();
     } finally {
       setIsSubmitting(false);
     }
