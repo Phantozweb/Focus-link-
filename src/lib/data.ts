@@ -190,7 +190,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     languages: ['English (Professional working proficiency)', 'German (Elementary proficiency)', 'Tamil (Native or bilingual proficiency)'],
     verified: true,
   },
-    {
+  {
     id: '20',
     name: 'Sabitabrata Panja',
     type: 'Optometrist',
