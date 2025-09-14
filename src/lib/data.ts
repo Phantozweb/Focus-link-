@@ -207,16 +207,16 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     workExperience: [
       {
         title: 'Optometrist',
-        company: 'Disha Eye Hospital',
-        startDate: 'June 2021',
-        endDate: 'March 2023',
+        company: 'Bhoomika Eye Hospital',
+        startDate: 'April 2023',
+        endDate: 'Present',
         description: ''
       },
       {
         title: 'Optometrist',
-        company: 'Bhoomika Eye Hospital',
-        startDate: 'April 2023',
-        endDate: 'Present',
+        company: 'Disha Eye Hospital',
+        startDate: 'June 2021',
+        endDate: 'March 2023',
         description: ''
       }
     ],
@@ -513,5 +513,3 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     languages: ['English'],
   },
 ];
-
-    
