@@ -119,13 +119,10 @@ export default function JoinPage() {
 
   const profileType = form.watch('type');
   const isIndividual = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(profileType);
-  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
-
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     
-    // --- Prepare data for Apps Script ---
     const now = new Date();
     const profileId = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getFullYear()}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
     
@@ -145,10 +142,29 @@ export default function JoinPage() {
       }
     }
     
+    let details: any = {
+      experience: values.experience,
+      location: values.location,
+      bio: values.bio,
+      skills: values.skills.map(s => s.value),
+      interests: values.interests.split(',').map(i => i.trim()),
+      email: values.email,
+      website: values.linkedin, // Use 'linkedin' field for website for orgs
+    };
+
+    if (isIndividual) {
+      details.languages = values.languages?.split(',').map(l => l.trim());
+      details.workExperience = values.workExperience;
+      details.education = values.education;
+      details.linkedin = values.linkedin;
+    }
+
     const submissionData = {
       profileId,
-      ...values,
+      name: values.name,
+      type: values.type,
       avatar: avatarData,
+      details: details,
     };
     
     // IMPORTANT: Replace with your Apps Script Web App URL
@@ -157,14 +173,13 @@ export default function JoinPage() {
     try {
       const response = await fetch(appsScriptUrl, {
         method: 'POST',
-        mode: 'no-cors', // Important for simple Apps Script POST requests
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(submissionData),
       });
 
-      // no-cors mode means we can't read the response, but we assume success if no network error
       toast({
         title: 'Form Submitted!',
         description: 'Your profile has been successfully submitted for review.',
@@ -193,6 +208,8 @@ export default function JoinPage() {
       form.setValue('type', 'Association');
     }
   }
+  
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
 
   const getOrgSpecificLabel = (field: 'skills' | 'interests') => {
     if (field === 'skills') {
