@@ -182,7 +182,7 @@ export default function JoinPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-3xl py-12 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
       <Card>
         <CardHeader>
           <CardTitle className="text-center font-headline text-3xl">

@@ -11,7 +11,7 @@ export function Header() {
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
                 remove_red_eye
                 </span>
-                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">FocusLink</h2>
+                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">FocusLinks</h2>
             </Link>
             <nav className="hidden md:flex items-center gap-6">
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/">Home</Link>

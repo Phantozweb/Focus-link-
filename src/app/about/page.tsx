@@ -45,7 +45,7 @@ export default function AboutPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-             <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Why FocusLink?</h2>
+             <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Why FocusLinks?</h2>
              <p className="mt-2 text-lg text-slate-600">A unified platform for the entire eye care ecosystem.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -68,7 +68,7 @@ export default function AboutPage() {
             <Eye className="h-12 w-12 text-primary mx-auto mb-4" />
             <h2 className="text-3xl font-bold text-slate-800">Join Us in Building the Future of Connected Eye Care</h2>
             <p className="mt-4 text-lg text-slate-600">
-               In an ever-evolving industry, staying connected is more important than ever. FocusLink provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
+               In an ever-evolving industry, staying connected is more important than ever. FocusLinks provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
             </p>
          </div>
       </section>

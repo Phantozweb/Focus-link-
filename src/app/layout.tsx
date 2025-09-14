@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'FocusLink',
+  title: 'FocusLinks',
   description: 'The world\'s largest eye care community to find, connect, and grow.',
 };
 

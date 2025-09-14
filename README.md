@@ -1,4 +1,4 @@
-# FocusLink
+# FocusLinks
 
 This is a Next.js application that serves as a directory for eye care students and professionals to connect.
 
