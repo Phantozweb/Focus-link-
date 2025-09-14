@@ -190,6 +190,55 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     languages: ['English (Professional working proficiency)', 'German (Elementary proficiency)', 'Tamil (Native or bilingual proficiency)'],
     verified: true,
   },
+    {
+    id: '20',
+    name: 'Sabitabrata Panja',
+    type: 'Optometrist',
+    experience: '4 year of Clinical Optometry experience',
+    location: 'West Bengal',
+    skills: ['Diabetic Retinopathy', 'Contact lens', 'Dispensing optics', 'Opd diagnosis'],
+    interests: ['Clinical Research', 'Low vision aids', 'Binocular rehabilitation'],
+    bio: 'I am confident in handling refraction, patient counseling, dispensing of spectacles, and managing primary eye care responsibilities at a vision centre. I am fluent in Hindi, which will help me communicate effectively with patients and team members.',
+    links: {
+      linkedin: 'https://www.linkedin.com/in/sabitabrata-panja-50b3bb229?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+      email: 'sabitabratapanja1999@gmail.com',
+    },
+    avatarUrl: 'https://iili.io/KuWfZUx.md.jpg',
+    workExperience: [
+      {
+        title: 'Optometrist',
+        company: 'Disha Eye Hospital',
+        startDate: 'June 2021',
+        endDate: 'March 2023',
+        description: ''
+      },
+      {
+        title: 'Optometrist',
+        company: 'Bhoomika Eye Hospital',
+        startDate: 'April 2023',
+        endDate: 'Present',
+        description: ''
+      }
+    ],
+    education: [
+      {
+        school: 'Swami vivekananda university, Barrackpore',
+        degree: 'Batchelor Of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2022',
+        endYear: '2025'
+      },
+       {
+        school: 'State Medical Faculty W.B',
+        degree: 'Diploma in Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2018',
+        endYear: '2021'
+      }
+    ],
+    languages: ['Bengali', 'Hindi', 'English', 'Oriya'],
+    verified: true,
+  },
   {
     id: '4',
     name: 'Dr. Ben Carter',
