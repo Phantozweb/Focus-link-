@@ -22,11 +22,20 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
-import { PlusCircle, Trash2, Loader2 } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, CheckCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const workExperienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -55,7 +64,7 @@ const formSchema = z.object({
   type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'], {
     required_error: 'You need to select a profile type.',
   }),
-  avatar: z.any().refine(files => files?.length === 1, 'Avatar is required.'),
+  avatar: z.any().optional(),
   experience: z.string().min(2, {
     message: 'Experience must be at least 2 characters.',
   }),
@@ -84,6 +93,7 @@ export default function JoinPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('individual');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -110,113 +120,7 @@ export default function JoinPage() {
 
   const profileType = form.watch('type');
   const isIndividual = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(profileType);
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    
-    const now = new Date();
-    const profileId = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getFullYear()}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
-    
-    const webhookUrl = 'https://discord.com/api/webhooks/1416675826577182780/gxAG9Kz0YJB1v9dRRA0TRMs2oDXH6CLOomD_qqzPjab0Iy78oWQ64n3bDc1tFnL-oa-k';
-
-    const formData = new FormData();
-    
-    // Create the embed object
-    const embed = {
-      title: `New Profile Submission: ${values.name}`,
-      color: 3447003, // A nice blue color
-      fields: [
-        { name: 'Profile Type', value: values.type, inline: true },
-        { name: 'Location', value: values.location, inline: true },
-        { name: 'Headline/Tagline', value: values.experience },
-        { name: 'Bio/Description', value: values.bio },
-        { name: `Skills / ${getOrgSpecificLabel('skills')}`, value: values.skills.map(s => s.value).join(', ') },
-        { name: `Interests / ${getOrgSpecificLabel('interests')}`, value: values.interests },
-      ],
-      footer: {
-        text: `Profile ID: ${profileId}`
-      },
-      timestamp: new Date().toISOString()
-    };
-
-    if (values.email) {
-      embed.fields.push({ name: 'Email', value: values.email, inline: true });
-    }
-    if (values.linkedin) {
-       embed.fields.push({ name: isIndividual ? 'LinkedIn' : 'Website', value: values.linkedin, inline: true });
-    }
-
-    if (isIndividual) {
-      if (values.languages) {
-        embed.fields.push({ name: 'Languages', value: values.languages, inline: true });
-      }
-      if (values.workExperience && values.workExperience.length > 0) {
-        embed.fields.push({
-          name: 'Work Experience',
-          value: values.workExperience.map(w => `**${w.title}** at ${w.company} (${w.startDate} - ${w.endDate})`).join('\n')
-        });
-      }
-      if (values.education && values.education.length > 0) {
-        embed.fields.push({
-          name: 'Education',
-          value: values.education.map(e => `**${e.degree}** from ${e.school} (${e.startYear} - ${e.endYear})`).join('\n')
-        });
-      }
-    }
-    
-    formData.append('payload_json', JSON.stringify({ embeds: [embed] }));
-    
-    if (values.avatar && values.avatar.length > 0) {
-       formData.append('file', values.avatar[0]);
-    }
-
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        toast({
-          title: 'Form Submitted!',
-          description: 'Your profile has been successfully sent for review.',
-        });
-        form.reset();
-      } else {
-        // Discord returns error details in the body
-        const errorData = await response.json();
-        console.error('Discord Webhook Error:', errorData);
-        toast({
-          variant: 'destructive',
-          title: 'Submission Failed',
-          description: 'Could not send data to the server. Please try again.',
-        });
-      }
-    } catch (error) {
-      console.error('Submission Error:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Submission Failed',
-        description: 'A network error occurred. Please check your connection and try again.',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  const avatarRef = form.register("avatar");
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    if (value === 'individual') {
-      form.setValue('type', 'Student');
-    } else {
-      form.setValue('type', 'Association');
-    }
-  }
   
-  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
-
   const getOrgSpecificLabel = (field: 'skills' | 'interests') => {
     if (field === 'skills') {
       switch (profileType) {
@@ -241,6 +145,99 @@ export default function JoinPage() {
     return '';
   }
 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    
+    const now = new Date();
+    const profileId = `${now.getDate().toString().padStart(2, '0')}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getFullYear()}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+    
+    const webhookUrl = 'https://discord.com/api/webhooks/1416675826577182780/gxAG9Kz0YJB1v9dRRA0TRMs2oDXH6CLOomD_qqzPjab0Iy78oWQ64n3bDc1tFnL-oa-k';
+
+    // Construct the details string
+    let details = `**Profile Type**: ${values.type}\n`;
+    details += `**Location**: ${values.location}\n`;
+    details += `**Headline/Tagline**: ${values.experience}\n`;
+    details += `**Bio/Description**: ${values.bio}\n`;
+    details += `**${isIndividual ? 'Skills' : getOrgSpecificLabel('skills')}**: ${values.skills.map(s => s.value).join(', ')}\n`;
+    details += `**${isIndividual ? 'Interests' : getOrgSpecificLabel('interests')}**: ${values.interests}\n`;
+
+    if (values.email) {
+      details += `**Email**: ${values.email}\n`;
+    }
+    if (values.linkedin) {
+      details += `**${isIndividual ? 'LinkedIn' : 'Website'}**: ${values.linkedin}\n`;
+    }
+    if (isIndividual && values.languages) {
+      details += `**Languages**: ${values.languages}\n`;
+    }
+    if (isIndividual && values.workExperience && values.workExperience.length > 0) {
+      details += `**Work Experience**: ${values.workExperience.map(w => `${w.title} at ${w.company} (${w.startDate} - ${w.endDate})`).join('; ')}\n`;
+    }
+    if (isIndividual && values.education && values.education.length > 0) {
+      details += `**Education**: ${values.education.map(e => `${e.degree} from ${e.school} (${e.startYear} - ${e.endYear})`).join('; ')}\n`;
+    }
+
+    const embed = {
+      title: `New Profile Submission: ${values.name}`,
+      color: 3447003, // A nice blue color
+      description: `\`\`\`${details}\`\`\``,
+      footer: {
+        text: `Profile ID: ${profileId}`
+      },
+      timestamp: new Date().toISOString()
+    };
+    
+    const formData = new FormData();
+    formData.append('payload_json', JSON.stringify({ embeds: [embed] }));
+
+    const avatarFile = form.getValues('avatar');
+    if (avatarFile && avatarFile.length > 0) {
+       formData.append('file', avatarFile[0]);
+    }
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setShowSuccessDialog(true);
+      } else {
+        const errorData = await response.json();
+        console.error('Discord Webhook Error:', errorData);
+        toast({
+          variant: 'destructive',
+          title: 'Submission Failed',
+          description: 'Could not send data to Discord. Please check the logs.',
+        });
+      }
+    } catch (error) {
+      console.error('Submission Error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Submission Error',
+        description: 'A network error occurred. Please check your connection and try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  const avatarRef = form.register("avatar");
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === 'individual') {
+      form.setValue('type', 'Student');
+    } else {
+      form.setValue('type', 'Association');
+    }
+  }
+  
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(profileType);
+
+
   const getOrgSpecificPlaceholder = (field: 'skills' | 'interests') => {
      if (field === 'skills') {
       switch (profileType) {
@@ -263,6 +260,11 @@ export default function JoinPage() {
       }
     }
     return '';
+  }
+
+  const closeSuccessDialog = () => {
+    setShowSuccessDialog(false);
+    form.reset();
   }
 
   return (
@@ -379,6 +381,9 @@ export default function JoinPage() {
                         <FormControl>
                           <Input type="file" accept="image/*" {...avatarRef} />
                         </FormControl>
+                         <FormDescription>
+                          Optional. A good quality image is recommended.
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -665,6 +670,22 @@ export default function JoinPage() {
           </Form>
         </CardContent>
       </Card>
+      <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+             <div className="flex justify-center">
+              <CheckCircle className="h-16 w-16 text-green-500" />
+            </div>
+            <AlertDialogTitle className="text-center">Submission Successful!</AlertDialogTitle>
+            <AlertDialogDescription className="text-center">
+              Your profile has been submitted for review. It will appear on the directory once it has been approved. This may take some time.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={closeSuccessDialog}>Close</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
