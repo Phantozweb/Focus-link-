@@ -5,10 +5,9 @@ import { useState } from 'react';
 import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, CheckCircle, Sparkles, User, RefreshCw } from 'lucide-react';
+import { Loader2, CheckCircle, Sparkles, RefreshCw } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import {
   AlertDialog,
@@ -19,47 +18,59 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { interview, InterviewOutput } from '@/ai/flows/interviewer';
+import { InterviewOutput } from '@/ai/flows/interviewer';
+import { interviewerChat, Message } from '@/ai/flows/interviewer-chat';
 import { ProfileCard } from '@/components/profile-card';
 import type { UserProfile } from '@/types';
-
+import { Chat } from '@/components/chat-ui';
 
 export default function JoinPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [userInput, setUserInput] = useState('');
   const [generatedProfile, setGeneratedProfile] = useState<InterviewOutput | null>(null);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'model',
+      content: "Hello! I'm the FocusLinks Interviewer AI. I'm here to help you create your professional profile. To start, please tell me a little bit about yourself. For example, you can mention your name, your role (like Student or Optometrist), where you're located, and what you do.",
+    },
+  ]);
 
-  const handleGenerateProfile = async () => {
-    if (!userInput) {
-      toast({
-        variant: 'destructive',
-        title: 'Please enter some information about yourself.',
-      });
-      return;
-    }
-    setIsGenerating(true);
-    setGeneratedProfile(null);
+  const handleSendMessage = async (text: string) => {
+    const userMessage: Message = { role: 'user', content: text };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+
     try {
-      const result = await interview({ text: userInput });
-      setGeneratedProfile(result);
-      toast({
-        title: 'Profile Generated!',
-        description: 'Review your profile below and submit when you are ready.',
-      });
+      const result = await interviewerChat(newMessages);
+      
+      if (result.profile) {
+        setGeneratedProfile(result.profile);
+        const finalBotMessage: Message = { role: 'model', content: result.reply || "Thanks! Here is your generated profile." };
+        setMessages(prev => [...prev, finalBotMessage]);
+
+        toast({
+            title: 'Profile Generated!',
+            description: 'Review your profile below and submit when you are ready.',
+        });
+      } else if (result.reply) {
+         const botMessage: Message = { role: 'model', content: result.reply };
+         setMessages(prev => [...prev, botMessage]);
+      } else {
+        throw new Error("The AI didn't provide a reply or a profile.");
+      }
     } catch (error) {
-      console.error('Error generating profile:', error);
+      console.error('Error in chat:', error);
+      const errorMessage: Message = { role: 'model', content: "I'm sorry, I encountered an error. Could you please try rephrasing your last message?" };
+      setMessages(prev => [...prev, errorMessage]);
       toast({
         variant: 'destructive',
-        title: 'AI Profile Generation Failed',
-        description: 'Could not generate a profile at this time. Please try again.',
+        title: 'AI Chat Error',
+        description: 'Could not get a response from the AI. Please try again.',
       });
-    } finally {
-      setIsGenerating(false);
     }
   };
+
 
   async function onSubmit() {
     if (!generatedProfile) {
@@ -86,7 +97,7 @@ export default function JoinPage() {
     if (generatedProfile.links?.linkedin) {
       details += `**LinkedIn/Website**: ${generatedProfile.links.linkedin}\n`;
     }
-    if (generatedProfile.languages.length > 0) {
+    if (generatedProfile.languages && generatedProfile.languages.length > 0) {
       details += `**Languages**: ${generatedProfile.languages.join(', ')}\n`;
     }
     if (generatedProfile.workExperience && generatedProfile.workExperience.length > 0) {
@@ -140,17 +151,22 @@ export default function JoinPage() {
 
   const closeSuccessDialog = () => {
     setShowSuccessDialog(false);
-    setUserInput('');
-    setGeneratedProfile(null);
+    startOver();
   }
 
   const startOver = () => {
       setGeneratedProfile(null);
+      setMessages([
+        {
+          role: 'model',
+          content: "Hello! I'm the FocusLinks Interviewer AI. Let's start over. Tell me a bit about yourself to begin creating your profile.",
+        },
+      ]);
   }
 
   return (
     <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-center font-headline text-3xl flex items-center justify-center gap-3">
             <Sparkles className="h-8 w-8 text-primary" /> FocusLinks Interviewer AI
@@ -159,28 +175,8 @@ export default function JoinPage() {
         <CardContent className="space-y-8">
           
           {!generatedProfile ? (
-            <div className="space-y-6">
-                <p className="text-center text-muted-foreground">
-                    Tell us about yourself. Our AI will create your professional profile from the text you provide. <br/>
-                    Include your name, role (student, optometrist, etc.), location, experience, education, skills, interests, and contact info.
-                </p>
-                <Textarea
-                    placeholder="For example: 'My name is Dr. Jane Doe, an optometrist in New York with 10 years of experience in pediatric optometry...'"
-                    className="resize-none"
-                    rows={10}
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                />
-                <Button onClick={handleGenerateProfile} disabled={isGenerating} size="lg" className="w-full">
-                    {isGenerating ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating Profile...
-                    </>
-                    ) : (
-                    'Generate Profile'
-                    )}
-                </Button>
+            <div className="h-[60vh]">
+                <Chat messages={messages} onSendMessage={handleSendMessage} />
             </div>
           ) : (
             <div className="space-y-8">
@@ -234,4 +230,3 @@ export default function JoinPage() {
     </div>
   );
 }
-
