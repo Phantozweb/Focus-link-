@@ -79,7 +79,7 @@ const formSchema = z.object({
   bio: z.string().min(10, {
     message: 'Bio must be at least 10 characters.',
   }),
-  email: z.string().email().optional().or(z.literal('')),
+  email: z.string().email("Please enter a valid email address."),
   linkedin: z.string().url().optional().or(z.literal('')),
   workExperience: z.array(workExperienceSchema).optional(),
   education: z.array(educationSchema).optional(),
@@ -576,7 +576,7 @@ export default function JoinPage() {
                       name="languages"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Languages</FormLabel>
+                          <FormLabel>Languages (Optional)</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="e.g. English, Spanish"
@@ -597,7 +597,7 @@ export default function JoinPage() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{isOrg ? 'Contact Email' : 'Email'} (Optional)</FormLabel>
+                        <FormLabel>{isOrg ? 'Contact Email' : 'Email'}</FormLabel>
                         <FormControl>
                           <Input
                             type="email"
@@ -689,5 +689,3 @@ export default function JoinPage() {
     </div>
   );
 }
-
-    
