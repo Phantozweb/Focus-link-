@@ -79,13 +79,13 @@ You will receive free-form text from a user. Your job is to analyze this text an
 3.  **Create a Headline**: Synthesize a concise, impactful headline (the 'experience' field) that summarizes their current status or main value proposition.
 4.  **Generate a Bio**: Do not just copy and paste from the input. Write a new, engaging, first-person bio (3-4 sentences) that highlights their key strengths, experiences, and goals based on the provided text.
 5.  **Structure Data**: Populate all fields of the output schema accurately.
-    *   For `workExperience` and `education`, create structured objects for each entry mentioned.
-    *   For `skills` and `interests`, extract them into separate array elements.
-    *   For `links`, extract the email and a LinkedIn or personal website URL.
+    *   For \`workExperience\` and \`education\`, create structured objects for each entry mentioned.
+    *   For \`skills\` and \`interests\`, extract them into separate array elements.
+    *   For \`links\`, extract the email and a LinkedIn or personal website URL.
 6.  **Defaults**:
-    *   Use the default placeholder for `avatarUrl`.
-    *   Set `verified` to `false`.
-    *   Generate a unique `id`.
+    *   Use the default placeholder for \`avatarUrl\`.
+    *   Set \`verified\` to \`false\`.
+    *   Generate a unique \`id\`.
 
 **User Input:**
 \`\`\`
