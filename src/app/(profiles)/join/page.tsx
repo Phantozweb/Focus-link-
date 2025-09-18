@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useState } from 'react';
+import { generateBio } from '@/ai/flows/generate-bio';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,7 +23,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
-import { PlusCircle, Trash2, Loader2, CheckCircle } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, CheckCircle, Sparkles } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -36,6 +37,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 const workExperienceSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -94,6 +105,10 @@ export default function JoinPage() {
   const [activeTab, setActiveTab] = useState('individual');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showAiDialog, setShowAiDialog] = useState(false);
+  const [aiPoints, setAiPoints] = useState('');
+  const [isGeneratingBio, setIsGeneratingBio] = useState(false);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -144,6 +159,41 @@ export default function JoinPage() {
     }
     return '';
   }
+
+  const handleGenerateBio = async () => {
+    if (!aiPoints) {
+      toast({
+        variant: 'destructive',
+        title: 'Please enter some key points.',
+      });
+      return;
+    }
+    setIsGeneratingBio(true);
+    try {
+      const result = await generateBio({
+        name: form.getValues('name'),
+        role: form.getValues('type'),
+        points: aiPoints,
+      });
+      form.setValue('bio', result.bio);
+      setShowAiDialog(false);
+      setAiPoints('');
+      toast({
+        title: 'Bio generated successfully!',
+        description: 'Your new bio has been added to the form.',
+      });
+    } catch (error) {
+      console.error('Error generating bio:', error);
+      toast({
+        variant: 'destructive',
+        title: 'AI Bio Generation Failed',
+        description: 'Could not generate a bio at this time. Please try again.',
+      });
+    } finally {
+      setIsGeneratingBio(false);
+    }
+  };
+
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -425,7 +475,50 @@ export default function JoinPage() {
                     name="bio"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{isIndividual ? 'Bio' : 'Description'}</FormLabel>
+                        <div className="flex items-center justify-between">
+                          <FormLabel>{isIndividual ? 'Bio' : 'Description'}</FormLabel>
+                          {isIndividual && (
+                            <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
+                              <DialogTrigger asChild>
+                                <Button variant="outline" size="sm">
+                                  <Sparkles className="mr-2 h-4 w-4" />
+                                  Generate Bio with AI
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Generate Bio with AI</DialogTitle>
+                                  <DialogDescription>
+                                    Enter a few key points about yourself, and we'll generate a professional bio for you.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <Textarea
+                                    placeholder="e.g., Passionate about pediatric optometry, skilled in contact lens fitting, enjoy volunteering..."
+                                    rows={4}
+                                    value={aiPoints}
+                                    onChange={(e) => setAiPoints(e.target.value)}
+                                  />
+                                </div>
+                                <DialogFooter>
+                                  <Button
+                                    onClick={handleGenerateBio}
+                                    disabled={isGeneratingBio}
+                                  >
+                                    {isGeneratingBio ? (
+                                      <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Generating...
+                                      </>
+                                    ) : (
+                                      'Generate'
+                                    )}
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
+                          )}
+                        </div>
                         <FormControl>
                           <Textarea
                             placeholder={isIndividual ? "Tell us a little bit about yourself, your passions, and your goals." : "Describe your organization's mission and values."}
