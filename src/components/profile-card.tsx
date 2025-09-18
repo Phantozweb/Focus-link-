@@ -31,7 +31,7 @@ export function ProfileCard({ user }: ProfileCardProps) {
         <div className="relative">
             <Image alt={`${user.name} Banner`} className="w-full h-24 object-cover rounded-t-lg" src={`https://picsum.photos/seed/${user.id}b/400/100`} width={400} height={100} data-ai-hint={getBannerHint()} />
             <Avatar className="w-20 h-20 rounded-full object-cover absolute -bottom-10 left-6 border-4 border-white shadow-md">
-              <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={getAvatarHint()} />
+              <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={getAvatarHint()} />
               <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
             </Avatar>
         </div>
