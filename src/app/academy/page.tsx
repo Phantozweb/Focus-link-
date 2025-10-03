@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
+import { WebinarBanner } from '@/components/webinar-banner';
 
 export default function AcademyPage() {
   const now = new Date();
@@ -36,14 +37,11 @@ export default function AcademyPage() {
             {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
               <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                 <div className="relative w-full aspect-video">
-                  <Image src={`https://picsum.photos/seed/${webinar.id}/1200/675`} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
+                  <WebinarBanner webinar={webinar} variant="card" />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex-grow">
-                     <div className="flex flex-wrap gap-2 mb-3">
-                      {webinar.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
+                     <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
                     
                     <div className="space-y-3 text-sm text-muted-foreground mt-4">
                       <WebinarTime dateTime={webinar.dateTime} />
@@ -83,13 +81,10 @@ export default function AcademyPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {pastWebinars.map(webinar => (
                   <Card key={webinar.id} className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col sm:flex-row">
-                     <div className="relative w-full sm:w-48 h-48 sm:h-auto aspect-square sm:aspect-auto">
-                        <Image src={`https://picsum.photos/seed/${webinar.id}/1200/675`} alt={webinar.title} fill className="object-cover" data-ai-hint="conference room" />
+                     <div className="relative w-full sm:w-56 h-full aspect-video sm:aspect-auto">
+                        <WebinarBanner webinar={webinar} variant="card" />
                      </div>
                     <CardContent className="p-6 flex flex-col">
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {webinar.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
-                      </div>
                       <h3 className="text-lg font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
                       <p className="text-muted-foreground text-sm flex-grow mb-4">Originally aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></p>
                       

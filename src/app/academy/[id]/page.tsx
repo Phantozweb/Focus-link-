@@ -73,9 +73,6 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                             </Badge>
                          </div>
                     </div>
-                    <h1 className="text-3xl font-bold text-slate-800 font-headline leading-tight">
-                        {webinar.title}
-                    </h1>
                 </div>
                 <WebinarActions webinar={webinar} />
              </div>

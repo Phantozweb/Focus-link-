@@ -20,6 +20,7 @@ import type { UserProfile } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { WebinarTime } from '@/components/webinar-time';
+import { WebinarBanner } from '@/components/webinar-banner';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -181,24 +182,12 @@ export default function Home() {
                         <Link href={`/academy/${webinar.id}`} className="h-full block">
                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                                 <div className="relative w-full aspect-video">
-                                    <Image src={`https://picsum.photos/seed/${webinar.id}/1200/675`} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
-                                    <div className="absolute top-2 right-2 flex gap-1">
-                                        {webinar.tags.slice(0, 2).map(tag => <Badge key={tag} variant="secondary" className="bg-white/80 backdrop-blur-sm">{tag}</Badge>)}
-                                    </div>
+                                    <WebinarBanner webinar={webinar} variant="card" />
                                 </div>
                                 <CardContent className="p-4 flex flex-col flex-grow">
                                     <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">{webinar.title}</h3>
-                                    <div className="flex items-center gap-3 my-3">
-                                        <Avatar className="h-10 w-10">
-                                            <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                                            <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-semibold text-sm text-slate-700">{webinar.speaker.name}</p>
-                                            <p className="text-xs text-muted-foreground">{webinar.speaker.title}</p>
-                                        </div>
-                                    </div>
-                                    <div className="border-t pt-3 space-y-2 text-sm text-muted-foreground">
+                                    
+                                    <div className="border-t pt-3 mt-3 space-y-2 text-sm text-muted-foreground">
                                         <WebinarTime dateTime={webinar.dateTime} />
                                     </div>
                                     <Button asChild className="w-full mt-4">
