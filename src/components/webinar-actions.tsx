@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Ticket, Calendar, Clock, Info } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle } from 'lucide-react';
 import { Badge } from './ui/badge';
 
 interface WebinarActionsProps {
@@ -19,7 +19,7 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
 );
 
 export function WebinarActions({ webinar }: WebinarActionsProps) {
-    const [status, setStatus] = useState<'UPCOMING' | 'LIVE' | 'ENDED'>('UPCOMING');
+    const [status, setStatus] = useState<'UPCOMING' | 'REGISTRATION_CLOSED' | 'LIVE' | 'ENDED'>('UPCOMING');
     const [timeLeft, setTimeLeft] = useState({
         days: 0, hours: 0, minutes: 0, seconds: 0
     });
@@ -29,20 +29,22 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         const calculateState = () => {
             const now = new Date().getTime();
             const webinarStartTime = new Date(webinar.dateTime).getTime();
-            // End time is start time + duration + 3 hours grace period
+            const registrationCloseTime = webinarStartTime - (2 * 60 * 60 * 1000); // 2 hours before start
             const durationParts = webinar.duration.split(' ');
             const durationValue = parseInt(durationParts[0], 10);
-            const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000);
+            const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000); // 3-hour grace period
 
-            if (now < webinarStartTime) {
+            if (now < registrationCloseTime) {
                 setStatus('UPCOMING');
                 const difference = webinarStartTime - now;
-                setTimeLeft({
+                 setTimeLeft({
                     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
                     hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
                     minutes: Math.floor((difference / 1000 / 60) % 60),
                     seconds: Math.floor((difference / 1000) % 60),
                 });
+            } else if (now >= registrationCloseTime && now < webinarStartTime) {
+                setStatus('REGISTRATION_CLOSED');
             } else if (now >= webinarStartTime && now < webinarEndTime) {
                 setStatus('LIVE');
             } else {
@@ -62,12 +64,13 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         setIsRegistered(true);
     };
 
-    const renderButton = () => {
-        if (isRegistered && status === 'UPCOMING') {
+    const renderContent = () => {
+         if (isRegistered && (status === 'UPCOMING' || status === 'REGISTRATION_CLOSED')) {
              return (
                  <div className="text-center p-4 bg-green-50 border-green-200 border rounded-lg">
+                    <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
                     <h3 className="font-bold text-green-800">You're Registered!</h3>
-                    <p className="text-sm text-green-700 mt-1">Please wait patiently. Our team will send the meeting link to your registered email address. While you wait, feel free to connect with us on LinkedIn!</p>
+                    <p className="text-sm text-green-700 mt-1">Please wait patiently. Our team will send the meeting link to your registered email address one hour before the session begins. While you wait, feel free to connect with us on LinkedIn!</p>
                 </div>
             )
         }
@@ -75,11 +78,34 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         switch (status) {
             case 'UPCOMING':
                 return (
-                    <Button size="lg" className="w-full text-lg py-6" onClick={handleRegister}>
-                        <Ticket className="mr-2 h-6 w-6" />
-                        Register Now
-                    </Button>
+                    <>
+                        <div className="text-center">
+                            <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
+                            <div className="flex justify-center gap-2">
+                                <CountdownUnit value={timeLeft.days} label="Days" />
+                                <CountdownUnit value={timeLeft.hours} label="Hours" />
+                                <CountdownUnit value={timeLeft.minutes} label="Minutes" />
+                                <CountdownUnit value={timeLeft.seconds} label="Seconds" />
+                            </div>
+                        </div>
+                        <Button size="lg" className="w-full text-lg py-6" onClick={handleRegister}>
+                            <Ticket className="mr-2 h-6 w-6" />
+                            Register Now
+                        </Button>
+                    </>
                 );
+            case 'REGISTRATION_CLOSED':
+                 return (
+                    <>
+                        <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
+                            <XCircle className="mr-2 h-6 w-6" />
+                            Registration Closed
+                        </Button>
+                        <div className="text-center text-sm text-muted-foreground p-2">
+                           Registration for this event closed 2 hours before the start time. If you have already registered, please check your email for the join link.
+                        </div>
+                    </>
+                 );
             case 'LIVE':
                  return (
                     <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
@@ -91,9 +117,16 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                 );
             case 'ENDED':
                  return (
-                    <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
-                        Session Ended
-                    </Button>
+                     <>
+                        <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
+                            Session Ended
+                        </Button>
+                        <div className="text-center p-4 bg-blue-50 border-blue-200 border rounded-lg">
+                            <Info className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                            <h3 className="font-bold text-blue-800">Claim Your Certificate</h3>
+                            <p className="text-sm text-blue-700 mt-1">If you registered and attended this session, you can claim your certificate of attendance within 48 hours. Please check your email for instructions.</p>
+                        </div>
+                    </>
                 );
         }
     };
@@ -101,19 +134,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     return (
         <div className="p-6 rounded-lg bg-slate-50 border h-full flex flex-col justify-center">
             <div className="space-y-4">
-                {status === 'UPCOMING' && !isRegistered && (
-                    <div className="text-center">
-                        <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
-                        <div className="flex justify-center gap-2">
-                            <CountdownUnit value={timeLeft.days} label="Days" />
-                            <CountdownUnit value={timeLeft.hours} label="Hours" />
-                            <CountdownUnit value={timeLeft.minutes} label="Minutes" />
-                            <CountdownUnit value={timeLeft.seconds} label="Seconds" />
-                        </div>
-                    </div>
-                )}
-                
-                {renderButton()}
+                {renderContent()}
             </div>
         </div>
     );
