@@ -32,7 +32,7 @@ export default function JoinPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'model',
-      content: "Hello! I'm the FocusLinks Interviewer AI. I'm here to help you create your professional profile. To start, please tell me a little bit about yourself. For example, you can mention your name, your role (like Student or Optometrist), where you're located, and what you do.",
+      content: "Hello! I'm the Focus Links Interviewer AI. I'm here to help you create your professional profile. To start, please tell me a little bit about yourself. For example, you can mention your name, your role (like Student or Optometrist), where you're located, and what you do.",
     },
   ]);
 
@@ -159,7 +159,7 @@ export default function JoinPage() {
       setMessages([
         {
           role: 'model',
-          content: "Hello! I'm the FocusLinks Interviewer AI. Let's start over. Tell me a bit about yourself to begin creating your profile.",
+          content: "Hello! I'm the Focus Links Interviewer AI. Let's start over. Tell me a bit about yourself to begin creating your profile.",
         },
       ]);
   }
@@ -169,7 +169,7 @@ export default function JoinPage() {
       <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-center font-headline text-3xl flex items-center justify-center gap-3">
-            <Sparkles className="h-8 w-8 text-primary" /> FocusLinks Interviewer AI
+            <Sparkles className="h-8 w-8 text-primary" /> Focus Links Interviewer AI
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">

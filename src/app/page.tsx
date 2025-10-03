@@ -2,7 +2,7 @@
 "use client";
 
 import { users as allUsers } from '@/lib/data';
-import { webinars } from '@/lib/webinars';
+import { webinars } from '@/lib/academy';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
+import { WebinarTime } from '@/components/webinar-time';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -168,14 +169,14 @@ export default function Home() {
                 <div className="flex justify-between items-center mb-8">
                 <h2 className="text-slate-800 text-3xl font-bold font-headline">Upcoming Webinars</h2>
                 <Button asChild variant="link" className="text-primary pr-0">
-                    <Link href="/webinars">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link href="/academy">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
                 </div>
                 <Carousel opts={{ align: "start" }} className="w-full">
                 <CarouselContent className="-ml-4">
                     {upcomingWebinars.map((webinar) => (
                     <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                        <Link href={`/webinars/${webinar.id}`} className="h-full block">
+                        <Link href={`/academy/${webinar.id}`} className="h-full block">
                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                                 <div className="relative">
                                     <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={225} className="w-full h-48 object-cover" data-ai-hint="presentation person" />
@@ -196,14 +197,7 @@ export default function Home() {
                                         </div>
                                     </div>
                                     <div className="border-t pt-3 space-y-2 text-sm text-muted-foreground">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-primary" />
-                                            <span>{webinar.date}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="h-4 w-4 text-primary" />
-                                            <span>{webinar.time}</span>
-                                        </div>
+                                        <WebinarTime dateTime={webinar.dateTime} />
                                     </div>
                                     <Button asChild className="w-full mt-4">
                                         <div className="w-full">View Details</div>
@@ -398,14 +392,3 @@ export default function Home() {
     </div>
   );
 }
-    
-    
-
-    
-
-
-
-
-    
-
-    

@@ -1,6 +1,5 @@
 
-
-import { webinars } from '@/lib/webinars';
+import { webinars } from '@/lib/academy';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -9,8 +8,9 @@ import { Calendar, Clock, Video, UserCircle, PlayCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { WebinarTime } from '@/components/webinar-time';
 
-export default function WebinarsPage() {
+export default function AcademyPage() {
   const upcomingWebinars = webinars.filter(w => !w.isPast);
   const pastWebinars = webinars.filter(w => w.isPast);
 
@@ -19,7 +19,7 @@ export default function WebinarsPage() {
       {/* Hero Section */}
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Connect & Grow: Webinars for Eye Care Professionals</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Focus Links Academy</h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
             Stay at the forefront of vision care with expert-led sessions on the latest research, clinical techniques, and industry innovations.
           </p>
@@ -29,9 +29,9 @@ export default function WebinarsPage() {
       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
         {/* Upcoming Webinars */}
         <section>
-          <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Webinars</h2>
+          <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Events</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
-            {upcomingWebinars.map(webinar => (
+            {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
               <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 grid grid-cols-1 md:grid-cols-2">
                 <div className="relative">
                   <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={400} className="w-full h-full object-cover" data-ai-hint="presentation person" />
@@ -44,14 +44,7 @@ export default function WebinarsPage() {
                     <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
                     
                     <div className="space-y-3 text-sm text-muted-foreground mt-4">
-                      <div className="flex items-center gap-3">
-                        <Calendar className="h-4 w-4 text-primary" />
-                        <span>{webinar.date}</span>
-                      </div>
-                       <div className="flex items-center gap-3">
-                        <Clock className="h-4 w-4 text-primary" />
-                        <span>{webinar.time} ({webinar.duration})</span>
-                      </div>
+                      <WebinarTime dateTime={webinar.dateTime} />
                     </div>
                   </div>
                   
@@ -69,11 +62,13 @@ export default function WebinarsPage() {
                   </div>
                   
                   <Button asChild className="w-full mt-auto">
-                    <Link href={`/webinars/${webinar.id}`}>View Details</Link>
+                    <Link href={`/academy/${webinar.id}`}>View Details</Link>
                   </Button>
                 </div>
               </Card>
-            ))}
+            )) : (
+              <p className="text-muted-foreground col-span-full text-center">No upcoming events scheduled. Please check back soon!</p>
+            )}
           </div>
         </section>
 
@@ -92,10 +87,10 @@ export default function WebinarsPage() {
                         {webinar.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
                       </div>
                       <h3 className="text-lg font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
-                      <p className="text-muted-foreground text-sm flex-grow mb-4">Originally aired: {webinar.date}</p>
+                      <p className="text-muted-foreground text-sm flex-grow mb-4">Originally aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></p>
                       
                       <Button asChild variant="secondary" className="w-full sm:w-auto mt-auto">
-                        <Link href={`/webinars/${webinar.id}`}>
+                        <Link href={`/academy/${webinar.id}`}>
                            <PlayCircle className="mr-2 h-4 w-4" />
                            Watch Recording
                         </Link>

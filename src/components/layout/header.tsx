@@ -11,12 +11,12 @@ export function Header() {
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
                 remove_red_eye
                 </span>
-                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">FocusLinks</h2>
+                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
             </Link>
             <nav className="hidden md:flex items-center gap-6">
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/">Home</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/directory">Directory</Link>
-                <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/webinars">Webinars</Link>
+                <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/academy">Academy</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/about">About Us</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/contact">Contact</Link>
             </nav>
@@ -48,8 +48,8 @@ export function Header() {
                         </Link>
                     </SheetClose>
                      <SheetClose asChild>
-                        <Link href="/webinars" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
-                          <span className="material-symbols-outlined">slideshow</span> Webinars
+                        <Link href="/academy" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                          <span className="material-symbols-outlined">slideshow</span> Academy
                         </Link>
                     </SheetClose>
                      <SheetClose asChild>

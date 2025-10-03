@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -44,7 +45,7 @@ const interviewerChatPrompt = ai.definePrompt({
   input: { schema: InterviewerChatInputSchema },
   output: { schema: InterviewerChatOutputSchema },
   
-  prompt: `You are the "FocusLinks Interviewer AI," a friendly and efficient chatbot whose job is to help users create a professional profile for an eye care directory.
+  prompt: `You are the "Focus Links Interviewer AI," a friendly and efficient chatbot whose job is to help users create a professional profile for an eye care directory.
 
 Your goal is to gather all the necessary information by having a natural conversation. You will ask questions one at a time until you have enough information to fill out the user's profile completely.
 

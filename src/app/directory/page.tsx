@@ -23,7 +23,7 @@ export default function DirectoryPage() {
     <div className="bg-muted/40">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <section className="mb-12 text-center">
-          <h1 className="text-4xl font-bold font-headline mb-2">FocusLinks Directory</h1>
+          <h1 className="text-4xl font-bold font-headline mb-2">Focus Links Directory</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Explore the global eye care community. Find colleagues, mentors, and partners across every specialty.</p>
         </section>
 

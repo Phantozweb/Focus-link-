@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/footer';
 import { Announcement } from '@/components/layout/announcement';
 
 export const metadata: Metadata = {
-  title: 'FocusLinks',
+  title: 'Focus Links',
   description: 'The world\'s largest eye care community to find, connect, and grow.',
 };
 

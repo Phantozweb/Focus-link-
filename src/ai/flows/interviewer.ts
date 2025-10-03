@@ -41,7 +41,7 @@ const InterviewInputSchema = z.object({
 });
 export type InterviewInput = z.infer<typeof InterviewInputSchema>;
 
-const InterviewOutputSchema = z.object({
+export const InterviewOutputSchema = z.object({
     id: z.string().default(() => String(Date.now())).describe("A unique ID for the user, can be a timestamp."),
     name: z.string().describe('The full name of the person or organization.'),
     type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry']).describe('The professional role or type of organization.'),
@@ -68,7 +68,7 @@ const prompt = ai.definePrompt({
   name: 'interviewerPrompt',
   input: {schema: InterviewInputSchema},
   output: {schema: InterviewOutputSchema},
-  prompt: `You are the "FocusLinks Interviewer AI". Your task is to act as an expert profile builder for a professional eye care directory.
+  prompt: `You are the "Focus Links Interviewer AI". Your task is to act as an expert profile builder for a professional eye care directory.
 
 You will receive free-form text from a user. Your job is to analyze this text and extract all relevant information to create a complete, structured, and professional profile.
 

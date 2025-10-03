@@ -8,8 +8,7 @@ export type Webinar = {
     title: string;
     avatarUrl: string;
   };
-  date: string;
-  time: string;
+  dateTime: string; // ISO 8601 format (e.g., "2024-10-27T04:30:00Z")
   duration: string;
   imageUrl: string;
   tags: string[];
@@ -26,10 +25,10 @@ export const webinars: Webinar[] = [
       title: 'Cataract Educator and Cornea Consultant at LVPEI KVC campus',
       avatarUrl: 'https://iili.io/Jodp9gI.png'
     },
-    date: 'Sunday, October 27, 2024',
-    time: '10:00 AM IST',
+    dateTime: '2024-10-27T04:30:00Z', // This is 10:00 AM IST
     duration: '75 minutes',
     imageUrl: 'https://picsum.photos/seed/webinar-clik/600/400',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical'],
+    isPast: false,
   }
 ];
