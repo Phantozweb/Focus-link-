@@ -7,29 +7,34 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const metadata: Metadata = {
   title: 'About Focus Links | Our Mission and Team',
-  description: 'Learn about the mission of Focus Links to connect the global eye care community and meet the team dedicated to building the future of vision care.',
+  description: 'Learn about the mission of Focus Links to connect the global eye care community and meet the team dedicated to building the future of vision care, including our Founder Janarthan Veeramani, and directors Mohd Asad, Adnan, and Anshi Jha.',
 };
 
 const teamMembers = [
   {
     name: 'Janarthan Veeramani',
     role: 'Founder',
+    description: 'Leads the vision and strategy for Focus Links, driving the mission to connect the global eye care community.'
   },
   {
     name: 'Mohd Asad',
     role: 'Managing Director of Academic',
+    description: 'Oversees the educational content and curriculum for the Focus Links Academy, ensuring high-quality learning experiences.'
   },
   {
     name: 'Adnan',
     role: 'Managing Director of Outreach and Marketing',
+    description: 'Heads community engagement and marketing initiatives, growing the Focus Links network and brand presence.'
   },
   {
     name: 'Anshi Jha',
     role: 'Director of Administration',
+    description: 'Manages the operational and administrative functions that keep the Focus Links platform running smoothly.'
   },
   {
     name: 'Shiva Shangari M',
     role: 'Core Developer',
+    description: 'Builds and maintains the technical infrastructure and features of the Focus Links platform.'
   }
 ];
 
@@ -97,11 +102,12 @@ export default function AboutPage() {
              <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Meet the Team</h2>
              <p className="mt-2 text-lg text-slate-600">The passionate individuals building Focus Links.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
              {teamMembers.map((member) => (
-                <div key={member.name} className="text-center p-4 bg-card rounded-lg shadow-sm border">
+                <div key={member.name} className="text-center p-6 bg-card rounded-lg shadow-sm border">
                     <h3 className="text-lg font-bold text-slate-800">{member.name}</h3>
-                    <p className="text-primary">{member.role}</p>
+                    <p className="text-primary font-semibold">{member.role}</p>
+                    <p className="text-sm text-slate-600 mt-2">{member.description}</p>
                 </div>
              ))}
           </div>
