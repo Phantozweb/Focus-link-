@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Tv } from 'lucide-react';
+import { ArrowLeft, Tv, User, Info, Video, Users } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -86,31 +86,64 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
               </h1>
             </div>
           </div>
-          <CardContent className="p-8 space-y-10">
-            <section>
-                <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
-                <div className="prose prose-lg max-w-none text-slate-600">
-                    <p>{webinar.description}</p>
-                </div>
-            </section>
+          <CardContent className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <Separator />
-            
-             <WebinarActions webinar={webinar} />
-
-            <section>
-                <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
-                <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
-                    <Avatar className="h-28 w-28">
-                        <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                        <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
-                        <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
+            <div className="md:col-span-2 space-y-10">
+                <section>
+                    <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
+                    <div className="prose prose-lg max-w-none text-slate-600">
+                        <p>{webinar.description}</p>
                     </div>
-                </div>
-            </section>
+                </section>
+                
+                <Separator />
+
+                <section>
+                    <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
+                    <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+                        <Avatar className="h-28 w-28">
+                            <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                            <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
+                            <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <div className="md:col-span-1 space-y-6">
+                <WebinarActions webinar={webinar} />
+                <Card className="bg-slate-50">
+                    <CardContent className="p-6 space-y-4">
+                        <h3 className="font-bold font-headline text-slate-800">Event Details</h3>
+                         <div className="flex items-start gap-3">
+                            <Users className="h-5 w-5 text-primary mt-1" />
+                            <div>
+                                <h4 className="font-semibold">Host & Organizer</h4>
+                                <p className="text-sm text-muted-foreground">Hosted by {webinar.host.name} ({webinar.host.title})</p>
+                                <p className="text-sm text-muted-foreground">Organized by Focus Links Academy</p>
+                                <p className="text-sm text-muted-foreground mt-1">Credits to Mohd Asad</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <Video className="h-5 w-5 text-primary mt-1" />
+                            <div>
+                                <h4 className="font-semibold">Platform</h4>
+                                <p className="text-sm text-muted-foreground">{webinar.platform}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <Info className="h-5 w-5 text-primary mt-1" />
+                            <div>
+                                <h4 className="font-semibold">How to Join</h4>
+                                <p className="text-sm text-muted-foreground">The meeting link will be emailed to registered attendees 1 hour before the session starts.</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
 
           </CardContent>
         </Card>
