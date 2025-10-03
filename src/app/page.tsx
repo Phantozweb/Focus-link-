@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -18,7 +18,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/types';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
 
@@ -43,14 +43,38 @@ export default function Home() {
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
   const students = allUsers.filter(u => u.type === 'Student');
   const industry = allUsers.filter(u => u.type === 'Industry');
-  const now = new Date();
-  const upcomingWebinars = webinars.filter(w => new Date(w.dateTime) > now);
+  
+  const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
+  const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
+
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterCountry, setFilterCountry] = useState('all');
 
+  useEffect(() => {
+    const now = new Date().getTime();
+    
+    const live: typeof webinars = [];
+    const upcoming: typeof webinars = [];
+
+    webinars.forEach(w => {
+      const startTime = new Date(w.dateTime).getTime();
+      const durationParts = w.duration.split(' ');
+      const durationValue = parseInt(durationParts[0], 10);
+      const endTime = startTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000);
+
+      if (now >= startTime && now < endTime) {
+        live.push(w);
+      } else if (now < startTime) {
+        upcoming.push(w);
+      }
+    });
+
+    setLiveWebinars(live);
+    setUpcomingWebinars(upcoming);
+  }, []);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -167,6 +191,48 @@ export default function Home() {
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
         
+          {liveWebinars.length > 0 && (
+            <section>
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-slate-800 text-3xl font-bold font-headline flex items-center gap-3">
+                  <Radio className="h-8 w-8 text-red-500 animate-pulse" />
+                  Live Now
+                </h2>
+                <Button asChild variant="link" className="text-primary pr-0">
+                  <Link href="/academy">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </div>
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {liveWebinars.map((webinar) => (
+                    <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                        <Link href={`/academy/${webinar.id}`} className="block">
+                          <div className="relative w-full aspect-video">
+                            <WebinarBanner webinar={webinar} variant="card" />
+                          </div>
+                        </Link>
+                        <div className="p-6 flex flex-col flex-grow">
+                          <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
+                            <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                          </h3>
+                          <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
+                            <WebinarTime dateTime={webinar.dateTime} />
+                          </div>
+                          <Button asChild className="w-full mt-4" variant="destructive">
+                            <Link href={`/academy/${webinar.id}`}>Join Live</Link>
+                          </Button>
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </section>
+          )}
+
           {upcomingWebinars.length > 0 && (
             <section>
                 <div className="flex justify-between items-center mb-8">

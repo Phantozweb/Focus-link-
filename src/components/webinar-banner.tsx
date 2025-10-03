@@ -6,7 +6,7 @@ import type { Webinar } from '@/lib/academy';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
-import { Ticket, XCircle, Calendar, Clock, Video, User } from 'lucide-react';
+import { Ticket, XCircle, Calendar, Clock, Video, User, Radio } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { WebinarTime } from './webinar-time';
 
@@ -18,22 +18,51 @@ interface WebinarBannerProps {
 
 export function WebinarBanner({ webinar, className, variant = 'default' }: WebinarBannerProps) {
   const isCard = variant === 'card';
-  const [isPast, setIsPast] = useState(false);
+  const [status, setStatus] = useState<'UPCOMING' | 'LIVE' | 'ENDED'>('UPCOMING');
 
   useEffect(() => {
-    const webinarDate = new Date(webinar.dateTime);
-    const now = new Date();
-    setIsPast(webinarDate.getTime() < now.getTime());
-  }, [webinar.dateTime]);
+    const calculateState = () => {
+        const now = new Date().getTime();
+        const webinarStartTime = new Date(webinar.dateTime).getTime();
+        const durationParts = webinar.duration.split(' ');
+        const durationValue = parseInt(durationParts[0], 10);
+        const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000); // 3-hour grace period
+
+        if (now < webinarStartTime) {
+            setStatus('UPCOMING');
+        } else if (now >= webinarStartTime && now < webinarEndTime) {
+            setStatus('LIVE');
+        } else {
+            setStatus('ENDED');
+        }
+    };
+
+    calculateState();
+    const timer = setInterval(calculateState, 1000 * 60); // Update every minute
+
+    return () => clearInterval(timer);
+  }, [webinar.dateTime, webinar.duration]);
   
-  const StatusBadge = () => (
+  const StatusBadge = () => {
+    if (status === 'LIVE') {
+        return (
+            <div className="absolute top-4 left-4 z-20">
+                <Badge className={cn("bg-red-500/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm text-white")}>
+                    <Radio className="h-4 w-4" /> Live
+                </Badge>
+            </div>
+        );
+    }
+    
+    const isPast = status === 'ENDED';
+    return (
      <div className="absolute top-4 left-4 z-20">
       <Badge variant={isPast ? "destructive" : "secondary"} className={cn("bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm", isPast ? 'bg-red-100/80 text-red-900' : 'bg-green-100/80 text-green-900')}>
         {isPast ? <XCircle className="h-4 w-4" /> : <Ticket className="h-4 w-4" />}
         {isPast ? 'Registration Closed' : 'Registration Open'}
       </Badge>
     </div>
-  );
+  )};
 
 
   if (isCard) {
