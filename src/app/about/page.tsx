@@ -14,32 +14,22 @@ const teamMembers = [
   {
     name: 'Janarthan Veeramani',
     role: 'Founder',
-    avatarUrl: 'https://iili.io/Jodp9gI.png',
-    aiHint: 'portrait person founder',
   },
   {
     name: 'Mohd Asad',
     role: 'Managing Director of Academic',
-    avatarUrl: 'https://iili.io/Jodp9gI.png',
-    aiHint: 'portrait person director',
   },
   {
     name: 'Adnan',
     role: 'Managing Director of Outreach and Marketing',
-    avatarUrl: 'https://iili.io/Jodp9gI.png',
-    aiHint: 'portrait person marketing',
   },
   {
     name: 'Anshi Jha',
     role: 'Director of Administration',
-    avatarUrl: 'https://iili.io/Jodp9gI.png',
-    aiHint: 'portrait person team',
   },
   {
     name: 'Shiva Shangari M',
     role: 'Core Developer',
-    avatarUrl: 'https://iili.io/Jodp9gI.png',
-    aiHint: 'portrait person developer',
   }
 ];
 
@@ -78,7 +68,7 @@ export default function AboutPage() {
         {/* Image Section */}
         <section>
           <div className="container mx-auto px-4">
-              <Image src="https://picsum.photos/seed/about-main/1200/500" alt="Eye care professionals collaborating" width={1200} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
+              <Image src="https://picsum.photos/seed/about-main/1200/500" alt="A team of eye care professionals collaborating in a modern office" width={1200} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
           </div>
         </section>
 
@@ -109,11 +99,7 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
              {teamMembers.map((member) => (
-                <div key={member.name} className="text-center">
-                    <Avatar className="h-32 w-32 mx-auto mb-4 shadow-lg border-4 border-white">
-                        <AvatarImage src={member.avatarUrl} alt={member.name} data-ai-hint={member.aiHint} />
-                        <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    </Avatar>
+                <div key={member.name} className="text-center p-4 bg-card rounded-lg shadow-sm border">
                     <h3 className="text-lg font-bold text-slate-800">{member.name}</h3>
                     <p className="text-primary">{member.role}</p>
                 </div>
