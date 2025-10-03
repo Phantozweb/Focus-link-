@@ -21,12 +21,16 @@ export default function DirectoryPage() {
 
   return (
     <div className="bg-muted/40">
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <section className="mb-12 text-center">
-          <h1 className="text-4xl font-bold font-headline mb-2">Focus Links Directory</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Explore the global eye care community. Find colleagues, mentors, and partners across every specialty.</p>
-        </section>
+       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Focus Links Directory</h1>
+          <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+            Explore the global eye care community. Find colleagues, mentors, and partners across every specialty.
+          </p>
+        </div>
+      </section>
 
+      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categoryLinks.map(link => (
@@ -46,5 +50,3 @@ export default function DirectoryPage() {
     </div>
   );
 }
-
-    
