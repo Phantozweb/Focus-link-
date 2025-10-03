@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -179,22 +179,31 @@ export default function Home() {
                 <CarouselContent className="-ml-4">
                     {upcomingWebinars.map((webinar) => (
                     <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                        <Link href={`/academy/${webinar.id}`} className="block h-full">
-                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                            <Link href={`/academy/${webinar.id}`} className="block">
                                 <div className="relative w-full aspect-video">
                                     <WebinarBanner webinar={webinar} variant="card" />
+                                    <div className="absolute top-2 left-2 z-20">
+                                        <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5">
+                                            <Tv className="h-3 w-3" />
+                                            Live Event
+                                        </Badge>
+                                    </div>
                                 </div>
-                                <div className="p-6 flex flex-col flex-grow">
-                                  <div className="flex-grow space-y-3 text-sm text-muted-foreground border-t pt-4">
-                                      <WebinarTime dateTime={webinar.dateTime} />
-                                  </div>
-                                  
-                                  <Button asChild className="w-full mt-auto">
-                                    <div>View Details</div>
-                                  </Button>
+                            </Link>
+                            <div className="p-6 flex flex-col flex-grow">
+                                <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
+                                    <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                                </h3>
+                                <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
+                                    <WebinarTime dateTime={webinar.dateTime} />
                                 </div>
-                            </Card>
-                        </Link>
+                                
+                                <Button asChild className="w-full mt-4">
+                                    <Link href={`/academy/${webinar.id}`}>View Details</Link>
+                                </Button>
+                            </div>
+                        </Card>
                     </CarouselItem>
                     ))}
                 </CarouselContent>

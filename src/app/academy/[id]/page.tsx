@@ -65,15 +65,22 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
           <CardContent className="p-0">
              <div className="relative w-full aspect-video rounded-t-lg overflow-hidden shadow-md">
                 <WebinarBanner webinar={webinar} />
-                 <div className="absolute top-2 left-2 z-20">
-                     <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5">
-                        <Tv className="h-3 w-3" />
+                 <div className="absolute top-4 left-4 z-20">
+                     <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm">
+                        <Tv className="h-4 w-4" />
                         {isPast ? 'On-Demand' : 'Live Event'}
                     </Badge>
                  </div>
             </div>
-            <div className="p-8 space-y-12">
-                <WebinarActions webinar={webinar} />
+            <div className="p-8 space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="md:col-span-2">
+                        <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800">{webinar.title}</h1>
+                    </div>
+                    <div className="md:col-span-1 row-start-1 md:row-start-auto">
+                         <WebinarActions webinar={webinar} />
+                    </div>
+                </div>
                 
                 <Separator />
 
