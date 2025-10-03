@@ -175,38 +175,42 @@ export default function Home() {
                 <CarouselContent className="-ml-4">
                     {upcomingWebinars.map((webinar) => (
                     <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                            <div className="relative">
-                                <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={225} className="w-full h-48 object-cover" data-ai-hint="presentation person" />
-                                <div className="absolute top-2 right-2 flex gap-1">
-                                    {webinar.tags.slice(0, 2).map(tag => <Badge key={tag} variant="secondary" className="bg-white/80 backdrop-blur-sm">{tag}</Badge>)}
-                                </div>
-                            </div>
-                            <CardContent className="p-4 flex flex-col flex-grow">
-                                <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">{webinar.title}</h3>
-                                <div className="flex items-center gap-3 my-3">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                                        <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <p className="font-semibold text-sm text-slate-700">{webinar.speaker.name}</p>
-                                        <p className="text-xs text-muted-foreground">{webinar.speaker.title}</p>
+                        <Link href={`/webinars/${webinar.id}`} className="h-full block">
+                            <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                                <div className="relative">
+                                    <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={225} className="w-full h-48 object-cover" data-ai-hint="presentation person" />
+                                    <div className="absolute top-2 right-2 flex gap-1">
+                                        {webinar.tags.slice(0, 2).map(tag => <Badge key={tag} variant="secondary" className="bg-white/80 backdrop-blur-sm">{tag}</Badge>)}
                                     </div>
                                 </div>
-                                <div className="border-t pt-3 space-y-2 text-sm text-muted-foreground">
-                                    <div className="flex items-center gap-2">
-                                        <Calendar className="h-4 w-4 text-primary" />
-                                        <span>{webinar.date}</span>
+                                <CardContent className="p-4 flex flex-col flex-grow">
+                                    <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">{webinar.title}</h3>
+                                    <div className="flex items-center gap-3 my-3">
+                                        <Avatar className="h-10 w-10">
+                                            <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                                            <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <p className="font-semibold text-sm text-slate-700">{webinar.speaker.name}</p>
+                                            <p className="text-xs text-muted-foreground">{webinar.speaker.title}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Clock className="h-4 w-4 text-primary" />
-                                        <span>{webinar.time}</span>
+                                    <div className="border-t pt-3 space-y-2 text-sm text-muted-foreground">
+                                        <div className="flex items-center gap-2">
+                                            <Calendar className="h-4 w-4 text-primary" />
+                                            <span>{webinar.date}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Clock className="h-4 w-4 text-primary" />
+                                            <span>{webinar.time}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <Button className="w-full mt-4">Register Now</Button>
-                            </CardContent>
-                        </Card>
+                                    <Button asChild className="w-full mt-4">
+                                        <div className="w-full">View Details</div>
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     </CarouselItem>
                     ))}
                 </CarouselContent>

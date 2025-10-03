@@ -1,4 +1,5 @@
 
+
 import { webinars } from '@/lib/webinars';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
@@ -7,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, Video, UserCircle, PlayCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export default function WebinarsPage() {
   const upcomingWebinars = webinars.filter(w => !w.isPast);
@@ -66,7 +68,9 @@ export default function WebinarsPage() {
                     </div>
                   </div>
                   
-                  <Button className="w-full mt-auto">Register Now</Button>
+                  <Button asChild className="w-full mt-auto">
+                    <Link href={`/webinars/${webinar.id}`}>View Details</Link>
+                  </Button>
                 </div>
               </Card>
             ))}
@@ -90,9 +94,11 @@ export default function WebinarsPage() {
                       <h3 className="text-lg font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
                       <p className="text-muted-foreground text-sm flex-grow mb-4">Originally aired: {webinar.date}</p>
                       
-                      <Button variant="secondary" className="w-full sm:w-auto mt-auto">
-                        <PlayCircle className="mr-2 h-4 w-4" />
-                        Watch Recording
+                      <Button asChild variant="secondary" className="w-full sm:w-auto mt-auto">
+                        <Link href={`/webinars/${webinar.id}`}>
+                           <PlayCircle className="mr-2 h-4 w-4" />
+                           Watch Recording
+                        </Link>
                       </Button>
                     </CardContent>
                   </Card>
