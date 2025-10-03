@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Tv, User, Info, Video, Users, Tag } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -51,9 +51,6 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     notFound();
   }
   
-  const webinarDate = new Date(webinar.dateTime);
-  const isPast = webinarDate.getTime() < Date.now();
-
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
@@ -63,25 +60,18 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
         </Link>
         <Card className="overflow-hidden shadow-xl">
           <CardContent className="p-0">
-             <div className="relative w-full aspect-video rounded-t-lg overflow-hidden shadow-md">
+             <div className="w-full aspect-video rounded-t-lg overflow-hidden shadow-md">
                 <WebinarBanner webinar={webinar} />
-                 <div className="absolute top-4 left-4 z-20">
-                     <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm">
-                        <Tv className="h-4 w-4" />
-                        {isPast ? 'On-Demand' : 'Live Event'}
-                    </Badge>
-                 </div>
             </div>
             <div className="p-8 space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="md:col-span-2">
-                        <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800">{webinar.title}</h1>
-                    </div>
-                    <div className="md:col-span-1 row-start-1 md:row-start-auto">
-                         <WebinarActions webinar={webinar} />
-                    </div>
+                <div className="md:col-span-2">
+                    <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800">{webinar.title}</h1>
                 </div>
                 
+                <Separator />
+                
+                <WebinarActions webinar={webinar} />
+
                 <Separator />
 
                 <div className="max-w-3xl mx-auto space-y-12">

@@ -39,12 +39,6 @@ export default function AcademyPage() {
                 <Link href={`/academy/${webinar.id}`} className="block">
                   <div className="relative w-full aspect-video">
                     <WebinarBanner webinar={webinar} variant="card" />
-                     <div className="absolute top-2 left-2 z-20">
-                         <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5">
-                            <Tv className="h-3 w-3" />
-                            Live Event
-                        </Badge>
-                     </div>
                   </div>
                 </Link>
                 <div className="p-6 flex flex-col flex-grow">
@@ -78,12 +72,6 @@ export default function AcademyPage() {
                     <Link href={`/academy/${webinar.id}`} className="block">
                        <div className="relative w-full aspect-video">
                           <WebinarBanner webinar={webinar} variant="card" />
-                           <div className="absolute top-2 left-2 z-20">
-                               <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5">
-                                  <Tv className="h-3 w-3" />
-                                  On-Demand
-                              </Badge>
-                           </div>
                        </div>
                     </Link>
                     <div className="p-6 flex flex-col flex-grow">
