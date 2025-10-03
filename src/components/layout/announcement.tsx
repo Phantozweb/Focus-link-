@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -13,6 +12,18 @@ export function Announcement() {
   if (!isOpen) {
     return null;
   }
+  
+  const AnnouncementContent = () => (
+     <div className="flex items-center gap-3">
+        <Megaphone className="h-5 w-5 flex-shrink-0" />
+        <p className="text-sm font-medium">
+          <span className="hidden sm:inline">Announcing our new Academy!</span>
+          <Link href="/academy" className="underline hover:text-blue-200 ml-2">
+            View Schedule
+          </Link>
+        </p>
+      </div>
+  );
 
   return (
     <div className={cn(
@@ -22,20 +33,27 @@ export function Announcement() {
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Megaphone className="h-5 w-5 flex-shrink-0" />
-            <p className="text-sm font-medium">
-              <span className="hidden sm:inline">Announcing our new Academy!</span>
-              <Link href="/academy" className="underline hover:text-blue-200 ml-2">
-                View Schedule
-              </Link>
-            </p>
+          <div className="flex-1 overflow-hidden">
+            <div className="flex w-max animate-marquee-fast">
+              <div className="flex-shrink-0 pr-12">
+                <AnnouncementContent />
+              </div>
+              <div className="flex-shrink-0 pr-12" aria-hidden="true">
+                <AnnouncementContent />
+              </div>
+              <div className="flex-shrink-0 pr-12" aria-hidden="true">
+                <AnnouncementContent />
+              </div>
+               <div className="flex-shrink-0 pr-12" aria-hidden="true">
+                <AnnouncementContent />
+              </div>
+            </div>
           </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(false)}
-            className="h-7 w-7 rounded-full hover:bg-white/20"
+            className="h-7 w-7 rounded-full hover:bg-white/20 flex-shrink-0"
             aria-label="Dismiss announcement"
           >
             <X className="h-4 w-4" />
