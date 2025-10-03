@@ -23,34 +23,34 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="bg-white">
+    <div className="bg-muted/40">
       {/* Hero Section */}
-      <section className="py-20 md:py-32 text-center bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-800 tracking-tight">The world's largest eye care community to find, connect, and grow.</h1>
-          <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
-            A product of Focus In. Our mission is to foster connections, facilitate collaboration, and empower professionals and students across the entire field of eye care.
+      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">About Focus Links</h1>
+          <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+            Our mission is to foster connections, facilitate collaboration, and empower professionals and students across the entire field of eye care.
           </p>
         </div>
       </section>
       
-      {/* Image Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-            <Image src="https://picsum.photos/seed/about-main/1200/500" alt="Eye care professionals collaborating" width={1200} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
-        </div>
-      </section>
+      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Image Section */}
+        <section>
+          <div className="container mx-auto px-4">
+              <Image src="https://picsum.photos/seed/about-main/1200/500" alt="Eye care professionals collaborating" width={1200} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
+          </div>
+        </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+        {/* Features Section */}
+        <section>
           <div className="text-center mb-12">
-             <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Why FocusLinks?</h2>
+             <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Why Focus Links?</h2>
              <p className="mt-2 text-lg text-slate-600">A unified platform for the entire eye care ecosystem.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="text-center p-8 bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow">
+              <div key={index} className="text-center p-8 bg-card rounded-lg shadow-md hover:shadow-xl transition-shadow">
                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">
                   {feature.icon}
                 </div>
@@ -59,19 +59,19 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-      
-      {/* Mission Section */}
-      <section className="py-20">
-         <div className="container mx-auto px-4 text-center max-w-4xl">
-            <Eye className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h2 className="text-3xl font-bold text-slate-800">Join Us in Building the Future of Connected Eye Care</h2>
-            <p className="mt-4 text-lg text-slate-600">
-               In an ever-evolving industry, staying connected is more important than ever. FocusLinks provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
-            </p>
-         </div>
-      </section>
+        </section>
+        
+        {/* Mission Section */}
+        <section className="py-12 bg-card border rounded-lg shadow-sm">
+           <div className="container mx-auto px-4 text-center max-w-4xl">
+              <Eye className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-3xl font-bold text-slate-800">Join Us in Building the Future of Connected Eye Care</h2>
+              <p className="mt-4 text-lg text-slate-600">
+                 In an ever-evolving industry, staying connected is more important than ever. Focus Links provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
+              </p>
+           </div>
+        </section>
+      </div>
 
     </div>
   );
