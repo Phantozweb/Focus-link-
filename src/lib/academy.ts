@@ -23,7 +23,7 @@ export const webinars: Webinar[] = [
     speaker: {
       name: 'Abhishek Kumar Banaita',
       title: 'Cataract Educator and Cornea Consultant at LVPEI KVC campus',
-      avatarUrl: 'https://iili.io/Jodp9gI.png'
+      avatarUrl: 'https://i.ibb.co/27Z4CkpY/IMG-20251004-WA0001.jpg'
     },
     dateTime: '2024-10-27T04:30:00Z', // This is 10:00 AM IST
     duration: '75 minutes',

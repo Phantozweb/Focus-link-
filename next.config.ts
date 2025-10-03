@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
         hostname: 'iili.io',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
