@@ -84,7 +84,7 @@ export const webinars: Webinar[] = [
     description: 'This session outlines best practices for optometrists in the co-management of cataract and refractive surgery patients, from pre-op assessment to post-op care.',
     speaker: {
       name: 'Dr. Lena Petrova',
-      title- 'Surgical Co-Management Consultant',
+      title: 'Surgical Co-Management Consultant',
       avatarUrl: 'https://iili.io/Jodp9gI.png'
     },
     date: 'August 12, 2024',

@@ -2,12 +2,13 @@
 "use client";
 
 import { users as allUsers } from '@/lib/data';
+import { webinars } from '@/lib/webinars';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -15,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/types';
+import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
@@ -38,6 +40,7 @@ export default function Home() {
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
   const students = allUsers.filter(u => u.type === 'Student');
   const industry = allUsers.filter(u => u.type === 'Industry');
+  const upcomingWebinars = webinars.filter(w => !w.isPast);
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -179,6 +182,59 @@ export default function Home() {
               <CarouselNext />
             </Carousel>
           </section>}
+
+           {upcomingWebinars.length > 0 && (
+            <section>
+                <div className="flex justify-between items-center mb-8">
+                <h2 className="text-slate-800 text-3xl font-bold font-headline">Upcoming Webinars</h2>
+                <Button asChild variant="link" className="text-primary pr-0">
+                    <Link href="/webinars">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+                </div>
+                <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                    {upcomingWebinars.map((webinar) => (
+                    <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                            <div className="relative">
+                                <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={225} className="w-full h-48 object-cover" data-ai-hint="presentation person" />
+                                <div className="absolute top-2 right-2 flex gap-1">
+                                    {webinar.tags.slice(0, 2).map(tag => <Badge key={tag} variant="secondary" className="bg-white/80 backdrop-blur-sm">{tag}</Badge>)}
+                                </div>
+                            </div>
+                            <CardContent className="p-4 flex flex-col flex-grow">
+                                <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">{webinar.title}</h3>
+                                <div className="flex items-center gap-3 my-3">
+                                    <Avatar className="h-10 w-10">
+                                        <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                                        <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold text-sm text-slate-700">{webinar.speaker.name}</p>
+                                        <p className="text-xs text-muted-foreground">{webinar.speaker.title}</p>
+                                    </div>
+                                </div>
+                                <div className="border-t pt-3 space-y-2 text-sm text-muted-foreground">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="h-4 w-4 text-primary" />
+                                        <span>{webinar.date}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="h-4 w-4 text-primary" />
+                                        <span>{webinar.time}</span>
+                                    </div>
+                                </div>
+                                <Button className="w-full mt-4">Register Now</Button>
+                            </CardContent>
+                        </Card>
+                    </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+                </Carousel>
+            </section>
+            )}
 
           <section>
             <div className="flex justify-between items-center mb-8">
@@ -345,5 +401,7 @@ export default function Home() {
 
 
 
+
+    
 
     
