@@ -163,27 +163,7 @@ export default function Home() {
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
         
-          {professionals.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Professionals</h2>
-              <Button asChild variant="link" className="text-primary pr-0">
-                <Link href="/directory/professionals">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-            </div>
-            <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
-                {professionals.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <ProfileCard user={user} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </section>}
-
-           {upcomingWebinars.length > 0 && (
+          {upcomingWebinars.length > 0 && (
             <section>
                 <div className="flex justify-between items-center mb-8">
                 <h2 className="text-slate-800 text-3xl font-bold font-headline">Upcoming Webinars</h2>
@@ -235,6 +215,26 @@ export default function Home() {
                 </Carousel>
             </section>
             )}
+
+          {professionals.length > 0 && <section>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Professionals</h2>
+              <Button asChild variant="link" className="text-primary pr-0">
+                <Link href="/directory/professionals">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </div>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-4">
+                {professionals.map((user) => (
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <ProfileCard user={user} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </section>}
 
           <section>
             <div className="flex justify-between items-center mb-8">
