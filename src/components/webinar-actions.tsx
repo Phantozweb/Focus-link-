@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Ticket } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock } from 'lucide-react';
 import { Badge } from './ui/badge';
 
 interface WebinarActionsProps {
