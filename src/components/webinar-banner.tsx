@@ -33,19 +33,17 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
         {/* Middle Section */}
         <div className={cn("flex-grow flex flex-col justify-center", isCard ? 'items-start text-left' : 'items-center text-center')}>
-          {!isCard && (
-            <Avatar className="w-24 h-24 border-4 border-white/20 shadow-lg mb-4">
-              <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
-              <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-          )}
-          <h2 className={cn("font-bold leading-tight", isCard ? "text-xl mt-4" : "text-2xl lg:text-3xl max-w-lg")}>
+          <h2 className={cn("font-bold leading-tight", isCard ? "text-lg mt-2" : "text-2xl lg:text-3xl max-w-lg")}>
             {webinar.title}
           </h2>
         </div>
 
         {/* Bottom Section */}
-        <div className="flex items-center justify-between text-sm">
+        <div className={cn("flex items-center gap-3 text-sm", isCard ? 'mt-3' : '')}>
+          <Avatar className={cn("border-2 border-white/20", isCard ? "w-8 h-8" : "w-12 h-12")}>
+              <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
+              <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
+          </Avatar>
           <div>
             <p className="font-bold">{webinar.speaker.name}</p>
             <p className="text-white/70">{webinar.speaker.title}</p>

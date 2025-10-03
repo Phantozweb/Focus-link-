@@ -49,17 +49,6 @@ export default function AcademyPage() {
                   </div>
                   
                   <Separator className="my-4" />
-
-                  <div className="flex items-center gap-3 mb-6">
-                    <Avatar>
-                        <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                        <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <p className="font-semibold text-slate-700">{webinar.speaker.name}</p>
-                        <p className="text-xs text-muted-foreground">{webinar.speaker.title}</p>
-                    </div>
-                  </div>
                   
                   <Button asChild className="w-full mt-auto">
                     <Link href={`/academy/${webinar.id}`}>View Details</Link>
