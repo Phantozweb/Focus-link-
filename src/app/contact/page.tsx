@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Handshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -35,9 +35,15 @@ export default function ContactPage() {
                 <span className="text-slate-700">+1 (555) 123-4567</span>
               </div>
             </div>
-             <p className="text-slate-600 text-sm">
-                For advertising inquiries, please contact us at <a href="mailto:ads@focuslink.com" className="text-primary hover:underline">ads@focuslink.com</a>.
-             </p>
+             <div className="p-4 rounded-md bg-primary/10 border border-primary/20">
+                <div className="flex items-center gap-3">
+                    <Handshake className="h-6 w-6 text-primary" />
+                    <h3 className="font-semibold text-primary">Interested in Collaborating?</h3>
+                </div>
+                <p className="text-slate-600 text-sm mt-2">
+                    For partnerships, advertising, or community collaborations, please use the form and our team will connect with you.
+                </p>
+            </div>
           </div>
 
           <div className="md:col-span-3">
