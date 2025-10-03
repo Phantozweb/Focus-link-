@@ -17,7 +17,7 @@ export function Announcement() {
   return (
     <div className={cn(
       "bg-primary text-primary-foreground",
-      "relative transition-all duration-300 ease-in-out",
+      "relative transition-all duration-300 ease-in-out w-full top-0 z-50",
       isOpen ? "py-2" : "py-0"
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -27,10 +27,10 @@ export default function RootLayout({
       </head>
       <body className={cn('antialiased bg-gray-50')}>
         <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-            <div className="layout-container flex h-full grow flex-col">
-                <Announcement />
+            <Announcement />
+            <div className="relative flex h-full grow flex-col">
                 <Header />
-                <main className="mt-28">
+                <main className="flex-1 pt-16">
                   {children}
                 </main>
                 <Footer />

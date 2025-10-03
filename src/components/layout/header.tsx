@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 fixed w-full z-40 top-0">
+    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 fixed w-full z-40 top-10">
         <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-3 text-slate-800">
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
