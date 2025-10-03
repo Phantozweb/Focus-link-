@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import type { Webinar } from '@/lib/academy';
@@ -24,6 +25,16 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
     const now = new Date();
     setIsPast(webinarDate.getTime() < now.getTime());
   }, [webinar.dateTime]);
+  
+  const StatusBadge = () => (
+     <div className="absolute top-4 left-4 z-20">
+      <Badge variant={isPast ? "destructive" : "secondary"} className={cn("bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm", isPast ? 'bg-red-100/80 text-red-900' : 'bg-green-100/80 text-green-900')}>
+        {isPast ? <XCircle className="h-4 w-4" /> : <Ticket className="h-4 w-4" />}
+        {isPast ? 'Registration Closed' : 'Registration Open'}
+      </Badge>
+    </div>
+  );
+
 
   if (isCard) {
     return (
@@ -31,15 +42,10 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
         <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 rounded-full bg-blue-500/20 blur-3xl opacity-80"></div>
         <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-96 h-96 rounded-full bg-cyan-500/20 blur-3xl opacity-80"></div>
         
-        <div className="absolute top-4 left-4 z-20">
-          <Badge variant={isPast ? "destructive" : "secondary"} className={cn("bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm", isPast ? 'bg-red-100/80 text-red-900' : 'bg-green-100/80 text-green-900')}>
-            {isPast ? <XCircle className="h-4 w-4" /> : <Ticket className="h-4 w-4" />}
-            {isPast ? 'Registration Closed' : 'Registration Open'}
-          </Badge>
-        </div>
+        <StatusBadge />
 
         <div className="relative z-10 w-full h-full flex flex-col justify-between pt-8">
-            <div>
+            <div className="pt-2">
               <h2 className="font-bold leading-tight text-lg">
                   {webinar.title}
               </h2>
@@ -62,35 +68,37 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
   // Default, detailed banner for the webinar page
   return (
-     <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden rounded-lg p-8 flex flex-col justify-between", className)}>
+     <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden rounded-lg p-6 md:p-8 flex flex-col justify-between", className)}>
       <div className="absolute inset-0 -translate-x-1/4 -translate-y-1/4 w-[150%] h-[150%] rounded-full bg-blue-500/20 blur-3xl opacity-60"></div>
       
-      <div className="relative z-10 flex flex-col md:flex-row gap-8 h-full">
+       <StatusBadge />
+
+      <div className="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 h-full items-center">
          <div className="flex-shrink-0 mx-auto md:mx-0">
-             <Avatar className="h-40 w-40 border-4 border-white/30 shadow-lg">
+             <Avatar className="h-24 w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 border-4 border-white/30 shadow-lg">
                 <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
-                <AvatarFallback className="text-6xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="text-5xl md:text-6xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
             </Avatar>
          </div>
          <div className="flex flex-col justify-center text-center md:text-left">
-            <h1 className="text-4xl font-bold font-headline leading-tight mb-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-headline leading-tight mb-4">
               {webinar.title}
             </h1>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-left">
-                <div className="flex items-center gap-3">
-                    <Calendar className="h-5 w-5 text-cyan-300" />
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm md:text-base">
+                <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span><WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></span>
                 </div>
-                 <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-cyan-300" />
+                 <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span><WebinarTime dateTime={webinar.dateTime} format={{ timeOnly: true }} /></span>
                 </div>
-                 <div className="flex items-center gap-3">
-                    <Video className="h-5 w-5 text-cyan-300" />
+                 <div className="flex items-center gap-2">
+                    <Video className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span>{webinar.platform}</span>
                 </div>
-                 <div className="flex items-center gap-3">
-                    <User className="h-5 w-5 text-cyan-300" />
+                 <div className="flex items-center gap-2">
+                    <User className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span>Hosted by {webinar.host.name}</span>
                 </div>
             </div>
