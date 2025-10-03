@@ -2,15 +2,14 @@
 import { webinars } from '@/lib/academy';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Calendar, Clock, PlayCircle, Tag, Tv } from 'lucide-react';
+import { ArrowLeft, Tv } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
-import { WebinarTime } from '@/components/webinar-time';
+import { WebinarActions } from '@/components/webinar-actions';
 
 type WebinarPageProps = {
   params: { id: string }
@@ -28,9 +27,6 @@ export async function generateMetadata(
       description: 'The webinar you are looking for does not exist.',
     }
   }
-
-  // optionally access and extend (rather than replace) parent metadata
-  // const previousImages = (await parent).openGraph?.images || []
 
   return {
     title: `${webinar.title} | Focus Links Academy`,
@@ -57,6 +53,9 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
   if (!webinar) {
     notFound();
   }
+  
+  const webinarDate = new Date(webinar.dateTime);
+  const isPast = webinarDate.getTime() < Date.now();
 
   return (
     <div className="bg-muted/40">
@@ -79,7 +78,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
               <div className="flex flex-wrap gap-2 mb-2">
                  <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5">
                     <Tv className="h-3 w-3" />
-                    {webinar.isPast ? 'On-Demand' : 'Live Event'}
+                    {isPast ? 'On-Demand' : 'Live Event'}
                 </Badge>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-white font-headline leading-tight">
@@ -97,29 +96,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
             
             <Separator />
             
-             <div className="p-6 rounded-lg bg-white border shadow-sm space-y-6">
-                  {webinar.isPast ? (
-                      <Button size="lg" className="w-full text-lg py-6">
-                          <PlayCircle className="mr-2 h-6 w-6" />
-                          Watch Recording
-                      </Button>
-                  ) : (
-                      <Button size="lg" className="w-full text-lg py-6">
-                          Register Now
-                      </Button>
-                  )}
-                  <div className="space-y-4 text-slate-700">
-                     <WebinarTime dateTime={webinar.dateTime} isDetailed={true} />
-                     <div className="flex items-start gap-3">
-                      <Tag className="h-5 w-5 text-primary" />
-                       <div className="flex flex-wrap gap-2">
-                        {webinar.tags.map(tag => (
-                          <Badge key={tag} variant="secondary">{tag}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-              </div>
+             <WebinarActions webinar={webinar} />
 
             <section>
                 <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>

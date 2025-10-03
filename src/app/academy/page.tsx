@@ -11,8 +11,9 @@ import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 
 export default function AcademyPage() {
-  const upcomingWebinars = webinars.filter(w => !w.isPast);
-  const pastWebinars = webinars.filter(w => w.isPast);
+  const now = new Date();
+  const upcomingWebinars = webinars.filter(w => new Date(w.dateTime) > now);
+  const pastWebinars = webinars.filter(w => new Date(w.dateTime) <= now);
 
   return (
     <div className="bg-muted/40">

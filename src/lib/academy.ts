@@ -12,7 +12,6 @@ export type Webinar = {
   duration: string;
   imageUrl: string;
   tags: string[];
-  isPast?: boolean;
 };
 
 export const webinars: Webinar[] = [
@@ -23,12 +22,11 @@ export const webinars: Webinar[] = [
     speaker: {
       name: 'Abhishek Kumar Banaita',
       title: 'Cataract Educator and Cornea Consultant at LVPEI KVC campus',
-      avatarUrl: 'https://i.ibb.co/27Z4CkpY/IMG-20251004-WA0001.jpg'
+      avatarUrl: 'https://i.ibb.co/Zcyc2H2/IMG-20251004-WA0001.jpg'
     },
     dateTime: '2024-10-27T04:30:00Z', // This is 10:00 AM IST
     duration: '75 minutes',
     imageUrl: 'https://picsum.photos/seed/webinar-clik/600/400',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical'],
-    isPast: false,
   }
 ];

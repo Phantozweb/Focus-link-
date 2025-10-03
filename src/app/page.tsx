@@ -41,7 +41,8 @@ export default function Home() {
   const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
   const students = allUsers.filter(u => u.type === 'Student');
   const industry = allUsers.filter(u => u.type === 'Industry');
-  const upcomingWebinars = webinars.filter(w => !w.isPast);
+  const now = new Date();
+  const upcomingWebinars = webinars.filter(w => new Date(w.dateTime) > now);
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
