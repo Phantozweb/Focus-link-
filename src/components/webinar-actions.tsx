@@ -75,7 +75,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                 );
             case 'ENDED':
                  return (
-                    <Button size="lg" className="w-full text-lg py-6" variant="secondary">
+                    <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
                         Session Ended
                     </Button>
                 );
