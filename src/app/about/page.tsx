@@ -2,6 +2,46 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, Users, Search, Award } from "lucide-react";
 import Image from "next/image";
+import type { Metadata } from 'next';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+export const metadata: Metadata = {
+  title: 'About Focus Links | Our Mission and Team',
+  description: 'Learn about the mission of Focus Links to connect the global eye care community and meet the team dedicated to building the future of vision care.',
+};
+
+const teamMembers = [
+  {
+    name: 'Janarthan Veeramani',
+    role: 'Founder',
+    avatarUrl: 'https://iili.io/Jodp9gI.png',
+    aiHint: 'portrait person founder',
+  },
+  {
+    name: 'Mohd Asad',
+    role: 'Managing Director of Academic',
+    avatarUrl: 'https://iili.io/Jodp9gI.png',
+    aiHint: 'portrait person director',
+  },
+  {
+    name: 'Adnan',
+    role: 'Outreach Marketing MD',
+    avatarUrl: 'https://iili.io/Jodp9gI.png',
+    aiHint: 'portrait person marketing',
+  },
+  {
+    name: 'Anshi Jha',
+    role: 'Team Member',
+    avatarUrl: 'https://iili.io/Jodp9gI.png',
+    aiHint: 'portrait person team',
+  },
+  {
+    name: 'Shiva Shangari M',
+    role: 'Developer',
+    avatarUrl: 'https://iili.io/Jodp9gI.png',
+    aiHint: 'portrait person developer',
+  }
+];
 
 export default function AboutPage() {
   const features = [
@@ -34,7 +74,7 @@ export default function AboutPage() {
         </div>
       </section>
       
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
+      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-20">
         {/* Image Section */}
         <section>
           <div className="container mx-auto px-4">
@@ -61,6 +101,26 @@ export default function AboutPage() {
           </div>
         </section>
         
+        {/* Meet the Team Section */}
+        <section>
+           <div className="text-center mb-12">
+             <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Meet the Team</h2>
+             <p className="mt-2 text-lg text-slate-600">The passionate individuals building Focus Links.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+             {teamMembers.map((member) => (
+                <div key={member.name} className="text-center">
+                    <Avatar className="h-32 w-32 mx-auto mb-4 shadow-lg border-4 border-white">
+                        <AvatarImage src={member.avatarUrl} alt={member.name} data-ai-hint={member.aiHint} />
+                        <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="text-lg font-bold text-slate-800">{member.name}</h3>
+                    <p className="text-primary">{member.role}</p>
+                </div>
+             ))}
+          </div>
+        </section>
+
         {/* Mission Section */}
         <section className="py-12 bg-card border rounded-lg shadow-sm">
            <div className="container mx-auto px-4 text-center max-w-4xl">
