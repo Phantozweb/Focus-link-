@@ -185,23 +185,8 @@ export default function Home() {
                                     <WebinarBanner webinar={webinar} variant="card" />
                                 </div>
                                 <div className="p-6 flex flex-col flex-grow">
-                                  <div className="flex-grow">
-                                     <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
-                                    
-                                    <div className="flex items-center gap-3 text-sm text-muted-foreground mt-4">
-                                      <Avatar className="h-8 w-8">
-                                        <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
-                                        <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                                      </Avatar>
-                                      <div>
-                                        <p className="font-semibold text-slate-700">{webinar.speaker.name}</p>
-                                        <p className="text-xs">{webinar.speaker.title}</p>
-                                      </div>
-                                    </div>
-                                    
-                                    <div className="space-y-3 text-sm text-muted-foreground mt-4 border-t pt-4">
+                                  <div className="flex-grow space-y-3 text-sm text-muted-foreground border-t pt-4">
                                       <WebinarTime dateTime={webinar.dateTime} />
-                                    </div>
                                   </div>
                                   
                                   <Button asChild className="w-full mt-auto">
