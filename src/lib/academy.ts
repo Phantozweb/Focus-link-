@@ -15,7 +15,6 @@ export type Webinar = {
   platform: 'Google Meet' | 'Zoom' | 'Other';
   dateTime: string; // ISO 8601 format (e.g., "2025-10-05T04:30:00Z")
   duration: string;
-  imageUrl: string;
   tags: string[];
 };
 
@@ -36,7 +35,6 @@ export const webinars: Webinar[] = [
     platform: 'Google Meet',
     dateTime: '2025-10-05T04:30:00Z', // This is 10:00 AM IST on Sunday, Oct 5, 2025
     duration: '75 minutes',
-    imageUrl: 'https://picsum.photos/seed/webinar-clik/1200/675',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical'],
   }
 ];

@@ -1,7 +1,7 @@
 
+
 import { webinars } from '@/lib/academy';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
 import { WebinarActions } from '@/components/webinar-actions';
+import { WebinarBanner } from '@/components/webinar-banner';
 
 type WebinarPageProps = {
   params: { id: string }
@@ -27,6 +28,8 @@ export async function generateMetadata(
       description: 'The webinar you are looking for does not exist.',
     }
   }
+  
+  const previousImages = (await parent).openGraph?.images || []
 
   return {
     title: `${webinar.title} | Focus Links Academy`,
@@ -34,14 +37,7 @@ export async function generateMetadata(
     openGraph: {
       title: webinar.title,
       description: webinar.description,
-      images: [
-        {
-          url: webinar.imageUrl,
-          width: 1200,
-          height: 675,
-          alt: webinar.title,
-        },
-      ],
+      images: [...previousImages],
     },
   }
 }
@@ -69,14 +65,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div className="space-y-4">
                     <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                        <Image
-                        src={webinar.imageUrl}
-                        alt={webinar.title}
-                        fill
-                        className="object-cover"
-                        data-ai-hint="presentation conference"
-                        />
-                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <WebinarBanner webinar={webinar} />
                          <div className="absolute top-2 left-2">
                              <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm flex items-center gap-1.5">
                                 <Tv className="h-3 w-3" />

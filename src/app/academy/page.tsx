@@ -1,4 +1,5 @@
 
+
 import { webinars } from '@/lib/academy';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
@@ -35,7 +36,7 @@ export default function AcademyPage() {
             {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
               <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
                 <div className="relative w-full aspect-video">
-                  <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
+                  <Image src={`https://picsum.photos/seed/${webinar.id}/1200/675`} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex-grow">
@@ -83,7 +84,7 @@ export default function AcademyPage() {
                 {pastWebinars.map(webinar => (
                   <Card key={webinar.id} className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col sm:flex-row">
                      <div className="relative w-full sm:w-48 h-48 sm:h-auto aspect-square sm:aspect-auto">
-                        <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="conference room" />
+                        <Image src={`https://picsum.photos/seed/${webinar.id}/1200/675`} alt={webinar.title} fill className="object-cover" data-ai-hint="conference room" />
                      </div>
                     <CardContent className="p-6 flex flex-col">
                       <div className="flex flex-wrap gap-1 mb-2">

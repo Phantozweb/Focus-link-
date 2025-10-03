@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { users as allUsers } from '@/lib/data';
@@ -180,7 +181,7 @@ export default function Home() {
                         <Link href={`/academy/${webinar.id}`} className="h-full block">
                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                                 <div className="relative w-full aspect-video">
-                                    <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
+                                    <Image src={`https://picsum.photos/seed/${webinar.id}/1200/675`} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
                                     <div className="absolute top-2 right-2 flex gap-1">
                                         {webinar.tags.slice(0, 2).map(tag => <Badge key={tag} variant="secondary" className="bg-white/80 backdrop-blur-sm">{tag}</Badge>)}
                                     </div>
