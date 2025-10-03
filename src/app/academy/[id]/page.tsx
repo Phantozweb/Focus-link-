@@ -65,7 +65,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
           Back to Academy
         </Link>
         <Card className="overflow-hidden shadow-xl">
-          <div className="relative h-64 md:h-96 w-full">
+          <div className="relative w-full aspect-video">
             <Image
               src={webinar.imageUrl}
               alt={webinar.title}

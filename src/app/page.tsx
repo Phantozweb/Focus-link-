@@ -179,8 +179,8 @@ export default function Home() {
                     <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                         <Link href={`/academy/${webinar.id}`} className="h-full block">
                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                                <div className="relative">
-                                    <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={225} className="w-full h-48 object-cover" data-ai-hint="presentation person" />
+                                <div className="relative w-full aspect-video">
+                                    <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
                                     <div className="absolute top-2 right-2 flex gap-1">
                                         {webinar.tags.slice(0, 2).map(tag => <Badge key={tag} variant="secondary" className="bg-white/80 backdrop-blur-sm">{tag}</Badge>)}
                                     </div>

@@ -34,7 +34,7 @@ export default function AcademyPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
             {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
               <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                <div className="relative h-64">
+                <div className="relative w-full aspect-video">
                   <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
@@ -82,7 +82,9 @@ export default function AcademyPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {pastWebinars.map(webinar => (
                   <Card key={webinar.id} className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col sm:flex-row">
-                     <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={400} className="w-full sm:w-48 h-48 sm:h-auto object-cover" data-ai-hint="conference room" />
+                     <div className="relative w-full sm:w-48 h-48 sm:h-auto aspect-square sm:aspect-auto">
+                        <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="conference room" />
+                     </div>
                     <CardContent className="p-6 flex flex-col">
                       <div className="flex flex-wrap gap-1 mb-2">
                         {webinar.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
