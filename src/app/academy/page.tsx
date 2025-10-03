@@ -35,26 +35,37 @@ export default function AcademyPage() {
           <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Events</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
             {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
-              <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                <div className="relative w-full aspect-video">
-                  <WebinarBanner webinar={webinar} variant="card" />
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex-grow">
-                     <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
-                    
-                    <div className="space-y-3 text-sm text-muted-foreground mt-4">
-                      <WebinarTime dateTime={webinar.dateTime} />
-                    </div>
+              <Link href={`/academy/${webinar.id}`} key={webinar.id} className="block h-full">
+                <Card className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
+                  <div className="relative w-full aspect-video">
+                    <WebinarBanner webinar={webinar} variant="card" />
                   </div>
-                  
-                  <Separator className="my-4" />
-                  
-                  <Button asChild className="w-full mt-auto">
-                    <Link href={`/academy/${webinar.id}`}>View Details</Link>
-                  </Button>
-                </div>
-              </Card>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex-grow">
+                       <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
+                      
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground mt-4">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
+                          <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-semibold text-slate-700">{webinar.speaker.name}</p>
+                          <p className="text-xs">{webinar.speaker.title}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3 text-sm text-muted-foreground mt-4 border-t pt-4">
+                        <WebinarTime dateTime={webinar.dateTime} />
+                      </div>
+                    </div>
+                    
+                    <Button asChild className="w-full mt-auto">
+                      <div>View Details</div>
+                    </Button>
+                  </div>
+                </Card>
+              </Link>
             )) : (
               <p className="text-muted-foreground col-span-full text-center">No upcoming events scheduled. Please check back soon!</p>
             )}

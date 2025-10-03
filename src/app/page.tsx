@@ -179,21 +179,35 @@ export default function Home() {
                 <CarouselContent className="-ml-4">
                     {upcomingWebinars.map((webinar) => (
                     <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                        <Link href={`/academy/${webinar.id}`} className="h-full block">
-                            <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                        <Link href={`/academy/${webinar.id}`} className="block h-full">
+                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                                 <div className="relative w-full aspect-video">
                                     <WebinarBanner webinar={webinar} variant="card" />
                                 </div>
-                                <CardContent className="p-4 flex flex-col flex-grow">
-                                    <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">{webinar.title}</h3>
+                                <div className="p-6 flex flex-col flex-grow">
+                                  <div className="flex-grow">
+                                     <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
                                     
-                                    <div className="border-t pt-3 mt-3 space-y-2 text-sm text-muted-foreground">
-                                        <WebinarTime dateTime={webinar.dateTime} />
+                                    <div className="flex items-center gap-3 text-sm text-muted-foreground mt-4">
+                                      <Avatar className="h-8 w-8">
+                                        <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
+                                        <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                                      </Avatar>
+                                      <div>
+                                        <p className="font-semibold text-slate-700">{webinar.speaker.name}</p>
+                                        <p className="text-xs">{webinar.speaker.title}</p>
+                                      </div>
                                     </div>
-                                    <Button asChild className="w-full mt-4">
-                                        <div className="w-full">View Details</div>
-                                    </Button>
-                                </CardContent>
+                                    
+                                    <div className="space-y-3 text-sm text-muted-foreground mt-4 border-t pt-4">
+                                      <WebinarTime dateTime={webinar.dateTime} />
+                                    </div>
+                                  </div>
+                                  
+                                  <Button asChild className="w-full mt-auto">
+                                    <div>View Details</div>
+                                  </Button>
+                                </div>
                             </Card>
                         </Link>
                     </CarouselItem>
