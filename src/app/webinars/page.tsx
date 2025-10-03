@@ -28,31 +28,34 @@ export default function WebinarsPage() {
         {/* Upcoming Webinars */}
         <section>
           <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Webinars</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
             {upcomingWebinars.map(webinar => (
-              <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+              <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 grid grid-cols-1 md:grid-cols-2">
                 <div className="relative">
-                  <Image src={webinar.imageUrl} alt={webinar.title} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint="presentation person" />
-                  <div className="absolute top-2 right-2">
-                    {webinar.tags.map(tag => <Badge key={tag} className="mr-1 backdrop-blur-sm bg-black/50 text-white border-white/20">{tag}</Badge>)}
-                  </div>
+                  <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={400} className="w-full h-full object-cover" data-ai-hint="presentation person" />
                 </div>
-                <CardContent className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
-                  <p className="text-muted-foreground text-sm flex-grow mb-4">{webinar.description}</p>
-                  
-                  <div className="space-y-3 text-sm text-muted-foreground mb-6">
-                    <div className="flex items-center gap-3">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <span>{webinar.date}</span>
+                <div className="p-6 flex flex-col">
+                  <div className="flex-grow">
+                     <div className="flex flex-wrap gap-2 mb-3">
+                      {webinar.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
                     </div>
-                     <div className="flex items-center gap-3">
-                      <Clock className="h-4 w-4 text-primary" />
-                      <span>{webinar.time} ({webinar.duration})</span>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
+                    
+                    <div className="space-y-3 text-sm text-muted-foreground mt-4">
+                      <div className="flex items-center gap-3">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span>{webinar.date}</span>
+                      </div>
+                       <div className="flex items-center gap-3">
+                        <Clock className="h-4 w-4 text-primary" />
+                        <span>{webinar.time} ({webinar.duration})</span>
+                      </div>
                     </div>
                   </div>
+                  
+                  <Separator className="my-4" />
 
-                  <div className="flex items-center gap-4 mb-6">
+                  <div className="flex items-center gap-3 mb-6">
                     <Avatar>
                         <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
                         <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
@@ -64,7 +67,7 @@ export default function WebinarsPage() {
                   </div>
                   
                   <Button className="w-full mt-auto">Register Now</Button>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
@@ -81,11 +84,12 @@ export default function WebinarsPage() {
                   <Card key={webinar.id} className="overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col sm:flex-row">
                      <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={400} className="w-full sm:w-48 h-48 sm:h-auto object-cover" data-ai-hint="conference room" />
                     <CardContent className="p-6 flex flex-col">
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        {webinar.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
+                      </div>
                       <h3 className="text-lg font-bold text-slate-800 mb-2 font-headline">{webinar.title}</h3>
                       <p className="text-muted-foreground text-sm flex-grow mb-4">Originally aired: {webinar.date}</p>
-                       <div className="flex flex-wrap gap-1 mb-4">
-                        {webinar.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                      </div>
+                      
                       <Button variant="secondary" className="w-full sm:w-auto mt-auto">
                         <PlayCircle className="mr-2 h-4 w-4" />
                         Watch Recording
