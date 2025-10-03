@@ -5,12 +5,13 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Tv, User, Info, Video, Users } from 'lucide-react';
+import { ArrowLeft, Tv, User, Info, Video, Users, Tag } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
 import { WebinarActions } from '@/components/webinar-actions';
 import { WebinarBanner } from '@/components/webinar-banner';
+import { WebinarTime } from '@/components/webinar-time';
 
 type WebinarPageProps = {
   params: { id: string }
@@ -90,6 +91,9 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                         <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Event Details</h2>
                         <Card className="bg-slate-50">
                             <CardContent className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div className="sm:col-span-2 space-y-3 text-sm text-slate-700">
+                                   <WebinarTime dateTime={webinar.dateTime} isDetailed />
+                                </div>
                                 <div className="flex items-start gap-3">
                                     <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                     <div>
@@ -104,6 +108,17 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                     <div>
                                         <h4 className="font-semibold">Platform</h4>
                                         <p className="text-sm text-muted-foreground">{webinar.platform}</p>
+                                    </div>
+                                </div>
+                                 <div className="flex items-start gap-3">
+                                    <Tag className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                     <div>
+                                        <h4 className="font-semibold">Tags</h4>
+                                        <div className="flex flex-wrap gap-2 mt-1">
+                                            {webinar.tags.map(tag => (
+                                                <Badge key={tag} variant="secondary">{tag}</Badge>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3 sm:col-span-2">

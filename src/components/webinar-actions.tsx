@@ -4,10 +4,8 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { WebinarTime } from '@/components/webinar-time';
 import { PlayCircle, Ticket } from 'lucide-react';
 import { Badge } from './ui/badge';
-import { Tag } from 'lucide-react';
 
 interface WebinarActionsProps {
     webinar: Webinar;
@@ -83,20 +81,8 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     };
 
     return (
-        <div className="p-6 rounded-lg bg-slate-50 border h-full flex flex-col justify-between">
+        <div className="p-6 rounded-lg bg-slate-50 border h-full flex flex-col justify-center">
             <div className="space-y-4">
-                <WebinarTime dateTime={webinar.dateTime} isDetailed={true} />
-                <div className="flex items-start gap-3 pt-2">
-                    <Tag className="h-5 w-5 text-primary mt-1" />
-                    <div className="flex flex-wrap gap-2">
-                        {webinar.tags.map(tag => (
-                            <Badge key={tag} variant="secondary">{tag}</Badge>
-                        ))}
-                    </div>
-                </div>
-            </div>
-            
-            <div className="space-y-4 mt-6">
                 {status === 'UPCOMING' && (
                     <div className="text-center">
                         <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
