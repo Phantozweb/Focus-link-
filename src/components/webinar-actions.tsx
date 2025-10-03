@@ -14,7 +14,7 @@ interface WebinarActionsProps {
 }
 
 const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
-  <div className="flex flex-col items-center">
+  <div className="flex flex-col items-center p-2 bg-slate-100 rounded-md w-20">
     <span className="text-3xl font-bold text-slate-800 tracking-tight">{String(value).padStart(2, '0')}</span>
     <span className="text-xs text-muted-foreground uppercase">{label}</span>
   </div>
@@ -83,31 +83,33 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     };
 
     return (
-        <div className="p-6 rounded-lg bg-white border shadow-sm space-y-6">
-            {status === 'UPCOMING' && (
-                <div className="text-center">
-                    <h3 className="font-bold text-slate-800 mb-4">Event Starts In</h3>
-                    <div className="flex justify-center gap-4">
-                        <CountdownUnit value={timeLeft.days} label="Days" />
-                        <CountdownUnit value={timeLeft.hours} label="Hours" />
-                        <CountdownUnit value={timeLeft.minutes} label="Minutes" />
-                        <CountdownUnit value={timeLeft.seconds} label="Seconds" />
-                    </div>
-                </div>
-            )}
-            
-            {renderButton()}
-
-            <div className="space-y-4 text-slate-700">
+        <div className="p-6 rounded-lg bg-slate-50 border h-full flex flex-col justify-between">
+            <div className="space-y-4">
                 <WebinarTime dateTime={webinar.dateTime} isDetailed={true} />
-                <div className="flex items-start gap-3">
-                    <Tag className="h-5 w-5 text-primary" />
+                <div className="flex items-start gap-3 pt-2">
+                    <Tag className="h-5 w-5 text-primary mt-1" />
                     <div className="flex flex-wrap gap-2">
                         {webinar.tags.map(tag => (
                             <Badge key={tag} variant="secondary">{tag}</Badge>
                         ))}
                     </div>
                 </div>
+            </div>
+            
+            <div className="space-y-4 mt-6">
+                {status === 'UPCOMING' && (
+                    <div className="text-center">
+                        <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
+                        <div className="flex justify-center gap-2">
+                            <CountdownUnit value={timeLeft.days} label="Days" />
+                            <CountdownUnit value={timeLeft.hours} label="Hours" />
+                            <CountdownUnit value={timeLeft.minutes} label="Minutes" />
+                            <CountdownUnit value={timeLeft.seconds} label="Seconds" />
+                        </div>
+                    </div>
+                )}
+                
+                {renderButton()}
             </div>
         </div>
     );
