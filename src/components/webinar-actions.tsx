@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Ticket, Calendar, Clock } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info } from 'lucide-react';
 import { Badge } from './ui/badge';
 
 interface WebinarActionsProps {
@@ -23,6 +23,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     const [timeLeft, setTimeLeft] = useState({
         days: 0, hours: 0, minutes: 0, seconds: 0
     });
+    const [isRegistered, setIsRegistered] = useState(false);
 
     useEffect(() => {
         const calculateState = () => {
@@ -55,20 +56,37 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         return () => clearInterval(timer);
     }, [webinar.dateTime, webinar.duration]);
 
+    const handleRegister = () => {
+        // In a real app, this would trigger an API call.
+        // For this demo, we'll just simulate the registration.
+        setIsRegistered(true);
+    };
+
     const renderButton = () => {
+        if (isRegistered && status === 'UPCOMING') {
+             return (
+                 <div className="text-center p-4 bg-green-50 border-green-200 border rounded-lg">
+                    <h3 className="font-bold text-green-800">You're Registered!</h3>
+                    <p className="text-sm text-green-700 mt-1">Please wait patiently. Our team will send the meeting link to your registered email address. While you wait, feel free to connect with us on LinkedIn!</p>
+                </div>
+            )
+        }
+        
         switch (status) {
             case 'UPCOMING':
                 return (
-                    <Button size="lg" className="w-full text-lg py-6">
+                    <Button size="lg" className="w-full text-lg py-6" onClick={handleRegister}>
                         <Ticket className="mr-2 h-6 w-6" />
                         Register Now
                     </Button>
                 );
             case 'LIVE':
                  return (
-                    <Button size="lg" className="w-full text-lg py-6 animate-pulse">
-                        <PlayCircle className="mr-2 h-6 w-6" />
-                        Join Live Session
+                    <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
+                        <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
+                            <PlayCircle className="mr-2 h-6 w-6" />
+                            Join Live Session
+                        </a>
                     </Button>
                 );
             case 'ENDED':
@@ -83,7 +101,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     return (
         <div className="p-6 rounded-lg bg-slate-50 border h-full flex flex-col justify-center">
             <div className="space-y-4">
-                {status === 'UPCOMING' && (
+                {status === 'UPCOMING' && !isRegistered && (
                     <div className="text-center">
                         <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
                         <div className="flex justify-center gap-2">
