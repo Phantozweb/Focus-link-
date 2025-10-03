@@ -25,19 +25,19 @@ const teamMembers = [
   },
   {
     name: 'Adnan',
-    role: 'Outreach Marketing MD',
+    role: 'Managing Director of Outreach and Marketing',
     avatarUrl: 'https://iili.io/Jodp9gI.png',
     aiHint: 'portrait person marketing',
   },
   {
     name: 'Anshi Jha',
-    role: 'Team Member',
+    role: 'Director of Administration',
     avatarUrl: 'https://iili.io/Jodp9gI.png',
     aiHint: 'portrait person team',
   },
   {
     name: 'Shiva Shangari M',
-    role: 'Developer',
+    role: 'Core Developer',
     avatarUrl: 'https://iili.io/Jodp9gI.png',
     aiHint: 'portrait person developer',
   }
