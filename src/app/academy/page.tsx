@@ -33,11 +33,11 @@ export default function AcademyPage() {
           <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Events</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
             {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
-              <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 grid grid-cols-1 md:grid-cols-2">
-                <div className="relative">
-                  <Image src={webinar.imageUrl} alt={webinar.title} width={400} height={400} className="w-full h-full object-cover" data-ai-hint="presentation person" />
+              <Card key={webinar.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+                <div className="relative h-64">
+                  <Image src={webinar.imageUrl} alt={webinar.title} fill className="object-cover" data-ai-hint="presentation person" />
                 </div>
-                <div className="p-6 flex flex-col">
+                <div className="p-6 flex flex-col flex-grow">
                   <div className="flex-grow">
                      <div className="flex flex-wrap gap-2 mb-3">
                       {webinar.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
