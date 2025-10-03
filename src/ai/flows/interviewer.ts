@@ -42,7 +42,7 @@ const InterviewInputSchema = z.object({
 export type InterviewInput = z.infer<typeof InterviewInputSchema>;
 
 export const InterviewOutputSchema = z.object({
-    id: z.string().default(() => String(Date.now())).describe("A unique ID for the user, can be a timestamp."),
+    id: z.string().describe("A unique ID for the user, can be a timestamp."),
     name: z.string().describe('The full name of the person or organization.'),
     type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry']).describe('The professional role or type of organization.'),
     experience: z.string().describe('A concise headline or tagline summarizing their experience (e.g., "5+ years in pediatric optometry" or "Leading eye care association").'),
@@ -67,7 +67,7 @@ export async function interview(input: InterviewInput): Promise<InterviewOutput>
 const prompt = ai.definePrompt({
   name: 'interviewerPrompt',
   input: {schema: InterviewInputSchema},
-  output: {schema: InterviewOutputSchema},
+  output: {schema: InterviewOutputSchema.omit({ id: true })},
   prompt: `You are the "Focus Links Interviewer AI". Your task is to act as an expert profile builder for a professional eye care directory.
 
 You will receive free-form text from a user. Your job is to analyze this text and extract all relevant information to create a complete, structured, and professional profile.
@@ -85,7 +85,7 @@ You will receive free-form text from a user. Your job is to analyze this text an
 6.  **Defaults**:
     *   Use the default placeholder for \`avatarUrl\`.
     *   Set \`verified\` to \`false\`.
-    *   Generate a unique \`id\`.
+    *   DO NOT generate an \`id\`.
 
 **User Input:**
 \`\`\`
@@ -103,6 +103,9 @@ const interviewerFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    return {
+        ...output!,
+        id: String(Date.now()),
+    };
   }
 );

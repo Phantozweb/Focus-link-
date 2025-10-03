@@ -10,19 +10,19 @@ export function Footer() {
                 <p className="text-gray-400 text-sm">Connecting the world of vision care.</p>
             </div>
             <div>
-                <h4 className="font-semibold mb-3">For Professionals</h4>
+                <h4 className="font-semibold mb-3">Directory</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
-                    <li><Link className="hover:text-white" href="/join">Create a Profile</Link></li>
-                    <li><Link className="hover:text-white" href="/join">List Your Clinic</Link></li>
-                    <li><Link className="hover:text-white" href="/contact">Advertise</Link></li>
+                    <li><Link className="hover:text-white" href="/directory/professionals">Professionals</Link></li>
+                    <li><Link className="hover:text-white" href="/directory/students">Students</Link></li>
+                    <li><Link className="hover:text-white" href="/directory/clinics">Clinics & Opticals</Link></li>
+                    <li><Link className="hover:text-white" href="/directory/associations">Associations</Link></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-3">Community</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
-                    <li><a className="hover:text-white" href="#">Articles</a></li>
                     <li><Link className="hover:text-white" href="/academy">Academy</Link></li>
-                    <li><Link className="hover:text-white" href="/directory">Directory</Link></li>
+                    <li><Link className="hover:text-white" href="/join">Join the Directory</Link></li>
                 </ul>
             </div>
             <div>

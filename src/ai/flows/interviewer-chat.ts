@@ -43,7 +43,7 @@ export async function interviewerChat(history: InterviewerChatInput): Promise<In
 const interviewerChatPrompt = ai.definePrompt({
   name: 'interviewerChatPrompt',
   input: { schema: InterviewerChatInputSchema },
-  output: { schema: InterviewerChatOutputSchema },
+  output: { schema: InterviewerChatOutputSchema.extend({ profile: InterviewOutputSchema.omit({id: true}).optional() }) },
   
   prompt: `You are the "Focus Links Interviewer AI," a friendly and efficient chatbot whose job is to help users create a professional profile for an eye care directory.
 
@@ -71,6 +71,7 @@ Your goal is to gather all the necessary information by having a natural convers
 - **languages**: Array of languages spoken.
 - **avatarUrl**: Use the default: 'https://iili.io/Jodp9gI.png'
 - **verified**: Use the default: false
+- **id**: DO NOT generate this field.
 
 **Conversation History:**
 {{#each this}}
@@ -92,6 +93,17 @@ const interviewerChatFlow = ai.defineFlow(
     if (!output) {
       throw new Error("AI failed to generate a response.");
     }
+    
+    if (output.profile) {
+        return {
+            ...output,
+            profile: {
+                ...output.profile,
+                id: String(Date.now()),
+            },
+        };
+    }
+
     return output;
   }
 );
