@@ -16,6 +16,7 @@ export function Header() {
             <nav className="hidden md:flex items-center gap-6">
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/">Home</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/directory">Directory</Link>
+                <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/webinars">Webinars</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/about">About Us</Link>
                 <Link className="text-slate-700 text-sm font-medium leading-normal hover:text-cyan-600 transition-colors" href="/contact">Contact</Link>
             </nav>
@@ -44,6 +45,11 @@ export function Header() {
                      <SheetClose asChild>
                         <Link href="/directory" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
                           <span className="material-symbols-outlined">search</span> Directory
+                        </Link>
+                    </SheetClose>
+                     <SheetClose asChild>
+                        <Link href="/webinars" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                          <span className="material-symbols-outlined">slideshow</span> Webinars
                         </Link>
                     </SheetClose>
                      <SheetClose asChild>

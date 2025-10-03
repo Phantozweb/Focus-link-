@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { Announcement } from '@/components/layout/announcement';
 
 export const metadata: Metadata = {
   title: 'FocusLinks',
@@ -27,8 +28,9 @@ export default function RootLayout({
       <body className={cn('antialiased bg-gray-50')}>
         <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
             <div className="layout-container flex h-full grow flex-col">
+                <Announcement />
                 <Header />
-                <main className="mt-16">
+                <main className="mt-28">
                   {children}
                 </main>
                 <Footer />
