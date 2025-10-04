@@ -16,12 +16,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { useDynamicFields } from '@/hooks/use-dynamic-fields';
-import { PlusCircle, Trash2, UserPlus, Loader2, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import {
   AlertDialog,
@@ -33,6 +29,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
+import { UserPlus, Loader2, CheckCircle } from 'lucide-react';
+import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 
 
@@ -41,65 +39,11 @@ const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalm
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
-  type: z.enum(profileTypes, { required_error: 'You must select a profile type.' }),
-  location: z.string().min(3, { message: 'Please enter your location.' }),
-  experience: z.string().min(10, { message: 'Headline must be at least 10 characters.' }),
-  bio: z.string().min(50, { message: 'Bio must be at least 50 characters.' }).max(1000),
-  linkedin: z.string().url().optional().or(z.literal('')),
-  avatarUrl: z.string().url().optional().or(z.literal('')),
-  skills: z.array(z.object({ value: z.string().min(1, { message: 'Skill cannot be empty.' }) })).min(1, { message: 'At least one skill is required.' }),
-  interests: z.array(z.object({ value: z.string().min(1, { message: 'Interest cannot be empty.' }) })).min(1, { message: 'At least one interest is required.' }),
-  languages: z.array(z.object({ value: z.string().min(1, { message: 'Language cannot be empty.' }) })).optional(),
-  workExperience: z.array(z.object({
-    title: z.string().min(2),
-    company: z.string().min(2),
-    startDate: z.string().min(4),
-    endDate: z.string(),
-    description: z.string().optional(),
-  })).optional(),
-  education: z.array(z.object({
-    school: z.string().min(3),
-    degree: z.string().min(3),
-    fieldOfStudy: z.string().min(3),
-    startYear: z.string().min(4),
-    endYear: z.string().min(4),
-  })).optional(),
+  country: z.string({ required_error: 'Please select a country.'}),
+  role: z.enum(profileTypes, { required_error: 'You must select a professional role.' }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
-
-const DynamicFieldArray = ({ form, name, label, placeholder }: { form: any, name: 'skills' | 'interests' | 'languages', label: string, placeholder: string }) => {
-  const { fields, add, remove } = useDynamicFields(form, name);
-  return (
-    <div className="space-y-4">
-      <FormLabel>{label}</FormLabel>
-      {fields.map((field, index) => (
-        <div key={field.id} className="flex items-center gap-2">
-          <FormField
-            control={form.control}
-            name={`${name}.${index}.value`}
-            render={({ field }) => (
-              <FormItem className="flex-grow">
-                <FormControl>
-                  <Input placeholder={placeholder} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
-            <Trash2 className="h-4 w-4 text-red-500" />
-          </Button>
-        </div>
-      ))}
-      <Button type="button" variant="outline" size="sm" onClick={() => add()}>
-        <PlusCircle className="mr-2 h-4 w-4" />
-        Add {label.slice(0, -1)}
-      </Button>
-    </div>
-  );
-};
-
 
 export default function MembershipPage() {
   const { toast } = useToast();
@@ -112,56 +56,37 @@ export default function MembershipPage() {
     defaultValues: {
       name: '',
       email: '',
-      location: '',
-      experience: '',
-      bio: '',
-      linkedin: '',
-      avatarUrl: '',
-      skills: [{ value: '' }],
-      interests: [{ value: '' }],
-      languages: [],
-      workExperience: [],
-      education: [],
     },
   });
   
-  const { fields: workFields, add: addWork, remove: removeWork } = useDynamicFields(form, 'workExperience');
-  const { fields: eduFields, add: addEdu, remove: removeEdu } = useDynamicFields(form, 'education');
-
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
 
-    // Transform data to match UserProfile structure
-    const profileData: Omit<UserProfile, 'id' | 'verified'> = {
+    const profileData = {
+        id: String(Date.now()),
         name: data.name,
-        type: data.type,
-        experience: data.experience,
-        location: data.location,
-        bio: data.bio,
+        type: data.role,
+        location: data.country,
         links: {
             email: data.email,
-            linkedin: data.linkedin || undefined,
         },
-        avatarUrl: data.avatarUrl || 'https://i.ibb.co/jG6L8p3/default-avatar.png',
-        skills: data.skills.map(s => s.value),
-        interests: data.interests.map(i => i.value),
-        languages: data.languages?.map(l => l.value) ?? [],
-        workExperience: data.workExperience ?? [],
-        education: data.education?.map(e => ({...e, university: ''})) ?? [],
+        // Add default empty values for other UserProfile fields
+        experience: `${data.role} from ${data.country}`,
+        bio: 'A new member of the Focus Links community.',
+        skills: [],
+        interests: [],
+        avatarUrl: 'https://i.ibb.co/jG6L8p3/default-avatar.png',
+        workExperience: [],
+        education: [],
+        languages: [],
+        verified: false,
     };
-    
-    const finalPayload = {
-      ...profileData,
-      id: String(Date.now()),
-      verified: false,
-    }
-
 
     try {
       const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(finalPayload),
+        body: JSON.stringify(profileData),
       });
 
       if (response.ok) {
@@ -179,7 +104,7 @@ export default function MembershipPage() {
       toast({
         variant: 'destructive',
         title: 'Network Error',
-        description: 'Could not submit your profile. Please check your connection.',
+        description: 'Could not submit your application. Please check your connection.',
       });
     } finally {
       setIsSubmitting(false);
@@ -193,188 +118,74 @@ export default function MembershipPage() {
 
   return (
     <>
-      <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto max-w-2xl py-12 px-4 sm:px-6 lg:px-8">
         <Card>
-          <CardHeader>
+          <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-3 mb-2">
                 <UserPlus className="h-8 w-8 text-primary" />
                 <CardTitle className="text-3xl font-headline">Join Our Community</CardTitle>
             </div>
-            <CardDescription className="text-center">Fill out the form below to create your profile and get listed in the Focus Links directory. Submissions are reviewed by our team.</CardDescription>
+            <CardDescription>
+              Become a part of the world's largest eye care network. Fill out the short form below to apply for membership. All applications are reviewed by our team.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 
-                {/* Basic Information */}
-                <div className="space-y-6">
-                   <h3 className="text-lg font-semibold border-b pb-2">Basic Information</h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField control={form.control} name="name" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl><Input placeholder="e.g., Dr. Jane Doe" {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}/>
-                        <FormField control={form.control} name="email" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email Address</FormLabel>
-                                <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}/>
-                        <FormField control={form.control} name="type" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>I am a...</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue placeholder="Select a profile type" /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        {profileTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}/>
-                        <FormField control={form.control} name="location" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Location</FormLabel>
-                                <FormControl><Input placeholder="City, Country" {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}/>
-                   </div>
-                </div>
+                <FormField control={form.control} name="name" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl><Input placeholder="e.g., Dr. Jane Doe" {...field} /></FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
 
-                {/* Professional Summary */}
-                <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Professional Summary</h3>
-                    <FormField control={form.control} name="experience" render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Profile Headline</FormLabel>
-                            <FormControl><Input placeholder="e.g., 5+ years in pediatric optometry" {...field} /></FormControl>
-                            <FormDescription>A short, impactful tagline for your profile.</FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}/>
-                    <FormField control={form.control} name="bio" render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Biography</FormLabel>
-                            <FormControl><Textarea placeholder="Tell us about your background, mission, and what makes you unique." rows={5} {...field} /></FormControl>
-                            <FormDescription>Write a professional bio in the first person.</FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}/>
-                </div>
-                
-                 {/* Links & Avatar */}
-                <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Links & Avatar</h3>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField control={form.control} name="linkedin" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>LinkedIn or Website URL</FormLabel>
-                                <FormControl><Input placeholder="https://linkedin.com/in/..." {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}/>
-                        <FormField control={form.control} name="avatarUrl" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Avatar URL</FormLabel>
-                                <FormControl><Input placeholder="https://example.com/image.png" {...field} /></FormControl>
-                                <FormDescription>Optional. A direct link to your profile picture.</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}/>
-                     </div>
-                </div>
-                
-                {/* Skills & Interests */}
-                 <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Skills & Interests</h3>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                       <DynamicFieldArray form={form} name="skills" label="Skills" placeholder="e.g., Contact Lenses" />
-                       <DynamicFieldArray form={form} name="interests" label="Interests" placeholder="e.g., Clinical Research" />
-                     </div>
-                 </div>
+                <FormField control={form.control} name="email" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
 
-                {/* Experience */}
-                <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Work Experience (Optional)</h3>
-                     {workFields.map((field, index) => (
-                        <Card key={field.id} className="p-4 bg-slate-50 relative">
-                             <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeWork(index)}>
-                                <Trash2 className="h-4 w-4 text-red-500" />
-                            </Button>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField control={form.control} name={`workExperience.${index}.title`} render={({ field }) => (
-                                    <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <FormField control={form.control} name={`workExperience.${index}.company`} render={({ field }) => (
-                                    <FormItem><FormLabel>Company</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <FormField control={form.control} name={`workExperience.${index}.startDate`} render={({ field }) => (
-                                    <FormItem><FormLabel>Start Date</FormLabel><FormControl><Input placeholder="e.g., Jan 2020" {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <FormField control={form.control} name={`workExperience.${index}.endDate`} render={({ field }) => (
-                                    <FormItem><FormLabel>End Date</FormLabel><FormControl><Input placeholder="e.g., Present" {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <div className="md:col-span-2">
-                                     <FormField control={form.control} name={`workExperience.${index}.description`} render={({ field }) => (
-                                        <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea rows={2} {...field} /></FormControl><FormMessage /></FormItem>
-                                    )}/>
-                                </div>
-                            </div>
-                        </Card>
-                    ))}
-                    <Button type="button" variant="outline" size="sm" onClick={() => addWork()}>
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add Experience
-                    </Button>
-                </div>
-                
-                {/* Education */}
-                 <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Education (Optional)</h3>
-                     {eduFields.map((field, index) => (
-                        <Card key={field.id} className="p-4 bg-slate-50 relative">
-                             <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2" onClick={() => removeEdu(index)}>
-                                <Trash2 className="h-4 w-4 text-red-500" />
-                            </Button>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField control={form.control} name={`education.${index}.school`} render={({ field }) => (
-                                    <FormItem><FormLabel>School/University</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <FormField control={form.control} name={`education.${index}.degree`} render={({ field }) => (
-                                    <FormItem><FormLabel>Degree</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                 <FormField control={form.control} name={`education.${index}.fieldOfStudy`} render={({ field }) => (
-                                    <FormItem><FormLabel>Field of Study</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <FormField control={form.control} name={`education.${index}.startYear`} render={({ field }) => (
-                                    <FormItem><FormLabel>Start Year</FormLabel><FormControl><Input placeholder="e.g., 2018" {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                                <FormField control={form.control} name={`education.${index}.endYear`} render={({ field }) => (
-                                    <FormItem><FormLabel>End Year</FormLabel><FormControl><Input placeholder="e.g., 2022" {...field} /></FormControl><FormMessage /></FormItem>
-                                )}/>
-                            </div>
-                        </Card>
-                    ))}
-                    <Button type="button" variant="outline" size="sm" onClick={() => addEdu()}>
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add Education
-                    </Button>
-                </div>
+                <FormField control={form.control} name="country" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Country of Practice / Study</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select your country" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {countries.map(c => <SelectItem key={c.code} value={c.name}>{c.name}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
 
-                {/* Languages */}
-                <div className="space-y-6">
-                    <h3 className="text-lg font-semibold border-b pb-2">Languages (Optional)</h3>
-                     <DynamicFieldArray form={form} name="languages" label="Languages" placeholder="e.g., English (Professional)" />
-                 </div>
-
-
-                <Separator className="my-8" />
+                <FormField control={form.control} name="role" render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Primary Role</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select your professional role" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {profileTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                        <FormDescription>What is your main role in the eye care community?</FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                )}/>
 
                 <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Submit for Review'}
+                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting Application...</> : 'Submit Application'}
                 </Button>
               </form>
             </Form>
@@ -388,9 +199,9 @@ export default function MembershipPage() {
              <div className="flex justify-center">
               <CheckCircle className="h-16 w-16 text-green-500" />
             </div>
-            <AlertDialogTitle className="text-center">Submission Successful!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Application Submitted!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Your profile has been submitted for review. It will appear on the directory once it has been approved. This may take some time.
+              Thank you for your interest in joining Focus Links. Your application has been submitted for review. You will be notified via email once your membership is approved.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
