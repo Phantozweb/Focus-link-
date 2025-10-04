@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
                 <h3 className="font-bold text-lg mb-4">Focus Links</h3>
-                <p className="text-gray-400 text-sm">Connecting the world of vision care.</p>
+                <p className="text-gray-400 text-sm">Connecting the Global Eye Care Community.</p>
             </div>
             <div>
                 <h4 className="font-semibold mb-3">Directory</h4>
