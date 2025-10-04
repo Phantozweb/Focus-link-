@@ -61,18 +61,7 @@ export default function MembershipPage() {
   
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
-    const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_APP_SCRIPT_URL;
-
-    if (!scriptUrl) {
-        console.error('Google App Script URL is not defined.');
-        toast({
-            variant: 'destructive',
-            title: 'Configuration Error',
-            description: 'The submission service is not configured correctly.',
-        });
-        setIsSubmitting(false);
-        return;
-    }
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwqEoTXDLXbfPzRic-JFfFiaT0sYJOLh0YeNpR2VzXglze_jcsxklB4CBuasEJJTIYm4g/exec";
 
     try {
         // Step 1: Check if email exists
@@ -87,7 +76,7 @@ export default function MembershipPage() {
             toast({
                 variant: 'destructive',
                 title: 'Already Registered',
-                description: 'This email address has already been submitted.',
+                description: 'You registered earlier with this email. Please check your inbox for details.',
             });
             setIsSubmitting(false);
             return;
@@ -98,7 +87,7 @@ export default function MembershipPage() {
             method: 'POST',
             mode: 'cors', 
             headers: {
-                'Content-Type': 'text/plain;charset=utf-8', // Required for Apps Script
+                'Content-Type': 'text/plain;charset=utf-8',
             },
             body: JSON.stringify(data),
         });
