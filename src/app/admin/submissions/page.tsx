@@ -5,100 +5,76 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Loader2, Check, X, User, ShieldCheck } from 'lucide-react';
-import type { UserProfile } from '@/types';
+import { Loader2, ShieldCheck, UserCheck, UserX, Users } from 'lucide-react';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from '@/components/ui/badge';
 
-function SubmissionDetails({ profile }: { profile: UserProfile }) {
-  return (
-    <div className="space-y-3 text-sm">
-      <p><strong>Role:</strong> {profile.type}</p>
-      <p><strong>Location:</strong> {profile.location}</p>
-      <p><strong>Headline:</strong> {profile.experience}</p>
-      <p><strong>Bio:</strong> {profile.bio}</p>
-      <p><strong>Skills:</strong> {profile.skills.join(', ')}</p>
-      <p><strong>Interests:</strong> {profile.interests.join(', ')}</p>
-      <p><strong>Email:</strong> {profile.links.email}</p>
-      <p><strong>LinkedIn/Website:</strong> {profile.links.linkedin}</p>
-      {profile.workExperience && profile.workExperience.length > 0 && (
-        <div>
-          <strong>Work Experience:</strong>
-          <ul className="list-disc pl-5">
-            {profile.workExperience.map((exp, i) => <li key={i}>{exp.title} at {exp.company}</li>)}
-          </ul>
-        </div>
-      )}
-       {profile.education && profile.education.length > 0 && (
-        <div>
-          <strong>Education:</strong>
-          <ul className="list-disc pl-5">
-            {profile.education.map((edu, i) => <li key={i}>{edu.degree} from {edu.school}</li>)}
-          </ul>
-        </div>
-      )}
-       {profile.languages && profile.languages.length > 0 && (
-         <p><strong>Languages:</strong> {profile.languages.join(', ')}</p>
-      )}
-    </div>
-  )
-}
+// Simplified Member type for the admin page
+type Member = {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    country: string;
+    verified: boolean;
+};
 
-export default function AdminSubmissionsPage() {
-  const [submissions, setSubmissions] = useState<UserProfile[]>([]);
+
+export default function AdminDashboardPage() {
+  const [members, setMembers] = useState<Member[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
-    // IMPORTANT: This is a simple protection mechanism for demonstration.
-    // In a real app, use a proper authentication system with server-side checks.
     const isAuthenticated = sessionStorage.getItem('isAdminAuthenticated');
     if (isAuthenticated !== 'true') {
       router.replace('/admin');
       return;
     }
 
-    async function fetchSubmissions() {
+    async function fetchMembers() {
       setIsLoading(true);
       try {
-        const response = await fetch('/api/submissions');
+        const response = await fetch('/api/members');
         if (response.ok) {
           const data = await response.json();
-          setSubmissions(data);
+          setMembers(data);
         } else {
-          toast({ variant: 'destructive', title: 'Failed to load submissions.' });
+          toast({ variant: 'destructive', title: 'Failed to load members.' });
         }
       } catch (error) {
-        toast({ variant: 'destructive', title: 'An error occurred while fetching submissions.' });
+        toast({ variant: 'destructive', title: 'An error occurred while fetching members.' });
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchSubmissions();
+    fetchMembers();
   }, [router, toast]);
 
 
-  const handleReview = async (profileId: string, action: 'approve' | 'reject') => {
-    setIsProcessing(profileId);
+  const handleVerification = async (memberId: string, shouldVerify: boolean) => {
+    setIsProcessing(memberId);
     try {
-      const response = await fetch('/api/review', {
+      const response = await fetch('/api/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ profileId, action }),
+        body: JSON.stringify({ memberId, action: shouldVerify ? 'verify' : 'unverify' }),
       });
 
       if (response.ok) {
-        setSubmissions(prev => prev.filter(s => s.id !== profileId));
+        setMembers(prev => prev.map(m => m.id === memberId ? { ...m, verified: shouldVerify } : m));
         toast({
-          title: `Profile ${action === 'approve' ? 'Approved' : 'Rejected'}`,
-          description: `The profile has been successfully ${action === 'approve' ? 'added to the directory' : 'removed'}.`,
+          title: `Member ${shouldVerify ? 'Verified' : 'Unverified'}`,
         });
       } else {
         const errorData = await response.json();
@@ -114,10 +90,10 @@ export default function AdminSubmissionsPage() {
   const handleLogout = () => {
     sessionStorage.removeItem('isAdminAuthenticated');
     router.replace('/admin');
-     toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+    toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
   }
 
-  if (isLoading && !submissions.length) {
+  if (isLoading && !members.length) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-muted/40">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -136,50 +112,69 @@ export default function AdminSubmissionsPage() {
                     Admin Dashboard
                 </CardTitle>
                 <CardDescription>
-                    Review and approve new profile submissions. Found {submissions.length} pending profiles.
+                    View registered members and manage profile verifications. Total members: {members.length}.
                 </CardDescription>
             </div>
             <Button onClick={handleLogout} variant="outline">Logout</Button>
           </CardHeader>
           <CardContent>
-            {submissions.length > 0 ? (
-               <Accordion type="single" collapsible className="w-full">
-                {submissions.map(profile => (
-                  <AccordionItem value={profile.id} key={profile.id}>
-                    <AccordionTrigger>
-                       <div className="flex items-center gap-3">
-                          <User className="h-5 w-5 text-muted-foreground" />
-                          <span className="font-semibold">{profile.name}</span>
-                          <span className="text-sm text-muted-foreground">({profile.type})</span>
-                       </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <SubmissionDetails profile={profile} />
-                      <div className="flex gap-4 mt-6">
-                        <Button
-                          onClick={() => handleReview(profile.id, 'approve')}
-                          disabled={isProcessing === profile.id}
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          {isProcessing === profile.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
-                          Approve
-                        </Button>
-                        <Button
-                          onClick={() => handleReview(profile.id, 'reject')}
-                          disabled={isProcessing === profile.id}
-                          variant="destructive"
-                        >
-                           {isProcessing === profile.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <X className="mr-2 h-4 w-4" />}
-                          Reject
-                        </Button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+            {members.length > 0 ? (
+               <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Member ID</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Country</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {members.map((member) => (
+                    <TableRow key={member.id}>
+                      <TableCell className="font-mono text-xs">{member.id}</TableCell>
+                      <TableCell className="font-medium">{member.name}</TableCell>
+                      <TableCell>{member.email}</TableCell>
+                      <TableCell>{member.role}</TableCell>
+                      <TableCell>{member.country}</TableCell>
+                      <TableCell>
+                        <Badge variant={member.verified ? "default" : "secondary"}>
+                            {member.verified ? "Verified" : "Not Verified"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {member.verified ? (
+                            <Button
+                                onClick={() => handleVerification(member.id, false)}
+                                disabled={isProcessing === member.id}
+                                variant="destructive"
+                                size="sm"
+                            >
+                                {isProcessing === member.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserX className="mr-2 h-4 w-4" />}
+                                Unverify
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={() => handleVerification(member.id, true)}
+                                disabled={isProcessing === member.id}
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700"
+                            >
+                                {isProcessing === member.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserCheck className="mr-2 h-4 w-4" />}
+                                Verify
+                            </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             ) : (
               <div className="text-center py-16 text-gray-500">
-                <p className="text-lg">No pending submissions.</p>
+                <Users className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <p className="text-lg">No members have joined yet.</p>
               </div>
             )}
           </CardContent>

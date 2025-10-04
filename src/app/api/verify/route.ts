@@ -1,12 +1,10 @@
 
-
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-// This file is being repurposed for verification instead of review.
-// A proper database is recommended for production apps.
-
+// For demonstration purposes, this API updates two files.
+// In a real application, this would be a single database transaction.
 const membersPath = path.join(process.cwd(), 'src/lib/members.json');
 const mainDataPath = path.join(process.cwd(), 'src/lib/data.ts');
 
@@ -21,13 +19,12 @@ async function readJsonFile(filePath: string) {
 
 async function updateUserVerification(userId: string, verifiedStatus: boolean) {
     // This is a simplified and potentially unsafe way to update the live `data.ts` file.
-    // It's for demonstration purposes and not suitable for production.
+    // It's for demonstration purposes and not suitable for production due to race conditions.
     try {
         let mainDataContent = await fs.readFile(mainDataPath, 'utf-8');
         
-        // Use a regex to find the specific user and update their verified status.
-        // This is fragile and depends on the exact formatting.
-        const userRegex = new RegExp(`(id: '${userId.replace(/'/g, "\\'")}',[\\s\\S]*?verified: )(false|true)`);
+        // This regex is fragile and depends on the exact formatting of the user object.
+        const userRegex = new RegExp(`(id:\\s*'${userId.replace(/'/g, "\\'")}',[\\s\\S]*?verified:\\s*)(false|true)`);
         
         const match = mainDataContent.match(userRegex);
 
@@ -63,8 +60,8 @@ export async function POST(request: Request) {
     const shouldBeVerified = action === 'verify';
     members[memberIndex].verified = shouldBeVerified;
     
-    // Also update the main `users` array in data.ts if the user exists there
-    // Note: In this demo, not all members might be in `data.ts`, but we try to update if they are.
+    // Also attempt to update the main `users` array in data.ts if the member exists there as a user profile.
+    // This connects the 'member' to their public 'profile'.
     await updateUserVerification(memberId, shouldBeVerified);
 
     await fs.writeFile(membersPath, JSON.stringify(members, null, 2));

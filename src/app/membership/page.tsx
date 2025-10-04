@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -29,7 +28,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { UserPlus, Loader2, CheckCircle } from 'lucide-react';
+import { UserPlus, Loader2, CheckCircle, PartyPopper } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 
@@ -50,6 +49,7 @@ export default function MembershipPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [newMemberId, setNewMemberId] = useState('');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -62,40 +62,31 @@ export default function MembershipPage() {
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
 
-    const profileData = {
-        id: String(Date.now()),
+    // The data sent is just the raw form data. The server will assign ID and verification status.
+    const memberData = {
         name: data.name,
-        type: data.role,
-        location: data.country,
-        links: {
-            email: data.email,
-        },
-        // Add default empty values for other UserProfile fields
-        experience: `${data.role} from ${data.country}`,
-        bio: 'A new member of the Focus Links community.',
-        skills: [],
-        interests: [],
-        avatarUrl: 'https://i.ibb.co/jG6L8p3/default-avatar.png',
-        workExperience: [],
-        education: [],
-        languages: [],
-        verified: false,
+        email: data.email,
+        country: data.country,
+        role: data.role,
     };
 
     try {
+      // Note: The API endpoint is now just '/api/submissions' which handles auto-registration
       const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profileData),
+        body: JSON.stringify(memberData),
       });
 
       if (response.ok) {
+        const result = await response.json();
+        setNewMemberId(result.memberId);
         setShowSuccessDialog(true);
       } else {
         const errorData = await response.json();
         toast({
           variant: 'destructive',
-          title: 'Submission Failed',
+          title: 'Registration Failed',
           description: errorData.message || 'An unknown error occurred.',
         });
       }
@@ -126,7 +117,7 @@ export default function MembershipPage() {
                 <CardTitle className="text-3xl font-headline">Join Our Community</CardTitle>
             </div>
             <CardDescription>
-              Become a part of the world's largest eye care network. Fill out the short form below to apply for membership. All applications are reviewed by our team.
+              Become a part of the world's largest eye care network. Fill out the form below to instantly become a member.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -185,7 +176,7 @@ export default function MembershipPage() {
                 )}/>
 
                 <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting Application...</> : 'Submit Application'}
+                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Joining...</> : 'Join Now'}
                 </Button>
               </form>
             </Form>
@@ -197,15 +188,15 @@ export default function MembershipPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
              <div className="flex justify-center">
-              <CheckCircle className="h-16 w-16 text-green-500" />
+              <PartyPopper className="h-16 w-16 text-green-500" />
             </div>
-            <AlertDialogTitle className="text-center">Application Submitted!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Welcome to Focus Links!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Thank you for your interest in joining Focus Links. Your application has been submitted for review. You will be notified via email once your membership is approved.
+              You are now a member of our community! Your unique Membership ID is <span className="font-bold text-foreground font-mono">{newMemberId}</span>. You can now connect with other professionals and explore our resources.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={closeSuccessDialog}>Close</AlertDialogAction>
+            <AlertDialogAction onClick={closeSuccessDialog}>Explore the Community</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
