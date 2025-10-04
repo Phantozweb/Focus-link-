@@ -61,20 +61,32 @@ export default function MembershipPage() {
   
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
+    const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_APP_SCRIPT_URL;
+
+    if (!scriptUrl) {
+        console.error('Google App Script URL is not defined.');
+        toast({
+            variant: 'destructive',
+            title: 'Configuration Error',
+            description: 'The submission service is not configured correctly.',
+        });
+        setIsSubmitting(false);
+        return;
+    }
 
     try {
-      const response = await fetch('/api/submissions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+        const response = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors', // Important for Apps Script web apps to avoid CORS errors
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
 
-      if (response.ok) {
+        // Since no-cors prevents reading the response, we optimistically assume success.
         setShowSuccessDialog(true);
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Network response was not ok.');
-      }
+
     } catch (error) {
       console.error(error);
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
@@ -176,7 +188,7 @@ export default function MembershipPage() {
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your professional role" />
-                          </SelectTrigger>
+                          </Trigger>
                         </FormControl>
                         <SelectContent>
                           {profileTypes.map((type) => (
@@ -209,7 +221,7 @@ export default function MembershipPage() {
             </div>
             <AlertDialogTitle className="text-center">Submission Received!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Thank you for your interest! Your membership application has been sent to our team for review. We'll be in touch shortly.
+              Thank you for your interest! Your membership application has been sent and will be added to our records shortly.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
