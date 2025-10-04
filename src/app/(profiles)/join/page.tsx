@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, CheckCircle, Sparkles, RefreshCw, Database } from 'lucide-react';
+import { Loader2, CheckCircle, Sparkles, RefreshCw, FileText } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import {
   AlertDialog,
@@ -19,6 +19,19 @@ import {
 import { interviewerChat } from '@/ai/flows/interviewer-chat';
 import type { UserProfile, Message } from '@/types';
 import { Chat } from '@/components/chat-ui';
+
+const ReportItem = ({ label, value }: { label: string; value: string | string[] | undefined }) => {
+    if (!value || (Array.isArray(value) && value.length === 0)) return null;
+
+    const displayValue = Array.isArray(value) ? value.join(', ') : value;
+
+    return (
+        <div className="grid grid-cols-3 gap-2 text-sm">
+            <dt className="font-semibold text-gray-600 col-span-1">{label}</dt>
+            <dd className="text-gray-800 col-span-2">{displayValue}</dd>
+        </div>
+    );
+};
 
 export default function JoinPage() {
   const { toast } = useToast();
@@ -181,14 +194,51 @@ export default function JoinPage() {
                <div className="sticky top-24">
                   <div className="text-center mb-4">
                       <h2 className="text-2xl font-bold font-headline flex items-center justify-center gap-2">
-                        <Database className="h-6 w-6" /> Live Data Preview
+                        <FileText className="h-6 w-6" /> Your Interview Report
                       </h2>
                       <p className="text-muted-foreground">The information gathered by the AI will appear here in real-time.</p>
                   </div>
-                  <Card className="bg-slate-900 text-slate-100 font-mono text-sm max-h-[50vh] overflow-y-auto">
-                    <CardContent className="p-4">
-                      <pre><code>{JSON.stringify(generatedProfile, null, 2)}</code></pre>
-                    </CardContent>
+                  <Card className="bg-slate-50 border-slate-200 max-h-[50vh] overflow-y-auto">
+                      <CardContent className="p-6">
+                        {Object.keys(generatedProfile).length > 0 ? (
+                            <dl className="space-y-4">
+                                <ReportItem label="Name" value={generatedProfile.name} />
+                                <ReportItem label="Role" value={generatedProfile.type} />
+                                <ReportItem label="Headline" value={generatedProfile.experience} />
+                                <ReportItem label="Location" value={generatedProfile.location} />
+                                <ReportItem label="Bio" value={generatedProfile.bio} />
+                                <ReportItem label="Skills" value={generatedProfile.skills} />
+                                <ReportItem label="Interests" value={generatedProfile.interests} />
+                                <ReportItem label="Email" value={generatedProfile.links?.email} />
+                                <ReportItem label="Website/LinkedIn" value={generatedProfile.links?.linkedin} />
+                                <ReportItem label="Languages" value={generatedProfile.languages} />
+                                {generatedProfile.workExperience && generatedProfile.workExperience.length > 0 && (
+                                    <div className="grid grid-cols-3 gap-2 text-sm">
+                                        <dt className="font-semibold text-gray-600 col-span-1">Work Experience</dt>
+                                        <dd className="text-gray-800 col-span-2">
+                                            {generatedProfile.workExperience.map((exp, i) => (
+                                                <div key={i} className="mb-2">{exp.title} at {exp.company}</div>
+                                            ))}
+                                        </dd>
+                                    </div>
+                                )}
+                                {generatedProfile.education && generatedProfile.education.length > 0 && (
+                                     <div className="grid grid-cols-3 gap-2 text-sm">
+                                        <dt className="font-semibold text-gray-600 col-span-1">Education</dt>
+                                        <dd className="text-gray-800 col-span-2">
+                                             {generatedProfile.education.map((edu, i) => (
+                                                <div key={i} className="mb-2">{edu.degree} from {edu.school}</div>
+                                            ))}
+                                        </dd>
+                                    </div>
+                                )}
+                            </dl>
+                        ) : (
+                            <div className="text-center py-10 text-gray-500">
+                                <p>Your report will be generated here as you answer the questions.</p>
+                            </div>
+                        )}
+                      </CardContent>
                   </Card>
 
                   {isComplete && (
