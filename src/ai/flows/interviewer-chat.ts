@@ -23,8 +23,6 @@ export async function interviewerChat(history: InterviewerChatInput): Promise<In
   return interviewerChatFlow(history);
 }
 
-const profileTypes = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
-
 // Define the prompt for the conversational interviewer
 const interviewerChatPrompt = ai.definePrompt({
   name: 'interviewerChatPrompt',
