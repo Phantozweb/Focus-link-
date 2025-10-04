@@ -60,7 +60,7 @@ export default function JoinPage() {
       const result = await interviewerChat(newMessages);
       
       if (result.profile) {
-        setGeneratedProfile(prev => ({...prev, ...result.profile}));
+        setGeneratedProfile(currentProfile => ({...currentProfile, ...result.profile}));
       }
 
       if (result.reply) {
