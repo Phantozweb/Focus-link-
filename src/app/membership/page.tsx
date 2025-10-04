@@ -63,7 +63,7 @@ export default function MembershipPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/submit-membership', {
+      const response = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -113,56 +113,84 @@ export default function MembershipPage() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
               >
-                <FormField control={form.control} name="name" render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl><Input placeholder="e.g., Dr. Jane Doe" {...field} /></FormControl>
-                        <FormMessage />
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Dr. Jane Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
-                )}/>
+                  )}
+                />
 
-                <FormField control={form.control} name="email" render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl><Input placeholder="you@example.com" {...field} /></FormControl>
-                        <FormMessage />
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="you@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
-                )}/>
+                  )}
+                />
 
-                <FormField control={form.control} name="country" render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Country of Practice / Study</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select your country" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {countries.map(c => <SelectItem key={c.code} value={c.name}>{c.name}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
+                      <FormLabel>Country of Practice / Study</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {countries.map((c) => (
+                            <SelectItem key={c.code} value={c.name}>
+                              {c.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
                     </FormItem>
-                )}/>
+                  )}
+                />
 
-                <FormField control={form.control} name="role" render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Primary Role</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select your professional role" />
-                                </Trigger>
-                            </FormControl>
-                            <SelectContent>
-                                {profileTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                        <FormDescription>What is your main role in the eye care community?</FormDescription>
-                        <FormMessage />
+                      <FormLabel>Primary Role</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your professional role" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {profileTypes.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>What is your main role in the eye care community?</FormDescription>
+                      <FormMessage />
                     </FormItem>
-                )}/>
+                  )}
+                />
 
                 <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
                    {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Joining...</> : 'Join Now'}
