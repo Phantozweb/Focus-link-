@@ -40,6 +40,11 @@ const professionalLinks = [
     { name: 'Academics', href: '/directory/professionals/academics' },
 ];
 
+const companyLinks = [
+    { name: 'About Us', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+]
+
 export function Header() {
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 sticky top-0 z-40">
@@ -78,8 +83,16 @@ export function Header() {
                 </DropdownMenu>
 
                 <Button variant="ghost" asChild><Link href="/academy">Academy</Link></Button>
-                <Button variant="ghost" asChild><Link href="/about">About Us</Link></Button>
-                <Button variant="ghost" asChild><Link href="/contact">Contact</Link></Button>
+                 <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Company <ChevronDown className="ml-1 h-4 w-4" /></Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                     {companyLinks.map(link => (
+                        <DropdownMenuItem key={link.name} asChild><Link href={link.href}>{link.name}</Link></DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
             </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -127,8 +140,18 @@ export function Header() {
                     </Accordion>
 
                     <SheetClose asChild><Link href="/academy" className="px-3 py-2 rounded-md hover:bg-muted">Academy</Link></SheetClose>
-                    <SheetClose asChild><Link href="/about" className="px-3 py-2 rounded-md hover:bg-muted">About Us</Link></SheetClose>
-                    <SheetClose asChild><Link href="/contact" className="px-3 py-2 rounded-md hover:bg-muted">Contact</Link></SheetClose>
+                    <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="company" className="border-b-0">
+                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Company</AccordionTrigger>
+                            <AccordionContent className="pl-6">
+                                {companyLinks.map(link => (
+                                    <SheetClose asChild key={link.name}>
+                                        <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
+                                    </SheetClose>
+                                ))}
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
                     <SheetClose asChild>
                       <Button asChild className="mt-4">
                         <Link href="/membership">
