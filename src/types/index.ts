@@ -89,6 +89,7 @@ export type InterviewOutput = z.infer<typeof InterviewOutputSchema>;
 export const MessageSchema = z.object({
   role: z.enum(['user', 'model']),
   content: z.string(),
+  suggestions: z.array(z.string()).optional().describe("A list of suggested replies for the user to click."),
 });
 export type Message = z.infer<typeof MessageSchema>;
 
@@ -97,6 +98,7 @@ export type InterviewerChatInput = z.infer<typeof InterviewerChatInputSchema>;
 
 export const InterviewerChatOutputSchema = z.object({
     reply: z.string().optional().describe("The AI's next question or comment to the user. This is used for continuing the conversation."),
-    profile: InterviewOutputSchema.optional().describe("The final, complete user profile object. This is only provided when the AI has gathered all necessary information and the interview is complete."),
+    suggestions: z.array(z.string()).optional().describe("A list of suggested replies for the user to click to speed up the conversation."),
+    profile: InterviewOutputSchema.partial().optional().describe("The current state of the user profile object. This should be returned with every turn so the UI can show a live preview."),
 });
 export type InterviewerChatOutput = z.infer<typeof InterviewerChatOutputSchema>;

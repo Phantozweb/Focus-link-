@@ -20,14 +20,18 @@ export function Chat({ messages, onSendMessage }: ChatProps) {
   const [isSending, setIsSending] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = async () => {
-    if (input.trim()) {
+  const handleSend = async (text: string = input) => {
+    if (text.trim()) {
       setIsSending(true);
-      await onSendMessage(input);
       setInput('');
+      await onSendMessage(text);
       setIsSending(false);
     }
   };
+  
+  const handleSuggestionClick = (suggestion: string) => {
+    handleSend(suggestion);
+  }
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -46,27 +50,45 @@ export function Chat({ messages, onSendMessage }: ChatProps) {
             <div
               key={index}
               className={cn(
-                'flex items-start gap-3',
+                'flex items-start gap-3 w-full',
                 message.role === 'user' ? 'justify-end' : 'justify-start'
               )}
             >
               {message.role === 'model' && (
-                <Avatar className="h-8 w-8 border">
+                <Avatar className="h-8 w-8 border flex-shrink-0">
                   <AvatarFallback><Bot /></AvatarFallback>
                 </Avatar>
               )}
-              <div
-                className={cn(
-                  'rounded-lg px-4 py-3 max-w-[80%] whitespace-pre-wrap',
-                  message.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted'
-                )}
-              >
-                <p className="text-sm">{message.content}</p>
+              <div className={cn("flex flex-col", message.role === 'user' ? 'items-end' : 'items-start' )}>
+                  <div
+                    className={cn(
+                      'rounded-lg px-4 py-3 max-w-[90%] whitespace-pre-wrap',
+                      message.role === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
+                    )}
+                  >
+                    <p className="text-sm">{message.content}</p>
+                  </div>
+                  {message.role === 'model' && message.suggestions && message.suggestions.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {message.suggestions.map((suggestion, i) => (
+                           <Button 
+                              key={i} 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              disabled={isSending}
+                              className="text-primary border-primary/50 hover:bg-primary/10"
+                            >
+                              {suggestion}
+                           </Button>
+                        ))}
+                      </div>
+                  )}
               </div>
                {message.role === 'user' && (
-                <Avatar className="h-8 w-8 border">
+                <Avatar className="h-8 w-8 border flex-shrink-0">
                   <AvatarFallback><User /></AvatarFallback>
                 </Avatar>
               )}
@@ -95,7 +117,7 @@ export function Chat({ messages, onSendMessage }: ChatProps) {
             placeholder="Type your message..."
             disabled={isSending}
           />
-          <Button onClick={handleSend} disabled={isSending || !input.trim()} size="icon">
+          <Button onClick={() => handleSend()} disabled={isSending || !input.trim()} size="icon">
             <Send className="h-4 w-4" />
           </Button>
         </div>
