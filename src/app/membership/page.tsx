@@ -70,7 +70,6 @@ export default function MembershipPage() {
     setIsSubmitting(true);
 
     try {
-      // Use Netlify's recommended way to submit forms from React
       const response = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -96,6 +95,7 @@ export default function MembershipPage() {
 
   const closeSuccessDialog = () => {
     setShowSuccessDialog(false);
+    form.reset();
     router.push('/');
   }
 
@@ -198,7 +198,7 @@ export default function MembershipPage() {
             </div>
             <AlertDialogTitle className="text-center">Submission Received!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Thank you for your interest! Your membership application has been submitted for review.
+              Thank you for your interest! Your membership application has been submitted for review. You can see your submission in your Netlify dashboard.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
