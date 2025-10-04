@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 
@@ -87,12 +87,23 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                 <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                             </div>
                         </div>
-                        <Button size="lg" className="w-full text-lg py-6" asChild>
-                            <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
-                                <Ticket className="mr-2 h-6 w-6" />
-                                Register Now
-                            </a>
-                        </Button>
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
+                          <p className="font-bold text-primary flex items-center justify-center gap-2"><Users className="h-5 w-5" /> 100+ People Registered!</p>
+                        </div>
+                        <div className='space-y-3'>
+                            <Button size="lg" className="w-full text-lg py-6" asChild>
+                                <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
+                                    <Ticket className="mr-2 h-6 w-6" />
+                                    Register Now
+                                </a>
+                            </Button>
+                            <Button size="lg" variant="outline" className="w-full" asChild>
+                                <Link href="/membership">
+                                    <UserPlus className="mr-2 h-5 w-5" />
+                                    Become a Member
+                                </Link>
+                            </Button>
+                        </div>
                     </>
                 );
             case 'REGISTRATION_CLOSED':

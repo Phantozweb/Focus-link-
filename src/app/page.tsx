@@ -108,8 +108,8 @@ export default function Home() {
     <div className="bg-muted/40">
        <section className="relative py-20 md:py-28 bg-gradient-to-r from-cyan-600 to-blue-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Find Your Next Opportunity in Eye Care</h1>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">The world's largest eye care community to find, connect, and grow. Search for professionals, organizations, and resources.</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">The Global Hub for Visionaries in Eye Care</h1>
+          <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">Connect, Collaborate, and Grow in the World of Vision. Search for professionals, organizations, and resources.</p>
           <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
            <div className="flex flex-col md:flex-row gap-2 items-center">
              <div className="flex-grow w-full">

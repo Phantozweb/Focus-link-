@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
+import { UserPlus } from 'lucide-react';
 
 export function Header() {
   return (
@@ -24,7 +25,10 @@ export function Header() {
         <div className="flex flex-1 justify-end gap-4">
             <div className="flex gap-2">
                 <Button asChild className="bg-cyan-600 hover:bg-cyan-700">
-                  <Link href="/membership">Join</Link>
+                  <Link href="/membership">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Become a Member
+                  </Link>
                 </Button>
             </div>
              <div className="md:hidden">
