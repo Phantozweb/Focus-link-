@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -114,7 +115,7 @@ export default function MembershipPage() {
           <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-3 mb-2">
                 <UserPlus className="h-8 w-8 text-primary" />
-                <CardTitle className="text-3xl font-headline">Join Our Community</CardTitle>
+                <CardTitle className="text-3xl font-headline">Free Community Membership</CardTitle>
             </div>
             <CardDescription>
               Become a part of the world's largest eye care network. Fill out the form below to instantly become a member.
