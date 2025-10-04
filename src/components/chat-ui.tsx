@@ -20,8 +20,8 @@ export function Chat({ messages, onSendMessage }: ChatProps) {
   const [isSending, setIsSending] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = async (text: string = input) => {
-    if (text.trim()) {
+  const handleSend = async (text: string) => {
+    if (text.trim() && !isSending) {
       setIsSending(true);
       setInput('');
       await onSendMessage(text);
@@ -70,7 +70,7 @@ export function Chat({ messages, onSendMessage }: ChatProps) {
                   >
                     <p className="text-sm">{message.content}</p>
                   </div>
-                  {message.role === 'model' && message.suggestions && message.suggestions.length > 0 && (
+                  {index === messages.length - 1 && message.role === 'model' && message.suggestions && message.suggestions.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-2">
                         {message.suggestions.map((suggestion, i) => (
                            <Button 
@@ -113,11 +113,11 @@ export function Chat({ messages, onSendMessage }: ChatProps) {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && !isSending && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
             placeholder="Type your message..."
             disabled={isSending}
           />
-          <Button onClick={() => handleSend()} disabled={isSending || !input.trim()} size="icon">
+          <Button onClick={() => handleSend(input)} disabled={isSending || !input.trim()} size="icon">
             <Send className="h-4 w-4" />
           </Button>
         </div>
