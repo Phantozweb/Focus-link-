@@ -75,17 +75,41 @@ export default function MembershipPage() {
     }
 
     try {
+        // Step 1: Check if email exists
+        const checkEmailUrl = `${scriptUrl}?email=${encodeURIComponent(data.email)}`;
+        const emailCheckResponse = await fetch(checkEmailUrl, {
+            method: 'GET',
+            mode: 'cors',
+        });
+        const emailCheckResult = await emailCheckResponse.json();
+
+        if (emailCheckResult.exists) {
+            toast({
+                variant: 'destructive',
+                title: 'Already Registered',
+                description: 'This email address has already been submitted.',
+            });
+            setIsSubmitting(false);
+            return;
+        }
+
+        // Step 2: If email does not exist, proceed with submission
         const response = await fetch(scriptUrl, {
             method: 'POST',
-            mode: 'no-cors', // Important for Apps Script web apps to avoid CORS errors
+            mode: 'cors', 
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain;charset=utf-8', // Required for Apps Script
             },
             body: JSON.stringify(data),
         });
 
-        // Since no-cors prevents reading the response, we optimistically assume success.
-        setShowSuccessDialog(true);
+        const result = await response.json();
+
+        if (result.result === 'success') {
+          setShowSuccessDialog(true);
+        } else {
+           throw new Error(result.message || 'An unknown error occurred during submission.');
+        }
 
     } catch (error) {
       console.error(error);
@@ -188,7 +212,7 @@ export default function MembershipPage() {
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your professional role" />
-                          </Trigger>
+                          </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {profileTypes.map((type) => (
@@ -205,7 +229,7 @@ export default function MembershipPage() {
                 />
 
                 <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Joining...</> : 'Join Now'}
+                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Join Now'}
                 </Button>
               </form>
             </Form>
