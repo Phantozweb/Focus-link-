@@ -22,13 +22,14 @@ export function Footer() {
                 <h4 className="font-semibold mb-3">Community</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
                     <li><Link className="hover:text-white" href="/academy">Academy</Link></li>
-                    <li><Link className="hover:text-white" href="/join">Join the Directory</Link></li>
+                    <li><Link className="hover:text-white" href="/membership">Membership</Link></li>
                 </ul>
             </div>
             <div>
-                <h4 className="font-semibold mb-3">Company</h4>
+                <h4 className="font-semibold mb-3">About</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
                     <li><Link className="hover:text-white" href="/about">About Us</Link></li>
+                    <li><Link className="hover:text-white" href="/faq">FAQ</Link></li>
                     <li><Link className="hover:text-white" href="/contact">Contact</Link></li>
                     <li><Link className="hover:text-white" href="/terms">Terms of Service</Link></li>
                 </ul>

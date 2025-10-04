@@ -10,10 +10,15 @@ const membersFilePath = path.join(process.cwd(), 'src/lib/members.json');
 
 async function getMembers() {
     try {
+        await fs.access(membersFilePath);
         const fileContent = await fs.readFile(membersFilePath, 'utf-8');
+        // If file is empty, JSON.parse will fail.
+        if (fileContent.trim() === '') {
+            return [];
+        }
         return JSON.parse(fileContent);
     } catch (error) {
-        // If the file doesn't exist or is empty, return an empty array.
+        // If the file doesn't exist, return an empty array.
         return [];
     }
 }
