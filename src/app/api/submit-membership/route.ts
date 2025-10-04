@@ -35,7 +35,7 @@ export async function POST(request: Request) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-        redirect: 'follow',
+        redirect: 'follow', // This is the crucial fix
     });
 
      // Check if the response from Google is okay before parsing
