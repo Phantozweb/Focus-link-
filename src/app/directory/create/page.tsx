@@ -1,58 +1,129 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Bot, FileText, ArrowRight } from "lucide-react";
-import Link from "next/link";
+'use client';
+
+import { useState, useTransition } from 'react';
+import { Chat } from '@/components/chat-ui';
+import { interviewerChat } from '@/ai/flows/interviewer-chat';
+import type { Message, InterviewerChatOutput } from '@/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { User, CheckCircle, PartyPopper } from 'lucide-react';
+import { ProfileCard } from '@/components/profile-card';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 export default function CreateProfilePage() {
-    return (
-        <div className="bg-muted/40">
-            <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-                <div className="container mx-auto px-4 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Create Your Professional Profile</h1>
-                <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-                    Let our AI help you build a standout profile for the eye care community. Choose your preferred method below.
-                </p>
-                </div>
-            </section>
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'model', content: "Hello! I'm the Focus Links AI Interviewer. I'll ask you a few questions to help build your professional profile. To start, what is your full name?" },
+  ]);
+  const [liveProfile, setLiveProfile] = useState<InterviewerChatOutput['profile'] | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const { toast } = useToast();
 
-            <div className="container mx-auto max-w-4xl py-16 px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <Card className="flex flex-col">
-                        <CardHeader>
-                            <div className="flex justify-center mb-4">
-                                <Bot className="h-12 w-12 text-primary" />
-                            </div>
-                            <CardTitle className="text-center">AI Interview Chat</CardTitle>
-                            <CardDescription className="text-center">
-                                Have a natural conversation with our AI assistant. It will ask you questions one by one to build your profile.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow flex flex-col justify-end">
-                            <Button asChild className="w-full">
-                                <Link href="/directory/create/chat">Start Chat Interview <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                            </Button>
-                        </CardContent>
-                    </Card>
+  const handleSendMessage = async (text: string) => {
+    const newMessages: Message[] = [...messages, { role: 'user', content: text }];
+    setMessages(newMessages);
 
-                     <Card className="flex flex-col">
-                        <CardHeader>
-                            <div className="flex justify-center mb-4">
-                                <FileText className="h-12 w-12 text-primary" />
-                            </div>
-                            <CardTitle className="text-center">AI Profile Builder</CardTitle>
-                            <CardDescription className="text-center">
-                                Paste your existing resume, bio, or just write about yourself. Our AI will parse it and create a structured profile for you.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow flex flex-col justify-end">
-                             <Button asChild className="w-full">
-                                <Link href="/directory/create/from-text">Use Text Builder <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </div>
+    startTransition(async () => {
+      try {
+        const result = await interviewerChat(newMessages);
+        const { reply, suggestions, profile } = result;
+
+        if (profile) {
+            setLiveProfile(profile);
+        }
+
+        if (reply) {
+            setMessages(prev => [...prev, { role: 'model', content: reply, suggestions }]);
+        }
+        
+        if (profile?.id) {
+            setShowSuccessDialog(true);
+        }
+
+      } catch (error) {
+        console.error('AI Chat Error:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'The AI assistant ran into a problem. Please try again.',
+        });
+        setMessages(messages);
+      }
+    });
+  };
+  
+  const handleApprove = async () => {
+    if (!liveProfile) return;
+    setShowSuccessDialog(false);
+    toast({
+        title: "Profile Created!",
+        description: "Your new profile is now available in the directory.",
+    });
+    setMessages([messages[0]]);
+    setLiveProfile(null);
+  }
+
+  return (
+    <div className="bg-muted/40">
+        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
+            <div className="container mx-auto px-4 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">AI Profile Creation</h1>
+            <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+                Have a natural conversation with our AI assistant. It will ask you questions one by one to build your professional profile.
+            </p>
             </div>
+        </section>
+    
+        <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div className="lg:col-span-2 h-[70vh]">
+              <Chat messages={messages} onSendMessage={handleSendMessage} />
+            </div>
+            <div className="lg:col-span-1">
+              <Card className="sticky top-24">
+                <CardHeader>
+                  <CardTitle>Live Profile Preview</CardTitle>
+                  <CardDescription>As you answer, your profile will be updated here in real-time.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {liveProfile && liveProfile.name ? (
+                    <ProfileCard user={{...liveProfile, id: 'preview'} as any} hideButton={true} />
+                  ) : (
+                    <div className="text-center py-10 text-muted-foreground">
+                      <User className="h-12 w-12 mx-auto mb-2 text-gray-400" />
+                      <p>Your profile preview will appear here.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
-    );
+      
+       <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+             <div className="flex justify-center">
+              <PartyPopper className="h-16 w-16 text-green-500" />
+            </div>
+            <AlertDialogTitle className="text-center">Profile Ready!</AlertDialogTitle>
+            <AlertDialogDescription className="text-center">
+              The AI has finished creating your profile. Please review the final version. You can now add it to the directory.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+           {liveProfile && (
+              <div className="my-4">
+                <ProfileCard user={liveProfile as any} hideButton />
+              </div>
+            )}
+          <AlertDialogFooter>
+            <Button variant="outline" onClick={() => setShowSuccessDialog(false)}>Make Changes</Button>
+            <AlertDialogAction onClick={handleApprove}>Looks Good, Create Profile</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
 }
