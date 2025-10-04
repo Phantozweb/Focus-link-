@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 
 export function useDynamicFields(form: any, fieldName: string) {
   const { control } = form;
@@ -10,12 +10,21 @@ export function useDynamicFields(form: any, fieldName: string) {
     name: fieldName,
   });
 
+  const add = () => {
+    let newItem: any = {};
+    if (fieldName === 'skills' || fieldName === 'interests' || fieldName === 'languages') {
+        newItem = { value: '' };
+    } else if (fieldName === 'workExperience') {
+        newItem = { title: '', company: '', startDate: '', endDate: '', description: '' };
+    } else if (fieldName === 'education') {
+        newItem = { school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' };
+    }
+    append(newItem);
+  };
+
   return {
     fields,
-    add: (value: any) => append(value),
+    add,
     remove,
   };
 }
-
-
-    

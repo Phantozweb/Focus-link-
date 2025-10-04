@@ -316,7 +316,7 @@ export default function Home() {
                 <EmptyStateCTA
                     title="No Associations Found"
                     ctaText="Be the First to Join!"
-                    ctaLink="/join"
+                    ctaLink="/membership"
                     icon={<UserPlus className="h-12 w-12" />}
                 />
              )}
@@ -345,7 +345,7 @@ export default function Home() {
                 <EmptyStateCTA
                     title="No Colleges Found"
                     ctaText="List Your Institution"
-                    ctaLink="/join"
+                    ctaLink="/membership"
                     icon={<Building className="h-12 w-12" />}
                 />
              )}
@@ -374,7 +374,7 @@ export default function Home() {
                 <EmptyStateCTA
                     title="No Clinics Found"
                     ctaText="Add Your Practice"
-                    ctaLink="/join"
+                    ctaLink="/membership"
                     icon={<Hospital className="h-12 w-12" />}
                 />
             )}
@@ -403,7 +403,7 @@ export default function Home() {
                  <EmptyStateCTA
                     title="No Industry Partners Found"
                     ctaText="Join as a Partner"
-                    ctaLink="/join"
+                    ctaLink="/membership"
                     icon={<Factory className="h-12 w-12" />}
                 />
             )}

@@ -24,7 +24,7 @@ export function Header() {
         <div className="flex flex-1 justify-end gap-4">
             <div className="flex gap-2">
                 <Button asChild className="bg-cyan-600 hover:bg-cyan-700">
-                  <Link href="/join">Join</Link>
+                  <Link href="/membership">Join</Link>
                 </Button>
             </div>
              <div className="md:hidden">
@@ -63,7 +63,7 @@ export function Header() {
                         </Link>
                     </SheetClose>
                     <SheetClose asChild>
-                        <Link href="/join" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
+                        <Link href="/membership" className="flex items-center gap-3 text-lg font-medium text-foreground transition-colors hover:text-primary">
                           <span className="material-symbols-outlined">person_add</span> Join Directory
                         </Link>
                     </SheetClose>
