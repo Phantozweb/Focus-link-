@@ -1,20 +1,50 @@
-
 import { NextResponse } from 'next/server';
 
-// This API route is no longer used for form submissions,
-// as Netlify Forms will handle it directly. This file can be removed
-// or kept as a placeholder. We will respond with a 405 Method Not Allowed
-// to indicate this endpoint doesn't handle POST requests anymore.
-
 export async function POST(request: Request) {
-  return NextResponse.json(
-    { message: 'This form is now handled by Netlify Forms.' },
-    { status: 405 }
-  );
-}
+  if (!process.env.DISCORD_WEBHOOK_URL) {
+    console.error('DISCORD_WEBHOOK_URL environment variable is not set.');
+    return NextResponse.json({ message: 'Server configuration error: Webhook URL is missing.' }, { status: 500 });
+  }
 
-// A GET endpoint might be useful for other purposes later,
-// but for now, it can also indicate it's not in use.
-export async function GET() {
-    return NextResponse.json({ message: "This endpoint is not configured for GET requests." }, { status: 405 });
+  try {
+    const data = await request.json();
+    const { name, email, country, role } = data;
+
+    if (!name || !email || !country || !role) {
+      return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+    }
+
+    const discordPayload = {
+      embeds: [
+        {
+          title: 'New Membership Application',
+          color: 3447003, // A nice blue color
+          fields: [
+            { name: 'Name', value: name, inline: true },
+            { name: 'Email', value: email, inline: true },
+            { name: 'Country', value: country, inline: true },
+            { name: 'Role', value: role, inline: true },
+          ],
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    };
+
+    const discordResponse = await fetch(process.env.DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(discordPayload),
+    });
+
+    if (!discordResponse.ok) {
+      console.error('Failed to send to Discord:', discordResponse.status, await discordResponse.text());
+      return NextResponse.json({ message: 'Failed to send notification' }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: 'Submission successful' }, { status: 200 });
+
+  } catch (error) {
+    console.error('Error processing submission:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+  }
 }

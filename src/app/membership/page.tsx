@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { UserPlus, Loader2, CheckCircle, PartyPopper } from 'lucide-react';
+import { UserPlus, Loader2, PartyPopper } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 
@@ -58,35 +58,30 @@ export default function MembershipPage() {
       email: '',
     },
   });
-
-  // Helper to encode the form data for Netlify
-  const encode = (data: Record<string, any>) => {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-      .join("&");
-  }
   
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode({ "form-name": "membership", ...data }),
+      const response = await fetch('/api/submit-membership', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
         setShowSuccessDialog(true);
       } else {
-        throw new Error('Network response was not ok.');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Network response was not ok.');
       }
     } catch (error) {
       console.error(error);
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
       toast({
         variant: 'destructive',
         title: 'Submission Error',
-        description: 'Could not submit your application. Please try again.',
+        description: `Could not submit your application: ${errorMessage}`,
       });
     } finally {
       setIsSubmitting(false);
@@ -114,22 +109,10 @@ export default function MembershipPage() {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              {/* Add Netlify form attributes */}
               <form 
-                name="membership"
-                data-netlify="true"
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
-                data-netlify-honeypot="bot-field"
               >
-                {/* This input is required for Netlify forms to work correctly */}
-                <input type="hidden" name="form-name" value="membership" />
-                <p className="hidden">
-                  <label>
-                    Don’t fill this out if you’re human: <input name="bot-field" />
-                  </label>
-                </p>
-
                 <FormField control={form.control} name="name" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Full Name</FormLabel>
@@ -170,7 +153,7 @@ export default function MembershipPage() {
                             <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select your professional role" />
-                                </SelectTrigger>
+                                </Trigger>
                             </FormControl>
                             <SelectContent>
                                 {profileTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
@@ -198,7 +181,7 @@ export default function MembershipPage() {
             </div>
             <AlertDialogTitle className="text-center">Submission Received!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Thank you for your interest! Your membership application has been submitted for review. You can see your submission in your Netlify dashboard.
+              Thank you for your interest! Your membership application has been sent to our team for review. We'll be in touch shortly.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
