@@ -1,78 +1,13 @@
 
-
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
 
-// This file is being repurposed for verification instead of review.
-// A proper database is recommended for production apps.
-
-const membersPath = path.join(process.cwd(), 'src/lib/members.json');
-const mainDataPath = path.join(process.cwd(), 'src/lib/data.ts');
-
-async function readJsonFile(filePath: string) {
-    try {
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        return []; // Return empty array if file doesn't exist
-    }
-}
-
-async function updateUserVerification(userId: string, verifiedStatus: boolean) {
-    // This is a simplified and potentially unsafe way to update the live `data.ts` file.
-    // It's for demonstration purposes and not suitable for production.
-    try {
-        let mainDataContent = await fs.readFile(mainDataPath, 'utf-8');
-        
-        // Use a regex to find the specific user and update their verified status.
-        // This is fragile and depends on the exact formatting.
-        const userRegex = new RegExp(`(id: '${userId.replace(/'/g, "\\'")}',[\\s\\S]*?verified: )(false|true)`);
-        
-        const match = mainDataContent.match(userRegex);
-
-        if (match) {
-            mainDataContent = mainDataContent.replace(userRegex, `$1${verifiedStatus}`);
-            await fs.writeFile(mainDataPath, mainDataContent, 'utf-8');
-            console.log(`Updated verification for user ${userId} to ${verifiedStatus} in data.ts`);
-        } else {
-            console.warn(`User with id ${userId} not found in data.ts for verification update.`);
-        }
-
-    } catch (e) {
-        console.error(`Failed to update verification status in data.ts for user ${userId}:`, e);
-    }
-}
-
+// This API route is no longer used and can be safely deleted.
+// It is being replaced by the /api/verify endpoint and a manual
+// data entry workflow that is compatible with serverless environments.
 
 export async function POST(request: Request) {
-  try {
-    const { memberId, action } = await request.json(); // action is 'verify' or 'unverify'
-
-    if (!memberId || !action) {
-      return NextResponse.json({ message: 'Missing memberId or action' }, { status: 400 });
-    }
-
-    const members = await readJsonFile(membersPath);
-    const memberIndex = members.findIndex((m: any) => m.id === memberId);
-
-    if (memberIndex === -1) {
-      return NextResponse.json({ message: 'Member not found' }, { status: 404 });
-    }
-
-    const shouldBeVerified = action === 'verify';
-    members[memberIndex].verified = shouldBeVerified;
-    
-    // Also update the main `users` array in data.ts if the user exists there
-    // Note: In this demo, not all members might be in `data.ts`, but we try to update if they are.
-    await updateUserVerification(memberId, shouldBeVerified);
-
-    await fs.writeFile(membersPath, JSON.stringify(members, null, 2));
-
-    return NextResponse.json({ message: `Member status updated to ${action}` }, { status: 200 });
-
-  } catch (error) {
-    console.error('Error processing verification:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-  }
+  return NextResponse.json(
+    { message: 'This endpoint is deprecated.' },
+    { status: 410 }
+  );
 }
