@@ -186,6 +186,11 @@ export default function Home() {
              <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>Search</Button>
            </div>
          </div>
+         <div className="mt-4">
+            <Link href="/membership" className="text-white hover:text-blue-200 text-sm font-semibold">
+                Become a Member for Free
+            </Link>
+         </div>
         </div>
       </section>
 
@@ -391,7 +396,7 @@ export default function Home() {
                 <Carousel opts={{ align: "start" }} className="w-full">
                 <CarouselContent className="-ml-4">
                     {industry.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                    <CarouselItem key={user.id} className="md:basis-1-2 lg:basis-1-3 pl-4">
                         <ProfileCard user={user} />
                     </CarouselItem>
                     ))}

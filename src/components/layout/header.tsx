@@ -83,14 +83,6 @@ export function Header() {
             </nav>
         </div>
         <div className="flex flex-1 justify-end gap-4">
-            <div className="flex gap-2">
-                <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
-                  <Link href="/membership">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Membership
-                  </Link>
-                </Button>
-            </div>
              <div className="md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
