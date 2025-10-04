@@ -2,7 +2,7 @@
 'use server';
 
 /**
- * @fileOverview An AI flow that acts as a conversational interviewer, asking questions to fill out a user profile.
+ * @fileOverview An AI flow that acts as a conversational interviewer, asking questions to fill out a user profile and scoring its completeness.
  *
  * - interviewerChat - A function that handles a single turn in the conversation.
  */
@@ -13,10 +13,8 @@ import {
   InterviewerChatInput, 
   InterviewerChatInputSchema, 
   InterviewerChatOutput, 
-  InterviewerChatOutputSchema, 
-  InterviewOutputSchema 
+  InterviewerChatOutputSchema 
 } from '@/types';
-
 
 // The main function that will be called from the frontend for each turn of the conversation
 export async function interviewerChat(history: InterviewerChatInput): Promise<InterviewerChatOutput> {
@@ -27,41 +25,37 @@ export async function interviewerChat(history: InterviewerChatInput): Promise<In
 const interviewerChatPrompt = ai.definePrompt({
   name: 'interviewerChatPrompt',
   input: { schema: InterviewerChatInputSchema },
-  output: { schema: InterviewerChatOutputSchema.extend({ profile: InterviewOutputSchema.partial().optional() }) },
+  output: { schema: InterviewerChatOutputSchema },
   
-  prompt: `You are the "Focus Links Interviewer AI," a friendly and efficient chatbot whose job is to help users create a professional profile for an eye care directory.
+  prompt: `You are the "Focus Links Interviewer AI," a friendly and efficient chatbot whose job is to help users create a professional profile for an eye care directory by conducting a structured interview.
 
-Your goal is to gather all the necessary information by having a natural conversation. You will ask questions one at a time until you have enough information to fill out the user's profile completely.
+Your goal is to gather all necessary information by having a natural conversation and to score the completeness of the profile.
 
 **Your process:**
-1.  **Analyze and Update**: Look at the conversation history and the most recent user message. Extract any new information and update the \`profile\` object. **You must return the updated \`profile\` object in every single turn.**
-2.  **Start the Conversation**: If this is the first message (history has 1 message), greet the user and ask for their full name.
-3.  **Ask the Next Question**: Based on what's missing from the profile, ask the single most important next question. Be specific. For example, if you have their name, ask for their profile type. If you have their type, ask for their location.
-4.  **Use Suggested Replies**: Whenever it makes sense, provide suggested replies to speed things up. For example, when asking for the profile type, provide the valid options as suggestions.
-5.  **Gather All Info**: Continue this conversational loop, asking one question at a time, until you have gathered all required fields for the user's profile (name, type, location, experience, bio, skills, interests, links, workExperience, education, languages).
-6.  **Finalize the Profile**: Once all fields are filled and you have confirmed with the user, your final text reply should be something like "Your profile is complete! You can now submit it." and provide the final, complete profile object.
+1.  **Analyze Conversation**: Review the entire conversation history.
+2.  **Calculate Completeness Score**: Based on the information gathered so far, calculate a \`completenessScore\` from 0 to 10. Each of the 10 core fields you gather (name, type, location, experience, bio, skills, interests, links, work experience, education) is worth 1 point.
+3.  **Ask the Next Question**: Determine the most important piece of missing information and ask the user a single, clear question to get it.
+4.  **Provide Suggestions**: When appropriate, provide suggested replies to make it easier for the user (e.g., for profile type).
+5.  **Finalize**: Once the score reaches 10/10, your final reply should be "Your profile is complete! You can now submit it." and you should stop asking questions.
 
-**Profile Schema to Fill:**
-- **name**: Full name.
-- **type**: One of: 'Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'.
-- **location**: City, State, Country.
-- **experience**: A short headline (e.g., "5+ years in pediatric optometry").
-- **skills**: An array of professional skills.
-- **interests**: An array of professional interests.
-- **bio**: A professional summary. You must **generate** a new one based on the conversation once all other information is gathered. Do not just copy text.
-- **links**: Email and LinkedIn/website.
-- **workExperience**: Array of jobs (title, company, startDate, endDate).
-- **education**: Array of degrees (school, degree, startYear, endYear).
-- **languages**: Array of languages spoken.
-- **avatarUrl**: Use the default: 'https://i.ibb.co/jG6L8p3/default-avatar.png'
-- **verified**: Use the default: false
+**Fields to gather (1 point each):**
+- name: Full name.
+- type: 'Student', 'Optometrist', etc.
+- location: City, State, Country.
+- experience: A short headline.
+- bio: A professional summary.
+- skills: An array of skills.
+- interests: An array of interests.
+- links: Email and LinkedIn/website.
+- workExperience: At least one job.
+- education: At least one degree.
 
 **Conversation History:**
 {{#each this}}
   **{{role}}**: {{#if content}}{{content}}{{/if}}
 {{/each}}
 
-Based on the history, update the profile object, and then decide what to ask next. Always return the current state of the profile.`,
+Based on the history, calculate the score and decide what to ask next.`,
 });
 
 
@@ -76,23 +70,6 @@ const interviewerChatFlow = ai.defineFlow(
     if (!output) {
       throw new Error("AI failed to generate a response.");
     }
-    
-    // Check if the profile is complete enough to finalize
-    const p = output.profile;
-    const isComplete = p && p.name && p.type && p.location && p.experience && p.bio && p.skills && p.skills.length > 0 && p.interests && p.interests.length > 0 && p.links?.email && p.workExperience && p.education && p.languages;
-
-    // Add the ID only when the AI says it is complete AND all fields are present
-    if (isComplete && output.reply?.includes('complete') && !p.id) {
-        return {
-            ...output,
-            profile: {
-                ...p,
-                id: String(Date.now()), // Assign ID at the very end
-            },
-        };
-    }
-    
-    // Otherwise, just return the partial progress
     return output;
   }
 );

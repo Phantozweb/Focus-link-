@@ -58,8 +58,8 @@ export const EducationSchema = z.object({
 });
 
 export const LinksSchema = z.object({
-    email: z.string().email().describe("The user's email address.").optional(),
-    linkedin: z.string().url().describe("A URL to the user's LinkedIn profile or personal website.").optional(),
+    email: z.string().email().optional(),
+    linkedin: z.string().url().optional(),
 });
 
 export const InterviewInputSchema = z.object({
@@ -99,6 +99,6 @@ export type InterviewerChatInput = z.infer<typeof InterviewerChatInputSchema>;
 export const InterviewerChatOutputSchema = z.object({
     reply: z.string().optional().describe("The AI's next question or comment to the user. This is used for continuing the conversation."),
     suggestions: z.array(z.string()).optional().describe("A list of suggested replies for the user to click to speed up the conversation."),
-    profile: InterviewOutputSchema.partial().optional().describe("The current state of the user profile object. This should be returned with every turn so the UI can show a live preview."),
+    completenessScore: z.number().min(0).max(10).describe("A score from 0-10 representing the completeness of the user's profile based on the conversation."),
 });
 export type InterviewerChatOutput = z.infer<typeof InterviewerChatOutputSchema>;
