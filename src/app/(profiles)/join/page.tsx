@@ -90,64 +90,29 @@ export default function JoinPage() {
         return;
     }
     setIsSubmitting(true);
-    
-    const webhookUrl = 'https://discord.com/api/webhooks/1416675826577182780/gxAG9Kz0YJB1v9dRRA0TRMs2oDXH6CLOomD_qqzPjab0Iy78oWQ64n3bDc1tFnL-oa-k';
-
-    let details = `**Profile Type**: ${generatedProfile.type}\n`;
-    details += `**Location**: ${generatedProfile.location}\n`;
-    details += `**Headline/Tagline**: ${generatedProfile.experience}\n`;
-    details += `**Bio/Description**: ${generatedProfile.bio}\n`;
-    if (generatedProfile.skills && generatedProfile.skills.length > 0) details += `**Skills**: ${generatedProfile.skills.join(', ')}\n`;
-    if (generatedProfile.interests && generatedProfile.interests.length > 0) details += `**Interests**: ${generatedProfile.interests.join(', ')}\n`;
-
-    if (generatedProfile.links?.email) {
-      details += `**Email**: ${generatedProfile.links.email}\n`;
-    }
-    if (generatedProfile.links?.linkedin) {
-      details += `**LinkedIn/Website**: ${generatedProfile.links.linkedin}\n`;
-    }
-    if (generatedProfile.languages && generatedProfile.languages.length > 0) {
-      details += `**Languages**: ${generatedProfile.languages.join(', ')}\n`;
-    }
-    if (generatedProfile.workExperience && generatedProfile.workExperience.length > 0) {
-      details += `**Work Experience**: ${generatedProfile.workExperience.map(w => `${w.title} at ${w.company} (${w.startDate} - ${w.endDate})`).join('; ')}\n`;
-    }
-    if (generatedProfile.education && generatedProfile.education.length > 0) {
-      details += `**Education**: ${generatedProfile.education.map(e => `${e.degree} from ${e.school} (${e.startYear} - ${e.endYear})`).join('; ')}\n`;
-    }
-
-    const embed = {
-      title: `New Profile Submission: ${generatedProfile.name}`,
-      color: 3447003, // A nice blue color
-      description: `\`\`\`${details}\`\`\``,
-      footer: {
-        text: `Profile ID: ${generatedProfile.id}`
-      },
-      timestamp: new Date().toISOString()
-    };
-    
-    const formData = new FormData();
-    formData.append('payload_json', JSON.stringify({ embeds: [embed] }));
 
     try {
-      const response = await fetch(webhookUrl, {
+      const response = await fetch('/api/submissions', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(generatedProfile),
       });
 
       if (response.ok) {
         setShowSuccessDialog(true);
       } else {
         const errorData = await response.json();
-        console.error('Discord Webhook Error:', errorData);
+        console.error('Submission API Error:', errorData);
         toast({
           variant: 'destructive',
           title: 'Submission Failed',
-          description: 'Could not send data to Discord. Please check the logs.',
+          description: errorData.message || 'Could not submit your profile. Please try again later.',
         });
       }
     } catch (error) {
-      console.error('Submission Error:', error);
+      console.error('Submission Fetch Error:', error);
       toast({
         variant: 'destructive',
         title: 'Submission Error',
