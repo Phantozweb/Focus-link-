@@ -43,7 +43,7 @@ export default function JoinPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [generatedProfile, setGeneratedProfile] = useState<Partial<UserProfile>>(defaultProfile);
+  const [generatedProfile, setGeneratedProfile] = useState<Partial<UserProfile>>({});
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'model',
@@ -171,11 +171,11 @@ export default function JoinPage() {
 
   const startOver = () => {
       setIsComplete(false);
-      setGeneratedProfile(defaultProfile);
+      setGeneratedProfile({});
       setMessages([
         {
           role: 'model',
-          content: "Hello! I'm the Focus Links Interviewer AI. Let's start over. Tell me a bit about yourself to begin creating your profile.",
+          content: "Hello! I'm the Focus Links Interviewer AI. Let's start over. What is your full name?",
         },
       ]);
   }

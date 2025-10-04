@@ -8,7 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import { 
   InterviewerChatInput, 
   InterviewerChatInputSchema, 
@@ -60,7 +60,7 @@ Your goal is to gather all the necessary information by having a natural convers
 
 **Conversation History:**
 {{#each this}}
-  **{{role}}**: {{content}}
+  **{{role}}**: {{#if content}}{{content}}{{/if}}
 {{/each}}
 
 Based on the history, update the profile object, and then decide what to ask next. Always return the current state of the profile.`,
