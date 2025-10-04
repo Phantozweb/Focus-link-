@@ -205,7 +205,7 @@ export default function JoinPage() {
                       <p className="text-muted-foreground">Your profile will update here as you answer questions.</p>
                   </div>
                   <div className="max-w-md mx-auto">
-                      <ProfileCard user={finalProfile} />
+                      <ProfileCard user={finalProfile} hideButton />
                   </div>
 
                   {isComplete && (
