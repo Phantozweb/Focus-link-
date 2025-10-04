@@ -51,7 +51,7 @@ export default function JoinPage() {
       }
       
       // Check if the profile is complete by seeing if an ID has been assigned by the flow
-      if (result.profile?.id && result.profile.id !== 'preview') {
+      if (result.profile?.id) {
         setIsComplete(true);
         toast({
             title: 'Profile Generated!',
@@ -73,7 +73,7 @@ export default function JoinPage() {
 
 
   async function onSubmit() {
-    if (!isComplete || !generatedProfile) {
+    if (!isComplete || !generatedProfile.id) {
         toast({ variant: 'destructive', title: 'Please complete the interview to generate a full profile first.' });
         return;
     }
@@ -85,8 +85,8 @@ export default function JoinPage() {
     details += `**Location**: ${generatedProfile.location}\n`;
     details += `**Headline/Tagline**: ${generatedProfile.experience}\n`;
     details += `**Bio/Description**: ${generatedProfile.bio}\n`;
-    if (generatedProfile.skills) details += `**Skills**: ${generatedProfile.skills.join(', ')}\n`;
-    if (generatedProfile.interests) details += `**Interests**: ${generatedProfile.interests.join(', ')}\n`;
+    if (generatedProfile.skills && generatedProfile.skills.length > 0) details += `**Skills**: ${generatedProfile.skills.join(', ')}\n`;
+    if (generatedProfile.interests && generatedProfile.interests.length > 0) details += `**Interests**: ${generatedProfile.interests.join(', ')}\n`;
 
     if (generatedProfile.links?.email) {
       details += `**Email**: ${generatedProfile.links.email}\n`;
