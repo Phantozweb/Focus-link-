@@ -13,6 +13,14 @@ export async function POST(request: Request) {
         method: 'GET',
         redirect: 'follow',
     });
+    
+    // Check if the response from Google is okay before parsing
+    if (!emailCheckResponse.ok) {
+        // Log the error response from Google Apps Script for debugging
+        const errorText = await emailCheckResponse.text();
+        console.error('Google Apps Script (GET) returned an error:', errorText);
+        return NextResponse.json({ result: 'error', message: 'Error checking email with Google Sheets.' }, { status: emailCheckResponse.status });
+    }
 
     const emailCheckResult = await emailCheckResponse.json();
 
@@ -29,6 +37,13 @@ export async function POST(request: Request) {
         body: JSON.stringify(data),
         redirect: 'follow',
     });
+
+     // Check if the response from Google is okay before parsing
+    if (!postResponse.ok) {
+        const errorText = await postResponse.text();
+        console.error('Google Apps Script (POST) returned an error:', errorText);
+        return NextResponse.json({ result: 'error', message: 'Error submitting data to Google Sheets.' }, { status: postResponse.status });
+    }
 
     const postResult = await postResponse.json();
 

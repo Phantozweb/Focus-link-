@@ -71,6 +71,12 @@ export default function MembershipPage() {
             body: JSON.stringify(data),
         });
 
+        // The response from our own API should be OK
+        if (!response.ok) {
+            const errorResult = await response.json().catch(() => ({ message: 'An unexpected API error occurred.' }));
+            throw new Error(errorResult.message || `API responded with status: ${response.status}`);
+        }
+
         const result = await response.json();
 
         if (result.exists) {
@@ -82,6 +88,7 @@ export default function MembershipPage() {
         } else if (result.result === 'success') {
             setShowSuccessDialog(true);
         } else {
+           // Handle logical errors returned from our API (e.g., from Google's end)
            throw new Error(result.message || 'An unknown error occurred during submission.');
         }
 
