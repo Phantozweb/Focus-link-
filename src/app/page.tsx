@@ -186,10 +186,10 @@ export default function Home() {
              <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>Search</Button>
            </div>
          </div>
-         <div className="mt-4">
-            <Link href="/membership" className="text-white hover:text-blue-200 text-sm font-semibold">
-                Become a Member for Free
-            </Link>
+         <div className="mt-6">
+            <Button asChild size="lg" variant="secondary" className="bg-white/90 text-primary hover:bg-white">
+                <Link href="/membership">Become a Member for Free</Link>
+            </Button>
          </div>
         </div>
       </section>
