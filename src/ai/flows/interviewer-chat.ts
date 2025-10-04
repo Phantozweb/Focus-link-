@@ -69,7 +69,7 @@ Your goal is to gather all the necessary information by having a natural convers
 - **workExperience**: Array of jobs (title, company, dates).
 - **education**: Array of degrees (school, degree, dates).
 - **languages**: Array of languages spoken.
-- **avatarUrl**: Use the default: 'https://iili.io/Jodp9gI.png'
+- **avatarUrl**: Use the default: 'https://i.ibb.co/jG6L8p3/default-avatar.png'
 - **verified**: Use the default: false
 - **id**: DO NOT generate this field.
 
