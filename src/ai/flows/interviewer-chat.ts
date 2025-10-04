@@ -78,26 +78,21 @@ const interviewerChatFlow = ai.defineFlow(
     }
     
     // Check if the profile is complete enough to finalize
-    const isComplete = output.profile && 
-        output.profile.name &&
-        output.profile.type &&
-        output.profile.location &&
-        output.profile.experience &&
-        output.profile.bio &&
-        output.profile.skills && output.profile.skills.length > 0 &&
-        output.profile.interests && output.profile.interests.length > 0;
+    const p = output.profile;
+    const isComplete = p && p.name && p.type && p.location && p.experience && p.bio && p.skills && p.skills.length > 0 && p.interests && p.interests.length > 0 && p.links?.email && p.workExperience && p.education && p.languages;
 
-    // Ensure the ID is added only at the end when the profile is complete
-    if (isComplete && !output.profile.id) {
+    // Add the ID only when the AI says it is complete AND all fields are present
+    if (isComplete && output.reply?.includes('complete') && !p.id) {
         return {
             ...output,
             profile: {
-                ...output.profile,
-                id: String(Date.now()),
+                ...p,
+                id: String(Date.now()), // Assign ID at the very end
             },
         };
     }
-
+    
+    // Otherwise, just return the partial progress
     return output;
   }
 );
