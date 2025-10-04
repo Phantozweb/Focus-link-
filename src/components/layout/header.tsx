@@ -55,7 +55,7 @@ export function Header() {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">Directory <ChevronDown className="ml-1 h-4 w-4" /></Button>
+                    <Button variant="ghost" className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">Directory <ChevronDown className="ml-1 h-4 w-4" /></Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     {directoryLinks.map(link => (
@@ -82,7 +82,15 @@ export function Header() {
                 <Button variant="ghost" asChild><Link href="/contact">Contact</Link></Button>
             </nav>
         </div>
-        <div className="flex flex-1 justify-end gap-4">
+        <div className="flex items-center gap-4">
+             <div className="hidden md:flex">
+                <Button asChild>
+                  <Link href="/membership">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Membership
+                  </Link>
+                </Button>
+            </div>
              <div className="md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
@@ -97,7 +105,7 @@ export function Header() {
                     
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="directory" className="border-b-0">
-                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted">Directory</AccordionTrigger>
+                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Directory</AccordionTrigger>
                             <AccordionContent className="pl-6">
                                 {directoryLinks.map(link => (
                                     <SheetClose asChild key={link.name}>
@@ -107,7 +115,7 @@ export function Header() {
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="professionals" className="border-b-0">
-                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted">Professionals</AccordionTrigger>
+                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Professionals</AccordionTrigger>
                             <AccordionContent className="pl-6">
                                 {professionalLinks.map(link => (
                                     <SheetClose asChild key={link.name}>
@@ -121,7 +129,14 @@ export function Header() {
                     <SheetClose asChild><Link href="/academy" className="px-3 py-2 rounded-md hover:bg-muted">Academy</Link></SheetClose>
                     <SheetClose asChild><Link href="/about" className="px-3 py-2 rounded-md hover:bg-muted">About Us</Link></SheetClose>
                     <SheetClose asChild><Link href="/contact" className="px-3 py-2 rounded-md hover:bg-muted">Contact</Link></SheetClose>
-                    <SheetClose asChild><Link href="/membership" className="px-3 py-2 rounded-md hover:bg-muted">Membership</Link></SheetClose>
+                    <SheetClose asChild>
+                      <Button asChild className="mt-4">
+                        <Link href="/membership">
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          Membership
+                        </Link>
+                      </Button>
+                    </SheetClose>
                   </nav>
                 </SheetContent>
               </Sheet>
