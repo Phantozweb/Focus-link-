@@ -50,8 +50,8 @@ Your goal is to gather all the necessary information by having a natural convers
 - **interests**: An array of professional interests.
 - **bio**: A professional summary. You must **generate** a new one based on the conversation once all other information is gathered. Do not just copy text.
 - **links**: Email and LinkedIn/website.
-- **workExperience**: Array of jobs (title, company, dates).
-- **education**: Array of degrees (school, degree, dates).
+- **workExperience**: Array of jobs (title, company, startDate, endDate).
+- **education**: Array of degrees (school, degree, startYear, endYear).
 - **languages**: Array of languages spoken.
 - **avatarUrl**: Use the default: 'https://i.ibb.co/jG6L8p3/default-avatar.png'
 - **verified**: Use the default: false
@@ -77,8 +77,18 @@ const interviewerChatFlow = ai.defineFlow(
       throw new Error("AI failed to generate a response.");
     }
     
+    // Check if the profile is complete enough to finalize
+    const isComplete = output.profile && 
+        output.profile.name &&
+        output.profile.type &&
+        output.profile.location &&
+        output.profile.experience &&
+        output.profile.bio &&
+        output.profile.skills && output.profile.skills.length > 0 &&
+        output.profile.interests && output.profile.interests.length > 0;
+
     // Ensure the ID is added only at the end when the profile is complete
-    if (output.profile && !output.profile.id && output.profile.name && output.profile.type && output.profile.location && output.profile.experience && output.profile.bio) {
+    if (isComplete && !output.profile.id) {
         return {
             ...output,
             profile: {

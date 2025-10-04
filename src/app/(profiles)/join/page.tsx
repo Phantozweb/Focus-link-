@@ -68,8 +68,8 @@ export default function JoinPage() {
          setMessages(prev => [...prev, botMessage]);
       }
       
-      // Check if the profile is complete
-      if (result.profile?.id && result.profile.name && result.profile.bio) {
+      // Check if the profile is complete by seeing if an ID has been assigned by the flow
+      if (result.profile?.id && result.profile.id !== 'preview') {
         setIsComplete(true);
         toast({
             title: 'Profile Generated!',
