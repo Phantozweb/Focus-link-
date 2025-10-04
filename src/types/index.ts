@@ -58,8 +58,8 @@ export const EducationSchema = z.object({
 });
 
 export const LinksSchema = z.object({
-    email: z.string().email().optional().or(z.literal('')).transform(val => val || undefined).describe("The user's email address."),
-    linkedin: z.string().url().optional().or(z.literal('')).transform(val => val || undefined).describe("A URL to the user's LinkedIn profile or personal website."),
+    email: z.string().email().describe("The user's email address.").optional(),
+    linkedin: z.string().url().describe("A URL to the user's LinkedIn profile or personal website.").optional(),
 });
 
 export const InterviewInputSchema = z.object({
