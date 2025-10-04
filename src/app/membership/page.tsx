@@ -68,7 +68,7 @@ export default function MembershipPage() {
         const checkEmailUrl = `${scriptUrl}?email=${encodeURIComponent(data.email)}`;
         const emailCheckResponse = await fetch(checkEmailUrl, {
             method: 'GET',
-            mode: 'cors',
+            redirect: 'follow', // Follow the redirect to get the final response
         });
         const emailCheckResult = await emailCheckResponse.json();
 
