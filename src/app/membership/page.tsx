@@ -50,7 +50,6 @@ export default function MembershipPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [newMemberId, setNewMemberId] = useState('');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -59,44 +58,36 @@ export default function MembershipPage() {
       email: '',
     },
   });
+
+  // Helper to encode the form data for Netlify
+  const encode = (data: Record<string, any>) => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+      .join("&");
+  }
   
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
 
-    // The data sent is just the raw form data. The server will assign ID and verification status.
-    const memberData = {
-        name: data.name,
-        email: data.email,
-        country: data.country,
-        role: data.role,
-    };
-
     try {
-      // Note: The API endpoint is now just '/api/submissions' which handles auto-registration
-      const response = await fetch('/api/submissions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(memberData),
+      // Use Netlify's recommended way to submit forms from React
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ "form-name": "membership", ...data }),
       });
 
       if (response.ok) {
-        const result = await response.json();
-        setNewMemberId(result.memberId);
         setShowSuccessDialog(true);
       } else {
-        const errorData = await response.json();
-        toast({
-          variant: 'destructive',
-          title: 'Registration Failed',
-          description: errorData.message || 'An unknown error occurred.',
-        });
+        throw new Error('Network response was not ok.');
       }
     } catch (error) {
       console.error(error);
       toast({
         variant: 'destructive',
-        title: 'Network Error',
-        description: 'Could not submit your application. Please check your connection.',
+        title: 'Submission Error',
+        description: 'Could not submit your application. Please try again.',
       });
     } finally {
       setIsSubmitting(false);
@@ -118,13 +109,27 @@ export default function MembershipPage() {
                 <CardTitle className="text-3xl font-headline">Free Community Membership</CardTitle>
             </div>
             <CardDescription>
-              Become a part of the world's largest eye care network. Fill out the form below to instantly become a member.
+              Become a part of the world's largest eye care network. Fill out the form below to become a member. Submissions are reviewed by our team.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                
+              {/* Add Netlify form attributes */}
+              <form 
+                name="membership"
+                data-netlify="true"
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+                data-netlify-honeypot="bot-field"
+              >
+                {/* This input is required for Netlify forms to work correctly */}
+                <input type="hidden" name="form-name" value="membership" />
+                <p className="hidden">
+                  <label>
+                    Don’t fill this out if you’re human: <input name="bot-field" />
+                  </label>
+                </p>
+
                 <FormField control={form.control} name="name" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Full Name</FormLabel>
@@ -191,9 +196,9 @@ export default function MembershipPage() {
              <div className="flex justify-center">
               <PartyPopper className="h-16 w-16 text-green-500" />
             </div>
-            <AlertDialogTitle className="text-center">Welcome to Focus Links!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Submission Received!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              You are now a member of our community! Your unique Membership ID is <span className="font-bold text-foreground font-mono">{newMemberId}</span>. You can now connect with other professionals and explore our resources.
+              Thank you for your interest! Your membership application has been submitted for review.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
