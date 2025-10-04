@@ -5,33 +5,17 @@
  * @fileOverview An AI flow that acts as a conversational interviewer, asking questions to fill out a user profile.
  *
  * - interviewerChat - A function that handles a single turn in the conversation.
- * - Message - The type for a single message in the chat history.
- * - InterviewerChatOutput - The output type, which can be a simple text reply or the final, completed profile.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { InterviewOutput, InterviewOutputSchema } from './interviewer';
-
-// Define the schema for a single message in the chat history
-export const MessageSchema = z.object({
-  role: z.enum(['user', 'model']),
-  content: z.string(),
-});
-export type Message = z.infer<typeof MessageSchema>;
-
-// Define the input schema for the chat flow
-const InterviewerChatInputSchema = z.array(MessageSchema);
-export type InterviewerChatInput = z.infer<typeof InterviewerChatInputSchema>;
-
-
-// Define the output schema for the chat flow.
-// The AI can either provide a text reply (to ask a question) OR the final profile.
-const InterviewerChatOutputSchema = z.object({
-    reply: z.string().optional().describe("The AI's next question or comment to the user. This is used for continuing the conversation."),
-    profile: InterviewOutputSchema.optional().describe("The final, complete user profile object. This is only provided when the AI has gathered all necessary information and the interview is complete."),
-});
-export type InterviewerChatOutput = z.infer<typeof InterviewerChatOutputSchema>;
+import { 
+  InterviewerChatInput, 
+  InterviewerChatInputSchema, 
+  InterviewerChatOutput, 
+  InterviewerChatOutputSchema, 
+  InterviewOutputSchema 
+} from '@/types';
 
 
 // The main function that will be called from the frontend for each turn of the conversation

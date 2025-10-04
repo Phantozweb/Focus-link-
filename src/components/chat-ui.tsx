@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Send, User, Bot } from 'lucide-react';
-import type { Message } from '@/ai/flows/interviewer-chat';
+import type { Message } from '@/types';
 import { cn } from '@/lib/utils';
 
 interface ChatProps {

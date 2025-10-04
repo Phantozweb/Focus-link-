@@ -18,10 +18,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { InterviewOutput } from '@/ai/flows/interviewer';
-import { interviewerChat, Message } from '@/ai/flows/interviewer-chat';
+import { interviewerChat } from '@/ai/flows/interviewer-chat';
 import { ProfileCard } from '@/components/profile-card';
-import type { UserProfile } from '@/types';
+import type { UserProfile, InterviewOutput, Message } from '@/types';
 import { Chat } from '@/components/chat-ui';
 
 export default function JoinPage() {
