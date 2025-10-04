@@ -6,6 +6,7 @@ import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
 import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle } from 'lucide-react';
 import { Badge } from './ui/badge';
+import Link from 'next/link';
 
 interface WebinarActionsProps {
     webinar: Webinar;
@@ -59,8 +60,6 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     }, [webinar.dateTime, webinar.duration]);
 
     const handleRegister = () => {
-        // In a real app, this would trigger an API call.
-        // For this demo, we'll just simulate the registration.
         setIsRegistered(true);
     };
 
@@ -70,7 +69,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                  <div className="text-center p-4 bg-green-50 border-green-200 border rounded-lg">
                     <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
                     <h3 className="font-bold text-green-800">You're Registered!</h3>
-                    <p className="text-sm text-green-700 mt-1">Please wait patiently. Our team will send the meeting link to your registered email address one hour before the session begins. While you wait, feel free to connect with us on LinkedIn!</p>
+                    <p className="text-sm text-green-700 mt-1">Please wait patiently. Our team will send the meeting link to your registered email address one hour before the session begins. While you wait, feel free to <a href="https://www.linkedin.com/company/focus-links" target="_blank" rel="noopener noreferrer" className="font-bold underline">connect with us on LinkedIn</a>! If you do not receive the link, please contact us.</p>
                 </div>
             )
         }
@@ -88,9 +87,11 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                 <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                             </div>
                         </div>
-                        <Button size="lg" className="w-full text-lg py-6" onClick={handleRegister}>
-                            <Ticket className="mr-2 h-6 w-6" />
-                            Register Now
+                        <Button size="lg" className="w-full text-lg py-6" asChild>
+                            <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
+                                <Ticket className="mr-2 h-6 w-6" />
+                                Register Now
+                            </a>
                         </Button>
                     </>
                 );

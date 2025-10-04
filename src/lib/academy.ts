@@ -16,6 +16,7 @@ export type Webinar = {
   dateTime: string; // ISO 8601 format (e.g., "2025-10-05T04:30:00Z")
   duration: string;
   tags: string[];
+  registrationLink: string;
 };
 
 export const webinars: Webinar[] = [
@@ -36,5 +37,6 @@ export const webinars: Webinar[] = [
     dateTime: '2025-10-05T04:30:00Z', // This is 10:00 AM IST on Sunday, Oct 5, 2025
     duration: '75 minutes',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical'],
+    registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
   }
 ];
