@@ -61,41 +61,26 @@ export default function MembershipPage() {
   
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbwqEoTXDLXbfPzRic-JFfFiaT0sYJOLh0YeNpR2VzXglze_jcsxklB4CBuasEJJTIYm4g/exec";
-
+    
     try {
-        // Step 1: Check if email exists
-        const checkEmailUrl = `${scriptUrl}?email=${encodeURIComponent(data.email)}`;
-        const emailCheckResponse = await fetch(checkEmailUrl, {
-            method: 'GET',
-            redirect: 'follow', // Follow the redirect to get the final response
-        });
-        const emailCheckResult = await emailCheckResponse.json();
-
-        if (emailCheckResult.exists) {
-            toast({
-                variant: 'destructive',
-                title: 'Already Registered',
-                description: 'You registered earlier with this email. Please check your inbox for details.',
-            });
-            setIsSubmitting(false);
-            return;
-        }
-
-        // Step 2: If email does not exist, proceed with submission
-        const response = await fetch(scriptUrl, {
+        const response = await fetch('/api/submit-membership', {
             method: 'POST',
-            mode: 'cors', 
             headers: {
-                'Content-Type': 'text/plain;charset=utf-8',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         });
 
         const result = await response.json();
 
-        if (result.result === 'success') {
-          setShowSuccessDialog(true);
+        if (result.exists) {
+             toast({
+                variant: 'destructive',
+                title: 'Already Registered',
+                description: 'You registered earlier with this email. Please check your inbox for details.',
+            });
+        } else if (result.result === 'success') {
+            setShowSuccessDialog(true);
         } else {
            throw new Error(result.message || 'An unknown error occurred during submission.');
         }
