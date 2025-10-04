@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,12 +50,11 @@ export default function JoinPage() {
          setMessages(prev => [...prev, botMessage]);
       }
       
-      // Check if the profile is complete by seeing if an ID has been assigned by the flow
       if (result.profile?.id) {
         setIsComplete(true);
         toast({
             title: 'Profile Generated!',
-            description: 'Review your profile and submit when you are ready.',
+            description: 'Your interview report is ready. Please review and submit it.',
         });
       }
 
