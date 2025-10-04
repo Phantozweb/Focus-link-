@@ -4,7 +4,7 @@
 import { useState, useTransition } from 'react';
 import { Chat } from '@/components/chat-ui';
 import { interviewerChat } from '@/ai/flows/interviewer-chat';
-import type { Message, InterviewerChatOutput } from '@/types';
+import type { Message, InterviewerChatOutput, UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -16,7 +16,9 @@ export default function CreateProfilePage() {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', content: "Hello! I'm the Focus Links AI Interviewer. I'll ask you a few questions to help build your professional profile. To start, what is your full name?" },
   ]);
-  const [liveProfile, setLiveProfile] = useState<InterviewerChatOutput['profile'] | null>(null);
+  const [liveProfile, setLiveProfile] = useState<Partial<UserProfile>>({
+    avatarUrl: 'https://i.ibb.co/jG6L8p3/default-avatar.png',
+  });
   const [isPending, startTransition] = useTransition();
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { toast } = useToast();
@@ -28,17 +30,17 @@ export default function CreateProfilePage() {
     startTransition(async () => {
       try {
         const result = await interviewerChat(newMessages);
-        const { reply, suggestions, profile } = result;
+        const { reply, suggestions, profile: profileUpdate } = result;
 
-        if (profile) {
-            setLiveProfile(profile);
+        if (profileUpdate) {
+            setLiveProfile(prev => ({ ...prev, ...profileUpdate }));
         }
 
         if (reply) {
             setMessages(prev => [...prev, { role: 'model', content: reply, suggestions }]);
         }
         
-        if (profile?.id) {
+        if (profileUpdate?.id) {
             setShowSuccessDialog(true);
         }
 
@@ -49,6 +51,7 @@ export default function CreateProfilePage() {
           title: 'Error',
           description: 'The AI assistant ran into a problem. Please try again.',
         });
+        // Roll back to previous message state on error
         setMessages(messages);
       }
     });
@@ -56,13 +59,19 @@ export default function CreateProfilePage() {
   
   const handleApprove = async () => {
     if (!liveProfile) return;
+    
+    // Here you would typically send the 'liveProfile' object to your backend to be saved.
+    // For this demo, we'll just show a success message.
+    
     setShowSuccessDialog(false);
     toast({
-        title: "Profile Created!",
-        description: "Your new profile is now available in the directory.",
+        title: "Profile Submitted!",
+        description: "Your new profile has been sent for approval.",
     });
+    
+    // Reset the state for a new submission
     setMessages([messages[0]]);
-    setLiveProfile(null);
+    setLiveProfile({ avatarUrl: 'https://i.ibb.co/jG6L8p3/default-avatar.png' });
   }
 
   return (
@@ -89,7 +98,7 @@ export default function CreateProfilePage() {
                 </CardHeader>
                 <CardContent>
                   {liveProfile && liveProfile.name ? (
-                    <ProfileCard user={{...liveProfile, id: 'preview'} as any} hideButton={true} />
+                    <ProfileCard user={liveProfile as UserProfile} hideButton={true} />
                   ) : (
                     <div className="text-center py-10 text-muted-foreground">
                       <User className="h-12 w-12 mx-auto mb-2 text-gray-400" />
@@ -110,17 +119,17 @@ export default function CreateProfilePage() {
             </div>
             <AlertDialogTitle className="text-center">Profile Ready!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              The AI has finished creating your profile. Please review the final version. You can now add it to the directory.
+              The AI has finished creating your profile. Please review the final version. You can now submit it for approval.
             </AlertDialogDescription>
           </AlertDialogHeader>
            {liveProfile && (
               <div className="my-4">
-                <ProfileCard user={liveProfile as any} hideButton />
+                <ProfileCard user={liveProfile as UserProfile} hideButton />
               </div>
             )}
           <AlertDialogFooter>
             <Button variant="outline" onClick={() => setShowSuccessDialog(false)}>Make Changes</Button>
-            <AlertDialogAction onClick={handleApprove}>Looks Good, Create Profile</AlertDialogAction>
+            <AlertDialogAction onClick={handleApprove}>Looks Good, Submit Profile</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
