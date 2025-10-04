@@ -2,7 +2,7 @@
 'use server';
 
 /**
- * @fileOverview An AI flow that acts as a conversational interviewer, asking questions to fill out a user profile and scoring its completeness.
+ * @fileOverview An AI flow that acts as a conversational interviewer, extracting structured profile data and scoring its completeness.
  *
  * - interviewerChat - A function that handles a single turn in the conversation.
  */
@@ -13,7 +13,8 @@ import {
   InterviewerChatInput, 
   InterviewerChatInputSchema, 
   InterviewerChatOutput, 
-  InterviewerChatOutputSchema 
+  InterviewerChatOutputSchema,
+  UserProfileSchema, // Import the base user profile schema
 } from '@/types';
 
 // The main function that will be called from the frontend for each turn of the conversation
@@ -33,10 +34,11 @@ Your goal is to gather all necessary information by having a natural conversatio
 
 **Your process:**
 1.  **Analyze Conversation**: Review the entire conversation history.
-2.  **Calculate Completeness Score**: Based on the information gathered so far, calculate a \`completenessScore\` from 0 to 10. Each of the 10 core fields you gather (name, type, location, experience, bio, skills, interests, links, work experience, education) is worth 1 point.
-3.  **Ask the Next Question**: Determine the most important piece of missing information and ask the user a single, clear question to get it.
-4.  **Provide Suggestions**: When appropriate, provide suggested replies to make it easier for the user (e.g., for profile type).
-5.  **Finalize**: Once the score reaches 10/10, your final reply should be "Your profile is complete! You can now submit it." and you should stop asking questions.
+2.  **Extract Data**: Extract all available information into the 'profile' JSON object based on the user's answers.
+3.  **Calculate Completeness Score**: Based on the *extracted data* in the 'profile' object, calculate a \`completenessScore\` from 0 to 10. Each of the 10 core fields you gather (name, type, location, experience, bio, skills, interests, links, work experience, education) is worth 1 point.
+4.  **Ask the Next Question**: Determine the most important piece of missing information and ask the user a single, clear question to get it.
+5.  **Provide Suggestions**: When appropriate, provide suggested replies to make it easier for the user (e.g., for profile type).
+6.  **Finalize**: Once the score reaches 10/10, your final reply should be "Your profile is complete! You can now submit it." and you should stop asking questions.
 
 **Fields to gather (1 point each):**
 - name: Full name.
@@ -55,7 +57,7 @@ Your goal is to gather all necessary information by having a natural conversatio
   **{{role}}**: {{#if content}}{{content}}{{/if}}
 {{/each}}
 
-Based on the history, calculate the score and decide what to ask next.`,
+Based on the history, populate the 'profile' object, calculate the score, and decide what to ask next.`,
 });
 
 

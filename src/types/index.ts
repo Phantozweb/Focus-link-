@@ -29,8 +29,8 @@ export type UserProfile = {
   interests: string[];
   bio: string;
   links: {
-    linkedin?: string;
     email?: string;
+    linkedin?: string;
   };
   avatarUrl: string;
   workExperience: WorkExperience[];
@@ -58,16 +58,12 @@ export const EducationSchema = z.object({
 });
 
 export const LinksSchema = z.object({
-    email: z.string().email().optional(),
-    linkedin: z.string().url().optional(),
+    email: z.string().email({ message: "Invalid email address" }).optional(),
+    linkedin: z.string().url({ message: "Invalid URL" }).optional(),
 });
 
-export const InterviewInputSchema = z.object({
-  text: z.string().describe("The user's free-form text describing themselves and their professional background."),
-});
-export type InterviewInput = z.infer<typeof InterviewInputSchema>;
 
-export const InterviewOutputSchema = z.object({
+export const UserProfileSchema = z.object({
     id: z.string().describe("A unique ID for the user, can be a timestamp."),
     name: z.string().describe('The full name of the person or organization.'),
     type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry']).describe('The professional role or type of organization.'),
@@ -83,7 +79,16 @@ export const InterviewOutputSchema = z.object({
     languages: z.array(z.string()).optional().describe('A list of languages the user speaks.'),
     verified: z.boolean().default(false).describe("Set to false by default."),
 });
+
+
+export const InterviewInputSchema = z.object({
+  text: z.string().describe("The user's free-form text describing themselves and their professional background."),
+});
+export type InterviewInput = z.infer<typeof InterviewInputSchema>;
+
+export const InterviewOutputSchema = UserProfileSchema;
 export type InterviewOutput = z.infer<typeof InterviewOutputSchema>;
+
 
 // Schemas and types from interviewer-chat.ts
 export const MessageSchema = z.object({
@@ -100,5 +105,6 @@ export const InterviewerChatOutputSchema = z.object({
     reply: z.string().optional().describe("The AI's next question or comment to the user. This is used for continuing the conversation."),
     suggestions: z.array(z.string()).optional().describe("A list of suggested replies for the user to click to speed up the conversation."),
     completenessScore: z.number().min(0).max(10).describe("A score from 0-10 representing the completeness of the user's profile based on the conversation."),
+    profile: UserProfileSchema.partial().optional().describe("The user profile object containing the data extracted from the conversation so far."),
 });
 export type InterviewerChatOutput = z.infer<typeof InterviewerChatOutputSchema>;
