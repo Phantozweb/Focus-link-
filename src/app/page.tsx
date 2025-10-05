@@ -108,18 +108,18 @@ export default function Home() {
   const ctaCards = [
     {
       title: "Become an Official Member",
-      description: "Join the largest eye care network to get listed, connect with peers, and access exclusive resources. Start your journey today.",
+      description: "Join for free to get access to community perks, webinar notifications, and become part of the world's largest eye care network.",
       href: "/membership",
       icon: <Award className="h-8 w-8 text-white" />,
       cta: "Join for Free",
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
     },
     {
-      title: "Build Your Profile with AI",
-      description: "Let our AI interviewer create a professional, complete, and engaging profile for you in minutes. Get noticed in the directory.",
+      title: "Get Listed on the Directory",
+      description: "Ready to be seen? Create a professional profile using our AI Interviewer and connect with peers across the globe.",
       href: "/directory/create",
       icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Create with AI",
+      cta: "Create Your Profile",
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {
