@@ -20,7 +20,8 @@ import type { UserProfile } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
-import { CardStack } from '@/components/card-stack';
+import Autoplay from "embla-carousel-autoplay";
+
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -106,7 +107,6 @@ export default function Home() {
 
   const ctaCards = [
     {
-      id: 0,
       title: "Become an Official Member",
       description: "Join the largest eye care network to get listed, connect with peers, and access exclusive resources. Start your journey today.",
       href: "/membership",
@@ -115,7 +115,6 @@ export default function Home() {
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
     },
     {
-      id: 1,
       title: "Build Your Profile with AI",
       description: "Let our AI interviewer create a professional, complete, and engaging profile for you in minutes. Get noticed in the directory.",
       href: "/directory/create",
@@ -124,7 +123,6 @@ export default function Home() {
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {
-      id: 2,
       title: "Host a Webinar With Us",
       description: "Share your expertise with thousands of eye care professionals and students. We provide the platform, you provide the knowledge.",
       href: "/contact",
@@ -222,9 +220,43 @@ export default function Home() {
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
         
         <section>
-          <div className="flex items-center justify-center">
-            <CardStack items={ctaCards} />
-          </div>
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            plugins={[
+              Autoplay({
+                delay: 5000,
+                stopOnInteraction: true,
+              }),
+            ]}
+            className="w-full"
+          >
+            <CarouselContent>
+              {ctaCards.map((card, index) => (
+                <CarouselItem key={index}>
+                  <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl h-80 ${card.className}`}>
+                     <div>
+                      <div className="mb-4">{card.icon}</div>
+                      <h3 className="font-bold text-2xl mb-2 text-white">{card.title}</h3>
+                      <p className="text-white/80">{card.description}</p>
+                    </div>
+                    <div className="mt-6">
+                      <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
+                        <Link href={card.href}>
+                          {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="pt-4">
+              <CarouselDots />
+            </div>
+          </Carousel>
         </section>
 
           {liveWebinars.length > 0 && (
