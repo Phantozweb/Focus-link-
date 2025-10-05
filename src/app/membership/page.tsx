@@ -117,147 +117,138 @@ export default function MembershipPage() {
 
   return (
     <>
-      <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="p-8 bg-muted/50">
-              <CardHeader className="p-0 text-left">
-                  <div className="flex items-start gap-3 mb-2">
-                      <UserPlus className="h-8 w-8 text-primary" />
-                      <div>
-                        <CardTitle className="text-3xl font-headline">Quick Membership</CardTitle>
-                        <CardDescription className="mt-1">
-                          Join the world's largest eye care network in seconds. Fill out the core details to get started.
-                        </CardDescription>
+      <div className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
+        <Card>
+          <CardHeader className="text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <UserPlus className="h-8 w-8 text-primary" />
+            </div>
+            <CardTitle className="text-3xl font-headline mt-4">Join Focus Links</CardTitle>
+            <CardDescription className="mt-1 text-base">
+              Become a member of the world's largest eye care network. Fill out the details below to get started.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form 
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Dr. Jane Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="you@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                   <FormField
+                    control={form.control}
+                    name="country"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Country</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your country" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {countries.map((c) => (
+                              <SelectItem key={c.code} value={c.name}>
+                                {c.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Primary Role</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your role" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {profileTypes.map((type) => (
+                              <SelectItem key={type} value={type}>
+                                {type}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                 <FormField
+                  control={form.control}
+                  name="terms"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm bg-muted/50">
+                       <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>
+                          Accept Terms & Conditions
+                        </FormLabel>
+                        <FormDescription>
+                          By submitting, you agree to our{' '}
+                          <Link href="/terms" className="underline hover:text-primary" target="_blank">
+                            Terms of Service
+                          </Link>
+                          .
+                        </FormDescription>
+                         <FormMessage />
                       </div>
-                  </div>
-              </CardHeader>
-              <CardContent className="p-0 mt-6">
-                <Form {...form}>
-                  <form 
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                  >
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., Dr. Jane Doe" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input placeholder="you@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                       <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Country</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select your country" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {countries.map((c) => (
-                                  <SelectItem key={c.code} value={c.name}>
-                                    {c.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="role"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Primary Role</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select your role" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {profileTypes.map((type) => (
-                                  <SelectItem key={type} value={type}>
-                                    {type}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
-                     <FormField
-                      control={form.control}
-                      name="terms"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm bg-background">
-                           <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>
-                              Accept Terms & Conditions
-                            </FormLabel>
-                            <FormDescription>
-                              By submitting, you agree to our{' '}
-                              <Link href="/terms" className="underline hover:text-primary" target="_blank">
-                                Terms of Service
-                              </Link>
-                              .
-                            </FormDescription>
-                             <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
+                    </FormItem>
+                  )}
+                />
 
 
-                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                       {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Join Now'}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </div>
-            <div className="hidden md:block relative">
-               <img src="https://picsum.photos/seed/membership/800/1000" alt="Eye care professionals collaborating" className="absolute inset-0 w-full h-full object-cover" data-ai-hint="people meeting" />
-            </div>
-          </div>
+                <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                   {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Join Now'}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
         </Card>
       </div>
 
