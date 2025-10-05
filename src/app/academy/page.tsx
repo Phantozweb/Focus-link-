@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
@@ -143,8 +143,8 @@ export default function AcademyPage() {
                       
                       <Button asChild variant="secondary" className="w-full mt-4">
                         <Link href={`/academy/${webinar.id}`}>
-                           <PlayCircle className="mr-2 h-4 w-4" />
-                           Watch Recording
+                           <Info className="mr-2 h-4 w-4" />
+                           View Details
                         </Link>
                       </Button>
                     </div>

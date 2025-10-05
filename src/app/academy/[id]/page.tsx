@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -84,6 +84,23 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                     </section>
                     
                     <Separator />
+
+                    <section>
+                         <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">A Note from the Founder</h2>
+                        <Card className="bg-blue-50 border-blue-100">
+                            <CardContent className="p-6">
+                                 <div className="flex gap-4">
+                                    <div><Award className="h-8 w-8 text-blue-600" /></div>
+                                    <div className="text-blue-800">
+                                        <p className="font-semibold italic">"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Academic Director, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"</p>
+                                        <p className="font-bold mt-3">– Janarthan Veeramani, Founder of Focus Links</p>
+                                    </div>
+                                 </div>
+                            </CardContent>
+                        </Card>
+                    </section>
+
+                    <Separator />
                     
                     <section>
                         <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Event Details</h2>
@@ -124,7 +141,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                         <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                         <div>
                                             <h4 className="font-semibold">Attendance</h4>
-                                            <p className="text-sm text-muted-foreground">Over {webinar.attendance.attended} professionals attended</p>
+                                            <p className="text-sm text-muted-foreground">{webinar.attendance.attended}+ professionals attended</p>
                                             <p className="text-sm text-muted-foreground">{webinar.attendance.registered} total registered</p>
                                         </div>
                                     </div>
