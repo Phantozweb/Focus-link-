@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { UserPlus, Loader2, PartyPopper, CheckCircle, Globe, BookOpen, Handshake } from 'lucide-react';
+import { UserPlus, Loader2, PartyPopper, CheckCircle, Globe, BookOpen, Handshake, Award } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import Link from 'next/link';
@@ -52,24 +52,24 @@ type FormValues = z.infer<typeof formSchema>;
 
 const membershipPerks = [
   {
-    icon: <Globe className="h-8 w-8 text-primary" />,
-    title: "Global Directory Listing",
-    description: "Create a professional profile and get discovered by a global network of peers, mentors, and potential employers."
+    icon: <Award className="h-8 w-8 text-primary" />,
+    title: "Official Member Status",
+    description: "Receive a verified badge on your profile (once approved) to stand out as a trusted member of the community."
   },
   {
     icon: <BookOpen className="h-8 w-8 text-primary" />,
-    title: "Exclusive Academy Access",
-    description: "Gain priority access to expert-led webinars, workshops, and educational content from the Focus Links Academy."
+    title: "Priority Academy Access",
+    description: "Get early notifications and priority registration for exclusive webinars and workshops from industry leaders."
   },
   {
     icon: <Handshake className="h-8 w-8 text-primary" />,
-    title: "Networking Opportunities",
-    description: "Connect with industry leaders, collaborate on projects, and build meaningful professional relationships."
+    title: "Exclusive Networking",
+    description: "Gain access to member-only channels and events to connect with peers, mentors, and collaborators."
   },
   {
-    icon: <CheckCircle className="h-8 w-8 text-primary" />,
-    title: "Community Perks",
-    description: "Receive notifications for new events, get opportunities to be featured, and become an official part of the community."
+    icon: <Globe className="h-8 w-8 text-primary" />,
+    title: "Community Recognition",
+    description: "Get opportunities to be featured in our newsletters and on our platform, showcasing your expertise to a global audience."
   }
 ];
 
@@ -144,12 +144,12 @@ export default function MembershipPage() {
      <div className="bg-muted/40">
         <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
             <div className="container mx-auto px-4 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Unlock Your Potential</h1>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Become an Official Member</h1>
                 <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-                    Join Focus Links for free to connect with a global network, access exclusive content, and grow your career in eye care.
+                    Join for free to get verified, access exclusive perks, and become a recognized part of the world's largest eye care community.
                 </p>
                  <Button size="lg" className="mt-8" onClick={() => document.getElementById('membership-form')?.scrollIntoView({ behavior: 'smooth' })}>
-                    Become a Member Now
+                    Apply for Membership
                 </Button>
             </div>
         </section>
@@ -157,8 +157,8 @@ export default function MembershipPage() {
         <section className="py-16">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-slate-800">Perks of Membership</h2>
-                    <p className="mt-2 text-lg text-slate-600">Everything you need to succeed in the eye care industry.</p>
+                    <h2 className="text-3xl font-bold text-slate-800">Exclusive Membership Perks</h2>
+                    <p className="mt-2 text-lg text-slate-600">Go beyond the directory. Unlock benefits available only to official members.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {membershipPerks.map((perk, index) => (
@@ -180,9 +180,9 @@ export default function MembershipPage() {
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                 <UserPlus className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-3xl font-headline mt-4">Join Focus Links</CardTitle>
+                <CardTitle className="text-3xl font-headline mt-4">Membership Application</CardTitle>
                 <CardDescription className="mt-1 text-base">
-                Become a member of the world's largest eye care network. Fill out the details below to get started.
+                Fill out the details below to apply. Your submission will be reviewed by our team.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -301,7 +301,7 @@ export default function MembershipPage() {
 
 
                     <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Join Now'}
+                    {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Submit Application'}
                     </Button>
                 </form>
                 </Form>
@@ -315,9 +315,9 @@ export default function MembershipPage() {
              <div className="flex justify-center">
               <PartyPopper className="h-16 w-16 text-green-500" />
             </div>
-            <AlertDialogTitle className="text-center">Submission Received!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Application Received!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Thank you for your interest! Your membership application has been sent and will be added to our records shortly.
+              Thank you for applying! Your membership application has been sent and will be added to our records shortly after review.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -328,3 +328,5 @@ export default function MembershipPage() {
     </>
   );
 }
+
+    
