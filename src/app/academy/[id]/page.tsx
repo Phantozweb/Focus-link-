@@ -112,10 +112,9 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                 <div className="flex items-start gap-3">
                                     <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                     <div>
-                                        <h4 className="font-semibold">Host & Organizer</h4>
-                                        <p className="text-sm text-muted-foreground">Hosted by {webinar.host.name} ({webinar.host.title})</p>
-                                        <p className="text-sm text-muted-foreground">Organized by Focus Links Academy</p>
-                                        <p className="text-sm text-muted-foreground mt-1">Credits to Mohd Asad</p>
+                                        <h4 className="font-semibold">Organizer</h4>
+                                        <p className="text-sm text-muted-foreground">Organized by {webinar.host.name} ({webinar.host.title})</p>
+                                        <p className="text-sm text-muted-foreground">Powered by Focus Links Academy</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">

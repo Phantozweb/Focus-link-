@@ -59,7 +59,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
      <div className="absolute top-4 left-4 z-20">
       <Badge variant={isPast ? "destructive" : "secondary"} className={cn("bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm", isPast ? 'bg-red-100/80 text-red-900' : 'bg-green-100/80 text-green-900')}>
         {isPast ? <XCircle className="h-4 w-4" /> : <Ticket className="h-4 w-4" />}
-        {isPast ? 'Registration Closed' : 'Registration Open'}
+        {isPast ? 'Event Ended' : 'Registration Open'}
       </Badge>
     </div>
   )};
@@ -128,7 +128,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
                 </div>
                  <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span>Hosted by {webinar.host.name}</span>
+                    <span>Organized by {webinar.host.name}</span>
                 </div>
             </div>
          </div>
