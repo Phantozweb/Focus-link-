@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -13,20 +14,6 @@ export function Announcement() {
     return null;
   }
   
-  const AnnouncementContent = () => {
-    return (
-     <div className="flex items-center gap-3">
-        <Megaphone className="h-5 w-5 flex-shrink-0" />
-        <p className="text-sm font-medium">
-          <span className="hidden sm:inline">Announcing our new Academy!</span>
-          <Link href="/academy" className="underline hover:text-blue-200 ml-2">
-            View Schedule
-          </Link>
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className={cn(
       "bg-primary text-primary-foreground",
@@ -35,21 +22,16 @@ export function Announcement() {
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 overflow-hidden">
-            <div className="flex w-max animate-marquee-fast">
-              <div className="flex-shrink-0 pr-12">
-                <AnnouncementContent />
+          <div className="flex-1 flex items-center justify-center text-center sm:justify-start sm:text-left">
+             <div className="flex items-center gap-3">
+                <Megaphone className="h-5 w-5 flex-shrink-0" />
+                <p className="text-sm font-medium">
+                  <span className="hidden sm:inline">Announcing our new Academy!</span>
+                  <Link href="/academy" className="underline hover:text-blue-200 ml-2">
+                    View Schedule
+                  </Link>
+                </p>
               </div>
-              <div className="flex-shrink-0 pr-12" aria-hidden="true">
-                <AnnouncementContent />
-              </div>
-              <div className="flex-shrink-0 pr-12" aria-hidden="true">
-                <AnnouncementContent />
-              </div>
-               <div className="flex-shrink-0 pr-12" aria-hidden="true">
-                <AnnouncementContent />
-              </div>
-            </div>
           </div>
           <Button
             variant="ghost"
