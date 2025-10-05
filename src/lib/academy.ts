@@ -17,13 +17,17 @@ export type Webinar = {
   duration: string;
   tags: string[];
   registrationLink: string;
+  attendance?: {
+    registered: number;
+    attended: number;
+  };
 };
 
 export const webinars: Webinar[] = [
   {
     id: 'webinar-clik-1',
     title: 'Contact Lens Induced Keratitis',
-    description: 'Join us for a deep dive into one of the most critical topics in modern eye care: Contact Lens Induced Keratitis (CLIK). This session, led by renowned expert Abhishek Kumar Banaita, will cover the pathophysiology, risk factors, and latest evidence-based approaches for diagnosis and management. Practitioners will learn to identify early signs, differentiate between infectious and non-infectious events, and implement effective prevention strategies in their daily practice. This is an essential webinar for any professional dedicated to ensuring the long-term safety and ocular health of their contact lens patients.',
+    description: 'This session, led by renowned expert Abhishek Kumar Banaita, covered the pathophysiology, risk factors, and latest evidence-based approaches for diagnosis and management of Contact Lens Induced Keratitis (CLIK). The event was a great success, with over 80 eye care professionals attending out of 114 who registered. Attendees learned to identify early signs, differentiate between events, and implement effective prevention strategies.',
     speaker: {
       name: 'Abhishek Kumar Banaita',
       title: 'Cataract Educator and Cornea Consultant at LVPEI KVC campus',
@@ -34,9 +38,13 @@ export const webinars: Webinar[] = [
       title: 'Managing Director of Academic, Focus Links'
     },
     platform: 'Google Meet',
-    dateTime: '2025-10-05T04:30:00Z', // This is 10:00 AM IST on Sunday, Oct 5, 2025
-    duration: '75 minutes',
-    tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical'],
+    dateTime: '2024-10-05T04:30:00Z', // This is 10:00 AM IST on a past date
+    duration: '90 minutes',
+    tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Past Event'],
     registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
+    attendance: {
+      registered: 114,
+      attended: 80,
+    }
   }
 ];

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -119,11 +119,21 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                         </div>
                                     </div>
                                 </div>
+                                {webinar.attendance && (
+                                   <div className="flex items-start gap-3">
+                                        <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                        <div>
+                                            <h4 className="font-semibold">Attendance</h4>
+                                            <p className="text-sm text-muted-foreground">Over {webinar.attendance.attended} professionals attended</p>
+                                            <p className="text-sm text-muted-foreground">{webinar.attendance.registered} total registered</p>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="flex items-start gap-3 sm:col-span-2">
                                     <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                     <div>
                                         <h4 className="font-semibold">How to Join</h4>
-                                        <p className="text-sm text-muted-foreground">The meeting link will be emailed to registered attendees 1 hour before the session starts.</p>
+                                        <p className="text-sm text-muted-foreground">The meeting link was emailed to registered attendees 1 hour before the session started.</p>
                                     </div>
                                 </div>
                             </CardContent>
