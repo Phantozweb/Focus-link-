@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { users as allUsers } from '@/lib/data';
 import { webinars } from '@/lib/academy';
 import { ProfileCard } from '@/components/profile-card';
@@ -18,10 +18,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile } from '@/types';
 import { Badge } from '@/components/ui/badge';
-import { useState, useEffect } from 'react';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
-import Autoplay from "embla-carousel-autoplay";
+import { CardStack } from '@/components/card-stack';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -53,10 +52,6 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterCountry, setFilterCountry] = useState('all');
-
-  const plugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true })
-  );
 
   useEffect(() => {
     const now = new Date().getTime();
@@ -111,6 +106,7 @@ export default function Home() {
 
   const ctaCards = [
     {
+      id: 0,
       title: "Become an Official Member",
       description: "Join the largest eye care network to get listed, connect with peers, and access exclusive resources. Start your journey today.",
       href: "/membership",
@@ -119,6 +115,7 @@ export default function Home() {
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
     },
     {
+      id: 1,
       title: "Build Your Profile with AI",
       description: "Let our AI interviewer create a professional, complete, and engaging profile for you in minutes. Get noticed in the directory.",
       href: "/directory/create",
@@ -127,6 +124,7 @@ export default function Home() {
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {
+      id: 2,
       title: "Host a Webinar With Us",
       description: "Share your expertise with thousands of eye care professionals and students. We provide the platform, you provide the knowledge.",
       href: "/contact",
@@ -224,42 +222,10 @@ export default function Home() {
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
         
         <section>
-           <Carousel
-              plugins={[plugin.current]}
-              className="w-full"
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-            >
-              <CarouselContent>
-                {ctaCards.map((card, index) => (
-                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="p-1 h-full">
-                      <Link href={card.href} className="block group h-full">
-                         <div className={`rounded-xl p-8 h-full flex flex-col justify-between text-white shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 ${card.className}`}>
-                           <div>
-                             <div className="mb-4">{card.icon}</div>
-                             <h3 className="font-bold text-2xl mb-2">{card.title}</h3>
-                             <p className="text-white/80">{card.description}</p>
-                           </div>
-                           <div className="mt-6">
-                             <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                               {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                             </Button>
-                           </div>
-                         </div>
-                       </Link>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className="pt-4">
-                 <CarouselDots />
-              </div>
-            </Carousel>
+          <div className="flex items-center justify-center">
+            <CardStack items={ctaCards} />
+          </div>
         </section>
-
 
           {liveWebinars.length > 0 && (
             <section>
@@ -521,7 +487,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
