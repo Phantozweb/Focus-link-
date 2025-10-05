@@ -38,7 +38,7 @@ export const webinars: Webinar[] = [
       title: 'Managing Director of Academic, Focus Links'
     },
     platform: 'Google Meet',
-    dateTime: '2025-10-05T04:30:00Z', // This is 10:00 AM IST on a past date
+    dateTime: '2024-10-05T04:30:00Z', // This is 10:00 AM IST on a past date
     duration: '60 minutes',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Past Event', 'First Webinar'],
     registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
