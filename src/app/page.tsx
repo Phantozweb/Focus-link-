@@ -7,7 +7,7 @@ import { webinars } from '@/lib/academy';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -224,24 +224,40 @@ export default function Home() {
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
         
         <section>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {ctaCards.map((card) => (
-              <Link key={card.title} href={card.href} className="block group">
-                <div className={`rounded-xl p-8 h-full flex flex-col justify-between text-white shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 ${card.className}`}>
-                  <div>
-                    <div className="mb-4">{card.icon}</div>
-                    <h3 className="font-bold text-2xl mb-2">{card.title}</h3>
-                    <p className="text-white/80">{card.description}</p>
-                  </div>
-                  <div className="mt-6">
-                    <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                      {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+           <Carousel
+              plugins={[plugin.current]}
+              className="w-full"
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+            >
+              <CarouselContent>
+                {ctaCards.map((card, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1 h-full">
+                      <Link href={card.href} className="block group h-full">
+                         <div className={`rounded-xl p-8 h-full flex flex-col justify-between text-white shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 ${card.className}`}>
+                           <div>
+                             <div className="mb-4">{card.icon}</div>
+                             <h3 className="font-bold text-2xl mb-2">{card.title}</h3>
+                             <p className="text-white/80">{card.description}</p>
+                           </div>
+                           <div className="mt-6">
+                             <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
+                               {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                             </Button>
+                           </div>
+                         </div>
+                       </Link>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="pt-4">
+                 <CarouselDots />
+              </div>
+            </Carousel>
         </section>
 
 
@@ -505,5 +521,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
