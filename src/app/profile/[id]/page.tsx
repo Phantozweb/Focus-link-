@@ -238,7 +238,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                   <div>
                     <h2 className="text-slate-800 text-xl font-bold leading-tight tracking-tight mb-4">About Us</h2>
                     <div className="space-y-6 text-gray-600 text-base leading-relaxed">
-                      <p>{user.bio}</p>
+                      <div dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                     </div>
                   </div>
                   <div>
@@ -449,7 +449,7 @@ export default function ProfilePage() {
               <div className="lg:col-span-2 space-y-8">
                 <section>
                   <h2 className="text-xl font-bold font-headline mb-4">About</h2>
-                  <p className="text-foreground/80 whitespace-pre-wrap">{user.bio}</p>
+                  <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                 </section>
                 
                 {isIndividual && user.workExperience.length > 0 && (

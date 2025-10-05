@@ -25,6 +25,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         days: 0, hours: 0, minutes: 0, seconds: 0
     });
     const [isRegistered, setIsRegistered] = useState(false);
+    const [showCertificateInfo, setShowCertificateInfo] = useState(false);
 
     useEffect(() => {
         const calculateState = () => {
@@ -33,7 +34,9 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             const registrationCloseTime = webinarStartTime - (2 * 60 * 60 * 1000); // 2 hours before start
             const durationParts = webinar.duration.split(' ');
             const durationValue = parseInt(durationParts[0], 10);
-            const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000); // 3-hour grace period
+            const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000);
+            const liveGracePeriod = webinarEndTime + (3 * 60 * 60 * 1000); // 3-hour grace period for LIVE status
+            const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); // 7 days after event end
 
             if (now < registrationCloseTime) {
                 setStatus('UPCOMING');
@@ -46,10 +49,15 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                 });
             } else if (now >= registrationCloseTime && now < webinarStartTime) {
                 setStatus('REGISTRATION_CLOSED');
-            } else if (now >= webinarStartTime && now < webinarEndTime) {
+            } else if (now >= webinarStartTime && now < liveGracePeriod) {
                 setStatus('LIVE');
             } else {
                 setStatus('ENDED');
+                if (now < certificateDeadline) {
+                    setShowCertificateInfo(true);
+                } else {
+                    setShowCertificateInfo(false);
+                }
             }
         };
 
@@ -133,11 +141,13 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                         <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
                             Session Ended
                         </Button>
-                        <div className="text-center p-4 bg-blue-50 border-blue-200 border rounded-lg">
-                            <Info className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-                            <h3 className="font-bold text-blue-800">Claim Your Certificate</h3>
-                            <p className="text-sm text-blue-700 mt-1">If you registered and attended this session, you can claim your certificate of attendance within 48 hours. Please check your email for instructions.</p>
-                        </div>
+                        {showCertificateInfo && (
+                            <div className="text-center p-4 bg-blue-50 border-blue-200 border rounded-lg">
+                                <Info className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                                <h3 className="font-bold text-blue-800">Claim Your Certificate</h3>
+                                <p className="text-sm text-blue-700 mt-1">If you registered and attended this session, you can claim your certificate of attendance. Please check your email for instructions.</p>
+                            </div>
+                        )}
                     </>
                 );
         }

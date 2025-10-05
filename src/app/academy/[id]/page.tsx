@@ -78,9 +78,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                 <div className="max-w-3xl mx-auto space-y-12">
                     <section>
                         <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
-                        <div className="prose prose-lg max-w-none text-slate-600">
-                            <p>{webinar.description}</p>
-                        </div>
+                        <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: webinar.description.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                     </section>
                     
                     <Separator />
@@ -92,7 +90,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                  <div className="flex gap-4">
                                     <div><Award className="h-8 w-8 text-blue-600" /></div>
                                     <div className="text-blue-800">
-                                        <p className="font-semibold italic">"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Academic Director, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"</p>
+                                        <p className="font-semibold italic">"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"</p>
                                         <p className="font-bold mt-3">– Janarthan Veeramani, Founder of Focus Links</p>
                                     </div>
                                  </div>
@@ -113,7 +111,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                     <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                     <div>
                                         <h4 className="font-semibold">Organizer</h4>
-                                        <p className="text-sm text-muted-foreground">Organized by {webinar.host.name} ({webinar.host.title})</p>
+                                        <p className="text-sm text-muted-foreground">Organized by {webinar.host.name}</p>
                                         <p className="text-sm text-muted-foreground">Powered by Focus Links Academy</p>
                                     </div>
                                 </div>
