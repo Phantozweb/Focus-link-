@@ -138,7 +138,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                         <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                         <div>
                                             <h4 className="font-semibold">Attendance</h4>
-                                            <p className="text-sm text-muted-foreground">{webinar.attendance.attended}+ professionals attended</p>
+                                            <p className="text-sm text-muted-foreground">{webinar.attendance.attended}+ participants attended</p>
                                             <p className="text-sm text-muted-foreground">{webinar.attendance.registered} total registered</p>
                                         </div>
                                     </div>
