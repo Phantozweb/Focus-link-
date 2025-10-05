@@ -2,6 +2,7 @@
 
 "use client";
 
+import { useRef } from 'react';
 import { users as allUsers } from '@/lib/data';
 import { webinars } from '@/lib/academy';
 import { ProfileCard } from '@/components/profile-card';
@@ -9,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -21,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { useState, useEffect } from 'react';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
+import Autoplay from "embla-carousel-autoplay";
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -52,6 +54,10 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterCountry, setFilterCountry] = useState('all');
+
+  const plugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true })
+  );
 
   useEffect(() => {
     const now = new Date().getTime();
@@ -106,87 +112,135 @@ export default function Home() {
 
   return (
     <div className="bg-muted/40">
-       <section className="relative py-20 md:py-28 bg-gradient-to-r from-cyan-600 to-blue-700 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">The World's Largest Eye Care Community</h1>
-          <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">Find, connect, and grow with professionals, students, and organizations in the vision care industry.</p>
-          <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
-           <div className="flex flex-col md:flex-row gap-2 items-center">
-             <div className="flex-grow w-full">
-                <label className="relative flex items-center">
-                 <Search className="absolute left-3 text-gray-500 h-5 w-5" />
-                 <input 
-                    className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" 
-                    placeholder="Search by name, skill, or keyword..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  />
-               </label>
-             </div>
-             
-             <Dialog>
-              <DialogTrigger asChild>
-                <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200">
-                  <SlidersHorizontal className="mr-2 h-5 w-5" />
-                  Filters
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Advanced Search Filters</DialogTitle>
-                   <DialogDescription>
-                    Refine your search to find the perfect connection.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                   <div className="grid grid-cols-4 items-center gap-4">
-                    <label className="text-right">Type</label>
-                    <div className="col-span-3">
-                      <Select onValueChange={setFilterType} value={filterType}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a profile type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Profiles</SelectItem>
-                           {profileTypes.map(type => (
-                            <SelectItem key={type} value={type}>
-                              {type}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+       <section className="relative bg-gradient-to-r from-cyan-600 to-blue-700 text-white overflow-hidden">
+        <Carousel 
+          plugins={[plugin.current]} 
+          className="w-full"
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
+        >
+          <CarouselContent>
+            <CarouselItem>
+              <div className="py-20 md:py-28 container mx-auto px-4 text-center">
+                 <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">The World's Largest Eye Care Community</h1>
+                  <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">Find, connect, and grow with professionals, students, and organizations in the vision care industry.</p>
+                  <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
+                  <div className="flex flex-col md:flex-row gap-2 items-center">
+                    <div className="flex-grow w-full">
+                        <label className="relative flex items-center">
+                        <Search className="absolute left-3 text-gray-500 h-5 w-5" />
+                        <input 
+                            className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" 
+                            placeholder="Search by name, skill, or keyword..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                          />
+                      </label>
                     </div>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <label className="text-right">Country</label>
-                     <div className="col-span-3">
-                      <Select onValueChange={setFilterCountry} value={filterCountry}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a country" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Countries</SelectItem>
-                          {countries.map(country => (
-                            <SelectItem key={country.code} value={country.name.toLowerCase()}>
-                              {country.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200">
+                          <SlidersHorizontal className="mr-2 h-5 w-5" />
+                          Filters
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>Advanced Search Filters</DialogTitle>
+                          <DialogDescription>
+                            Refine your search to find the perfect connection.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <label className="text-right">Type</label>
+                            <div className="col-span-3">
+                              <Select onValueChange={setFilterType} value={filterType}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a profile type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Profiles</SelectItem>
+                                  {profileTypes.map(type => (
+                                    <SelectItem key={type} value={type}>
+                                      {type}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <label className="text-right">Country</label>
+                            <div className="col-span-3">
+                              <Select onValueChange={setFilterCountry} value={filterCountry}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a country" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Countries</SelectItem>
+                                  {countries.map(country => (
+                                    <SelectItem key={country.code} value={country.name.toLowerCase()}>
+                                      {country.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+                        <Button type="submit" onClick={handleSearch} className="w-full">
+                            Show Results
+                          </Button>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>Search</Button>
                   </div>
                 </div>
-                 <Button type="submit" onClick={handleSearch} className="w-full">
-                    Show Results
-                  </Button>
-              </DialogContent>
-            </Dialog>
-
-             <Button className="w-full md:w-auto h-12 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>Search</Button>
-           </div>
-         </div>
-        </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem>
+               <div className="py-20 md:py-28 container mx-auto px-4 text-center flex flex-col items-center justify-center min-h-[440px]">
+                <Sparkles className="h-16 w-16 text-yellow-300 mb-4" />
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Create Your Profile with AI</h1>
+                <p className="text-lg md:text-xl mb-8 max-w-2xl text-blue-100 mx-auto">Have a natural conversation with our AI assistant to build your professional profile in minutes.</p>
+                <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-200">
+                  <Link href="/directory/create">Get Started with AI</Link>
+                </Button>
+              </div>
+            </CarouselItem>
+             <CarouselItem>
+               <div className="py-20 md:py-28 container mx-auto px-4 text-center flex flex-col items-center justify-center min-h-[440px]">
+                <UserPlus className="h-16 w-16 text-blue-200 mb-4" />
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Become a Registered Member</h1>
+                <p className="text-lg md:text-xl mb-8 max-w-2xl text-blue-100 mx-auto">Join the world's largest eye care network to get listed in the directory and access exclusive resources.</p>
+                <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-200">
+                  <Link href="/membership">Join for Free</Link>
+                </Button>
+              </div>
+            </CarouselItem>
+             <CarouselItem>
+               <div className="py-20 md:py-28 container mx-auto px-4 text-center flex flex-col items-center justify-center min-h-[440px]">
+                <BookUser className="h-16 w-16 text-cyan-200 mb-4" />
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Host a Webinar with Us</h1>
+                <p className="text-lg md:text-xl mb-8 max-w-2xl text-blue-100 mx-auto">Share your expertise with the global eye care community. We provide the platform and the audience.</p>
+                <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-200">
+                  <Link href="/contact">Book a Webinar</Link>
+                </Button>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
+              <div className="embla__dots">
+                  {/* Dots will be rendered here via the Carousel component */}
+              </div>
+            </div>
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
+        </Carousel>
       </section>
 
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">

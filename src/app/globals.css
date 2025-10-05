@@ -67,6 +67,21 @@
     @apply bg-background text-foreground;
      font-family: "Public Sans", "Noto Sans", sans-serif;
   }
+  .embla__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* 8px */
+  }
+  .embla__dot {
+    width: 0.75rem; /* 12px */
+    height: 0.75rem; /* 12px */
+    border-radius: 9999px; /* full */
+    background-color: hsla(0, 0%, 100%, 0.3);
+    transition: background-color 0.2s ease-in-out, width 0.2s ease-in-out;
+  }
+  .embla__dot--selected {
+    background-color: white;
+    width: 2rem; /* 32px */
+  }
 }
-
-    
