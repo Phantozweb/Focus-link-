@@ -22,7 +22,6 @@ import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
 import Autoplay from "embla-carousel-autoplay";
 
-
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
 const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaText: string, ctaLink: string, icon: React.ReactNode }) => (
@@ -108,7 +107,7 @@ export default function Home() {
   const ctaCards = [
     {
       title: "Become an Official Member",
-      description: "Join for free to get access to community perks, webinar notifications, and become part of the world's largest eye care network.",
+      description: "Join for free to get a verified profile, priority access to academy events, and exclusive networking opportunities.",
       href: "/membership",
       icon: <Award className="h-8 w-8 text-white" />,
       cta: "Join for Free",

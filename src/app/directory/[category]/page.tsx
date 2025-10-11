@@ -5,6 +5,34 @@ import { DirectoryClient } from './directory-client';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { Metadata } from 'next';
+
+type DirectoryCategoryPageProps = {
+  params: { category: string }
+};
+
+const getTitle = (category: string) => {
+    switch(category) {
+        case 'students': return 'Students';
+        case 'professionals': return 'Professionals';
+        case 'associations': return 'Associations';
+        case 'colleges': return 'Colleges & Schools';
+        case 'clinics': return 'Clinics & Opticals';
+        case 'industry': return 'Industry Partners';
+        case 'all':
+        default: return 'All Profiles';
+    }
+}
+
+export function generateMetadata({ params }: DirectoryCategoryPageProps): Metadata {
+  const category = params.category || 'all';
+  const title = getTitle(category);
+
+  return {
+    title: `${title} | Focus Links Directory`,
+    description: `Browse and search for ${title.toLowerCase()} in the Focus Links global eye care community. Connect with peers and leaders in the industry.`,
+  };
+}
 
 function DirectorySkeleton() {
   return (
@@ -28,7 +56,7 @@ function DirectorySkeleton() {
   )
 }
 
-export default function DirectoryCategoryPage({ params }: { params: { category: string } }) {
+export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageProps) {
   const category = params.category || 'all';
   
   const validCategories = ['students', 'associations', 'colleges', 'clinics', 'industry', 'all', 'professionals'];
@@ -59,23 +87,10 @@ export default function DirectoryCategoryPage({ params }: { params: { category: 
       }
   });
 
-  const getTitle = () => {
-      switch(category) {
-          case 'students': return 'Students';
-          case 'professionals': return 'Professionals';
-          case 'associations': return 'Associations';
-          case 'colleges': return 'Colleges & Schools';
-          case 'clinics': return 'Clinics & Opticals';
-          case 'industry': return 'Industry Partners';
-          case 'all':
-          default: return 'All Profiles';
-      }
-  }
-
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <Suspense fallback={<DirectorySkeleton />}>
-        <DirectoryClient allUsers={initialFilteredUsers} title={getTitle()} category={category} />
+        <DirectoryClient allUsers={initialFilteredUsers} title={getTitle(category)} category={category} />
       </Suspense>
     </div>
   );

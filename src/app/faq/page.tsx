@@ -5,6 +5,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'FAQ | Focus Links',
+  description: 'Find answers to frequently asked questions about Focus Links, including how to join, profile verification, academy events, and partnership opportunities.',
+};
 
 const faqs = [
     {

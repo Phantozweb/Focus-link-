@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
 import { useState, useEffect } from 'react';
+import type { Metadata } from 'next';
 
 export default function AcademyPage() {
   const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);

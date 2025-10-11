@@ -8,8 +8,14 @@ import { Footer } from '@/components/layout/footer';
 import { Announcement } from '@/components/layout/announcement';
 
 export const metadata: Metadata = {
-  title: 'Focus Links',
-  description: 'The world\'s largest eye care community to find, connect, and grow.',
+  title: {
+    default: 'Focus Links | Global Eye Care Community',
+    template: '%s | Focus Links',
+  },
+  description: 'The world\'s largest eye care community for students, optometrists, and industry professionals to find, connect, and grow. Explore our directory and academy.',
+  verification: {
+    google: 'fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE',
+  },
 };
 
 export default function RootLayout({
@@ -20,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
+        <meta name="google-site-verification" content="fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />

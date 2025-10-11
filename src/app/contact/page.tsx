@@ -5,6 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact Us | Focus Links',
+  description: 'Get in touch with the Focus Links team. Contact us for support, partnerships, or any questions about our eye care community platform.',
+};
 
 export default function ContactPage() {
   return (

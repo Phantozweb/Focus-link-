@@ -13,7 +13,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescript
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
-
 const initialProfile: Partial<UserProfile> = {
     name: '',
     type: undefined,

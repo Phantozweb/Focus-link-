@@ -324,6 +324,13 @@ export default function ProfilePage() {
     notFound();
   }
 
+  // Set metadata dynamically
+  if (typeof window !== 'undefined') {
+      document.title = `${user.name} - ${user.type} | Focus Links`;
+      document.querySelector('meta[name="description"]')?.setAttribute('content', user.bio.substring(0, 160));
+  }
+
+
   if (user.type === 'Student') {
     return <StudentProfile user={user} />;
   }
@@ -437,8 +444,7 @@ export default function ProfilePage() {
                           <Languages className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                           <div>
                             <h3 className="font-semibold">Languages</h3>
-                            <p className="text-muted-foreground">{user.languages.join(', ')}</p>
-                          </div>
+                            <p className="text-muted-foreground">{user.languages.join(', ')}</p>                          </div>
                         </div>
                       )}
                   </div>

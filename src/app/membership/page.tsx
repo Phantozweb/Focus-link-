@@ -35,7 +35,6 @@ import type { UserProfile } from '@/types';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 
-
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
 const formSchema = z.object({
@@ -328,5 +327,3 @@ export default function MembershipPage() {
     </>
   );
 }
-
-    

@@ -1,4 +1,11 @@
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service | Focus Links',
+  description: 'Read the Terms of Service for using the Focus Links platform. Learn about profile submissions, content ownership, and our community guidelines.',
+};
+
 export default function TermsPage() {
   return (
     <div className="bg-white py-12">
