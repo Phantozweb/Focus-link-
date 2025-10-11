@@ -50,130 +50,167 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
   if (!webinar) {
     notFound();
   }
+
+  const eventSchema = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": webinar.title,
+    "startDate": webinar.dateTime,
+    "description": webinar.description.replace(/<[^>]*>/g, ''), // Strip HTML for schema
+    "eventStatus": new Date() > new Date(webinar.dateTime) ? "https://schema.org/EventCompleted" : "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "location": {
+      "@type": "VirtualLocation",
+      "url": webinar.registrationLink
+    },
+    "image": webinar.speaker.avatarUrl,
+    "performer": {
+      "@type": "Person",
+      "name": webinar.speaker.name
+    },
+    "organizer": {
+      "@type": "Organization",
+      "name": webinar.host.name,
+      "url": "https://focuslinks.pro"
+    },
+     "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": webinar.registrationLink
+    }
+  };
   
   return (
-    <div className="bg-muted/40">
-      <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-        <Link href="/academy" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Academy
-        </Link>
-        <Card className="overflow-hidden shadow-xl">
-          <CardContent className="p-0">
-             <div className="w-full aspect-video rounded-t-lg overflow-hidden shadow-md">
-                <WebinarBanner webinar={webinar} />
-            </div>
-            <div className="p-8 space-y-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2">
-                        <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800">{webinar.title}</h1>
-                    </div>
-                    <div className="lg:row-start-1 lg:col-start-3">
-                         <WebinarActions webinar={webinar} />
-                    </div>
-                </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }}
+      />
+      <div className="bg-muted/40">
+        <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
+          <Link href="/academy" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary mb-6">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Academy
+          </Link>
+          <Card className="overflow-hidden shadow-xl">
+            <CardContent className="p-0">
+              <div className="w-full aspect-video rounded-t-lg overflow-hidden shadow-md">
+                  <WebinarBanner webinar={webinar} />
+              </div>
+              <div className="p-8 space-y-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                      <div className="lg:col-span-2">
+                          <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800">{webinar.title}</h1>
+                      </div>
+                      <div className="lg:row-start-1 lg:col-start-3">
+                          <WebinarActions webinar={webinar} />
+                      </div>
+                  </div>
 
-                <Separator />
+                  <Separator />
 
-                <div className="max-w-3xl mx-auto space-y-12">
-                    <section>
-                        <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
-                        <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: webinar.description.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
-                    </section>
-                    
-                    <Separator />
+                  <div className="max-w-3xl mx-auto space-y-12">
+                      <section>
+                          <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
+                          <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: webinar.description.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      </section>
+                      
+                      <Separator />
 
-                    <section>
-                         <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">A Note from the Founder</h2>
-                        <Card className="bg-blue-50 border-blue-100">
-                            <CardContent className="p-6">
-                                 <div className="flex gap-4">
-                                    <div><Award className="h-8 w-8 text-blue-600" /></div>
-                                    <div className="text-blue-800">
-                                        <p className="font-semibold italic">"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"</p>
-                                        <p className="font-bold mt-3">– Janarthan Veeramani, Founder of Focus Links</p>
-                                    </div>
-                                 </div>
-                            </CardContent>
-                        </Card>
-                    </section>
+                      <section>
+                          <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">A Note from the Founder</h2>
+                          <Card className="bg-blue-50 border-blue-100">
+                              <CardContent className="p-6">
+                                  <div className="flex gap-4">
+                                      <div><Award className="h-8 w-8 text-blue-600" /></div>
+                                      <div className="text-blue-800">
+                                          <p className="font-semibold italic">"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"</p>
+                                          <p className="font-bold mt-3">– Janarthan Veeramani, Founder of Focus Links</p>
+                                      </div>
+                                  </div>
+                              </CardContent>
+                          </Card>
+                      </section>
 
-                    <Separator />
-                    
-                    <section>
-                        <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Event Details</h2>
-                        <Card className="bg-slate-50">
-                            <CardContent className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div className="sm:col-span-2 space-y-3 text-sm text-slate-700">
-                                   <WebinarTime dateTime={webinar.dateTime} isDetailed />
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                    <div>
-                                        <h4 className="font-semibold">Organizer</h4>
-                                        <p className="text-sm text-muted-foreground">Organized by {webinar.host.name}</p>
-                                        <p className="text-sm text-muted-foreground">Powered by Focus Links Academy</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <Video className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                    <div>
-                                        <h4 className="font-semibold">Platform</h4>
-                                        <p className="text-sm text-muted-foreground">{webinar.platform}</p>
-                                    </div>
-                                </div>
-                                 <div className="flex items-start gap-3">
-                                    <Tag className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                     <div>
-                                        <h4 className="font-semibold">Tags</h4>
-                                        <div className="flex flex-wrap gap-2 mt-1">
-                                            {webinar.tags.map(tag => (
-                                                <Badge key={tag} variant="secondary">{tag}</Badge>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                {webinar.attendance && (
-                                   <div className="flex items-start gap-3">
-                                        <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                        <div>
-                                            <h4 className="font-semibold">Attendance</h4>
-                                            <p className="text-sm text-muted-foreground">{webinar.attendance.attended}+ participants attended</p>
-                                            <p className="text-sm text-muted-foreground">{webinar.attendance.registered} total registered</p>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className="flex items-start gap-3 sm:col-span-2">
-                                    <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                    <div>
-                                        <h4 className="font-semibold">How to Join</h4>
-                                        <p className="text-sm text-muted-foreground">The meeting link was emailed to registered attendees 1 hour before the session started.</p>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </section>
-                    
-                    <Separator />
+                      <Separator />
+                      
+                      <section>
+                          <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Event Details</h2>
+                          <Card className="bg-slate-50">
+                              <CardContent className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                  <div className="sm:col-span-2 space-y-3 text-sm text-slate-700">
+                                    <WebinarTime dateTime={webinar.dateTime} isDetailed />
+                                  </div>
+                                  <div className="flex items-start gap-3">
+                                      <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <div>
+                                          <h4 className="font-semibold">Organizer</h4>
+                                          <p className="text-sm text-muted-foreground">Organized by {webinar.host.name}</p>
+                                          <p className="text-sm text-muted-foreground">Powered by Focus Links Academy</p>
+                                      </div>
+                                  </div>
+                                  <div className="flex items-start gap-3">
+                                      <Video className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <div>
+                                          <h4 className="font-semibold">Platform</h4>
+                                          <p className="text-sm text-muted-foreground">{webinar.platform}</p>
+                                      </div>
+                                  </div>
+                                  <div className="flex items-start gap-3">
+                                      <Tag className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <div>
+                                          <h4 className="font-semibold">Tags</h4>
+                                          <div className="flex flex-wrap gap-2 mt-1">
+                                              {webinar.tags.map(tag => (
+                                                  <Badge key={tag} variant="secondary">{tag}</Badge>
+                                              ))}
+                                          </div>
+                                      </div>
+                                  </div>
+                                  {webinar.attendance && (
+                                    <div className="flex items-start gap-3">
+                                          <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                          <div>
+                                              <h4 className="font-semibold">Attendance</h4>
+                                              <p className="text-sm text-muted-foreground">{webinar.attendance.attended}+ participants attended</p>
+                                              <p className="text-sm text-muted-foreground">{webinar.attendance.registered} total registered</p>
+                                          </div>
+                                      </div>
+                                  )}
+                                  <div className="flex items-start gap-3 sm:col-span-2">
+                                      <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <div>
+                                          <h4 className="font-semibold">How to Join</h4>
+                                          <p className="text-sm text-muted-foreground">The meeting link was emailed to registered attendees 1 hour before the session started.</p>
+                                      </div>
+                                  </div>
+                              </CardContent>
+                          </Card>
+                      </section>
+                      
+                      <Separator />
 
-                    <section>
-                        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
-                        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
-                            <Avatar className="h-28 w-28">
-                                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                                <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
-                                <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-          </CardContent>
-        </Card>
+                      <section>
+                          <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
+                          <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+                              <Avatar className="h-28 w-28">
+                                  <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                                  <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                  <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
+                                  <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
+                              </div>
+                          </div>
+                      </section>
+                  </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

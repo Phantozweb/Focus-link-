@@ -39,30 +39,49 @@ const faqs = [
     }
 ]
 
+const faqPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer
+        }
+    }))
+};
+
 export default function FAQPage() {
   return (
-    <div className="bg-muted/40">
-        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-            <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Frequently Asked Questions</h1>
-            <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-                Find answers to common questions about our platform, membership, and features.
-            </p>
-            </div>
-        </section>
+    <>
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageSchema) }}
+        />
+        <div className="bg-muted/40">
+            <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
+                <div className="container mx-auto px-4 text-center">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Frequently Asked Questions</h1>
+                <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+                    Find answers to common questions about our platform, membership, and features.
+                </p>
+                </div>
+            </section>
 
-        <div className="container mx-auto max-w-3xl py-16 px-4 sm:px-6 lg:px-8">
-            <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
-                    <AccordionItem value={`item-${index}`} key={index}>
-                        <AccordionTrigger className="text-lg text-left">{faq.question}</AccordionTrigger>
-                        <AccordionContent className="text-base text-muted-foreground">
-                            {faq.answer}
-                        </AccordionContent>
-                    </AccordionItem>
-                ))}
-            </Accordion>
+            <div className="container mx-auto max-w-3xl py-16 px-4 sm:px-6 lg:px-8">
+                <Accordion type="single" collapsible className="w-full">
+                    {faqs.map((faq, index) => (
+                        <AccordionItem value={`item-${index}`} key={index}>
+                            <AccordionTrigger className="text-lg text-left">{faq.question}</AccordionTrigger>
+                            <AccordionContent className="text-base text-muted-foreground">
+                                {faq.answer}
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </div>
         </div>
-    </div>
+    </>
   );
 }

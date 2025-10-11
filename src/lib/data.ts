@@ -71,7 +71,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         startDate: 'Aug 2023',
         endDate: 'May 2025',
         duration: '1 yr 10 mos',
-        description: 'Completed the first two years of the B.Sc. Optometry collaborative program.'
+        description: '**Completed the first two years** of the B.Sc. Optometry collaborative program.'
       },
     ],
     education: [

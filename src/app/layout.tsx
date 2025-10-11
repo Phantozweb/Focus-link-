@@ -18,6 +18,37 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Focus Links',
+  url: 'https://focuslinks.pro',
+  logo: 'https://focuslinks.pro/logo.png', // Assuming you have a logo at this URL
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    email: 'support@focuslink.com',
+  },
+  sameAs: [
+    'https://www.linkedin.com/company/focus-links'
+  ]
+};
+
+const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Focus Links',
+    url: 'https://focuslinks.pro',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        'urlTemplate': 'https://focuslinks.pro/directory/all?q={search_term_string}'
+      },
+      'query-input': 'required name=search_term_string'
+    }
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,6 +62,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body className={cn('antialiased bg-gray-50')}>
         <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
