@@ -4,6 +4,8 @@
 import { useRef, useState, useEffect } from 'react';
 import { users as allUsers } from '@/lib/data';
 import { webinars } from '@/lib/academy';
+import { demoDiscussions } from '@/lib/forum';
+import { demoJobs } from '@/lib/jobs';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -34,65 +36,6 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
         </Button>
     </div>
 );
-
-const demoDiscussions = [
-  {
-    id: 1,
-    title: 'Unusual Presentation of Keratoconus in a Young Patient',
-    category: 'Cornea & External Disease',
-    replies: 12,
-  },
-  {
-    id: 2,
-    title: 'Managing Progressive Myopia in Children: What’s Working?',
-    category: 'Pediatric Optometry',
-    replies: 34,
-  },
-  {
-    id: 3,
-    title: 'Atypical Macular Degeneration Case Study',
-    category: 'Retina',
-    replies: 21,
-  },
-   {
-    id: 4,
-    title: 'Best Practices for Fitting Scleral Lenses Post-Corneal Transplant',
-    category: 'Contact Lenses',
-    replies: 18,
-  },
-];
-
-const demoJobs = [
-    {
-        id: 1,
-        title: 'Full-Time Optometrist',
-        company: 'VisionCare Associates',
-        location: 'New York, NY',
-        applicants: 12
-    },
-    {
-        id: 2,
-        title: 'Pediatric Optometrist Specialist',
-        company: 'KidsEye Center',
-        location: 'Los Angeles, CA',
-        applicants: 5
-    },
-    {
-        id: 3,
-        title: 'Ophthalmic Technician',
-        company: 'Advanced Eye Hospital',
-        location: 'Chicago, IL',
-        applicants: 28
-    },
-    {
-        id: 4,
-        title: 'Retail Optician',
-        company: 'Modern Eyewear Co.',
-        location: 'Houston, TX',
-        applicants: 7
-    }
-];
-
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
@@ -432,7 +375,7 @@ export default function Home() {
                         <CardContent className="p-6 flex flex-col flex-grow">
                           <Badge variant="secondary" className="mb-2 w-fit">{discussion.category}</Badge>
                           <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                            <Link href="/forum" className="hover:text-primary transition-colors">{discussion.title}</Link>
+                            <Link href={`/forum/${discussion.id}`} className="hover:text-primary transition-colors">{discussion.title}</Link>
                           </h3>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-auto border-t pt-4">
                             <MessageSquare className="h-4 w-4" /> {discussion.replies} Replies
@@ -461,7 +404,7 @@ export default function Home() {
                       <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                         <CardContent className="p-6 flex flex-col flex-grow">
                           <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                            <Link href="/jobs" className="hover:text-primary transition-colors">{job.title}</Link>
+                            <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                           </h3>
                            <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                               <div className="flex items-center gap-2">
@@ -470,9 +413,7 @@ export default function Home() {
                               <div className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4" /> {job.location}
                               </div>
-                              <div className="flex items-center gap-2">
-                                <Users className="h-4 w-4" /> {job.applicants} applicants
-                              </div>
+                              <p className="text-sm text-gray-500">{job.applicants} applicants</p>
                            </div>
                         </CardContent>
                       </Card>
@@ -641,3 +582,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

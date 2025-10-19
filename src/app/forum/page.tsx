@@ -6,67 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { demoDiscussions } from '@/lib/forum';
 
 export const metadata: Metadata = {
   title: 'Case Discussion Forum | Focus Links',
-  description: 'Engage with eye care professionals in our case discussion forum. Share your insights, ask questions, and collaborate on complex cases. Coming soon!',
+  description: 'Engage with eye care professionals in our case discussion forum. Share your insights, ask questions, and collaborate on complex cases.',
 };
-
-const demoDiscussions = [
-  {
-    id: 1,
-    title: 'Unusual Presentation of Keratoconus in a Young Patient',
-    author: 'Dr. Emily Carter',
-    avatar: 'https://picsum.photos/seed/p1/40/40',
-    category: 'Cornea & External Disease',
-    description: 'A 19-year-old male presented with rapidly progressing astigmatism and visual distortion in the left eye. Topography reveals an atypical pattern, not classic for Pellucid Marginal Degeneration or Keratoconus. Looking for opinions on differential diagnosis and management strategies...',
-    mediaCount: 2,
-    replies: 12,
-    views: 156,
-    upvotes: 45,
-    lastReply: '2 hours ago',
-  },
-  {
-    id: 2,
-    title: 'Managing Progressive Myopia in Children: What’s Working?',
-    author: 'Dr. Ben Hanson',
-    avatar: 'https://picsum.photos/seed/p2/40/40',
-    category: 'Pediatric Optometry',
-    description: 'Sharing a case of an 8-year-old with a -1.50D/year progression rate. We\'ve tried multifocal soft lenses with limited success. Has anyone had consistent results with Atropine 0.05% or new DIMS lenses in similar cases? Seeking practical insights.',
-    mediaCount: 0,
-    replies: 34,
-    views: 432,
-    upvotes: 88,
-    lastReply: '5 hours ago',
-  },
-  {
-    id: 3,
-    title: 'Atypical Macular Degeneration Case Study',
-    author: 'Dr. Aisha Khan',
-    avatar: 'https://picsum.photos/seed/p3/40/40',
-    category: 'Retina',
-    description: 'Patient is a 55-year-old female with drusen deposits but no CNV, yet experiencing significant central vision loss. OCT and FAF images attached. Is this a rare form of AMD or could it be a macular dystrophy? All thoughts are welcome.',
-    mediaCount: 3,
-    replies: 21,
-    views: 289,
-    upvotes: 62,
-    lastReply: '1 day ago',
-  },
-   {
-    id: 4,
-    title: 'Best Practices for Fitting Scleral Lenses Post-Corneal Transplant',
-    author: 'Optom. David Chen',
-    avatar: 'https://picsum.photos/seed/p4/40/40',
-    category: 'Contact Lenses',
-    description: 'I have a patient who underwent a penetrating keratoplasty 1 year ago and now requires a scleral lens for visual rehabilitation. The graft is clear, but the topography is highly irregular. Looking for tips on initial lens selection and vaulting strategies.',
-    mediaCount: 1,
-    replies: 18,
-    views: 205,
-    upvotes: 51,
-    lastReply: '3 days ago',
-  },
-];
-
 
 export default function ForumPage() {
   return (
@@ -81,14 +26,6 @@ export default function ForumPage() {
       </section>
 
       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 bg-card p-8 rounded-lg shadow-md border">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">Coming Soon!</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                We are building an interactive and secure forum for case discussions. Below is a preview of what you can expect. 
-                Stay tuned for a platform where you can collaborate with peers and enhance your clinical knowledge.
-            </p>
-        </div>
-
         <div className="max-w-4xl mx-auto">
            <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-slate-800">Trending Discussions</h2>
@@ -113,7 +50,7 @@ export default function ForumPage() {
                             <div className="flex-grow">
                                 <Badge variant="secondary" className="mb-2">{discussion.category}</Badge>
                                 <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
-                                    <Link href="#">{discussion.title}</Link>
+                                    <Link href={`/forum/${discussion.id}`}>{discussion.title}</Link>
                                 </h3>
                                  <p className="text-sm text-slate-600 mt-1 line-clamp-2">{discussion.description}</p>
                                 <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
@@ -145,3 +82,5 @@ export default function ForumPage() {
     </div>
   );
 }
+
+    

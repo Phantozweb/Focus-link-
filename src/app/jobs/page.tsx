@@ -1,60 +1,23 @@
 
 import type { Metadata } from 'next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Briefcase, MapPin, Search, Building, Users, Lock } from 'lucide-react';
+import { Briefcase, MapPin, Search, Building, Lock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { demoJobs } from '@/lib/jobs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export const metadata: Metadata = {
   title: 'Job Board | Focus Links',
-  description: 'Find your next career opportunity in the eye care industry on the Focus Links job board. Browse listings from top clinics, hospitals, and companies. Coming soon!',
+  description: 'Find your next career opportunity in the eye care industry on the Focus Links job board. Browse listings from top clinics, hospitals, and companies.',
 };
-
-const demoJobs = [
-    {
-        id: 1,
-        title: 'Full-Time Optometrist',
-        company: 'VisionCare Associates',
-        logo: 'https://picsum.photos/seed/c1/40/40',
-        location: 'New York, NY',
-        type: 'Full-Time',
-        posted: '2 days ago',
-        applicants: 12
-    },
-    {
-        id: 2,
-        title: 'Pediatric Optometrist Specialist',
-        company: 'KidsEye Center',
-        logo: 'https://picsum.photos/seed/c2/40/40',
-        location: 'Los Angeles, CA',
-        type: 'Part-Time',
-        posted: '5 days ago',
-        applicants: 5
-    },
-    {
-        id: 3,
-        title: 'Ophthalmic Technician',
-        company: 'Advanced Eye Hospital',
-        logo: 'https://picsum.photos/seed/c3/40/40',
-        location: 'Chicago, IL',
-        type: 'Full-Time',
-        posted: '1 week ago',
-        applicants: 28
-    },
-    {
-        id: 4,
-        title: 'Retail Optician',
-        company: 'Modern Eyewear Co.',
-        logo: 'https://picsum.photos/seed/c4/40/40',
-        location: 'Houston, TX',
-        type: 'Full-Time',
-        posted: '1 week ago',
-        applicants: 7
-    }
-];
 
 export default function JobsPage() {
   return (
@@ -69,13 +32,6 @@ export default function JobsPage() {
       </section>
 
        <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 bg-card p-8 rounded-lg shadow-md border">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">Coming Soon!</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                Our job board is under construction! Below is a preview of how you'll be able to browse and post job opportunities from top clinics, hospitals, and industry partners.
-            </p>
-        </div>
-
         <div className="max-w-5xl mx-auto">
             {/* Filter Bar */}
             <Card className="mb-8">
@@ -90,14 +46,21 @@ export default function JobsPage() {
                             <Input placeholder="City, state, or zip code" className="pl-10" />
                         </div>
                     </div>
-                    <div className="w-full flex-shrink-0 sm:w-auto flex flex-col md:flex-row gap-2">
+                     <div className="w-full flex-shrink-0 sm:w-auto flex flex-col md:flex-row gap-2">
                       <Button className="w-full md:w-auto">Find Jobs</Button>
-                      <div className="text-center">
-                        <Button variant="secondary" className="w-full md:w-auto">Post a Job</Button>
-                        <p className="text-xs text-muted-foreground mt-1 flex items-center justify-center gap-1">
-                           <Lock className="h-3 w-3" /> Members only
-                        </p>
-                      </div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="secondary" className="w-full md:w-auto" disabled>
+                              <Lock className="mr-2 h-4 w-4" />
+                              Post a Job
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Members only</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                 </CardContent>
             </Card>
@@ -112,7 +75,7 @@ export default function JobsPage() {
                             </div>
                             <div className="col-span-10 sm:col-span-8 flex-grow">
                                 <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
-                                    <Link href="#">{job.title}</Link>
+                                    <Link href={`/jobs/${job.id}`}>{job.title}</Link>
                                 </h3>
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-x-2 gap-y-1 text-sm text-muted-foreground mt-1">
                                     <div className="flex items-center gap-1.5"><Building className="h-4 w-4" /> {job.company}</div>
@@ -125,13 +88,10 @@ export default function JobsPage() {
                             </div>
                             <div className="col-span-12 sm:col-span-3 flex flex-col items-start sm:items-end justify-between h-full gap-2 text-sm w-full sm:w-auto">
                                 <Button asChild className="w-full sm:w-auto">
-                                    <Link href="#">View Details</Link>
+                                    <Link href={`/jobs/${job.id}`}>View Details</Link>
                                 </Button>
                                 <div className="flex items-center gap-2 text-muted-foreground w-full justify-end">
-                                  <div className="flex items-center gap-1">
-                                    <Users className="h-4 w-4" />
-                                    <span>{job.applicants} applicants</span>
-                                  </div>
+                                  <p>{job.applicants} applicants</p>
                                   <span className="text-muted-foreground/50">|</span>
                                   <span>{job.posted}</span>
                                 </div>
@@ -148,3 +108,5 @@ export default function JobsPage() {
     </div>
   );
 }
+
+    
