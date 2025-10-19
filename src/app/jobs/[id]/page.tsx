@@ -29,9 +29,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
 
             <Card>
                 <CardHeader className="p-6 flex flex-col sm:flex-row items-start gap-6">
-                    <div className="h-20 w-20 bg-slate-100 rounded-md flex items-center justify-center flex-shrink-0">
-                        <img src={job.logo} alt={`${job.company} logo`} className="w-16 h-16 rounded-sm object-contain" data-ai-hint="logo building" />
-                    </div>
+                    <img src={job.logo} alt={`${job.company} logo`} className="w-20 h-20 rounded-md object-contain" data-ai-hint="logo building" />
                     <div>
                         <Badge className="mb-2">{job.type}</Badge>
                         <CardTitle className="text-3xl font-headline text-slate-800">{job.title}</CardTitle>
@@ -96,5 +94,3 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     </div>
   );
 }
-
-    

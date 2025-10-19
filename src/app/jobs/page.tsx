@@ -70,8 +70,8 @@ export default function JobsPage() {
                 {demoJobs.map(job => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4 grid grid-cols-12 items-start gap-4">
-                            <div className="col-span-2 sm:col-span-1 h-16 w-16 bg-slate-100 rounded-md flex items-center justify-center flex-shrink-0">
-                                <img src={job.logo} alt={`${job.company} logo`} className="w-12 h-12 rounded-sm object-contain" data-ai-hint="logo building" />
+                            <div className="col-span-2 sm:col-span-1 flex-shrink-0">
+                                <img src={job.logo} alt={`${job.company} logo`} className="w-16 h-16 rounded-md object-contain" data-ai-hint="logo building" />
                             </div>
                             <div className="col-span-10 sm:col-span-8 flex-grow">
                                 <h3 className="text-lg font-bold text-slate-800 hover:text-primary">

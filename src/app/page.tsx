@@ -37,6 +37,33 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
     </div>
 );
 
+const ctaCards = [
+    {
+      title: "Become an Official Member",
+      description: "Join for free to get a verified profile, priority access to academy events, and exclusive networking opportunities.",
+      href: "/membership",
+      icon: <Award className="h-8 w-8 text-white" />,
+      cta: "Join for Free",
+      className: "bg-gradient-to-br from-blue-600 to-cyan-500",
+    },
+    {
+      title: "Get Listed on the Directory",
+      description: "Apply for membership to create your professional profile and connect with peers and leaders across the globe.",
+      href: "/membership",
+      icon: <Sparkles className="h-8 w-8 text-white" />,
+      cta: "Apply to Get Listed",
+       className: "bg-gradient-to-br from-slate-700 to-slate-900",
+    },
+    {
+      title: "Host a Webinar With Us",
+      description: "Share your expertise with thousands of eye care professionals and students. We provide the platform, you provide the knowledge.",
+      href: "/contact",
+      icon: <BookUser className="h-8 w-8 text-white" />,
+      cta: "Book a Webinar",
+       className: "bg-gradient-to-br from-cyan-700 to-blue-800",
+    },
+];
+
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
   const associations = allUsers.filter(u => u.type === 'Association');
@@ -104,33 +131,6 @@ export default function Home() {
     
     router.push(`/directory/${category}?${params.toString()}`);
   }
-
-  const ctaCards = [
-    {
-      title: "Become an Official Member",
-      description: "Join for free to get a verified profile, priority access to academy events, and exclusive networking opportunities.",
-      href: "/membership",
-      icon: <Award className="h-8 w-8 text-white" />,
-      cta: "Join for Free",
-      className: "bg-gradient-to-br from-blue-600 to-cyan-500",
-    },
-    {
-      title: "Get Listed on the Directory",
-      description: "Apply for membership to create your professional profile and connect with peers and leaders across the globe.",
-      href: "/membership",
-      icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Apply to Get Listed",
-       className: "bg-gradient-to-br from-slate-700 to-slate-900",
-    },
-    {
-      title: "Host a Webinar With Us",
-      description: "Share your expertise with thousands of eye care professionals and students. We provide the platform, you provide the knowledge.",
-      href: "/contact",
-      icon: <BookUser className="h-8 w-8 text-white" />,
-      cta: "Book a Webinar",
-       className: "bg-gradient-to-br from-cyan-700 to-blue-800",
-    },
-  ];
 
   return (
     <div className="bg-muted/40">
@@ -416,9 +416,7 @@ export default function Home() {
                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                         <CardContent className="p-6 flex flex-col flex-grow">
                             <div className="flex items-start gap-4 mb-4">
-                                <div className="h-12 w-12 bg-slate-100 rounded-md flex items-center justify-center flex-shrink-0">
-                                    <img src={job.logo} alt={`${job.company} logo`} className="w-10 h-10 rounded-sm object-contain" data-ai-hint="logo building" />
-                                </div>
+                                <img src={job.logo} alt={`${job.company} logo`} className="w-12 h-12 rounded-md object-contain" data-ai-hint="logo building" />
                                 <div>
                                     <p className="font-semibold text-slate-800">{job.company}</p>
                                     <Badge variant="outline">{job.type}</Badge>
@@ -428,9 +426,9 @@ export default function Home() {
                             <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                           </h3>
                            <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                              <p>{job.location}</p>
-                              <p>{job.applicants} applicants</p>
-                              <p>Posted {job.posted}</p>
+                              <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {job.location}</p>
+                              <p className="flex items-center gap-2"><Users className="h-4 w-4" /> {job.applicants} applicants</p>
+                              <p className="flex items-center gap-2"><Calendar className="h-4 w-4" /> Posted {job.posted}</p>
                            </div>
                         </CardContent>
                       </Card>
