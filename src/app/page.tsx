@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -129,8 +129,8 @@ export default function Home() {
       icon: <BookUser className="h-8 w-8 text-white" />,
       cta: "Book a Webinar",
        className: "bg-gradient-to-br from-cyan-700 to-blue-800",
-    }
-  ]
+    },
+  ];
 
   return (
     <div className="bg-muted/40">
@@ -377,8 +377,20 @@ export default function Home() {
                           <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
                             <Link href={`/forum/${discussion.id}`} className="hover:text-primary transition-colors">{discussion.title}</Link>
                           </h3>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-auto border-t pt-4">
-                            <MessageSquare className="h-4 w-4" /> {discussion.replies} Replies
+                           <p className="text-sm text-slate-600 mt-1 line-clamp-2 flex-grow">{discussion.description}</p>
+                          <div className="border-t pt-4 mt-4 space-y-3">
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Avatar className="h-6 w-6">
+                                    <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
+                                    <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <span>{discussion.author}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm text-muted-foreground">
+                                <div className="flex items-center gap-1.5"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
+                                <div className="flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
+                                <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
@@ -401,19 +413,30 @@ export default function Home() {
                 <CarouselContent className="-ml-4">
                   {demoJobs.map((job) => (
                     <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                       <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                         <CardContent className="p-6 flex flex-col flex-grow">
+                            <div className="flex items-start gap-4 mb-4">
+                                <div className="h-12 w-12 bg-slate-100 rounded-md flex items-center justify-center flex-shrink-0">
+                                    <img src={job.logo} alt={`${job.company} logo`} className="w-10 h-10 rounded-sm object-contain" data-ai-hint="logo building" />
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-slate-800">{job.company}</p>
+                                    <Badge variant="outline">{job.type}</Badge>
+                                </div>
+                            </div>
                           <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
                             <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                           </h3>
                            <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                               <div className="flex items-center gap-2">
-                                <Building className="h-4 w-4" /> {job.company}
-                              </div>
-                              <div className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4" /> {job.location}
                               </div>
-                              <p className="text-sm text-gray-500">{job.applicants} applicants</p>
+                               <div className="flex items-center gap-2">
+                                <Users className="h-4 w-4" /> {job.applicants} applicants
+                              </div>
+                               <div className="flex items-center gap-2">
+                                <Calendar className="h-4 w-4" /> Posted {job.posted}
+                              </div>
                            </div>
                         </CardContent>
                       </Card>
@@ -582,5 +605,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
