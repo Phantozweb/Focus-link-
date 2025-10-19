@@ -48,27 +48,18 @@ const aboutLinks = [
 
 export function Header() {
 
-  const showNotification = (title: string, body?: string) => {
-    // This function will be called only after permission is granted.
-    // In a full app, this would use a service worker. For this test,
-    // we use the direct constructor which should now work in the new context.
-    new Notification(title, { body });
-  }
-
   const handleNotificationRequest = async () => {
     if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification.");
+      alert("This browser does not support desktop notifications.");
       return;
     }
 
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
-        // Permission was granted, now show a notification.
-        showNotification("Thanks for subscribing!", "You will now receive updates from Focus Links.");
+        alert("Thanks for subscribing! You will now receive updates from Focus Links.");
       } else {
-         // Permission was denied.
-        alert("You have denied notification permissions. You can enable them in your browser settings.");
+         alert("You have denied notification permissions. You can enable them in your browser settings if you change your mind.");
       }
     } catch (err) {
        console.error("Error requesting notification permission:", err);
