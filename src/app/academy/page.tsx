@@ -118,7 +118,9 @@ export default function AcademyPage() {
                 </div>
               </Card>
             )) : (
-              <p className="text-muted-foreground col-span-full text-center">No upcoming events scheduled. Please check back soon!</p>
+              <Card className="col-span-full">
+                <CardContent className="p-8 text-center text-muted-foreground">No upcoming events scheduled. Please check back soon!</CardContent>
+              </Card>
             )}
           </div>
         </section>

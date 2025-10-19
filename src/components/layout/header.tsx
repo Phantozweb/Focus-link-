@@ -143,74 +143,7 @@ export function Header() {
             </div>
         </div>
          <div className="md:hidden">
-            <Sheet>
-            <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                    <Menu />
-                <span className="sr-only">Open menu</span>
-                </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-                <nav className="flex flex-col gap-2 pt-8 text-lg font-medium">
-                <SheetClose asChild><Link href="/" className="px-3 py-2 rounded-md hover:bg-muted">Home</Link></SheetClose>
-                
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="directory" className="border-b-0">
-                        <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Directory</AccordionTrigger>
-                        <AccordionContent className="pl-6">
-                            {directoryLinks.map(link => (
-                                <SheetClose asChild key={link.name}>
-                                    <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
-                                </SheetClose>
-                            ))}
-                                <Accordion type="single" collapsible className="w-full">
-                                <AccordionItem value="professionals" className="border-b-0">
-                                    <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Professionals</AccordionTrigger>
-                                    <AccordionContent className="pl-6">
-                                        {professionalLinks.map(link => (
-                                            <SheetClose asChild key={link.name}>
-                                                <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
-                                            </SheetClose>
-                                        ))}
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </AccordionContent>
-                    </AccordionItem>
-
-                        <AccordionItem value="community" className="border-b-0">
-                        <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Community</AccordionTrigger>
-                        <AccordionContent className="pl-6">
-                            {communityLinks.map(link => (
-                                <SheetClose asChild key={link.name}>
-                                    <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
-                                </SheetClose>
-                            ))}
-                        </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="about" className="border-b-0">
-                        <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">About</AccordionTrigger>
-                        <AccordionContent className="pl-6">
-                            {aboutLinks.map(link => (
-                                <SheetClose asChild key={link.name}>
-                                    <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
-
-                                </SheetClose>
-                            ))}
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-
-                    <SheetClose asChild>
-                    <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" className="w-full justify-start mt-4">
-                        <Bell className="mr-2 h-4 w-4" />
-                        Notification Settings
-                    </Button>
-                </SheetClose>
-                </nav>
-            </SheetContent>
-            </Sheet>
+            {/* The hamburger menu is intentionally removed for mobile as per the new design */}
         </div>
     </header>
   );
