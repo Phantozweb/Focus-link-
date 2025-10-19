@@ -115,10 +115,10 @@ export default function Home() {
     },
     {
       title: "Get Listed on the Directory",
-      description: "Ready to be seen? Create a professional profile using our AI Interviewer and connect with peers across the globe.",
-      href: "/directory/create",
+      description: "Ready to be seen? Apply for membership to create your professional profile and connect with peers across the globe.",
+      href: "/membership",
       icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Create Your Profile",
+      cta: "Apply to Get Listed",
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {

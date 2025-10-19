@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,8 +64,6 @@ export function Header() {
                     <Button variant="ghost">Directory <ChevronDown className="ml-1 h-4 w-4" /></Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem asChild><Link href="/directory/create" className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" />Create Profile (AI)</Link></DropdownMenuItem>
-                    <DropdownMenuSeparator />
                     {directoryLinks.map(link => (
                         <DropdownMenuItem key={link.name} asChild><Link href={link.href}>{link.name}</Link></DropdownMenuItem>
                     ))}
@@ -86,6 +84,8 @@ export function Header() {
                 </DropdownMenu>
 
                 <Button variant="ghost" asChild><Link href="/academy">Academy</Link></Button>
+                <Button variant="ghost" asChild><Link href="/forum">Forum</Link></Button>
+                <Button variant="ghost" asChild><Link href="/jobs">Jobs</Link></Button>
                  <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost">About <ChevronDown className="ml-1 h-4 w-4" /></Button>
@@ -123,9 +123,6 @@ export function Header() {
                         <AccordionItem value="directory" className="border-b-0">
                             <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Directory</AccordionTrigger>
                             <AccordionContent className="pl-6">
-                                <SheetClose asChild>
-                                    <Link href="/directory/create" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted"><Sparkles className="h-4 w-4 text-primary" />Create Profile (AI)</Link>
-                                </SheetClose>
                                 {directoryLinks.map(link => (
                                     <SheetClose asChild key={link.name}>
                                         <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
@@ -146,6 +143,9 @@ export function Header() {
                     </Accordion>
 
                     <SheetClose asChild><Link href="/academy" className="px-3 py-2 rounded-md hover:bg-muted">Academy</Link></SheetClose>
+                    <SheetClose asChild><Link href="/forum" className="px-3 py-2 rounded-md hover:bg-muted">Forum</Link></SheetClose>
+                    <SheetClose asChild><Link href="/jobs" className="px-3 py-2 rounded-md hover:bg-muted">Jobs</Link></SheetClose>
+
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="about" className="border-b-0">
                             <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">About</AccordionTrigger>
