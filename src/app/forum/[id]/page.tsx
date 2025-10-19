@@ -120,5 +120,3 @@ export default function ForumPostPage({ params }: ForumPostPageProps) {
     </div>
   );
 }
-
-    

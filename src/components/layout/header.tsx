@@ -54,11 +54,8 @@ export function Header() {
   const { toast } = useToast();
 
   const handlePreferencesSave = (preferences: Record<string, boolean>) => {
+    // This is where you would save the user's preferences to your backend.
     console.log("Saving preferences:", preferences);
-    toast({
-      title: "Preferences Saved",
-      description: "Your notification settings have been updated.",
-    });
   };
 
   return (
