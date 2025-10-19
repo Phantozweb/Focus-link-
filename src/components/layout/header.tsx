@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell, BookOpen, Users, Tv } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +42,12 @@ const professionalLinks = [
     { name: 'Opticians', href: '/directory/professionals/opticians' },
     { name: 'Academics', href: '/directory/professionals/academics' },
 ];
+
+const communityLinks = [
+    { name: 'Academy', href: '/academy', icon: <BookOpen /> },
+    { name: 'Forum', href: '/forum', icon: <MessageSquare /> },
+    { name: 'Jobs', href: '/jobs', icon: <Briefcase /> },
+]
 
 const aboutLinks = [
     { name: 'About Us', href: '/about' },
@@ -99,9 +105,17 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Button variant="ghost" asChild><Link href="/academy">Academy</Link></Button>
-                <Button variant="ghost" asChild><Link href="/forum">Forum</Link></Button>
-                <Button variant="ghost" asChild><Link href="/jobs">Jobs</Link></Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost">Community <ChevronDown className="ml-1 h-4 w-4" /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        {communityLinks.map(link => (
+                            <DropdownMenuItem key={link.name} asChild><Link href={link.href}>{link.name}</Link></DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
                  <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost">About <ChevronDown className="ml-1 h-4 w-4" /></Button>
@@ -148,25 +162,32 @@ export function Header() {
                                         <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
                                     </SheetClose>
                                 ))}
+                                 <Accordion type="single" collapsible className="w-full">
+                                    <AccordionItem value="professionals" className="border-b-0">
+                                        <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Professionals</AccordionTrigger>
+                                        <AccordionContent className="pl-6">
+                                            {professionalLinks.map(link => (
+                                                <SheetClose asChild key={link.name}>
+                                                    <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
+                                                </SheetClose>
+                                            ))}
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="professionals" className="border-b-0">
-                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Professionals</AccordionTrigger>
+
+                         <AccordionItem value="community" className="border-b-0">
+                            <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">Community</AccordionTrigger>
                             <AccordionContent className="pl-6">
-                                {professionalLinks.map(link => (
+                                {communityLinks.map(link => (
                                     <SheetClose asChild key={link.name}>
                                         <Link href={link.href} className="block px-3 py-2 rounded-md hover:bg-muted">{link.name}</Link>
                                     </SheetClose>
                                 ))}
                             </AccordionContent>
                         </AccordionItem>
-                    </Accordion>
 
-                    <SheetClose asChild><Link href="/academy" className="px-3 py-2 rounded-md hover:bg-muted">Academy</Link></SheetClose>
-                    <SheetClose asChild><Link href="/forum" className="px-3 py-2 rounded-md hover:bg-muted">Forum</Link></SheetClose>
-                    <SheetClose asChild><Link href="/jobs" className="px-3 py-2 rounded-md hover:bg-muted">Jobs</Link></SheetClose>
-
-                    <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="about" className="border-b-0">
                             <AccordionTrigger className="px-3 py-2 rounded-md hover:bg-muted focus:no-underline">About</AccordionTrigger>
                             <AccordionContent className="pl-6">
@@ -178,6 +199,7 @@ export function Header() {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
+
                      <SheetClose asChild>
                       <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" className="w-full justify-start mt-4">
                         <Bell className="mr-2 h-4 w-4" />
