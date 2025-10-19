@@ -49,33 +49,30 @@ const aboutLinks = [
 export function Header() {
 
   const showNotification = (title: string, body?: string) => {
-    // A service worker is required for robust notification handling,
-    // but for a simple test, the Notification constructor can be used
-    // directly if the context allows it.
+    // This function will be called only after permission is granted.
+    // In a full app, this would use a service worker. For this test,
+    // we use the direct constructor which should now work in the new context.
     new Notification(title, { body });
   }
 
-  const handleNotificationRequest = () => {
+  const handleNotificationRequest = async () => {
     if (!("Notification" in window)) {
       alert("This browser does not support desktop notification.");
       return;
     }
-  
-    if (Notification.permission === "granted") {
-      // If permission is already granted, show a test notification
-      showNotification("This is a test notification from Focus Links!");
-    } else if (Notification.permission !== "denied") {
-      // Otherwise, ask for permission
-      Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
-          showNotification("Thanks for subscribing! Here is your first notification.");
-        } else {
-          alert("You have denied notification permissions.");
-        }
-      });
-    } else {
-        // If permission is denied, explain how to enable it
-        alert("You have denied notification permissions. Please enable them in your browser settings to receive updates.");
+
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        // Permission was granted, now show a notification.
+        showNotification("Thanks for subscribing!", "You will now receive updates from Focus Links.");
+      } else {
+         // Permission was denied.
+        alert("You have denied notification permissions. You can enable them in your browser settings.");
+      }
+    } catch (err) {
+       console.error("Error requesting notification permission:", err);
+       alert("There was an error while trying to enable notifications.");
     }
   };
 
