@@ -48,15 +48,24 @@ const aboutLinks = [
 
 export function Header() {
 
+  const showNotification = (title: string, body?: string) => {
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification(title, { body });
+    });
+  }
+
   const handleNotificationRequest = () => {
-    if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
-      new Notification("This is a test notification from Focus Links!");
+    if (!("Notification" in window) || !navigator.serviceWorker) {
+      alert("This browser does not support desktop notification.");
+      return;
+    }
+  
+    if (Notification.permission === "granted") {
+      showNotification("This is a test notification from Focus Links!");
     } else if (Notification.permission !== "denied") {
       Notification.requestPermission().then(function (permission) {
         if (permission === "granted") {
-          new Notification("Thanks for subscribing! Here is a test notification.");
+          showNotification("Thanks for subscribing! Here is a test notification.");
         } else {
           alert("You have denied notification permissions.");
         }
