@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
@@ -21,7 +22,9 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
+import { NotificationSettings } from '@/components/notification-settings';
+import { useToast } from '@/hooks/use-toast';
 
 const directoryLinks = [
     { name: 'All Profiles', href: '/directory/all' },
@@ -47,29 +50,24 @@ const aboutLinks = [
 ]
 
 export function Header() {
+  const [isNotificationDialogOpen, setIsNotificationDialogOpen] = useState(false);
+  const { toast } = useToast();
 
-  const handleNotificationRequest = async () => {
-    if (!("Notification" in window)) {
-      alert("This browser does not support desktop notifications.");
-      return;
-    }
-
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
-        alert("Thanks for subscribing! You will now receive updates from Focus Links.");
-      } else {
-         alert("You have denied notification permissions. You can enable them in your browser settings if you change your mind.");
-      }
-    } catch (err) {
-       console.error("Error requesting notification permission:", err);
-       alert("There was an error while trying to enable notifications.");
-    }
+  const handlePreferencesSave = (preferences: Record<string, boolean>) => {
+    console.log("Saving preferences:", preferences);
+    toast({
+      title: "Preferences Saved",
+      description: "Your notification settings have been updated.",
+    });
   };
-
 
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 sticky top-0 z-40">
+        <NotificationSettings 
+          isOpen={isNotificationDialogOpen}
+          onOpenChange={setIsNotificationDialogOpen}
+          onSave={handlePreferencesSave}
+        />
         <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-3 text-slate-800">
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
@@ -121,7 +119,7 @@ export function Header() {
         </div>
         <div className="flex items-center gap-4">
              <div className="hidden md:flex items-center gap-2">
-                <Button onClick={handleNotificationRequest} variant="outline" size="icon">
+                <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" size="icon">
                   <Bell className="h-5 w-5" />
                   <span className="sr-only">Enable Notifications</span>
                 </Button>
@@ -183,9 +181,9 @@ export function Header() {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
-                     <Button onClick={handleNotificationRequest} variant="outline" className="w-full justify-start mt-4">
+                     <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" className="w-full justify-start mt-4">
                       <Bell className="mr-2 h-4 w-4" />
-                      Enable Notifications
+                      Notification Settings
                     </Button>
                     <SheetClose asChild>
                       <Button asChild className="mt-4">
