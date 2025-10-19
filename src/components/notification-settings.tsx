@@ -15,6 +15,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { BellRing, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { demoJobs } from '@/lib/jobs';
 
 interface NotificationSettingsProps {
   isOpen: boolean;
@@ -27,6 +28,25 @@ const initialPreferences = {
   jobs: true,
   forum: false,
 };
+
+function showDemoNotification() {
+  const job = demoJobs[0];
+  if (!job) return;
+
+  const title = 'New Job Posting!';
+  const options: NotificationOptions = {
+    body: `A new role is available: ${job.title} at ${job.company}`,
+    icon: '/logo.png', // A path to an icon
+    badge: '/logo.png', // An icon for mobile
+    tag: 'new-job-notification',
+  };
+
+  // The new Notification() constructor is the most direct way
+  // to show a notification from the page script.
+  // This might be blocked in some secure contexts (like iframes) without a service worker,
+  // but it is the standard way for this type of application structure.
+  new Notification(title, options);
+}
 
 export function NotificationSettings({
   isOpen,
@@ -66,6 +86,7 @@ export function NotificationSettings({
       });
     } else if (currentPermission === 'granted') {
       onSave(preferences);
+      setTimeout(showDemoNotification, 2000);
     }
     
     setIsSaving(false);
@@ -143,4 +164,3 @@ export function NotificationSettings({
     </Dialog>
   );
 }
-
