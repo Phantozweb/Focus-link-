@@ -70,32 +70,27 @@ export default function JobsPage() {
             <div className="space-y-4">
                 {demoJobs.map(job => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
-                        <CardContent className="p-4 grid grid-cols-12 items-start gap-4">
-                            <div className="col-span-2 sm:col-span-1 flex-shrink-0">
-                                <Image src={job.logo} alt={`${job.company} logo`} width={64} height={64} className="rounded-md object-contain" data-ai-hint="logo building" />
+                        <CardContent className="p-6">
+                            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                <div>
+                                    <Badge className="mb-2">{job.type}</Badge>
+                                    <h3 className="text-xl font-bold text-slate-800 hover:text-primary">
+                                        <Link href={`/jobs/${job.id}`}>{job.title}</Link>
+                                    </h3>
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mt-2">
+                                        <span>{job.company}</span>
+                                        <span>&middot;</span>
+                                        <span>{job.location}</span>
+                                    </div>
+                                </div>
+                                <div className="sm:text-right">
+                                    <Button asChild>
+                                        <Link href={`/jobs/${job.id}`}>View Details</Link>
+                                    </Button>
+                                </div>
                             </div>
-                            <div className="col-span-10 sm:col-span-8 flex-grow">
-                                <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
-                                    <Link href={`/jobs/${job.id}`}>{job.title}</Link>
-                                </h3>
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-x-2 gap-y-1 text-sm text-muted-foreground mt-1">
-                                    <span>{job.company}</span>
-                                    <span className="hidden sm:inline">&middot;</span>
-                                    <span>{job.location}</span>
-                                </div>
-                                <div className="mt-2">
-                                    <Badge>{job.type}</Badge>
-                                </div>
-                            </div>
-                            <div className="col-span-12 sm:col-span-3 flex flex-col items-start sm:items-end justify-between h-full gap-2 text-sm w-full sm:w-auto">
-                                <Button asChild className="w-full sm:w-auto">
-                                    <Link href={`/jobs/${job.id}`}>View Details</Link>
-                                </Button>
-                                <div className="flex items-center gap-2 text-muted-foreground w-full justify-end">
-                                  <p>Posted by {job.postedBy}</p>
-                                  <span className="text-muted-foreground/50">|</span>
-                                  <span>{job.posted}</span>
-                                </div>
+                            <div className="border-t mt-4 pt-3 text-xs text-muted-foreground text-right">
+                                Posted {job.posted} by <span className="font-semibold text-slate-600">{job.postedBy}</span>
                             </div>
                         </CardContent>
                     </Card>
@@ -109,5 +104,3 @@ export default function JobsPage() {
     </div>
   );
 }
-
-    

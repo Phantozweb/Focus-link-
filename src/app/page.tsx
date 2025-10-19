@@ -62,7 +62,7 @@ const ctaCards = [
       cta: "Book a Webinar",
        className: "bg-gradient-to-br from-cyan-700 to-blue-800",
     },
-];
+  ];
 
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
@@ -415,20 +415,20 @@ export default function Home() {
                     <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                         <CardContent className="p-6 flex flex-col flex-grow">
-                            <div className="flex items-start gap-4 mb-4">
-                                <Image src={job.logo} alt={`${job.company} logo`} width={48} height={48} className="rounded-md object-contain" data-ai-hint="logo building" />
-                                <div>
-                                    <p className="font-semibold text-slate-800">{job.company}</p>
-                                    <Badge variant="outline">{job.type}</Badge>
-                                </div>
-                            </div>
+                          <div className="flex items-center gap-4 mb-4">
+                              <Image src={job.logo} alt={`${job.company} logo`} width={48} height={48} className="rounded-md object-contain" data-ai-hint="logo building" />
+                              <div>
+                                  <p className="font-semibold text-slate-800">{job.company}</p>
+                                  <Badge variant="outline">{job.type}</Badge>
+                              </div>
+                          </div>
                           <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
                             <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                           </h3>
                            <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                              <p><span>{job.location}</span></p>
-                              <p>Posted by {job.postedBy}</p>
-                              <p>Posted {job.posted}</p>
+                              <p><span className="font-semibold text-slate-700">Location:</span> {job.location}</p>
+                              <p><span className="font-semibold text-slate-700">Posted by:</span> {job.postedBy}</p>
+                              <p><span className="font-semibold text-slate-700">Posted:</span> {job.posted}</p>
                            </div>
                         </CardContent>
                       </Card>
@@ -597,5 +597,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

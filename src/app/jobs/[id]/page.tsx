@@ -84,7 +84,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                                    </CardContent>
                                </Card>
                                 <div className="text-sm text-center text-muted-foreground">
-                                    Posted {job.posted} by {job.postedBy}
+                                    Posted {job.posted}. By <span className="font-semibold text-slate-700">{job.postedBy}</span>
                                 </div>
                             </div>
                         </div>
@@ -95,5 +95,3 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     </div>
   );
 }
-
-    
