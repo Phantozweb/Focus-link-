@@ -6,6 +6,7 @@ export const demoDiscussions = [
     author: 'Dr. Emily Carter',
     avatar: 'https://picsum.photos/seed/p1/40/40',
     category: 'Cornea & External Disease',
+    tags: ['Keratoconus', 'Topography', 'Corneal Ectasia'],
     description: 'A 19-year-old male presented with rapidly progressing astigmatism and visual distortion in the left eye. Topography reveals an atypical pattern, not classic for Pellucid Marginal Degeneration or Keratoconus. Looking for opinions on differential diagnosis and management strategies...',
     fullContent: `
 A 19-year-old male presented to my clinic with a chief complaint of progressively blurry vision and shadowing in his left eye over the past 6 months. His right eye is asymptomatic.
@@ -44,6 +45,7 @@ Any insights would be greatly appreciated.
     author: 'Dr. Ben Hanson',
     avatar: 'https://picsum.photos/seed/p2/40/40',
     category: 'Pediatric Optometry',
+    tags: ['Myopia Control', 'Pediatrics', 'Atropine'],
     description: 'Sharing a case of an 8-year-old with a -1.50D/year progression rate. We\'ve tried multifocal soft lenses with limited success. Has anyone had consistent results with Atropine 0.05% or new DIMS lenses in similar cases? Seeking practical insights.',
     fullContent: 'Sharing a case of an 8-year-old with a -1.50D/year progression rate. We\'ve tried multifocal soft lenses with limited success. Has anyone had consistent results with Atropine 0.05% or new DIMS lenses in similar cases? Seeking practical insights.',
     media: [],
@@ -59,6 +61,7 @@ Any insights would be greatly appreciated.
     author: 'Dr. Aisha Khan',
     avatar: 'https://picsum.photos/seed/p3/40/40',
     category: 'Retina',
+    tags: ['AMD', 'Macular Dystrophy', 'OCT'],
     description: 'Patient is a 55-year-old female with drusen deposits but no CNV, yet experiencing significant central vision loss. OCT and FAF images attached. Is this a rare form of AMD or could it be a macular dystrophy? All thoughts are welcome.',
     fullContent: 'Patient is a 55-year-old female with drusen deposits but no CNV, yet experiencing significant central vision loss. OCT and FAF images attached. Is this a rare form of AMD or could it be a macular dystrophy? All thoughts are welcome.',
     media: [
@@ -77,6 +80,7 @@ Any insights would be greatly appreciated.
     author: 'Optom. David Chen',
     avatar: 'https://picsum.photos/seed/p4/40/40',
     category: 'Contact Lenses',
+    tags: ['Scleral Lenses', 'Post-PKP', 'Specialty Contact Lens'],
     description: 'I have a patient who underwent a penetrating keratoplasty 1 year ago and now requires a scleral lens for visual rehabilitation. The graft is clear, but the topography is highly irregular. Looking for tips on initial lens selection and vaulting strategies.',
     fullContent: 'I have a patient who underwent a penetrating keratoplasty 1 year ago and now requires a scleral lens for visual rehabilitation. The graft is clear, but the topography is highly irregular. Looking for tips on initial lens selection and vaulting strategies.',
     media: [],

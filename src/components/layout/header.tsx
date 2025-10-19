@@ -208,14 +208,6 @@ export function Header() {
                         Notification Settings
                     </Button>
                 </SheetClose>
-                <SheetClose asChild>
-                    <Button asChild className="mt-4">
-                    <Link href="/membership">
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        Membership
-                    </Link>
-                    </Button>
-                </SheetClose>
                 </nav>
             </SheetContent>
             </Sheet>

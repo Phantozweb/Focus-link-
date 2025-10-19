@@ -22,7 +22,8 @@ export default function ForumPage() {
       discussion.title.toLowerCase().includes(term) ||
       discussion.description.toLowerCase().includes(term) ||
       discussion.author.toLowerCase().includes(term) ||
-      discussion.category.toLowerCase().includes(term)
+      discussion.category.toLowerCase().includes(term) ||
+      (discussion.tags && discussion.tags.some(tag => tag.toLowerCase().includes(term)))
     );
   });
 
@@ -30,7 +31,7 @@ export default function ForumPage() {
     <div className="bg-muted/40">
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Case Discussion Forum</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Case Forum</h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
             A dedicated space for eye care professionals to share, discuss, and learn from real-world clinical cases.
           </p>
@@ -43,7 +44,7 @@ export default function ForumPage() {
               <div className="relative w-full md:w-auto md:flex-grow">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
-                  placeholder="Search discussions..."
+                  placeholder="Search cases, tags, or categories..."
                   className="pl-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
