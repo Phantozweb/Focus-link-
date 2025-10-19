@@ -6,6 +6,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Announcement } from '@/components/layout/announcement';
+import { BottomNav } from '@/components/layout/bottom-nav';
+
 
 export const metadata: Metadata = {
   title: {
@@ -69,10 +71,13 @@ export default function RootLayout({
         <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
             <Announcement />
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 pb-20 md:pb-0">
               {children}
             </main>
-            <Footer />
+            <div className="hidden md:block">
+              <Footer />
+            </div>
+             <BottomNav />
         </div>
         <Toaster />
       </body>
