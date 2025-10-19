@@ -49,29 +49,33 @@ const aboutLinks = [
 export function Header() {
 
   const showNotification = (title: string, body?: string) => {
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.showNotification(title, { body });
-    });
+    // A service worker is required for robust notification handling,
+    // but for a simple test, the Notification constructor can be used
+    // directly if the context allows it.
+    new Notification(title, { body });
   }
 
   const handleNotificationRequest = () => {
-    if (!("Notification" in window) || !navigator.serviceWorker) {
+    if (!("Notification" in window)) {
       alert("This browser does not support desktop notification.");
       return;
     }
   
     if (Notification.permission === "granted") {
+      // If permission is already granted, show a test notification
       showNotification("This is a test notification from Focus Links!");
     } else if (Notification.permission !== "denied") {
+      // Otherwise, ask for permission
       Notification.requestPermission().then(function (permission) {
         if (permission === "granted") {
-          showNotification("Thanks for subscribing! Here is a test notification.");
+          showNotification("Thanks for subscribing! Here is your first notification.");
         } else {
           alert("You have denied notification permissions.");
         }
       });
     } else {
-        alert("You have denied notification permissions. Please enable them in your browser settings.");
+        // If permission is denied, explain how to enable it
+        alert("You have denied notification permissions. Please enable them in your browser settings to receive updates.");
     }
   };
 
