@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageSquare, ThumbsUp, Eye } from 'lucide-react';
+import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
@@ -19,6 +19,8 @@ const demoDiscussions = [
     author: 'Dr. Emily Carter',
     avatar: 'https://picsum.photos/seed/p1/40/40',
     category: 'Cornea & External Disease',
+    description: 'A 19-year-old male presented with rapidly progressing astigmatism and visual distortion in the left eye. Topography reveals an atypical pattern, not classic for Pellucid Marginal Degeneration or Keratoconus. Looking for opinions on differential diagnosis and management strategies...',
+    mediaCount: 2,
     replies: 12,
     views: 156,
     upvotes: 45,
@@ -30,6 +32,8 @@ const demoDiscussions = [
     author: 'Dr. Ben Hanson',
     avatar: 'https://picsum.photos/seed/p2/40/40',
     category: 'Pediatric Optometry',
+    description: 'Sharing a case of an 8-year-old with a -1.50D/year progression rate. We\'ve tried multifocal soft lenses with limited success. Has anyone had consistent results with Atropine 0.05% or new DIMS lenses in similar cases? Seeking practical insights.',
+    mediaCount: 0,
     replies: 34,
     views: 432,
     upvotes: 88,
@@ -41,6 +45,8 @@ const demoDiscussions = [
     author: 'Dr. Aisha Khan',
     avatar: 'https://picsum.photos/seed/p3/40/40',
     category: 'Retina',
+    description: 'Patient is a 55-year-old female with drusen deposits but no CNV, yet experiencing significant central vision loss. OCT and FAF images attached. Is this a rare form of AMD or could it be a macular dystrophy? All thoughts are welcome.',
+    mediaCount: 3,
     replies: 21,
     views: 289,
     upvotes: 62,
@@ -52,6 +58,8 @@ const demoDiscussions = [
     author: 'Optom. David Chen',
     avatar: 'https://picsum.photos/seed/p4/40/40',
     category: 'Contact Lenses',
+    description: 'I have a patient who underwent a penetrating keratoplasty 1 year ago and now requires a scleral lens for visual rehabilitation. The graft is clear, but the topography is highly irregular. Looking for tips on initial lens selection and vaulting strategies.',
+    mediaCount: 1,
     replies: 18,
     views: 205,
     upvotes: 51,
@@ -84,7 +92,12 @@ export default function ForumPage() {
         <div className="max-w-4xl mx-auto">
            <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-slate-800">Trending Discussions</h2>
-                <Button>Start a New Discussion</Button>
+                <div className="text-right">
+                  <Button>Start a New Discussion</Button>
+                   <p className="text-xs text-muted-foreground mt-1 flex items-center justify-end gap-1">
+                      <Lock className="h-3 w-3" /> Membership required to post.
+                   </p>
+                </div>
             </div>
             <div className="space-y-4">
                 {demoDiscussions.map((discussion) => (
@@ -102,14 +115,25 @@ export default function ForumPage() {
                                 <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
                                     <Link href="#">{discussion.title}</Link>
                                 </h3>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
-                                    <Avatar className="h-6 w-6">
-                                        <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
-                                        <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{discussion.author}</span>
+                                 <p className="text-sm text-slate-600 mt-1 line-clamp-2">{discussion.description}</p>
+                                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+                                    <div className="flex items-center gap-2">
+                                      <Avatar className="h-6 w-6">
+                                          <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
+                                          <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
+                                      </Avatar>
+                                      <span>{discussion.author}</span>
+                                    </div>
                                     <span>&middot;</span>
                                     <span>Last reply {discussion.lastReply}</span>
+                                     {discussion.mediaCount > 0 && (
+                                      <>
+                                        <span>&middot;</span>
+                                        <span className="flex items-center gap-1">
+                                          <Paperclip className="h-4 w-4" /> {discussion.mediaCount}
+                                        </span>
+                                      </>
+                                    )}
                                 </div>
                             </div>
                         </CardContent>

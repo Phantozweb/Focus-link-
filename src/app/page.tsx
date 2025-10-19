@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -68,24 +68,28 @@ const demoJobs = [
         title: 'Full-Time Optometrist',
         company: 'VisionCare Associates',
         location: 'New York, NY',
+        applicants: 12
     },
     {
         id: 2,
         title: 'Pediatric Optometrist Specialist',
         company: 'KidsEye Center',
         location: 'Los Angeles, CA',
+        applicants: 5
     },
     {
         id: 3,
         title: 'Ophthalmic Technician',
         company: 'Advanced Eye Hospital',
         location: 'Chicago, IL',
+        applicants: 28
     },
     {
         id: 4,
         title: 'Retail Optician',
         company: 'Modern Eyewear Co.',
         location: 'Houston, TX',
+        applicants: 7
     }
 ];
 
@@ -465,6 +469,9 @@ export default function Home() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4" /> {job.location}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Users className="h-4 w-4" /> {job.applicants} applicants
                               </div>
                            </div>
                         </CardContent>
