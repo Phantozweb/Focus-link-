@@ -59,7 +59,7 @@ export function Header() {
   };
 
   return (
-    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 sticky top-0 z-40">
+    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-4 sm:px-6 lg:px-8 py-3 sticky top-0 z-40">
         <NotificationSettings 
           isOpen={isNotificationDialogOpen}
           onOpenChange={setIsNotificationDialogOpen}
