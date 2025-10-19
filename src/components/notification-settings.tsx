@@ -49,6 +49,25 @@ export function NotificationSettings({
     setPreferences((prev) => ({ ...prev, [id]: checked }));
   };
 
+  const showDemoNotification = () => {
+    const demoJob = demoJobs[0];
+    const title = 'New Job Posting!';
+    const options = {
+      body: `${demoJob.title} at ${demoJob.company}`,
+      icon: '/logo.png',
+    };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.showNotification(title, options);
+      });
+    } else {
+        // Fallback for environments without a service worker
+        new Notification(title, options);
+    }
+  };
+
+
   const handleSave = async () => {
     setIsSaving(true);
     
@@ -82,6 +101,36 @@ export function NotificationSettings({
         title: 'Permissions Granted!',
         description: "You're all set to receive notifications for new updates.",
       });
+
+      // Show a demo notification if the user opted in
+      if (preferences.jobs || preferences.webinars || preferences.forum) {
+        setTimeout(() => {
+            try {
+                const title = 'Focus Links Test';
+                const options = {
+                    body: 'This is a test notification to confirm you are subscribed!',
+                    icon: '/logo.png' // Make sure you have a logo.png in your public folder
+                };
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification(title, options);
+                    });
+                } else {
+                    // This is a fallback and might trigger the "Illegal constructor" in some strict environments,
+                    // but it's the only option without a service worker.
+                    new Notification(title, options);
+                }
+            } catch (e) {
+                console.error("Could not show notification:", e);
+                // Optionally inform the user that the test notification failed but settings are saved.
+                 toast({
+                    variant: 'destructive',
+                    title: 'Test Notification Failed',
+                    description: 'Could not display a test notification, but your preferences are saved.',
+                });
+            }
+        }, 2000);
+      }
     }
     
     setIsSaving(false);
