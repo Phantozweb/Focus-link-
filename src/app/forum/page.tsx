@@ -1,19 +1,31 @@
 
+'use client';
+
+import { useState } from 'react';
 import type { Metadata } from 'next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock } from 'lucide-react';
+import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { demoDiscussions } from '@/lib/forum';
+import { Input } from '@/components/ui/input';
 
-export const metadata: Metadata = {
-  title: 'Case Discussion Forum | Focus Links',
-  description: 'Engage with eye care professionals in our case discussion forum. Share your insights, ask questions, and collaborate on complex cases.',
-};
 
 export default function ForumPage() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredDiscussions = demoDiscussions.filter((discussion) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      discussion.title.toLowerCase().includes(term) ||
+      discussion.description.toLowerCase().includes(term) ||
+      discussion.author.toLowerCase().includes(term) ||
+      discussion.category.toLowerCase().includes(term)
+    );
+  });
+
   return (
     <div className="bg-muted/40">
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
@@ -27,25 +39,35 @@ export default function ForumPage() {
 
       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-           <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-slate-800">Trending Discussions</h2>
-                <div className="text-right">
-                  <Button>Start a New Discussion</Button>
-                   <p className="text-xs text-muted-foreground mt-1 flex items-center justify-end gap-1">
-                      <Lock className="h-3 w-3" /> Membership required to post.
-                   </p>
-                </div>
+           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+              <div className="relative w-full md:w-auto md:flex-grow">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  placeholder="Search discussions..."
+                  className="pl-10"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="text-right flex-shrink-0">
+                <Button>Start a New Discussion</Button>
+                 <p className="text-xs text-muted-foreground mt-1 flex items-center justify-end gap-1">
+                    <Lock className="h-3 w-3" /> Membership required to post.
+                 </p>
+              </div>
             </div>
             <div className="space-y-4">
-                {demoDiscussions.map((discussion) => (
+                {filteredDiscussions.map((discussion) => (
                     <Card key={discussion.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-start">
-                            <div className="flex-shrink-0 flex flex-col items-center gap-2 w-full sm:w-20 text-center">
+                            <div className="flex-shrink-0 flex flex-row sm:flex-col items-center gap-4 w-full sm:w-20 text-center">
                                 <Button variant="outline" size="sm" className="w-full">
                                     <ThumbsUp className="h-4 w-4 mr-2" /> {discussion.upvotes}
                                 </Button>
-                                <div className="text-sm text-muted-foreground flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
-                                <div className="text-sm text-muted-foreground flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
+                                <div className="flex items-center gap-4 text-sm text-muted-foreground sm:w-full">
+                                  <div className="flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
+                                  <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
+                                </div>
                             </div>
                             <div className="flex-grow">
                                 <Badge variant="secondary" className="mb-2">{discussion.category}</Badge>

@@ -428,15 +428,9 @@ export default function Home() {
                             <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                           </h3>
                            <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                              <div className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4" /> {job.location}
-                              </div>
-                               <div className="flex items-center gap-2">
-                                <Users className="h-4 w-4" /> {job.applicants} applicants
-                              </div>
-                               <div className="flex items-center gap-2">
-                                <Calendar className="h-4 w-4" /> Posted {job.posted}
-                              </div>
+                              <p>{job.location}</p>
+                              <p>{job.applicants} applicants</p>
+                              <p>Posted {job.posted}</p>
                            </div>
                         </CardContent>
                       </Card>

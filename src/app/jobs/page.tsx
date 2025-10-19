@@ -78,9 +78,9 @@ export default function JobsPage() {
                                     <Link href={`/jobs/${job.id}`}>{job.title}</Link>
                                 </h3>
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-x-2 gap-y-1 text-sm text-muted-foreground mt-1">
-                                    <div className="flex items-center gap-1.5"><Building className="h-4 w-4" /> {job.company}</div>
+                                    <span>{job.company}</span>
                                     <span className="hidden sm:inline">&middot;</span>
-                                    <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {job.location}</div>
+                                    <span>{job.location}</span>
                                 </div>
                                 <div className="mt-2">
                                     <Badge>{job.type}</Badge>
@@ -108,5 +108,3 @@ export default function JobsPage() {
     </div>
   );
 }
-
-    
