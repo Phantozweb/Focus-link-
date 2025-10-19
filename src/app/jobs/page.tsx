@@ -1,10 +1,56 @@
 
 import type { Metadata } from 'next';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Briefcase, MapPin, Search, Building } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Job Board | Focus Links',
   description: 'Find your next career opportunity in the eye care industry on the Focus Links job board. Browse listings from top clinics, hospitals, and companies. Coming soon!',
 };
+
+const demoJobs = [
+    {
+        id: 1,
+        title: 'Full-Time Optometrist',
+        company: 'VisionCare Associates',
+        logo: 'https://picsum.photos/seed/c1/40/40',
+        location: 'New York, NY',
+        type: 'Full-Time',
+        posted: '2 days ago'
+    },
+    {
+        id: 2,
+        title: 'Pediatric Optometrist Specialist',
+        company: 'KidsEye Center',
+        logo: 'https://picsum.photos/seed/c2/40/40',
+        location: 'Los Angeles, CA',
+        type: 'Part-Time',
+        posted: '5 days ago'
+    },
+    {
+        id: 3,
+        title: 'Ophthalmic Technician',
+        company: 'Advanced Eye Hospital',
+        logo: 'https://picsum.photos/seed/c3/40/40',
+        location: 'Chicago, IL',
+        type: 'Full-Time',
+        posted: '1 week ago'
+    },
+    {
+        id: 4,
+        title: 'Retail Optician',
+        company: 'Modern Eyewear Co.',
+        logo: 'https://picsum.photos/seed/c4/40/40',
+        location: 'Houston, TX',
+        type: 'Full-Time',
+        posted: '1 week ago'
+    }
+];
 
 export default function JobsPage() {
   return (
@@ -18,12 +64,64 @@ export default function JobsPage() {
         </div>
       </section>
 
-      <div className="container mx-auto max-w-3xl py-16 px-4 sm:px-6 lg:px-8 text-center">
-        <div className="bg-card p-12 rounded-lg shadow-lg border">
+       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 bg-card p-8 rounded-lg shadow-md border">
             <h2 className="text-3xl font-bold text-slate-800 mb-4">Coming Soon!</h2>
-            <p className="text-lg text-slate-600">
-                Our job board is under construction! Soon, you'll be able to browse and post job opportunities from top clinics, hospitals, opticals, and industry partners.
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                Our job board is under construction! Below is a preview of how you'll be able to browse and find job opportunities from top clinics, hospitals, and industry partners.
             </p>
+        </div>
+
+        <div className="max-w-5xl mx-auto">
+            {/* Filter Bar */}
+            <Card className="mb-8">
+                <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-center">
+                    <div className="relative flex-grow w-full">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input placeholder="Job title, keyword, or company" className="pl-10" />
+                    </div>
+                     <div className="relative flex-grow w-full">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input placeholder="City, state, or zip code" className="pl-10" />
+                    </div>
+                    <Button className="w-full sm:w-auto">Find Jobs</Button>
+                </CardContent>
+            </Card>
+
+            {/* Job Listings */}
+            <div className="space-y-4">
+                {demoJobs.map(job => (
+                    <Card key={job.id} className="hover:shadow-md transition-shadow">
+                        <CardContent className="p-4 flex flex-col sm:flex-row items-start gap-4">
+                            <div className="h-16 w-16 bg-slate-100 rounded-md flex items-center justify-center flex-shrink-0">
+                                <img src={job.logo} alt={`${job.company} logo`} className="w-12 h-12 rounded-sm object-contain" data-ai-hint="logo building" />
+                            </div>
+                            <div className="flex-grow">
+                                <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
+                                    <Link href="#">{job.title}</Link>
+                                </h3>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                    <div className="flex items-center gap-1.5"><Building className="h-4 w-4" /> {job.company}</div>
+                                    <span>&middot;</span>
+                                    <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {job.location}</div>
+                                </div>
+                                <div className="mt-2">
+                                    <Badge>{job.type}</Badge>
+                                </div>
+                            </div>
+                            <div className="flex flex-col items-end gap-2 text-sm w-full sm:w-auto">
+                                <Button asChild>
+                                    <Link href="#">View Details</Link>
+                                </Button>
+                                <span className="text-muted-foreground">{job.posted}</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+            <div className="text-center mt-8">
+                <Button variant="outline">Load More Jobs</Button>
+            </div>
         </div>
       </div>
     </div>

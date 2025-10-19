@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -34,6 +34,60 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
         </Button>
     </div>
 );
+
+const demoDiscussions = [
+  {
+    id: 1,
+    title: 'Unusual Presentation of Keratoconus in a Young Patient',
+    category: 'Cornea & External Disease',
+    replies: 12,
+  },
+  {
+    id: 2,
+    title: 'Managing Progressive Myopia in Children: What’s Working?',
+    category: 'Pediatric Optometry',
+    replies: 34,
+  },
+  {
+    id: 3,
+    title: 'Atypical Macular Degeneration Case Study',
+    category: 'Retina',
+    replies: 21,
+  },
+   {
+    id: 4,
+    title: 'Best Practices for Fitting Scleral Lenses Post-Corneal Transplant',
+    category: 'Contact Lenses',
+    replies: 18,
+  },
+];
+
+const demoJobs = [
+    {
+        id: 1,
+        title: 'Full-Time Optometrist',
+        company: 'VisionCare Associates',
+        location: 'New York, NY',
+    },
+    {
+        id: 2,
+        title: 'Pediatric Optometrist Specialist',
+        company: 'KidsEye Center',
+        location: 'Los Angeles, CA',
+    },
+    {
+        id: 3,
+        title: 'Ophthalmic Technician',
+        company: 'Advanced Eye Hospital',
+        location: 'Chicago, IL',
+    },
+    {
+        id: 4,
+        title: 'Retail Optician',
+        company: 'Modern Eyewear Co.',
+        location: 'Houston, TX',
+    }
+];
 
 
 export default function Home() {
@@ -115,7 +169,7 @@ export default function Home() {
     },
     {
       title: "Get Listed on the Directory",
-      description: "Ready to be seen? Apply for membership to create your professional profile and connect with peers across the globe.",
+      description: "Apply for membership to create your professional profile and connect with peers and leaders across the globe.",
       href: "/membership",
       icon: <Sparkles className="h-8 w-8 text-white" />,
       cta: "Apply to Get Listed",
@@ -359,7 +413,69 @@ export default function Home() {
               <CarouselNext />
             </Carousel>
           </section>}
+           <section>
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-slate-800 text-3xl font-bold font-headline">From the Forum</h2>
+                <Button asChild variant="link" className="text-primary pr-0">
+                  <Link href="/forum">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </div>
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {demoDiscussions.map((discussion) => (
+                    <CarouselItem key={discussion.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                        <CardContent className="p-6 flex flex-col flex-grow">
+                          <Badge variant="secondary" className="mb-2 w-fit">{discussion.category}</Badge>
+                          <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
+                            <Link href="/forum" className="hover:text-primary transition-colors">{discussion.title}</Link>
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-auto border-t pt-4">
+                            <MessageSquare className="h-4 w-4" /> {discussion.replies} Replies
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </section>
 
+             <section>
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-slate-800 text-3xl font-bold font-headline">Latest Job Postings</h2>
+                <Button asChild variant="link" className="text-primary pr-0">
+                  <Link href="/jobs">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </div>
+              <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-4">
+                  {demoJobs.map((job) => (
+                    <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                        <CardContent className="p-6 flex flex-col flex-grow">
+                          <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
+                            <Link href="/jobs" className="hover:text-primary transition-colors">{job.title}</Link>
+                          </h3>
+                           <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
+                              <div className="flex items-center gap-2">
+                                <Building className="h-4 w-4" /> {job.company}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <MapPin className="h-4 w-4" /> {job.location}
+                              </div>
+                           </div>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </section>
           <section>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
