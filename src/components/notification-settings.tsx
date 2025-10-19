@@ -50,21 +50,34 @@ export function NotificationSettings({
   };
 
   const showDemoNotification = () => {
+    if (typeof window === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
+      return;
+    }
+    
     const demoJob = demoJobs[0];
     const title = 'New Job Posting!';
-    const options = {
+    const options: NotificationOptions = {
       body: `${demoJob.title} at ${demoJob.company}`,
-      icon: '/logo.png',
+      icon: '/logo.png', // Ensure you have a logo.png in your /public folder
     };
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.showNotification(title, options);
-      });
-    } else {
-        // Fallback for environments without a service worker
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification(title, options);
+    }).catch(err => {
+      console.error('Service Worker not ready or notification failed:', err);
+      // Fallback for environments where service worker is tricky but constructor might work
+      // This is less reliable and might still cause issues in some contexts.
+      try {
         new Notification(title, options);
-    }
+      } catch (e) {
+        console.error('Fallback notification failed:', e);
+        toast({
+          variant: 'destructive',
+          title: 'Test Notification Failed',
+          description: 'Could not display a test notification, but your preferences are saved.',
+        });
+      }
+    });
   };
 
 
@@ -102,33 +115,11 @@ export function NotificationSettings({
         description: "You're all set to receive notifications for new updates.",
       });
 
-      // Show a demo notification if the user opted in
-      if (preferences.jobs || preferences.webinars || preferences.forum) {
+      const anyPreferenceEnabled = Object.values(preferences).some(p => p);
+
+      if (anyPreferenceEnabled) {
         setTimeout(() => {
-            try {
-                const title = 'Focus Links Test';
-                const options = {
-                    body: 'This is a test notification to confirm you are subscribed!',
-                    icon: '/logo.png' // Make sure you have a logo.png in your public folder
-                };
-                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.ready.then(registration => {
-                        registration.showNotification(title, options);
-                    });
-                } else {
-                    // This is a fallback and might trigger the "Illegal constructor" in some strict environments,
-                    // but it's the only option without a service worker.
-                    new Notification(title, options);
-                }
-            } catch (e) {
-                console.error("Could not show notification:", e);
-                // Optionally inform the user that the test notification failed but settings are saved.
-                 toast({
-                    variant: 'destructive',
-                    title: 'Test Notification Failed',
-                    description: 'Could not display a test notification, but your preferences are saved.',
-                });
-            }
+          showDemoNotification();
         }, 2000);
       }
     }

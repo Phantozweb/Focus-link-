@@ -121,7 +121,7 @@ export function Header() {
              <div className="hidden md:flex items-center gap-2">
                 <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" size="icon">
                   <Bell className="h-5 w-5" />
-                  <span className="sr-only">Enable Notifications</span>
+                  <span className="sr-only">Notification Settings</span>
                 </Button>
                 <Button asChild>
                   <Link href="/membership">
@@ -181,10 +181,12 @@ export function Header() {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
-                     <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" className="w-full justify-start mt-4">
-                      <Bell className="mr-2 h-4 w-4" />
-                      Notification Settings
-                    </Button>
+                     <SheetClose asChild>
+                      <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" className="w-full justify-start mt-4">
+                        <Bell className="mr-2 h-4 w-4" />
+                        Notification Settings
+                      </Button>
+                    </SheetClose>
                     <SheetClose asChild>
                       <Button asChild className="mt-4">
                         <Link href="/membership">
