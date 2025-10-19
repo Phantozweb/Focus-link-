@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,6 +47,26 @@ const aboutLinks = [
 ]
 
 export function Header() {
+
+  const handleNotificationRequest = () => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notification");
+    } else if (Notification.permission === "granted") {
+      new Notification("You are already subscribed to notifications!");
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        if (permission === "granted") {
+          new Notification("Thanks for subscribing!");
+        } else {
+          alert("You have denied notification permissions.");
+        }
+      });
+    } else {
+        alert("You have denied notification permissions. Please enable them in your browser settings.");
+    }
+  };
+
+
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-10 py-3 sticky top-0 z-40">
         <div className="flex items-center gap-8">
@@ -99,7 +119,11 @@ export function Header() {
             </nav>
         </div>
         <div className="flex items-center gap-4">
-             <div className="hidden md:flex">
+             <div className="hidden md:flex items-center gap-2">
+                <Button onClick={handleNotificationRequest} variant="outline" size="icon">
+                  <Bell className="h-5 w-5" />
+                  <span className="sr-only">Enable Notifications</span>
+                </Button>
                 <Button asChild>
                   <Link href="/membership">
                     <UserPlus className="mr-2 h-4 w-4" />
@@ -158,6 +182,10 @@ export function Header() {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
+                     <Button onClick={handleNotificationRequest} variant="outline" className="w-full justify-start mt-4">
+                      <Bell className="mr-2 h-4 w-4" />
+                      Enable Notifications
+                    </Button>
                     <SheetClose asChild>
                       <Button asChild className="mt-4">
                         <Link href="/membership">
