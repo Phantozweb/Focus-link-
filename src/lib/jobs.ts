@@ -8,7 +8,7 @@ export const demoJobs = [
         location: 'New York, NY',
         type: 'Full-Time',
         posted: '2 days ago',
-        applicants: 12,
+        postedBy: 'Jane Doe',
         description: 'VisionCare Associates is seeking a motivated and compassionate Optometrist to join our thriving practice in the heart of New York City. We are a full-scope practice with a focus on primary eye care, contact lenses, and the management of ocular disease.',
         responsibilities: [
             'Perform comprehensive eye examinations for patients of all ages.',
@@ -43,7 +43,7 @@ export const demoJobs = [
         location: 'Los Angeles, CA',
         type: 'Part-Time',
         posted: '5 days ago',
-        applicants: 5,
+        postedBy: 'John Smith',
         description: 'KidsEye Center is a premier pediatric and family eye care practice looking for a dedicated Part-Time Pediatric Optometrist. Our mission is to provide the highest quality vision care for children in a fun and welcoming environment.',
         responsibilities: [
             'Perform comprehensive eye exams for infants, toddlers, and children.',
@@ -71,7 +71,7 @@ export const demoJobs = [
         location: 'Chicago, IL',
         type: 'Full-Time',
         posted: '1 week ago',
-        applicants: 28,
+        postedBy: 'Admin Team',
         description: 'Advanced Eye Hospital, a leading multi-specialty ophthalmology practice, is hiring a skilled Ophthalmic Technician. Join our team of experts and contribute to delivering outstanding patient care.',
         responsibilities: [
             'Perform preliminary patient work-ups, including visual acuity, tonometry, and patient history.',
@@ -99,7 +99,7 @@ export const demoJobs = [
         location: 'Houston, TX',
         type: 'Full-Time',
         posted: '1 week ago',
-        applicants: 7,
+        postedBy: 'HR Department',
         description: 'Modern Eyewear Co. is looking for a stylish and knowledgeable Retail Optician to join our team. We pride ourselves on offering a curated selection of independent and designer frames and providing an exceptional customer experience.',
         responsibilities: [
             'Assist customers in selecting frames and lenses that best suit their prescription and lifestyle.',

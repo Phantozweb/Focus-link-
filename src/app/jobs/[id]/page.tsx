@@ -7,6 +7,7 @@ import { ArrowLeft, MapPin, Building, Briefcase, Check, Users } from 'lucide-rea
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 type JobDetailPageProps = {
   params: { id: string }
@@ -29,7 +30,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
 
             <Card>
                 <CardHeader className="p-6 flex flex-col sm:flex-row items-start gap-6">
-                    <img src={job.logo} alt={`${job.company} logo`} className="w-20 h-20 rounded-md object-contain" data-ai-hint="logo building" />
+                    <Image src={job.logo} alt={`${job.company} logo`} width={80} height={80} className="rounded-md object-contain" data-ai-hint="logo building" />
                     <div>
                         <Badge className="mb-2">{job.type}</Badge>
                         <CardTitle className="text-3xl font-headline text-slate-800">{job.title}</CardTitle>
@@ -83,7 +84,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                                    </CardContent>
                                </Card>
                                 <div className="text-sm text-center text-muted-foreground">
-                                    Posted {job.posted} &middot; {job.applicants} applicants
+                                    Posted {job.posted} by {job.postedBy}
                                 </div>
                             </div>
                         </div>
@@ -94,3 +95,5 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     </div>
   );
 }
+
+    

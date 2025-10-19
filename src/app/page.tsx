@@ -416,7 +416,7 @@ export default function Home() {
                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                         <CardContent className="p-6 flex flex-col flex-grow">
                             <div className="flex items-start gap-4 mb-4">
-                                <img src={job.logo} alt={`${job.company} logo`} className="w-12 h-12 rounded-md object-contain" data-ai-hint="logo building" />
+                                <Image src={job.logo} alt={`${job.company} logo`} width={48} height={48} className="rounded-md object-contain" data-ai-hint="logo building" />
                                 <div>
                                     <p className="font-semibold text-slate-800">{job.company}</p>
                                     <Badge variant="outline">{job.type}</Badge>
@@ -426,9 +426,9 @@ export default function Home() {
                             <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                           </h3>
                            <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                              <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {job.location}</p>
-                              <p className="flex items-center gap-2"><Users className="h-4 w-4" /> {job.applicants} applicants</p>
-                              <p className="flex items-center gap-2"><Calendar className="h-4 w-4" /> Posted {job.posted}</p>
+                              <p><span>{job.location}</span></p>
+                              <p>Posted by {job.postedBy}</p>
+                              <p>Posted {job.posted}</p>
                            </div>
                         </CardContent>
                       </Card>
@@ -597,3 +597,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

@@ -13,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Job Board | Focus Links',
@@ -71,7 +72,7 @@ export default function JobsPage() {
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4 grid grid-cols-12 items-start gap-4">
                             <div className="col-span-2 sm:col-span-1 flex-shrink-0">
-                                <img src={job.logo} alt={`${job.company} logo`} className="w-16 h-16 rounded-md object-contain" data-ai-hint="logo building" />
+                                <Image src={job.logo} alt={`${job.company} logo`} width={64} height={64} className="rounded-md object-contain" data-ai-hint="logo building" />
                             </div>
                             <div className="col-span-10 sm:col-span-8 flex-grow">
                                 <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
@@ -91,7 +92,7 @@ export default function JobsPage() {
                                     <Link href={`/jobs/${job.id}`}>View Details</Link>
                                 </Button>
                                 <div className="flex items-center gap-2 text-muted-foreground w-full justify-end">
-                                  <p>{job.applicants} applicants</p>
+                                  <p>Posted by {job.postedBy}</p>
                                   <span className="text-muted-foreground/50">|</span>
                                   <span>{job.posted}</span>
                                 </div>
@@ -108,3 +109,5 @@ export default function JobsPage() {
     </div>
   );
 }
+
+    
