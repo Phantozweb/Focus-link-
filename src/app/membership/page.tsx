@@ -29,15 +29,21 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { UserPlus, Loader2, PartyPopper, CheckCircle, Globe, BookOpen, Handshake, Award } from 'lucide-react';
+import { UserPlus, Loader2, PartyPopper, CheckCircle, Globe, BookOpen, Handshake, Award, ArrowLeft, ArrowRight, Building, User, Briefcase } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
-const formSchema = z.object({
+const isProfessional = (role: string) => ['Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(role);
+const isStudent = (role: string) => role === 'Student';
+const isOrganization = (role: string) => ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(role);
+
+
+const baseSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
   country: z.string({ required_error: 'Please select a country.'}),
@@ -46,6 +52,42 @@ const formSchema = z.object({
     message: "You must accept the terms and conditions to continue.",
   }),
 });
+
+const professionalSchema = z.object({
+    specialization: z.string().min(2, "Please enter your main specialization.").optional(),
+    yearsOfExperience: z.coerce.number().min(0, "Years of experience must be a positive number.").optional(),
+});
+
+const studentSchema = z.object({
+    university: z.string().min(3, "Please enter your university name."),
+    graduationYear: z.coerce.number().min(new Date().getFullYear(), "Please enter a valid graduation year."),
+});
+
+const organizationSchema = z.object({
+    organizationName: z.string().min(3, "Please enter the organization's name."),
+    website: z.string().url("Please enter a valid website URL."),
+});
+
+
+const formSchema = baseSchema.superRefine((data, ctx) => {
+    if (isProfessional(data.role)) {
+        const result = professionalSchema.safeParse(data);
+        if (!result.success) {
+            result.error.issues.forEach(issue => ctx.addIssue(issue));
+        }
+    } else if (isStudent(data.role)) {
+        const result = studentSchema.safeParse(data);
+        if (!result.success) {
+            result.error.issues.forEach(issue => ctx.addIssue(issue));
+        }
+    } else if (isOrganization(data.role)) {
+        const result = organizationSchema.safeParse(data);
+        if (!result.success) {
+            result.error.issues.forEach(issue => ctx.addIssue(issue));
+        }
+    }
+});
+
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -78,6 +120,7 @@ export default function MembershipPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [step, setStep] = useState(1);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -86,7 +129,21 @@ export default function MembershipPage() {
       email: '',
       terms: false,
     },
+     mode: 'onChange'
   });
+
+  const selectedRole = form.watch('role');
+
+  const handleNextStep = async () => {
+    const isValid = await form.trigger(['name', 'email', 'country', 'role', 'terms']);
+    if (isValid) {
+      setStep(2);
+    }
+  };
+
+  const handlePrevStep = () => {
+    setStep(1);
+  };
   
   async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
@@ -175,136 +232,205 @@ export default function MembershipPage() {
       
         <div id="membership-form" className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
             <Card>
-            <CardHeader className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <UserPlus className="h-8 w-8 text-primary" />
-                </div>
-                <CardTitle className="text-3xl font-headline mt-4">Membership Application</CardTitle>
-                <CardDescription className="mt-1 text-base">
-                Fill out the details below to apply. Your submission will be reviewed by our team.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Form {...form}>
-                <form 
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                >
-                    <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                            <Input placeholder="e.g., Dr. Jane Doe" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-
-                    <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl>
-                            <Input placeholder="you@example.com" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Country</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                <SelectValue placeholder="Select your country" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {countries.map((c) => (
-                                <SelectItem key={c.code} value={c.name}>
-                                    {c.name}
-                                </SelectItem>
-                                ))}
-                            </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="role"
-                        render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Primary Role</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                <SelectValue placeholder="Select your role" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {profileTypes.map((type) => (
-                                <SelectItem key={type} value={type}>
-                                    {type}
-                                </SelectItem>
-                                ))}
-                            </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
+                <CardHeader className="text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        <UserPlus className="h-8 w-8 text-primary" />
                     </div>
-                    
-                    <FormField
-                    control={form.control}
-                    name="terms"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm bg-muted/50">
-                        <FormControl>
-                            <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                            <FormLabel>
-                            Accept Terms & Conditions
-                            </FormLabel>
-                            <FormDescription>
-                            By submitting, you agree to our{' '}
-                            <Link href="/terms" className="underline hover:text-primary" target="_blank">
-                                Terms of Service
-                            </Link>
-                            .
-                            </FormDescription>
-                            <FormMessage />
-                        </div>
-                        </FormItem>
-                    )}
-                    />
+                    <CardTitle className="text-3xl font-headline mt-4">Membership Application</CardTitle>
+                    <CardDescription className="mt-1 text-base">
+                        Step {step} of 2: {step === 1 ? 'Basic Information' : 'Tell Us More About You'}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        {step === 1 && (
+                            <>
+                                <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Full Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., Dr. Jane Doe" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
 
+                                <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Email Address</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="you@example.com" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
 
-                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Submit Application'}
-                    </Button>
-                </form>
-                </Form>
-            </CardContent>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="country"
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Country</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                            <SelectValue placeholder="Select your country" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {countries.map((c) => (
+                                            <SelectItem key={c.code} value={c.name}>
+                                                {c.name}
+                                            </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="role"
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Primary Role</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                            <SelectValue placeholder="Select your role" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {profileTypes.map((type) => (
+                                            <SelectItem key={type} value={type}>
+                                                {type}
+                                            </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                    )}
+                                />
+                                </div>
+                                
+                                <FormField
+                                control={form.control}
+                                name="terms"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm bg-muted/50">
+                                    <FormControl>
+                                        <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>
+                                        Accept Terms & Conditions
+                                        </FormLabel>
+                                        <FormDescription>
+                                        By submitting, you agree to our{' '}
+                                        <Link href="/terms" className="underline hover:text-primary" target="_blank">
+                                            Terms of Service
+                                        </Link>
+                                        .
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </div>
+                                    </FormItem>
+                                )}
+                                />
+                                <Button type="button" size="lg" className="w-full" onClick={handleNextStep}>
+                                    Next <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </>
+                        )}
+                        {step === 2 && (
+                            <>
+                                {isStudent(selectedRole) && (
+                                    <>
+                                        <FormField control={form.control} name="university" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><BookOpen className="h-4 w-4"/>University/College Name</FormLabel>
+                                                <FormControl><Input placeholder="e.g., University of California, Berkeley" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                        <FormField control={form.control} name="graduationYear" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><Globe className="h-4 w-4"/>Expected Graduation Year</FormLabel>
+                                                <FormControl><Input type="number" placeholder="e.g., 2027" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                    </>
+                                )}
+
+                                {isProfessional(selectedRole) && (
+                                    <>
+                                        <FormField control={form.control} name="specialization" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><Briefcase className="h-4 w-4"/>Primary Specialization</FormLabel>
+                                                <FormControl><Input placeholder="e.g., Pediatric Optometry, Cornea and Contact Lenses" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                        <FormField control={form.control} name="yearsOfExperience" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><Award className="h-4 w-4"/>Years of Experience</FormLabel>
+                                                <FormControl><Input type="number" placeholder="e.g., 5" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                    </>
+                                )}
+
+                                {isOrganization(selectedRole) && (
+                                    <>
+                                        <FormField control={form.control} name="organizationName" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><Building className="h-4 w-4"/>Organization Name</FormLabel>
+                                                <FormControl><Input placeholder="e.g., Global Eye Care Foundation" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                        <FormField control={form.control} name="website" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><Globe className="h-4 w-4"/>Website</FormLabel>
+                                                <FormControl><Input placeholder="https://example.com" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                    </>
+                                )}
+                                
+
+                                <div className="flex gap-4">
+                                     <Button type="button" size="lg" variant="outline" className="w-full" onClick={handlePrevStep}>
+                                        <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                                    </Button>
+                                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                                        {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Submit Application'}
+                                    </Button>
+                                </div>
+                           </>
+                        )}
+                        </form>
+                    </Form>
+                </CardContent>
             </Card>
         </div>
     </div>
