@@ -47,11 +47,11 @@ const ctaCards = [
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
     },
     {
-      title: "Create Your Profile with AI",
-      description: "Use our AI assistant to build a professional profile in minutes. Answer a few questions and let the AI do the rest.",
-      href: "/membership",
+      title: "Create Your Public Profile",
+      description: "Use our new profile builder to get listed on the directory and showcase your expertise to the community.",
+      href: "/directory/create",
       icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Start with AI",
+      cta: "Build Your Profile",
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {
