@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Processes a full interview transcript into a structured user profile.
@@ -72,7 +73,7 @@ const processAnswersFlow = ai.defineFlow(
         output: {
             schema: ProcessInterviewOutputSchema,
         },
-        model: 'gemini-2.5-flash',
+        model: 'googleai/gemini-2.5-flash',
     });
 
     return output || { profile: {}, completenessScore: 0 };

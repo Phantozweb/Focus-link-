@@ -59,7 +59,7 @@ const generateQuestionsFlow = ai.defineFlow(
         output: {
             schema: GenerateInterviewQuestionsOutputSchema,
         },
-        model: 'gemini-2.5-flash',
+        model: 'googleai/gemini-2.5-flash',
     });
 
     return output || { questions: [] };
