@@ -1,8 +1,9 @@
 
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useMemo } from 'react';
 import { Chat } from '@/components/chat-ui';
+import { GuidedQuestionnaire } from '@/components/guided-questionnaire';
 import { interviewerChat } from '@/ai/flows/interviewer-chat';
 import type { Message, UserProfile, InterviewerChatOutput } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,14 +30,22 @@ const initialProfile: Partial<UserProfile> = {
 
 
 export default function CreateProfilePage() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', content: "Hello! I'm the Focus Links AI Interviewer. I'll ask you a few questions to help build your professional profile. To start, what is your full name?" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [profile, setProfile] = useState<Partial<UserProfile>>(initialProfile);
   const [completenessScore, setCompletenessScore] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { toast } = useToast();
+  const [view, setView] = useState<'questionnaire' | 'chat'>('questionnaire');
+
+  const handleQuestionnaireComplete = (data: Partial<UserProfile>) => {
+    const initialContext = `Great, I have your initial information. You've set your name as ${data.name}, your role as ${data.type}, and your location as ${data.location}. Now, let's build out the rest of your profile. To start, could you tell me a bit more about your work or studies for your bio?`;
+    
+    setProfile(data);
+    setMessages([{ role: 'model', content: initialContext }]);
+    setView('chat');
+  };
+
 
   const handleSendMessage = async (text: string) => {
     const newMessages: Message[] = [...messages, { role: 'user', content: text }];
@@ -81,9 +90,10 @@ export default function CreateProfilePage() {
         title: "Profile Submitted!",
         description: "Your new profile has been sent for approval.",
     });
-    setMessages([messages[0]]);
+    setMessages([]);
     setProfile(initialProfile);
     setCompletenessScore(0);
+    setView('questionnaire');
   }
   
   const ReportItem = ({ label, value }: { label: string, value: string | string[] | undefined | null }) => {
@@ -110,7 +120,7 @@ export default function CreateProfilePage() {
             <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">AI Profile Creation</h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-                Have a natural conversation with our AI assistant. It will ask you questions one by one and build your profile based on your answers.
+                Answer a few quick questions, then have a natural conversation with our AI to build your complete professional profile.
             </p>
             </div>
         </section>
@@ -118,13 +128,22 @@ export default function CreateProfilePage() {
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 h-[70vh]">
-              <Chat messages={messages} onSendMessage={handleSendMessage} />
+              {view === 'questionnaire' ? (
+                  <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />
+              ) : (
+                  <Chat messages={messages} onSendMessage={handleSendMessage} />
+              )}
             </div>
             <div className="lg:col-span-1">
               <Card className="sticky top-24">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2"><FileText /> Interview Report</CardTitle>
-                  <CardDescription>Your profile is built in real-time as you answer questions. A score of 10/10 is required.</CardDescription>
+                  <CardDescription>
+                      {view === 'questionnaire'
+                        ? 'Complete the initial questions to begin the AI interview.'
+                        : 'Your profile is built in real-time as you answer questions. A score of 10/10 is required.'
+                      }
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
