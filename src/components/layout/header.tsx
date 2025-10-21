@@ -51,7 +51,7 @@ const communityLinks = [
 
 const aboutLinks = [
     { name: 'About Us', href: '/about' },
-    { name: 'FAQ', href: '/faq'},
+    { name: 'Help Center', href: '/help-center'},
     { name: 'Contact', href: '/contact' },
 ]
 

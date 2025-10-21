@@ -31,7 +31,7 @@ export function Footer() {
                 <h4 className="font-semibold mb-3">About</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
                     <li><Link className="hover:text-white" href="/about">About Us</Link></li>
-                    <li><Link className="hover:text-white" href="/faq">FAQ</Link></li>
+                    <li><Link className="hover:text-white" href="/help-center">Help Center</Link></li>
                     <li><Link className="hover:text-white" href="/contact">Contact</Link></li>
                     <li><Link className="hover:text-white" href="/terms">Terms of Service</Link></li>
                 </ul>
