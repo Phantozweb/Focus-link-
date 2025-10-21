@@ -207,32 +207,9 @@ export default function MembershipPage() {
                 <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
                     Join for free to get verified, access exclusive perks, and become a recognized part of the world's largest eye care community.
                 </p>
-                 <Button size="lg" className="mt-8" onClick={() => document.getElementById('membership-form')?.scrollIntoView({ behavior: 'smooth' })}>
-                    Apply for Membership
-                </Button>
             </div>
         </section>
 
-        <section className="py-16">
-            <div className="container mx-auto px-4">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-slate-800">Exclusive Membership Perks</h2>
-                    <p className="mt-2 text-lg text-slate-600">Go beyond the directory. Unlock benefits available only to official members.</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {membershipPerks.map((perk, index) => (
-                        <div key={index} className="text-center p-6 bg-card rounded-lg shadow-sm border">
-                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">
-                                {perk.icon}
-                            </div>
-                            <h3 className="text-xl font-bold text-slate-800 mb-2">{perk.title}</h3>
-                            <p className="text-slate-600">{perk.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-      
         <div id="membership-form" className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
             <Card>
                 <CardHeader className="text-center">
@@ -241,7 +218,7 @@ export default function MembershipPage() {
                     </div>
                     <CardTitle className="text-3xl font-headline mt-4">Membership Application</CardTitle>
                     <CardDescription className="mt-1 text-base">
-                        Step {step} of 2: {step === 1 ? 'Basic Information' : 'Tell Us More About You'}
+                        Step {step} of 2: {step === 1 ? 'Basic Information' : 'Tell Us More About You'}. All fields are mandatory unless marked optional.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -459,6 +436,26 @@ export default function MembershipPage() {
                 </CardContent>
             </Card>
         </div>
+        
+        <section className="py-16">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold text-slate-800">Exclusive Membership Perks</h2>
+                    <p className="mt-2 text-lg text-slate-600">Go beyond the directory. Unlock benefits available only to official members.</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {membershipPerks.map((perk, index) => (
+                        <div key={index} className="text-center p-6 bg-card rounded-lg shadow-sm border">
+                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">
+                                {perk.icon}
+                            </div>
+                            <h3 className="text-xl font-bold text-slate-800 mb-2">{perk.title}</h3>
+                            <p className="text-slate-600">{perk.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
     </div>
        <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
         <AlertDialogContent>
