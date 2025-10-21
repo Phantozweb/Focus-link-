@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Generates a set of interview questions based on initial user data.
@@ -40,19 +41,18 @@ const generateQuestionsFlow = ai.defineFlow(
 
         **Your Goal:**
         Ask questions to fill in the missing details for these key fields:
-        - **Headline/Experience**: A short, impactful professional summary.
         - **Bio**: A 3-4 sentence professional summary.
         - **Skills**: A list of professional skills.
         - **Interests**: Professional or academic interests.
-        - **Work Experience**: Details about past jobs (title, company, etc.).
-        - **Education**: Details about degrees and schools.
+        - **Work Experience**: Details about past jobs (title, company, etc.), if applicable.
+        - **Education**: Details about degrees and schools, if not already provided.
         - **Contact Info**: Email and LinkedIn/Website.
 
         **Instructions:**
-        1.  Analyze the provided initial data to see what's missing.
+        1.  Analyze the provided initial data to see what's missing for a perfect profile.
         2.  Create a list of 3-5 friendly, conversational questions to gather this missing information.
         3.  Combine related items into a single question (e.g., "What are some of your key skills and professional interests?").
-        4.  Start with a broad question to encourage a detailed response (e.g., "Tell me about your professional journey and what you're passionate about.").
+        4.  Start with a broad question to encourage a detailed response (e.g., "Could you tell me a bit about your professional journey and what you're passionate about in eye care?").
         5.  Ensure your questions are open-ended to encourage descriptive answers.
         
         Generate the questions now.`,
@@ -65,3 +65,5 @@ const generateQuestionsFlow = ai.defineFlow(
     return output || { questions: [] };
   }
 );
+
+    

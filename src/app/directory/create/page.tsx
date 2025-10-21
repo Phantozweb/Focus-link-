@@ -30,7 +30,7 @@ const initialProfile: Partial<UserProfile> = {
     verified: false,
 };
 
-const AiQuestionView = ({ question, onAnswer, isPending, onComplete, totalQuestions, currentQuestionIndex }: { question: string, onAnswer: (answer: string) => void, isPending: boolean, onComplete: () => void, totalQuestions: number, currentQuestionIndex: number }) => {
+const AiQuestionView = ({ question, onAnswer, isPending, totalQuestions, currentQuestionIndex }: { question: string, onAnswer: (answer: string) => void, isPending: boolean, totalQuestions: number, currentQuestionIndex: number }) => {
     const [answer, setAnswer] = useState('');
 
     const handleSend = () => {
@@ -56,7 +56,7 @@ const AiQuestionView = ({ question, onAnswer, isPending, onComplete, totalQuesti
                         id="ai-question"
                         value={answer}
                         onChange={(e) => setAnswer(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                        onKeyDown={(e) => e.key === 'Enter' && answer.trim() && handleSend()}
                         placeholder="Type your answer here..."
                         className="text-center text-lg h-12"
                         autoFocus
@@ -64,7 +64,7 @@ const AiQuestionView = ({ question, onAnswer, isPending, onComplete, totalQuesti
                     />
                 </div>
                 <div className="flex justify-end items-center mt-8">
-                     <Button onClick={isFinalQuestion ? onComplete : handleSend} disabled={!answer.trim() || isPending}>
+                     <Button onClick={handleSend} disabled={!answer.trim() || isPending}>
                         {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</> : 
                          isFinalQuestion ? 'Finish & Review' : 'Next'}
                         {!isPending && <ArrowRight className="ml-2 h-4 w-4" />}
@@ -101,7 +101,7 @@ export default function CreateProfilePage() {
             setView('ai-interview');
         } else {
             // If no questions are generated, proceed to final processing
-            await handleInterviewComplete();
+            await processFinalProfile([]);
         }
       } catch (error) {
         console.error('AI Question Generation Error:', error);
@@ -116,15 +116,16 @@ export default function CreateProfilePage() {
   };
 
   const handleAiAnswer = (answer: string) => {
-    setAiAnswers(prev => [...prev, answer]);
+    const newAnswers = [...aiAnswers, answer];
+    setAiAnswers(newAnswers);
     if (currentAiQuestionIndex < aiQuestions.length - 1) {
         setCurrentAiQuestionIndex(prev => prev + 1);
+    } else {
+        processFinalProfile(newAnswers);
     }
   };
 
-  const handleInterviewComplete = async () => {
-      const finalAnswers = [...aiAnswers]; // Capture current answers
-
+  const processFinalProfile = async (finalAnswers: string[]) => {
       setView('loading');
       startTransition(async () => {
           try {
@@ -137,7 +138,7 @@ export default function CreateProfilePage() {
               const result = await processInterviewAnswers(fullConversation);
               
               if (result.profile) {
-                setFinalProfile(prev => ({...prev, ...result.profile}));
+                setFinalProfile(prev => ({...prev, ...initialData, ...result.profile}));
                 setCompletenessScore(result.completenessScore || 0);
               }
               
@@ -150,7 +151,8 @@ export default function CreateProfilePage() {
                   title: 'Error',
                   description: 'The AI failed to process your profile. Please try again.',
               });
-              setView('ai-interview'); // Go back to the interview
+              // Go back to the last question
+              setView('ai-interview'); 
           }
       });
   };
@@ -195,7 +197,6 @@ export default function CreateProfilePage() {
             return <AiQuestionView 
                 question={aiQuestions[currentAiQuestionIndex]} 
                 onAnswer={handleAiAnswer}
-                onComplete={handleInterviewComplete}
                 isPending={isPending}
                 totalQuestions={aiQuestions.length}
                 currentQuestionIndex={currentAiQuestionIndex}
@@ -243,7 +244,7 @@ export default function CreateProfilePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  { (view === 'ai-interview' || showSuccessDialog) &&
+                  { (view === 'ai-interview' || view === 'loading' || showSuccessDialog) &&
                     <div>
                         <div className="flex justify-between items-center mb-2">
                         <h4 className="font-semibold text-sm">Profile Completeness Score</h4>
@@ -253,9 +254,9 @@ export default function CreateProfilePage() {
                     </div>
                   }
                   <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
-                     <ReportItem label="Name" value={finalProfile.name} />
-                     <ReportItem label="Role" value={finalProfile.type} />
-                     <ReportItem label="Location" value={finalProfile.location} />
+                     <ReportItem label="Name" value={finalProfile.name || initialData.name} />
+                     <ReportItem label="Role" value={finalProfile.type || initialData.type} />
+                     <ReportItem label="Location" value={finalProfile.location || initialData.location} />
                      <ReportItem label="Headline" value={finalProfile.experience} />
                      <ReportItem label="Bio" value={finalProfile.bio} />
                      <ReportItem label="Skills" value={finalProfile.skills} />
@@ -291,3 +292,5 @@ export default function CreateProfilePage() {
     </div>
   );
 }
+
+    

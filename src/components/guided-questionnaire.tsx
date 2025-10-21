@@ -25,7 +25,7 @@ const isOrganization = (role?: string) => role && ['Association', 'College', 'Ho
 
 export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
   const [step, setStep] = useState(0);
-  const [data, setData] = useState<Partial<UserProfile & { university: string, graduationYear: string, specialization: string, yearsOfExperience: number, website: string }>>({
+  const [data, setData] = useState<Partial<UserProfile & { university: string, graduationYear: string, specialization: string, yearsOfExperience: string, website: string }>>({
     name: '',
     type: undefined,
     location: '',
@@ -78,10 +78,11 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
         finalData.education = [{
           school: data.university || '',
           endYear: String(data.graduationYear) || '',
-          degree: '', fieldOfStudy: '', startYear: ''
+          degree: 'B.Optom (or equivalent)', fieldOfStudy: 'Optometry', startYear: ''
         }];
       }
       if (isProfessional(data.type)) {
+         finalData.experience = data.specialization || '';
          finalData.workExperience = [{
             title: data.specialization || '',
             company: `${data.yearsOfExperience || 0} years experience`,
@@ -102,19 +103,21 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
     }
   };
 
-  const handleChange = (field: string, value: string | number) => {
+  const handleChange = (field: string, value: string) => {
     setData(prev => ({ ...prev, [field]: value }));
   };
 
   const isNextDisabled = () => {
+    if (!currentQuestion) return true;
     const field = currentQuestion.field;
     const value = (data as any)[field];
 
-    if (value === undefined || value === null) return true;
+    if (value === undefined || value === null || value === '') return true;
 
     const stringValue = String(value).trim();
+    if (stringValue.length === 0) return true;
 
-    if (field === 'type' || field === 'location') return !stringValue;
+    if (field === 'type' || field === 'location') return false; // Already handled by initial check
     if (field === 'name') return stringValue.length < 2;
     if (field === 'university') return stringValue.length < 3;
     if (field === 'graduationYear') return stringValue.length !== 4 || !/^\d{4}$/.test(stringValue);
@@ -180,10 +183,8 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
              <Select 
                 onValueChange={value => {
                   handleChange(currentQuestion.field, value);
-                  // Automatically move to next step on selection if it's a base question
-                  if (step < baseQuestions.length) {
-                    setTimeout(() => handleNext(), 100);
-                  }
+                  // Automatically move to next step on selection
+                  setTimeout(() => handleNext(), 100);
                 }}
                 value={(data as any)[currentQuestion.field] || ''}
              >
@@ -213,3 +214,5 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
     </Card>
   );
 }
+
+    
