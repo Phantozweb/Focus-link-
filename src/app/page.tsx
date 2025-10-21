@@ -47,11 +47,11 @@ const ctaCards = [
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
     },
     {
-      title: "Get Listed on the Directory",
-      description: "Apply for membership to create your professional profile and connect with peers and leaders across the globe.",
-      href: "/membership",
+      title: "Create Your Profile with AI",
+      description: "Use our AI assistant to build a professional profile in minutes. Answer a few questions and let the AI do the rest.",
+      href: "/directory/create",
       icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Apply to Get Listed",
+      cta: "Create AI Profile",
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {
@@ -592,7 +592,6 @@ export default function Home() {
               <CarouselNext />
             </Carousel>
           </section>}
-
       </div>
     </div>
   );
