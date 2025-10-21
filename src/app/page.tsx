@@ -43,15 +43,15 @@ const ctaCards = [
       description: "Join for free to get a verified profile, priority access to academy events, and exclusive networking opportunities.",
       href: "/membership",
       icon: <Award className="h-8 w-8 text-white" />,
-      cta: "Join for Free",
+      cta: "Apply for Membership",
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
     },
     {
       title: "Create Your Profile with AI",
       description: "Use our AI assistant to build a professional profile in minutes. Answer a few questions and let the AI do the rest.",
-      href: "/directory/create",
+      href: "/membership",
       icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Create AI Profile",
+      cta: "Start with AI",
        className: "bg-gradient-to-br from-slate-700 to-slate-900",
     },
     {
