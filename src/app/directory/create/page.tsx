@@ -10,26 +10,15 @@ import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, PartyPopper, Bot, FileText, Loader2, ArrowRight, Image as ImageIcon } from 'lucide-react';
+import { CheckCircle, PartyPopper, Bot, FileText, Loader2, ArrowRight, Image as ImageIcon, Sparkles, Edit, Trash2 } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-const initialProfile: Partial<UserProfile> = {
-    name: '',
-    type: undefined,
-    location: '',
-    experience: '',
-    bio: '',
-    skills: [],
-    interests: [],
-    links: { email: '', linkedin: ''},
-    workExperience: [],
-    education: [],
-    verified: false,
-    avatarUrl: '',
-};
+import { Textarea } from '@/components/ui/textarea';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserProfileSchema } from '@/types';
 
 const AiQuestionView = ({ question, onAnswer, isPending, totalQuestions, currentQuestionIndex }: { question: string, onAnswer: (answer: string) => void, isPending: boolean, totalQuestions: number, currentQuestionIndex: number }) => {
     const [answer, setAnswer] = useState('');
@@ -76,6 +65,93 @@ const AiQuestionView = ({ question, onAnswer, isPending, totalQuestions, current
     )
 }
 
+const FinalReviewView = ({ profileData, onApprove, onEdit, isSubmitting }: { profileData: Partial<UserProfile>, onApprove: (data: Partial<UserProfile>) => void, onEdit: () => void, isSubmitting: boolean }) => {
+    const form = useForm<Partial<UserProfile>>({
+        resolver: zodResolver(UserProfileSchema.partial()),
+        defaultValues: profileData,
+    });
+
+    const { control, register } = form;
+
+    const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({ control, name: "skills" });
+    const { fields: interestFields, append: appendInterest, remove: removeInterest } = useFieldArray({ control, name: "interests" });
+
+    const onSubmit = (data: Partial<UserProfile>) => {
+        onApprove(data);
+    };
+
+    return (
+        <Card className="h-full flex flex-col">
+            <CardHeader className="text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                    <PartyPopper className="h-8 w-8 text-green-600" />
+                </div>
+                <CardTitle className="text-3xl font-headline mt-4">Review Your AI-Generated Profile</CardTitle>
+                <CardDescription className="mt-1 text-base">
+                    The AI has finished. Review and edit any field below, then add a profile picture URL and submit.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow space-y-6 overflow-y-auto pr-6">
+                <form id="final-review-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="avatarUrl">Profile Picture URL</Label>
+                        <Input id="avatarUrl" {...register('avatarUrl')} placeholder="https://example.com/your-photo.jpg" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" {...register('name')} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="experience">Headline</Label>
+                        <Input id="experience" {...register('experience')} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="bio">Bio</Label>
+                        <Textarea id="bio" {...register('bio')} rows={5} />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Skills</Label>
+                        <div className="space-y-2">
+                            {skillFields.map((field, index) => (
+                                <div key={field.id} className="flex items-center gap-2">
+                                    <Input {...register(`skills.${index}` as const)} />
+                                    <Button type="button" variant="ghost" size="icon" onClick={() => removeSkill(index)}><Trash2 className="h-4 w-4" /></Button>
+                                </div>
+                            ))}
+                        </div>
+                        <Button type="button" variant="outline" size="sm" onClick={() => appendSkill('')}>Add Skill</Button>
+                    </div>
+
+                     <div className="space-y-2">
+                        <Label>Interests</Label>
+                        <div className="space-y-2">
+                            {interestFields.map((field, index) => (
+                                <div key={field.id} className="flex items-center gap-2">
+                                    <Input {...register(`interests.${index}` as const)} />
+                                    <Button type="button" variant="ghost" size="icon" onClick={() => removeInterest(index)}><Trash2 className="h-4 w-4" /></Button>
+                                </div>
+                            ))}
+                        </div>
+                        <Button type="button" variant="outline" size="sm" onClick={() => appendInterest('')}>Add Interest</Button>
+                    </div>
+                </form>
+            </CardContent>
+            <CardContent>
+                 <div className="flex justify-between items-center mt-8">
+                    <Button variant="outline" onClick={onEdit}>
+                        <Edit className="mr-2 h-4 w-4" /> Go Back & Re-run AI
+                    </Button>
+                    <Button form="final-review-form" type="submit" disabled={isSubmitting} size="lg">
+                        {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Looks Good, Submit Profile'}
+                        {!isSubmitting && <ArrowRight className="ml-2 h-4 w-4" />}
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
+
 export default function CreateProfilePage() {
   const [isPending, startTransition] = useTransition();
   const [view, setView] = useState<'questionnaire' | 'ai-interview' | 'loading' | 'final-review'>('questionnaire');
@@ -87,10 +163,21 @@ export default function CreateProfilePage() {
   const [aiQuestions, setAiQuestions] = useState<string[]>([]);
   const [aiAnswers, setAiAnswers] = useState<string[]>([]);
   const [currentAiQuestionIndex, setCurrentAiQuestionIndex] = useState(0);
-  const [finalProfile, setFinalProfile] = useState<Partial<UserProfile>>(initialProfile);
+  const [finalProfile, setFinalProfile] = useState<Partial<UserProfile>>({
+      name: '',
+      type: undefined,
+      location: '',
+      experience: '',
+      bio: '',
+      skills: [],
+      interests: [],
+      links: { email: '', linkedin: ''},
+      workExperience: [],
+      education: [],
+      verified: false,
+      avatarUrl: '',
+  });
   const [completenessScore, setCompletenessScore] = useState(0);
-  const [avatarUrl, setAvatarUrl] = useState('');
-
 
   const handleQuestionnaireComplete = async (data: Partial<UserProfile>) => {
     setInitialData(data);
@@ -101,9 +188,9 @@ export default function CreateProfilePage() {
         if (questions && questions.length > 0) {
             setAiQuestions(questions);
             setCurrentAiQuestionIndex(0);
+            setAiAnswers([]);
             setView('ai-interview');
         } else {
-            // If no questions are generated, proceed to final processing
             await processFinalProfile([]);
         }
       } catch (error) {
@@ -141,6 +228,10 @@ export default function CreateProfilePage() {
               const result = await processInterviewAnswers(fullConversation);
               
               if (result.profile) {
+                // Ensure skills/interests are arrays
+                result.profile.skills = Array.isArray(result.profile.skills) ? result.profile.skills : [];
+                result.profile.interests = Array.isArray(result.profile.interests) ? result.profile.interests : [];
+
                 setFinalProfile(prev => ({...prev, ...initialData, ...result.profile}));
                 setCompletenessScore(result.completenessScore || 0);
               }
@@ -154,19 +245,17 @@ export default function CreateProfilePage() {
                   title: 'Error',
                   description: 'The AI failed to process your profile. Please try again.',
               });
-              // Go back to the last question
               setView('ai-interview'); 
           }
       });
   };
   
-  const handleApprove = async () => {
+  const handleApprove = async (editedData: Partial<UserProfile>) => {
     startTransition(async () => {
         try {
             const newSubmissionId = `focuslinks-${Date.now()}`;
             const submissionData = {
-                ...finalProfile,
-                avatarUrl: avatarUrl,
+                ...editedData,
                 submissionId: newSubmissionId,
                 submissionDate: new Date().toISOString(),
                 status: 'In Review',
@@ -199,16 +288,25 @@ export default function CreateProfilePage() {
     });
   }
 
+  const handleRegenerate = () => {
+      if (initialData) {
+        handleQuestionnaireComplete(initialData);
+      } else {
+        setView('questionnaire');
+      }
+  }
+
   const handleFinalReset = () => {
     setShowSuccessDialog(false);
-    // Reset all state for a new session
     setInitialData({});
     setAiQuestions([]);
     setAiAnswers([]);
     setCurrentAiQuestionIndex(0);
-    setFinalProfile(initialProfile);
+    setFinalProfile({
+        name: '', type: undefined, location: '', experience: '', bio: '', skills: [], interests: [],
+        links: { email: '', linkedin: ''}, workExperience: [], education: [], verified: false, avatarUrl: '',
+    });
     setCompletenessScore(0);
-    setAvatarUrl('');
     setSubmissionId('');
     setView('questionnaire');
   }
@@ -253,39 +351,12 @@ export default function CreateProfilePage() {
             )
         case 'final-review':
              return (
-                <Card className="h-full flex flex-col">
-                    <CardHeader className="text-center">
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                            <PartyPopper className="h-8 w-8 text-green-600" />
-                        </div>
-                        <CardTitle className="text-3xl font-headline mt-4">Profile Ready for Review!</CardTitle>
-                        <CardDescription className="mt-1 text-base">
-                            The AI has finished. Please add a profile picture URL and submit for approval.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow flex flex-col justify-center">
-                        <div className="space-y-4">
-                            <Label htmlFor="avatar-url" className="text-xl font-semibold text-center block">Your Profile Picture URL</Label>
-                            <div className="relative">
-                               <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                <Input
-                                    id="avatar-url"
-                                    value={avatarUrl}
-                                    onChange={(e) => setAvatarUrl(e.target.value)}
-                                    placeholder="https://example.com/your-photo.jpg"
-                                    className="pl-10 text-center text-lg h-12"
-                                    autoFocus
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-end items-center mt-8">
-                            <Button onClick={handleApprove} disabled={!avatarUrl || isPending} size="lg">
-                                {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Looks Good, Submit Profile'}
-                                {!isPending && <ArrowRight className="ml-2 h-4 w-4" />}
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                <FinalReviewView
+                    profileData={finalProfile}
+                    onApprove={handleApprove}
+                    onEdit={handleRegenerate}
+                    isSubmitting={isPending}
+                />
             )
         default:
              return <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />;
@@ -305,7 +376,7 @@ export default function CreateProfilePage() {
     
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            <div className="lg:col-span-2 h-[70vh]">
+            <div className="lg:col-span-2 h-[80vh]">
               {renderContent()}
             </div>
             <div className="lg:col-span-1">

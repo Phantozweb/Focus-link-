@@ -9,9 +9,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { countries } from '@/lib/countries';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from './ui/progress';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
@@ -22,6 +24,54 @@ interface GuidedQuestionnaireProps {
 const isProfessional = (role?: string) => role && ['Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(role);
 const isStudent = (role?: string) => role === 'Student';
 const isOrganization = (role?: string) => role && ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(role);
+
+function CountryCombobox({ value, onChange }: { value: string, onChange: (value: string) => void }) {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between text-lg h-12"
+                >
+                    {value ? countries.find((country) => country.name.toLowerCase() === value.toLowerCase())?.name : "Select your country..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                <Command>
+                    <CommandInput placeholder="Search country..." />
+                    <CommandEmpty>No country found.</CommandEmpty>
+                    <CommandList>
+                        <CommandGroup>
+                            {countries.map((country) => (
+                                <CommandItem
+                                    key={country.code}
+                                    value={country.name}
+                                    onSelect={(currentValue) => {
+                                        onChange(currentValue.toLowerCase() === value.toLowerCase() ? "" : currentValue);
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            value.toLowerCase() === country.name.toLowerCase() ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
+                                    {country.name}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    );
+}
 
 export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
   const [step, setStep] = useState(0);
@@ -37,7 +87,7 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
   const baseQuestions = [
     { label: "First, what's your full name or your organization's name?", field: 'name' as const, type: 'text', placeholder: 'e.g., Dr. Jane Doe' },
     { label: 'And which of these best describes you?', field: 'type' as const, type: 'select', placeholder: 'Select a role...', options: profileTypes.map(p => ({ value: p, label: p })) },
-    { label: 'Finally, where are you located?', field: 'location' as const, type: 'select', placeholder: 'Select your country...', options: countries.map(c => ({ value: c.name, label: c.name })) },
+    { label: 'Finally, where are you located?', field: 'location' as const, type: 'combobox', placeholder: 'Select your country...', options: countries.map(c => ({ value: c.name, label: c.name })) },
   ];
 
   const studentQuestions = [
@@ -68,11 +118,11 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
     if (step < allQuestions.length - 1) {
       setStep(step + 1);
     } else {
-      // Prepare final data object
       const finalData: Partial<UserProfile> = {
         name: data.name,
         type: data.type,
         location: data.location,
+        links: {},
       };
       if (isStudent(data.type)) {
         finalData.education = [{
@@ -90,8 +140,8 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
         }];
       }
       if (isOrganization(data.type)) {
-        finalData.name = data.name; // Org name is same as user name initially
-        finalData.links = { email: data.links?.email, linkedin: data.website };
+        finalData.name = data.name;
+        finalData.links!.linkedin = data.website;
       }
       onComplete(finalData);
     }
@@ -109,30 +159,8 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
 
   const isNextDisabled = () => {
     if (!currentQuestion) return true;
-    const field = currentQuestion.field;
-    const value = (data as any)[field];
-
-    if (value === undefined || value === null || value === '') return true;
-
-    const stringValue = String(value).trim();
-    if (stringValue.length === 0) return true;
-
-    if (field === 'type' || field === 'location') return false; // Already handled by initial check
-    if (field === 'name') return stringValue.length < 2;
-    if (field === 'university') return stringValue.length < 3;
-    if (field === 'graduationYear') return stringValue.length !== 4 || !/^\d{4}$/.test(stringValue);
-    if (field === 'specialization') return stringValue.length < 2;
-    if (field === 'yearsOfExperience') return isNaN(Number(value)) || Number(value) < 0;
-    if (field === 'website') {
-      try {
-        new URL(stringValue);
-        return false;
-      } catch {
-        return true;
-      }
-    }
-    
-    return false;
+    const value = (data as any)[currentQuestion.field];
+    return value === undefined || value === null || String(value).trim() === '';
   };
   
   return (
@@ -183,7 +211,6 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
              <Select 
                 onValueChange={value => {
                   handleChange(currentQuestion.field, value);
-                  // Automatically move to next step on selection
                   setTimeout(() => handleNext(), 100);
                 }}
                 value={(data as any)[currentQuestion.field] || ''}
@@ -200,6 +227,15 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
                 </SelectContent>
             </Select>
           )}
+          {currentQuestion.type === 'combobox' && (
+            <CountryCombobox
+              value={(data as any)[currentQuestion.field] || ''}
+              onChange={value => {
+                handleChange(currentQuestion.field, value);
+                setTimeout(() => handleNext(), 100);
+              }}
+            />
+          )}
         </div>
         <div className="flex justify-between items-center mt-8">
           <Button variant="outline" onClick={handleBack} className={cn(step === 0 && "invisible")}>
@@ -214,5 +250,3 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
     </Card>
   );
 }
-
-    
