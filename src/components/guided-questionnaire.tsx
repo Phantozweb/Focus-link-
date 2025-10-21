@@ -77,20 +77,20 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
       if (isStudent(data.type)) {
         finalData.education = [{
           school: data.university || '',
-          endYear: data.graduationYear || '',
+          endYear: String(data.graduationYear) || '',
           degree: '', fieldOfStudy: '', startYear: ''
         }];
       }
       if (isProfessional(data.type)) {
          finalData.workExperience = [{
             title: data.specialization || '',
-            company: `${data.yearsOfExperience} years experience`,
+            company: `${data.yearsOfExperience || 0} years experience`,
             startDate: '', endDate: '', description: ''
         }];
       }
       if (isOrganization(data.type)) {
         finalData.name = data.name; // Org name is same as user name initially
-        finalData.links = { linkedin: data.website };
+        finalData.links = { email: data.links?.email, linkedin: data.website };
       }
       onComplete(finalData);
     }
@@ -108,24 +108,27 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
 
   const isNextDisabled = () => {
     const field = currentQuestion.field;
-    if (data[field] === undefined || data[field] === null) return true;
+    const value = (data as any)[field];
 
-    const value = String(data[field]);
+    if (value === undefined || value === null) return true;
 
-    if (field === 'type' || field === 'location') return !value;
-    if (field === 'name') return value.length < 2;
-    if (field === 'university') return value.length < 3;
-    if (field === 'graduationYear') return value.length !== 4;
-    if (field === 'specialization') return value.length < 2;
-    if (field === 'yearsOfExperience') return Number(value) < 0;
+    const stringValue = String(value).trim();
+
+    if (field === 'type' || field === 'location') return !stringValue;
+    if (field === 'name') return stringValue.length < 2;
+    if (field === 'university') return stringValue.length < 3;
+    if (field === 'graduationYear') return stringValue.length !== 4 || !/^\d{4}$/.test(stringValue);
+    if (field === 'specialization') return stringValue.length < 2;
+    if (field === 'yearsOfExperience') return isNaN(Number(value)) || Number(value) < 0;
     if (field === 'website') {
       try {
-        new URL(value);
+        new URL(stringValue);
         return false;
       } catch {
         return true;
       }
     }
+    
     return false;
   };
   
@@ -154,7 +157,7 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
               id={currentQuestion.field}
               type="number"
               value={(data as any)[currentQuestion.field] || ''}
-              onChange={e => handleChange(currentQuestion.field, e.target.valueAsNumber)}
+              onChange={e => handleChange(currentQuestion.field, e.target.value)}
               placeholder={currentQuestion.placeholder}
               className="text-center text-lg h-12"
               autoFocus
@@ -175,7 +178,13 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
           )}
           {currentQuestion.type === 'select' && currentQuestion.options && (
              <Select 
-                onValueChange={value => handleChange(currentQuestion.field, value)}
+                onValueChange={value => {
+                  handleChange(currentQuestion.field, value);
+                  // Automatically move to next step on selection if it's a base question
+                  if (step < baseQuestions.length) {
+                    setTimeout(() => handleNext(), 100);
+                  }
+                }}
                 value={(data as any)[currentQuestion.field] || ''}
              >
                 <SelectTrigger className="text-lg h-12">
