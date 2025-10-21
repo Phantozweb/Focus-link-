@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -102,6 +103,15 @@ export default function CreateProfilePage() {
   const { fields: languageFields, add: addLanguage, remove: removeLanguage } = useDynamicFields(form, 'languages');
 
   
+  const watchedFields = form.watch(['name', 'type', 'skills', 'interests', 'education', 'workExperience']);
+  const canGenerateBio =
+    !!watchedFields[0] && // name
+    !!watchedFields[1] && // type
+    ((watchedFields[2] && watchedFields[2].length > 0) || // skills
+     (watchedFields[3] && watchedFields[3].length > 0) || // interests
+     (watchedFields[4] && watchedFields[4].length > 0) || // education
+     (watchedFields[5] && watchedFields[5].length > 0)); // workExperience
+
   const handleGenerateBio = async () => {
     setIsGeneratingBio(true);
     const { name, type, skills, interests, education, workExperience } = form.getValues();
@@ -269,7 +279,7 @@ export default function CreateProfilePage() {
                             <CardTitle>About</CardTitle>
                             <CardDescription>Tell the community about yourself. What are you passionate about?</CardDescription>
                         </div>
-                         <Button type="button" variant="outline" size="sm" onClick={handleGenerateBio} disabled={isGeneratingBio}>
+                         <Button type="button" variant="outline" size="sm" onClick={handleGenerateBio} disabled={isGeneratingBio || !canGenerateBio}>
                             {isGeneratingBio ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                             Generate with AI
                         </Button>
