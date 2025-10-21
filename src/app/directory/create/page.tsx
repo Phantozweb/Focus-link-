@@ -8,7 +8,7 @@ import type { Message, UserProfile, InterviewerChatOutput } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { User, CheckCircle, PartyPopper, Bot, FileText, ChevronRight, Loader2 } from 'lucide-react';
+import { User, CheckCircle, PartyPopper, Bot, FileText, ChevronRight, Loader2, ArrowRight } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
@@ -248,3 +248,5 @@ export default function CreateProfilePage() {
     </div>
   );
 }
+
+    
