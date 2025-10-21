@@ -1,14 +1,16 @@
 
 'use client';
 
-import { useState, useTransition, useMemo } from 'react';
+import { useState, useTransition } from 'react';
 import { GuidedQuestionnaire } from '@/components/guided-questionnaire';
-import { interviewerChat } from '@/ai/flows/interviewer-chat';
-import type { Message, UserProfile, InterviewerChatOutput } from '@/types';
+import { generateInterviewQuestions } from '@/ai/flows/generate-interview-questions';
+import { processInterviewAnswers } from '@/ai/flows/process-interview-answers';
+
+import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { User, CheckCircle, PartyPopper, Bot, FileText, ChevronRight, Loader2, ArrowRight } from 'lucide-react';
+import { CheckCircle, PartyPopper, Bot, FileText, Loader2, ArrowRight } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
@@ -28,8 +30,7 @@ const initialProfile: Partial<UserProfile> = {
     verified: false,
 };
 
-
-const AiQuestion = ({ question, onAnswer, isPending }: { question: string, onAnswer: (answer: string) => void, isPending: boolean }) => {
+const AiQuestionView = ({ question, onAnswer, isPending, onComplete, totalQuestions, currentQuestionIndex }: { question: string, onAnswer: (answer: string) => void, isPending: boolean, onComplete: () => void, totalQuestions: number, currentQuestionIndex: number }) => {
     const [answer, setAnswer] = useState('');
 
     const handleSend = () => {
@@ -37,7 +38,9 @@ const AiQuestion = ({ question, onAnswer, isPending }: { question: string, onAns
             onAnswer(answer);
             setAnswer('');
         }
-    }
+    };
+    
+    const isFinalQuestion = currentQuestionIndex === totalQuestions - 1;
 
     return (
         <Card className="h-full flex flex-col">
@@ -46,6 +49,7 @@ const AiQuestion = ({ question, onAnswer, isPending }: { question: string, onAns
                 <CardDescription>Answer the AI's questions to complete your profile.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-center">
+                 <Progress value={((currentQuestionIndex + 1) / totalQuestions) * 100} className="mb-8" />
                 <div className="space-y-4">
                     <Label htmlFor="ai-question" className="text-xl font-semibold text-center block">{question}</Label>
                     <Input
@@ -60,8 +64,10 @@ const AiQuestion = ({ question, onAnswer, isPending }: { question: string, onAns
                     />
                 </div>
                 <div className="flex justify-end items-center mt-8">
-                     <Button onClick={handleSend} disabled={isPending || !answer.trim()}>
-                        {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Thinking...</> : <>Next <ArrowRight className="ml-2 h-4 w-4" /></>}
+                     <Button onClick={isFinalQuestion ? onComplete : handleSend} disabled={!answer.trim() || isPending}>
+                        {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</> : 
+                         isFinalQuestion ? 'Finish & Review' : 'Next'}
+                        {!isPending && <ArrowRight className="ml-2 h-4 w-4" />}
                     </Button>
                 </div>
             </CardContent>
@@ -69,75 +75,84 @@ const AiQuestion = ({ question, onAnswer, isPending }: { question: string, onAns
     )
 }
 
-
 export default function CreateProfilePage() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [profile, setProfile] = useState<Partial<UserProfile>>(initialProfile);
-  const [completenessScore, setCompletenessScore] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const [view, setView] = useState<'questionnaire' | 'ai-interview' | 'loading'>('questionnaire');
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { toast } = useToast();
-  const [view, setView] = useState<'questionnaire' | 'chat'>('questionnaire');
-  const [currentQuestion, setCurrentQuestion] = useState('');
 
-  const handleQuestionnaireComplete = (data: Partial<UserProfile>) => {
-    let context = `Great, I have your initial information. You've set your name to ${data.name}, your role as ${data.type}, and your location as ${data.location}.`;
-
-    if (data.type === 'Student' && data.education && data.education.length > 0) {
-      context += ` I see you're studying at ${data.education[0].school}.`;
-    }
-    if (data.type && ['Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(data.type) && data.workExperience && data.workExperience.length > 0) {
-      context += ` You mentioned your specialization is ${data.workExperience[0].title}.`
-    }
-     if (data.type && ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(data.type) && data.links?.linkedin) {
-      context += ` Your organization's website is ${data.links.linkedin}.`
-    }
-
-    const firstQuestion = `Now, let's build out the rest of your profile. To start, could you tell me a bit more about your work or studies for your headline and bio?`;
-    
-    setProfile(data);
-    setMessages([{ role: 'model', content: context }]);
-    setCurrentQuestion(firstQuestion);
-    setView('chat');
-  };
+  const [initialData, setInitialData] = useState<Partial<UserProfile>>({});
+  const [aiQuestions, setAiQuestions] = useState<string[]>([]);
+  const [aiAnswers, setAiAnswers] = useState<string[]>([]);
+  const [currentAiQuestionIndex, setCurrentAiQuestionIndex] = useState(0);
+  const [finalProfile, setFinalProfile] = useState<Partial<UserProfile>>(initialProfile);
+  const [completenessScore, setCompletenessScore] = useState(0);
 
 
-  const handleAiAnswer = async (text: string) => {
-    const newMessages: Message[] = [...messages, { role: 'user', content: text }];
-    setMessages(newMessages);
-
+  const handleQuestionnaireComplete = async (data: Partial<UserProfile>) => {
+    setInitialData(data);
+    setView('loading');
     startTransition(async () => {
       try {
-        const result = await interviewerChat(newMessages);
-        const { reply, suggestions, completenessScore: scoreUpdate, profile: profileUpdate } = result;
-
-        if (scoreUpdate !== undefined) {
-            setCompletenessScore(scoreUpdate);
+        const { questions } = await generateInterviewQuestions({ initialData: JSON.stringify(data) });
+        if (questions && questions.length > 0) {
+            setAiQuestions(questions);
+            setCurrentAiQuestionIndex(0);
+            setView('ai-interview');
+        } else {
+            // If no questions are generated, proceed to final processing
+            await handleInterviewComplete();
         }
-        
-        if (profileUpdate) {
-            setProfile(prev => ({...prev, ...profileUpdate}));
-        }
-
-        if (reply) {
-            setCurrentQuestion(reply);
-            setMessages(prev => [...prev, { role: 'model', content: reply, suggestions }]);
-        }
-        
-        if (scoreUpdate === 10) {
-            setShowSuccessDialog(true);
-        }
-
       } catch (error) {
-        console.error('AI Chat Error:', error);
+        console.error('AI Question Generation Error:', error);
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'The AI assistant ran into a problem. Please try again.',
+          description: 'The AI assistant failed to generate interview questions. Please try again.',
         });
-        // On error, we don't roll back, just let the user try again.
+        setView('questionnaire');
       }
     });
+  };
+
+  const handleAiAnswer = (answer: string) => {
+    setAiAnswers(prev => [...prev, answer]);
+    if (currentAiQuestionIndex < aiQuestions.length - 1) {
+        setCurrentAiQuestionIndex(prev => prev + 1);
+    }
+  };
+
+  const handleInterviewComplete = async () => {
+      const finalAnswers = [...aiAnswers]; // Capture current answers
+
+      setView('loading');
+      startTransition(async () => {
+          try {
+              const fullConversation = {
+                  initialData: JSON.stringify(initialData),
+                  questions: aiQuestions,
+                  answers: finalAnswers,
+              };
+
+              const result = await processInterviewAnswers(fullConversation);
+              
+              if (result.profile) {
+                setFinalProfile(prev => ({...prev, ...result.profile}));
+                setCompletenessScore(result.completenessScore || 0);
+              }
+              
+              setShowSuccessDialog(true);
+
+          } catch (error) {
+              console.error('AI Processing Error:', error);
+              toast({
+                  variant: 'destructive',
+                  title: 'Error',
+                  description: 'The AI failed to process your profile. Please try again.',
+              });
+              setView('ai-interview'); // Go back to the interview
+          }
+      });
   };
   
   const handleApprove = async () => {
@@ -146,16 +161,18 @@ export default function CreateProfilePage() {
         title: "Profile Submitted!",
         description: "Your new profile has been sent for approval.",
     });
-    setMessages([]);
-    setProfile(initialProfile);
+    // Reset all state for a new session
+    setInitialData({});
+    setAiQuestions([]);
+    setAiAnswers([]);
+    setCurrentAiQuestionIndex(0);
+    setFinalProfile(initialProfile);
     setCompletenessScore(0);
     setView('questionnaire');
   }
-  
+
   const ReportItem = ({ label, value }: { label: string, value: string | string[] | undefined | null }) => {
-      if (!value || (Array.isArray(value) && value.length === 0)) {
-          return null;
-      }
+      if (!value || (Array.isArray(value) && value.length === 0)) return null;
       const displayValue = Array.isArray(value) ? value.join(', ') : value;
       return (
           <div className="flex items-start gap-3 text-sm">
@@ -168,6 +185,34 @@ export default function CreateProfilePage() {
              </div>
           </div>
       );
+  }
+
+  const renderContent = () => {
+    switch(view) {
+        case 'questionnaire':
+            return <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />;
+        case 'ai-interview':
+            return <AiQuestionView 
+                question={aiQuestions[currentAiQuestionIndex]} 
+                onAnswer={handleAiAnswer}
+                onComplete={handleInterviewComplete}
+                isPending={isPending}
+                totalQuestions={aiQuestions.length}
+                currentQuestionIndex={currentAiQuestionIndex}
+            />
+        case 'loading':
+            return (
+                <Card className="h-full flex flex-col items-center justify-center">
+                    <CardContent className="text-center">
+                        <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
+                        <h2 className="text-xl font-semibold text-slate-700">AI is Preparing Your Profile...</h2>
+                        <p className="text-muted-foreground">This may take a moment.</p>
+                    </CardContent>
+                </Card>
+            )
+        default:
+             return <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />;
+    }
   }
 
   return (
@@ -184,11 +229,7 @@ export default function CreateProfilePage() {
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-2 h-[70vh]">
-              {view === 'questionnaire' ? (
-                  <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />
-              ) : (
-                  <AiQuestion question={currentQuestion} onAnswer={handleAiAnswer} isPending={isPending} />
-              )}
+              {renderContent()}
             </div>
             <div className="lg:col-span-1">
               <Card className="sticky top-24">
@@ -197,30 +238,32 @@ export default function CreateProfilePage() {
                   <CardDescription>
                       {view === 'questionnaire'
                         ? 'Complete the initial questions to begin the AI interview.'
-                        : 'Your profile is built in real-time as you answer questions. A score of 10/10 is required.'
+                        : 'Your profile is built in real-time as you answer questions.'
                       }
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-semibold text-sm">Profile Completeness Score</h4>
-                      <p className="font-bold text-primary text-lg">{completenessScore}/10</p>
+                  { (view === 'ai-interview' || showSuccessDialog) &&
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-semibold text-sm">Profile Completeness Score</h4>
+                        <p className="font-bold text-primary text-lg">{completenessScore}/10</p>
+                        </div>
+                        <Progress value={completenessScore * 10} />
                     </div>
-                    <Progress value={completenessScore * 10} />
-                  </div>
+                  }
                   <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
-                     <ReportItem label="Name" value={profile.name} />
-                     <ReportItem label="Role" value={profile.type} />
-                     <ReportItem label="Location" value={profile.location} />
-                     <ReportItem label="Headline" value={profile.experience} />
-                     <ReportItem label="Bio" value={profile.bio} />
-                     <ReportItem label="Skills" value={profile.skills} />
-                     <ReportItem label="Interests" value={profile.interests} />
-                     <ReportItem label="Email" value={profile.links?.email} />
-                     <ReportItem label="LinkedIn/Website" value={profile.links?.linkedin} />
-                     <ReportItem label="Work Experience" value={profile.workExperience?.map(w => w.title)} />
-                     <ReportItem label="Education" value={profile.education?.map(e => e.degree)} />
+                     <ReportItem label="Name" value={finalProfile.name} />
+                     <ReportItem label="Role" value={finalProfile.type} />
+                     <ReportItem label="Location" value={finalProfile.location} />
+                     <ReportItem label="Headline" value={finalProfile.experience} />
+                     <ReportItem label="Bio" value={finalProfile.bio} />
+                     <ReportItem label="Skills" value={finalProfile.skills} />
+                     <ReportItem label="Interests" value={finalProfile.interests} />
+                     <ReportItem label="Email" value={finalProfile.links?.email} />
+                     <ReportItem label="LinkedIn/Website" value={finalProfile.links?.linkedin} />
+                     <ReportItem label="Work Experience" value={finalProfile.workExperience?.map(w => w.title)} />
+                     <ReportItem label="Education" value={finalProfile.education?.map(e => e.degree)} />
                   </div>
                 </CardContent>
               </Card>
@@ -234,9 +277,9 @@ export default function CreateProfilePage() {
              <div className="flex justify-center">
               <PartyPopper className="h-16 w-16 text-green-500" />
             </div>
-            <AlertDialogTitle className="text-center">Profile Ready! Score: 10/10</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Profile Ready! Score: {completenessScore}/10</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              The AI has gathered all the necessary information. You can now submit your profile for review.
+              The AI has processed your answers. Review your generated profile information. You can now submit it for final approval.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
