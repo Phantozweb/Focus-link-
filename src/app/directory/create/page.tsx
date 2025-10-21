@@ -10,7 +10,7 @@ import type { UserProfile } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, PartyPopper, Bot, FileText, Loader2, ArrowRight } from 'lucide-react';
+import { CheckCircle, PartyPopper, Bot, FileText, Loader2, ArrowRight, Image as ImageIcon } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
@@ -28,6 +28,7 @@ const initialProfile: Partial<UserProfile> = {
     workExperience: [],
     education: [],
     verified: false,
+    avatarUrl: '',
 };
 
 const AiQuestionView = ({ question, onAnswer, isPending, totalQuestions, currentQuestionIndex }: { question: string, onAnswer: (answer: string) => void, isPending: boolean, totalQuestions: number, currentQuestionIndex: number }) => {
@@ -77,8 +78,9 @@ const AiQuestionView = ({ question, onAnswer, isPending, totalQuestions, current
 
 export default function CreateProfilePage() {
   const [isPending, startTransition] = useTransition();
-  const [view, setView] = useState<'questionnaire' | 'ai-interview' | 'loading'>('questionnaire');
+  const [view, setView] = useState<'questionnaire' | 'ai-interview' | 'loading' | 'final-review'>('questionnaire');
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [submissionId, setSubmissionId] = useState('');
   const { toast } = useToast();
 
   const [initialData, setInitialData] = useState<Partial<UserProfile>>({});
@@ -87,6 +89,7 @@ export default function CreateProfilePage() {
   const [currentAiQuestionIndex, setCurrentAiQuestionIndex] = useState(0);
   const [finalProfile, setFinalProfile] = useState<Partial<UserProfile>>(initialProfile);
   const [completenessScore, setCompletenessScore] = useState(0);
+  const [avatarUrl, setAvatarUrl] = useState('');
 
 
   const handleQuestionnaireComplete = async (data: Partial<UserProfile>) => {
@@ -142,7 +145,7 @@ export default function CreateProfilePage() {
                 setCompletenessScore(result.completenessScore || 0);
               }
               
-              setShowSuccessDialog(true);
+              setView('final-review');
 
           } catch (error) {
               console.error('AI Processing Error:', error);
@@ -158,33 +161,31 @@ export default function CreateProfilePage() {
   };
   
   const handleApprove = async () => {
-    setShowSuccessDialog(false);
     startTransition(async () => {
         try {
+            const newSubmissionId = `focuslinks-${Date.now()}`;
+            const submissionData = {
+                ...finalProfile,
+                avatarUrl: avatarUrl,
+                submissionId: newSubmissionId,
+                submissionDate: new Date().toISOString(),
+                status: 'In Review',
+            };
+
             const response = await fetch('/api/submit-ai-profile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(finalProfile),
+                body: JSON.stringify(submissionData),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to submit profile.');
             }
-
-            toast({
-                title: "Profile Submitted!",
-                description: "Your new profile has been sent for approval and will be added to the directory shortly.",
-            });
-
-            // Reset all state for a new session
-            setInitialData({});
-            setAiQuestions([]);
-            setAiAnswers([]);
-            setCurrentAiQuestionIndex(0);
-            setFinalProfile(initialProfile);
-            setCompletenessScore(0);
+            
+            setSubmissionId(newSubmissionId);
+            setShowSuccessDialog(true);
             setView('questionnaire');
 
         } catch (error) {
@@ -196,6 +197,20 @@ export default function CreateProfilePage() {
             });
         }
     });
+  }
+
+  const handleFinalReset = () => {
+    setShowSuccessDialog(false);
+    // Reset all state for a new session
+    setInitialData({});
+    setAiQuestions([]);
+    setAiAnswers([]);
+    setCurrentAiQuestionIndex(0);
+    setFinalProfile(initialProfile);
+    setCompletenessScore(0);
+    setAvatarUrl('');
+    setSubmissionId('');
+    setView('questionnaire');
   }
 
   const ReportItem = ({ label, value }: { label: string, value: string | string[] | undefined | null }) => {
@@ -236,6 +251,42 @@ export default function CreateProfilePage() {
                     </CardContent>
                 </Card>
             )
+        case 'final-review':
+             return (
+                <Card className="h-full flex flex-col">
+                    <CardHeader className="text-center">
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                            <PartyPopper className="h-8 w-8 text-green-600" />
+                        </div>
+                        <CardTitle className="text-3xl font-headline mt-4">Profile Ready for Review!</CardTitle>
+                        <CardDescription className="mt-1 text-base">
+                            The AI has finished. Please add a profile picture URL and submit for approval.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow flex flex-col justify-center">
+                        <div className="space-y-4">
+                            <Label htmlFor="avatar-url" className="text-xl font-semibold text-center block">Your Profile Picture URL</Label>
+                            <div className="relative">
+                               <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Input
+                                    id="avatar-url"
+                                    value={avatarUrl}
+                                    onChange={(e) => setAvatarUrl(e.target.value)}
+                                    placeholder="https://example.com/your-photo.jpg"
+                                    className="pl-10 text-center text-lg h-12"
+                                    autoFocus
+                                />
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center mt-8">
+                            <Button onClick={handleApprove} disabled={!avatarUrl || isPending} size="lg">
+                                {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Looks Good, Submit Profile'}
+                                {!isPending && <ArrowRight className="ml-2 h-4 w-4" />}
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            )
         default:
              return <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />;
     }
@@ -269,7 +320,7 @@ export default function CreateProfilePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  { (view === 'ai-interview' || view === 'loading' || showSuccessDialog) &&
+                  { (view !== 'questionnaire') &&
                     <div>
                         <div className="flex justify-between items-center mb-2">
                         <h4 className="font-semibold text-sm">Profile Completeness Score</h4>
@@ -301,18 +352,19 @@ export default function CreateProfilePage() {
         <AlertDialogContent>
           <AlertDialogHeader>
              <div className="flex justify-center">
-              <PartyPopper className="h-16 w-16 text-green-500" />
+              <CheckCircle className="h-16 w-16 text-green-500" />
             </div>
-            <AlertDialogTitle className="text-center">Profile Ready! Score: {completenessScore}/10</AlertDialogTitle>
+            <AlertDialogTitle className="text-center">Profile Submitted Successfully!</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              The AI has processed your answers. Review your generated profile information. You can now submit it for final approval.
+              Your profile has been sent for review. Please save your Submission ID for your records.
+               <div className="font-mono text-sm bg-muted text-foreground p-2 rounded-md mt-4">
+                {submissionId}
+               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button variant="outline" onClick={() => setShowSuccessDialog(false)}>Make Changes</Button>
-            <AlertDialogAction onClick={handleApprove} disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Looks Good, Submit Profile
+            <AlertDialogAction onClick={handleFinalReset}>
+              Create Another Profile
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
