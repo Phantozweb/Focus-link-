@@ -159,18 +159,43 @@ export default function CreateProfilePage() {
   
   const handleApprove = async () => {
     setShowSuccessDialog(false);
-    toast({
-        title: "Profile Submitted!",
-        description: "Your new profile has been sent for approval.",
+    startTransition(async () => {
+        try {
+            const response = await fetch('/api/submit-ai-profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(finalProfile),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit profile.');
+            }
+
+            toast({
+                title: "Profile Submitted!",
+                description: "Your new profile has been sent for approval and will be added to the directory shortly.",
+            });
+
+            // Reset all state for a new session
+            setInitialData({});
+            setAiQuestions([]);
+            setAiAnswers([]);
+            setCurrentAiQuestionIndex(0);
+            setFinalProfile(initialProfile);
+            setCompletenessScore(0);
+            setView('questionnaire');
+
+        } catch (error) {
+            console.error('Profile Submission Error:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Submission Failed',
+                description: 'There was an error submitting your profile. Please try again.',
+            });
+        }
     });
-    // Reset all state for a new session
-    setInitialData({});
-    setAiQuestions([]);
-    setAiAnswers([]);
-    setCurrentAiQuestionIndex(0);
-    setFinalProfile(initialProfile);
-    setCompletenessScore(0);
-    setView('questionnaire');
   }
 
   const ReportItem = ({ label, value }: { label: string, value: string | string[] | undefined | null }) => {
@@ -285,12 +310,13 @@ export default function CreateProfilePage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button variant="outline" onClick={() => setShowSuccessDialog(false)}>Make Changes</Button>
-            <AlertDialogAction onClick={handleApprove}>Looks Good, Submit Profile</AlertDialogAction>
+            <AlertDialogAction onClick={handleApprove} disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Looks Good, Submit Profile
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
   );
 }
-
-    
