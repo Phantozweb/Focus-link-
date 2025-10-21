@@ -2,17 +2,17 @@
 'use client';
 
 import { useState, useTransition, useMemo } from 'react';
-import { Chat } from '@/components/chat-ui';
 import { GuidedQuestionnaire } from '@/components/guided-questionnaire';
 import { interviewerChat } from '@/ai/flows/interviewer-chat';
 import type { Message, UserProfile, InterviewerChatOutput } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { User, CheckCircle, PartyPopper, Bot, FileText, ChevronRight } from 'lucide-react';
+import { User, CheckCircle, PartyPopper, Bot, FileText, ChevronRight, Loader2 } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const initialProfile: Partial<UserProfile> = {
     name: '',
@@ -29,6 +29,47 @@ const initialProfile: Partial<UserProfile> = {
 };
 
 
+const AiQuestion = ({ question, onAnswer, isPending }: { question: string, onAnswer: (answer: string) => void, isPending: boolean }) => {
+    const [answer, setAnswer] = useState('');
+
+    const handleSend = () => {
+        if (answer.trim()) {
+            onAnswer(answer);
+            setAnswer('');
+        }
+    }
+
+    return (
+        <Card className="h-full flex flex-col">
+            <CardHeader>
+                <CardTitle>AI Interview</CardTitle>
+                <CardDescription>Answer the AI's questions to complete your profile.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow flex flex-col justify-center">
+                <div className="space-y-4">
+                    <Label htmlFor="ai-question" className="text-xl font-semibold text-center block">{question}</Label>
+                    <Input
+                        id="ai-question"
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                        placeholder="Type your answer here..."
+                        className="text-center text-lg h-12"
+                        autoFocus
+                        disabled={isPending}
+                    />
+                </div>
+                <div className="flex justify-end items-center mt-8">
+                     <Button onClick={handleSend} disabled={isPending || !answer.trim()}>
+                        {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Thinking...</> : <>Next <ArrowRight className="ml-2 h-4 w-4" /></>}
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
+
 export default function CreateProfilePage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [profile, setProfile] = useState<Partial<UserProfile>>(initialProfile);
@@ -37,6 +78,7 @@ export default function CreateProfilePage() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { toast } = useToast();
   const [view, setView] = useState<'questionnaire' | 'chat'>('questionnaire');
+  const [currentQuestion, setCurrentQuestion] = useState('');
 
   const handleQuestionnaireComplete = (data: Partial<UserProfile>) => {
     let context = `Great, I have your initial information. You've set your name to ${data.name}, your role as ${data.type}, and your location as ${data.location}.`;
@@ -51,15 +93,16 @@ export default function CreateProfilePage() {
       context += ` Your organization's website is ${data.links.linkedin}.`
     }
 
-    context += ` Now, let's build out the rest of your profile. To start, could you tell me a bit more about your work or studies for your headline and bio?`;
+    const firstQuestion = `Now, let's build out the rest of your profile. To start, could you tell me a bit more about your work or studies for your headline and bio?`;
     
     setProfile(data);
     setMessages([{ role: 'model', content: context }]);
+    setCurrentQuestion(firstQuestion);
     setView('chat');
   };
 
 
-  const handleSendMessage = async (text: string) => {
+  const handleAiAnswer = async (text: string) => {
     const newMessages: Message[] = [...messages, { role: 'user', content: text }];
     setMessages(newMessages);
 
@@ -77,6 +120,7 @@ export default function CreateProfilePage() {
         }
 
         if (reply) {
+            setCurrentQuestion(reply);
             setMessages(prev => [...prev, { role: 'model', content: reply, suggestions }]);
         }
         
@@ -91,7 +135,7 @@ export default function CreateProfilePage() {
           title: 'Error',
           description: 'The AI assistant ran into a problem. Please try again.',
         });
-        setMessages(messages); // Roll back on error
+        // On error, we don't roll back, just let the user try again.
       }
     });
   };
@@ -143,7 +187,7 @@ export default function CreateProfilePage() {
               {view === 'questionnaire' ? (
                   <GuidedQuestionnaire onComplete={handleQuestionnaireComplete} />
               ) : (
-                  <Chat messages={messages} onSendMessage={handleSendMessage} />
+                  <AiQuestion question={currentQuestion} onAnswer={handleAiAnswer} isPending={isPending} />
               )}
             </div>
             <div className="lg:col-span-1">

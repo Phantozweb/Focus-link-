@@ -25,7 +25,7 @@ const isOrganization = (role?: string) => role && ['Association', 'College', 'Ho
 
 export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
   const [step, setStep] = useState(0);
-  const [data, setData] = useState<Partial<UserProfile>>({
+  const [data, setData] = useState<Partial<UserProfile & { university: string, graduationYear: string, specialization: string, yearsOfExperience: number, website: string }>>({
     name: '',
     type: undefined,
     location: '',
@@ -108,15 +108,19 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
 
   const isNextDisabled = () => {
     const field = currentQuestion.field;
-    if (field === 'type' || field === 'location') return !data[field];
-    if (field === 'name') return !data.name || data.name.length < 2;
-    if (field === 'university') return !data.university || data.university.length < 3;
-    if (field === 'graduationYear') return !data.graduationYear || String(data.graduationYear).length !== 4;
-    if (field === 'specialization') return !data.specialization || data.specialization.length < 2;
-    if (field === 'yearsOfExperience') return data.yearsOfExperience === undefined || data.yearsOfExperience < 0;
+    if (data[field] === undefined || data[field] === null) return true;
+
+    const value = String(data[field]);
+
+    if (field === 'type' || field === 'location') return !value;
+    if (field === 'name') return value.length < 2;
+    if (field === 'university') return value.length < 3;
+    if (field === 'graduationYear') return value.length !== 4;
+    if (field === 'specialization') return value.length < 2;
+    if (field === 'yearsOfExperience') return Number(value) < 0;
     if (field === 'website') {
       try {
-        new URL(data.website || '');
+        new URL(value);
         return false;
       } catch {
         return true;
@@ -125,16 +129,11 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
     return false;
   };
   
-  const progress = (step + 1) / allQuestions.length * 100;
-
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Let's Get Started</CardTitle>
         <CardDescription>Answer these quick questions to begin building your profile.</CardDescription>
-        <div className="pt-2">
-            <Progress value={progress} />
-        </div>
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-center">
         <div className="space-y-4">
@@ -147,6 +146,7 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
               placeholder={currentQuestion.placeholder}
               className="text-center text-lg h-12"
               autoFocus
+              onKeyDown={(e) => e.key === 'Enter' && !isNextDisabled() && handleNext()}
             />
           )}
            {currentQuestion.type === 'number' && (
@@ -158,6 +158,7 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
               placeholder={currentQuestion.placeholder}
               className="text-center text-lg h-12"
               autoFocus
+              onKeyDown={(e) => e.key === 'Enter' && !isNextDisabled() && handleNext()}
             />
           )}
            {currentQuestion.type === 'url' && (
@@ -169,6 +170,7 @@ export function GuidedQuestionnaire({ onComplete }: GuidedQuestionnaireProps) {
               placeholder={currentQuestion.placeholder}
               className="text-center text-lg h-12"
               autoFocus
+              onKeyDown={(e) => e.key === 'Enter' && !isNextDisabled() && handleNext()}
             />
           )}
           {currentQuestion.type === 'select' && currentQuestion.options && (
