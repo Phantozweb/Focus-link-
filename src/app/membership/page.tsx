@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { UserPlus, Loader2, PartyPopper, CheckCircle, Globe, BookOpen, Handshake, Award, ArrowLeft, ArrowRight, Building, User, Briefcase } from 'lucide-react';
+import { UserPlus, Loader2, PartyPopper, CheckCircle, Globe, BookOpen, Handshake, Award, ArrowLeft, ArrowRight, Building, User, Briefcase, Hospital } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import Link from 'next/link';
@@ -46,6 +46,7 @@ const isOrganization = (role: string) => ['Association', 'College', 'Hospital', 
 const baseSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
+  contactNumber: z.string().min(10, { message: 'Please enter a valid contact number.' }),
   country: z.string({ required_error: 'Please select a country.'}),
   role: z.enum(profileTypes, { required_error: 'You must select a professional role.' }),
   terms: z.boolean().refine(val => val === true, {
@@ -60,6 +61,7 @@ const professionalSchema = z.object({
 
 const studentSchema = z.object({
     university: z.string().min(3, "Please enter your university name."),
+    affiliatedHospital: z.string().optional(),
     graduationYear: z.coerce.number().min(new Date().getFullYear(), "Please enter a valid graduation year."),
 });
 
@@ -127,6 +129,7 @@ export default function MembershipPage() {
     defaultValues: {
       name: '',
       email: '',
+      contactNumber: '',
       terms: false,
     },
      mode: 'onChange'
@@ -135,7 +138,7 @@ export default function MembershipPage() {
   const selectedRole = form.watch('role');
 
   const handleNextStep = async () => {
-    const isValid = await form.trigger(['name', 'email', 'country', 'role', 'terms']);
+    const isValid = await form.trigger(['name', 'email', 'country', 'role', 'terms', 'contactNumber']);
     if (isValid) {
       setStep(2);
     }
@@ -260,19 +263,35 @@ export default function MembershipPage() {
                                 )}
                                 />
 
-                                <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                    <FormLabel>Email Address</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="you@example.com" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Email Address</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="you@example.com" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
+                                    <FormField
+                                    control={form.control}
+                                    name="contactNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Contact Number</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="+91 98765 43210" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
+                                </div>
+
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <FormField
@@ -366,6 +385,13 @@ export default function MembershipPage() {
                                             <FormItem>
                                                 <FormLabel className="flex items-center gap-2"><BookOpen className="h-4 w-4"/>University/College Name</FormLabel>
                                                 <FormControl><Input placeholder="e.g., University of California, Berkeley" {...field} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}/>
+                                        <FormField control={form.control} name="affiliatedHospital" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="flex items-center gap-2"><Hospital className="h-4 w-4"/>Affiliated Hospital/Clinic (Optional)</FormLabel>
+                                                <FormControl><Input placeholder="e.g., Aravind Eye Hospital" {...field} /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}/>
