@@ -39,10 +39,22 @@ export default function CreateProfilePage() {
   const [view, setView] = useState<'questionnaire' | 'chat'>('questionnaire');
 
   const handleQuestionnaireComplete = (data: Partial<UserProfile>) => {
-    const initialContext = `Great, I have your initial information. You've set your name as ${data.name}, your role as ${data.type}, and your location as ${data.location}. Now, let's build out the rest of your profile. To start, could you tell me a bit more about your work or studies for your bio?`;
+    let context = `Great, I have your initial information. You've set your name to ${data.name}, your role as ${data.type}, and your location as ${data.location}.`;
+
+    if (data.type === 'Student' && data.education && data.education.length > 0) {
+      context += ` I see you're studying at ${data.education[0].school}.`;
+    }
+    if (data.type && ['Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(data.type) && data.workExperience && data.workExperience.length > 0) {
+      context += ` You mentioned your specialization is ${data.workExperience[0].title}.`
+    }
+     if (data.type && ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(data.type) && data.links?.linkedin) {
+      context += ` Your organization's website is ${data.links.linkedin}.`
+    }
+
+    context += ` Now, let's build out the rest of your profile. To start, could you tell me a bit more about your work or studies for your headline and bio?`;
     
     setProfile(data);
-    setMessages([{ role: 'model', content: initialContext }]);
+    setMessages([{ role: 'model', content: context }]);
     setView('chat');
   };
 
