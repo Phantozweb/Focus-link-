@@ -31,7 +31,7 @@ export default function ForumPage() {
     <div className="bg-muted/40">
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Case Forum</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Case Forum (Demo)</h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
             A dedicated space for eye care professionals to share, discuss, and learn from real-world clinical cases.
           </p>
