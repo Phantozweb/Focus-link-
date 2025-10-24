@@ -26,7 +26,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     });
     const [isRegistered, setIsRegistered] = useState(false);
     const [showCertificateInfo, setShowCertificateInfo] = useState(false);
-    const isQuiz = webinar.id === 'quiz-event-1';
+    const isQuiz = webinar.id === 'eye-q-arena-2025';
 
     useEffect(() => {
         const calculateState = () => {

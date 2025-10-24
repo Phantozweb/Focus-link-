@@ -137,7 +137,7 @@ const DefaultSpeakerInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
 
 export default function WebinarDetailPage({ params }: WebinarPageProps) {
   const webinar = webinars.find(w => w.id === params.id);
-  const isQuiz = webinar?.id === 'quiz-event-1';
+  const isQuiz = webinar?.id === 'eye-q-arena-2025';
 
   if (!webinar) {
     notFound();

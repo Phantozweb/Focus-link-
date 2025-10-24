@@ -48,7 +48,7 @@ export const webinars: Webinar[] = [
     }
   },
   {
-    id: 'quiz-event-1',
+    id: 'eye-q-arena-2025',
     title: 'Eye Q Arena 2025: The International Optometry Knowledge Championship',
     description: `**"Where Global Vision Meets Knowledge."**
 

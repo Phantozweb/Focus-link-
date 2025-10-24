@@ -15,7 +15,7 @@ import Link from 'next/link';
 export default function QuizPage() {
   const params = useParams();
   const id = params.id as string;
-  const quiz = webinars.find(w => w.id === id && w.id === 'quiz-event-1');
+  const quiz = webinars.find(w => w.id === id && w.id === 'eye-q-arena-2025');
 
   const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished'>('not-started');
   const [currentModule, setCurrentModule] = useState(0);
