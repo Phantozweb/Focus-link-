@@ -11,18 +11,28 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Check, Loader2, UserPlus, Info, Copy, MessageCircle, Mail, Phone, Globe, Briefcase, MapPin } from 'lucide-react';
+import { Check, Loader2, UserPlus, Info, Copy, MessageCircle, Mail, Phone, Globe, Briefcase, MapPin, AlertCircle } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import Link from 'next/link';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   email: z.string().email('Invalid email address'),
-  whatsapp: z.string().min(10, 'A valid WhatsApp number is required'),
+  countryCode: z.string().min(1, 'Country code is required'),
+  whatsapp: z.string().min(5, 'A valid WhatsApp number is required'),
   linkedin: z.string().url('Please enter a valid LinkedIn URL').optional().or(z.literal('')),
   role: z.enum(profileTypes, { required_error: 'Please select your role' }),
   country: z.string().min(2, 'Please select your country'),
@@ -35,9 +45,13 @@ export function MembershipForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionData, setSubmissionData] = useState<FormData | null>(null);
   const [membershipId, setMembershipId] = useState<string | null>(null);
+  const [errorDialog, setErrorDialog] = useState<{open: boolean; message: string;}>({open: false, message: ''});
   const { toast } = useToast();
   const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      countryCode: '+91'
+    }
   });
 
   const generateMembershipId = (countryName: string) => {
@@ -60,8 +74,12 @@ export function MembershipForm() {
     const payload = {
       timestamp: new Date().toISOString(),
       membershipId: newId,
-      ...data
+      ...data,
+      whatsapp: `${data.countryCode}${data.whatsapp}` // Combine country code and number
     };
+    // We don't need countryCode in the final payload
+    delete (payload as any).countryCode;
+
 
     try {
       const response = await fetch('/api/submit-membership', {
@@ -97,11 +115,7 @@ export function MembershipForm() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
       console.error("Submission error:", errorMessage);
-      toast({
-        variant: "destructive",
-        title: "Submission Error",
-        description: errorMessage,
-      });
+      setErrorDialog({open: true, message: "We're facing a high volume of submissions right now. Please try again in a few hours."});
     } finally {
       setIsSubmitting(false);
     }
@@ -130,18 +144,22 @@ export function MembershipForm() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="p-4 bg-muted rounded-lg border">
-            <Label>Your Official Membership ID</Label>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <p className="text-2xl font-bold font-mono text-primary tracking-widest">{membershipId}</p>
-              <Button variant="ghost" size="icon" onClick={copyToClipboard}>
-                <Copy className="h-5 w-5" />
-              </Button>
-            </div>
-            <p className="text-xs text-muted-foreground mt-2 text-center">
-              **Important:** Please save this ID. You will need it for all future events and interactions.
-            </p>
-          </div>
+          <Alert className="bg-blue-50 border-blue-200">
+             <Info className="h-4 w-4" />
+            <AlertTitle className="font-bold">Your Official Membership ID</AlertTitle>
+            <AlertDescription>
+                <div className="flex items-center justify-between mt-2">
+                    <p className="text-xl font-bold font-mono text-blue-800 tracking-wider">{membershipId}</p>
+                    <Button variant="outline" size="sm" onClick={copyToClipboard} className="bg-white">
+                        <Copy className="h-4 w-4 mr-2" />
+                        Copy
+                    </Button>
+                </div>
+                 <p className="text-xs text-blue-700 mt-2">
+                    **Important:** Please save this ID. You will need it for all future events and interactions.
+                 </p>
+            </AlertDescription>
+          </Alert>
 
           <Card>
             <CardHeader>
@@ -149,7 +167,7 @@ export function MembershipForm() {
             </CardHeader>
             <CardContent className="space-y-4 text-sm">
               <div className="flex items-center"><Mail className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.email}</div>
-              <div className="flex items-center"><Phone className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.whatsapp}</div>
+              <div className="flex items-center"><Phone className="h-4 w-4 mr-3 text-muted-foreground" /> {`${submissionData.countryCode} ${submissionData.whatsapp}`}</div>
               {submissionData.linkedin && <div className="flex items-center"><Globe className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.linkedin}</div>}
               <div className="flex items-center"><Briefcase className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.role}</div>
               <div className="flex items-center"><MapPin className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.location}, {submissionData.country}</div>
@@ -176,6 +194,21 @@ export function MembershipForm() {
   }
 
   return (
+    <>
+    <AlertDialog open={errorDialog.open} onOpenChange={(open) => setErrorDialog({...errorDialog, open })}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="flex items-center gap-2"><AlertCircle className="text-destructive"/> Submission Error</AlertDialogTitle>
+          <AlertDialogDescription>
+            {errorDialog.message}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogAction>Got it</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
     <Card>
       <CardHeader className="text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -188,7 +221,6 @@ export function MembershipForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Form Fields */}
           <div className="space-y-2">
             <Label htmlFor="name">Full Name or Organization Name</Label>
             <Input id="name" {...register('name')} />
@@ -200,10 +232,29 @@ export function MembershipForm() {
               <Input id="email" type="email" {...register('email')} />
               {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="whatsapp">WhatsApp Number</Label>
-              <Input id="whatsapp" type="tel" {...register('whatsapp')} placeholder="+1 (555) 123-4567" />
-              {errors.whatsapp && <p className="text-sm text-destructive">{errors.whatsapp.message}</p>}
+             <div className="space-y-2">
+                <Label htmlFor="whatsapp">WhatsApp Number</Label>
+                <div className="flex gap-2">
+                    <Controller
+                        name="countryCode"
+                        control={control}
+                        render={({ field }) => (
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <SelectTrigger className="w-1/3">
+                                    <SelectValue placeholder="+91" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="+91">IN (+91)</SelectItem>
+                                    <SelectItem value="+1">US (+1)</SelectItem>
+                                    <SelectItem value="+44">UK (+44)</SelectItem>
+                                    <SelectItem value="+61">AU (+61)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    <Input id="whatsapp" type="tel" {...register('whatsapp')} className="w-2/3" placeholder="9876543210" />
+                </div>
+                {(errors.countryCode || errors.whatsapp) && <p className="text-sm text-destructive">{errors.countryCode?.message || errors.whatsapp?.message}</p>}
             </div>
           </div>
           <div className="space-y-2">
@@ -263,5 +314,8 @@ export function MembershipForm() {
         </form>
       </CardContent>
     </Card>
+    </>
   );
 }
+
+    
