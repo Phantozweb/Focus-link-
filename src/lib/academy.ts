@@ -60,7 +60,8 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
 
 ### Rules & Regulations
 - **Membership Required**: To participate, you must be an official member of Focus Links. <a href="/membership" class="text-primary underline font-semibold">Join for free</a> if you haven't already. It only takes a few minutes!
-- **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate. A pass mark of 50% is required for each module and for the overall score.
+- **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate.
+- **Passing Score**: A score of **50% or higher** is required to pass each module and to pass the quiz overall.
 - **Fair Play**: We trust our community to compete with integrity. Any detected form of malpractice may result in disqualification.
 - **Scoring**: Questions are assigned points based on difficulty (Easy: 1, Medium: 2, Hard: 5). Your final score is the sum of points from correctly answered questions.
 - **Certification**: All participants who meet the passing score receive a digital Certificate of Participation. Top performers earn a Certificate of Excellence.
