@@ -19,19 +19,21 @@ export async function POST(request: Request) {
         redirect: 'follow', // Important for Google Apps Scripts
     });
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Google Apps Script returned an error:', errorText);
-        // Try to parse the error as JSON, but fall back to the raw text if it's not.
-        try {
-          const errorJson = JSON.parse(errorText);
-          return NextResponse.json({ result: 'error', message: errorJson.message || 'Error submitting to Google Sheet.' }, { status: response.status });
-        } catch (e) {
-          return NextResponse.json({ result: 'error', message: 'An unexpected error occurred with the submission service.' }, { status: response.status });
-        }
+    const resultText = await response.text();
+    let result;
+    try {
+        result = JSON.parse(resultText);
+    } catch (e) {
+        // If the response is not JSON, it's likely an error page from Google.
+        console.error('Google Apps Script returned non-JSON response:', resultText);
+        throw new Error('The submission service returned an unexpected response. Please try again later.');
     }
 
-    const result = await response.json();
+
+    if (!response.ok) {
+        console.error('Google Apps Script returned an error:', result);
+        throw new Error(result.message || 'Error submitting to Google Sheet.');
+    }
 
     // The Apps Script should return a clear success or error/exists status.
     // e.g., { result: 'success' } or { result: 'exists' }
@@ -39,9 +41,11 @@ export async function POST(request: Request) {
         return NextResponse.json({ result: 'success' });
     } else if (result.result === 'exists') {
          return NextResponse.json({ exists: true });
-    }
-     else {
-        return NextResponse.json({ result: 'error', message: result.message || 'An unknown error occurred during submission.' }, { status: 500 });
+    } else {
+        // If the script returns a 200 OK but doesn't have result:'success' or result:'exists'
+        // it might be an unhandled case in the script. We'll treat it as an error.
+        console.error("Unknown successful response from Apps Script:", result);
+        throw new Error(result.message || 'An unknown error occurred during submission.');
     }
 
   } catch (error) {
