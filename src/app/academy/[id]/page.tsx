@@ -34,11 +34,11 @@ export async function generateMetadata(
   
   const previousImages = (await parent).openGraph?.images || []
   const description = (webinar.description || '')
-    .replace(/<[^>]*>/g, '')
-    .replace(/\*+/g, '')
-    .replace(/###/g, '')
-    .replace(/\n/g, ' ')
-    .replace(/\|/g, '');
+    .replace(/<[^>]*>/g, '') // strip html
+    .replace(/\*+/g, '') // strip markdown bold
+    .replace(/###/g, '') // strip markdown headings
+    .replace(/\n/g, ' ') // strip newlines
+    .replace(/\|/g, ''); // strip table pipes
 
   return {
     title: `${webinar.title} | Focus Links Academy`,
@@ -73,14 +73,15 @@ function formatDescription(text: string) {
             const bodyRows = rows.slice(2);
             const tableBody = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
 
-            return `<div class="overflow-x-auto my-6"><table class="w-full">${tableHead}${tableBody}</table></div>`;
+            return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${tableHead}${tableBody}</table></div>`;
         });
     }
 
     const processedText = textBeforeTable
+        .replace(/<a href="([^"]*)" class="([^"]*)">([^<]*)<\/a>/g, '<a href="$1" class="$2" target="_blank" rel="noopener noreferrer">$3</a>') // Add target and rel to links
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/### (.*?)(?:\n|$)/g, '<h3 class="text-xl font-bold text-slate-800 mt-6 mb-3">$1</h3>')
-        .replace(/^- (.*?)(?:\n|$)/gm, '<li class="flex items-start gap-3 mt-2"><span class="text-primary mt-1">&#10003;</span><span>$1</span></li>')
+        .replace(/### (.*?)(?:\n|$)/g, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>')
+        .replace(/^- (.*?)(?:\n|$)/gm, '<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>$1</span></li>')
         .replace(/<\/li>\n<li/g, '</li><li')
         .replace(/(<li.*<\/li>)/gs, '<ul class="list-none p-0">$1</ul>')
         .replace(/\n/g, '<br />');
@@ -223,7 +224,6 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
                   <div className="max-w-3xl mx-auto space-y-12">
                       <section>
-                          <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
                           <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: formatDescription(description) }} />
                       </section>
                       
@@ -311,7 +311,11 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                       <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
                                           <h4 className="font-semibold">How to Join</h4>
-                                          <p className="text-sm text-muted-foreground">The meeting link was emailed to registered attendees 1 hour before the session started.</p>
+                                          {isQuiz ? (
+                                              <p className="text-sm text-muted-foreground">The quiz will be available on this page at the scheduled start time. Make sure you are logged in as a member.</p>
+                                          ) : (
+                                              <p className="text-sm text-muted-foreground">The meeting link was emailed to registered attendees 1 hour before the session started.</p>
+                                          )}
                                       </div>
                                   </div>
                               </CardContent>

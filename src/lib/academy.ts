@@ -54,29 +54,31 @@ export const webinars: Webinar[] = [
 
 **Eye Q Arena 2025** is an international-level optometry quiz competition that brings together passionate optometry students, interns, and professionals from across the globe. Organized by FocusLinks — The World’s Largest Eye Care Community, this event aims to promote academic excellence, global collaboration, and clinical reasoning skills in the field of eye care.
 
-Participants will engage in a **60-minute timed challenge with 100 questions**, covering essential and emerging areas of optometry. This is your chance to test your knowledge from the anterior to the posterior segment of the eye. Scores, accuracy, and completion time will determine placement on the global leaderboard, recognizing the best minds in vision science.
+This is your chance to test your knowledge from the anterior to the posterior segment of the eye and see how you stack up against peers worldwide. Scores, accuracy, and completion time will determine placement on the global leaderboard.
 
 Step into the Arena — Compete, Learn, and Lead the Vision.
 
 ### Rules & Regulations
-- **Membership Required**: To participate, you must be a member of Focus Links. <a href="/membership" class="text-primary underline">Join for free</a> if you haven't already.
-- **Single Attempt**: Each participant is allowed only one attempt at the quiz.
-- **Fair Play**: Any form of malpractice will result in immediate disqualification.
-- **Certification**: All participants receive a digital certificate. Top performers earn a Certificate of Excellence.
+- **Membership Required**: To participate, you must be an official member of Focus Links. <a href="/membership" class="text-primary underline font-semibold">Join for free</a> if you haven't already. It only takes a few minutes!
+- **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate.
+- **Fair Play**: We trust our community to compete with integrity. Any detected form of malpractice may result in disqualification.
+- **Certification**: All participants who meet the passing score receive a digital Certificate of Participation. Top performers earn a Certificate of Excellence.
 
 ### Instructions for Participants
-- The quiz will be available on the event start date.
-- You will have 60 minutes to answer 100 multiple-choice questions.
-- A stable internet connection is required.
-- Your final score and time will be recorded for the leaderboard.
+- The quiz takes place directly on this webpage. No external links will be sent.
+- The quiz consists of 10 timed modules. Your 60-minute clock is the sum of all module times.
+- When you begin a module, its specific timer starts. Time saved from one module will be carried over, giving you extra time for more challenging sections.
+- If a module's time expires, your submitted answers will be saved, and you will automatically proceed to the next module. Unanswered questions will be marked as incorrect.
+- **Optional Breaks**: Between each module, you can take an optional 2-minute break. This break time does not count against your total 60-minute quiz time.
+- At the end of the quiz, you will receive a detailed report of your overall score, module-by-module performance, and timing.
 
 ### Event Highlights:
 - **International-Level Competition**: Open to optometry students & practitioners worldwide.
-- **100 Questions in 60 Minutes**: Across 10 in-depth modules.
-- **Leaderboard Ranking**: By score, accuracy & completion time.
-- **Digital Certificates**: For Participation & Excellence.
-- **Organized by FocusLinks**: Global Eye Care Community.
-- **Networking & Global Recognition**: An opportunity to shine.
+- **100 Questions in 60 Minutes**: Test your knowledge across 10 in-depth modules.
+- **Live Leaderboard Ranking**: See where you stand based on score, accuracy & completion time.
+- **Digital Certificates**: Earn a Certificate of Participation or Excellence.
+- **Organized by FocusLinks**: The world's largest global eye care community.
+- **Global Recognition**: An opportunity to showcase your expertise and shine.
 
 ---QUIZ_MODULES_TABLE---
 | Module | Topic | Questions |
@@ -104,7 +106,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
     platform: 'Online Platform',
     dateTime: '2025-11-15T13:00:00Z',
     duration: '60 minutes',
-    tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment'],
+    tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
   }
 ];
