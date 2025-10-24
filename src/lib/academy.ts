@@ -50,25 +50,37 @@ export const webinars: Webinar[] = [
   {
     id: 'quiz-event-1',
     title: 'Eye Q Arena 2025: The International Optometry Knowledge Championship',
-    description: `**Where Global Vision Meets Knowledge.**
+    description: `**"Where Global Vision Meets Knowledge."**
 
 **Eye Q Arena 2025** is an international-level optometry quiz competition that brings together passionate optometry students, interns, and professionals from across the globe.
 
 Organized by FocusLinks — The World’s Largest Eye Care Community, this event aims to promote academic excellence, global collaboration, and clinical reasoning skills in the field of eye care.
 
-Participants will engage in a **45-minute timed challenge**, covering essential and emerging areas of optometry including optics, ocular physiology, binocular vision, clinical techniques, contact lenses, ocular pathology, and AI innovations in eye care.
-
-Scores, accuracy, and completion time will determine placement on the global leaderboard, recognizing the best minds in vision science. All participants will receive a verified digital certificate, while top scorers earn a **Certificate of Excellence** — endorsed by FocusLinks and partner organizations.
+Participants will engage in a **60-minute timed challenge with 100 questions**, covering essential and emerging areas of optometry. Scores, accuracy, and completion time will determine placement on the global leaderboard, recognizing the best minds in vision science.
 
 Step into the Arena — Compete, Learn, and Lead the Vision.
 
 ### Event Highlights:
 - **International-Level Competition**: Open to optometry students & practitioners worldwide.
-- **45-Minute Timed MCQ Quiz**: Across 7 knowledge modules.
-- **Leaderboard Ranking**: By accuracy & completion time.
+- **100 Questions in 60 Minutes**: Across 10 in-depth modules.
+- **Leaderboard Ranking**: By score, accuracy & completion time.
 - **Digital Certificates**: For Participation & Excellence.
 - **Organized by FocusLinks**: Global Eye Care Community.
 - **Networking & Global Recognition**: An opportunity to shine.
+
+### Quiz Modules:
+| Module | Topic | Questions |
+|---|---|---|
+| 1 | Eyelids & Adnexa | 10 |
+| 2 | Conjunctiva & Sclera | 10 |
+| 3 | Cornea | 10 |
+| 4 | Anterior Chamber & Aqueous Humor | 10 |
+| 5 | Iris & Pupil | 10 |
+| 6 | Crystalline Lens & Accommodation | 10 |
+| 7 | Vitreous Body | 10 |
+| 8 | Retina | 10 |
+| 9 | Optic Nerve & Pathways | 10 |
+| 10 | Extraocular Muscles & Ocular Motility | 10 |
 `,
     speaker: {
       name: 'V.M. Ram Kumar',
@@ -81,7 +93,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
     },
     platform: 'Online Platform',
     dateTime: '2025-11-15T13:00:00Z',
-    duration: '45 minutes',
+    duration: '60 minutes',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals'],
     registrationLink: '#',
   }

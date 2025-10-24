@@ -36,26 +36,42 @@ export async function generateMetadata(
 
   return {
     title: `${webinar.title} | Focus Links Academy`,
-    description: webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' '),
+    description: webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' ').replace(/\|/g, ''),
     openGraph: {
       title: webinar.title,
-      description: webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' '),
+      description: webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' ').replace(/\|/g, ''),
       images: [...previousImages],
     },
   }
 }
 
-
 function formatDescription(text: string) {
-    const html = text
+    const tableRegex = /(\|.*\|(?:\n\|.*\|)+)/g;
+
+    const htmlWithTables = text.replace(tableRegex, (match) => {
+        const rows = match.trim().split('\n');
+        const header = rows[1]; // The separator line
+        const body = rows.slice(2);
+
+        const tableHead = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${rows[0].split('|').slice(1, -1).map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</th>`).join('')}</tr></thead>`;
+        
+        const tableBody = `<tbody>${body.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+        return `<div class="overflow-x-auto"><table class="my-6 w-full overflow-y-auto">${tableHead}${tableBody}</table></div>`;
+    });
+    
+    const remainingHtml = htmlWithTables.split(/<div class="overflow-x-auto">.*<\/div>/g).map(part => part
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/### (.*?)\n/g, '<h3 class="text-xl font-bold text-slate-800 mt-6 mb-3">$1</h3>')
         .replace(/^- (.*?)\n/gm, '<li class="flex items-start gap-3 mt-2"><span class="text-primary mt-1">&#10003;</span><span>$1</span></li>')
         .replace(/<\/li>\n<li/g, '</li><li')
         .replace(/(<li.*<\/li>)/gs, '<ul class="list-none p-0">$1</ul>')
-        .replace(/\n/g, '<br />');
-    return html;
+        .replace(/\n/g, '<br />')
+    ).join('');
+
+    return htmlWithTables.replace(tableRegex, (match) => match).replace(/(<br \/>\s*)+/g, '<br />');
 }
+
 
 const QuizOrganizers = ({webinar}: {webinar: (typeof webinars)[0]}) => (
      <section>
@@ -115,7 +131,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     "@type": "Event",
     "name": webinar.title,
     "startDate": webinar.dateTime,
-    "description": webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' '),
+    "description": webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' ').replace(/\|/g, ''),
     "eventStatus": new Date() > new Date(webinar.dateTime) ? "https://schema.org/EventCompleted" : "https://schema.org/EventScheduled",
     "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
     "location": {
@@ -141,12 +157,19 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     }
   };
   
-  const { description, highlights } = (() => {
+  const { description, highlights, quizModules } = (() => {
     if (isQuiz) {
       const parts = webinar.description.split('### Event Highlights:');
-      return { description: parts[0], highlights: parts[1] };
+      const mainDesc = parts[0];
+      const highlightsAndModules = parts[1] || '';
+      
+      const highlightsParts = highlightsAndModules.split('### Quiz Modules:');
+      const highlightsText = highlightsParts[0] || '';
+      const modulesText = highlightsParts[1] ? `### Quiz Modules:\n${highlightsParts[1]}` : '';
+
+      return { description: mainDesc, highlights: highlightsText, quizModules: modulesText };
     }
-    return { description: webinar.description, highlights: null };
+    return { description: webinar.description, highlights: null, quizModules: null };
   })();
 
   const founderNote = isQuiz
@@ -194,6 +217,15 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                           <section>
                             <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800 flex items-center gap-2"><Star className="text-amber-500"/> Event Highlights</h2>
                             <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: formatDescription(highlights) }} />
+                          </section>
+                        </>
+                      )}
+                      
+                       {quizModules && (
+                        <>
+                          <Separator />
+                          <section>
+                            <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: formatDescription(quizModules) }} />
                           </section>
                         </>
                       )}
