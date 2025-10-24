@@ -76,7 +76,7 @@ export function MembershipForm() {
     }
   };
   
-   if (submissionData) {
+  if (submissionData) {
     return (
       <Card className="text-center">
         <CardHeader>
