@@ -1,0 +1,176 @@
+
+'use client';
+
+import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Check, Loader2, UserPlus, Info } from 'lucide-react';
+import { countries } from '@/lib/countries';
+import type { UserProfile } from '@/types';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+
+const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
+
+const formSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  whatsapp: z.string().min(10, 'A valid WhatsApp number is required'),
+  linkedin: z.string().url('Please enter a valid LinkedIn URL').optional().or(z.literal('')),
+  role: z.enum(profileTypes, { required_error: 'Please select your role' }),
+  country: z.string().min(2, 'Please select your country'),
+  location: z.string().min(2, 'City and State/Region are required'),
+});
+
+export function MembershipForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { toast } = useToast();
+  const { register, handleSubmit, control, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/submit-membership', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.exists) {
+         toast({
+          variant: 'destructive',
+          title: 'You are Already a Member!',
+          description: "An application with this email address has already been submitted. Please check your email or contact support if you believe this is an error.",
+        });
+      } else if (response.ok && result.result === 'success') {
+        setIsSubmitted(true);
+      } else {
+        throw new Error(result.message || 'An unknown error occurred.');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Could not submit your application. Please try again.';
+      toast({
+        variant: 'destructive',
+        title: 'Submission Failed',
+        description: errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+   if (isSubmitted) {
+    return (
+      <Alert className='bg-green-50 border-green-200'>
+        <Check className="h-4 w-4 !text-green-600" />
+        <AlertTitle className='text-green-800'>Application Submitted!</AlertTitle>
+        <AlertDescription className='text-green-700'>
+          Thank you for joining! Our team will review your application and create your profile within 48-72 hours. You'll receive an email confirmation once your profile is live.
+          <br /><br />
+          In the meantime, feel free to join our WhatsApp community to start connecting right away.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  return (
+    <Card>
+        <CardHeader className="text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <UserPlus className="h-8 w-8 text-primary" />
+            </div>
+            <CardTitle className="text-3xl font-headline mt-4">Membership Application</CardTitle>
+            <CardDescription className="mt-1 text-base">
+                Fill out the form below to create your official profile and join the Focus Links directory.
+            </CardDescription>
+        </CardHeader>
+        <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {/* Form Fields */}
+                <div className="space-y-2">
+                    <Label htmlFor="name">Full Name or Organization Name</Label>
+                    <Input id="name" {...register('name')} />
+                    {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email Address</Label>
+                        <Input id="email" type="email" {...register('email')} />
+                        {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="whatsapp">WhatsApp Number</Label>
+                        <Input id="whatsapp" type="tel" {...register('whatsapp')} placeholder="+1 (555) 123-4567" />
+                        {errors.whatsapp && <p className="text-sm text-destructive">{errors.whatsapp.message}</p>}
+                    </div>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
+                    <Input id="linkedin" {...register('linkedin')} placeholder="https://linkedin.com/in/your-profile" />
+                    {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
+                </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="role">Primary Role</Label>
+                         <Controller
+                            name="role"
+                            control={control}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <SelectTrigger id="role">
+                                        <SelectValue placeholder="Select your role..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {profileTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="country">Country</Label>
+                        <Controller
+                            name="country"
+                            control={control}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <SelectTrigger id="country">
+                                        <SelectValue placeholder="Select your country..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {countries.map(country => <SelectItem key={country.code} value={country.name}>{country.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.country && <p className="text-sm text-destructive">{errors.country.message}</p>}
+                    </div>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="location">City & State/Province</Label>
+                    <Input id="location" {...register('location')} placeholder="e.g., San Francisco, California" />
+                    {errors.location && <p className="text-sm text-destructive">{errors.location.message}</p>}
+                </div>
+                <div className='pt-4'>
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
+                        Submit Application
+                    </Button>
+                </div>
+            </form>
+        </CardContent>
+    </Card>
+  );
+}

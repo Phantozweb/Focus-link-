@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Announcement } from '@/components/layout/announcement';
 import { BottomNav } from '@/components/layout/bottom-nav';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 
 export const metadata: Metadata = {
@@ -68,18 +69,20 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body className={cn('antialiased bg-gray-50')}>
-        <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-            <Announcement />
-            <Header />
-            <main className="flex-1 pb-20 md:pb-0">
-              {children}
-            </main>
-            <div className="hidden md:block">
-              <Footer />
+        <TooltipProvider>
+            <div className="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
+                <Announcement />
+                <Header />
+                <main className="flex-1 pb-20 md:pb-0">
+                  {children}
+                </main>
+                <div className="hidden md:block">
+                  <Footer />
+                </div>
+                <BottomNav />
             </div>
-             <BottomNav />
-        </div>
-        <Toaster />
+            <Toaster />
+        </TooltipProvider>
       </body>
     </html>
   );

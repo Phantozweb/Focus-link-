@@ -3,8 +3,9 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserPlus, Award, BookOpen, Handshake, Globe } from 'lucide-react';
+import { UserPlus, Award, BookOpen, Handshake, Globe, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import { MembershipForm } from '@/components/membership-form';
 
 const membershipPerks = [
   {
@@ -40,34 +41,16 @@ export default function MembershipPage() {
             <div className="container mx-auto px-4 text-center">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Become an Official Member</h1>
                 <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-                    Join our WhatsApp community for free to get verified, access exclusive perks, and become a recognized part of the world's largest eye care community.
+                   Submit your application to get verified, create your official directory profile, and unlock exclusive community perks.
                 </p>
             </div>
         </section>
 
         <div id="membership-join" className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
-            <Card>
-                <CardHeader className="text-center">
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        <UserPlus className="h-8 w-8 text-primary" />
-                    </div>
-                    <CardTitle className="text-3xl font-headline mt-4">Join Our Community</CardTitle>
-                    <CardDescription className="mt-1 text-base">
-                        As we are in the early stages of building our platform, we invite you to join our official WhatsApp community. This is the fastest way to get connected with the core team, apply for verification, and get early access to new features.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <Button size="lg" asChild>
-                    <a href={whatsAppCommunityLink} target="_blank" rel="noopener noreferrer">
-                      Join the WhatsApp Community
-                    </a>
-                  </Button>
-                   <p className="text-xs text-muted-foreground mt-2">You will be redirected to WhatsApp.</p>
-                </CardContent>
-            </Card>
+            <MembershipForm />
         </div>
         
-        <section className="py-16">
+        <section className="py-16 bg-background border-t border-b">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-slate-800">Exclusive Membership Perks</h2>
@@ -86,6 +69,28 @@ export default function MembershipPage() {
                 </div>
             </div>
         </section>
+
+        <div className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
+            <Card className='bg-slate-800 text-white'>
+                <CardHeader className="text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-500/20">
+                        <MessageCircle className="h-8 w-8 text-green-400" />
+                    </div>
+                    <CardTitle className="text-3xl font-headline mt-4">Join our WhatsApp Community</CardTitle>
+                    <CardDescription className="mt-1 text-base text-slate-300">
+                        While your official membership application is being reviewed, join our WhatsApp community for discussions, event updates, and networking. Note that this is separate from official membership.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <Button size="lg" variant="secondary" asChild>
+                    <a href={whatsAppCommunityLink} target="_blank" rel="noopener noreferrer">
+                      Join WhatsApp
+                    </a>
+                  </Button>
+                   <p className="text-xs text-slate-400 mt-2">You will be redirected to WhatsApp.</p>
+                </CardContent>
+            </Card>
+        </div>
     </div>
     </>
   );

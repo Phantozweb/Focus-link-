@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, MessageCircle, Info } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -25,6 +25,7 @@ import { WebinarBanner } from '@/components/webinar-banner';
 import Autoplay from "embla-carousel-autoplay";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -111,21 +112,22 @@ export default function Home() {
   const ctaCards = [
     {
       title: "Become an Official Member",
-      description: "Join our WhatsApp community to get verified, access exclusive perks, and connect with peers.",
+      description: "Submit an application to get verified, create your official profile, and unlock exclusive community perks.",
       href: "/membership",
       icon: <Award className="h-8 w-8 text-white" />,
-      cta: "Join the Community",
+      cta: "Apply Now",
       className: "bg-gradient-to-br from-blue-600 to-cyan-500",
       isDialog: false,
     },
     {
-      title: "Get Listed on the Directory",
-      description: "Interested in a profile? Join as a member to create your professional listing and get discovered.",
-      href: "/membership",
-      icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Become a Member",
+      title: "215+ Members in our WhatsApp Community",
+      description: "Join our active WhatsApp group for discussions, quick updates, and informal networking. Note: This is separate from official membership.",
+      href: "https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2",
+      icon: <MessageCircle className="h-8 w-8 text-white" />,
+      cta: "Join WhatsApp Community",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
       isDialog: false,
+      tooltipText: "Last updated Oct 24, 2025"
     },
     {
       title: "Host a Webinar With Us",
@@ -192,6 +194,7 @@ export default function Home() {
 
   return (
     <Dialog>
+       <TooltipProvider>
       <div className="bg-muted/40">
         <section className="relative bg-gradient-to-r from-cyan-600 to-blue-700 text-white overflow-hidden py-20 md:py-28">
             <div className="container mx-auto px-4 text-center">
@@ -298,7 +301,19 @@ export default function Home() {
                     <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl h-80 ${card.className}`}>
                       <div>
                         <div className="mb-4">{card.icon}</div>
-                        <h3 className="font-bold text-2xl mb-2 text-white">{card.title}</h3>
+                         <div className='flex items-center gap-2'>
+                           <h3 className="font-bold text-2xl mb-2 text-white">{card.title}</h3>
+                           {card.tooltipText && (
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <Info className="h-4 w-4 text-white/70" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>{card.tooltipText}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
+                         </div>
                         <p className="text-white/80">{card.description}</p>
                       </div>
                       <div className="mt-6">
@@ -310,7 +325,7 @@ export default function Home() {
                           </DialogTrigger>
                         ) : (
                           <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                            <Link href={card.href}>
+                            <Link href={card.href} target={card.href.startsWith('http') ? '_blank' : '_self'}>
                               {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
                           </Button>
@@ -662,6 +677,7 @@ export default function Home() {
         </div>
         <ProfileRequestDialog />
       </div>
+      </TooltipProvider>
     </Dialog>
   );
 }
