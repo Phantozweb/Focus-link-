@@ -130,11 +130,11 @@ export default function Home() {
       tooltipText: "Last updated Oct 24, 2025"
     },
     {
-      title: "Host a Webinar With Us",
-      description: "Share your expertise with thousands of eye care professionals and students. We provide the platform, you provide the knowledge.",
-      href: "/contact",
-      icon: <BookUser className="h-8 w-8 text-white" />,
-      cta: "Book a Webinar",
+      title: "Create Your Professional Profile",
+      description: "Already a member? Complete your profile to showcase your skills, experience, and interests to the global community.",
+      href: "/profile/create",
+      icon: <UserPlus className="h-8 w-8 text-white" />,
+      cta: "Create Profile",
       className: "bg-gradient-to-br from-cyan-700 to-blue-800",
       isDialog: false,
     },
