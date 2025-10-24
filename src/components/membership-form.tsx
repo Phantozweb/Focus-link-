@@ -32,7 +32,7 @@ const formSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   email: z.string().email('Invalid email address'),
   whatsapp: z.string().startsWith('+', { message: "Number must include country code (e.g., +91...)"}).min(8, 'Please enter a valid WhatsApp number'),
-  linkedin: z.string().optional().or(z.literal('')),
+  linkedin: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
   role: z.enum(profileTypes, { required_error: 'Please select your role' }),
   country: z.string().min(2, 'Please select your country'),
   location: z.string().min(2, 'City and State/Region are required'),
@@ -95,7 +95,7 @@ export function MembershipForm() {
       const result = await response.json();
 
       if (!response.ok) {
-          throw new Error(result.message || 'An unknown error occurred.');
+          throw new Error(result.message || 'An unknown error occurred during submission.');
       }
       
       if (result.exists) {
@@ -112,12 +112,13 @@ export function MembershipForm() {
           description: "Your details have been recorded. Welcome to Focus Links!",
         });
       } else {
-        throw new Error(result.message || 'Submission failed. Please try again.');
+        // This case handles unexpected but successful responses from the API
+        throw new Error(result.message || 'Received an unexpected response from the server.');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
       console.error("Submission error:", errorMessage);
-      setErrorDialog({open: true, message: "We're facing a high volume of submissions right now. Please try again in a few hours."});
+      setErrorDialog({open: true, message: errorMessage});
     } finally {
       setIsSubmitting(false);
     }
@@ -151,8 +152,8 @@ export function MembershipForm() {
             <AlertTitle className="font-bold">Your Official Membership ID</AlertTitle>
             <AlertDescription>
                 <div className="flex items-center justify-between mt-2">
-                    <p className="text-xl font-bold font-mono text-blue-800 tracking-wider">{membershipId}</p>
-                    <Button variant="outline" size="sm" onClick={copyToClipboard} className="bg-white">
+                    <p className="text-xl font-bold font-mono text-blue-800 tracking-wider break-all">{membershipId}</p>
+                    <Button variant="outline" size="sm" onClick={copyToClipboard} className="bg-white ml-4">
                         <Copy className="h-4 w-4 mr-2" />
                         Copy
                     </Button>
