@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Check, Loader2, UserPlus, Info, Copy, MessageCircle, Mail, Phone, Globe, Briefcase, MapPin, AlertCircle } from 'lucide-react';
+import { Check, Loader2, UserPlus, Info, Copy, MessageCircle, Mail, Phone, Globe, Briefcase, MapPin, AlertCircle, Edit } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -97,14 +97,14 @@ export function MembershipForm() {
         body: JSON.stringify(payload),
       });
 
-      // The API route now consistently returns JSON, so we parse it first.
-      const result = await response.json();
+      const resultText = await response.text();
 
       if (!response.ok) {
-        // If response status is not 2xx, it's an error (e.g. rate limit from script)
-        throw new Error(result.message || 'An unknown submission error occurred.');
+        throw new Error(resultText || "An unknown submission error occurred.");
       }
       
+      const result = JSON.parse(resultText);
+
       if (result.exists) {
         toast({
             variant: "destructive",
@@ -119,8 +119,7 @@ export function MembershipForm() {
           description: "Your details have been recorded. Welcome to Focus Links!",
         });
       } else {
-        // Handle other unexpected (but successful status) responses from the script
-        throw new Error(result.message || 'Received an unexpected response from the server.');
+        throw new Error(result.message || 'An unexpected response was received from the server.');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
@@ -149,7 +148,7 @@ export function MembershipForm() {
           </div>
           <CardTitle className="text-3xl font-headline mt-4">Welcome, {submissionData.name}!</CardTitle>
           <CardDescription className="mt-1 text-base">
-            Your application has been submitted successfully. Here is a summary of your details.
+            Your application has been submitted successfully. Here is your membership ID.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -165,38 +164,33 @@ export function MembershipForm() {
                     </Button>
                 </div>
                  <p className="text-xs text-blue-700 mt-2">
-                    **Important:** Please save this ID. You will need it for all future events and interactions.
+                    **Important:** Please save this ID. You will need it to create your profile and for all future events.
                  </p>
             </AlertDescription>
           </Alert>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">Submission Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <div className="flex items-center"><Mail className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.email}</div>
-              <div className="flex items-center"><Phone className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.whatsapp}</div>
-              {submissionData.linkedin && <div className="flex items-center"><Globe className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.linkedin}</div>}
-              <div className="flex items-center"><Briefcase className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.role}</div>
-              <div className="flex items-center"><MapPin className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.location}, {submissionData.country}</div>
-            </CardContent>
-          </Card>
           
           <Alert>
             <Info className="h-4 w-4" />
             <AlertTitle>What's Next?</AlertTitle>
             <AlertDescription>
-              While we verify your application (48-72 hours), join our WhatsApp community for instant updates and networking!
+                Your profile is your professional storefront. Take the next step to build it out and get discovered.
             </AlertDescription>
           </Alert>
 
-          <Button size="lg" className="w-full" asChild>
-            <a href="https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2" target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="mr-2 h-5 w-5" />
-              Join WhatsApp Community
-            </a>
-          </Button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Button size="lg" className="w-full" asChild>
+              <Link href="/profile/create">
+                <Edit className="mr-2 h-5 w-5" />
+                Create Your Profile
+              </Link>
+            </Button>
+            <Button size="lg" className="w-full" variant="secondary" asChild>
+                <a href="https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2" target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="mr-2 h-5 w-5" />
+                Join WhatsApp
+                </a>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );

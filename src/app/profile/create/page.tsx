@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function CreateProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -180,7 +181,10 @@ export default function CreateProfilePage() {
                   <Label htmlFor="membershipId">Membership ID</Label>
                   <Input id="membershipId" {...form.register('id')} placeholder="Enter the ID you received upon registration" />
                   {form.formState.errors.id && <p className="text-sm text-destructive">{form.formState.errors.id.message}</p>}
-                  <p className="text-xs text-muted-foreground">Required to link your profile to your membership.</p>
+                  <p className="text-xs text-muted-foreground">
+                    A Membership ID is required to create a profile. If you don't have one,{' '}
+                    <Link href="/membership" className="text-primary underline font-semibold">get one for free</Link>.
+                  </p>
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
