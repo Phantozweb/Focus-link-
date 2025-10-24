@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   }
 
   // IMPORTANT: This is your actual Google Apps Script URL for verification
-  const scriptUrl = 'https://script.google.com/macros/s/AKfycbzUsC2yxSAzkIEmr83AFYPaAH6o_sgSJjhLtzgYB8EKKGpKSkh5E9XEVm7RIIcioA7t/exec';
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbw1_uyCNh2H4zS7lx4GJBnhxczD3qR8wVebQr7qS_ljo-FkROmgWpICAcs51O27Zv9D/exec';
   
   try {
     const validationResponse = await fetch(`${scriptUrl}?id=${encodeURIComponent(id)}`, {
