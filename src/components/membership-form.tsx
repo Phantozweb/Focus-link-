@@ -55,19 +55,58 @@ export function MembershipForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    // Simulate a successful submission for UI testing
-    setTimeout(() => {
-      const newId = generateMembershipId(data.country);
-      setMembershipId(newId);
-      setSubmissionData(data);
-      setIsSubmitting(false);
-      toast({
-        title: 'Submission Successful!',
-        description: 'This is a test submission. No data was sent.',
-      });
-    }, 1000);
-  };
+    const newId = generateMembershipId(data.country);
+    
+    const payload = {
+      timestamp: new Date().toISOString(),
+      membershipId: newId,
+      ...data
+    };
 
+    try {
+      const response = await fetch('/api/submit-membership', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+          throw new Error(result.message || 'An unknown error occurred.');
+      }
+      
+      if (result.exists) {
+        toast({
+            variant: "destructive",
+            title: "Email Already Registered",
+            description: "An application with this email address already exists. Please use a different email or contact support.",
+        });
+      } else if (result.result === 'success') {
+        setMembershipId(newId);
+        setSubmissionData(data);
+        toast({
+          title: 'Application Submitted!',
+          description: "Your details have been recorded. Welcome to Focus Links!",
+        });
+      } else {
+        throw new Error(result.message || 'Submission failed. Please try again.');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
+      console.error("Submission error:", errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Submission Error",
+        description: errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   const copyToClipboard = () => {
     if (membershipId) {
       navigator.clipboard.writeText(membershipId);
@@ -168,7 +207,7 @@ export function MembershipForm() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
+            <Label htmlFor="linkedin">LinkedIn Profile URL (or Website for Orgs)</Label>
             <Input id="linkedin" {...register('linkedin')} placeholder="https://linkedin.com/in/your-profile" />
             {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
           </div>
@@ -226,5 +265,3 @@ export function MembershipForm() {
     </Card>
   );
 }
-
-    

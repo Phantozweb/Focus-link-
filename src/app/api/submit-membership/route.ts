@@ -2,24 +2,29 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbwqEoTXDLXbfPzRic-JFfFiaT0sYJOLh0YeNpR2VzXglze_jcsxklB4CBuasEJJTIYm4g/exec";
+  // IMPORTANT: Replace this with your actual Google Apps Script URL
+  const scriptUrl = process.env.GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbwqEoTXDLXbfPzRic-JFfFiaT0sYJOLh0YeNpR2VzXglze_jcsxklB4CBuasEJJTIYm4g/exec";
+  
+  if (!scriptUrl) {
+    console.error('Google Script URL is not defined in environment variables.');
+    return NextResponse.json({ result: 'error', message: 'Server configuration error.' }, { status: 500 });
+  }
   
   try {
     const data = await request.json();
 
     // Step 1: Check if email exists by making a GET request to the script
+    // Your Apps Script needs to handle GET requests with an 'email' query parameter.
     const checkEmailUrl = `${scriptUrl}?email=${encodeURIComponent(data.email)}`;
     const emailCheckResponse = await fetch(checkEmailUrl, {
         method: 'GET',
         redirect: 'follow',
     });
     
-    // Check if the response from Google is okay before parsing
     if (!emailCheckResponse.ok) {
-        // Log the error response from Google Apps Script for debugging
         const errorText = await emailCheckResponse.text();
         console.error('Google Apps Script (GET) returned an error:', errorText);
-        return NextResponse.json({ result: 'error', message: 'Error checking email with Google Sheets.' }, { status: emailCheckResponse.status });
+        return NextResponse.json({ result: 'error', message: 'Error checking email with the database.' }, { status: emailCheckResponse.status });
     }
 
     const emailCheckResult = await emailCheckResponse.json();
@@ -29,20 +34,20 @@ export async function POST(request: Request) {
     }
 
     // Step 2: If email doesn't exist, proceed with submission (POST)
+    // Your Apps Script needs to handle POST requests with the full data payload.
     const postResponse = await fetch(scriptUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
-        redirect: 'follow', // This is the crucial fix
+        body: JSON.stringify({ ...data, action: 'submit' }), // Add an action for routing in Apps Script
+        redirect: 'follow',
     });
 
-     // Check if the response from Google is okay before parsing
     if (!postResponse.ok) {
         const errorText = await postResponse.text();
         console.error('Google Apps Script (POST) returned an error:', errorText);
-        return NextResponse.json({ result: 'error', message: 'Error submitting data to Google Sheets.' }, { status: postResponse.status });
+        return NextResponse.json({ result: 'error', message: 'Error submitting data to the database.' }, { status: postResponse.status });
     }
 
     const postResult = await postResponse.json();
