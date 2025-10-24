@@ -46,5 +46,24 @@ export const webinars: Webinar[] = [
       registered: 114,
       attended: 82,
     }
+  },
+  {
+    id: 'quiz-event-1',
+    title: 'The Ultimate Optometry Quiz Challenge',
+    description: "Test your knowledge and compete against peers in our first-ever Ultimate Optometry Quiz Challenge! This exciting event, officially conducted by Focus Links, will cover a wide range of topics from clinical optometry to optical physics. It's a fun way to learn, challenge yourself, and win bragging rights. The event is expertly organized and hosted by the knowledgeable **V.M. Ram Kumar**.",
+    speaker: {
+      name: 'V.M. Ram Kumar',
+      title: 'M.Sc. Optometry | Lecturer & Clinical Optometrist',
+      avatarUrl: 'https://picsum.photos/seed/ramkumar/200/200'
+    },
+    host: {
+      name: 'Focus Links Academy',
+      title: 'Official Organizer'
+    },
+    platform: 'Google Meet',
+    dateTime: '2024-11-15T13:00:00Z',
+    duration: '90 minutes',
+    tags: ['Quiz', 'Student Event', 'Clinical Knowledge', 'Upcoming'],
+    registrationLink: '#',
   }
 ];
