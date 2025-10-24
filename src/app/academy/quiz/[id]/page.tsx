@@ -10,13 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
+const PASS_PERCENTAGE = 0.5; // 50%
 
 type Answer = { questionId: string; selectedOption: string };
 type ModuleResult = {
@@ -25,6 +26,8 @@ type ModuleResult = {
   total: number;
   timeTaken: number;
   totalTime: number;
+  passed: boolean;
+  totalPoints: number;
 };
 
 
@@ -91,18 +94,21 @@ export default function QuizPage() {
   const calculateModuleScore = () => {
     const moduleQuestions = allQuestions.filter(q => q.module === currentModule.topic);
     let score = 0;
+    let totalPoints = 0;
     moduleQuestions.forEach(question => {
+      totalPoints += question.points;
       const userAnswer = answers[question.id];
       if (userAnswer && userAnswer.selectedOption === question.correctAnswer) {
-        score++;
+        score += question.points;
       }
     });
-    return score;
+    return {score, totalPoints};
   };
 
   const handleNextModule = () => {
-    const score = calculateModuleScore();
+    const {score, totalPoints} = calculateModuleScore();
     const timeTaken = currentModule.time - timeLeftInModule;
+    const passed = (score / totalPoints) >= PASS_PERCENTAGE;
     
     setModuleResults(prev => [...prev, {
       topic: currentModule.topic,
@@ -110,6 +116,8 @@ export default function QuizPage() {
       total: currentQuestions.length,
       timeTaken,
       totalTime: currentModule.time,
+      passed,
+      totalPoints
     }]);
 
     if (currentModuleIndex < quizModules.length - 1) {
@@ -194,8 +202,9 @@ export default function QuizPage() {
     
      if (quizState === 'finished') {
        const totalScore = moduleResults.reduce((acc, r) => acc + r.score, 0);
-       const totalPossible = moduleResults.reduce((acc, r) => acc + r.total, 0);
+       const totalPossiblePoints = moduleResults.reduce((acc, r) => acc + r.totalPoints, 0);
        const totalTimeTaken = moduleResults.reduce((acc, r) => acc + r.timeTaken, 0);
+       const overallPassed = (totalScore / totalPossiblePoints) >= PASS_PERCENTAGE;
 
       return (
          <div className="text-center">
@@ -207,12 +216,13 @@ export default function QuizPage() {
                     <CardTitle className="flex items-center gap-2"><BarChart /> Performance Report</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   <div className="flex justify-around items-center text-center p-4 bg-muted rounded-lg">
-                      <div>
-                          <p className="text-sm text-muted-foreground">Total Score</p>
-                          <p className="text-4xl font-bold">{totalScore}<span className="text-2xl text-muted-foreground">/{totalPossible}</span></p>
+                   <div className={cn("flex flex-col sm:flex-row justify-around items-center text-center p-4 rounded-lg", overallPassed ? "bg-green-50" : "bg-red-50")}>
+                      <div className={cn("mb-4 sm:mb-0", overallPassed ? "text-green-800" : "text-red-800")}>
+                          <p className="text-sm font-semibold">{overallPassed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</p>
+                          <p className="text-4xl font-bold">{totalScore}<span className="text-2xl text-muted-foreground">/{totalPossiblePoints}</span></p>
+                          <p className="text-sm">Overall Score</p>
                       </div>
-                       <div>
+                       <div className="text-slate-800">
                           <p className="text-sm text-muted-foreground">Total Time</p>
                           <p className="text-4xl font-bold font-mono">{formatTime(totalTimeTaken)}</p>
                       </div>
@@ -224,14 +234,22 @@ export default function QuizPage() {
                           <TableHead>Module</TableHead>
                           <TableHead className="text-right">Score</TableHead>
                           <TableHead className="text-right">Time</TableHead>
+                          <TableHead className="text-right">Result</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {moduleResults.map(result => (
                           <TableRow key={result.topic}>
                             <TableCell className="font-medium">{result.topic}</TableCell>
-                            <TableCell className="text-right">{result.score}/{result.total}</TableCell>
+                            <TableCell className="text-right">{result.score}/{result.totalPoints}</TableCell>
                             <TableCell className="text-right font-mono">{formatTime(result.timeTaken)}</TableCell>
+                            <TableCell className="text-right">
+                                {result.passed ? (
+                                    <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
+                                ) : (
+                                    <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
+                                )}
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -266,8 +284,16 @@ export default function QuizPage() {
 
             {/* Question */}
             <div>
-              <p className="font-semibold text-lg mb-1">Question {currentQuestionIndex + 1} of {TOTAL_QUESTIONS_PER_MODULE}</p>
-              <p className="text-xl text-slate-800 mb-6">{currentQuestion.text}</p>
+              <div className="flex justify-between items-baseline">
+                <p className="font-semibold text-lg mb-1">Question {currentQuestionIndex + 1} of {TOTAL_QUESTIONS_PER_MODULE}</p>
+                <span className={cn(
+                    "text-xs font-bold px-2 py-1 rounded-full",
+                    currentQuestion.difficulty === 'easy' && "bg-green-100 text-green-800",
+                    currentQuestion.difficulty === 'medium' && "bg-yellow-100 text-yellow-800",
+                    currentQuestion.difficulty === 'hard' && "bg-red-100 text-red-800",
+                )}>{currentQuestion.difficulty.toUpperCase()} ({currentQuestion.points} {currentQuestion.points === 1 ? 'Mark' : 'Marks'})</span>
+              </div>
+              <p className="text-xl text-slate-800 my-6">{currentQuestion.text}</p>
               <RadioGroup 
                 value={answers[currentQuestion.id]?.selectedOption || ''}
                 onValueChange={(v) => handleAnswerChange(currentQuestion.id, v)}
