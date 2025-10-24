@@ -99,6 +99,7 @@ export default function CreateProfilePage() {
   
   const onSubmit = async (data: UserProfile) => {
     setIsSubmitting(true);
+    form.clearErrors('id'); // Clear previous errors
     
     const payload = {
         ...data,
@@ -122,23 +123,27 @@ export default function CreateProfilePage() {
         throw new Error(result.message || 'Failed to save profile.');
       }
 
-      if (result.exists) {
+      if (result.result === 'invalid_id') {
+        form.setError('id', { type: 'manual', message: 'This Membership ID is not valid. Please check and try again.' });
+        toast({ variant: 'destructive', title: 'Invalid ID', description: 'The Membership ID you entered was not found.' });
+      } else if (result.result === 'exists') {
          toast({
             variant: 'destructive',
             title: 'Profile Already Exists',
-            description: 'A profile with this Membership ID already exists.',
+            description: 'A profile with this Membership ID has already been created.',
          });
-      } else {
+      } else if (result.result === 'success') {
         toast({
           title: 'Profile Saved!',
           description: 'Your professional profile has been created successfully.',
         });
-        // Redirect to their new profile page after a short delay
+        // Redirect to the main directory after a short delay
         setTimeout(() => {
-            // In a real app, you'd get the new profile ID from the response
-            // For now, we'll just redirect to the directory
             router.push('/directory/all');
         }, 1500);
+      } else {
+        // Handle any other unexpected responses from the script
+        throw new Error(result.message || 'An unexpected response was received from the server.');
       }
 
     } catch (error) {
@@ -174,6 +179,7 @@ export default function CreateProfilePage() {
                 <div className="space-y-2">
                   <Label htmlFor="membershipId">Membership ID</Label>
                   <Input id="membershipId" {...form.register('id')} placeholder="Enter the ID you received upon registration" />
+                  {form.formState.errors.id && <p className="text-sm text-destructive">{form.formState.errors.id.message}</p>}
                   <p className="text-xs text-muted-foreground">Required to link your profile to your membership.</p>
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
