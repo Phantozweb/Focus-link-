@@ -50,9 +50,12 @@ export function MembershipForm() {
     resolver: zodResolver(formSchema)
   });
 
-  const generateMembershipId = (countryName: string) => {
+  const getCountryCode = (countryName: string) => {
     const country = countries.find(c => c.name === countryName);
-    const countryCode = country ? country.code : 'XX';
+    return country ? country.code : 'XX';
+  };
+  
+  const generateMembershipId = (countryCode: string) => {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -65,7 +68,8 @@ export function MembershipForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    const newId = generateMembershipId(data.country);
+    const countryCode = getCountryCode(data.country);
+    const newId = generateMembershipId(countryCode);
     
     let fullLinkedinUrl = data.linkedin;
     if (fullLinkedinUrl && !fullLinkedinUrl.startsWith('http')) {

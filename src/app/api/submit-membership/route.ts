@@ -26,31 +26,33 @@ export async function POST(request: Request) {
     } catch (e) {
         // If the response is not JSON, it's likely an error page from Google.
         console.error('Google Apps Script returned non-JSON response:', resultText);
-        throw new Error('The submission service returned an unexpected response. Please try again later.');
+        return NextResponse.json({ message: 'The submission service returned an unexpected response.' }, { status: 502 });
     }
 
 
     if (!response.ok) {
-        console.error('Google Apps Script returned an error:', result);
-        throw new Error(result.message || 'Error submitting to Google Sheet.');
+        // This case handles network-level errors (e.g., 500 from Apps Script)
+        console.error('Google Apps Script returned a server error:', result);
+        return NextResponse.json({ message: result.message || 'Error submitting to Google Sheet.' }, { status: response.status });
     }
 
     // The Apps Script should return a clear success or error/exists status.
-    // e.g., { result: 'success' } or { result: 'exists' }
+    // e.g., { "result": "success" } or { "result": "exists" }
+    // We return a 200 OK for both successful data entry and for a detected duplicate.
     if (result.result === 'success') {
         return NextResponse.json({ result: 'success' });
     } else if (result.result === 'exists') {
          return NextResponse.json({ exists: true });
     } else {
-        // If the script returns a 200 OK but doesn't have result:'success' or result:'exists'
-        // it might be an unhandled case in the script. We'll treat it as an error.
+        // If the script returns a 200 OK but doesn't have a recognized result,
+        // it might be an unhandled case in the script. We treat it as an application-level error.
         console.error("Unknown successful response from Apps Script:", result);
-        throw new Error(result.message || 'An unknown error occurred during submission.');
+        return NextResponse.json({ message: result.message || 'An unknown error occurred during submission.' }, { status: 500 });
     }
 
   } catch (error) {
     console.error('API Route Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
-    return NextResponse.json({ result: 'error', message: errorMessage }, { status: 500 });
+    return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }
