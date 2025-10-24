@@ -119,13 +119,13 @@ export default function Home() {
       isDialog: false,
     },
     {
-      title: "Create Your Public Profile",
-      description: "Interested in a profile? Request to be listed, and our team will get in touch to create your listing manually.",
-      href: "#",
+      title: "Get Listed on the Directory",
+      description: "Interested in a profile? Join as a member to create your professional listing and get discovered.",
+      href: "/membership",
       icon: <Sparkles className="h-8 w-8 text-white" />,
-      cta: "Request a Listing",
+      cta: "Become a Member",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
-      isDialog: true,
+      isDialog: false,
     },
     {
       title: "Host a Webinar With Us",

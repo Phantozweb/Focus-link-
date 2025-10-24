@@ -58,7 +58,7 @@ export default function JobsPage() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Members only</p>
+                            <p>Official membership required to post jobs.</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

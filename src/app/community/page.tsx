@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { WebinarBanner } from '@/components/webinar-banner';
 import { WebinarTime } from '@/components/webinar-time';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
 function ForumList() {
@@ -43,10 +44,19 @@ function ForumList() {
                 />
               </div>
               <div className="text-right flex-shrink-0 w-full md:w-auto">
-                <Button className="w-full">Start a New Discussion</Button>
-                 <p className="text-xs text-muted-foreground mt-1 flex items-center justify-end gap-1">
-                    <Lock className="h-3 w-3" /> Membership required to post.
-                 </p>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button className="w-full" disabled>
+                        <Lock className="mr-2 h-4 w-4" />
+                        Start a New Discussion
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Official membership required to post.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             <div className="space-y-4">

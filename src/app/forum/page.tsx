@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { demoDiscussions } from '@/lib/forum';
 import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
 export default function ForumPage() {
@@ -51,10 +52,19 @@ export default function ForumPage() {
                 />
               </div>
               <div className="text-right flex-shrink-0">
-                <Button>Start a New Discussion</Button>
-                 <p className="text-xs text-muted-foreground mt-1 flex items-center justify-end gap-1">
-                    <Lock className="h-3 w-3" /> Membership required to post.
-                 </p>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button disabled>
+                        <Lock className="mr-2 h-4 w-4" />
+                        Start a New Discussion
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Official membership required to post.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             <div className="space-y-4">
