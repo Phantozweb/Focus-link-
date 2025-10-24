@@ -5,13 +5,15 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
 import { WebinarActions } from '@/components/webinar-actions';
 import { WebinarBanner } from '@/components/webinar-banner';
 import { WebinarTime } from '@/components/webinar-time';
+import { Leaderboard } from '@/components/leaderboard';
+import { demoLeaderboardData } from '@/lib/data';
 
 type WebinarPageProps = {
   params: { id: string }
@@ -34,18 +36,75 @@ export async function generateMetadata(
 
   return {
     title: `${webinar.title} | Focus Links Academy`,
-    description: webinar.description,
+    description: webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' '),
     openGraph: {
       title: webinar.title,
-      description: webinar.description,
+      description: webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' '),
       images: [...previousImages],
     },
   }
 }
 
 
+function formatDescription(text: string) {
+    const html = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/### (.*?)\n/g, '<h3 class="text-xl font-bold text-slate-800 mt-6 mb-3">$1</h3>')
+        .replace(/^- (.*?)\n/gm, '<li class="flex items-start gap-3 mt-2"><span class="text-primary mt-1">&#10003;</span><span>$1</span></li>')
+        .replace(/<\/li>\n<li/g, '</li><li')
+        .replace(/(<li.*<\/li>)/gs, '<ul class="list-none p-0">$1</ul>')
+        .replace(/\n/g, '<br />');
+    return html;
+}
+
+const QuizOrganizers = ({webinar}: {webinar: (typeof webinars)[0]}) => (
+     <section>
+        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">Organizers</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+                <Avatar className="h-28 w-28">
+                    <AvatarImage src="https://iili.io/KTpEi9s.md.jpg" alt="Janarthan Veeramani" data-ai-hint="portrait person" />
+                    <AvatarFallback className="text-4xl">JV</AvatarFallback>
+                </Avatar>
+                <div>
+                    <p className="font-bold text-2xl text-slate-800">Janarthan Veeramani</p>
+                    <p className="text-lg text-muted-foreground">Organizer</p>
+                </div>
+            </div>
+             <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+                <Avatar className="h-28 w-28">
+                    <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                    <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                    <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
+                    <p className="text-lg text-muted-foreground">Co-Organizer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
+const DefaultSpeakerInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
+    <section>
+        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
+        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+            <Avatar className="h-28 w-28">
+                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+                <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
+                <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
+            </div>
+        </div>
+    </section>
+);
+
+
 export default function WebinarDetailPage({ params }: WebinarPageProps) {
   const webinar = webinars.find(w => w.id === params.id);
+  const isQuiz = webinar?.id === 'quiz-event-1';
 
   if (!webinar) {
     notFound();
@@ -56,7 +115,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     "@type": "Event",
     "name": webinar.title,
     "startDate": webinar.dateTime,
-    "description": webinar.description.replace(/<[^>]*>/g, ''), // Strip HTML for schema
+    "description": webinar.description.replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' '),
     "eventStatus": new Date() > new Date(webinar.dateTime) ? "https://schema.org/EventCompleted" : "https://schema.org/EventScheduled",
     "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
     "location": {
@@ -82,6 +141,18 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     }
   };
   
+  const { description, highlights } = (() => {
+    if (isQuiz) {
+      const parts = webinar.description.split('### Event Highlights:');
+      return { description: parts[0], highlights: parts[1] };
+    }
+    return { description: webinar.description, highlights: null };
+  })();
+
+  const founderNote = isQuiz
+    ? `"This International Quiz Competition marks a major milestone for Focus Links. I want to extend my deepest gratitude to my esteemed lecturer, V.M. Ramkumar, whose guidance in conducting this quiz was seriously impressive. A special thank you to every participant who joins us. Your engagement and passion are what make this community thrive. We are incredibly excited to see you on the leaderboard!"`
+    : `"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"`;
+
   return (
     <>
       <script
@@ -114,9 +185,19 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                   <div className="max-w-3xl mx-auto space-y-12">
                       <section>
                           <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800">About this event</h2>
-                          <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: webinar.description.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                          <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: formatDescription(description) }} />
                       </section>
                       
+                       {highlights && (
+                        <>
+                          <Separator />
+                          <section>
+                            <h2 className="text-2xl font-bold font-headline mb-4 text-slate-800 flex items-center gap-2"><Star className="text-amber-500"/> Event Highlights</h2>
+                            <div className="prose prose-lg max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: formatDescription(highlights) }} />
+                          </section>
+                        </>
+                      )}
+
                       <Separator />
 
                       <section>
@@ -126,7 +207,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                   <div className="flex gap-4">
                                       <div><Award className="h-8 w-8 text-blue-600" /></div>
                                       <div className="text-blue-800">
-                                          <p className="font-semibold italic">"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"</p>
+                                          <p className="font-semibold italic">{founderNote}</p>
                                           <p className="font-bold mt-3">– Janarthan Veeramani, Founder of Focus Links</p>
                                       </div>
                                   </div>
@@ -192,19 +273,23 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                       
                       <Separator />
 
-                      <section>
-                          <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
-                          <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
-                              <Avatar className="h-28 w-28">
-                                  <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                                  <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <div>
-                                  <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
-                                  <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
-                              </div>
-                          </div>
-                      </section>
+                      {isQuiz ? <QuizOrganizers webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
+
+                       {isQuiz && (
+                        <>
+                          <Separator />
+                          <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-2xl font-bold font-headline text-slate-800 flex items-center gap-2">
+                                    <Trophy className="text-amber-500"/>
+                                    Live Leaderboard
+                                </h3>
+                                <p className="text-sm text-muted-foreground font-semibold">{demoLeaderboardData.length} Participants</p>
+                            </div>
+                            <Leaderboard data={demoLeaderboardData} itemsPerPage={30} />
+                          </section>
+                        </>
+                       )}
                   </div>
               </div>
             </CardContent>
