@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   // IMPORTANT: Replace this with your actual Google Apps Script URL
-  const scriptUrl = process.env.GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbwqEoTXDLXbfPzRic-JFfFiaT0sYJOLh0YeNpR2VzXglze_jcsxklB4CBuasEJJTIYm4g/exec";
+  const scriptUrl = process.env.GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbzpxTTUokGUhshRGb5a0jUaXMUi0RVNfIRxqfs1bBQGRVEbS15rDReIeBFxL13dM31-/exec";
   
   if (!scriptUrl) {
     console.error('Google Script URL is not defined in environment variables.');
@@ -64,3 +64,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ result: 'error', message: errorMessage }, { status: 500 });
   }
 }
+
