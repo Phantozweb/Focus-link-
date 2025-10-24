@@ -204,7 +204,8 @@ export default function QuizPage() {
        const totalScore = moduleResults.reduce((acc, r) => acc + r.score, 0);
        const totalPossiblePoints = moduleResults.reduce((acc, r) => acc + r.totalPoints, 0);
        const totalTimeTaken = moduleResults.reduce((acc, r) => acc + r.timeTaken, 0);
-       const overallPassed = (totalScore / totalPossiblePoints) >= PASS_PERCENTAGE;
+       const overallPercentage = totalPossiblePoints > 0 ? (totalScore / totalPossiblePoints) : 0;
+       const overallPassed = overallPercentage >= PASS_PERCENTAGE;
 
       return (
          <div className="text-center">
@@ -219,8 +220,8 @@ export default function QuizPage() {
                    <div className={cn("flex flex-col sm:flex-row justify-around items-center text-center p-4 rounded-lg", overallPassed ? "bg-green-50" : "bg-red-50")}>
                       <div className={cn("mb-4 sm:mb-0", overallPassed ? "text-green-800" : "text-red-800")}>
                           <p className="text-sm font-semibold">{overallPassed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</p>
-                          <p className="text-4xl font-bold">{totalScore}<span className="text-2xl text-muted-foreground">/{totalPossiblePoints}</span></p>
-                          <p className="text-sm">Overall Score</p>
+                          <p className="text-4xl font-bold">{(overallPercentage * 100).toFixed(0)}<span className="text-2xl">%</span></p>
+                          <p className="text-sm">Overall Score ({totalScore}/{totalPossiblePoints} points)</p>
                       </div>
                        <div className="text-slate-800">
                           <p className="text-sm text-muted-foreground">Total Time</p>
@@ -232,7 +233,7 @@ export default function QuizPage() {
                       <TableHeader>
                         <TableRow>
                           <TableHead>Module</TableHead>
-                          <TableHead className="text-right">Score</TableHead>
+                          <TableHead className="text-right">Score (%)</TableHead>
                           <TableHead className="text-right">Time</TableHead>
                           <TableHead className="text-right">Result</TableHead>
                         </TableRow>
@@ -241,7 +242,10 @@ export default function QuizPage() {
                         {moduleResults.map(result => (
                           <TableRow key={result.topic}>
                             <TableCell className="font-medium">{result.topic}</TableCell>
-                            <TableCell className="text-right">{result.score}/{result.totalPoints}</TableCell>
+                             <TableCell className="text-right font-mono">
+                                {result.totalPoints > 0 ? ((result.score / result.totalPoints) * 100).toFixed(0) : 0}%
+                                <span className="text-xs text-muted-foreground ml-1">({result.score}/{result.totalPoints})</span>
+                            </TableCell>
                             <TableCell className="text-right font-mono">{formatTime(result.timeTaken)}</TableCell>
                             <TableCell className="text-right">
                                 {result.passed ? (
@@ -345,5 +349,3 @@ export default function QuizPage() {
     </div>
   );
 }
-
-    
