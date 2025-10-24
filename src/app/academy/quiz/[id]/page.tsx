@@ -3,31 +3,30 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { webinars } from '@/lib/academy';
+import { quizModules, questions as allQuestions, type Question } from '@/lib/quiz-questions';
 import { notFound, useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-
-const quizModules = [
-  { topic: 'Eyelids & Adnexa', time: 5 * 60 },
-  { topic: 'Conjunctiva & Sclera', time: 6 * 60 },
-  { topic: 'Cornea', time: 7 * 60 },
-  { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60 },
-  { topic: 'Iris & Pupil', time: 6 * 60 },
-  { topic: 'Crystalline Lens & Accommodation', time: 7 * 60 },
-  { topic: 'Vitreous Body', time: 5 * 60 },
-  { topic: 'Retina', time: 9 * 60 },
-  { topic: 'Optic Nerve & Pathways', time: 9 * 60 },
-  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60 },
-];
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
+
+type Answer = { questionId: string; selectedOption: string };
+type ModuleResult = {
+  topic: string;
+  score: number;
+  total: number;
+  timeTaken: number;
+  totalTime: number;
+};
+
 
 export default function QuizPage() {
   const params = useParams();
@@ -36,31 +35,41 @@ export default function QuizPage() {
 
   const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished'>('not-started');
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, Answer>>({});
+  const [moduleStartTime, setModuleStartTime] = useState(0);
+  const [moduleResults, setModuleResults] = useState<ModuleResult[]>([]);
+
   const currentModule = useMemo(() => quizModules[currentModuleIndex], [currentModuleIndex]);
+  const currentQuestions = useMemo(() => {
+    if (!currentModule) return [];
+    return allQuestions.filter(q => q.module === currentModule.topic);
+  }, [currentModule]);
+  const currentQuestion = useMemo(() => currentQuestions[currentQuestionIndex], [currentQuestions, currentQuestionIndex]);
+  
   const [timeLeftInModule, setTimeLeftInModule] = useState(currentModule?.time || 0);
   const [breakTimeLeft, setBreakTimeLeft] = useState(BREAK_TIME_SECONDS);
 
+  // Module Timer
   useEffect(() => {
     if (quizState === 'active' && timeLeftInModule > 0) {
       const timer = setInterval(() => {
         setTimeLeftInModule(prev => prev - 1);
       }, 1000);
       return () => clearInterval(timer);
-    } else if (quizState === 'active' && timeLeftInModule === 0) {
+    } else if (quizState === 'active' && timeLeftInModule <= 0) {
       handleNextModule();
     }
   }, [quizState, timeLeftInModule]);
 
+  // Break Timer
   useEffect(() => {
     if (quizState === 'break' && breakTimeLeft > 0) {
       const timer = setInterval(() => {
         setBreakTimeLeft(prev => prev - 1);
       }, 1000);
       return () => clearInterval(timer);
-    } else if (quizState === 'break' && breakTimeLeft === 0) {
+    } else if (quizState === 'break' && breakTimeLeft <= 0) {
       startNextModule();
     }
   }, [quizState, breakTimeLeft]);
@@ -71,11 +80,38 @@ export default function QuizPage() {
 
   const startQuiz = () => {
     setCurrentModuleIndex(0);
+    setCurrentQuestionIndex(0);
     setTimeLeftInModule(quizModules[0].time);
+    setModuleStartTime(Date.now());
+    setAnswers({});
+    setModuleResults([]);
     setQuizState('active');
   };
 
+  const calculateModuleScore = () => {
+    const moduleQuestions = allQuestions.filter(q => q.module === currentModule.topic);
+    let score = 0;
+    moduleQuestions.forEach(question => {
+      const userAnswer = answers[question.id];
+      if (userAnswer && userAnswer.selectedOption === question.correctAnswer) {
+        score++;
+      }
+    });
+    return score;
+  };
+
   const handleNextModule = () => {
+    const score = calculateModuleScore();
+    const timeTaken = currentModule.time - timeLeftInModule;
+    
+    setModuleResults(prev => [...prev, {
+      topic: currentModule.topic,
+      score,
+      total: currentQuestions.length,
+      timeTaken,
+      totalTime: currentModule.time,
+    }]);
+
     if (currentModuleIndex < quizModules.length - 1) {
       setQuizState('break');
       setBreakTimeLeft(BREAK_TIME_SECONDS);
@@ -88,8 +124,9 @@ export default function QuizPage() {
      const nextModuleIndex = currentModuleIndex + 1;
       if (nextModuleIndex < quizModules.length) {
         setCurrentModuleIndex(nextModuleIndex);
-        setCurrentQuestion(0);
+        setCurrentQuestionIndex(0);
         setTimeLeftInModule(quizModules[nextModuleIndex].time);
+        setModuleStartTime(Date.now());
         setQuizState('active');
       } else {
         setQuizState('finished');
@@ -97,7 +134,7 @@ export default function QuizPage() {
   }
 
   const handleAnswerChange = (questionId: string, value: string) => {
-    setAnswers(prev => ({...prev, [questionId]: value}));
+    setAnswers(prev => ({...prev, [questionId]: { questionId, selectedOption: value }}));
   };
   
   const formatTime = (seconds: number) => {
@@ -156,22 +193,53 @@ export default function QuizPage() {
     }
     
      if (quizState === 'finished') {
+       const totalScore = moduleResults.reduce((acc, r) => acc + r.score, 0);
+       const totalPossible = moduleResults.reduce((acc, r) => acc + r.total, 0);
+       const totalTimeTaken = moduleResults.reduce((acc, r) => acc + r.timeTaken, 0);
+
       return (
          <div className="text-center">
             <Trophy className="h-16 w-16 text-amber-500 mx-auto mb-4" />
             <h1 className="text-3xl font-bold font-headline">Quiz Complete!</h1>
-            <p className="text-muted-foreground mt-2">You have finished the Eye Q Arena challenge.</p>
+            <p className="text-muted-foreground mt-2">You have finished the Eye Q Arena challenge. Here are your results.</p>
              <Card className="mt-8 text-left">
                 <CardHeader>
-                    <CardTitle>Your Preliminary Results</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><BarChart /> Performance Report</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   <p className="text-4xl font-bold text-center">85 / 100</p>
-                   <p className="text-muted-foreground text-center">Detailed report and leaderboard ranking will be available shortly.</p>
+                   <div className="flex justify-around items-center text-center p-4 bg-muted rounded-lg">
+                      <div>
+                          <p className="text-sm text-muted-foreground">Total Score</p>
+                          <p className="text-4xl font-bold">{totalScore}<span className="text-2xl text-muted-foreground">/{totalPossible}</span></p>
+                      </div>
+                       <div>
+                          <p className="text-sm text-muted-foreground">Total Time</p>
+                          <p className="text-4xl font-bold font-mono">{formatTime(totalTimeTaken)}</p>
+                      </div>
+                   </div>
+                   <h3 className="font-semibold pt-4">Module Breakdown</h3>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Module</TableHead>
+                          <TableHead className="text-right">Score</TableHead>
+                          <TableHead className="text-right">Time</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {moduleResults.map(result => (
+                          <TableRow key={result.topic}>
+                            <TableCell className="font-medium">{result.topic}</TableCell>
+                            <TableCell className="text-right">{result.score}/{result.total}</TableCell>
+                            <TableCell className="text-right font-mono">{formatTime(result.timeTaken)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                 </CardContent>
              </Card>
              <div className="mt-8 flex gap-4">
-                <Button size="lg" className="flex-1" variant="outline">Try Again (2 attempts left)</Button>
+                <Button size="lg" className="flex-1" variant="outline" onClick={startQuiz}>Try Again (2 attempts left)</Button>
                 <Button size="lg" className="flex-1" asChild>
                     <Link href={`/academy/${id}`}>Back to Leaderboard</Link>
                 </Button>
@@ -180,7 +248,7 @@ export default function QuizPage() {
       );
     }
     
-    if(quizState === 'active' && currentModule) {
+    if(quizState === 'active' && currentModule && currentQuestion) {
        return (
          <div>
             {/* Header */}
@@ -194,39 +262,32 @@ export default function QuizPage() {
                   <span>{formatTime(timeLeftInModule)}</span>
               </div>
             </div>
-            <Progress value={((currentQuestion + 1)/TOTAL_QUESTIONS_PER_MODULE) * 100} className="mb-6" />
+            <Progress value={((currentQuestionIndex + 1)/TOTAL_QUESTIONS_PER_MODULE) * 100} className="mb-6" />
 
             {/* Question */}
             <div>
-              <p className="font-semibold text-lg mb-1">Question {currentQuestion + 1} of {TOTAL_QUESTIONS_PER_MODULE}</p>
-              <p className="text-xl text-slate-800 mb-6">Which layer of the cornea is responsible for maintaining its dehydrated state?</p>
-              <RadioGroup onValueChange={(v) => handleAnswerChange(`q${currentQuestion}`, v)}>
+              <p className="font-semibold text-lg mb-1">Question {currentQuestionIndex + 1} of {TOTAL_QUESTIONS_PER_MODULE}</p>
+              <p className="text-xl text-slate-800 mb-6">{currentQuestion.text}</p>
+              <RadioGroup 
+                value={answers[currentQuestion.id]?.selectedOption || ''}
+                onValueChange={(v) => handleAnswerChange(currentQuestion.id, v)}
+              >
                   <div className="space-y-3">
-                      <Label className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-muted has-[input:checked]:bg-primary/10 has-[input:checked]:border-primary">
-                          <RadioGroupItem value="a" id="r1" />
-                          <span>Epithelium</span>
-                      </Label>
-                       <Label className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-muted has-[input:checked]:bg-primary/10 has-[input:checked]:border-primary">
-                          <RadioGroupItem value="b" id="r2" />
-                          <span>Bowman's Layer</span>
-                      </Label>
-                       <Label className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-muted has-[input:checked]:bg-primary/10 has-[input:checked]:border-primary">
-                          <RadioGroupItem value="c" id="r3" />
-                          <span>Stroma</span>
-                      </Label>
-                      <Label className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-muted has-[input:checked]:bg-primary/10 has-[input:checked]:border-primary">
-                          <RadioGroupItem value="d" id="r4" />
-                          <span>Endothelium</span>
-                      </Label>
+                      {currentQuestion.options.map((option) => (
+                         <Label key={option.id} className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-muted has-[input:checked]:bg-primary/10 has-[input:checked]:border-primary transition-all">
+                            <RadioGroupItem value={option.id} id={`${currentQuestion.id}-${option.id}`} />
+                            <span>{option.text}</span>
+                        </Label>
+                      ))}
                   </div>
               </RadioGroup>
             </div>
             
             {/* Navigation */}
             <div className="mt-8 flex justify-between">
-                <Button variant="outline" onClick={() => setCurrentQuestion(q => Math.max(0, q-1))} disabled={currentQuestion === 0}>Previous</Button>
-                 {currentQuestion < TOTAL_QUESTIONS_PER_MODULE - 1 ? (
-                    <Button onClick={() => setCurrentQuestion(q => q + 1)}>Next</Button>
+                <Button variant="outline" onClick={() => setCurrentQuestionIndex(q => Math.max(0, q-1))} disabled={currentQuestionIndex === 0}>Previous</Button>
+                 {currentQuestionIndex < currentQuestions.length - 1 ? (
+                    <Button onClick={() => setCurrentQuestionIndex(q => q + 1)}>Next</Button>
                 ) : (
                     <Button onClick={handleNextModule} variant="default">Finish Module</Button>
                 )}
