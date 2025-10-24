@@ -17,19 +17,19 @@ const helpTopics = [
       {
         value: 'profile-create',
         question: 'How do I create a profile?',
-        answer: `You can create a profile in two main ways: by filling out the detailed <a href="/membership" class="text-primary underline font-semibold">Membership Application form</a> for official membership, or by using the <a href="/directory/create" class="text-primary underline font-semibold">AI Profile Builder</a> for a quick, AI-guided setup.`
+        answer: `Creating a profile is the first step to becoming part of our community. To start, you must fill out the official <a href="/membership" class="text-primary underline font-semibold">Membership Application form</a>. Our team will review your submission, and once approved, your profile will be created and listed in the directory.`
       },
       {
-        value: 'membership-vs-profile',
-        question: 'What is the difference between creating a profile and official membership?',
-        answer: `Creating a profile gets you listed in our directory. Applying for official membership through the detailed form allows our team to review your application. Once approved, you'll receive a 'Verified' badge <span class="inline-flex items-center"><Award className="h-4 w-4 text-primary mx-1" /></span> on your profile. This badge grants you higher visibility, builds trust, and unlocks exclusive perks like posting in the forum and priority event registration.`
+        value: 'membership-perks',
+        question: 'What are the benefits of official membership?',
+        answer: `Applying for membership is how you create your official profile. Once our team reviews and approves your application, you'll receive a 'Verified' badge <span class="inline-flex items-center"><Award className="h-4 w-4 text-primary mx-1" /></span> on your profile. This badge grants you higher visibility, builds trust, and unlocks exclusive perks like posting in the forum and job board, plus priority event registration.`
       },
       {
         value: 'profile-standout',
         question: 'How can I make my profile stand out?',
         answer: `A great profile is your digital handshake. To make it effective:
           <ul class="list-disc pl-5 mt-2 space-y-2">
-              <li><strong>Write a compelling bio:</strong> Go beyond your resume. Share your passion, your goals, and what makes you unique in the eye care field. Our AI can help you with this!</li>
+              <li><strong>Write a compelling bio:</strong> Go beyond your resume. Share your passion, your goals, and what makes you unique in the eye care field.</li>
               <li><strong>Be specific with skills:</strong> Instead of just 'Contact Lenses', specify 'Scleral Lens Fitting' or 'Myopia Control with Ortho-K'.</li>
               <li><strong>Highlight key achievements:</strong> Mention any research, presentations, or special projects you've been a part of.</li>
           </ul>`
@@ -86,8 +86,8 @@ const helpTopics = [
       },
       {
         value: 'host-webinar',
-        question: 'How can I host a webinar with Focus Links?',
-        answer: `We are always looking for experts to share their knowledge. If you have a topic you're passionate about and want to present to our community, please <a href="/contact" class="text-primary underline font-semibold">contact us</a> with your proposal. We'd love to collaborate!`
+        question: 'How can my organization host a webinar with Focus Links?',
+        answer: `We love collaborating with member organizations! To host a webinar, your organization must first have an approved profile on our platform. Once you are a member, please <a href="/contact" class="text-primary underline font-semibold">contact us</a> with your event proposal. We'd be thrilled to partner with you.`
       }
     ]
   },
@@ -99,7 +99,7 @@ const helpTopics = [
       {
         value: 'submit-case',
         question: 'How do I submit a case to the forum?',
-        answer: `To start a new discussion or share a clinical case, navigate to the <a href="/forum" class="text-primary underline font-semibold">Case Forum</a> and click the 'Start a New Discussion' button. Please note that only official, verified members can post new topics to maintain the quality of our discussions.`
+        answer: `To start a new discussion or share a clinical case, you must have an approved member profile. Navigate to the <a href="/forum" class="text-primary underline font-semibold">Case Forum</a> and click the 'Start a New Discussion' button. If the button is disabled, it means you need to become an official member first.`
       },
       {
         value: 'forum-rules',
@@ -121,7 +121,7 @@ const helpTopics = [
       {
         value: 'post-job',
         question: 'How can my organization post a job listing?',
-        answer: `Job posting is a perk for our official members and partners. If your organization is a verified member, you will see an active 'Post a Job' button on the job board. If you are not a member yet, please <a href="/membership" class="text-primary underline font-semibold">apply for membership</a>. For partnership inquiries, you can also <a href="/contact" class="text-primary underline font-semibold">contact us</a>.`
+        answer: `Job posting is a perk for our official members and partners. To post a job, your organization must have an approved profile. If you are a member, you can <a href="/contact" class="text-primary underline font-semibold">contact us</a> to get your job listed. If you are not a member yet, please <a href="/membership" class="text-primary underline font-semibold">apply for membership</a> first.`
       }
     ]
   }
