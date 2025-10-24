@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 
@@ -26,6 +26,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     });
     const [isRegistered, setIsRegistered] = useState(false);
     const [showCertificateInfo, setShowCertificateInfo] = useState(false);
+    const isQuiz = webinar.id === 'quiz-event-1';
 
     useEffect(() => {
         const calculateState = () => {
@@ -38,8 +39,12 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             const liveGracePeriod = webinarEndTime + (3 * 60 * 60 * 1000); // 3-hour grace period for LIVE status
             const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); // 7 days after event end
 
-            if (now < registrationCloseTime) {
-                setStatus('UPCOMING');
+            if (now < webinarStartTime) {
+                if (now < registrationCloseTime || isQuiz) {
+                    setStatus('UPCOMING');
+                } else {
+                    setStatus('REGISTRATION_CLOSED');
+                }
                 const difference = webinarStartTime - now;
                  setTimeLeft({
                     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -47,8 +52,6 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                     minutes: Math.floor((difference / 1000 / 60) % 60),
                     seconds: Math.floor((difference / 1000) % 60),
                 });
-            } else if (now >= registrationCloseTime && now < webinarStartTime) {
-                setStatus('REGISTRATION_CLOSED');
             } else if (now >= webinarStartTime && now < liveGracePeriod) {
                 setStatus('LIVE');
             } else {
@@ -65,14 +68,14 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         const timer = setInterval(calculateState, 1000);
 
         return () => clearInterval(timer);
-    }, [webinar.dateTime, webinar.duration]);
+    }, [webinar.dateTime, webinar.duration, isQuiz]);
 
     const handleRegister = () => {
         setIsRegistered(true);
     };
 
     const renderContent = () => {
-         if (isRegistered && (status === 'UPCOMING' || status === 'REGISTRATION_CLOSED')) {
+         if (isRegistered && !isQuiz && (status === 'UPCOMING' || status === 'REGISTRATION_CLOSED')) {
              return (
                  <div className="text-center p-4 bg-green-50 border-green-200 border rounded-lg">
                     <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
@@ -95,23 +98,36 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                 <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                             </div>
                         </div>
-                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
-                          <p className="font-bold text-primary flex items-center justify-center gap-2"><Users className="h-5 w-5" /> 100+ People Registered!</p>
-                        </div>
-                        <div className='space-y-3'>
-                            <Button size="lg" className="w-full text-lg py-6" asChild>
-                                <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
-                                    <Ticket className="mr-2 h-6 w-6" />
-                                    Register Now
-                                </a>
-                            </Button>
-                            <Button size="lg" variant="outline" className="w-full" asChild>
-                                <Link href="/membership">
-                                    <UserPlus className="mr-2 h-5 w-5" />
-                                    Become a Member
-                                </Link>
-                            </Button>
-                        </div>
+                        {isQuiz ? (
+                             <div className='space-y-3'>
+                                <Button size="lg" className="w-full text-lg py-6" asChild>
+                                  <Link href={`/academy/quiz/${webinar.id}`}>
+                                      <Trophy className="mr-2 h-6 w-6" />
+                                      Enter Arena
+                                  </Link>
+                                </Button>
+                             </div>
+                        ) : (
+                          <>
+                            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
+                              <p className="font-bold text-primary flex items-center justify-center gap-2"><Users className="h-5 w-5" /> 100+ People Registered!</p>
+                            </div>
+                            <div className='space-y-3'>
+                                <Button size="lg" className="w-full text-lg py-6" asChild>
+                                    <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
+                                        <Ticket className="mr-2 h-6 w-6" />
+                                        Register Now
+                                    </a>
+                                </Button>
+                                <Button size="lg" variant="outline" className="w-full" asChild>
+                                    <Link href="/membership">
+                                        <UserPlus className="mr-2 h-5 w-5" />
+                                        Become a Member
+                                    </Link>
+                                </Button>
+                            </div>
+                          </>
+                        )}
                     </>
                 );
             case 'REGISTRATION_CLOSED':
@@ -128,18 +144,27 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                  );
             case 'LIVE':
                  return (
-                    <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
-                        <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
-                            <PlayCircle className="mr-2 h-6 w-6" />
-                            Join Live Session
-                        </a>
-                    </Button>
+                    isQuiz ? (
+                         <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
+                            <Link href={`/academy/quiz/${webinar.id}`}>
+                                <Trophy className="mr-2 h-6 w-6" />
+                                Start Quiz Now
+                            </Link>
+                        </Button>
+                    ) : (
+                        <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
+                            <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
+                                <PlayCircle className="mr-2 h-6 w-6" />
+                                Join Live Session
+                            </a>
+                        </Button>
+                    )
                 );
             case 'ENDED':
                  return (
                      <>
                         <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
-                            Session Ended
+                            {isQuiz ? 'Competition Ended' : 'Session Ended'}
                         </Button>
                         {showCertificateInfo && (
                             <div className="text-center p-4 bg-blue-50 border-blue-200 border rounded-lg">
