@@ -53,37 +53,16 @@ export function MembershipForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    try {
-      const response = await fetch('/api/submit-membership', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.exists) {
-         toast({
-          variant: 'destructive',
-          title: 'You are Already a Member!',
-          description: "An application with this email address has already been submitted. Please check your email or contact support if you believe this is an error.",
-        });
-      } else if (response.ok && result.result === 'success') {
-        const newId = generateMembershipId(data.country);
-        setSubmissionData({ name: data.name, membershipId: newId });
-      } else {
-        throw new Error(result.message || 'An unknown error occurred.');
-      }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Could not submit your application. Please try again.';
-      toast({
-        variant: 'destructive',
-        title: 'Submission Failed',
-        description: errorMessage,
-      });
-    } finally {
+    // Simulate a successful submission for UI testing
+    setTimeout(() => {
+      const newId = generateMembershipId(data.country);
+      setSubmissionData({ name: data.name, membershipId: newId });
       setIsSubmitting(false);
-    }
+       toast({
+        title: 'Submission Successful!',
+        description: 'This is a test submission. No data was sent.',
+      });
+    }, 1000);
   };
 
   const copyToClipboard = () => {
@@ -203,7 +182,7 @@ export function MembershipForm() {
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <SelectTrigger id="country">
                                         <SelectValue placeholder="Select your country..." />
-                                    </SelectTrigger>
+                                    </Trigger>
                                     <SelectContent>
                                         {countries.map(country => <SelectItem key={country.code} value={country.name}>{country.name}</SelectItem>)}
                                     </SelectContent>
