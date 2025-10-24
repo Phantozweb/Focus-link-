@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   // IMPORTANT: Replace this with your actual Google Apps Script URL
-  const scriptUrl = "YOUR_APPS_SCRIPT_URL_HERE";
+  const scriptUrl = "https://script.google.com/macros/s/AKfycby-2FKK9TD_UwJ0ZlX2gsYkL9YYjCeqLjMdvQbE46s3qR6LkCKjOdTjhpCf6cyUJfHm/exec";
   
   try {
     const data = await request.json();

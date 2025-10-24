@@ -10,13 +10,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, PlusCircle, Trash2, User, Save } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2, User, Save, Upload, Image as ImageIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function CreateProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [previewUrl, setPreviewUrl] = useState('');
   const { toast } = useToast();
   const router = useRouter();
   
@@ -44,6 +47,56 @@ export default function CreateProfilePage() {
   const { fields: expFields, add: addExp, remove: removeExp } = useDynamicFields(form, 'workExperience');
   const { fields: eduFields, add: addEdu, remove: removeEdu } = useDynamicFields(form, 'education');
 
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+    if (!apiKey) {
+      setUploadStatus('Error: ImgBB API key is not configured.');
+      toast({
+        variant: 'destructive',
+        title: 'Image Upload Error',
+        description: 'The ImgBB API key is missing. Please configure it in your environment variables.',
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploadStatus('Uploading...');
+
+    try {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        const imageUrl = data.data.url;
+        setUploadStatus('Upload successful!');
+        setPreviewUrl(imageUrl);
+        form.setValue('avatarUrl', imageUrl);
+        toast({
+          title: 'Image Uploaded',
+          description: 'Your profile picture has been successfully uploaded.',
+        });
+      } else {
+        throw new Error(data.error?.message || 'Unknown upload error');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+      setUploadStatus(`Error: ${errorMessage}`);
+      toast({
+        variant: 'destructive',
+        title: 'Upload Failed',
+        description: errorMessage,
+      });
+    }
+  };
+  
   const onSubmit = async (data: UserProfile) => {
     setIsSubmitting(true);
     
@@ -147,9 +200,25 @@ export default function CreateProfilePage() {
                         <Input id="linkedin" {...form.register('links.linkedin')} />
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="avatarUrl">Profile Picture URL</Label>
-                    <Input id="avatarUrl" {...form.register('avatarUrl')} placeholder="https://example.com/your-photo.jpg" />
+              </section>
+
+              {/* Avatar Upload */}
+              <section className="space-y-4">
+                <h3 className="text-lg font-semibold border-b pb-2">Profile Picture</h3>
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                    {previewUrl ? (
+                      <Image src={previewUrl} alt="Profile preview" width={96} height={96} className="object-cover w-full h-full" />
+                    ) : (
+                      <ImageIcon className="w-10 h-10 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-grow">
+                     <Label htmlFor="avatarUpload" className="block mb-2">Upload an Image</Label>
+                    <Input id="avatarUpload" type="file" accept="image/*" onChange={handleImageUpload} className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                    {uploadStatus && <p className="text-sm text-muted-foreground mt-2">{uploadStatus}</p>}
+                    <input type="hidden" {...form.register('avatarUrl')} />
+                  </div>
                 </div>
               </section>
               
