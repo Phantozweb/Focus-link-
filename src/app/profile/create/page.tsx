@@ -13,10 +13,12 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, PlusCircle, Trash2, User, Save } from 'lucide-react';
 import { useState } from 'react';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
+import { useRouter } from 'next/navigation';
 
 export default function CreateProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
   
   const form = useForm<UserProfile>({
     resolver: zodResolver(UserProfileSchema),
@@ -44,29 +46,54 @@ export default function CreateProfilePage() {
 
   const onSubmit = async (data: UserProfile) => {
     setIsSubmitting(true);
-    console.log("Submitting data:", data);
     
-    // Here you would make an API call to your backend to save the profile data
-    // For this demo, we'll simulate an API call
+    const payload = {
+        ...data,
+        skills: JSON.stringify(data.skills.map(s => s.value)),
+        interests: JSON.stringify(data.interests.map(i => i.value)),
+        languages: JSON.stringify(data.languages.map(l => l.value)),
+        workExperience: JSON.stringify(data.workExperience),
+        education: JSON.stringify(data.education),
+    };
+    
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      // const response = await fetch('/api/create-profile', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data),
-      // });
-      // if (!response.ok) throw new Error('Failed to save profile.');
-
-      toast({
-        title: 'Profile Saved!',
-        description: 'Your professional profile has been created successfully.',
+      const response = await fetch('/api/create-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to save profile.');
+      }
+
+      if (result.exists) {
+         toast({
+            variant: 'destructive',
+            title: 'Profile Already Exists',
+            description: 'A profile with this Membership ID already exists.',
+         });
+      } else {
+        toast({
+          title: 'Profile Saved!',
+          description: 'Your professional profile has been created successfully.',
+        });
+        // Redirect to their new profile page after a short delay
+        setTimeout(() => {
+            // In a real app, you'd get the new profile ID from the response
+            // For now, we'll just redirect to the directory
+            router.push('/directory/all');
+        }, 1500);
+      }
+
     } catch (error) {
+       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
       toast({
         variant: 'destructive',
         title: 'Save Failed',
-        description: 'Could not save your profile at this time. Please try again.',
+        description: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
@@ -93,7 +120,7 @@ export default function CreateProfilePage() {
                 <h3 className="text-lg font-semibold border-b pb-2">Basic Information</h3>
                 <div className="space-y-2">
                   <Label htmlFor="membershipId">Membership ID</Label>
-                  <Input id="membershipId" placeholder="Enter the ID you received upon registration" />
+                  <Input id="membershipId" {...form.register('id')} placeholder="Enter the ID you received upon registration" />
                   <p className="text-xs text-muted-foreground">Required to link your profile to your membership.</p>
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -221,5 +248,3 @@ export default function CreateProfilePage() {
     </div>
   );
 }
-
-    
