@@ -10,7 +10,7 @@ export function useDynamicFields(form: any, fieldName: string) {
     name: fieldName,
   });
 
-  const add = (defaultValue: any = {}) => {
+  const add = (defaultValue: any) => {
     let newItem = defaultValue;
     if (fieldName === 'skills' || fieldName === 'interests' || fieldName === 'languages') {
         newItem = { value: '' };
@@ -28,5 +28,3 @@ export function useDynamicFields(form: any, fieldName: string) {
     remove,
   };
 }
-
-    

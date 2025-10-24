@@ -10,17 +10,28 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, PlusCircle, Trash2, User, Save, Upload, Image as ImageIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Loader2, PlusCircle, Trash2, User, Save, Upload, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDynamicFields } from '@/hooks/use-dynamic-fields';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Debounce function
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+
 export default function CreateProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
+  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
   const { toast } = useToast();
   const router = useRouter();
   
@@ -40,7 +51,35 @@ export default function CreateProfilePage() {
       education: [{ school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' }],
       avatarUrl: '',
     },
+    mode: 'onChange',
   });
+  
+  const membershipId = form.watch('id');
+
+  const checkIdValidity = useCallback(debounce(async (id: string) => {
+    if (!id || id.trim().length < 5) {
+      setIdStatus('idle');
+      return;
+    }
+    setIdStatus('loading');
+    try {
+      const response = await fetch(`/api/verify-id?id=${id}`);
+      const data = await response.json();
+      if (data.isValid) {
+        setIdStatus('valid');
+      } else {
+        setIdStatus('invalid');
+      }
+    } catch (error) {
+      console.error('ID validation failed:', error);
+      setIdStatus('invalid');
+    }
+  }, 500), []);
+
+  useEffect(() => {
+    checkIdValidity(membershipId || '');
+  }, [membershipId, checkIdValidity]);
+
 
   const { fields: skillFields, add: addSkill, remove: removeSkill } = useDynamicFields(form, 'skills');
   const { fields: interestFields, add: addInterest, remove: removeInterest } = useDynamicFields(form, 'interests');
@@ -53,16 +92,7 @@ export default function CreateProfilePage() {
     if (!file) return;
 
     const apiKey = '58bcdc0482981150fadb03eb2d91b2dc';
-    if (!apiKey) {
-      setUploadStatus('Error: ImgBB API key is not configured.');
-      toast({
-        variant: 'destructive',
-        title: 'Image Upload Error',
-        description: 'The ImgBB API key is missing. Please configure it in your environment variables.',
-      });
-      return;
-    }
-
+    
     const formData = new FormData();
     formData.append('image', file);
     setUploadStatus('Uploading...');
@@ -138,10 +168,8 @@ export default function CreateProfilePage() {
           title: 'Profile Saved!',
           description: 'Your professional profile has been created successfully.',
         });
-        // Redirect to the main directory after a short delay
-        setTimeout(() => {
-            router.push('/directory/all');
-        }, 1500);
+        // Redirect to the new profile page
+        router.push(`/profile/${data.id}`);
       } else {
         // Handle any other unexpected responses from the script
         throw new Error(result.message || 'An unexpected response was received from the server.');
@@ -179,8 +207,16 @@ export default function CreateProfilePage() {
                 <h3 className="text-lg font-semibold border-b pb-2">Basic Information</h3>
                 <div className="space-y-2">
                   <Label htmlFor="membershipId">Membership ID</Label>
-                  <Input id="membershipId" {...form.register('id')} placeholder="Enter the ID you received upon registration" />
+                  <div className="relative">
+                    <Input id="membershipId" {...form.register('id')} placeholder="Enter the ID you received upon registration" />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+                        {idStatus === 'valid' && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+                        {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                    </div>
+                  </div>
                   {form.formState.errors.id && <p className="text-sm text-destructive">{form.formState.errors.id.message}</p>}
+                   {idStatus === 'invalid' && <p className="text-sm text-destructive">This Membership ID is not valid.</p>}
                   <p className="text-xs text-muted-foreground">
                     A Membership ID is required to create a profile. If you don't have one,{' '}
                     <Link href="/membership" className="text-primary underline font-semibold">get one for free</Link>.
@@ -291,7 +327,7 @@ export default function CreateProfilePage() {
                     </Button>
                   </div>
                 ))}
-                <Button type="button" variant="outline" size="sm" onClick={() => addExp()}><PlusCircle className="mr-2 h-4 w-4" />Add Experience</Button>
+                <Button type="button" variant="outline" size="sm" onClick={() => addExp({ title: '', company: '', startDate: '', endDate: '', description: '' })}><PlusCircle className="mr-2 h-4 w-4" />Add Experience</Button>
               </section>
               
               {/* Dynamic Fields: Education */}
@@ -313,10 +349,10 @@ export default function CreateProfilePage() {
                     </Button>
                   </div>
                 ))}
-                <Button type="button" variant="outline" size="sm" onClick={() => addEdu()}><PlusCircle className="mr-2 h-4 w-4" />Add Education</Button>
+                <Button type="button" variant="outline" size="sm" onClick={() => addEdu({ school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' })}><PlusCircle className="mr-2 h-4 w-4" />Add Education</Button>
               </section>
 
-              <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+              <Button type="submit" className="w-full" size="lg" disabled={isSubmitting || idStatus !== 'valid'}>
                 {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                 Save Profile
               </Button>
