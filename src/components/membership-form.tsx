@@ -31,9 +31,8 @@ const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalm
 const formSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   email: z.string().email('Invalid email address'),
-  countryCode: z.string().min(1, 'Country code is required'),
-  whatsapp: z.string().min(5, 'A valid WhatsApp number is required'),
-  linkedin: z.string().url('Please enter a valid LinkedIn URL').optional().or(z.literal('')),
+  whatsapp: z.string().startsWith('+', { message: "Number must include country code (e.g., +91...)"}).min(8, 'Please enter a valid WhatsApp number'),
+  linkedin: z.string().optional().or(z.literal('')),
   role: z.enum(profileTypes, { required_error: 'Please select your role' }),
   country: z.string().min(2, 'Please select your country'),
   location: z.string().min(2, 'City and State/Region are required'),
@@ -48,10 +47,7 @@ export function MembershipForm() {
   const [errorDialog, setErrorDialog] = useState<{open: boolean; message: string;}>({open: false, message: ''});
   const { toast } = useToast();
   const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      countryCode: '+91'
-    }
+    resolver: zodResolver(formSchema)
   });
 
   const generateMembershipId = (countryName: string) => {
@@ -71,16 +67,18 @@ export function MembershipForm() {
     setIsSubmitting(true);
     const newId = generateMembershipId(data.country);
     
+    let fullLinkedinUrl = data.linkedin;
+    if (fullLinkedinUrl && !fullLinkedinUrl.startsWith('http')) {
+        fullLinkedinUrl = `https://${fullLinkedinUrl}`;
+    }
+
     const payload = {
       timestamp: new Date().toISOString(),
       membershipId: newId,
       ...data,
-      whatsapp: `${data.countryCode}${data.whatsapp}` // Combine country code and number
+      linkedin: fullLinkedinUrl,
     };
-    // We don't need countryCode in the final payload
-    delete (payload as any).countryCode;
-
-
+    
     try {
       const response = await fetch('/api/submit-membership', {
         method: 'POST',
@@ -167,7 +165,7 @@ export function MembershipForm() {
             </CardHeader>
             <CardContent className="space-y-4 text-sm">
               <div className="flex items-center"><Mail className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.email}</div>
-              <div className="flex items-center"><Phone className="h-4 w-4 mr-3 text-muted-foreground" /> {`${submissionData.countryCode} ${submissionData.whatsapp}`}</div>
+              <div className="flex items-center"><Phone className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.whatsapp}</div>
               {submissionData.linkedin && <div className="flex items-center"><Globe className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.linkedin}</div>}
               <div className="flex items-center"><Briefcase className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.role}</div>
               <div className="flex items-center"><MapPin className="h-4 w-4 mr-3 text-muted-foreground" /> {submissionData.location}, {submissionData.country}</div>
@@ -234,32 +232,13 @@ export function MembershipForm() {
             </div>
              <div className="space-y-2">
                 <Label htmlFor="whatsapp">WhatsApp Number</Label>
-                <div className="flex gap-2">
-                    <Controller
-                        name="countryCode"
-                        control={control}
-                        render={({ field }) => (
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <SelectTrigger className="w-1/3">
-                                    <SelectValue placeholder="+91" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="+91">IN (+91)</SelectItem>
-                                    <SelectItem value="+1">US (+1)</SelectItem>
-                                    <SelectItem value="+44">UK (+44)</SelectItem>
-                                    <SelectItem value="+61">AU (+61)</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        )}
-                    />
-                    <Input id="whatsapp" type="tel" {...register('whatsapp')} className="w-2/3" placeholder="9876543210" />
-                </div>
-                {(errors.countryCode || errors.whatsapp) && <p className="text-sm text-destructive">{errors.countryCode?.message || errors.whatsapp?.message}</p>}
+                <Input id="whatsapp" type="tel" {...register('whatsapp')} placeholder="+919876543210" />
+                {errors.whatsapp && <p className="text-sm text-destructive">{errors.whatsapp.message}</p>}
             </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="linkedin">LinkedIn Profile URL (or Website for Orgs)</Label>
-            <Input id="linkedin" {...register('linkedin')} placeholder="https://linkedin.com/in/your-profile" />
+            <Input id="linkedin" {...register('linkedin')} placeholder="linkedin.com/in/your-profile" />
             {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -317,5 +296,3 @@ export function MembershipForm() {
     </>
   );
 }
-
-    
