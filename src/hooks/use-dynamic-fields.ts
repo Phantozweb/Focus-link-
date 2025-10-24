@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useFieldArray } from 'react-hook-form';
@@ -9,8 +10,8 @@ export function useDynamicFields(form: any, fieldName: string) {
     name: fieldName,
   });
 
-  const add = () => {
-    let newItem: any = {};
+  const add = (defaultValue: any = {}) => {
+    let newItem = defaultValue;
     if (fieldName === 'skills' || fieldName === 'interests' || fieldName === 'languages') {
         newItem = { value: '' };
     } else if (fieldName === 'workExperience') {
@@ -27,3 +28,5 @@ export function useDynamicFields(form: any, fieldName: string) {
     remove,
   };
 }
+
+    
