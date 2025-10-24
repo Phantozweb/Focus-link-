@@ -51,7 +51,7 @@ export default function CreateProfilePage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+    const apiKey = '58bcdc0482981150fadb03eb2d91b2dc';
     if (!apiKey) {
       setUploadStatus('Error: ImgBB API key is not configured.');
       toast({
