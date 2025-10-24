@@ -5,8 +5,9 @@ import { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Trophy } from 'lucide-react';
+import { Trophy, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Card, CardContent } from './ui/card';
 
 export type LeaderboardEntry = {
   rank: number;
@@ -23,6 +24,20 @@ interface LeaderboardProps {
 
 export function Leaderboard({ data, itemsPerPage = 10 }: LeaderboardProps) {
   const [currentPage, setCurrentPage] = useState(1);
+
+  if (!data || data.length === 0) {
+    return (
+        <Card className="text-center">
+            <CardContent className="p-8">
+                <Info className="h-10 w-10 text-muted-foreground mx-auto mb-4" />
+                <h3 className="font-semibold text-xl">The Leaderboard is Empty</h3>
+                <p className="text-muted-foreground mt-1">
+                    No participants have completed the quiz yet. Be the first to make it to the top!
+                </p>
+            </CardContent>
+        </Card>
+    );
+  }
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;

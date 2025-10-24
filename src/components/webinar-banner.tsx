@@ -19,6 +19,7 @@ interface WebinarBannerProps {
 export function WebinarBanner({ webinar, className, variant = 'default' }: WebinarBannerProps) {
   const isCard = variant === 'card';
   const [status, setStatus] = useState<'UPCOMING' | 'LIVE' | 'ENDED'>('UPCOMING');
+  const isQuiz = webinar.id === 'eye-q-arena-2025';
 
   useEffect(() => {
     const calculateState = () => {
@@ -54,15 +55,28 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
         );
     }
     
-    const isPast = status === 'ENDED';
+    if (status === 'ENDED') {
+        return (
+            <div className="absolute top-4 left-4 z-20">
+                <Badge variant="destructive" className={cn("bg-red-100/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm text-red-900")}>
+                    <XCircle className="h-4 w-4" />
+                    Event Ended
+                </Badge>
+            </div>
+        );
+    }
+
+    // UPCOMING
+    const badgeText = isQuiz ? 'Upcoming Quiz' : 'Upcoming Webinar';
     return (
      <div className="absolute top-4 left-4 z-20">
-      <Badge variant={isPast ? "destructive" : "secondary"} className={cn("bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm", isPast ? 'bg-red-100/80 text-red-900' : 'bg-green-100/80 text-green-900')}>
-        {isPast ? <XCircle className="h-4 w-4" /> : <Ticket className="h-4 w-4" />}
-        {isPast ? 'Event Ended' : 'Registration Open'}
+      <Badge variant="secondary" className={cn("bg-white/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm", 'bg-blue-100/80 text-blue-900')}>
+        <Calendar className="h-4 w-4" />
+        {badgeText}
       </Badge>
     </div>
-  )};
+    );
+  };
 
 
   if (isCard) {

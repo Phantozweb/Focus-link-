@@ -143,6 +143,9 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     notFound();
   }
 
+  const eventStartTime = new Date(webinar.dateTime).getTime();
+  const hasStarted = new Date().getTime() >= eventStartTime;
+
   const eventSchema = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -326,7 +329,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
                       {isQuiz ? <QuizOrganizers webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
 
-                       {isQuiz && (
+                       {isQuiz && hasStarted && (
                         <>
                           <Separator />
                           <section>
@@ -335,7 +338,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                     <Trophy className="text-amber-500"/>
                                     Live Leaderboard
                                 </h3>
-                                <p className="text-sm text-muted-foreground font-semibold">{demoLeaderboardData.length} Participants</p>
+                                {demoLeaderboardData.length > 0 && <p className="text-sm text-muted-foreground font-semibold">{demoLeaderboardData.length} Participants</p>}
                             </div>
                             <Leaderboard data={demoLeaderboardData} itemsPerPage={30} />
                           </section>

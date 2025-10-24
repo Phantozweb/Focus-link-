@@ -4,7 +4,10 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 
@@ -18,6 +21,37 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
     <span className="text-xs text-muted-foreground uppercase">{label}</span>
   </div>
 );
+
+function QuizEntryDialog({ webinarId }: { webinarId: string }) {
+  const [membershipId, setMembershipId] = useState('');
+  return (
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Enter Your Membership ID</DialogTitle>
+        <DialogDescription>
+          Please enter your Focus Links membership ID to participate in the Eye Q Arena.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="space-y-4 py-4">
+        <div className="space-y-2">
+          <Label htmlFor="membership-id">Membership ID</Label>
+          <Input 
+            id="membership-id" 
+            value={membershipId}
+            onChange={(e) => setMembershipId(e.target.value)}
+            placeholder="e.g., FL-12345" 
+          />
+        </div>
+      </div>
+      <Button asChild disabled={!membershipId}>
+        <Link href={`/academy/quiz/${webinarId}`}>
+          <Trophy className="mr-2 h-4 w-4" />
+          Start Quiz
+        </Link>
+      </Button>
+    </DialogContent>
+  )
+}
 
 export function WebinarActions({ webinar }: WebinarActionsProps) {
     const [status, setStatus] = useState<'UPCOMING' | 'REGISTRATION_CLOSED' | 'LIVE' | 'ENDED'>('UPCOMING');
@@ -99,14 +133,15 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             </div>
                         </div>
                         {isQuiz ? (
-                             <div className='space-y-3'>
-                                <Button size="lg" className="w-full text-lg py-6" asChild>
-                                  <Link href={`/academy/quiz/${webinar.id}`}>
-                                      <Trophy className="mr-2 h-6 w-6" />
-                                      Enter Arena
-                                  </Link>
-                                </Button>
-                             </div>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button size="lg" className="w-full text-lg py-6">
+                                        <Trophy className="mr-2 h-6 w-6" />
+                                        Enter Arena
+                                    </Button>
+                                </DialogTrigger>
+                                <QuizEntryDialog webinarId={webinar.id} />
+                            </Dialog>
                         ) : (
                           <>
                             <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
@@ -145,12 +180,15 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             case 'LIVE':
                  return (
                     isQuiz ? (
-                         <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
-                            <Link href={`/academy/quiz/${webinar.id}`}>
-                                <Trophy className="mr-2 h-6 w-6" />
-                                Start Quiz Now
-                            </Link>
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                              <Button size="lg" className="w-full text-lg py-6 animate-pulse">
+                                  <Trophy className="mr-2 h-6 w-6" />
+                                  Enter Arena Now
+                              </Button>
+                          </DialogTrigger>
+                          <QuizEntryDialog webinarId={webinar.id} />
+                        </Dialog>
                     ) : (
                         <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
                             <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">

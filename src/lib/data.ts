@@ -139,10 +139,4 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
   },
 ];
 
-export const demoLeaderboardData: LeaderboardEntry[] = Array.from({ length: 100 }, (_, i) => ({
-  rank: i + 1,
-  avatar: `https://picsum.photos/seed/leader${i + 1}/40/40`,
-  name: `Participant ${100 - i}`, // To make it seem like names are random
-  score: 100 - i,
-  time: `${Math.floor(Math.random() * 20) + 20}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
-}));
+export const demoLeaderboardData: LeaderboardEntry[] = [];
