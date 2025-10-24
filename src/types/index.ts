@@ -40,7 +40,7 @@ export type UserProfile = {
 };
 
 export const UserProfileSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().min(1, "Membership ID is required."),
   name: z.string().min(2, "Name must be at least 2 characters."),
   type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry']),
   location: z.string(),
@@ -70,5 +70,3 @@ export const UserProfileSchema = z.object({
   verified: z.boolean().optional(),
   languages: z.array(z.object({ value: z.string().min(1, "Language cannot be empty.") })),
 });
-
-    
