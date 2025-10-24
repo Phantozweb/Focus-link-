@@ -47,7 +47,7 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
          <div className="text-sm text-muted-foreground">
             Not a member yet?{' '}
             <Button variant="link" asChild className="p-0 h-auto">
-                <Link href="/membership">Join for free</Link>
+                <Link href="/membership#membership-join">Join for free</Link>
             </Button>
         </div>
         <Button asChild disabled={!membershipId}>
@@ -141,10 +141,15 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             </div>
                         </div>
                         {isQuiz ? (
-                             <Button size="lg" className="w-full text-lg py-6" disabled>
-                                <Lock className="mr-2 h-6 w-6" />
-                                Arena Locked
-                            </Button>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                  <Button size="lg" className="w-full text-lg py-6">
+                                      <Trophy className="mr-2 h-6 w-6" />
+                                      Enter Arena Now
+                                  </Button>
+                              </DialogTrigger>
+                              <QuizEntryDialog webinarId={webinar.id} />
+                            </Dialog>
                         ) : (
                           <>
                             <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
