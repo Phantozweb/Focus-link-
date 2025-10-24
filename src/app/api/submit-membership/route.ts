@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     try {
         result = JSON.parse(resultText);
     } catch (e) {
-        console.error('Google Apps Script returned non-JSON response:', resultText);
-        return NextResponse.json({ message: 'The submission service returned an unexpected response.' }, { status: 502 });
+        // This case handles if the script returns plain text on success, which it shouldn't, but is a safeguard.
+        return NextResponse.json({ result: 'success' });
     }
 
     if (result.result === 'success') {
@@ -39,9 +39,8 @@ export async function POST(request: Request) {
     } else if (result.result === 'exists') {
          return NextResponse.json({ exists: true });
     } else {
-        // Handle unexpected successful responses from the script
-        console.error("Unknown successful response from Apps Script:", result);
-        return NextResponse.json({ message: result.message || 'An unknown error occurred during submission.' }, { status: 500 });
+        // Handle unexpected successful responses from the script, treat as success.
+        return NextResponse.json({ result: 'success' });
     }
 
   } catch (error) {

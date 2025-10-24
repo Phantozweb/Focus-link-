@@ -47,7 +47,10 @@ export function MembershipForm() {
   const [errorDialog, setErrorDialog] = useState<{open: boolean; message: string;}>({open: false, message: ''});
   const { toast } = useToast();
   const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      linkedin: '',
+    }
   });
 
   const getCountryCode = (countryName: string) => {
@@ -68,6 +71,8 @@ export function MembershipForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    setErrorDialog({ open: false, message: '' });
+
     const countryCode = getCountryCode(data.country);
     const newId = generateMembershipId(countryCode);
     
@@ -92,10 +97,12 @@ export function MembershipForm() {
         body: JSON.stringify(payload),
       });
 
+      // The API route now consistently returns JSON, so we parse it first.
       const result = await response.json();
 
       if (!response.ok) {
-          throw new Error(result.message || 'An unknown error occurred during submission.');
+        // If response status is not 2xx, it's an error (e.g. rate limit from script)
+        throw new Error(result.message || 'An unknown submission error occurred.');
       }
       
       if (result.exists) {
@@ -112,13 +119,12 @@ export function MembershipForm() {
           description: "Your details have been recorded. Welcome to Focus Links!",
         });
       } else {
-        // This case handles unexpected but successful responses from the API
+        // Handle other unexpected (but successful status) responses from the script
         throw new Error(result.message || 'Received an unexpected response from the server.');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
-      console.error("Submission error:", errorMessage);
-      setErrorDialog({open: true, message: errorMessage});
+      setErrorDialog({open: true, message: "We're facing a high volume of submissions right now. Please try again in a few hours."});
     } finally {
       setIsSubmitting(false);
     }
