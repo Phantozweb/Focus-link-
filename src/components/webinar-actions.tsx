@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock } from 'lucide-react';
@@ -43,12 +43,20 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
           />
         </div>
       </div>
-      <Button asChild disabled={!membershipId}>
-        <Link href={`/academy/quiz/${webinarId}`}>
-          <Trophy className="mr-2 h-4 w-4" />
-          Start Quiz
-        </Link>
-      </Button>
+      <DialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-2">
+         <div className="text-sm text-muted-foreground">
+            Not a member yet?{' '}
+            <Button variant="link" asChild className="p-0 h-auto">
+                <Link href="/membership">Join for free</Link>
+            </Button>
+        </div>
+        <Button asChild disabled={!membershipId}>
+            <Link href={`/academy/quiz/${webinarId}`}>
+            <Trophy className="mr-2 h-4 w-4" />
+            Start Quiz
+            </Link>
+        </Button>
+      </DialogFooter>
     </DialogContent>
   )
 }
@@ -133,15 +141,10 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             </div>
                         </div>
                         {isQuiz ? (
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button size="lg" className="w-full text-lg py-6">
-                                        <Trophy className="mr-2 h-6 w-6" />
-                                        Enter Arena
-                                    </Button>
-                                </DialogTrigger>
-                                <QuizEntryDialog webinarId={webinar.id} />
-                            </Dialog>
+                             <Button size="lg" className="w-full text-lg py-6" disabled>
+                                <Lock className="mr-2 h-6 w-6" />
+                                Arena Locked
+                            </Button>
                         ) : (
                           <>
                             <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
