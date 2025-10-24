@@ -52,13 +52,23 @@ export const webinars: Webinar[] = [
     title: 'Eye Q Arena 2025: The International Optometry Knowledge Championship',
     description: `**"Where Global Vision Meets Knowledge."**
 
-**Eye Q Arena 2025** is an international-level optometry quiz competition that brings together passionate optometry students, interns, and professionals from across the globe.
+**Eye Q Arena 2025** is an international-level optometry quiz competition that brings together passionate optometry students, interns, and professionals from across the globe. Organized by FocusLinks — The World’s Largest Eye Care Community, this event aims to promote academic excellence, global collaboration, and clinical reasoning skills in the field of eye care.
 
-Organized by FocusLinks — The World’s Largest Eye Care Community, this event aims to promote academic excellence, global collaboration, and clinical reasoning skills in the field of eye care.
-
-Participants will engage in a **60-minute timed challenge with 100 questions**, covering essential and emerging areas of optometry. Scores, accuracy, and completion time will determine placement on the global leaderboard, recognizing the best minds in vision science.
+Participants will engage in a **60-minute timed challenge with 100 questions**, covering essential and emerging areas of optometry. This is your chance to test your knowledge from the anterior to the posterior segment of the eye. Scores, accuracy, and completion time will determine placement on the global leaderboard, recognizing the best minds in vision science.
 
 Step into the Arena — Compete, Learn, and Lead the Vision.
+
+### Rules & Regulations
+- **Membership Required**: To participate, you must be a member of Focus Links. <a href="/membership" class="text-primary underline">Join for free</a> if you haven't already.
+- **Single Attempt**: Each participant is allowed only one attempt at the quiz.
+- **Fair Play**: Any form of malpractice will result in immediate disqualification.
+- **Certification**: All participants receive a digital certificate. Top performers earn a Certificate of Excellence.
+
+### Instructions for Participants
+- The quiz will be available on the event start date.
+- You will have 60 minutes to answer 100 multiple-choice questions.
+- A stable internet connection is required.
+- Your final score and time will be recorded for the leaderboard.
 
 ### Event Highlights:
 - **International-Level Competition**: Open to optometry students & practitioners worldwide.
@@ -68,7 +78,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
 - **Organized by FocusLinks**: Global Eye Care Community.
 - **Networking & Global Recognition**: An opportunity to shine.
 
-### Quiz Modules:
+---QUIZ_MODULES_TABLE---
 | Module | Topic | Questions |
 |---|---|---|
 | 1 | Eyelids & Adnexa | 10 |
@@ -94,7 +104,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
     platform: 'Online Platform',
     dateTime: '2025-11-15T13:00:00Z',
     duration: '60 minutes',
-    tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals'],
+    tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment'],
     registrationLink: '#',
   }
 ];
