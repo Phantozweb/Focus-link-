@@ -38,9 +38,9 @@ export const webinars: Webinar[] = [
       title: 'Managing Director of Academic, Focus Links'
     },
     platform: 'Google Meet',
-    dateTime: '2024-10-05T04:30:00Z', // This is a past date
+    dateTime: '2025-10-05T04:30:00Z',
     duration: '60 minutes',
-    tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Past Event', 'First Webinar'],
+    tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Upcoming'],
     registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
     attendance: {
       registered: 114,
@@ -49,8 +49,8 @@ export const webinars: Webinar[] = [
   },
   {
     id: 'quiz-event-1',
-    title: 'The Ultimate Optometry Quiz Challenge',
-    description: "Test your knowledge and compete against peers in our first-ever Ultimate Optometry Quiz Challenge! This exciting event, officially conducted by Focus Links, will cover a wide range of topics from clinical optometry to optical physics. It's a fun way to learn, challenge yourself, and win bragging rights. The event is expertly organized and hosted by the knowledgeable **V.M. Ram Kumar**.",
+    title: 'Clinical Crossroads: An Optometry Quiz Challenge',
+    description: "Test your knowledge and compete against peers in our first-ever Optometry Quiz Challenge! This exciting event, officially conducted by Focus Links, will cover a wide range of topics from clinical optometry to optical physics. It's a fun way to learn, challenge yourself, and win bragging rights. The event is expertly organized and hosted by the knowledgeable **V.M. Ram Kumar**.",
     speaker: {
       name: 'V.M. Ram Kumar',
       title: 'M.Sc. Optometry | Lecturer & Clinical Optometrist',
@@ -61,7 +61,7 @@ export const webinars: Webinar[] = [
       title: 'Official Organizer'
     },
     platform: 'Google Meet',
-    dateTime: '2024-11-15T13:00:00Z',
+    dateTime: '2025-11-15T13:00:00Z',
     duration: '90 minutes',
     tags: ['Quiz', 'Student Event', 'Clinical Knowledge', 'Upcoming'],
     registrationLink: '#',
