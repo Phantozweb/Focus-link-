@@ -38,7 +38,18 @@ export function MembershipForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const generateMembershipId = () => `FL-${Math.floor(10000 + Math.random() * 90000)}`;
+  const generateMembershipId = (countryName: string) => {
+    const country = countries.find(c => c.name === countryName);
+    const countryCode = country ? country.code : 'XX';
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    return `${countryCode}${year}${month}${day}${hours}${minutes}${seconds}`;
+  };
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -58,7 +69,7 @@ export function MembershipForm() {
           description: "An application with this email address has already been submitted. Please check your email or contact support if you believe this is an error.",
         });
       } else if (response.ok && result.result === 'success') {
-        const newId = generateMembershipId();
+        const newId = generateMembershipId(data.country);
         setSubmissionData({ name: data.name, membershipId: newId });
       } else {
         throw new Error(result.message || 'An unknown error occurred.');
@@ -94,25 +105,27 @@ export function MembershipForm() {
           </div>
           <CardTitle className="text-3xl font-headline mt-4">Welcome, {submissionData.name}!</CardTitle>
           <CardDescription className="mt-1 text-base">
-            Your application has been submitted successfully. Here is your temporary membership ID.
+            Your application has been submitted successfully. Please save your permanent Membership ID.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="p-4 bg-muted rounded-lg">
-            <Label>Your Membership ID</Label>
+            <Label>Your Official Membership ID</Label>
             <div className="flex items-center justify-center gap-2 mt-2">
               <p className="text-2xl font-bold font-mono text-primary tracking-widest">{submissionData.membershipId}</p>
               <Button variant="ghost" size="icon" onClick={copyToClipboard}>
                 <Copy className="h-5 w-5" />
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">Keep this ID safe. You'll receive an official confirmation via email.</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              **Important:** Please save this ID. You will need it for all future events and interactions.
+            </p>
           </div>
           <Alert>
             <MessageCircle className="h-4 w-4" />
             <AlertTitle>What's Next?</AlertTitle>
             <AlertDescription>
-              While our team verifies your application (48-72 hours), join our WhatsApp community for instant updates and networking!
+              While we verify your application (48-72 hours), join our WhatsApp community for instant updates and networking!
             </AlertDescription>
           </Alert>
           <Button size="lg" className="w-full" asChild>
