@@ -2,60 +2,46 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-  // IMPORTANT: Replace this with your actual Google Apps Script URL
-  const scriptUrl = process.env.GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbzpxTTUokGUhshRGb5a0jUaXMUi0RVNfIRxqfs1bBQGRVEbS15rDReIeBFxL13dM31-/exec";
-  
-  if (!scriptUrl) {
-    console.error('Google Script URL is not defined in environment variables.');
-    return NextResponse.json({ result: 'error', message: 'Server configuration error.' }, { status: 500 });
-  }
+  // IMPORTANT: This is your actual Google Apps Script URL
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbzpxTTUokGUhshRGb5a0jUaXMUi0RVNfIRxqfs1bBQGRVEbS15rDReIeBFxL13dM31-/exec";
   
   try {
     const data = await request.json();
 
-    // Step 1: Check if email exists by making a GET request to the script
-    // Your Apps Script needs to handle GET requests with an 'email' query parameter.
-    const checkEmailUrl = `${scriptUrl}?email=${encodeURIComponent(data.email)}`;
-    const emailCheckResponse = await fetch(checkEmailUrl, {
-        method: 'GET',
-        redirect: 'follow',
-    });
-    
-    if (!emailCheckResponse.ok) {
-        const errorText = await emailCheckResponse.text();
-        console.error('Google Apps Script (GET) returned an error:', errorText);
-        return NextResponse.json({ result: 'error', message: 'Error checking email with the database.' }, { status: emailCheckResponse.status });
-    }
-
-    const emailCheckResult = await emailCheckResponse.json();
-
-    if (emailCheckResult.exists) {
-        return NextResponse.json({ exists: true });
-    }
-
-    // Step 2: If email doesn't exist, proceed with submission (POST)
-    // Your Apps Script needs to handle POST requests with the full data payload.
-    const postResponse = await fetch(scriptUrl, {
+    // The Apps Script should handle both email checking and data submission.
+    // We send all data in a single POST request.
+    const response = await fetch(scriptUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...data, action: 'submit' }), // Add an action for routing in Apps Script
-        redirect: 'follow',
+        body: JSON.stringify(data),
+        redirect: 'follow', // Important for Google Apps Scripts
     });
 
-    if (!postResponse.ok) {
-        const errorText = await postResponse.text();
-        console.error('Google Apps Script (POST) returned an error:', errorText);
-        return NextResponse.json({ result: 'error', message: 'Error submitting data to the database.' }, { status: postResponse.status });
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Google Apps Script returned an error:', errorText);
+        // Try to parse the error as JSON, but fall back to the raw text if it's not.
+        try {
+          const errorJson = JSON.parse(errorText);
+          return NextResponse.json({ result: 'error', message: errorJson.message || 'Error submitting to Google Sheet.' }, { status: response.status });
+        } catch (e) {
+          return NextResponse.json({ result: 'error', message: 'An unexpected error occurred with the submission service.' }, { status: response.status });
+        }
     }
 
-    const postResult = await postResponse.json();
+    const result = await response.json();
 
-    if (postResult.result === 'success') {
+    // The Apps Script should return a clear success or error/exists status.
+    // e.g., { result: 'success' } or { result: 'exists' }
+    if (result.result === 'success') {
         return NextResponse.json({ result: 'success' });
-    } else {
-        return NextResponse.json({ result: 'error', message: postResult.message || 'An error occurred during submission.' }, { status: 500 });
+    } else if (result.result === 'exists') {
+         return NextResponse.json({ exists: true });
+    }
+     else {
+        return NextResponse.json({ result: 'error', message: result.message || 'An unknown error occurred during submission.' }, { status: 500 });
     }
 
   } catch (error) {
@@ -64,4 +50,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ result: 'error', message: errorMessage }, { status: 500 });
   }
 }
-
