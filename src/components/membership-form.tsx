@@ -15,6 +15,7 @@ import { Check, Loader2, UserPlus, Info, Copy, MessageCircle } from 'lucide-reac
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import Link from 'next/link';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
