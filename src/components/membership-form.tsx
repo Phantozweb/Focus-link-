@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Check, Loader2, UserPlus, Info } from 'lucide-react';
+import { Check, Loader2, UserPlus, Info, Copy, MessageCircle } from 'lucide-react';
 import { countries } from '@/lib/countries';
 import type { UserProfile } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -28,15 +28,19 @@ const formSchema = z.object({
   location: z.string().min(2, 'City and State/Region are required'),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 export function MembershipForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submissionData, setSubmissionData] = useState<{ name: string; membershipId: string } | null>(null);
   const { toast } = useToast();
-  const { register, handleSubmit, control, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
+  const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const generateMembershipId = () => `FL-${Math.floor(10000 + Math.random() * 90000)}`;
+
+  const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
       const response = await fetch('/api/submit-membership', {
@@ -54,7 +58,8 @@ export function MembershipForm() {
           description: "An application with this email address has already been submitted. Please check your email or contact support if you believe this is an error.",
         });
       } else if (response.ok && result.result === 'success') {
-        setIsSubmitted(true);
+        const newId = generateMembershipId();
+        setSubmissionData({ name: data.name, membershipId: newId });
       } else {
         throw new Error(result.message || 'An unknown error occurred.');
       }
@@ -69,18 +74,55 @@ export function MembershipForm() {
       setIsSubmitting(false);
     }
   };
+
+  const copyToClipboard = () => {
+    if (submissionData) {
+      navigator.clipboard.writeText(submissionData.membershipId);
+      toast({
+        title: 'Copied!',
+        description: 'Your membership ID has been copied to the clipboard.',
+      });
+    }
+  };
   
-   if (isSubmitted) {
+   if (submissionData) {
     return (
-      <Alert className='bg-green-50 border-green-200'>
-        <Check className="h-4 w-4 !text-green-600" />
-        <AlertTitle className='text-green-800'>Application Submitted!</AlertTitle>
-        <AlertDescription className='text-green-700'>
-          Thank you for joining! Our team will review your application and create your profile within 48-72 hours. You'll receive an email confirmation once your profile is live.
-          <br /><br />
-          In the meantime, feel free to join our WhatsApp community to start connecting right away.
-        </AlertDescription>
-      </Alert>
+      <Card className="text-center">
+        <CardHeader>
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <Check className="h-8 w-8 text-green-600" />
+          </div>
+          <CardTitle className="text-3xl font-headline mt-4">Welcome, {submissionData.name}!</CardTitle>
+          <CardDescription className="mt-1 text-base">
+            Your application has been submitted successfully. Here is your temporary membership ID.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="p-4 bg-muted rounded-lg">
+            <Label>Your Membership ID</Label>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <p className="text-2xl font-bold font-mono text-primary tracking-widest">{submissionData.membershipId}</p>
+              <Button variant="ghost" size="icon" onClick={copyToClipboard}>
+                <Copy className="h-5 w-5" />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">Keep this ID safe. You'll receive an official confirmation via email.</p>
+          </div>
+          <Alert>
+            <MessageCircle className="h-4 w-4" />
+            <AlertTitle>What's Next?</AlertTitle>
+            <AlertDescription>
+              While our team verifies your application (48-72 hours), join our WhatsApp community for instant updates and networking!
+            </AlertDescription>
+          </Alert>
+          <Button size="lg" className="w-full" asChild>
+            <a href="https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2" target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Join WhatsApp Community
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
