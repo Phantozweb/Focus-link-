@@ -9,16 +9,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Membership ID is required' }, { status: 400 });
   }
 
-  // IMPORTANT: Replace this placeholder with the actual URL of your Google Apps Script for verification
-  const scriptUrl = 'YOUR_GOOGLE_APP_SCRIPT_URL_FOR_VERIFICATION';
+  // IMPORTANT: This is your actual Google Apps Script URL for verification
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbzUsC2yxSAzkIEmr83AFYPaAH6o_sgSJjhLtzgYB8EKKGpKSkh5E9XEVm7RIIcioA7t/exec';
   
-  if (scriptUrl === 'YOUR_GOOGLE_APP_SCRIPT_URL_FOR_VERIFICATION') {
-      console.error("Verification script URL is not set.");
-      // In a real scenario, you might want to return an error or have a default behavior
-      // For this demo, we'll return invalid to prevent submissions without a real check.
-      return NextResponse.json({ isValid: false, error: "Verification service not configured." });
-  }
-
   try {
     const validationResponse = await fetch(`${scriptUrl}?id=${encodeURIComponent(id)}`, {
         method: 'GET',
