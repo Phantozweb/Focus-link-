@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // This function can't be used in a client component, but it's a good
 // pattern for server components. For this client component, we'll
@@ -355,7 +356,6 @@ Thank you.
     return `mailto:${user.links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
   
-
   return (
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
@@ -372,7 +372,7 @@ Thank you.
                 </div>
                 <div className="p-6 bg-card">
                     <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
-                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 md:-mt-24 relative z-10 shrink-0">
+                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card relative z-10 shrink-0">
                           {user.avatarUrl ? (
                               <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
                           ) : null}
@@ -428,23 +428,60 @@ Thank you.
                         </div>
                     </div>
                 </div>
-                <div className="p-6 pt-0">
-                    <div className="border-b">
-                        <nav className="-mb-px flex space-x-8 overflow-x-auto">
-                            <a className="border-primary text-primary whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">About</a>
-                            <a className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">Programs</a>
-                            <a className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">Gallery</a>
-                        </nav>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
-                    <div className="md:col-span-2 space-y-8">
-                        <section>
-                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">About Us</h2>
-                            <div className="prose max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
-                        </section>
-                        {user.gallery && user.gallery.length > 0 && (
-                            <section>
-                                <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Gallery</h2>
+                 <Tabs defaultValue="about" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3 rounded-none border-b">
+                        <TabsTrigger value="about">About</TabsTrigger>
+                        <TabsTrigger value="programs">Programs</TabsTrigger>
+                        <TabsTrigger value="gallery">Gallery</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="about">
+                        <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="md:col-span-2 space-y-8">
+                                <section>
+                                    <h2 className="text-xl md:text-2xl font-bold font-headline mb-4 text-slate-800">About Us</h2>
+                                    <div className="prose prose-lg max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                                </section>
+                            </div>
+                            <div className="md:col-span-1 space-y-6">
+                                <Card>
+                                    <CardHeader><CardTitle className="text-lg">Contact Information</CardTitle></CardHeader>
+                                    <CardContent className="space-y-4 text-sm">
+                                    {user.links.email && (<div className="flex items-start gap-3">
+                                        <Mail className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                                        <span className="text-gray-600 break-all">{user.links.email}</span>
+                                    </div>)}
+                                    <div className="flex items-start gap-3">
+                                        <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                                        <span className="text-gray-600">{user.location}</span>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <Phone className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                                        <span className="text-gray-600">96559 07744</span>
+                                    </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </div>
+                    </TabsContent>
+                    <TabsContent value="programs">
+                       <div className="p-6 md:p-8 space-y-8">
+                            <Card>
+                                <CardHeader><CardTitle className="text-lg md:text-xl">Focus Areas</CardTitle></CardHeader>
+                                <CardContent className="flex flex-wrap gap-2">
+                                    {user.skills.map(skill => <Badge key={skill} variant="secondary" className="text-base py-1 px-3">{skill}</Badge>)}
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader><CardTitle className="text-lg md:text-xl">Placement Partners</CardTitle></CardHeader>
+                                <CardContent className="flex flex-wrap gap-2">
+                                    {user.interests.map(interest => <Badge key={interest} variant="outline" className="text-base py-1 px-3">{interest}</Badge>)}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </TabsContent>
+                    <TabsContent value="gallery">
+                        {user.gallery && user.gallery.length > 0 ? (
+                            <div className="p-6 md:p-8">
                                 <Carousel opts={{ loop: true }}>
                                     <CarouselContent>
                                     {user.gallery.map((imgUrl, index) => (
@@ -458,42 +495,10 @@ Thank you.
                                     <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
                                     <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
                                 </Carousel>
-                            </section>
-                        )}
-                    </div>
-                    <div className="md:col-span-1 space-y-6">
-                        <Card>
-                            <CardHeader><CardTitle className="text-lg">Contact Information</CardTitle></CardHeader>
-                            <CardContent className="space-y-4 text-sm">
-                            {user.links.email && (<div className="flex items-start gap-3">
-                                <Mail className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                                <span className="text-gray-600 break-all">{user.links.email}</span>
-                            </div>)}
-                            <div className="flex items-start gap-3">
-                                <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                                <span className="text-gray-600">{user.location}</span>
                             </div>
-                             <div className="flex items-start gap-3">
-                                <Phone className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                                <span className="text-gray-600">96559 07744</span>
-                            </div>
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader><CardTitle className="text-lg">Focus Areas</CardTitle></CardHeader>
-                            <CardContent className="flex flex-wrap gap-2">
-                                {user.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader><CardTitle className="text-lg">Placement Partners</CardTitle></CardHeader>
-                            <CardContent className="flex flex-wrap gap-2">
-                                {user.interests.map(interest => <Badge key={interest} variant="outline">{interest}</Badge>)}
-                            </CardContent>
-                        </Card>
-                    </div>
-                    </div>
-                </div>
+                        ) : <p className="p-6 text-center text-muted-foreground">No gallery images available.</p>}
+                    </TabsContent>
+                </Tabs>
             </Card>
         </div>
     </div>
