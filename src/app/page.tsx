@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, MessageCircle, Info } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, MessageCircle as CommunityIcon, Info } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -25,6 +25,7 @@ import { WebinarBanner } from '@/components/webinar-banner';
 import Autoplay from "embla-carousel-autoplay";
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Label } from '@/components/ui/label';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -55,6 +56,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all'); // Can be 'all', 'forum', 'jobs', or a profile type
   const [filterCountry, setFilterCountry] = useState('all');
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   
   const ctaCards = [
     {
@@ -70,7 +72,7 @@ export default function Home() {
       title: "215+ Members in our WhatsApp Community",
       description: "Join our active WhatsApp group for discussions, quick updates, and informal networking. Note: This is separate from official membership.",
       href: "https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2",
-      icon: <MessageCircle className="h-8 w-8 text-white" />,
+      icon: <CommunityIcon className="h-8 w-8 text-white" />,
       cta: "Join WhatsApp Community",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
       isDialog: false,
@@ -112,6 +114,7 @@ export default function Home() {
   }, []);
 
   const handleSearch = () => {
+    setIsFilterDialogOpen(false);
     const params = new URLSearchParams();
     if (searchTerm) params.set('q', searchTerm);
 
@@ -155,65 +158,90 @@ export default function Home() {
         <div className="bg-muted/40">
           <section className="relative bg-gradient-to-r from-cyan-600 to-blue-700 text-white overflow-hidden py-20 md:py-28">
               <div className="container mx-auto px-4 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">The Global Community for Eye Care</h1>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">A Global Community for Eye Care</h1>
                   <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">Connecting vision professionals, students, and organizations worldwide. Find peers, discover opportunities, and grow your network.</p>
                   
-                  <div className="w-full max-w-4xl bg-white/20 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-white/30 mx-auto">
-                    <div className="flex flex-col md:flex-row gap-2 items-center">
-                        {/* Search Input */}
-                        <div className="relative flex-grow w-full">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
-                            <Input 
-                                className="w-full pl-12 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500 h-12 text-base" 
-                                placeholder="Search by name, skill, job title..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                            />
-                        </div>
-                        
-                        <div className="flex w-full md:w-auto gap-2">
-                            {/* Category Select */}
-                            <Select onValueChange={setFilterType} value={filterType}>
-                                <SelectTrigger className="h-12 text-base bg-white text-gray-800 flex-grow">
-                                    <SelectValue placeholder="All Content" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">All Profiles</SelectItem>
-                                    <SelectItem value="forum">Case Forum</SelectItem>
-                                    <SelectItem value="jobs">Job Board</SelectItem>
-                                    <SelectGroup>
-                                        <SelectLabel>Profile Types</SelectLabel>
-                                        {profileTypes.map(type => (
-                                            <SelectItem key={type} value={type}>{type}</SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-
-                            {/* Location Select (conditional) */}
-                            {filterType !== 'forum' && filterType !== 'jobs' && (
-                                <Select onValueChange={setFilterCountry} value={filterCountry}>
-                                    <SelectTrigger className="h-12 text-base bg-white text-gray-800 flex-grow">
-                                        <SelectValue placeholder="Location" />
+                  <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
+                    <div className="flex gap-2">
+                      <div className="relative flex-grow">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
+                          <Input 
+                              className="w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500 h-12 text-base" 
+                              placeholder="Search by name, skill, job title..."
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                          />
+                      </div>
+                      
+                      <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
+                        <DialogTrigger asChild>
+                          <Button variant="secondary" size="icon" className="h-12 w-12 flex-shrink-0 bg-white text-gray-800 hover:bg-gray-200">
+                              <SlidersHorizontal className="h-5 w-5" />
+                              <span className="sr-only">Advanced Filters</span>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Advanced Search</DialogTitle>
+                              <DialogDescription>
+                                Narrow down your search by content type and location.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="filter-type" className="text-right">
+                                  Content
+                                </Label>
+                                <div className="col-span-3">
+                                  <Select onValueChange={setFilterType} value={filterType}>
+                                    <SelectTrigger id="filter-type">
+                                        <SelectValue placeholder="All Content" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">All Countries</SelectItem>
-                                        {countries.map(country => (
-                                            <SelectItem key={country.code} value={country.name.toLowerCase()}>{country.name}</SelectItem>
-                                        ))}
+                                        <SelectItem value="all">All Profiles</SelectItem>
+                                        <SelectItem value="forum">Case Forum</SelectItem>
+                                        <SelectItem value="jobs">Job Board</SelectItem>
+                                        <SelectGroup>
+                                            <SelectLabel>Profile Types</SelectLabel>
+                                            {profileTypes.map(type => (
+                                                <SelectItem key={type} value={type}>{type}</SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
-                                </Select>
-                            )}
-                            
-                            {/* Search Button */}
-                            <Button className="h-12 w-full md:w-auto bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>
-                                <span className="md:hidden">Search</span>
-                                <Search className="hidden md:block h-5 w-5"/>
-                            </Button>
-                        </div>
+                                  </Select>
+                                </div>
+                              </div>
+                              {filterType !== 'forum' && filterType !== 'jobs' && (
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                  <Label htmlFor="filter-country" className="text-right">
+                                    Country
+                                  </Label>
+                                  <div className="col-span-3">
+                                    <Select onValueChange={setFilterCountry} value={filterCountry}>
+                                        <SelectTrigger id="filter-country">
+                                            <SelectValue placeholder="Location" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All Countries</SelectItem>
+                                            {countries.map(country => (
+                                                <SelectItem key={country.code} value={country.name.toLowerCase()}>{country.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            <Button onClick={handleSearch} className="w-full">Apply Filters & Search</Button>
+                        </DialogContent>
+                      </Dialog>
+
+                      <Button className="h-12 w-auto px-6 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>
+                          Search
+                      </Button>
                     </div>
-                </div>
+                  </div>
               </div>
           </section>
 
