@@ -266,7 +266,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                       <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
                                           <h4 className="font-semibold">Organizer</h4>
-                                          <p className="text-sm text-muted-foreground">Organized by {webinar.host.name}</p>
+                                          <p className="text-sm text-muted-foreground">Organized by {isQuiz ? webinar.speaker.name : webinar.host.name}</p>
                                           <p className="text-sm text-muted-foreground">Powered by Focus Links Academy</p>
                                       </div>
                                   </div>
@@ -274,7 +274,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                       <Video className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
                                           <h4 className="font-semibold">Platform</h4>
-                                          <p className="text-sm text-muted-foreground">{webinar.platform}</p>
+                                          <p className="text-sm text-muted-foreground">{isQuiz ? "Hosted by Focus Links" : webinar.platform}</p>
                                       </div>
                                   </div>
                                   <div className="flex items-start gap-3">
