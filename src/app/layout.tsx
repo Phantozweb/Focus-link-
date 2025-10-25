@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: 'Focus Links | Global Eye Care Community',
     template: '%s | Focus Links',
   },
-  description: 'The world\'s largest eye care community for students, optometrists, and industry professionals to find, connect, and grow. Explore our directory and events.',
+  description: "Join Focus Links, the world's largest digital ecosystem for the eye care industry. Connect with optometrists, students, and organizations, explore clinical cases, and advance your career through our global directory and events.",
   verification: {
     google: 'fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE',
   },
@@ -26,7 +26,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'Focus Links',
   url: 'https://focuslinks.pro',
-  logo: 'https://focuslinks.pro/logo.png', // Assuming you have a logo at this URL
+  logo: 'https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg',
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
@@ -60,6 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
+        <link rel="icon" href="https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg" type="image/jpeg" />
         <meta name="google-site-verification" content="fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

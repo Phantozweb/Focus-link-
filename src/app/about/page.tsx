@@ -1,42 +1,16 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, Users, Search, Award } from "lucide-react";
+import { Eye, Users, Search, Award, Linkedin, Mail } from "lucide-react";
 import Image from "next/image";
 import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: 'About Focus Links | Our Mission and Team',
-  description: 'Learn about the mission of Focus Links to connect the global eye care community and meet the team dedicated to building the future of vision care, including our Founder Janarthan Veeramani, and directors Mohd Asad, Adnan, and Anshi Jha.',
+  title: 'About Focus Links | Our Mission for the Global Eye Care Community',
+  description: 'Learn about the mission of Focus Links to unite the global eye care community. Discover our vision for connecting students, professionals, and organizations to foster innovation and growth in vision care, led by our founder, Janarthan Veeramani.',
 };
-
-const teamMembers = [
-  {
-    name: 'Janarthan Veeramani',
-    role: 'Founder',
-    description: 'Leads the vision and strategy for Focus Links, driving the mission to connect the global eye care community.'
-  },
-  {
-    name: 'Mohd Asad',
-    role: 'Managing Director of Academic',
-    description: 'Oversees the educational content and curriculum for the Focus Links Academy, ensuring high-quality learning experiences.'
-  },
-  {
-    name: 'Adnan',
-    role: 'Managing Director of Outreach and Marketing',
-    description: 'Heads community engagement and marketing initiatives, growing the Focus Links network and brand presence.'
-  },
-  {
-    name: 'Anshi Jha',
-    role: 'Director of Administration',
-    description: 'Manages the operational and administrative functions that keep the Focus Links platform running smoothly.'
-  },
-  {
-    name: 'Shiva Shangari M',
-    role: 'Core Developer',
-    description: 'Builds and maintains the technical infrastructure and features of the Focus Links platform.'
-  }
-];
 
 const aboutPageSchema = {
   "@context": "https://schema.org",
@@ -47,7 +21,13 @@ const aboutPageSchema = {
     "@type": "Organization",
     "name": "Focus Links",
     "url": "https://focuslinks.pro/about",
-    "logo": "https://focuslinks.pro/logo.png"
+    "logo": "https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg",
+    "founder": {
+      "@type": "Person",
+      "name": "Janarthan Veeramani",
+      "jobTitle": "Founder",
+      "url": "https://focuslinks.pro/profile/19"
+    }
   }
 };
 
@@ -56,18 +36,18 @@ export default function AboutPage() {
   const features = [
     {
       icon: <Users className="h-8 w-8 text-primary" />,
-      title: "Comprehensive Profiles",
-      description: "Build a detailed profile that highlights your experience, education, skills, and interests to showcase your unique expertise."
+      title: "Global Directory",
+      description: "A comprehensive database of students, optometrists, clinics, and industry partners. Find anyone, anywhere."
     },
     {
       icon: <Search className="h-8 w-8 text-primary" />,
-      title: "Advanced Directory",
-      description: "Easily search and filter our extensive directory to find the right people and organizations that match your needs."
+      title: "Career Opportunities",
+      description: "Explore job boards and connect with leading organizations to find your next role in the eye care industry."
     },
     {
       icon: <Award className="h-8 w-8 text-primary" />,
-      title: "Inclusive Community",
-      description: "We welcome everyone from individual practitioners and students to large associations, colleges, hospitals, and optical practices."
+      title: "Community & Events",
+      description: "Engage in clinical case discussions, attend expert-led webinars, and participate in global knowledge competitions."
     }
   ]
 
@@ -81,25 +61,35 @@ export default function AboutPage() {
         {/* Hero Section */}
         <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">About Focus Links</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Our Mission: To Unite the World of Eye Care</h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-              Our mission is to foster connections, facilitate collaboration, and empower professionals and students across the entire field of eye care.
+              We are building a single, cohesive digital ecosystem where every student, professional, and organization in the eye care industry can connect, learn, and grow together.
             </p>
           </div>
         </section>
         
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-20">
-          {/* Image Section */}
+         
           <section>
-            <div className="container mx-auto px-4">
-                <Image src="https://picsum.photos/seed/about-main/1200/500" alt="A team of eye care professionals collaborating in a modern office" width={1200} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="order-2 lg:order-1">
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">From a Student's Vision to a Global Community</h2>
+                    <div className="space-y-4 text-slate-600 text-lg">
+                        <p>Focus Links was born from a simple idea: the world of eye care is vast, but it doesn't have to be fragmented. As an optometry student, our founder, Janarthan Veeramani, saw the need for a unified platform—a place to break down silos between academia, clinical practice, and industry.</p>
+                        <p>What started as a tool to connect students has grown into a global mission. We are creating a digital home for every individual and organization dedicated to vision, from the first-year student to the seasoned ophthalmologist, from small clinics to multinational corporations.</p>
+                        <p>Our platform isn't just a directory; it's a dynamic ecosystem for collaboration, career advancement, and continuous learning.</p>
+                    </div>
+                </div>
+                 <div className="order-1 lg:order-2">
+                    <Image src="https://picsum.photos/seed/about-main/600/500" alt="A team of eye care professionals collaborating in a modern office" width={600} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
+                </div>
             </div>
           </section>
 
           {/* Features Section */}
           <section>
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Why Focus Links?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-800">What We Offer</h2>
               <p className="mt-2 text-lg text-slate-600">A unified platform for the entire eye care ecosystem.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -116,30 +106,52 @@ export default function AboutPage() {
           </section>
           
           {/* Meet the Team Section */}
-          <section>
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Meet the Team</h2>
-              <p className="mt-2 text-lg text-slate-600">The passionate individuals building Focus Links.</p>
+          <section className="text-center">
+            <div className="mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-800">Meet the Founder</h2>
+              <p className="mt-2 text-lg text-slate-600">The passionate individual building Focus Links.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamMembers.map((member) => (
-                  <div key={member.name} className="text-center p-6 bg-card rounded-lg shadow-sm border">
-                      <h3 className="text-lg font-bold text-slate-800">{member.name}</h3>
-                      <p className="text-primary font-semibold">{member.role}</p>
-                      <p className="text-sm text-slate-600 mt-2">{member.description}</p>
-                  </div>
-              ))}
-            </div>
+            <Card className="max-w-2xl mx-auto p-8 text-center bg-card shadow-lg border">
+                <Avatar className="h-32 w-32 mx-auto mb-4 border-4 border-primary/20 shadow-md">
+                    <AvatarImage src="https://iili.io/KTpEi9s.md.jpg" alt="Janarthan Veeramani" />
+                    <AvatarFallback className="text-5xl">JV</AvatarFallback>
+                </Avatar>
+                <h3 className="text-2xl font-bold text-slate-800">Janarthan Veeramani</h3>
+                <p className="text-primary font-semibold text-lg">Founder & Visionary</p>
+                <p className="text-slate-600 mt-4 max-w-prose mx-auto">
+                    "I started Focus Links because I believe connection is the catalyst for innovation. My goal is to build the tools and the community that I wished I had as a student—a space where anyone in the eye care field can find their place, share their knowledge, and shape the future of vision."
+                </p>
+                 <div className="flex items-center justify-center gap-2 mt-6">
+                    <Button asChild variant="outline">
+                        <Link href="/profile/19">View Profile</Link>
+                    </Button>
+                    <Button asChild variant="ghost" size="icon">
+                        <a href="https://www.linkedin.com/in/janarthan-v" target="_blank" rel="noopener noreferrer">
+                            <Linkedin className="h-5 w-5" />
+                        </a>
+                    </Button>
+                    <Button asChild variant="ghost" size="icon">
+                        <a href="mailto:janarthanv@outlook.com">
+                            <Mail className="h-5 w-5" />
+                        </a>
+                    </Button>
+                 </div>
+            </Card>
           </section>
 
           {/* Mission Section */}
-          <section className="py-12 bg-card border rounded-lg shadow-sm">
+          <section className="py-16 bg-card border rounded-lg shadow-sm">
             <div className="container mx-auto px-4 text-center max-w-4xl">
                 <Eye className="h-12 w-12 text-primary mx-auto mb-4" />
                 <h2 className="text-3xl font-bold text-slate-800">Join Us in Building the Future of Connected Eye Care</h2>
                 <p className="mt-4 text-lg text-slate-600">
                   In an ever-evolving industry, staying connected is more important than ever. Focus Links provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
                 </p>
+                 <div className="mt-8">
+                  <Button asChild size="lg">
+                    <Link href="/membership">Become a Member</Link>
+                  </Button>
+                </div>
             </div>
           </section>
         </div>

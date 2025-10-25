@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users } from '@/lib/data';
@@ -12,6 +11,43 @@ import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+// This function can't be used in a client component, but it's a good
+// pattern for server components. For this client component, we'll
+// set the metadata dynamically in the component itself.
+// export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+//   const user = users.find((u) => u.id === params.id);
+//   if (!user) {
+//     return {
+//       title: 'Profile Not Found',
+//       description: 'The profile you are looking for does not exist.',
+//     };
+//   }
+
+//   return {
+//     title: `${user.name} | ${user.type} on Focus Links`,
+//     description: user.bio.substring(0, 160),
+//     openGraph: {
+//       title: `${user.name} | Focus Links`,
+//       description: user.bio.substring(0, 160),
+//       images: [
+//         {
+//           url: user.avatarUrl,
+//           width: 800,
+//           height: 600,
+//           alt: user.name,
+//         },
+//       ],
+//       type: 'profile',
+//       profile: {
+//         firstName: user.name.split(' ')[0],
+//         lastName: user.name.split(' ').slice(1).join(' '),
+//         username: user.id,
+//       },
+//     },
+//   };
+// }
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
   return (

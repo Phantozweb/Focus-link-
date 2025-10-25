@@ -127,9 +127,28 @@ const helpTopics = [
   }
 ];
 
+const faqPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": helpTopics.flatMap(topic => 
+    topic.questions.map(q => ({
+      "@type": "Question",
+      "name": q.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": q.answer.replace(/<[^>]*>/g, '') // Strip HTML for schema
+      }
+    }))
+  )
+};
+
 export default function HelpCenterPage() {
   return (
     <div className="bg-muted/40">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageSchema) }}
+        />
         <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
             <div className="container mx-auto px-4 text-center">
                 <LifeBuoy className="h-16 w-16 mx-auto mb-4" />
