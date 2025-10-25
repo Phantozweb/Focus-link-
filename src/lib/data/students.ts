@@ -215,4 +215,52 @@ My goal is to build a career that combines clinical leadership with education an
     languages: ['English (Full Professional)', 'Hindi (Native or Bilingual)'],
     verified: true,
   },
+  {
+    id: '7',
+    name: 'M. Mega Dharshini',
+    type: 'Student',
+    experience: 'State Head - Tamil Nadu at Optobharat | B.Optom Student',
+    location: 'Tirunelveli, Tamil Nadu, India',
+    skills: [
+        'Vision Examination & Refraction',
+        'Auto-Refractometer (AR) & NCT Operation',
+        'Patient Handling & Consultation',
+        'Systematic Review & Research',
+        'Poster Presentation'
+    ],
+    interests: ['Dispensing Optics', 'Contact Lenses', 'Community Outreach'],
+    bio: 'A third-year Optometry student with leadership experience as the State Head for Optobharat in Tamil Nadu. Passionate about community outreach, dispensing optics, and contact lenses. Proven research and presentation skills through systematic reviews and conference participation.',
+    links: {
+      email: 'megadharshini999@gmail.com'
+    },
+    avatarUrl: '',
+    workExperience: [
+      {
+        title: 'State Head - Tamil Nadu',
+        company: 'Optobharat',
+        startDate: '',
+        endDate: 'Present',
+        description: 'Leading state-level initiatives and student engagement for a prominent optometry organization.'
+      },
+      {
+        title: 'Community Eye Camp Participant',
+        company: 'Vision Screening Camps',
+        startDate: '',
+        endDate: '5 Camps',
+        description: 'Assisted with vision screenings and patient management in community settings.'
+      }
+    ],
+    education: [
+      {
+        school: 'VK College of Optometry',
+        university: 'VK College of Optometry, Madurai',
+        degree: 'Bachelor of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '',
+        endYear: 'Present (Third Year)'
+      }
+    ],
+    languages: ['English', 'Tamil'],
+    verified: false
+  }
 ];
