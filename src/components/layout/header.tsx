@@ -54,7 +54,7 @@ const aboutLinks = [
 
 const MobileNavLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
     <SheetClose asChild>
-        <Link href={href} className="flex items-center gap-3 rounded-md px-3 py-3 text-base font-medium text-slate-700 hover:bg-slate-100">
+        <Link href={href} className="flex items-center gap-3 rounded-md px-3 py-3 text-lg font-medium text-slate-700 hover:bg-slate-100">
             {children}
         </Link>
     </SheetClose>
@@ -111,7 +111,7 @@ export function Header() {
                     </div>
                   <nav className="flex-grow overflow-y-auto p-4 space-y-4">
                     <div className="space-y-1">
-                          <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">Account</h3>
+                          <h3 className="px-3 text-sm font-semibold uppercase text-slate-400 tracking-wider">Account</h3>
                           <MobileNavLink href="/profile">
                               <User className="h-5 w-5" />
                               <span>My Profile</span>
@@ -127,7 +127,7 @@ export function Header() {
                         </div>
                         <Separator />
                     <div className="space-y-1">
-                          <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">Directory</h3>
+                          <h3 className="px-3 text-sm font-semibold uppercase text-slate-400 tracking-wider">Directory</h3>
                            {directoryLinks.map(link => (
                               <MobileNavLink key={link.name} href={link.href}>
                                   {link.icon}
@@ -135,7 +135,7 @@ export function Header() {
                               </MobileNavLink>
                           ))}
                           <Collapsible className="px-3">
-                            <CollapsibleTrigger className="flex w-full items-center justify-between py-3 text-base font-medium text-slate-700 hover:bg-slate-100 rounded-md">
+                            <CollapsibleTrigger className="flex w-full items-center justify-between py-3 text-lg font-medium text-slate-700 hover:bg-slate-100 rounded-md">
                               <div className="flex items-center gap-3">
                                 <Stethoscope className="h-5 w-5" />
                                 <span>Professionals</span>
@@ -145,7 +145,7 @@ export function Header() {
                             <CollapsibleContent className="pl-8 space-y-1 mt-1">
                                {professionalLinks.map(link => (
                                 <SheetClose asChild key={link.name}>
-                                    <Link href={link.href} className="block rounded-md px-3 py-2 text-base font-medium text-slate-600 hover:bg-slate-100">{link.name}</Link>
+                                    <Link href={link.href} className="block rounded-md px-3 py-2 text-lg font-medium text-slate-600 hover:bg-slate-100">{link.name}</Link>
                                 </SheetClose>
                                ))}
                             </CollapsibleContent>
@@ -153,7 +153,7 @@ export function Header() {
                       </div>
                       <Separator />
                       <div className="space-y-1">
-                          <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">Community</h3>
+                          <h3 className="px-3 text-sm font-semibold uppercase text-slate-400 tracking-wider">Community</h3>
                           {communityLinks.map(link => {
                               const showPing = link.hasLiveIndicator && hasUnseenLiveEvent;
                               return (
@@ -173,7 +173,7 @@ export function Header() {
                       </div>
                       <Separator />
                        <div className="space-y-1">
-                          <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">About</h3>
+                          <h3 className="px-3 text-sm font-semibold uppercase text-slate-400 tracking-wider">About</h3>
                           {aboutLinks.map(link => (
                               <MobileNavLink key={link.name} href={link.href}>
                                   {link.icon}
@@ -189,7 +189,7 @@ export function Header() {
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
                 remove_red_eye
                 </span>
-                <h2 className="hidden sm:block text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
+                <h2 className="sm:block text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
             </Link>
             <nav className="hidden md:flex items-center gap-2">
                 <Button variant="ghost" asChild><Link href="/">Home</Link></Button>
@@ -275,3 +275,5 @@ export function Header() {
     </header>
   );
 }
+
+    

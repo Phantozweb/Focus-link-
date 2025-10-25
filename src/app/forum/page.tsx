@@ -6,12 +6,13 @@ import type { Metadata } from 'next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock, Search } from 'lucide-react';
+import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock, Search, Construction } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { demoDiscussions } from '@/lib/forum';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 
 export default function ForumPage() {
@@ -41,6 +42,13 @@ export default function ForumPage() {
 
       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+            <Alert className="mb-8 bg-yellow-50 border-yellow-200 text-yellow-900">
+              <Construction className="h-4 w-4 !text-yellow-700" />
+              <AlertTitle className="font-bold">Feature Coming Soon!</AlertTitle>
+              <AlertDescription>
+                The ability to post new discussions and reply is currently under development. For now, enjoy a preview of the types of cases our community will engage with.
+              </AlertDescription>
+            </Alert>
            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <div className="relative w-full md:w-auto md:flex-grow">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -57,7 +65,7 @@ export default function ForumPage() {
                     <TooltipTrigger asChild>
                       <Button disabled>
                         <Lock className="mr-2 h-4 w-4" />
-                        Start a New Discussion
+                        Start a New Discussion (Coming Soon)
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -72,7 +80,7 @@ export default function ForumPage() {
                     <Card key={discussion.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-start">
                             <div className="flex-shrink-0 flex flex-row sm:flex-col items-center gap-4 w-full sm:w-20 text-center">
-                                <Button variant="outline" size="sm" className="w-full">
+                                <Button variant="outline" size="sm" className="w-full" disabled>
                                     <ThumbsUp className="h-4 w-4 mr-2" /> {discussion.upvotes}
                                 </Button>
                                 <div className="flex items-center gap-4 text-sm text-muted-foreground sm:w-full">
@@ -115,3 +123,5 @@ export default function ForumPage() {
     </div>
   );
 }
+
+    
