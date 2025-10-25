@@ -171,7 +171,7 @@ My goal is to build a career that combines clinical leadership with education an
       linkedin: 'https://linkedin.com/in/anshi-jha-6a98b0310',
       email: '12anshijha@gmail.com',
     },
-    avatarUrl: '',
+    avatarUrl: 'https://i.ibb.co/twWf1ngC/IMG-20251025-172851.jpg',
     workExperience: [
       {
         title: 'Optometry Intern',
