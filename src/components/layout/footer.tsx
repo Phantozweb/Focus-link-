@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-     <footer className="bg-slate-800 text-white py-12 px-10 md:px-20 lg:px-40">
+     <footer className="bg-slate-800 text-white py-12 px-10 md:px-20 lg:px-40 hidden md:block">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
                 <h3 className="font-bold text-lg mb-4">Focus Links</h3>

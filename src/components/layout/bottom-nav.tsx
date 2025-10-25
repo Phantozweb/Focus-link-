@@ -11,11 +11,16 @@ const navItems = [
   { href: '/directory', label: 'Directory', icon: Users },
   { href: '/events', label: 'Events', icon: Calendar },
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
-  { href: '/profile', label: 'Profile', icon: ProfileIcon },
+  { href: '/login', label: 'Login', icon: LogIn },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
+
+  // Hide bottom nav on profile pages, login, and membership pages for a cleaner look
+  if (pathname.startsWith('/profile') || pathname === '/login' || pathname === '/membership') {
+    return null;
+  }
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-50">

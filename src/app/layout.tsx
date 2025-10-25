@@ -76,9 +76,7 @@ export default function RootLayout({
                 <main className="flex-1 pb-20 md:pb-0">
                   {children}
                 </main>
-                <div className="hidden md:block">
-                  <Footer />
-                </div>
+                <Footer />
                 <BottomNav />
             </div>
             <Toaster />
