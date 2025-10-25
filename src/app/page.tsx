@@ -151,7 +151,7 @@ export default function Home() {
       const startTime = new Date(w.dateTime).getTime();
       const durationParts = w.duration.split(' ');
       const durationValue = parseInt(durationParts[0], 10);
-      const endTime = startTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000);
+      const endTime = startTime + (durationValue * 60 * 60 * 1000) * (w.id === 'eye-q-arena-2025' ? 24 * 11 : 1); // Handle days for quiz
 
       if (now >= startTime && now < endTime) {
         live.push(w);
@@ -386,7 +386,7 @@ export default function Home() {
             {upcomingWebinars.length > 0 && (
               <section>
                   <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Upcoming Webinars</h2>
+                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Upcoming Live Events</h2>
                   <Button asChild variant="link" className="text-primary pr-0">
                       <Link href="/academy">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>

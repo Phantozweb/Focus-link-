@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Ticket, XCircle, Calendar, Clock, Video, User, Radio, Users, Tv } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { WebinarTime } from './webinar-time';
+import Image from 'next/image';
 
 interface WebinarBannerProps {
   webinar: Webinar;
@@ -27,7 +28,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
         const webinarStartTime = new Date(webinar.dateTime).getTime();
         const durationParts = webinar.duration.split(' ');
         const durationValue = parseInt(durationParts[0], 10);
-        const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000); // 3-hour grace period
+        const webinarEndTime = webinarStartTime + (durationValue * 60 * 60 * 1000) * (webinar.id === 'eye-q-arena-2025' ? 24 * 11 : 1);
 
         if (now < webinarStartTime) {
             setStatus('UPCOMING');
@@ -42,7 +43,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
     const timer = setInterval(calculateState, 1000 * 60); // Update every minute
 
     return () => clearInterval(timer);
-  }, [webinar.dateTime, webinar.duration]);
+  }, [webinar.dateTime, webinar.duration, webinar.id]);
   
   const StatusBadge = () => {
     if (status === 'LIVE') {
@@ -80,6 +81,36 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
 
   if (isCard) {
+     if (isQuiz) {
+      return (
+        <div className={cn("relative w-full h-full bg-slate-900 text-white overflow-hidden rounded-lg p-4 flex flex-col justify-between", className)}>
+          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Quiz Icon" layout="fill" objectFit="cover" className="absolute inset-0 opacity-10 blur-sm" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
+          
+          <StatusBadge />
+
+          <div className="relative z-10 w-full h-full flex flex-col justify-between pt-8">
+              <div className="pt-2">
+                <h2 className="font-bold leading-tight text-lg">
+                    {webinar.title}
+                </h2>
+              </div>
+
+              <div className="flex items-center gap-3 text-sm pt-3 mt-3">
+                <Avatar className="w-8 h-8 border-2 border-white/20">
+                    <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
+                    <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                    <p className="font-bold">{webinar.speaker.name}</p>
+                    <p className="text-white/70 text-xs">{webinar.speaker.title}</p>
+                </div>
+              </div>
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden rounded-lg p-4 flex flex-col justify-between", className)}>
         <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 rounded-full bg-blue-500/20 blur-3xl opacity-80"></div>
