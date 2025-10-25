@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
@@ -20,6 +20,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '../ui/separator';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { webinars } from '@/lib/academy';
+import { usePathname } from 'next/navigation';
 
 const directoryLinks = [
     { name: 'All Profiles', href: '/directory/all', icon: <Users className="h-5 w-5"/> },
@@ -60,6 +62,32 @@ const MobileNavLink = ({ href, children }: { href: string, children: React.React
 
 export function Header() {
   const { toast } = useToast();
+  const pathname = usePathname();
+  const [hasUnseenLiveEvent, setHasUnseenLiveEvent] = useState(false);
+
+  useEffect(() => {
+    const liveWebinars = webinars.filter(w => {
+      const startTime = new Date(w.dateTime).getTime();
+      const durationParts = w.duration.split(' ');
+      const durationValue = parseInt(durationParts[0], 10);
+      const endTime = startTime + (durationValue * 60 * 1000);
+      return Date.now() >= startTime && Date.now() < endTime;
+    });
+
+    if (liveWebinars.length > 0) {
+      const hasSeen = sessionStorage.getItem('seenLiveEvents');
+      if (!hasSeen) {
+        setHasUnseenLiveEvent(true);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pathname.startsWith('/events') && hasUnseenLiveEvent) {
+      sessionStorage.setItem('seenLiveEvents', 'true');
+      setHasUnseenLiveEvent(false);
+    }
+  }, [pathname, hasUnseenLiveEvent]);
 
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-4 sm:px-6 lg:px-8 py-3 sticky top-0 z-40">
@@ -119,12 +147,14 @@ export function Header() {
                       <Separator />
                       <div className="space-y-1">
                           <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">Community</h3>
-                          {communityLinks.map(link => (
+                          {communityLinks.map(link => {
+                              const showPing = link.hasLiveIndicator && hasUnseenLiveEvent;
+                              return (
                               <MobileNavLink key={link.name} href={link.href}>
                                   <div className="relative flex items-center gap-3">
                                     {link.icon}
                                     <span>{link.name}</span>
-                                     {link.hasLiveIndicator && (
+                                     {showPing && (
                                         <span className="relative flex h-2.5 w-2.5">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                                             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
@@ -132,7 +162,7 @@ export function Header() {
                                     )}
                                   </div>
                               </MobileNavLink>
-                          ))}
+                          )})}
                       </div>
                       <Separator />
                        <div className="space-y-1">
@@ -200,14 +230,16 @@ export function Header() {
                         <Button variant="ghost">Community <ChevronDown className="ml-1 h-4 w-4" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        {communityLinks.map(link => (
+                        {communityLinks.map(link => {
+                            const showPing = link.hasLiveIndicator && hasUnseenLiveEvent;
+                            return (
                             <DropdownMenuItem key={link.name} asChild>
                                 <Link href={link.href}>
                                   <div className="flex items-center gap-2">
                                     {link.icon}
                                     <span>{link.name}</span>
-                                     {link.hasLiveIndicator && (
-                                        <span className="relative flex h-2 w-2">
+                                     {showPing && (
+                                        <span className="relative flex h-2 w-2 ml-1">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                                             <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                                         </span>
@@ -215,7 +247,7 @@ export function Header() {
                                   </div>
                                 </Link>
                             </DropdownMenuItem>
-                        ))}
+                        )})}
                     </DropdownMenuContent>
                 </DropdownMenu>
 

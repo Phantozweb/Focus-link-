@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, MessageSquare, Briefcase, Calendar, User as ProfileIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { webinars } from '@/lib/academy';
+import { useEffect, useState } from 'react';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -16,6 +18,31 @@ const navItems = [
 
 export function BottomNav() {
   const pathname = usePathname();
+  const [hasUnseenLiveEvent, setHasUnseenLiveEvent] = useState(false);
+
+  useEffect(() => {
+    const liveWebinars = webinars.filter(w => {
+      const startTime = new Date(w.dateTime).getTime();
+      const durationParts = w.duration.split(' ');
+      const durationValue = parseInt(durationParts[0], 10);
+      const endTime = startTime + (durationValue * 60 * 1000);
+      return Date.now() >= startTime && Date.now() < endTime;
+    });
+
+    if (liveWebinars.length > 0) {
+      const hasSeen = sessionStorage.getItem('seenLiveEvents');
+      if (!hasSeen) {
+        setHasUnseenLiveEvent(true);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pathname.startsWith('/events') && hasUnseenLiveEvent) {
+      sessionStorage.setItem('seenLiveEvents', 'true');
+      setHasUnseenLiveEvent(false);
+    }
+  }, [pathname, hasUnseenLiveEvent]);
 
   // Hide bottom nav on login and membership pages for a cleaner look
   if (pathname === '/login' || pathname === '/membership' || pathname === '/profile/create') {
@@ -33,6 +60,7 @@ export function BottomNav() {
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
         {navItems.map((item) => {
           const isActive = (pathname === '/' && item.href === '/') || (item.href !== '/' && pathname.startsWith(item.href));
+          const showPing = item.hasLiveIndicator && hasUnseenLiveEvent;
           return (
             <Link
               key={item.href}
@@ -44,7 +72,7 @@ export function BottomNav() {
             >
               <div className="relative">
                 <item.icon className="w-6 h-6 mb-1" />
-                {item.hasLiveIndicator && (
+                {showPing && (
                     <span className="absolute top-0 right-0 -mr-1 -mt-1 flex h-2.5 w-2.5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
