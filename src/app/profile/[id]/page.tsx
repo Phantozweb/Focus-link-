@@ -6,7 +6,7 @@ import { notFound, useRouter, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
@@ -101,8 +101,12 @@ function StudentProfile({ user }: { user: UserProfile }) {
             <div className="p-6 sm:p-8 -mt-24">
               <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                 <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
-                  <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"portrait person"} />
-                  <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
+                   {user.avatarUrl ? (
+                    <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"portrait person"} />
+                   ) : null}
+                  <AvatarFallback className="text-6xl">
+                    {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-20 w-20" />}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
                   <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
@@ -234,7 +238,14 @@ function AssociationProfile({ user }: { user: UserProfile }) {
           <div className="rounded-lg bg-white p-4 sm:p-6 shadow-md">
             <div className="flex w-full flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="flex flex-col sm:flex-row items-start gap-4">
-                <Image src={user.avatarUrl} alt={`${user.name} logo`} width={128} height={128} className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-sm border-4 border-white" data-ai-hint="logo building" />
+                 <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-sm border-4 border-white">
+                  {user.avatarUrl ? (
+                    <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
+                  ) : null}
+                  <AvatarFallback className="text-6xl rounded-md">
+                     {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <Building className="h-16 w-16" />}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="flex flex-col gap-1 pt-2">
                   <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
                     {user.name}
@@ -465,8 +476,12 @@ export default function ProfilePage() {
               <div className="p-6 sm:p-8 -mt-24">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                   <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
-                    <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={isOrg ? "logo building" : "portrait person"} />
-                    <AvatarFallback className="text-6xl">{user.name.charAt(0)}</AvatarFallback>
+                    {user.avatarUrl ? (
+                      <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={isOrg ? "logo building" : "portrait person"} />
+                    ) : null}
+                    <AvatarFallback className="text-6xl">
+                      {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-20 w-20" />}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
                     <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">

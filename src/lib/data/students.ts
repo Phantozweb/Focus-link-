@@ -116,7 +116,7 @@ I’m currently exploring research methodology and the psychological aspects of 
       linkedin: 'https://linkedin.com/in/braseetha-a-260b60323',
       email: 'brasee66@gmail.com',
     },
-    avatarUrl: 'https://i.ibb.co/yYyV5gG/female-icon-2.png',
+    avatarUrl: '',
     workExperience: [
         {
           title: 'First Prize – Science Exhibition',
