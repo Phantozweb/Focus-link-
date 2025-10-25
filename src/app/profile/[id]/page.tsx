@@ -392,7 +392,7 @@ Thank you.
                                 <DialogTrigger asChild>
                                   <Button className="flex-1 md:flex-initial">Apply Now</Button>
                                 </DialogTrigger>
-                                <DialogContent>
+                                <DialogContent className="sm:max-w-md">
                                     <DialogHeader>
                                         <DialogTitle>Application Inquiry</DialogTitle>
                                         <DialogDescription>
@@ -400,17 +400,17 @@ Thank you.
                                         </DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-4">
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label htmlFor="name" className="text-right">Name</Label>
-                                            <Input id="name" value={inquiryName} onChange={(e) => setInquiryName(e.target.value)} className="col-span-3" />
+                                        <div className="space-y-2">
+                                            <Label htmlFor="name">Name</Label>
+                                            <Input id="name" value={inquiryName} onChange={(e) => setInquiryName(e.target.value)} />
                                         </div>
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label htmlFor="email" className="text-right">Email</Label>
-                                            <Input id="email" type="email" value={inquiryEmail} onChange={(e) => setInquiryEmail(e.target.value)} className="col-span-3" />
+                                        <div className="space-y-2">
+                                            <Label htmlFor="email">Email</Label>
+                                            <Input id="email" type="email" value={inquiryEmail} onChange={(e) => setInquiryEmail(e.target.value)} />
                                         </div>
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label htmlFor="phone" className="text-right">Phone</Label>
-                                            <Input id="phone" type="tel" value={inquiryPhone} onChange={(e) => setInquiryPhone(e.target.value)} className="col-span-3" />
+                                        <div className="space-y-2">
+                                            <Label htmlFor="phone">Phone</Label>
+                                            <Input id="phone" type="tel" value={inquiryPhone} onChange={(e) => setInquiryPhone(e.target.value)} />
                                         </div>
                                     </div>
                                     <DialogFooter>
