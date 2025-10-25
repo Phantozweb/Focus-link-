@@ -1,5 +1,5 @@
 
-import { users as allUsers } from '@/lib/data';
+import { professionals } from '@/lib/data/professionals';
 import { OpticiansDirectoryClient } from './opticians-directory-client';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -27,7 +27,7 @@ function DirectorySkeleton() {
 }
 
 export default function OpticiansDirectoryPage() {
-  const initialFilteredUsers = allUsers.filter(user => user.type === 'Optician');
+  const initialFilteredUsers = professionals.filter(user => user.type === 'Optician');
   
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">

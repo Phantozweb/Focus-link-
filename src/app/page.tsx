@@ -2,7 +2,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from 'react';
-import { users as allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
 import { demoDiscussions } from '@/lib/forum';
 import { demoJobs } from '@/lib/jobs';
@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, MessageCircle as CommunityIcon, Info } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, Info, MessageSquare, Building2 as CommunityIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -637,3 +637,5 @@ export default function Home() {
       </TooltipProvider>
   );
 }
+
+    

@@ -1,5 +1,5 @@
 
-import { users as allUsers } from '@/lib/data';
+import { professionals } from '@/lib/data/professionals';
 import { AcademicsDirectoryClient } from './academics-directory-client';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -28,7 +28,7 @@ function DirectorySkeleton() {
 
 
 export default function AcademicsDirectoryPage() {
-  const initialFilteredUsers = allUsers.filter(user => user.type === 'Academic');
+  const initialFilteredUsers = professionals.filter(user => user.type === 'Academic');
   
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">

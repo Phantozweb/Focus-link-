@@ -1,7 +1,7 @@
 
 'use client';
 
-import { users } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import { notFound, useRouter, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -354,7 +354,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  const user = users.find((u) => u.id === id);
+  const user = allUsers.find((u) => u.id === id);
 
   if (!user) {
     notFound();

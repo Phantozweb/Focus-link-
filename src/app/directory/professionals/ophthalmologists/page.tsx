@@ -1,5 +1,5 @@
 
-import { users as allUsers } from '@/lib/data';
+import { professionals } from '@/lib/data/professionals';
 import { OphthalmologistsDirectoryClient } from './ophthalmologists-directory-client';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -28,7 +28,7 @@ function DirectorySkeleton() {
 }
 
 export default function OphthalmologistsDirectoryPage() {
-  const initialFilteredUsers = allUsers.filter(user => user.type === 'Ophthalmologist');
+  const initialFilteredUsers = professionals.filter(user => user.type === 'Ophthalmologist');
   
   return (
      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">

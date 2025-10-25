@@ -1,5 +1,5 @@
 
-import { users as allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import type { UserProfile } from '@/types';
 import { DirectoryClient } from './directory-client';
 import { notFound } from 'next/navigation';

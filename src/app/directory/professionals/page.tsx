@@ -1,7 +1,7 @@
 
 'use client';
 
-import { users as allUsers } from '@/lib/data';
+import { professionals } from '@/lib/data/professionals';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -20,10 +20,10 @@ const professionalCategories = [
 
 export default function ProfessionalsPage() {
   const router = useRouter();
-  const optometrists = allUsers.filter(u => u.type === 'Optometrist');
-  const ophthalmologists = allUsers.filter(u => u.type === 'Ophthalmologist');
-  const opticians = allUsers.filter(u => u.type === 'Optician');
-  const academics = allUsers.filter(u => u.type === 'Academic');
+  const optometrists = professionals.filter(u => u.type === 'Optometrist');
+  const ophthalmologists = professionals.filter(u => u.type === 'Ophthalmologist');
+  const opticians = professionals.filter(u => u.type === 'Optician');
+  const academics = professionals.filter(u => u.type === 'Academic');
 
   return (
     <div className="bg-muted/40">
