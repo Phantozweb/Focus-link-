@@ -107,9 +107,19 @@ export default function AcademyPage() {
                   </div>
                 </Link>
                 <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                    <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
-                  </h3>
+                  {webinar.id === 'eye-q-arena-2025' ? (
+                     <div className="text-center flex-grow">
+                      <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">
+                        <h3 className="text-xl font-black text-slate-800">Eye Q Arena 2025</h3>
+                        <p className="text-sm text-muted-foreground">The International Optometry Knowledge Championship</p>
+                      </Link>
+                    </div>
+                  ) : (
+                    <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
+                      <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                    </h3>
+                  )}
+
                    {webinar.id === 'eye-q-arena-2025' ? (
                       <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                           <p className="line-clamp-2">Test your knowledge against peers worldwide in this international optometry quiz competition.</p>
