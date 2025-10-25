@@ -29,6 +29,8 @@ const initialPreferences = {
   forum: false,
 };
 
+// This component is no longer used in the header but is kept for potential future use.
+// If you want to re-enable it, you'll need to add a trigger for it somewhere in the UI.
 export function NotificationSettings({
   isOpen,
   onOpenChange,

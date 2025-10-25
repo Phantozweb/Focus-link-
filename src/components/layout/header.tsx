@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell, BookOpen, Users, Tv, Calendar, LogIn } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, User, BookOpen, Users, Tv, Calendar, LogIn } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +23,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { NotificationSettings } from '@/components/notification-settings';
 import { useToast } from '@/hooks/use-toast';
 
 const directoryLinks = [
@@ -56,21 +55,10 @@ const aboutLinks = [
 ]
 
 export function Header() {
-  const [isNotificationDialogOpen, setIsNotificationDialogOpen] = useState(false);
   const { toast } = useToast();
-
-  const handlePreferencesSave = (preferences: Record<string, boolean>) => {
-    // This is where you would save the user's preferences to your backend.
-    console.log("Saving preferences:", preferences);
-  };
 
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 bg-white px-4 sm:px-6 lg:px-8 py-3 sticky top-0 z-40">
-        <NotificationSettings 
-          isOpen={isNotificationDialogOpen}
-          onOpenChange={setIsNotificationDialogOpen}
-          onSave={handlePreferencesSave}
-        />
         <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-3 text-slate-800">
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
@@ -130,9 +118,11 @@ export function Header() {
         </div>
         <div className="hidden md:flex items-center gap-4">
              <div className="flex items-center gap-2">
-                <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" size="icon">
-                  <Bell className="h-5 w-5" />
-                  <span className="sr-only">Notification Settings</span>
+                <Button variant="outline" size="icon" asChild>
+                  <Link href="/profile">
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">My Profile</span>
+                  </Link>
                 </Button>
                 <Button variant="ghost" asChild>
                   <Link href="/login">
