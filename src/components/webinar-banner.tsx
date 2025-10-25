@@ -6,7 +6,7 @@ import type { Webinar } from '@/lib/academy';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
-import { Ticket, XCircle, Calendar, Clock, Video, User, Radio } from 'lucide-react';
+import { Ticket, XCircle, Calendar, Clock, Video, User, Radio, Users, Tv } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { WebinarTime } from './webinar-time';
 
@@ -137,11 +137,11 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
                     <span><WebinarTime dateTime={webinar.dateTime} format={{ timeOnly: true }} /></span>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Video className="h-4 w-4 text-cyan-300 flex-shrink-0" />
+                    <Users className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span>Organized by {webinar.speaker.name}</span>
                 </div>
                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-cyan-300 flex-shrink-0" />
+                    <Tv className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span>Powered by {webinar.host.name}</span>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -271,7 +271,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                       </div>
                                   </div>
                                   <div className="flex items-start gap-3">
-                                      <Video className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <Tv className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
                                           <h4 className="font-semibold">Platform</h4>
                                           <p className="text-sm text-muted-foreground">Hosted by Focus Links</p>
