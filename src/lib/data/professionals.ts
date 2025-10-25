@@ -204,7 +204,7 @@ export const professionals: UserProfile[] = [
       {
         title: 'Lecturer in Optometry',
         company: 'VK College of Optometry, Madurai',
-        startDate: 'Dec 2023',
+        startDate: 'June 2025',
         endDate: 'Present',
         description: 'Instructing and mentoring undergraduate optometry students in core subjects and clinical practices. Overseeing student-led patient examinations and providing expert guidance on diagnosis and management.'
       }
