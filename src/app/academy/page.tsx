@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
@@ -31,7 +31,9 @@ export default function AcademyPage() {
       const startTime = new Date(w.dateTime).getTime();
       const durationParts = w.duration.split(' ');
       const durationValue = parseInt(durationParts[0], 10);
-      const endTime = startTime + (durationValue * 60 * 1000) + (3 * 60 * 60 * 1000); // 3-hour grace period
+      const isQuiz = w.id === 'eye-q-arena-2025';
+      const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24) : (1000 * 60);
+      const endTime = startTime + (durationValue * durationMultiplier);
 
       if (now >= startTime && now < endTime) {
         live.push(w);
@@ -43,8 +45,8 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming);
-    setPastWebinars(past);
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
+    setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
   }, []);
 
   return (
@@ -108,9 +110,23 @@ export default function AcademyPage() {
                   <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
                     <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                   </h3>
-                  <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                      <WebinarTime dateTime={webinar.dateTime} />
-                  </div>
+                   {webinar.id === 'eye-q-arena-2025' ? (
+                      <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
+                          <p className="line-clamp-2">Test your knowledge against peers worldwide in this international optometry quiz competition.</p>
+                          <div className="flex items-center gap-2 pt-2">
+                              <Users className="h-4 w-4 text-primary" />
+                              <span>Organized by {webinar.speaker.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Tv className="h-4 w-4 text-primary" />
+                            <span>Powered by {webinar.host.name}</span>
+                          </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
+                        <WebinarTime dateTime={webinar.dateTime} />
+                      </div>
+                    )}
                   
                   <Button asChild className="w-full mt-4">
                     <Link href={`/academy/${webinar.id}`}>View Details</Link>
