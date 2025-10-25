@@ -175,7 +175,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
                 </div>
                  <div className="flex items-center gap-2">
                     <Tv className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span>Powered by {webinar.host.name}</span>
+                    <span>Hosted by {webinar.host.name}</span>
                 </div>
             </div>
          </div>
