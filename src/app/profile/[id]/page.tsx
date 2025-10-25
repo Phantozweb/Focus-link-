@@ -281,7 +281,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                         <div className="md:col-span-2 space-y-8">
                             <section>
                                 <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">About Us</h2>
-                                <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                                <div className="prose max-w-none text-white" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                             </section>
                             <section>
                                 <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Headlines</h2>
@@ -337,14 +337,14 @@ function CollegeProfile({ user }: { user: UserProfile }) {
                 Back
             </Link>
             </Button>
-            <Card>
+            <Card className="overflow-hidden">
                 <div className="relative h-48 md:h-64 w-full">
                     <Image src={bannerImage} alt={`${user.name} banner`} fill style={{objectFit: 'cover'}} data-ai-hint="college campus"/>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 </div>
-                <div className="p-6">
-                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6 -mt-20 relative z-10">
-                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card">
+                <div className="p-6 bg-card">
+                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
+                         <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 relative z-10">
                         {user.avatarUrl ? (
                             <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
                         ) : null}
@@ -383,7 +383,7 @@ function CollegeProfile({ user }: { user: UserProfile }) {
                     <div className="md:col-span-2 space-y-8">
                         <section>
                             <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">About Us</h2>
-                            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                            <div className="prose max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                         </section>
                         {user.gallery && user.gallery.length > 0 && (
                             <section>
