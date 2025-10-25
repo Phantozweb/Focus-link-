@@ -201,12 +201,12 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
             <CardContent className="p-0">
               <div className="p-8 space-y-8">
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                      <div className="lg:col-span-2">
+                      <div className="lg:col-span-3 space-y-6">
                            {isQuiz ? <QuizBanner webinar={webinar} /> : <WebinarBanner webinar={webinar} />}
-                           <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800 mt-6">{webinar.title}</h1>
-                      </div>
-                      <div className="lg:row-start-1 lg:col-start-3">
-                          <WebinarActions webinar={webinar} />
+                           <h1 className="text-3xl lg:text-4xl font-bold font-headline text-slate-800">{webinar.title}</h1>
+                           <div className="max-w-md mx-auto">
+                              <WebinarActions webinar={webinar} />
+                           </div>
                       </div>
                   </div>
 

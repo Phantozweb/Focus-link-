@@ -130,15 +130,13 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         switch (status) {
             case 'UPCOMING':
                 return (
-                    <>
-                        <div className="text-center">
-                            <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
-                            <div className="flex justify-center gap-2">
-                                <CountdownUnit value={timeLeft.days} label="Days" />
-                                <CountdownUnit value={timeLeft.hours} label="Hours" />
-                                <CountdownUnit value={timeLeft.minutes} label="Minutes" />
-                                <CountdownUnit value={timeLeft.seconds} label="Seconds" />
-                            </div>
+                    <div className="space-y-4 text-center">
+                        <h3 className="font-semibold text-slate-700 mb-3">Event Starts In</h3>
+                        <div className="flex justify-center gap-2">
+                            <CountdownUnit value={timeLeft.days} label="Days" />
+                            <CountdownUnit value={timeLeft.hours} label="Hours" />
+                            <CountdownUnit value={timeLeft.minutes} label="Minutes" />
+                            <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                         </div>
                         {isQuiz ? (
                             <Dialog>
@@ -151,27 +149,25 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                               <QuizEntryDialog webinarId={webinar.id} />
                             </Dialog>
                         ) : (
-                          <>
-                            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-center">
+                          <div className='space-y-3 pt-4'>
+                            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
                               <p className="font-bold text-primary flex items-center justify-center gap-2"><Users className="h-5 w-5" /> 100+ People Registered!</p>
                             </div>
-                            <div className='space-y-3'>
-                                <Button size="lg" className="w-full text-lg py-6" asChild>
-                                    <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
-                                        <Ticket className="mr-2 h-6 w-6" />
-                                        Register Now
-                                    </a>
-                                </Button>
-                                <Button size="lg" variant="outline" className="w-full" asChild>
-                                    <Link href="/membership">
-                                        <UserPlus className="mr-2 h-5 w-5" />
-                                        Become a Member
-                                    </Link>
-                                </Button>
-                            </div>
-                          </>
+                            <Button size="lg" className="w-full text-lg py-6" asChild>
+                                <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
+                                    <Ticket className="mr-2 h-6 w-6" />
+                                    Register Now
+                                </a>
+                            </Button>
+                            <Button size="lg" variant="outline" className="w-full" asChild>
+                                <Link href="/membership">
+                                    <UserPlus className="mr-2 h-5 w-5" />
+                                    Become a Member
+                                </Link>
+                            </Button>
+                          </div>
                         )}
-                    </>
+                    </div>
                 );
             case 'REGISTRATION_CLOSED':
                  return (
