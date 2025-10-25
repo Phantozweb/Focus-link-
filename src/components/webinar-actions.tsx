@@ -4,12 +4,13 @@
 import { useState, useEffect } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 interface WebinarActionsProps {
     webinar: Webinar;
@@ -51,12 +52,60 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
             </Button>
         </div>
         <Button asChild disabled={!membershipId}>
-            <Link href={`/events/quiz/${webinarId}`}>
+            <Link href={`/academy/quiz/${webinarId}`}>
             <Trophy className="mr-2 h-4 w-4" />
             Start Quiz
             </Link>
         </Button>
       </DialogFooter>
+    </DialogContent>
+  )
+}
+
+function ReminderDialog() {
+  const { toast } = useToast();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleNotify = () => {
+    // Here you would typically send the data to a backend service
+    // For demo purposes, we'll just show a toast message.
+    toast({
+      title: "You're on the list!",
+      description: `We'll email ${email} when the arena opens.`,
+    });
+  }
+
+  return (
+    <DialogContent>
+        <DialogHeader>
+            <DialogTitle>Get Notified</DialogTitle>
+            <DialogDescription>
+                Enter your details below, and we'll send you an email reminder just before the Eye Q Arena opens.
+            </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+            <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your Name" />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+            </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button onClick={handleNotify} disabled={!name || !email}>
+              Notify Me
+            </Button>
+          </DialogClose>
+        </DialogFooter>
     </DialogContent>
   )
 }
@@ -139,15 +188,21 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                         </div>
                         {isQuiz ? (
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                  <Button size="lg" className="w-full text-lg py-6">
-                                      <Trophy className="mr-2 h-6 w-6" />
-                                      Enter Arena Now
+                            <div className="space-y-3 pt-3">
+                              <Button size="lg" className="w-full text-lg py-6" disabled>
+                                  <Lock className="mr-2 h-6 w-6" />
+                                  Arena is Locked
+                              </Button>
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button size="lg" variant="outline" className="w-full">
+                                      <Bell className="mr-2 h-5 w-5" />
+                                      Remind Me
                                   </Button>
-                              </DialogTrigger>
-                              <QuizEntryDialog webinarId={webinar.id} />
-                            </Dialog>
+                                </DialogTrigger>
+                                <ReminderDialog />
+                              </Dialog>
+                            </div>
                         ) : (
                           <div className='space-y-3 pt-4'>
                             <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
