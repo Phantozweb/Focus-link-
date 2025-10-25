@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, MessageSquare, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, MessageCircle, Info } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
@@ -24,7 +24,6 @@ import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
 import Autoplay from "embla-carousel-autoplay";
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
@@ -183,11 +182,12 @@ export default function Home() {
                                     <SelectItem value="all">All Profiles</SelectItem>
                                     <SelectItem value="forum">Case Forum</SelectItem>
                                     <SelectItem value="jobs">Job Board</SelectItem>
-                                    <optgroup label="Profile Types">
+                                    <SelectGroup>
+                                        <SelectLabel>Profile Types</SelectLabel>
                                         {profileTypes.map(type => (
                                             <SelectItem key={type} value={type}>{type}</SelectItem>
                                         ))}
-                                    </optgroup>
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
 
