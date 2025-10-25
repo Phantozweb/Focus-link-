@@ -83,29 +83,12 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
   if (isCard) {
      if (isQuiz) {
       return (
-        <div className={cn("relative w-full h-full bg-slate-900 text-white overflow-hidden rounded-lg p-4 flex flex-col justify-between", className)}>
-          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Quiz Icon" layout="fill" objectFit="cover" className="absolute inset-0 opacity-10 blur-sm" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
-          
+        <div className={cn("relative w-full h-full", className)}>
+          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" className="rounded-lg" />
+          <div className="absolute inset-0 bg-black/30 rounded-lg"></div>
           <StatusBadge />
-
-          <div className="relative z-10 w-full h-full flex flex-col justify-between pt-8">
-              <div className="pt-2">
-                <h2 className="font-bold leading-tight text-lg">
-                    {webinar.title}
-                </h2>
-              </div>
-
-              <div className="flex items-center gap-3 text-sm pt-3 mt-3">
-                <Avatar className="w-8 h-8 border-2 border-white/20">
-                    <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
-                    <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                    <p className="font-bold">{webinar.speaker.name}</p>
-                    <p className="text-white/70 text-xs">{webinar.speaker.title}</p>
-                </div>
-              </div>
+          <div className="absolute bottom-0 left-0 p-4 text-white">
+            <h2 className="font-bold leading-tight text-lg">{webinar.title}</h2>
           </div>
         </div>
       );
@@ -141,7 +124,16 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
   }
 
   // Default, detailed banner for the webinar page
-  const bannerAvatar = isQuiz ? 'https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png' : webinar.speaker.avatarUrl;
+  if (isQuiz) {
+    return (
+       <div className={cn("relative w-full h-[250px] overflow-hidden rounded-lg", className)}>
+        <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" />
+        <div className="absolute inset-0 bg-black/30"></div>
+        <StatusBadge />
+      </div>
+    );
+  }
+
 
   return (
      <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden rounded-lg p-6 md:p-8 flex flex-col justify-between", className)}>
@@ -152,7 +144,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
       <div className="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 h-full items-center">
          <div className="flex-shrink-0 mx-auto md:mx-0">
              <Avatar className="h-24 w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 border-4 border-white/30 shadow-lg">
-                <AvatarImage src={bannerAvatar} alt={webinar.speaker.name} />
+                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
                 <AvatarFallback className="text-5xl md:text-6xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
             </Avatar>
          </div>

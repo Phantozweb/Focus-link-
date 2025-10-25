@@ -198,7 +198,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
           </Link>
           <Card className="overflow-hidden shadow-xl">
             <CardContent className="p-0">
-              <div className="w-full aspect-video rounded-t-lg overflow-hidden shadow-md">
+              <div className="w-full">
                   <WebinarBanner webinar={webinar} />
               </div>
               <div className="p-8 space-y-8">
