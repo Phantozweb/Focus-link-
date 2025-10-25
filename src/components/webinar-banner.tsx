@@ -138,11 +138,11 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
                 </div>
                  <div className="flex items-center gap-2">
                     <Video className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span>{webinar.platform}</span>
+                    <span>Organized by {webinar.speaker.name}</span>
                 </div>
                  <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span>Organized by {webinar.host.name}</span>
+                    <span>Powered by {webinar.host.name}</span>
                 </div>
             </div>
          </div>
