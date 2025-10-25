@@ -5,7 +5,7 @@ import type { Webinar } from '@/lib/academy';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
-import { Ticket, XCircle, Calendar, Clock, Video, User, Radio, Users, Tv } from 'lucide-react';
+import { Ticket, XCircle, Calendar, Clock, Video, User, Radio, Users, Tv, Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { WebinarTime } from './webinar-time';
 import Image from 'next/image';
@@ -81,7 +81,46 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
 
   if (isQuiz) {
+    if (variant === 'card') {
       return <QuizBanner webinar={webinar} className={className} variant={variant} />;
+    }
+    // Detailed quiz banner for detail page
+    return (
+      <div className={cn("relative w-full h-full bg-gradient-to-br from-amber-500 to-orange-600 text-white overflow-hidden p-6 md:p-8 flex flex-col justify-between", className)}>
+        <div className="absolute inset-0 -translate-x-1/4 -translate-y-1/4 w-[150%] h-[150%] rounded-full bg-orange-500/20 blur-3xl opacity-60"></div>
+        <StatusBadge />
+        <div className="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 h-full items-center">
+           <div className="flex-shrink-0 mx-auto md:mx-0">
+               <div className="h-24 w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 rounded-full border-4 border-white/30 shadow-lg flex items-center justify-center bg-white/20">
+                  <Trophy className="h-12 w-12 md:h-16 md:w-16 text-white" />
+               </div>
+           </div>
+           <div className="flex flex-col justify-center text-center md:text-left">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-headline leading-tight mb-4">
+                {webinar.title}
+              </h1>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm md:text-base">
+                  <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-amber-200 flex-shrink-0" />
+                      <span>November 2 - 12, 2025</span>
+                  </div>
+                   <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-amber-200 flex-shrink-0" />
+                      <span>{webinar.duration}</span>
+                  </div>
+                   <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-amber-200 flex-shrink-0" />
+                      <span>Organized by {webinar.speaker.name}</span>
+                  </div>
+                   <div className="flex items-center gap-2">
+                      <Tv className="h-4 w-4 text-amber-200 flex-shrink-0" />
+                      <span>Hosted by {webinar.host.name}</span>
+                  </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    );
   }
 
   // Default, detailed banner for the webinar page
