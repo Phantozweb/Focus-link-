@@ -185,10 +185,12 @@ export default function CreateProfilePage() {
          });
       } else if (result.status === "success") {
         toast({
-          title: 'Profile Saved!',
-          description: 'Your professional profile has been created successfully.',
+          title: 'Profile Submitted!',
+          description: 'Your profile has been submitted for review! Our Team will Review and make a Profile for you!',
         });
-        router.push(`/profile/${data.id}`);
+        form.reset();
+        setPreviewUrl('');
+        setIdStatus('idle');
       } else {
         throw new Error(result.message || 'An unexpected response was received from the server.');
       }
