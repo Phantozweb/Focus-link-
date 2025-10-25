@@ -1,3 +1,4 @@
+
 import type { UserProfile } from '@/types';
 
 export const students: UserProfile[] = [
@@ -145,5 +146,73 @@ I’m currently exploring research methodology and the psychological aspects of 
     ],
     languages: ['English (Full Professional)', 'Tamil (Native)', 'Hindi (Limited Working)'],
     verified: false,
+  },
+  {
+    id: '23',
+    name: 'Anshi Jha',
+    type: 'Student',
+    experience: 'Optometry Intern | Head of Clinical Development (Focus-IN)',
+    location: 'Etawah, Uttar Pradesh, India',
+    skills: [
+      'Vision Testing & Eye Examination',
+      'Patient Communication & Education',
+      'Refraction (Optometry) & Diagnostic Techniques',
+      'Clinical Training & Workshop Design',
+      'Research Methodology & Data Analysis',
+      'Myopia Management & Ocular Health Awareness'
+    ],
+    interests: ['Myopia Management', 'Binocular Vision', 'AI in Eye Care'],
+    bio: `I am a Bachelor of Optometry student at Uttar Pradesh University of Medical Sciences with a growing passion for clinical innovation, patient care, and global vision science.
+
+As the Head of Clinical Development at Focus-IN, I lead and design training initiatives, coordinate clinical research projects, and mentor fellow students in evidence-based optometric practice. My work bridges academic knowledge with real-world applications—helping aspiring clinicians build confidence and competence in diverse areas of optometry.
+
+My goal is to build a career that combines clinical leadership with education and research, creating platforms where future optometrists can learn, share, and grow toward global clinical excellence.`,
+    links: {
+      linkedin: 'https://linkedin.com/in/anshi-jha-6a98b0310',
+      email: '12anshijha@gmail.com',
+    },
+    avatarUrl: '',
+    workExperience: [
+      {
+        title: 'Optometry Intern',
+        company: 'L V Prasad Eye Institute',
+        startDate: 'July 2025',
+        endDate: 'Present',
+        description: 'Performing comprehensive eye examinations, vision testing, and assisting in specialized clinics to enhance patient management skills.'
+      },
+      {
+        title: 'Head of Clinical Development',
+        company: 'Focus-IN',
+        startDate: 'September 2025',
+        endDate: 'Present',
+        description: 'Oversee clinical content and training modules. Collaborate with professionals to design workshops on clinical refraction, binocular vision, and ocular disease management.'
+      },
+      {
+        title: 'Regional Contributor & Student Representative',
+        company: 'OptoBharat (Central Zone)',
+        startDate: 'March 2025',
+        endDate: 'Present',
+        description: 'Supporting student engagement and vision awareness projects across India through collaborations and community events.'
+      },
+      {
+        title: '2nd Place – World Optometry Week 2025 Quiz Competition',
+        company: 'UPUMS',
+        startDate: '',
+        endDate: 'Achievement',
+        description: 'Secured second place in a university-level optometry quiz competition.'
+      }
+    ],
+    education: [
+      {
+        school: 'Uttar Pradesh University of Medical Sciences',
+        university: 'Uttar Pradesh University of Medical Sciences',
+        degree: 'Bachelor of Optometry (B.Optom)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2021',
+        endYear: '2025 (Expected)'
+      }
+    ],
+    languages: ['English (Full Professional)', 'Hindi (Native or Bilingual)'],
+    verified: true,
   },
 ];
