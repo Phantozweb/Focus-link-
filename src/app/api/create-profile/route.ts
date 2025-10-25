@@ -8,6 +8,11 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
 
+    // The frontend should prevent this, but as a safeguard:
+    if (!data.membershipId) {
+      return NextResponse.json({ status: "error", message: "Membership ID is required." }, { status: 400 });
+    }
+
     const response = await fetch(scriptUrl, {
         method: 'POST',
         headers: {
@@ -24,16 +29,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: resultText || "An error occurred with the submission script." }, { status: response.status });
     }
 
-    let result;
-    try {
-        // The script should return JSON for business logic results (success, exists, invalid_id)
-        result = JSON.parse(resultText);
-    } catch (e) {
-        // This handles cases where the script might return plain text on success.
-        // We'll treat it as a generic success but log a warning.
-        console.warn("Apps Script returned non-JSON response:", resultText);
-        return NextResponse.json({ result: 'success', message: 'Profile created, but script response format was unexpected.' });
-    }
+    // The script now returns a standard JSON object with a 'status' field.
+    const result = JSON.parse(resultText);
     
     // Forward the structured JSON response from the script to the client.
     return NextResponse.json(result);
@@ -41,6 +38,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('API Route Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
-    return NextResponse.json({ message: errorMessage }, { status: 500 });
+    return NextResponse.json({ status: 'error', message: errorMessage }, { status: 500 });
   }
 }

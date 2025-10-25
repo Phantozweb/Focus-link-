@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -52,7 +51,7 @@ export default function CreateProfilePage() {
       education: [{ school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' }],
       avatarUrl: '',
     },
-    mode: 'onChange',
+    mode: 'onChange', // Important for real-time validation feedback
   });
   
   const membershipId = form.watch('id');
@@ -83,7 +82,7 @@ export default function CreateProfilePage() {
   }, 500), [form]);
 
   useEffect(() => {
-    checkIdValidity(membershipId || '');
+    checkIdValidity(membershipId);
   }, [membershipId, checkIdValidity]);
 
 
@@ -137,8 +136,7 @@ export default function CreateProfilePage() {
   const onSubmit = async (data: UserProfileForm) => {
     setIsSubmitting(true);
     
-    // This check is now robust because the form's `id` state is synchronized.
-    if (!data.id || idStatus !== 'valid') {
+    if (idStatus !== 'valid') {
         toast({
             variant: 'destructive',
             title: 'Invalid Membership ID',
@@ -150,6 +148,7 @@ export default function CreateProfilePage() {
 
     const payload = {
         ...data,
+        membershipId: data.id, // Ensure membershipId is explicitly passed
         skills: JSON.stringify(data.skills?.map(s => s.value)),
         interests: JSON.stringify(data.interests?.map(i => i.value)),
         languages: JSON.stringify(data.languages?.map(l => l.value)),
@@ -170,16 +169,13 @@ export default function CreateProfilePage() {
         throw new Error(result.message || 'Failed to save profile.');
       }
 
-      if (result.result === 'invalid_id') {
-        form.setError('id', { type: 'manual', message: 'This Membership ID is not valid. Please check and try again.' });
-        toast({ variant: 'destructive', title: 'Invalid ID', description: 'The Membership ID you entered was not found.' });
-      } else if (result.result === 'exists') {
+      if (result.status === "error" && result.message.includes("already exists")) {
          toast({
             variant: 'destructive',
             title: 'Profile Already Exists',
             description: 'A profile with this Membership ID has already been created.',
          });
-      } else if (result.result === 'success') {
+      } else if (result.status === "success") {
         toast({
           title: 'Profile Saved!',
           description: 'Your professional profile has been created successfully.',
