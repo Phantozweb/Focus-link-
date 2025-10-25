@@ -363,6 +363,123 @@ function AssociationProfile({ user }: { user: UserProfile }) {
   );
 }
 
+function CollegeProfile({ user }: { user: UserProfile }) {
+  
+  return (
+    <div className="flex-1 bg-gray-50">
+        <Button variant="outline" asChild className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
+          <Link href="/directory/colleges">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Link>
+        </Button>
+      <div className="relative h-48 md:h-64 w-full">
+        <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} fill objectFit="cover" data-ai-hint="college campus"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="max-w-5xl mx-auto -mt-16">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-md">
+            <div className="flex w-full flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                 <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-sm border-4 border-white">
+                  {user.avatarUrl ? (
+                    <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
+                  ) : null}
+                  <AvatarFallback className="text-6xl rounded-md">
+                     {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <Building className="h-16 w-16" />}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1 pt-2">
+                  <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
+                    {user.name}
+                    {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                  </h1>
+                  <p className="text-gray-500">{user.experience}</p>
+                </div>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <Button asChild>
+                  <a href="#">Apply Now</a>
+                </Button>
+                {user.links.linkedin && (
+                <Button asChild variant="secondary">
+                   <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
+                </Button>
+                )}
+              </div>
+            </div>
+            <div className="mt-6">
+              <div className="flex border-b border-gray-200">
+                <a className="flex flex-col items-center justify-center border-b-2 border-b-primary text-primary px-4 py-3" href="#">
+                  <p className="text-sm font-semibold">About</p>
+                </a>
+                <a className="flex flex-col items-center justify-center border-b-2 border-b-transparent text-gray-500 hover:text-slate-800 hover:border-gray-300 px-4 py-3" href="#">
+                  <p className="text-sm font-semibold">Programs</p>
+                </a>
+                <a className="flex flex-col items-center justify-center border-b-2 border-b-transparent text-gray-500 hover:text-slate-800 hover:border-gray-300 px-4 py-3" href="#">
+                  <p className="text-sm font-semibold">Gallery</p>
+                </a>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
+              <div className="md:col-span-2">
+                <div className="space-y-8">
+                  <div>
+                    <h2 className="text-slate-800 text-xl font-bold leading-tight tracking-tight mb-4">About Us</h2>
+                    <div className="space-y-6 text-gray-600 text-base leading-relaxed">
+                      <div dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                    </div>
+                  </div>
+                  {user.gallery && user.gallery.length > 0 && (
+                    <div>
+                      <h2 className="text-slate-800 text-xl font-bold leading-tight tracking-tight mb-4">Gallery</h2>
+                       <div className="grid grid-cols-2 gap-4">
+                        {user.gallery.map((imgUrl, index) => (
+                          <div key={index} className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+                             <Image src={imgUrl} alt={`${user.name} gallery image ${index + 1}`} layout="fill" objectFit="cover" className="hover:scale-105 transition-transform duration-300" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="md:col-span-1 space-y-8">
+                <div>
+                  <h3 className="text-slate-800 text-lg font-bold leading-tight tracking-tight mb-4">Contact Information</h3>
+                  <div className="space-y-4 text-sm">
+                    {user.links.email && (<div className="flex items-center gap-3">
+                      <Mail className="h-5 w-5 text-gray-400" />
+                      <span className="text-gray-600">{user.links.email}</span>
+                    </div>)}
+                     <div className="flex items-start gap-3">
+                        <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-600">{user.location}</span>
+                    </div>
+                  </div>
+                </div>
+                 <div>
+                    <h3 className="text-slate-800 text-lg font-bold leading-tight tracking-tight mb-4">Focus Areas</h3>
+                     <div className="flex flex-wrap gap-2">
+                        {user.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
+                    </div>
+                 </div>
+                 <div>
+                    <h3 className="text-slate-800 text-lg font-bold leading-tight tracking-tight mb-4">Placement Partners</h3>
+                     <div className="flex flex-wrap gap-2">
+                        {user.interests.map(interest => <Badge key={interest} variant="outline">{interest}</Badge>)}
+                    </div>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 export default function ProfilePage() {
   const params = useParams();
@@ -425,6 +542,10 @@ export default function ProfilePage() {
   
   if (user.type === 'Association') {
     return <> <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} /><AssociationProfile user={user} /></>;
+  }
+
+  if (user.type === 'College') {
+    return <> <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} /><CollegeProfile user={user} /></>;
   }
 
 
@@ -598,7 +719,3 @@ export default function ProfilePage() {
     </>
   );
 }
-
-    
-
-    

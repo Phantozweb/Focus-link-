@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 export type WorkExperience = {
@@ -36,6 +37,7 @@ export type UserProfile = {
   education: Education[];
   languages: string[];
   verified?: boolean;
+  gallery?: string[];
 };
 
 // This type is for the form data structure before it's processed.

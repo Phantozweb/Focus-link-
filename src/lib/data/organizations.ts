@@ -38,6 +38,10 @@ export const organizations: UserProfile[] = [
       linkedin: 'https://vkinstitutions.in/'
     },
     avatarUrl: 'https://vkinstitutions.in/assets/images/pre-logo.png',
+    gallery: [
+      'https://vkinstitutions.in/assets/images/about-img.jpg',
+      'https://vkinstitutions.in/assets/images/about-img-2.jpg'
+    ],
     workExperience: [],
     education: [],
     languages: [],
