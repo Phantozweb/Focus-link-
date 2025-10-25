@@ -6,7 +6,7 @@ import { notFound, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
@@ -14,6 +14,10 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 // This function can't be used in a client component, but it's a good
 // pattern for server components. For this client component, we'll
@@ -240,8 +244,8 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 </div>
                 <div className="p-6">
-                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6 -mt-20 relative z-10">
-                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card">
+                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
+                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 md:-mt-24 relative z-10 shrink-0">
                             {user.avatarUrl ? (
                                 <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
                             ) : null}
@@ -254,16 +258,16 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                                 {user.name}
                                 {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
                             </h1>
-                            <p className="text-muted-foreground">{user.experience}</p>
-                            <p className="text-muted-foreground">{user.skills.length * 1000 + 2345} members</p>
+                            <p className="text-muted-foreground mt-1 text-base">{user.experience}</p>
+                            <p className="text-muted-foreground text-sm">{user.skills.length * 1000 + 2345} members</p>
                         </div>
-                        <div className="flex shrink-0 items-center gap-2 self-start md:self-end">
-                            <Button asChild>
-                            <a href="#">Join</a>
+                        <div className="flex shrink-0 items-center gap-2 self-start md:self-end w-full md:w-auto">
+                            <Button asChild className="flex-1 md:flex-initial">
+                              <a href="#">Join</a>
                             </Button>
                             {user.links.linkedin && (
-                            <Button asChild variant="secondary">
-                            <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
+                            <Button asChild variant="secondary" className="flex-1 md:flex-initial">
+                              <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
                             </Button>
                             )}
                         </div>
@@ -271,7 +275,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                 </div>
                  <div className="p-6 pt-0">
                     <div className="border-b">
-                        <nav className="-mb-px flex space-x-8">
+                        <nav className="-mb-px flex space-x-8 overflow-x-auto">
                             <a className="border-primary text-primary whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">About</a>
                             <a className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">Events</a>
                             <a className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">News</a>
@@ -281,7 +285,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                         <div className="md:col-span-2 space-y-8">
                             <section>
                                 <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">About Us</h2>
-                                <div className="prose max-w-none text-white" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                                <div className="prose max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                             </section>
                             <section>
                                 <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Headlines</h2>
@@ -307,8 +311,8 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                              <Card>
                                 <CardHeader><CardTitle className="text-lg">Contact Information</CardTitle></CardHeader>
                                 <CardContent className="space-y-4 text-sm">
-                                {user.links.email && (<div className="flex items-center gap-3">
-                                    <Mail className="h-5 w-5 text-gray-400" />
+                                {user.links.email && (<div className="flex items-start gap-3">
+                                    <Mail className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                                     <span className="text-gray-600 break-all">{user.links.email}</span>
                                 </div>)}
                                 <div className="flex items-start gap-3">
@@ -328,23 +332,29 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 
 function CollegeProfile({ user }: { user: UserProfile }) {
   const bannerImage = user.gallery && user.gallery.length > 0 ? user.gallery[0] : `https://picsum.photos/seed/${user.id}b/1200/300`;
+  const [inquiryName, setInquiryName] = useState('');
+  const [inquiryEmail, setInquiryEmail] = useState('');
+  const [inquiryPhone, setInquiryPhone] = useState('');
+
+  const generateMailto = () => {
+    const subject = `Inquiry from Focus Links Website: Application for ${user.name}`;
+    const body = `
+Hello ${user.name},
+
+I found your institution on Focus Links and would like to inquire about applications. Please find my details below:
+
+**Full Name:** ${inquiryName}
+**Email Address:** ${inquiryEmail}
+**Contact Number:** ${inquiryPhone}
+
+Thank you.
+
+---
+*Sent via Focus Links - The Global Eye Care Community*
+    `;
+    return `mailto:${user.links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
   
-  const inquirySubject = `Inquiry from Focus Links Website: Application for ${user.name}`;
-  const inquiryBody = `
-  Hello ${user.name},
-
-  I found your institution on Focus Links and would like to apply. Please find my details below:
-
-  **Full Name:** [Your Name Here]
-  **Email Address:** [Your Email Here]
-  **Contact Number:** [Your Phone Number Here]
-
-  Thank you.
-
-  ---
-  *Sent via Focus Links - The Global Eye Care Community*
-  `;
-  const mailtoLink = `mailto:${user.links.email}?subject=${encodeURIComponent(inquirySubject)}&body=${encodeURIComponent(inquiryBody)}`;
 
   return (
     <div className="bg-muted/40">
@@ -361,37 +371,66 @@ function CollegeProfile({ user }: { user: UserProfile }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 </div>
                 <div className="p-6 bg-card">
-                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
-                         <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 relative z-10">
-                        {user.avatarUrl ? (
-                            <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
-                        ) : null}
-                        <AvatarFallback className="text-6xl rounded-md">
-                            {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <Building className="h-16 w-16" />}
-                        </AvatarFallback>
+                    <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
+                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 md:-mt-24 relative z-10 shrink-0">
+                          {user.avatarUrl ? (
+                              <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
+                          ) : null}
+                          <AvatarFallback className="text-6xl rounded-md">
+                              {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <Building className="h-16 w-16" />}
+                          </AvatarFallback>
                         </Avatar>
                         <div className="flex-grow pt-2">
                             <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
                                 {user.name}
                                 {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
                             </h1>
-                            <p className="text-muted-foreground">{user.experience}</p>
+                            <p className="text-muted-foreground mt-1 text-base">{user.experience}</p>
                         </div>
-                        <div className="flex shrink-0 items-center gap-2 self-start md:self-end">
-                            <Button asChild>
-                                <a href={mailtoLink}>Apply Now</a>
-                            </Button>
+                        <div className="flex shrink-0 items-center gap-2 self-start md:self-end w-full md:w-auto">
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button className="flex-1 md:flex-initial">Apply Now</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Application Inquiry</DialogTitle>
+                                        <DialogDescription>
+                                            Enter your details below to send an application inquiry to {user.name}. Your email client will open with a pre-filled message.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="name" className="text-right">Name</Label>
+                                            <Input id="name" value={inquiryName} onChange={(e) => setInquiryName(e.target.value)} className="col-span-3" />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="email" className="text-right">Email</Label>
+                                            <Input id="email" type="email" value={inquiryEmail} onChange={(e) => setInquiryEmail(e.target.value)} className="col-span-3" />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="phone" className="text-right">Phone</Label>
+                                            <Input id="phone" type="tel" value={inquiryPhone} onChange={(e) => setInquiryPhone(e.target.value)} className="col-span-3" />
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button asChild>
+                                            <a href={generateMailto()}>Send Inquiry</a>
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             {user.links.linkedin && (
-                            <Button asChild variant="secondary">
-                            <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
-                            </Button>
+                              <Button asChild variant="secondary" className="flex-1 md:flex-initial">
+                                <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
+                              </Button>
                             )}
                         </div>
                     </div>
                 </div>
                 <div className="p-6 pt-0">
                     <div className="border-b">
-                        <nav className="-mb-px flex space-x-8">
+                        <nav className="-mb-px flex space-x-8 overflow-x-auto">
                             <a className="border-primary text-primary whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">About</a>
                             <a className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">Programs</a>
                             <a className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium" href="#">Gallery</a>
@@ -426,13 +465,17 @@ function CollegeProfile({ user }: { user: UserProfile }) {
                         <Card>
                             <CardHeader><CardTitle className="text-lg">Contact Information</CardTitle></CardHeader>
                             <CardContent className="space-y-4 text-sm">
-                            {user.links.email && (<div className="flex items-center gap-3">
-                                <Mail className="h-5 w-5 text-gray-400" />
+                            {user.links.email && (<div className="flex items-start gap-3">
+                                <Mail className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                                 <span className="text-gray-600 break-all">{user.links.email}</span>
                             </div>)}
                             <div className="flex items-start gap-3">
                                 <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                                 <span className="text-gray-600">{user.location}</span>
+                            </div>
+                             <div className="flex items-start gap-3">
+                                <Phone className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-600">96559 07744</span>
                             </div>
                             </CardContent>
                         </Card>
