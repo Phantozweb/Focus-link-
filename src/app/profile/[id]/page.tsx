@@ -327,7 +327,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 }
 
 function CollegeProfile({ user }: { user: UserProfile }) {
-  
+  const bannerImage = user.gallery && user.gallery.length > 0 ? user.gallery[0] : `https://picsum.photos/seed/${user.id}b/1200/300`;
   return (
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
@@ -339,7 +339,7 @@ function CollegeProfile({ user }: { user: UserProfile }) {
             </Button>
             <Card>
                 <div className="relative h-48 md:h-64 w-full">
-                    <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} fill style={{objectFit: 'cover'}} data-ai-hint="college campus"/>
+                    <Image src={bannerImage} alt={`${user.name} banner`} fill style={{objectFit: 'cover'}} data-ai-hint="college campus"/>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 </div>
                 <div className="p-6">
