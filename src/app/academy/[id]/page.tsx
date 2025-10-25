@@ -14,6 +14,7 @@ import { WebinarBanner } from '@/components/webinar-banner';
 import { WebinarTime } from '@/components/webinar-time';
 import { Leaderboard } from '@/components/leaderboard';
 import { demoLeaderboardData } from '@/lib/data';
+import { QuizBanner } from '@/components/quiz-banner';
 
 type WebinarPageProps = {
   params: { id: string }
@@ -199,7 +200,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
           <Card className="overflow-hidden shadow-xl">
             <CardContent className="p-0">
               <div className="w-full">
-                  <WebinarBanner webinar={webinar} />
+                {isQuiz ? <QuizBanner webinar={webinar} /> : <WebinarBanner webinar={webinar} />}
               </div>
               <div className="p-8 space-y-8">
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -9,6 +9,7 @@ import { Ticket, XCircle, Calendar, Clock, Video, User, Radio, Users, Tv } from 
 import { useEffect, useState } from 'react';
 import { WebinarTime } from './webinar-time';
 import Image from 'next/image';
+import { QuizBanner } from './quiz-banner';
 
 interface WebinarBannerProps {
   webinar: Webinar;
@@ -79,54 +80,11 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
   };
 
 
-  if (isCard) {
-     if (isQuiz) {
-      return (
-        <div className={cn("relative w-full h-full overflow-hidden rounded-t-lg", className)}>
-          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="center 15%" className="rounded-t-lg" />
-          <StatusBadge />
-        </div>
-      );
-    }
-    
-    return (
-      <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden rounded-lg p-4 flex flex-col justify-between", className)}>
-        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 rounded-full bg-blue-500/20 blur-3xl opacity-80"></div>
-        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-96 h-96 rounded-full bg-cyan-500/20 blur-3xl opacity-80"></div>
-        
-        <StatusBadge />
-
-        <div className="relative z-10 w-full h-full flex flex-col justify-between pt-8">
-            <div className="pt-2">
-            </div>
-
-            <div className="flex items-center gap-3 text-sm pt-3 mt-3">
-              <Avatar className="w-8 h-8 border-2 border-white/20">
-                  <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
-                  <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                  <p className="font-bold">{webinar.speaker.name}</p>
-                  <p className="text-white/70 text-xs">{webinar.speaker.title}</p>
-              </div>
-            </div>
-        </div>
-      </div>
-    );
+  if (isQuiz) {
+      return <QuizBanner webinar={webinar} className={className} variant={variant} />;
   }
 
   // Default, detailed banner for the webinar page
-  if (isQuiz) {
-    return (
-       <div className={cn("relative w-full h-[250px] overflow-hidden", className)}>
-        <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="center 15%" />
-        <div className="absolute inset-0 bg-black/20"></div>
-        <StatusBadge />
-      </div>
-    );
-  }
-
-
   return (
      <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden p-6 md:p-8 flex flex-col justify-between", className)}>
       <div className="absolute inset-0 -translate-x-1/4 -translate-y-1/4 w-[150%] h-[150%] rounded-full bg-blue-500/20 blur-3xl opacity-60"></div>
