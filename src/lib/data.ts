@@ -137,6 +137,62 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     languages: ['Bengali', 'Hindi', 'English', 'Oriya'],
     verified: true,
   },
+  {
+    id: '21',
+    name: 'Roshan Kumar',
+    type: 'Optometrist',
+    experience: 'Enlightening Eyes Through Vision & Purposes',
+    location: 'Ranchi, Jharkhand, India',
+    skills: ['Refraction', 'Qualitative Research', 'Analytical Skills', 'Research Skills'],
+    interests: ['Vision Therapy', 'Neuro Optometric Rehabilitation'],
+    bio: 'A dedicated optometrist with one year of clinical experience, passionate about providing comprehensive eye care. Experienced in both hospital and specialized eye care settings, with a focus on neuro-optometric rehabilitation and a commitment to ongoing learning and research.',
+    links: {
+      linkedin: 'https://linkedin.com/in/roshan-kumar-7720a92b0',
+      email: 'optomroshankumar@gmail.com',
+    },
+    avatarUrl: 'https://i.ibb.co/fzZKkbVm/IMG-20251025-155610.jpg',
+    workExperience: [
+      {
+        title: 'Consultant Optometrist',
+        company: 'Vision Probe Eye Hospital',
+        startDate: 'Aug 2025',
+        endDate: 'Present',
+        description: 'Providing primary eye care and consultations.',
+      },
+      {
+        title: 'Intern Optometrist',
+        company: 'iRIS Superspeciality Eye Care Centre',
+        startDate: 'Jul 2024',
+        endDate: 'Aug 2025',
+        description: 'Gained hands-on clinical experience in a superspeciality setting.',
+      },
+       {
+        title: 'Member',
+        company: 'Neuro Optometric Rehabilitation Association, International (NORA)',
+        startDate: 'Feb 2024',
+        endDate: 'Present',
+        description: 'Active member of an international organization focused on neuro-optometric rehabilitation.',
+      },
+      {
+        title: 'Observationship',
+        company: 'iRIS Superspeciality Eye Care Centre',
+        startDate: 'Dec 2023',
+        endDate: 'Jan 2024',
+        description: 'Observed and assisted in various clinical procedures.',
+      }
+    ],
+    education: [
+      {
+        school: 'Swami Vivekanand University',
+        degree: 'Bachelor of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2021',
+        endYear: '2025',
+      }
+    ],
+    languages: ['English', 'Hindi', 'Bengali'],
+    verified: true,
+  },
 ];
 
 export const demoLeaderboardData: LeaderboardEntry[] = [];
