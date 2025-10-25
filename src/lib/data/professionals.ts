@@ -117,4 +117,69 @@ export const professionals: UserProfile[] = [
     languages: ['English', 'Hindi', 'Bengali'],
     verified: true,
   },
+  {
+    id: '24',
+    name: 'Mohd Atif Alam',
+    type: 'Optometrist',
+    experience: 'Sr. Optometrist & Store Manager',
+    location: 'Kushinagar, Uttar Pradesh, India',
+    skills: ['Refraction', 'Contact Lenses', 'Optical Dispensing', 'Store Management', 'Team Leadership', 'Inventory Management', 'Customer Relationship Management (CRM)'],
+    interests: ['Clinical Optometry', 'Retail Management', 'Practice Growth'],
+    bio: 'Dedicated Optometrist with expertise in eye banking, contact lens fitting, and professional services. Committed to enhancing vision and eye health through strong communication, leadership, and problem-solving skills.',
+    links: {
+      linkedin: 'https://www.linkedin.com/in/md-atif-alam--7a96a61a8',
+      email: 'mdatifalam788@gmail.com',
+    },
+    avatarUrl: 'https://i.ibb.co/YF1PmkBm/IMG-20251025-170957.jpg',
+    workExperience: [
+      {
+        title: 'Sr.Optometrist & Store Manager',
+        company: "Dr.Agarwal's Eye Hospital",
+        startDate: 'Nov 2024',
+        endDate: 'Present',
+        description: 'Supervise and train optometrists and staff, manage daily sales and inventory, and oversee all store operations to ensure a high-quality customer experience.'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Reliance Vision Express Private Limited',
+        startDate: 'Jul 2023',
+        endDate: 'Nov 2024',
+        description: ''
+      },
+      {
+        title: 'Optometrist',
+        company: 'Lenskart.com',
+        startDate: 'Jan 2022',
+        endDate: 'Jun 2023',
+        description: ''
+      },
+      {
+        title: 'Junior Optometrist',
+        company: 'Balaji Eye Centre Dr. Sumit Rastogi',
+        startDate: 'Sep 2020',
+        endDate: 'Dec 2021',
+        description: ''
+      }
+    ],
+    education: [
+      {
+        school: 'Capital University, Jharkhand',
+        university: 'Capital University, Jharkhand',
+        degree: 'Bachelor of Science, Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2022',
+        endYear: '2025'
+      },
+      {
+        school: 'Era University',
+        university: 'Era University',
+        degree: 'Diploma, Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2019',
+        endYear: '2021'
+      }
+    ],
+    languages: ['Hindi', 'English'],
+    verified: true,
+  },
 ];
