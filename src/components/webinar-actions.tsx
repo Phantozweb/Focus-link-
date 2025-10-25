@@ -71,12 +71,15 @@ function ReminderDialog({webinar}: {webinar: Webinar}) {
     const webhookUrl = 'https://discord.com/api/webhooks/1416675826577182780/gxAG9Kz0YJB1v9dRRA0TRMs2oDXH6CLOomD_qqzPjab0Iy78oWQ64n3bDc1tFnL-oa-k';
     
     const embed = {
-      title: 'New Event Reminder Request!',
-      description: `A user has requested to be notified about the **${webinar.title}**.`,
-      color: 3447003, // Blue color
+      title: `🔔 New Reminder Request for Eye Q Arena!`,
+      description: `A user wants to be notified about the **${webinar.title}**.`,
+      color: 3066993, // Green color
+      thumbnail: {
+        url: webinar.speaker.avatarUrl,
+      },
       fields: [
-        { name: 'Name', value: name, inline: true },
-        { name: 'Email', value: email, inline: true },
+        { name: '👤 Name', value: name, inline: true },
+        { name: '📧 Email', value: email, inline: true },
       ],
       footer: {
         text: `Reminder requested on ${new Date().toLocaleString()}`,
