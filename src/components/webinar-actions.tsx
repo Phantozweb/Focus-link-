@@ -51,7 +51,7 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
             </Button>
         </div>
         <Button asChild disabled={!membershipId}>
-            <Link href={`/academy/quiz/${webinarId}`}>
+            <Link href={`/events/quiz/${webinarId}`}>
             <Trophy className="mr-2 h-4 w-4" />
             Start Quiz
             </Link>

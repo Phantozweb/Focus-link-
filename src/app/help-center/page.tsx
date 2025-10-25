@@ -5,7 +5,7 @@ import { LifeBuoy, UserPlus, Search, Briefcase, MessageSquare, BookOpen, Sparkle
 
 export const metadata: Metadata = {
   title: 'Help Center | Focus Links',
-  description: 'Your complete guide to using Focus Links. Find answers on how to create a profile, apply for membership, use the directory, post jobs, and engage with the community forum and academy to grow your career.',
+  description: 'Your complete guide to using Focus Links. Find answers on how to create a profile, apply for membership, use the directory, post jobs, and engage with the community forum and events to grow your career.',
 };
 
 const helpTopics = [
@@ -64,25 +64,25 @@ const helpTopics = [
               <li><strong class="text-primary">Find Mentors:</strong> Connect with experienced professionals who can guide your career.</li>
               <li><strong class="text-primary">Gain Visibility:</strong> Get noticed by leading organizations, clinics, and future employers.</li>
               <li><strong class="text-primary">Build Your Network:</strong> Start building professional relationships long before you graduate.</li>
-              <li><strong class="text-primary">Stay Informed:</strong> Keep up with industry trends through our Academy and Forum.</li>
+              <li><strong class="text-primary">Stay Informed:</strong> Keep up with industry trends through our Events and Forum.</li>
           </ul>`
       }
     ]
   },
-   // Academy
+   // Events
   {
-    category: 'Academy & Events',
+    category: 'Events',
     icon: <BookOpen className="h-5 w-5 text-primary" />,
     questions: [
       {
         value: 'join-webinar',
         question: 'How do I join a webinar?',
-        answer: `Visit the <a href="/academy" class="text-primary underline font-semibold">Academy page</a> to see all upcoming, live, and past events. For upcoming events, click 'View Details' and use the registration link. Once registered, you'll receive an email with the link to join the session one hour before it starts.`
+        answer: `Visit the <a href="/events" class="text-primary underline font-semibold">Events page</a> to see all upcoming, live, and past events. For upcoming events, click 'View Details' and use the registration link. Once registered, you'll receive an email with the link to join the session one hour before it starts.`
       },
       {
         value: 'view-past-webinars',
         question: 'Can I view past webinars?',
-        answer: `Yes! The 'On-Demand & Past Events' section on the Academy page lists all our previous webinars. Click 'View Details' to access recordings and materials, allowing you to learn at your own pace.`
+        answer: `Yes! The 'On-Demand & Past Events' section on the Events page lists all our previous webinars. Click 'View Details' to access recordings and materials, allowing you to learn at your own pace.`
       },
       {
         value: 'host-webinar',

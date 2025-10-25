@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell, BookOpen, Users, Tv } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell, BookOpen, Users, Tv, Calendar } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,7 +44,7 @@ const professionalLinks = [
 ];
 
 const communityLinks = [
-    { name: 'Academy', href: '/academy', icon: <BookOpen /> },
+    { name: 'Events', href: '/events', icon: <Calendar /> },
     { name: 'Forum', href: '/forum', icon: <MessageSquare /> },
     { name: 'Jobs', href: '/jobs', icon: <Briefcase /> },
 ]

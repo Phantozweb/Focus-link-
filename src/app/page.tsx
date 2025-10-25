@@ -349,7 +349,7 @@ export default function Home() {
                     Live Now
                   </h2>
                   <Button asChild variant="link" className="text-primary pr-0">
-                    <Link href="/academy">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link href="/events">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </div>
                 <Carousel opts={{ align: "start" }} className="w-full">
@@ -357,20 +357,20 @@ export default function Home() {
                     {liveWebinars.map((webinar) => (
                       <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                         <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                          <Link href={`/academy/${webinar.id}`} className="block">
+                          <Link href={`/events/${webinar.id}`} className="block">
                             <div className="relative w-full aspect-video">
                               <WebinarBanner webinar={webinar} variant="card" />
                             </div>
                           </Link>
                           <div className="p-6 flex flex-col flex-grow">
                             <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                              <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                              <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                             </h3>
                             <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                               <WebinarTime dateTime={webinar.dateTime} />
                             </div>
                             <Button asChild className="w-full mt-4" variant="destructive">
-                              <Link href={`/academy/${webinar.id}`}>Join Live</Link>
+                              <Link href={`/events/${webinar.id}`}>Join Live</Link>
                             </Button>
                           </div>
                         </Card>
@@ -388,7 +388,7 @@ export default function Home() {
                   <div className="flex justify-between items-center mb-8">
                   <h2 className="text-slate-800 text-3xl font-bold font-headline">Upcoming Live Events</h2>
                   <Button asChild variant="link" className="text-primary pr-0">
-                      <Link href="/academy">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      <Link href="/events">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                   </div>
                   <Carousel opts={{ align: "start" }} className="w-full">
@@ -396,21 +396,21 @@ export default function Home() {
                       {upcomingWebinars.map((webinar) => (
                       <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
                           <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                              <Link href={`/academy/${webinar.id}`} className="block">
+                              <Link href={`/events/${webinar.id}`} className="block">
                                   <div className="relative w-full aspect-video">
                                       <WebinarBanner webinar={webinar} variant="card" />
                                   </div>
                               </Link>
                               <div className="p-6 flex flex-col flex-grow">
                                   <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                                      <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                                      <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                                   </h3>
                                   <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                                       <WebinarTime dateTime={webinar.dateTime} />
                                   </div>
                                   
                                   <Button asChild className="w-full mt-4">
-                                      <Link href={`/academy/${webinar.id}`}>View Details</Link>
+                                      <Link href={`/events/${webinar.id}`}>View Details</Link>
                                   </Button>
                               </div>
                           </Card>

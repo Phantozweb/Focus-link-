@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: 'Focus Links | Global Eye Care Community',
     template: '%s | Focus Links',
   },
-  description: 'The world\'s largest eye care community for students, optometrists, and industry professionals to find, connect, and grow. Explore our directory and academy.',
+  description: 'The world\'s largest eye care community for students, optometrists, and industry professionals to find, connect, and grow. Explore our directory and events.',
   verification: {
     google: 'fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE',
   },

@@ -15,7 +15,7 @@ const membershipPerks = [
   },
   {
     icon: <BookOpen className="h-8 w-8 text-primary" />,
-    title: "Priority Academy Access",
+    title: "Priority Event Access",
     description: "Get early notifications and priority registration for exclusive webinars and workshops."
   },
   {

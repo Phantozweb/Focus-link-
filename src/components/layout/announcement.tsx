@@ -26,8 +26,8 @@ export function Announcement() {
              <div className="flex items-center gap-3">
                 <Megaphone className="h-5 w-5 flex-shrink-0" />
                 <p className="text-sm font-medium">
-                  <span>Announcing our new Academy!</span>
-                  <Link href="/academy" className="underline hover:text-blue-200 ml-2">
+                  <span>Announcing our new Events section!</span>
+                  <Link href="/events" className="underline hover:text-blue-200 ml-2">
                     View Schedule
                   </Link>
                 </p>
