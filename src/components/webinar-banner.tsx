@@ -87,9 +87,6 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
           <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" className="rounded-t-lg" />
           <div className="absolute inset-0 bg-black/30 rounded-t-lg"></div>
           <StatusBadge />
-          <div className="absolute bottom-0 left-0 p-4 text-white">
-            <h2 className="font-bold leading-tight text-lg">{webinar.title}</h2>
-          </div>
         </div>
       );
     }
