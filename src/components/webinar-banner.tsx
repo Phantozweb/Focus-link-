@@ -84,8 +84,8 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
      if (isQuiz) {
       return (
         <div className={cn("relative w-full h-full", className)}>
-          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="top" className="rounded-t-lg" />
-          <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div>
+          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="center 35%" className="rounded-t-lg" />
+          <div className="absolute inset-0 bg-black/30 rounded-t-lg"></div>
           <StatusBadge />
         </div>
       );
@@ -100,9 +100,6 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
         <div className="relative z-10 w-full h-full flex flex-col justify-between pt-8">
             <div className="pt-2">
-              <h2 className="font-bold leading-tight text-lg">
-                  {webinar.title}
-              </h2>
             </div>
 
             <div className="flex items-center gap-3 text-sm pt-3 mt-3">
@@ -124,7 +121,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
   if (isQuiz) {
     return (
        <div className={cn("relative w-full h-[250px] overflow-hidden rounded-t-lg", className)}>
-        <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="top" />
+        <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="center" />
         <div className="absolute inset-0 bg-black/20"></div>
         <StatusBadge />
       </div>
