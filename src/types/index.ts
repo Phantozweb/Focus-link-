@@ -25,8 +25,8 @@ export type UserProfile = {
   type: 'Optometrist' | 'Student' | 'Academic' | 'Researcher' | 'Association' | 'College' | 'Hospital' | 'Optical' | 'Industry' | 'Ophthalmologist' | 'Optician';
   experience: string;
   location: string;
-  skills: { value: string }[] | string[];
-  interests: { value: string }[] | string[];
+  skills: string[];
+  interests: string[];
   bio: string;
   links: {
     email?: string;
@@ -35,19 +35,27 @@ export type UserProfile = {
   avatarUrl: string;
   workExperience: WorkExperience[];
   education: Education[];
-  languages: { value: string }[] | string[];
+  languages: string[];
   verified?: boolean;
 };
 
+// This type is for the form data structure before it's processed.
+export type UserProfileForm = Omit<UserProfile, 'skills' | 'interests' | 'languages'> & {
+  skills?: { value: string }[];
+  interests?: { value: string }[];
+  languages?: { value: string }[];
+};
+
+
 export const UserProfileSchema = z.object({
-  id: z.string().min(1, "Membership ID is required."),
+  id: z.string().min(5, "A valid Membership ID is required."),
   name: z.string().min(2, "Name must be at least 2 characters."),
   type: z.enum(['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry']),
   location: z.string().optional(),
   experience: z.string().optional(),
   bio: z.string().min(10, "Bio should be more descriptive."),
-  skills: z.array(z.object({ value: z.string().min(1, "Skill cannot be empty.") })),
-  interests: z.array(z.object({ value: z.string().min(1, "Interest cannot be empty.") })),
+  skills: z.array(z.object({ value: z.string().min(1, "Skill cannot be empty.") })).optional(),
+  interests: z.array(z.object({ value: z.string().min(1, "Interest cannot be empty.") })).optional(),
   links: z.object({
     email: z.string().email().optional().or(z.literal('')),
     linkedin: z.string().url().optional().or(z.literal('')),
@@ -70,5 +78,3 @@ export const UserProfileSchema = z.object({
   verified: z.boolean().optional(),
   languages: z.array(z.object({ value: z.string().min(1, "Language cannot be empty.") })).optional(),
 });
-
-    

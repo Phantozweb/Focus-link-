@@ -3,7 +3,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserProfileSchema, type UserProfile } from '@/types';
+import { UserProfileSchema, type UserProfileForm } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -35,7 +35,7 @@ export default function CreateProfilePage() {
   const { toast } = useToast();
   const router = useRouter();
   
-  const form = useForm<UserProfile>({
+  const form = useForm<UserProfileForm>({
     resolver: zodResolver(UserProfileSchema),
     defaultValues: {
       id: '',
@@ -68,16 +68,17 @@ export default function CreateProfilePage() {
       const data = await response.json();
       if (data.isValid) {
         setIdStatus('valid');
-        form.setValue('id', id); // Ensure react-hook-form knows the value
+        // This is the critical part: ensure the form knows the value is set and valid.
+        form.setValue('id', id, { shouldValidate: true }); 
         form.clearErrors('id');
       } else {
         setIdStatus('invalid');
-        form.setError('id', { type: 'manual', message: 'This Membership ID is not valid.' });
+        form.setError('id', { type: 'manual', message: 'This Membership ID is not valid or does not exist.' });
       }
     } catch (error) {
       console.error('ID validation failed:', error);
       setIdStatus('invalid');
-      form.setError('id', { type: 'manual', message: 'Could not verify ID.' });
+      form.setError('id', { type: 'manual', message: 'Could not verify ID. Please check your connection and try again.' });
     }
   }, 500), [form]);
 
@@ -133,10 +134,11 @@ export default function CreateProfilePage() {
     }
   };
   
-  const onSubmit = async (data: UserProfile) => {
+  const onSubmit = async (data: UserProfileForm) => {
     setIsSubmitting(true);
     
-    if (idStatus !== 'valid') {
+    // This check is now robust because the form's `id` state is synchronized.
+    if (!data.id || idStatus !== 'valid') {
         toast({
             variant: 'destructive',
             title: 'Invalid Membership ID',
@@ -148,9 +150,9 @@ export default function CreateProfilePage() {
 
     const payload = {
         ...data,
-        skills: JSON.stringify(data.skills.map(s => s.value)),
-        interests: JSON.stringify(data.interests.map(i => i.value)),
-        languages: JSON.stringify(data.languages.map(l => l.value)),
+        skills: JSON.stringify(data.skills?.map(s => s.value)),
+        interests: JSON.stringify(data.interests?.map(i => i.value)),
+        languages: JSON.stringify(data.languages?.map(l => l.value)),
         workExperience: JSON.stringify(data.workExperience),
         education: JSON.stringify(data.education),
     };
@@ -376,5 +378,3 @@ export default function CreateProfilePage() {
     </div>
   );
 }
-
-    
