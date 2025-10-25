@@ -90,29 +90,17 @@ function formatDescription(text: string) {
 }
 
 
-const QuizOrganizers = ({webinar}: {webinar: (typeof webinars)[0]}) => (
+const OrganizerInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
      <section>
-        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">Organizers</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
-                <Avatar className="h-28 w-28">
-                    <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
-                    <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                    <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
-                    <p className="text-lg text-muted-foreground">Organizer</p>
-                </div>
-            </div>
-             <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
-                <Avatar className="h-28 w-28">
-                    <AvatarImage src="https://iili.io/KTpEi9s.md.jpg" alt="Janarthan Veeramani" data-ai-hint="portrait person" />
-                    <AvatarFallback className="text-4xl">JV</AvatarFallback>
-                </Avatar>
-                <div>
-                    <p className="font-bold text-2xl text-slate-800">Janarthan Veeramani</p>
-                    <p className="text-lg text-muted-foreground">Co-Organizer</p>
-                </div>
+        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Organizer</h3>
+        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+            <Avatar className="h-28 w-28">
+                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+                <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
+                <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
             </div>
         </div>
     </section>
@@ -327,7 +315,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                       
                       <Separator />
 
-                      {isQuiz ? <QuizOrganizers webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
+                      {isQuiz ? <OrganizerInfo webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
 
                        {isQuiz && hasStarted && (
                         <>
