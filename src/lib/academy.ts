@@ -59,12 +59,15 @@ This is your chance to test your knowledge from the anterior to the posterior se
 Step into the Arena — Compete, Learn, and Lead the Vision.
 
 ### Rules & Regulations
+- **Event Duration**: The quiz will be open from **November 2nd to November 12th, 2025**.
 - **Membership Required**: To participate, you must be an official member of Focus Links. <a href="/membership" class="text-primary underline font-semibold">Join for free</a> if you haven't already. It only takes a few minutes!
 - **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate.
 - **Passing Score**: A score of **50% or higher** is required to pass each module and to pass the quiz overall.
 - **Fair Play**: We trust our community to compete with integrity. Any detected form of malpractice may result in disqualification.
 - **Scoring**: Questions are assigned points based on difficulty (Easy: 1, Medium: 2, Hard: 5). Your final score is the sum of points from correctly answered questions.
-- **Certification**: All participants who meet the passing score receive a digital Certificate of Participation. Top performers earn a Certificate of Excellence.
+- **Certification & Rewards**: 
+    - All participants who meet the passing score will receive a digital **Certificate of Participation**.
+    - Top performers, based on a combination of high scores and fast completion times, will earn a prestigious **Certificate of Excellence** and a **special achievement badge** on their Focus Links profile.
 
 ### Instructions for Participants
 - The quiz takes place directly on this webpage. No external links will be sent.
@@ -108,7 +111,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
     },
     platform: 'Online Platform',
     dateTime: '2025-11-02T13:00:00Z',
-    duration: '60 minutes',
+    duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
   }
