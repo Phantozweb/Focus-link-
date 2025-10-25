@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -51,7 +52,7 @@ export default function CreateProfilePage() {
       education: [{ school: '', degree: '', fieldOfStudy: '', startYear: '', endYear: '' }],
       avatarUrl: '',
     },
-    mode: 'onChange', // Important for real-time validation feedback
+    mode: 'onBlur',
   });
   
   const membershipId = form.watch('id');
@@ -63,12 +64,10 @@ export default function CreateProfilePage() {
     }
     setIdStatus('loading');
     try {
-      const response = await fetch(`/api/verify-id?id=${id}`);
+      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
       const data = await response.json();
       if (data.isValid) {
         setIdStatus('valid');
-        // This is the critical part: ensure the form knows the value is set and valid.
-        form.setValue('id', id, { shouldValidate: true }); 
         form.clearErrors('id');
       } else {
         setIdStatus('invalid');
@@ -77,12 +76,16 @@ export default function CreateProfilePage() {
     } catch (error) {
       console.error('ID validation failed:', error);
       setIdStatus('invalid');
-      form.setError('id', { type: 'manual', message: 'Could not verify ID. Please check your connection and try again.' });
+      form.setError('id', { type: 'manual', message: 'Could not verify ID. Please check your connection.' });
     }
   }, 500), [form]);
 
   useEffect(() => {
-    checkIdValidity(membershipId);
+    if (membershipId) {
+      checkIdValidity(membershipId);
+    } else {
+      setIdStatus('idle');
+    }
   }, [membershipId, checkIdValidity]);
 
 
@@ -147,13 +150,18 @@ export default function CreateProfilePage() {
     }
 
     const payload = {
-        ...data,
-        membershipId: data.id, // Ensure membershipId is explicitly passed
-        skills: JSON.stringify(data.skills?.map(s => s.value)),
-        interests: JSON.stringify(data.interests?.map(i => i.value)),
-        languages: JSON.stringify(data.languages?.map(l => l.value)),
-        workExperience: JSON.stringify(data.workExperience),
-        education: JSON.stringify(data.education),
+      membershipId: data.id,
+      name: data.name,
+      experience: data.experience,
+      bio: data.bio,
+      email: data.links?.email || '',
+      linkedin: data.links?.linkedin || '',
+      avatarUrl: data.avatarUrl,
+      skills: JSON.stringify(data.skills?.map(s => s.value).filter(Boolean)),
+      interests: JSON.stringify(data.interests?.map(i => i.value).filter(Boolean)),
+      languages: JSON.stringify(data.languages?.map(l => l.value).filter(Boolean)),
+      workExperience: JSON.stringify(data.workExperience?.filter(exp => exp.title || exp.company)),
+      education: JSON.stringify(data.education?.filter(edu => edu.school || edu.degree)),
     };
     
     try {
@@ -180,10 +188,8 @@ export default function CreateProfilePage() {
           title: 'Profile Saved!',
           description: 'Your professional profile has been created successfully.',
         });
-        // Redirect to the new profile page
         router.push(`/profile/${data.id}`);
       } else {
-        // Handle any other unexpected responses from the script
         throw new Error(result.message || 'An unexpected response was received from the server.');
       }
 
@@ -230,7 +236,7 @@ export default function CreateProfilePage() {
                   {form.formState.errors.id && <p className="text-sm text-destructive">{form.formState.errors.id.message}</p>}
                   <p className="text-xs text-muted-foreground">
                     A Membership ID is required to create a profile. If you don't have one,{' '}
-                    <Link href="/membership" className="text-primary underline font-semibold">get one for free</Link>.
+                    <Link href="/membership#membership-join" className="text-primary underline font-semibold">get one for free</Link>.
                   </p>
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
