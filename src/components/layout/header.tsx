@@ -26,8 +26,7 @@ import { usePathname } from 'next/navigation';
 const directoryLinks = [
     { name: 'All Profiles', href: '/directory/all', icon: <Users className="h-5 w-5"/> },
     { name: 'Students', href: '/directory/students', icon: <GraduationCap className="h-5 w-5"/> },
-    { name: 'Associations', href: '/directory/associations', icon: <Handshake className="h-5 w-5"/> },
-    { name: 'Colleges & Schools', href: '/directory/colleges', icon: <Building className="h-5 w-5"/> },
+    { name: 'Institutions', href: '/directory/institutions', icon: <Building className="h-5 w-5"/> },
     { name: 'Clinics & Opticals', href: '/directory/clinics', icon: <Hospital className="h-5 w-5"/> },
     { name: 'Industry Partners', href: '/directory/industry', icon: <Factory className="h-5 w-5"/> },
 ];

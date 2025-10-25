@@ -26,8 +26,8 @@ export function Announcement() {
              <div className="flex items-center gap-3">
                 <Megaphone className="h-5 w-5 flex-shrink-0" />
                 <p className="text-sm font-medium">
-                  <span>Get your membership ID and create a profile!</span>
-                  <Link href="/membership" className="underline hover:text-blue-200 ml-2">
+                  <span>New here? Learn how to get started on Focus Links.</span>
+                  <Link href="/help-center#getting-started" className="underline hover:text-blue-200 ml-2">
                     Get Started
                   </Link>
                 </p>

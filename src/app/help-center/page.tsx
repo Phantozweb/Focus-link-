@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { LifeBuoy, UserPlus, Search, Briefcase, MessageSquare, BookOpen, Sparkles, Award, HelpCircle } from 'lucide-react';
+import { LifeBuoy, UserPlus, Search, Briefcase, MessageSquare, BookOpen, Sparkles, Award, HelpCircle, Rocket } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Help Center | Focus Links',
@@ -9,6 +9,35 @@ export const metadata: Metadata = {
 };
 
 const helpTopics = [
+   // Getting Started
+  {
+    category: 'Getting Started',
+    icon: <Rocket className="h-5 w-5 text-primary" />,
+    id: "getting-started",
+    questions: [
+      {
+        value: 'start-step-1',
+        question: 'Step 1: Become an Official Member',
+        answer: `Everything starts with membership. Fill out the quick <a href="/membership" class="text-primary underline font-semibold">Membership Application form</a>. This is how you get your unique Membership ID, which is the key to creating your profile.`
+      },
+      {
+        value: 'start-step-2',
+        question: 'Step 2: Create Your Detailed Profile',
+        answer: `Once you have your Membership ID, head over to the <a href="/profile/create" class="text-primary underline font-semibold">Create Profile page</a>. This is where you'll add all your details: your bio, skills, experience, and a profile picture. The more complete your profile, the easier it is for others to connect with you.`
+      },
+      {
+        value: 'start-step-3',
+        question: 'Step 3: Explore the Community',
+        answer: `Once your profile is submitted, you can start exploring!
+          <ul class="list-disc pl-5 mt-2 space-y-2">
+              <li>Browse the <a href="/directory" class="text-primary underline font-semibold">Directory</a> to find peers and mentors.</li>
+              <li>Check out upcoming <a href="/events" class="text-primary underline font-semibold">Events</a> to expand your knowledge.</li>
+              <li>See what's happening in the <a href="/forum" class="text-primary underline font-semibold">Case Forum</a> and <a href="/jobs" class="text-primary underline font-semibold">Job Board</a>.</li>
+          </ul>
+          Welcome to the community!`
+      },
+    ]
+  },
   // Profile & Membership
   {
     category: 'Profile & Membership',
@@ -162,7 +191,7 @@ export default function HelpCenterPage() {
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto space-y-12">
                 {helpTopics.map((topic) => (
-                    <div key={topic.category}>
+                    <div key={topic.category} id={topic.id}>
                         <div className="flex items-center gap-3 mb-6">
                             {topic.icon}
                             <h2 className="text-2xl font-bold text-slate-800">{topic.category}</h2>

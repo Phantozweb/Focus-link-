@@ -4,27 +4,25 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { Briefcase, GraduationCap, Building, Hospital, Users, Factory, Microscope, BookOpen, Stethoscope, Handshake } from 'lucide-react';
+import { Building, Handshake, BookOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-const categoryLinks = [
-    { name: 'Students', icon: <GraduationCap className="h-8 w-8 text-primary" />, href: '/directory/students', description: 'Find the next generation of talent.' },
-    { name: 'Professionals', icon: <Stethoscope className="h-8 w-8 text-primary" />, href: '/directory/professionals', description: 'Connect with experienced ODs, MDs, and Opticians.' },
-    { name: 'Institutions', icon: <Building className="h-8 w-8 text-primary" />, href: '/directory/institutions', description: 'Discover colleges and associations.' },
-    { name: 'Clinics & Opticals', icon: <Hospital className="h-8 w-8 text-primary" />, href: '/directory/clinics', description: 'Find top-rated practices and eye care centers.' },
-    { name: 'Industry Partners', icon: <Factory className="h-8 w-8 text-primary" />, href: '/directory/industry', description: 'Connect with industry leaders and innovators.' },
+const institutionLinks = [
+    { name: 'Colleges & Schools', icon: <BookOpen className="h-8 w-8 text-primary" />, href: '/directory/colleges', description: 'Discover top-tier educational institutions.' },
+    { name: 'Associations', icon: <Handshake className="h-8 w-8 text-primary" />, href: '/directory/associations', description: 'Explore leading professional organizations.' },
 ];
 
-export default function DirectoryPage() {
+export default function InstitutionsDirectoryPage() {
   const router = useRouter();
 
   return (
     <div className="bg-muted/40">
        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Focus Links Directory</h1>
+          <Building className="h-16 w-16 mx-auto mb-4" />
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Institutions Directory</h1>
           <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-            Explore the global eye care community. Find colleagues, mentors, and partners across every specialty.
+            Find and connect with the leading educational and professional institutions in the eye care industry.
           </p>
         </div>
       </section>
@@ -32,7 +30,7 @@ export default function DirectoryPage() {
       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categoryLinks.map(link => (
+              {institutionLinks.map(link => (
                   <Link href={link.href} key={link.name} className="block group">
                       <Card className="flex flex-col items-center justify-center p-8 bg-card rounded-lg shadow-sm border border-border hover:shadow-xl hover:border-primary transition-all duration-300 h-full text-center">
                           <div className="mb-4 text-primary transition-transform duration-300 group-hover:scale-110">
