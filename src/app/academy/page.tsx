@@ -124,6 +124,10 @@ export default function AcademyPage() {
                       <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                           <p className="line-clamp-2">Test your knowledge against peers worldwide in this international optometry quiz competition.</p>
                           <div className="flex items-center gap-2 pt-2">
+                              <Calendar className="h-4 w-4 text-primary" />
+                              <span>Nov 2 - Nov 12, 2025</span>
+                          </div>
+                          <div className="flex items-center gap-2 pt-2">
                               <Users className="h-4 w-4 text-primary" />
                               <span>Organized by {webinar.speaker.name}</span>
                           </div>
