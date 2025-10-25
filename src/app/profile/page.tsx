@@ -2,9 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Edit, Settings, LogOut, CheckCircle2 } from "lucide-react";
+import { User, Edit, Settings, LogOut, CheckCircle2, UserPlus, Info } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const profileLinks = [
   { href: "/profile/edit", label: "Edit My Profile", icon: Edit },
@@ -14,12 +15,53 @@ const profileLinks = [
 
 export default function ProfileDashboardPage() {
   // Dummy user data - replace with actual logged-in user data
+  // For demo purposes, we assume a user might not have a profile yet.
+  const hasProfile = true; 
   const user = {
     name: 'Janarthan Veeramani',
     email: 'janarthanv@outlook.com',
     avatarUrl: 'https://iili.io/KTpEi9s.md.jpg',
     verified: true,
+    membershipId: 'IN20241026123456'
   };
+  
+  if (!hasProfile) {
+    return (
+        <div className="bg-muted/40 min-h-screen py-12">
+            <div className="container mx-auto max-w-2xl px-4">
+                <Card>
+                    <CardHeader className="text-center">
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                            <UserPlus className="h-8 w-8 text-primary" />
+                        </div>
+                        <CardTitle className="text-3xl font-headline mt-4">Complete Your Profile</CardTitle>
+                        <CardDescription className="mt-1 text-base">
+                          Your membership is active, but your profile isn't live yet. Let's fix that.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <Alert>
+                            <Info className="h-4 w-4" />
+                            <AlertTitle>Your Membership ID</AlertTitle>
+                            <AlertDescription>
+                                Your ID is <strong>{user.membershipId}</strong>. You'll need this to create your public profile.
+                            </AlertDescription>
+                        </Alert>
+                        <Button asChild size="lg" className="w-full">
+                            <Link href="/profile/create">Create Your Public Profile</Link>
+                        </Button>
+                        <div className="text-center text-sm text-muted-foreground">
+                            If you don't have a membership ID, please{' '}
+                            <Link href="/membership" className="text-primary underline font-semibold">
+                                apply here
+                            </Link>.
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    )
+  }
   
   return (
     <div className="bg-muted/40 min-h-screen py-12">

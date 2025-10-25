@@ -100,9 +100,8 @@ export function Header() {
                     <span className="sr-only">Open menu</span>
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-full max-w-xs p-0">
-                  <nav className="flex flex-col h-full">
-                    <div className="p-4 border-b">
+                <SheetContent side="left" className="w-full max-w-xs p-0 flex flex-col">
+                  <div className="p-4 border-b">
                        <Link href="/" className="flex items-center gap-3 text-slate-800">
                           <span className="material-symbols-outlined text-3xl text-cyan-600">
                           remove_red_eye
@@ -110,16 +109,24 @@ export function Header() {
                           <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
                       </Link>
                     </div>
-
-                    <div className="flex-grow overflow-y-auto p-4 space-y-4">
-                        <div className="space-y-1">
+                  <nav className="flex-grow overflow-y-auto p-4 space-y-4">
+                    <div className="space-y-1">
+                          <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">Account</h3>
                           <MobileNavLink href="/profile">
                               <User className="h-5 w-5" />
                               <span>My Profile</span>
                           </MobileNavLink>
+                           <MobileNavLink href="/login">
+                              <LogIn className="h-5 w-5" />
+                              <span>Login</span>
+                          </MobileNavLink>
+                           <MobileNavLink href="/membership">
+                              <UserPlus className="h-5 w-5" />
+                              <span>Membership</span>
+                          </MobileNavLink>
                         </div>
                         <Separator />
-                        <div className="space-y-1">
+                    <div className="space-y-1">
                           <h3 className="px-3 text-xs font-semibold uppercase text-slate-400 tracking-wider">Directory</h3>
                            {directoryLinks.map(link => (
                               <MobileNavLink key={link.name} href={link.href}>
@@ -174,20 +181,6 @@ export function Header() {
                               </MobileNavLink>
                           ))}
                       </div>
-                    </div>
-
-                    <div className="p-4 border-t mt-auto space-y-2">
-                        <SheetClose asChild>
-                          <Button asChild className="w-full">
-                            <Link href="/membership"><UserPlus className="mr-2 h-4 w-4" />Membership</Link>
-                          </Button>
-                        </SheetClose>
-                        <SheetClose asChild>
-                           <Button variant="outline" asChild className="w-full">
-                            <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Login</Link>
-                          </Button>
-                        </SheetClose>
-                    </div>
                   </nav>
                 </SheetContent>
               </Sheet>
@@ -196,7 +189,7 @@ export function Header() {
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
                 remove_red_eye
                 </span>
-                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em] sm:block">Focus Links</h2>
+                <h2 className="hidden sm:block text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
             </Link>
             <nav className="hidden md:flex items-center gap-2">
                 <Button variant="ghost" asChild><Link href="/">Home</Link></Button>
@@ -264,20 +257,12 @@ export function Header() {
             </nav>
         </div>
         <div className="hidden md:flex items-center gap-4">
-             <div className="flex items-center gap-2">
-                <Button variant="ghost" asChild>
-                  <Link href="/login">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Login
-                  </Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/membership">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Membership
-                  </Link>
-                </Button>
-            </div>
+             <Button variant="ghost" size="icon" asChild>
+                <Link href="/profile">
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">My Profile</span>
+                </Link>
+            </Button>
         </div>
          <div className="md:hidden">
             <Button variant="ghost" size="icon" asChild>
