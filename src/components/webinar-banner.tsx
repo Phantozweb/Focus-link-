@@ -82,9 +82,8 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
   if (isCard) {
      if (isQuiz) {
       return (
-        <div className={cn("relative w-full h-full", className)}>
-          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="center 15%" className="rounded-t-lg" />
-          <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div>
+        <div className={cn("relative w-full h-full overflow-hidden rounded-t-lg", className)}>
+          <Image src="https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png" alt="Eye Q Arena Banner" layout="fill" objectFit="cover" objectPosition="center 15%" className="rounded-t-lg transform scale-125" />
           <StatusBadge />
         </div>
       );
