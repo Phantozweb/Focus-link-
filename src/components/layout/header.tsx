@@ -160,7 +160,7 @@ export function Header() {
                 <span className="material-symbols-outlined text-3xl text-cyan-600">
                 remove_red_eye
                 </span>
-                <h2 className="hidden md:block text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
+                <h2 className="text-slate-800 text-lg font-bold leading-tight tracking-[-0.015em]">Focus Links</h2>
             </Link>
             <nav className="hidden md:flex items-center gap-2">
                 <Button variant="ghost" asChild><Link href="/">Home</Link></Button>

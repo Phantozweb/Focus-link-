@@ -3,23 +3,29 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, BookOpen, User as ProfileIcon, Briefcase, Calendar, LogIn, UserPlus } from 'lucide-react';
+import { Home, Users, MessageSquare, Briefcase, Calendar, User as ProfileIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/directory', label: 'Directory', icon: Users },
   { href: '/events', label: 'Events', icon: Calendar },
-  { href: '/jobs', label: 'Jobs', icon: Briefcase },
-  { href: '/login', label: 'Login', icon: LogIn },
+  { href: '/forum', label: 'Forum', icon: MessageSquare },
+  { href: '/profile', label: 'Profile', icon: ProfileIcon },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
 
-  // Hide bottom nav on profile pages, login, and membership pages for a cleaner look
-  if (pathname.startsWith('/profile') || pathname === '/login' || pathname === '/membership') {
+  // Hide bottom nav on login and membership pages for a cleaner look
+  if (pathname === '/login' || pathname === '/membership') {
     return null;
+  }
+
+  // Hide on specific sub-pages like an individual profile or event
+  const isDetailPage = pathname.split('/').length > 2 && (pathname.startsWith('/profile/') || pathname.startsWith('/events/') || pathname.startsWith('/jobs/') || pathname.startsWith('/forum/'));
+  if (isDetailPage && pathname !== '/profile/create') {
+      return null;
   }
 
   return (
