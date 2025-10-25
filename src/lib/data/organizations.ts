@@ -1,3 +1,4 @@
+
 import type { UserProfile } from '@/types';
 
 export const organizations: UserProfile[] = [
@@ -36,7 +37,7 @@ export const organizations: UserProfile[] = [
       email: 'vkinstitution@gmail.com',
       linkedin: 'https://vkinstitutions.in/'
     },
-    avatarUrl: 'https://vkinstitutions.in/assets/images/logo.png',
+    avatarUrl: 'https://vkinstitutions.in/assets/images/pre-logo.png',
     workExperience: [],
     education: [],
     languages: [],
