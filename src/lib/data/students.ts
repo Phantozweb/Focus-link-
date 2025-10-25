@@ -3,7 +3,7 @@ import type { UserProfile } from '@/types';
 
 export const students: UserProfile[] = [
     {
-    id: '19',
+    id: '1',
     name: 'Janarthan Veeramani',
     type: 'Student',
     experience: 'Founder of Focus-IN | Head of Administration at Optobharat | B.Optom Student',
@@ -88,7 +88,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     verified: true,
   },
   {
-    id: '22',
+    id: '2',
     name: 'Braseetha A',
     type: 'Student',
     experience: 'Aspiring Optometrist | Pediatric & Binocular Vision Enthusiast',
@@ -148,7 +148,7 @@ I’m currently exploring research methodology and the psychological aspects of 
     verified: false,
   },
   {
-    id: '23',
+    id: '3',
     name: 'Anshi Jha',
     type: 'Student',
     experience: 'Optometry Intern | Head of Clinical Development (Focus-IN)',

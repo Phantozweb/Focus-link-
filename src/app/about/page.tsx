@@ -26,7 +26,7 @@ const aboutPageSchema = {
       "@type": "Person",
       "name": "Janarthan Veeramani",
       "jobTitle": "Founder",
-      "url": "https://focuslinks.pro/profile/19"
+      "url": "https://focuslinks.pro/profile/1"
     }
   }
 };
@@ -123,7 +123,7 @@ export default function AboutPage() {
                 </p>
                  <div className="flex items-center justify-center gap-2 mt-6">
                     <Button asChild variant="outline">
-                        <Link href="/profile/19">View Profile</Link>
+                        <Link href="/profile/1">View Profile</Link>
                     </Button>
                     <Button asChild variant="ghost" size="icon">
                         <a href="https://www.linkedin.com/in/janarthan-v" target="_blank" rel="noopener noreferrer">

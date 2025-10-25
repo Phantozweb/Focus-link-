@@ -1,8 +1,9 @@
+
 import type { UserProfile } from '@/types';
 
 export const professionals: UserProfile[] = [
   {
-    id: '20',
+    id: '4',
     name: 'Sabitabrata Panja',
     type: 'Optometrist',
     experience: '4 year of Clinical Optometry experience',
@@ -53,7 +54,7 @@ export const professionals: UserProfile[] = [
     verified: true,
   },
     {
-    id: '21',
+    id: '5',
     name: 'Roshan Kumar',
     type: 'Optometrist',
     experience: 'Enlightening Eyes Through Vision & Purposes',
@@ -118,7 +119,7 @@ export const professionals: UserProfile[] = [
     verified: true,
   },
   {
-    id: '24',
+    id: '6',
     name: 'Mohd Atif Alam',
     type: 'Optometrist',
     experience: 'Sr. Optometrist & Store Manager',
