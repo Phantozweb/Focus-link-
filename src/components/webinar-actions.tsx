@@ -62,18 +62,49 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   )
 }
 
-function ReminderDialog() {
+function ReminderDialog({webinar}: {webinar: Webinar}) {
   const { toast } = useToast();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleNotify = () => {
-    // Here you would typically send the data to a backend service
-    // For demo purposes, we'll just show a toast message.
-    toast({
-      title: "You're on the list!",
-      description: `We'll email ${email} when the arena opens.`,
-    });
+  const handleNotify = async () => {
+    const webhookUrl = 'https://discord.com/api/webhooks/1416675826577182780/gxAG9Kz0YJB1v9dRRA0TRMs2oDXH6CLOomD_qqzPjab0Iy78oWQ64n3bDc1tFnL-oa-k';
+    
+    const embed = {
+      title: 'New Event Reminder Request!',
+      description: `A user has requested to be notified about the **${webinar.title}**.`,
+      color: 3447003, // Blue color
+      fields: [
+        { name: 'Name', value: name, inline: true },
+        { name: 'Email', value: email, inline: true },
+      ],
+      footer: {
+        text: `Reminder requested on ${new Date().toLocaleString()}`,
+      },
+    };
+
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ embeds: [embed] }),
+      });
+
+      toast({
+        title: "You're on the list!",
+        description: `We'll email ${email} when the arena opens.`,
+      });
+
+    } catch (error) {
+      console.error('Failed to send Discord notification:', error);
+       toast({
+        variant: 'destructive',
+        title: 'Something went wrong',
+        description: `We couldn't set your reminder. Please try again later.`,
+      });
+    }
   }
 
   return (
@@ -200,7 +231,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                       Remind Me
                                   </Button>
                                 </DialogTrigger>
-                                <ReminderDialog />
+                                <ReminderDialog webinar={webinar} />
                               </Dialog>
                             </div>
                         ) : (
