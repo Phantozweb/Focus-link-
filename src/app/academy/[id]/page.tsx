@@ -198,7 +198,9 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
             Back to Academy
           </Link>
           <Card className="overflow-hidden shadow-xl">
-            {isQuiz ? <QuizBanner webinar={webinar} /> : <WebinarBanner webinar={webinar} />}
+             <div className="relative aspect-[16/9] md:aspect-[2/1] lg:aspect-[3/1]">
+              {isQuiz ? <QuizBanner webinar={webinar} /> : <WebinarBanner webinar={webinar} />}
+            </div>
             <CardContent className="p-0">
               <div className="p-8 space-y-8">
                   <div className="text-center space-y-4">
