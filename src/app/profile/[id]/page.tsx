@@ -328,6 +328,24 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 
 function CollegeProfile({ user }: { user: UserProfile }) {
   const bannerImage = user.gallery && user.gallery.length > 0 ? user.gallery[0] : `https://picsum.photos/seed/${user.id}b/1200/300`;
+  
+  const inquirySubject = `Inquiry from Focus Links Website: Application for ${user.name}`;
+  const inquiryBody = `
+  Hello ${user.name},
+
+  I found your institution on Focus Links and would like to apply. Please find my details below:
+
+  **Full Name:** [Your Name Here]
+  **Email Address:** [Your Email Here]
+  **Contact Number:** [Your Phone Number Here]
+
+  Thank you.
+
+  ---
+  *Sent via Focus Links - The Global Eye Care Community*
+  `;
+  const mailtoLink = `mailto:${user.links.email}?subject=${encodeURIComponent(inquirySubject)}&body=${encodeURIComponent(inquiryBody)}`;
+
   return (
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
@@ -361,7 +379,7 @@ function CollegeProfile({ user }: { user: UserProfile }) {
                         </div>
                         <div className="flex shrink-0 items-center gap-2 self-start md:self-end">
                             <Button asChild>
-                            <a href="#">Apply Now</a>
+                                <a href={mailtoLink}>Apply Now</a>
                             </Button>
                             {user.links.linkedin && (
                             <Button asChild variant="secondary">
