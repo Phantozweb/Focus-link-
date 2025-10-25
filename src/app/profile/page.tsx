@@ -27,7 +27,7 @@ export default function ProfileDashboardPage() {
                         <Info className="h-4 w-4" />
                         <AlertTitle>What to Expect</AlertTitle>
                         <AlertDescription>
-                            Soon, you'll be able to manage your public profile, view your activity, and access member-only settings right here.
+                          Soon, this will be your personal dashboard. You'll see your profile card and be able to resubmit any updates. Plus, you can personalize a feed to get notified about what matters most to you.
                         </AlertDescription>
                     </Alert>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
