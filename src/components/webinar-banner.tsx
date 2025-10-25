@@ -98,7 +98,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
               <div className="flex items-center gap-3 text-sm pt-3 mt-3">
                 <Avatar className="w-8 h-8 border-2 border-white/20">
-                    <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
+                    <AvatarImage src={'https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png'} alt={webinar.speaker.name} />
                     <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -141,6 +141,8 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
   }
 
   // Default, detailed banner for the webinar page
+  const bannerAvatar = isQuiz ? 'https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png' : webinar.speaker.avatarUrl;
+
   return (
      <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden rounded-lg p-6 md:p-8 flex flex-col justify-between", className)}>
       <div className="absolute inset-0 -translate-x-1/4 -translate-y-1/4 w-[150%] h-[150%] rounded-full bg-blue-500/20 blur-3xl opacity-60"></div>
@@ -150,7 +152,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
       <div className="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 h-full items-center">
          <div className="flex-shrink-0 mx-auto md:mx-0">
              <Avatar className="h-24 w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 border-4 border-white/30 shadow-lg">
-                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
+                <AvatarImage src={bannerAvatar} alt={webinar.speaker.name} />
                 <AvatarFallback className="text-5xl md:text-6xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
             </Avatar>
          </div>
