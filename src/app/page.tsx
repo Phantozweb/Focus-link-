@@ -444,7 +444,7 @@ export default function Home() {
             </section>}
             <section>
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-slate-800 text-3xl font-bold font-headline">From the Forum (Demo)</h2>
+                  <h2 className="text-slate-800 text-3xl font-bold font-headline">From the Forum</h2>
                   <Button asChild variant="link" className="text-primary pr-0">
                     <Link href="/forum">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
@@ -486,7 +486,7 @@ export default function Home() {
 
               <section>
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Latest Job Postings (Demo)</h2>
+                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Latest Job Postings</h2>
                   <Button asChild variant="link" className="text-primary pr-0">
                     <Link href="/jobs">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
