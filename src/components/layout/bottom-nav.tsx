@@ -11,7 +11,7 @@ const navItems = [
   { href: '/directory', label: 'Directory', icon: Users },
   { href: '/events', label: 'Events', icon: Calendar },
   { href: '/forum', label: 'Forum', icon: MessageSquare },
-  { href: '/profile', label: 'Profile', icon: ProfileIcon },
+  { href: '/jobs', label: 'Jobs', icon: Briefcase },
 ];
 
 export function BottomNav() {
