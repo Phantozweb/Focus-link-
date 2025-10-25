@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/directory', label: 'Directory', icon: Users },
-  { href: '/events', label: 'Events', icon: Calendar },
+  { href: '/events', label: 'Events', icon: Calendar, hasLiveIndicator: true },
   { href: '/forum', label: 'Forum', icon: MessageSquare },
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
 ];
@@ -18,13 +18,13 @@ export function BottomNav() {
   const pathname = usePathname();
 
   // Hide bottom nav on login and membership pages for a cleaner look
-  if (pathname === '/login' || pathname === '/membership') {
+  if (pathname === '/login' || pathname === '/membership' || pathname === '/profile/create') {
     return null;
   }
 
   // Hide on specific sub-pages like an individual profile or event
   const isDetailPage = pathname.split('/').length > 2 && (pathname.startsWith('/profile/') || pathname.startsWith('/events/') || pathname.startsWith('/jobs/') || pathname.startsWith('/forum/'));
-  if (isDetailPage && pathname !== '/profile/create') {
+  if (isDetailPage && !pathname.startsWith('/profile/create')) {
       return null;
   }
 
@@ -42,7 +42,15 @@ export function BottomNav() {
                 isActive ? 'text-primary' : 'text-gray-500'
               )}
             >
-              <item.icon className="w-6 h-6 mb-1" />
+              <div className="relative">
+                <item.icon className="w-6 h-6 mb-1" />
+                {item.hasLiveIndicator && (
+                    <span className="absolute top-0 right-0 -mr-1 -mt-1 flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                    </span>
+                )}
+              </div>
               <span className="text-[11px]">{item.label}</span>
             </Link>
           );
