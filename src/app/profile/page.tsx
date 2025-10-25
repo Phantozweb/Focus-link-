@@ -35,7 +35,7 @@ export default function ProfileDashboardPage() {
                            <Link href="/">Back to Home</Link>
                         </Button>
                         <Button size="lg" className="w-full" variant="secondary" asChild>
-                            <Link href="/membership">Create a Profile</Link>
+                            <Link href="/profile/create">Create a Profile</Link>
                         </Button>
                     </div>
                 </CardContent>
