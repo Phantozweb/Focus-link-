@@ -193,6 +193,66 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     languages: ['English', 'Hindi', 'Bengali'],
     verified: true,
   },
+  {
+    id: '22',
+    name: 'Braseetha A',
+    type: 'Student',
+    experience: 'Aspiring Optometrist | Pediatric & Binocular Vision Enthusiast',
+    location: 'Madurai, Tamil Nadu, India',
+    skills: [
+      'Diagnosing and managing eye conditions', 
+      'Prescribing corrective lenses', 
+      'Refraction', 
+      'Contact lens fitting', 
+      'Instruments handling', 
+      'Diagnosis & prescription management', 
+      'Clinical skills & patient communication', 
+      'Primary and data analysis research', 
+      'Customer service & patient management',
+      'Effective communication',
+      'Team collaboration',
+      'Analytical thinking'
+    ],
+    interests: ['Pediatric Vision Care', 'Binocular Vision Assessment', 'Congenital Ocular Motor Anomalies', 'Concept-based Learning', 'Peer Learning', 'Research Methodology'],
+    bio: `I’m an Optometry student passionate about pediatric vision care, binocular vision assessment, and congenital ocular motor anomalies.
+I love simplifying complex academic topics through concept maps, structured notes, and visual learning aids — making learning accessible and engaging.
+
+Beyond academics, I create interactive quizzes and MCQs to support peer learning and foster curiosity in vision science.
+I’m currently exploring research methodology and the psychological aspects of human behavior, enriching both my clinical and personal development.`,
+    links: {
+      linkedin: 'https://linkedin.com/in/braseetha-a-260b60323',
+      email: 'brasee66@gmail.com',
+    },
+    avatarUrl: 'https://picsum.photos/seed/braseetha/400/400',
+    workExperience: [
+        {
+          title: 'First Prize – Science Exhibition',
+          company: 'VK College of Science and Optometry',
+          startDate: '',
+          endDate: 'Achievement',
+          description: 'Won first prize in a poster competition, contributing to vision awareness through creativity and clinical insight.'
+        },
+        {
+          title: 'Participant',
+          company: 'EuyunCare',
+          startDate: '',
+          endDate: 'Achievement',
+          description: 'Participated in the International Webinar Series on Specialty Contact Lenses, deepening my understanding of clinical care and global collaboration.'
+        }
+    ],
+    education: [
+      {
+        school: 'V.K. College of Optometry',
+        university: 'Alagappa University',
+        degree: 'Bachelor of Optometry (B.Optom)',
+        fieldOfStudy: 'Medical Sciences focused on Eye Health and Vision Care',
+        startYear: '2023',
+        endYear: '2027'
+      }
+    ],
+    languages: ['English (Full Professional)', 'Tamil (Native)', 'Hindi (Limited Working)'],
+    verified: false,
+  },
 ];
 
 export const demoLeaderboardData: LeaderboardEntry[] = [];
