@@ -98,7 +98,7 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
               <div className="flex items-center gap-3 text-sm pt-3 mt-3">
                 <Avatar className="w-8 h-8 border-2 border-white/20">
-                    <AvatarImage src={'https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png'} alt={webinar.speaker.name} />
+                    <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
                     <AvatarFallback>{webinar.speaker.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
