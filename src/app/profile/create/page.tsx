@@ -38,6 +38,7 @@ export default function CreateProfilePage() {
   const form = useForm<UserProfile>({
     resolver: zodResolver(UserProfileSchema),
     defaultValues: {
+      id: '',
       name: '',
       type: 'Student',
       location: '',
@@ -67,14 +68,18 @@ export default function CreateProfilePage() {
       const data = await response.json();
       if (data.isValid) {
         setIdStatus('valid');
+        form.setValue('id', id); // Ensure react-hook-form knows the value
+        form.clearErrors('id');
       } else {
         setIdStatus('invalid');
+        form.setError('id', { type: 'manual', message: 'This Membership ID is not valid.' });
       }
     } catch (error) {
       console.error('ID validation failed:', error);
       setIdStatus('invalid');
+      form.setError('id', { type: 'manual', message: 'Could not verify ID.' });
     }
-  }, 500), []);
+  }, 500), [form]);
 
   useEffect(() => {
     checkIdValidity(membershipId || '');
@@ -130,8 +135,17 @@ export default function CreateProfilePage() {
   
   const onSubmit = async (data: UserProfile) => {
     setIsSubmitting(true);
-    form.clearErrors('id'); // Clear previous errors
     
+    if (idStatus !== 'valid') {
+        toast({
+            variant: 'destructive',
+            title: 'Invalid Membership ID',
+            description: 'Please enter a valid Membership ID before saving.',
+        });
+        setIsSubmitting(false);
+        return;
+    }
+
     const payload = {
         ...data,
         skills: JSON.stringify(data.skills.map(s => s.value)),
@@ -176,7 +190,7 @@ export default function CreateProfilePage() {
       }
 
     } catch (error) {
-       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+       const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
       toast({
         variant: 'destructive',
         title: 'Save Failed',
@@ -216,7 +230,6 @@ export default function CreateProfilePage() {
                     </div>
                   </div>
                   {form.formState.errors.id && <p className="text-sm text-destructive">{form.formState.errors.id.message}</p>}
-                   {idStatus === 'invalid' && <p className="text-sm text-destructive">This Membership ID is not valid.</p>}
                   <p className="text-xs text-muted-foreground">
                     A Membership ID is required to create a profile. If you don't have one,{' '}
                     <Link href="/membership" className="text-primary underline font-semibold">get one for free</Link>.
@@ -363,3 +376,5 @@ export default function CreateProfilePage() {
     </div>
   );
 }
+
+    
