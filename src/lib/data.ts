@@ -188,6 +188,13 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         fieldOfStudy: 'Optometry',
         startYear: '2021',
         endYear: '2025',
+      },
+       {
+        school: 'Swami Vivekanand University',
+        degree: 'B.Optom',
+        fieldOfStudy: 'Optometry',
+        startYear: '2021',
+        endYear: '2025'
       }
     ],
     languages: ['English', 'Hindi', 'Bengali'],
@@ -223,7 +230,7 @@ I’m currently exploring research methodology and the psychological aspects of 
       linkedin: 'https://linkedin.com/in/braseetha-a-260b60323',
       email: 'brasee66@gmail.com',
     },
-    avatarUrl: 'https://picsum.photos/seed/braseetha/400/400',
+    avatarUrl: 'https://i.ibb.co/yYyV5gG/female-icon-2.png',
     workExperience: [
         {
           title: 'First Prize – Science Exhibition',
@@ -237,7 +244,7 @@ I’m currently exploring research methodology and the psychological aspects of 
           company: 'EuyunCare',
           startDate: '',
           endDate: 'Achievement',
-          description: 'Participated in the International Webinar Series on Specialty Contact Lenses, deepening my understanding of clinical care and global collaboration.'
+          description: 'Participated in the International Webinar Series on Specialty Contact Lenses, deepening my understanding of clinical care and global collaboration in optometry.'
         }
     ],
     education: [
