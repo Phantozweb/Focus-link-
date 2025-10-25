@@ -162,3 +162,5 @@ export function OpticiansDirectoryClient({ allUsers }: { allUsers: UserProfile[]
     </div>
   );
 }
+
+    

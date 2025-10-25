@@ -162,3 +162,5 @@ export function OptometristsDirectoryClient({ allUsers }: { allUsers: UserProfil
     </div>
   );
 }
+
+    

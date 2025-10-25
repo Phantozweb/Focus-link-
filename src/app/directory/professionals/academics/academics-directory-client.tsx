@@ -164,3 +164,5 @@ export function AcademicsDirectoryClient({ allUsers }: { allUsers: UserProfile[]
     </div>
   );
 }
+
+    

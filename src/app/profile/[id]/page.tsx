@@ -2,7 +2,7 @@
 'use client';
 
 import { allUsers } from '@/lib/data/index';
-import { notFound, useRouter, useParams } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 // This function can't be used in a client component, but it's a good
 // pattern for server components. For this client component, we'll
@@ -84,14 +85,15 @@ function EducationItem({ education }: { education: Education }) {
 }
 
 function StudentProfile({ user }: { user: UserProfile }) {
-  const router = useRouter();
 
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-        <Button variant="outline" onClick={() => router.back()} className="mb-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
+        <Button variant="outline" asChild className="mb-4">
+          <Link href="/directory/students">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Students
+          </Link>
         </Button>
         <Card className="overflow-hidden">
           <div className="relative h-48 w-full bg-primary/10">
@@ -221,13 +223,14 @@ function StudentProfile({ user }: { user: UserProfile }) {
 }
 
 function AssociationProfile({ user }: { user: UserProfile }) {
-  const router = useRouter();
   
   return (
     <div className="flex-1 bg-gray-50">
-        <Button variant="outline" onClick={() => router.back()} className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
+        <Button variant="outline" asChild className="absolute top-20 left-4 sm:left-6 lg:left-8 z-10">
+          <Link href="/directory/associations">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Link>
         </Button>
       <div className="relative h-48 md:h-64 w-full">
         <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} fill objectFit="cover" data-ai-hint="office building"/>
@@ -362,7 +365,6 @@ function AssociationProfile({ user }: { user: UserProfile }) {
 
 
 export default function ProfilePage() {
-  const router = useRouter();
   const params = useParams();
   const id = params.id as string;
   const user = allUsers.find((u) => u.id === id);
@@ -464,9 +466,11 @@ export default function ProfilePage() {
       {schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />}
       <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-          <Button variant="outline" onClick={() => router.back()} className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+          <Button variant="outline" asChild className="mb-4">
+            <Link href="/directory">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Directory
+            </Link>
           </Button>
           <Card className="overflow-hidden">
             <div className="relative h-48 w-full bg-primary/10">
@@ -594,5 +598,7 @@ export default function ProfilePage() {
     </>
   );
 }
+
+    
 
     
