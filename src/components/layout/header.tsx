@@ -257,6 +257,12 @@ export function Header() {
             </nav>
         </div>
         <div className="hidden md:flex items-center gap-4">
+             <Button asChild>
+                <Link href="/membership">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Membership
+                </Link>
+             </Button>
              <Button variant="ghost" size="icon" asChild>
                 <Link href="/profile">
                     <User className="h-5 w-5" />
@@ -275,5 +281,3 @@ export function Header() {
     </header>
   );
 }
-
-    
