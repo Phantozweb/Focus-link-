@@ -183,4 +183,51 @@ export const professionals: UserProfile[] = [
     languages: ['Hindi', 'English'],
     verified: true,
   },
+  {
+    id: '8',
+    name: 'V.M. Ram Kumar',
+    type: 'Academic',
+    experience: 'Lecturer in Optometry | M.Optom',
+    location: 'Madurai, Tamil Nadu, India',
+    skills: [
+      'Ocular Disease Management', 'Binocular Vision Evaluation & Therapy', 'Low Vision Rehabilitation', 'Glaucoma Screening', 
+      'Scleral Contact Lenses', 'Rose-K Lenses', 'RGP Lenses', 'SD-OCT', 'Fundus Photography', 'A-Scan Biometry', 
+      'Corneal Topography', 'Automated Perimetry', 'Clinical Instruction & Mentoring'
+    ],
+    interests: ['Clinical Research', 'Specialty Contact Lenses', 'Glaucoma Diagnosis'],
+    bio: 'A clinically-focused and detail-oriented Optometrist with a Master\'s degree and hands-on experience in advanced diagnostics, ocular disease management, and specialty lens fitting. Combines a strong foundation in clinical research with a commitment to quality patient evaluation and low vision rehabilitation. Proven ability to operate a wide range of ophthalmic instruments and manage complex patient cases effectively.',
+    links: {
+      email: 'ramkumar4111999@gmail.com',
+    },
+    avatarUrl: 'https://i.ibb.co/LhnqwR5t/IMG-20251025-WA0020.jpg',
+    workExperience: [
+      {
+        title: 'Lecturer in Optometry',
+        company: 'VK College of Optometry, Madurai',
+        startDate: 'Dec 2023',
+        endDate: 'Present',
+        description: 'Instructing and mentoring undergraduate optometry students in core subjects and clinical practices. Overseeing student-led patient examinations and providing expert guidance on diagnosis and management.'
+      }
+    ],
+    education: [
+      {
+        school: 'Dr. MGR Medical University, Chennai',
+        university: 'Dr. MGR Medical University, Chennai',
+        degree: 'Master of Optometry (M.Optometry)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2021',
+        endYear: '2023'
+      },
+      {
+        school: 'Periyar University (Lotus Bausch and Lomb Institute of Optometry), Salem',
+        university: 'Periyar University',
+        degree: 'Bachelor of Optometry (B.Optometry)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2017',
+        endYear: '2021'
+      }
+    ],
+    languages: [],
+    verified: true,
+  }
 ];
