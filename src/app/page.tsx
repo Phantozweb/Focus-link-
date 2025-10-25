@@ -40,58 +40,6 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
     </div>
 );
 
-function ProfileRequestDialog() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [role, setRole] = useState('');
-
-  const generateMailto = () => {
-    const subject = `Profile Listing Request: ${name}`;
-    const body = `Hello Focus Links Team,\n\nI would like to request to be listed in the directory.\n\n- Name: ${name}\n- Email: ${email}\n- Primary Role: ${role}\n\nThank you!`;
-    return `mailto:team.focuslinks@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
-
-  return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Request a Profile Listing</DialogTitle>
-        <DialogDescription>
-          Our platform is in its early stages. Fill out this form, and we'll email you to get your profile set up manually.
-        </DialogDescription>
-      </DialogHeader>
-      <div className="space-y-4 py-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
-          <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., Dr. Jane Doe" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="role">Primary Role</Label>
-          <Select onValueChange={setRole} value={role}>
-            <SelectTrigger id="role">
-              <SelectValue placeholder="Select your role" />
-            </SelectTrigger>
-            <SelectContent>
-              {profileTypes.map((type) => (
-                <SelectItem key={type} value={type}>{type}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <Button asChild disabled={!name || !email || !role}>
-        <a href={generateMailto()}>
-          <Mail className="mr-2 h-4 w-4" /> Send Mail
-        </a>
-      </Button>
-    </DialogContent>
-  );
-}
-
-
 export default function Home() {
   const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
   const associations = allUsers.filter(u => u.type === 'Association');
@@ -106,7 +54,7 @@ export default function Home() {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState('all'); // Can be 'all', 'forum', 'jobs', or a profile type
   const [filterCountry, setFilterCountry] = useState('all');
   
   const ctaCards = [
@@ -166,113 +114,105 @@ export default function Home() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (searchTerm) {
-      params.set('q', searchTerm);
-    }
-    if (filterCountry !== 'all') {
-      params.set('country', filterCountry);
-    }
+    if (searchTerm) params.set('q', searchTerm);
 
-    const categoryMap = {
-        'Student': 'students',
-        'Optometrist': 'professionals',
-        'Ophthalmologist': 'professionals',
-        'Optician': 'professionals',
-        'Academic': 'professionals',
-        'Researcher': 'professionals',
-        'Association': 'associations',
-        'College': 'colleges',
-        'Hospital': 'clinics',
-        'Optical': 'clinics',
-        'Industry': 'industry',
+    let path = '/directory/all'; // Default search path
+
+    if (filterType === 'forum') {
+        path = '/forum';
+    } else if (filterType === 'jobs') {
+        path = '/jobs';
+    } else if (filterType !== 'all') {
+        // It's a profile type, map to the correct category
+        const categoryMap: { [key: string]: string } = {
+            'Student': 'students',
+            'Optometrist': 'professionals',
+            'Ophthalmologist': 'professionals',
+            'Optician': 'professionals',
+            'Academic': 'professionals',
+            'Researcher': 'professionals',
+            'Association': 'associations',
+            'College': 'colleges',
+            'Hospital': 'clinics',
+            'Optical': 'clinics',
+            'Industry': 'industry',
+        };
+        const category = categoryMap[filterType] || 'all';
+        path = `/directory/${category}`;
+        if (filterCountry !== 'all') {
+          params.set('country', filterCountry);
+        }
+    } else { // 'all' profiles
+       if (filterCountry !== 'all') {
+          params.set('country', filterCountry);
+       }
     }
     
-    const category = filterType !== 'all' ? (categoryMap[filterType as keyof typeof categoryMap] || 'all') : 'all';
-    
-    router.push(`/directory/${category}?${params.toString()}`);
-  }
+    router.push(`${path}?${params.toString()}`);
+  };
 
   return (
-    <Dialog>
       <TooltipProvider>
         <div className="bg-muted/40">
           <section className="relative bg-gradient-to-r from-cyan-600 to-blue-700 text-white overflow-hidden py-20 md:py-28">
               <div className="container mx-auto px-4 text-center">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">The Global Community for Eye Care</h1>
                   <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">Connecting vision professionals, students, and organizations worldwide. Find peers, discover opportunities, and grow your network.</p>
-                  <div className="w-full max-w-3xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
-                    <div className="flex flex-col sm:flex-row gap-2 items-center">
-                      <div className="relative flex-grow w-full">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
-                        <input 
-                            className="form-input w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500" 
-                            placeholder="Search by name, skill, or keyword..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                          />
-                      </div>
-                      
-                      <div className="flex w-full sm:w-auto gap-2">
-                         <DialogTrigger asChild>
-                            <Button variant="secondary" size="icon" className="h-12 w-12 bg-white text-primary hover:bg-gray-200 flex-shrink-0">
-                              <SlidersHorizontal className="h-5 w-5" />
-                            </Button>
-                        </DialogTrigger>
-
-                        <Button className="w-full h-12 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>Search</Button>
-                      </div>
-                    </div>
-
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                          <DialogTitle>Advanced Search Filters</DialogTitle>
-                          <DialogDescription>
-                            Refine your search to find the perfect connection.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <label className="text-right">Type</label>
-                            <div className="col-span-3">
-                              <Select onValueChange={setFilterType} value={filterType}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a profile type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="all">All Profiles</SelectItem>
-                                  {profileTypes.map(type => (
-                                    <SelectItem key={type} value={type}>
-                                      {type}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <label className="text-right">Country</label>
-                            <div className="col-span-3">
-                              <Select onValueChange={setFilterCountry} value={filterCountry}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a country" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="all">All Countries</SelectItem>
-                                  {countries.map(country => (
-                                    <SelectItem key={country.code} value={country.name.toLowerCase()}>
-                                      {country.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
+                  
+                  <div className="w-full max-w-4xl bg-white/20 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-white/30 mx-auto">
+                    <div className="flex flex-col md:flex-row gap-2 items-center">
+                        {/* Search Input */}
+                        <div className="relative flex-grow w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
+                            <Input 
+                                className="w-full pl-12 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500 h-12 text-base" 
+                                placeholder="Search by name, skill, job title..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                            />
                         </div>
-                        <Button type="submit" onClick={handleSearch} className="w-full">
-                            Show Results
-                          </Button>
-                      </DialogContent>
+                        
+                        <div className="flex w-full md:w-auto gap-2">
+                            {/* Category Select */}
+                            <Select onValueChange={setFilterType} value={filterType}>
+                                <SelectTrigger className="h-12 text-base bg-white text-gray-800 flex-grow">
+                                    <SelectValue placeholder="All Content" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Profiles</SelectItem>
+                                    <SelectItem value="forum">Case Forum</SelectItem>
+                                    <SelectItem value="jobs">Job Board</SelectItem>
+                                    <optgroup label="Profile Types">
+                                        {profileTypes.map(type => (
+                                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                                        ))}
+                                    </optgroup>
+                                </SelectContent>
+                            </Select>
+
+                            {/* Location Select (conditional) */}
+                            {filterType !== 'forum' && filterType !== 'jobs' && (
+                                <Select onValueChange={setFilterCountry} value={filterCountry}>
+                                    <SelectTrigger className="h-12 text-base bg-white text-gray-800 flex-grow">
+                                        <SelectValue placeholder="Location" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">All Countries</SelectItem>
+                                        {countries.map(country => (
+                                            <SelectItem key={country.code} value={country.name.toLowerCase()}>{country.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                            
+                            {/* Search Button */}
+                            <Button className="h-12 w-full md:w-auto bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>
+                                <span className="md:hidden">Search</span>
+                                <Search className="hidden md:block h-5 w-5"/>
+                            </Button>
+                        </div>
+                    </div>
                 </div>
               </div>
           </section>
@@ -315,19 +255,11 @@ export default function Home() {
                           <p className="text-white/80">{card.description}</p>
                         </div>
                         <div className="mt-6">
-                          {card.isDialog ? (
-                            <DialogTrigger asChild>
-                              <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                                {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                              </Button>
-                            </DialogTrigger>
-                          ) : (
-                            <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                              <Link href={card.href} target={card.href.startsWith('http') ? '_blank' : '_self'}>
-                                {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                              </Link>
-                            </Button>
-                          )}
+                          <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
+                            <Link href={card.href} target={card.href.startsWith('http') ? '_blank' : '_self'}>
+                              {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                          </Button>
                         </div>
                       </div>
                     </CarouselItem>
@@ -673,9 +605,7 @@ export default function Home() {
                 </Carousel>
               </section>}
           </div>
-          <ProfileRequestDialog />
         </div>
       </TooltipProvider>
-    </Dialog>
   );
 }
