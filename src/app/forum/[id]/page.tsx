@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 type ForumPostPageProps = {
   params: { id: string }
@@ -74,12 +75,18 @@ export default function ForumPostPage({ params }: ForumPostPageProps) {
                                     <AvatarFallback><User /></AvatarFallback>
                                 </Avatar>
                                 <div className="flex-grow">
-                                    <Textarea placeholder="Add your reply..." className="mb-2" />
+                                    <Textarea placeholder="Add your reply..." className="mb-2" disabled />
                                     <div className="flex justify-end items-center gap-2">
-                                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                                          <Lock className="h-3 w-3" /> Membership required to reply.
-                                        </p>
-                                        <Button><Send className="h-4 w-4 mr-2" /> Submit Reply</Button>
+                                       <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button disabled><Send className="h-4 w-4 mr-2" /> Submit Reply</Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                <p>Login with your member account to reply.</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
                                     </div>
                                 </div>
                             </div>

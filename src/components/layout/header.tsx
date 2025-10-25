@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell, BookOpen, Users, Tv, Calendar } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, Bell, BookOpen, Users, Tv, Calendar, LogIn } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -133,6 +133,12 @@ export function Header() {
                 <Button onClick={() => setIsNotificationDialogOpen(true)} variant="outline" size="icon">
                   <Bell className="h-5 w-5" />
                   <span className="sr-only">Notification Settings</span>
+                </Button>
+                <Button variant="ghost" asChild>
+                  <Link href="/login">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Login
+                  </Link>
                 </Button>
                 <Button asChild>
                   <Link href="/membership">

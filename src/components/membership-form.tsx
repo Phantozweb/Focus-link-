@@ -164,7 +164,7 @@ export function MembershipForm() {
                     </Button>
                 </div>
                  <p className="text-xs text-blue-700 mt-2">
-                    **Important:** Please save this ID. You will need it to create your profile and for all future events.
+                    **Important:** Please save this ID. You will need it to create your profile.
                  </p>
             </AlertDescription>
           </Alert>
@@ -173,7 +173,7 @@ export function MembershipForm() {
             <Info className="h-4 w-4" />
             <AlertTitle>What's Next?</AlertTitle>
             <AlertDescription>
-                Your profile is your professional storefront. Take the next step to build it out and get discovered.
+              Our team will review your application. Once approved, you will receive an email with a **temporary password** to log in to your account. After that, you can create your detailed profile to be listed in the directory.
             </AlertDescription>
           </Alert>
 

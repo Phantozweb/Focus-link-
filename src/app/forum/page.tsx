@@ -61,7 +61,7 @@ export default function ForumPage() {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Official membership required to post.</p>
+                      <p>Login with your member account to post.</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
