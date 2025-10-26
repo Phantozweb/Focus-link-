@@ -102,16 +102,16 @@ function StudentProfile({ user }: { user: UserProfile }) {
                   <p className="text-lg text-muted-foreground">{user.experience}</p>
                    <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                     {user.links.email && (
-                      <Button asChild variant="outline" size="icon">
+                      <Button asChild variant="outline">
                         <a href={generateMailto(user.links.email, '', user.name)} aria-label={`Email ${user.name}`}>
-                          <Mail className="h-5 w-5" />
+                          <Mail className="mr-2 h-4 w-4" /> Connect via Email
                         </a>
                       </Button>
                     )}
                     {user.links.linkedin && (
-                      <Button asChild variant="outline" size="icon">
+                      <Button asChild variant="outline">
                         <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${user.name}'s LinkedIn profile`}>
-                          <Linkedin className="h-5 w-5" />
+                          <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
                         </a>
                       </Button>
                     )}
@@ -242,11 +242,15 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                         </div>
                         <div className="flex shrink-0 items-center gap-2 self-start md:self-end w-full md:w-auto">
                             <Button asChild className="flex-1 md:flex-initial">
-                              <a href={generateMailto(user.links.email, '', user.name)}>Connect via Email</a>
+                              <a href={generateMailto(user.links.email, '', user.name)}>
+                                <Mail className="mr-2 h-4 w-4" /> Connect via Email
+                              </a>
                             </Button>
                             {user.links.linkedin && (
                             <Button asChild variant="secondary" className="flex-1 md:flex-initial">
-                              <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
+                              <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">
+                                <Globe className="mr-2 h-4 w-4" /> Website
+                              </a>
                             </Button>
                             )}
                         </div>
@@ -367,7 +371,10 @@ Thank you.
                         <div className="flex shrink-0 items-center gap-2 self-start md:self-end w-full md:w-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                  <Button className="flex-1 md:flex-initial">Inquire via Email</Button>
+                                  <Button className="flex-1 md:flex-initial">
+                                    <Mail className="mr-2 h-4 w-4" />
+                                    Inquire via Email
+                                  </Button>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-md">
                                     <DialogHeader>
@@ -399,7 +406,9 @@ Thank you.
                             </Dialog>
                             {user.links.linkedin && (
                               <Button asChild variant="secondary" className="flex-1 md:flex-initial">
-                                <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">Website</a>
+                                <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer">
+                                <Globe className="mr-2 h-4 w-4" />
+                                Website</a>
                               </Button>
                             )}
                         </div>
@@ -648,16 +657,17 @@ export default function ProfilePage() {
                     <p className="text-lg text-muted-foreground">{user.experience}</p>
                     <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                       {user.links.email && (
-                        <Button asChild variant="outline" size="icon">
+                        <Button asChild variant="outline">
                           <a href={generateMailto(user.links.email, '', user.name)} aria-label={`Email ${user.name}`}>
-                            <Mail className="h-5 w-5" />
+                            <Mail className="mr-2 h-4 w-4" /> Connect via Email
                           </a>
                         </Button>
                       )}
                       {user.links.linkedin && (
-                        <Button asChild variant="outline" size="icon">
+                        <Button asChild variant="outline">
                           <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={isIndividual ? `${user.name}'s LinkedIn profile` : `${user.name} Website`}>
-                            {isIndividual ? <Linkedin className="h-5 w-5" /> : <Globe className="h-5 w-5" />}
+                            {isIndividual ? <Linkedin className="mr-2 h-4 w-4" /> : <Globe className="mr-2 h-4 w-4" />}
+                            {isIndividual ? 'LinkedIn' : 'Website'}
                           </a>
                         </Button>
                       )}
@@ -751,3 +761,5 @@ export default function ProfilePage() {
     </>
   );
 }
+
+    
