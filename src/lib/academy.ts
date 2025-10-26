@@ -102,7 +102,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
 `,
     speaker: {
       name: 'V.M. Ram Kumar',
-      title: 'M.Sc. Optometry | Lecturer & Clinical Optometrist',
+      title: 'M.Optom | Lecturer & Clinical Optometrist',
       avatarUrl: 'https://i.ibb.co/LhnqwR5t/IMG-20251025-WA0020.jpg'
     },
     host: {

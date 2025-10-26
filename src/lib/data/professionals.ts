@@ -213,7 +213,7 @@ export const professionals: UserProfile[] = [
       {
         school: 'Dr. MGR Medical University, Chennai',
         university: 'Dr. MGR Medical University, Chennai',
-        degree: 'Master of Optometry (M.Optometry)',
+        degree: 'Master of Optometry (M.Optom)',
         fieldOfStudy: 'Optometry',
         startYear: '2021',
         endYear: '2023'
@@ -221,7 +221,7 @@ export const professionals: UserProfile[] = [
       {
         school: 'Periyar University (Lotus Bausch and Lomb Institute of Optometry), Salem',
         university: 'Periyar University',
-        degree: 'Bachelor of Optometry (B.Optometry)',
+        degree: 'Bachelor of Optometry (B.Optom)',
         fieldOfStudy: 'Optometry',
         startYear: '2017',
         endYear: '2021'

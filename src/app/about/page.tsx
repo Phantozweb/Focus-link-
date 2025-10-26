@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, Users, Search, Award, Linkedin, Mail } from "lucide-react";
+import { Eye, Users, Search, Award, Linkedin, Mail, BookOpen, MessageSquare, Briefcase } from "lucide-react";
 import Image from "next/image";
 import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -37,17 +37,22 @@ export default function AboutPage() {
     {
       icon: <Users className="h-8 w-8 text-primary" />,
       title: "Global Directory",
-      description: "A comprehensive database of students, optometrists, clinics, and industry partners. Find anyone, anywhere."
+      description: "A comprehensive database of students, professionals, institutions, clinics, and industry partners."
     },
     {
-      icon: <Search className="h-8 w-8 text-primary" />,
-      title: "Career Opportunities",
-      description: "Explore job boards and connect with leading organizations to find your next role in the eye care industry."
+      icon: <BookOpen className="h-8 w-8 text-primary" />,
+      title: "Academy & Events",
+      description: "Access expert-led webinars and compete in global knowledge competitions like the Eye Q Arena."
     },
     {
-      icon: <Award className="h-8 w-8 text-primary" />,
-      title: "Community & Events",
-      description: "Engage in clinical case discussions, attend expert-led webinars, and participate in global knowledge competitions."
+      icon: <MessageSquare className="h-8 w-8 text-primary" />,
+      title: "Case Forum",
+      description: "Engage in clinical case discussions and share insights with a global community of practitioners."
+    },
+    {
+        icon: <Briefcase className="h-8 w-8 text-primary" />,
+        title: "Career Center",
+        description: "Explore the job board to find your next role in the eye care industry."
     }
   ]
 
@@ -87,7 +92,7 @@ export default function AboutPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-slate-800">What We Offer</h2>
               <p className="mt-2 text-lg text-slate-600">A unified platform for the entire eye care ecosystem.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
                 <div key={index} className="text-center p-8 bg-card rounded-lg shadow-md hover:shadow-xl transition-shadow">
                   <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">
