@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, Users, Search, Award, Linkedin, Mail, BookOpen, MessageSquare, Briefcase } from "lucide-react";
+import { Eye, Users, Search, Award, Linkedin, Mail, BookOpen, MessageSquare, Briefcase, Handshake } from "lucide-react";
 import Image from "next/image";
 import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -137,6 +137,25 @@ export default function AboutPage() {
                     </Button>
                  </div>
             </Card>
+          </section>
+
+          {/* New Collaboration Section */}
+          <section>
+              <Card className="bg-primary/10 border-primary/20 shadow-lg">
+                  <CardContent className="p-8 md:p-12 text-center">
+                      <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/20 mx-auto mb-4">
+                          <Handshake className="h-8 w-8 text-primary" />
+                      </div>
+                      <h2 className="text-3xl font-bold text-slate-800">A Hub for Global Collaboration</h2>
+                      <p className="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">
+                          "My vision for Focus Links extends beyond a simple directory. It is a heartfelt invitation to every eye care association, college, and community group across the globe. We offer you a dedicated hub—a place to host your events, share your knowledge, run competitions, and connect with a global audience, all free of charge. This is our commitment to fostering a truly unified community, where collaboration drives the future of vision care."
+                      </p>
+                      <p className="mt-2 font-semibold text-slate-800">– Janarthan Veeramani, Founder</p>
+                      <Button asChild className="mt-6" size="lg">
+                          <Link href="/contact">Collaborate With Us</Link>
+                      </Button>
+                  </CardContent>
+              </Card>
           </section>
 
           {/* Mission Section */}

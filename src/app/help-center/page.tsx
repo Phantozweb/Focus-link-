@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { LifeBuoy, UserPlus, Search, Briefcase, MessageSquare, BookOpen, Sparkles, Award, HelpCircle, Rocket } from 'lucide-react';
+import { LifeBuoy, UserPlus, Search, Briefcase, MessageSquare, BookOpen, Sparkles, Award, HelpCircle, Rocket, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Help Center | Focus Links',
@@ -96,6 +96,32 @@ const helpTopics = [
               <li><strong class="text-primary">Stay Informed:</strong> Keep up with industry trends through our Events and Forum.</li>
           </ul>`
       }
+    ]
+  },
+  // Community Questions
+  {
+    category: 'Community Questions',
+    icon: <Users className="h-5 w-5 text-primary" />,
+    id: "community-questions",
+    questions: [
+      {
+        value: 'why-focus-links',
+        question: 'With platforms like LinkedIn, Indeed, and Naukri, why should I join Focus Links?',
+        answer: `While general platforms are great, they are built for everyone. Focus Links is built **just for the eye care industry**. Here’s the difference:
+        <ul class="list-disc pl-5 mt-2 space-y-2">
+            <li><strong>Niche Community:</strong> Every connection you make here is relevant to your field. You won't get lost in the noise of other industries.</li>
+            <li><strong>Specialized Content:</strong> Our Case Forum, Events, and Job Board are exclusively for eye care. The discussions are deeper and the opportunities are more targeted.</li>
+            <li><strong>Global Collaboration Hub:</strong> We are actively partnering with international associations to become the central digital home for the world's eye care community. It's a place to not just find a job, but to build a global career.</li>
+        </ul>
+        Think of us as a permanent, global eye care conference that's always online.`
+      },
+      {
+        value: 'how-jobs',
+        question: 'How does this platform help me find jobs?',
+        answer: `Our <a href="/jobs" class="text-primary underline font-semibold">Job Board</a> is more than just a listing service. It connects you directly with employers who are specifically looking for eye care talent. Because our platform is niche, employers know they are reaching qualified candidates, and you know every listing is relevant to your career path.
+        <br/><br/>
+        Furthermore, by building a strong profile, you increase your visibility to recruiters and institutions who actively browse our directory for promising talent. Your profile becomes your professional showcase in front of the right audience.`
+      },
     ]
   },
    // Events
