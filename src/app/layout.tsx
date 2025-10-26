@@ -11,6 +11,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://focuslinks.pro'),
   title: {
     default: 'Focus Links | Global Eye Care Community',
     template: '%s | Focus Links',
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
   description: "Join Focus Links, the world's largest digital ecosystem for the eye care industry. Connect with optometrists, students, and organizations, explore clinical cases, and advance your career through our global directory and events.",
   verification: {
     google: 'fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE',
+  },
+  alternates: {
+    canonical: '/',
   },
 };
 
