@@ -1,6 +1,6 @@
 
 import { MetadataRoute } from 'next'
-import { allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
 import { demoJobs } from '@/lib/jobs';
 import { demoDiscussions } from '@/lib/forum';
