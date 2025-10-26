@@ -40,14 +40,27 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
     </div>
 );
 
+// Fisher-Yates shuffle algorithm
+const shuffleArray = (array: any[]) => {
+  let currentIndex = array.length,  randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
+
 export default function Home() {
-  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
-  const associations = allUsers.filter(u => u.type === 'Association');
-  const colleges = allUsers.filter(u => u.type === 'College');
-  const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
-  const students = allUsers.filter(u => u.type === 'Student');
-  const industry = allUsers.filter(u => u.type === 'Industry');
-  
+  const [professionals, setProfessionals] = useState<UserProfile[]>([]);
+  const [associations, setAssociations] = useState<UserProfile[]>([]);
+  const [colleges, setColleges] = useState<UserProfile[]>([]);
+  const [clinicsAndOpticals, setClinicsAndOpticals] = useState<UserProfile[]>([]);
+  const [students, setStudents] = useState<UserProfile[]>([]);
+  const [industry, setIndustry] = useState<UserProfile[]>([]);
+
   const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
   const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
 
@@ -58,6 +71,46 @@ export default function Home() {
   const [filterCountry, setFilterCountry] = useState('all');
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   
+  useEffect(() => {
+    // Randomize all user types on client-side mount
+    const allProfessionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
+    setProfessionals(shuffleArray([...allProfessionals]));
+
+    const allAssociations = allUsers.filter(u => u.type === 'Association');
+    setAssociations(shuffleArray([...allAssociations]));
+    
+    const allColleges = allUsers.filter(u => u.type === 'College');
+    setColleges(shuffleArray([...allColleges]));
+
+    const allClinics = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
+    setClinicsAndOpticals(shuffleArray([...allClinics]));
+    
+    const allStudents = allUsers.filter(u => u.type === 'Student');
+    setStudents(shuffleArray([...allStudents]));
+
+    const allIndustry = allUsers.filter(u => u.type === 'Industry');
+    setIndustry(shuffleArray([...allIndustry]));
+
+
+    const now = new Date().getTime();
+    const live: typeof webinars = [];
+    const upcoming: typeof webinars = [];
+    webinars.forEach(w => {
+      const startTime = new Date(w.dateTime).getTime();
+      const durationParts = w.duration.split(' ');
+      const durationValue = parseInt(durationParts[0], 10);
+      const endTime = startTime + (durationValue * 60 * 60 * 1000) * (w.id === 'eye-q-arena-2025' ? 24 * 11 : 1);
+      if (now >= startTime && now < endTime) {
+        live.push(w);
+      } else if (now < startTime) {
+        upcoming.push(w);
+      }
+    });
+    setLiveWebinars(live);
+    setUpcomingWebinars(upcoming);
+  }, []);
+
+
   const ctaCards = [
     {
       title: "Become an Official Member",
@@ -88,30 +141,6 @@ export default function Home() {
       isDialog: false,
     },
   ];
-
-
-  useEffect(() => {
-    const now = new Date().getTime();
-    
-    const live: typeof webinars = [];
-    const upcoming: typeof webinars = [];
-
-    webinars.forEach(w => {
-      const startTime = new Date(w.dateTime).getTime();
-      const durationParts = w.duration.split(' ');
-      const durationValue = parseInt(durationParts[0], 10);
-      const endTime = startTime + (durationValue * 60 * 60 * 1000) * (w.id === 'eye-q-arena-2025' ? 24 * 11 : 1); // Handle days for quiz
-
-      if (now >= startTime && now < endTime) {
-        live.push(w);
-      } else if (now < startTime) {
-        upcoming.push(w);
-      }
-    });
-
-    setLiveWebinars(live);
-    setUpcomingWebinars(upcoming);
-  }, []);
 
   const handleSearch = () => {
     setIsFilterDialogOpen(false);
@@ -388,7 +417,11 @@ export default function Home() {
                     <Link href="/directory/professionals">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </div>
-                <Carousel opts={{ align: "start" }} className="w-full">
+                 <Carousel 
+                    opts={{ align: "start", loop: true }}
+                    plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
+                    className="w-full"
+                >
                   <CarouselContent className="-ml-4">
                     {professionals.map((user) => (
                       <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -407,7 +440,11 @@ export default function Home() {
                       <Link href="/forum">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                   </div>
-                  <Carousel opts={{ align: "start" }} className="w-full">
+                  <Carousel 
+                    opts={{ align: "start", loop: true }}
+                    plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
+                    className="w-full"
+                  >
                     <CarouselContent className="-ml-4">
                       {demoDiscussions.map((discussion) => (
                         <CarouselItem key={discussion.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -449,7 +486,11 @@ export default function Home() {
                       <Link href="/jobs">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                   </div>
-                  <Carousel opts={{ align: "start" }} className="w-full">
+                  <Carousel 
+                    opts={{ align: "start", loop: true }}
+                    plugins={[Autoplay({ delay: 6000, stopOnInteraction: true })]}
+                    className="w-full"
+                  >
                     <CarouselContent className="-ml-4">
                       {demoJobs.map((job) => (
                         <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -487,7 +528,11 @@ export default function Home() {
                   </Button>}
                 </div>
                 {associations.length > 0 ? (
-                    <Carousel opts={{ align: "start" }} className="w-full">
+                    <Carousel 
+                        opts={{ align: "start", loop: true }}
+                        plugins={[Autoplay({ delay: 4500, stopOnInteraction: true })]}
+                        className="w-full"
+                    >
                         <CarouselContent className="-ml-4">
                             {associations.map((user) => (
                             <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -516,7 +561,11 @@ export default function Home() {
                   </Button>}
                 </div>
                 {colleges.length > 0 ? (
-                    <Carousel opts={{ align: "start" }} className="w-full">
+                    <Carousel 
+                        opts={{ align: "start", loop: true }}
+                        plugins={[Autoplay({ delay: 5500, stopOnInteraction: true })]}
+                        className="w-full"
+                    >
                     <CarouselContent className="-ml-4">
                         {colleges.map((user) => (
                         <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -545,7 +594,11 @@ export default function Home() {
                   </Button>}
                 </div>
                 {clinicsAndOpticals.length > 0 ? (
-                    <Carousel opts={{ align: "start" }} className="w-full">
+                    <Carousel 
+                        opts={{ align: "start", loop: true }}
+                        plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]}
+                        className="w-full"
+                    >
                     <CarouselContent className="-ml-4">
                         {clinicsAndOpticals.map((user) => (
                         <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -574,7 +627,11 @@ export default function Home() {
                   </Button>}
                 </div>
                 {industry.length > 0 ? (
-                    <Carousel opts={{ align: "start" }} className="w-full">
+                    <Carousel 
+                        opts={{ align: "start", loop: true }}
+                        plugins={[Autoplay({ delay: 6500, stopOnInteraction: true })]}
+                        className="w-full"
+                    >
                     <CarouselContent className="-ml-4">
                         {industry.map((user) => (
                         <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -602,11 +659,15 @@ export default function Home() {
                     <Link href="/directory/students">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </div>
-                <Carousel opts={{ align: "start" }} className="w-full">
+                <Carousel 
+                    opts={{ align: "start", loop: true }}
+                    plugins={[Autoplay({ delay: 4200, stopOnInteraction: true })]}
+                    className="w-full"
+                >
                   <CarouselContent className="-ml-4">
                     {students.map((student) => (
-                      <CarouselItem key={student.id} className="basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
-                        <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
+                      <CarouselItem key={student.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
+                         <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
                             <div className="p-6 flex flex-col items-center flex-grow">
                               <Avatar className="h-24 w-24 mb-4 border-2 border-background shadow-md">
                                 <AvatarImage src={student.avatarUrl} alt={student.name} className="object-cover" data-ai-hint="portrait person" />
@@ -616,8 +677,8 @@ export default function Home() {
                                 {student.name}
                                 {student.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
                               </h3>
-                              <p className="text-sm text-primary">{student.education[0]?.school || 'Optometry Student'}</p>
-                              <p className="text-sm text-muted-foreground mt-2 flex-grow">{student.bio.substring(0,80)}...</p>
+                              <p className="text-sm text-primary font-medium">{student.experience.split('|')[0]}</p>
+                              <p className="text-sm text-muted-foreground mt-2 flex-grow line-clamp-3">{student.bio.substring(0,100)}...</p>
                             </div>
                             <div className="p-4 border-t bg-muted/50 mt-auto">
                               <Button asChild className="w-full">
@@ -637,5 +698,3 @@ export default function Home() {
       </TooltipProvider>
   );
 }
-
-    
