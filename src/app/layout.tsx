@@ -66,6 +66,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg" type="image/jpeg" />
         <meta name="google-site-verification" content="fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE" />
+        <meta name="google-site-verification" content="8mO8b4Ylc2hheiV-tqdNspyLlP22f8oE8-M8PRiab-U" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />
