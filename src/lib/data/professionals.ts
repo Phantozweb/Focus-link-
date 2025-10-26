@@ -248,7 +248,7 @@ export const professionals: UserProfile[] = [
       email: 'laizerdoyin@gmail.com',
       linkedin: 'https://www.linkedin.com/in/charles-o-4169ba199'
     },
-    avatarUrl: 'https://i.ibb.co/hJR6K9H/DSC-1027.jpg',
+    avatarUrl: 'https://i.ibb.co/NddTFdKy/DSC-1027.jpg',
     workExperience: [
       {
         title: 'Optometrist',
