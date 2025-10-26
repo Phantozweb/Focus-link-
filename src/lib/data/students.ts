@@ -219,7 +219,7 @@ My goal is to build a career that combines clinical leadership with education an
     id: '7',
     name: 'M. Mega Dharshini',
     type: 'Student',
-    experience: 'State Head - Tamil Nadu at Optobharat | B.Optom Student',
+    experience: 'B.Optom Student',
     location: 'Tirunelveli, Tamil Nadu, India',
     skills: [
         'Vision Examination & Refraction',
@@ -239,8 +239,8 @@ My goal is to build a career that combines clinical leadership with education an
         title: 'State Head - Tamil Nadu',
         company: 'Optobharat',
         startDate: '',
-        endDate: 'Present',
-        description: 'Leading state-level initiatives and student engagement for a prominent optometry organization.'
+        endDate: '',
+        description: 'Led state-level initiatives and student engagement for a prominent optometry organization.'
       },
       {
         title: 'Community Eye Camp Participant',
