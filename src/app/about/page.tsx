@@ -71,17 +71,12 @@ export default function AboutPage() {
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-20">
          
           <section>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="order-2 lg:order-1">
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">From a Student's Vision to a Global Community</h2>
-                    <div className="space-y-4 text-slate-600 text-lg">
-                        <p>Focus Links was born from a simple idea: the world of eye care is vast, but it doesn't have to be fragmented. As an optometry student, our founder, Janarthan Veeramani, saw the need for a unified platform—a place to break down silos between academia, clinical practice, and industry.</p>
-                        <p>What started as a tool to connect students has grown into a global mission. We are creating a digital home for every individual and organization dedicated to vision, from the first-year student to the seasoned ophthalmologist, from small clinics to multinational corporations.</p>
-                        <p>Our platform isn't just a directory; it's a dynamic ecosystem for collaboration, career advancement, and continuous learning.</p>
-                    </div>
-                </div>
-                 <div className="order-1 lg:order-2">
-                    <Image src="https://picsum.photos/seed/about-main/600/500" alt="A team of eye care professionals collaborating in a modern office" width={600} height={500} className="rounded-lg shadow-lg" data-ai-hint="people meeting office" />
+            <div className="max-w-4xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4 text-center">From a Student's Vision to a Global Community</h2>
+                <div className="space-y-4 text-slate-600 text-lg text-center">
+                    <p>Focus Links was born from a simple idea: the world of eye care is vast, but it doesn't have to be fragmented. As an optometry student, our founder, Janarthan Veeramani, saw the need for a unified platform—a place to break down silos between academia, clinical practice, and industry.</p>
+                    <p>What started as a tool to connect students has grown into a global mission. We are creating a digital home for every individual and organization dedicated to vision, from the first-year student to the seasoned ophthalmologist, from small clinics to multinational corporations.</p>
+                    <p>Our platform isn't just a directory; it's a dynamic ecosystem for collaboration, career advancement, and continuous learning.</p>
                 </div>
             </div>
           </section>
