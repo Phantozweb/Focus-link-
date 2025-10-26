@@ -229,5 +229,67 @@ export const professionals: UserProfile[] = [
     ],
     languages: [],
     verified: true,
+  },
+  {
+    id: '10',
+    name: 'Charles Olamidoyin Laizer',
+    type: 'Optometrist',
+    experience: 'Clinical Optometrist | Advocate of Good Eye Health',
+    location: 'Lagos State, Nigeria',
+    skills: [
+      'General optometry care', 'Cycloplegic Refraction', 'Ocular management', 'Low Vision therapy', 'Pediatric Optometrist',
+      'Glaucoma', 'Eye Exams', 'Cataract', 'Dry Eye', 'Data Management', 'Clinical Data Management', 'Electronic Data Management',
+      'Archives Management', 'Database Management System (DBMS)', 'Computer Literacy', 'Graphic Design', 'Cinematography',
+      'Photography', 'Community Outreach', 'Healthcare Management', 'Clinical Documentation'
+    ],
+    interests: ['Orthoptic', 'Contact lenses', 'Binoculars Vision training'],
+    bio: "A dedicated optometrist who's always ready to deliver the best eye care with compassion and expertise. With a passion for helping patients see the world more clearly, Charles specializes in routine eye exams, contact lens fittings, and managing conditions like glaucoma and diabetic retinopathy. He believes in empowering patients with the knowledge and care they need to maintain healthy vision for life.",
+    links: {
+      email: 'laizerdoyin@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/charles-o-4169ba199'
+    },
+    avatarUrl: 'https://i.ibb.co/hJR6K9h/DSC-1027.jpg',
+    workExperience: [
+      {
+        title: 'Optometrist',
+        company: 'Lagos University Teaching Hospital',
+        startDate: 'Jan 2024',
+        endDate: 'Present',
+        description: 'Optometry care.'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Diphillab vision care',
+        startDate: 'Jul 2020',
+        endDate: 'Jan 2024',
+        description: 'General Optometry procedures.'
+      },
+      {
+        title: 'Doctor of Optometry OD',
+        company: '8 division medical services hospital',
+        startDate: 'Jul 2019',
+        endDate: 'Jun 2020',
+        description: ''
+      },
+      {
+        title: 'Intern Optometrist',
+        company: 'Eye Foundation Hospital',
+        startDate: 'Feb 2018',
+        endDate: 'Jan 2019',
+        description: 'Examine patients\' eyes and provide eye health education. Assisting senior Optometrist on duty. Engaged in community optometry and outreaches.'
+      }
+    ],
+    education: [
+      {
+        school: 'University of Benin',
+        university: 'University of Benin',
+        degree: 'Doctor of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2011',
+        endYear: '2017'
+      }
+    ],
+    languages: ['English', 'Yoruba'],
+    verified: true
   }
 ];
