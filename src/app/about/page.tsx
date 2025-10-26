@@ -147,9 +147,12 @@ export default function AboutPage() {
                 <p className="mt-4 text-lg text-slate-600">
                   In an ever-evolving industry, staying connected is more important than ever. Focus Links provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
                 </p>
-                 <div className="mt-8">
+                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                   <Button asChild size="lg">
                     <Link href="/membership">Become a Member</Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline">
+                    <Link href="/directory">Explore the Directory</Link>
                   </Button>
                 </div>
             </div>
