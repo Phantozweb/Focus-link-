@@ -339,7 +339,7 @@ export default function Home() {
                       <Link href="/events">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                   </div>
-                  <Carousel opts={{ align: "start" }} className="w-full">
+                  <Carousel opts={{ align: "start" }} plugins={[ Autoplay({ delay: 3000, stopOnInteraction: true }) ]} className="w-full">
                     <CarouselContent className="-ml-4">
                       {liveWebinars.map((webinar) => (
                         <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -378,7 +378,7 @@ export default function Home() {
                         <Link href="/events">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                     </div>
-                    <Carousel opts={{ align: "start" }} className="w-full">
+                    <Carousel opts={{ align: "start" }} plugins={[ Autoplay({ delay: 4000, stopOnInteraction: true }) ]} className="w-full">
                     <CarouselContent className="-ml-4">
                         {upcomingWebinars.map((webinar) => (
                         <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
