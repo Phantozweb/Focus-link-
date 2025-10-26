@@ -17,44 +17,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-// This function can't be used in a client component, but it's a good
-// pattern for server components. For this client component, we'll
-// set the metadata dynamically in the component itself.
-// export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-//   const user = users.find((u) => u.id === params.id);
-//   if (!user) {
-//     return {
-//       title: 'Profile Not Found',
-//       description: 'The profile you are looking for does not exist.',
-//     };
-//   }
-
-//   return {
-//     title: `${user.name} | ${user.type} on Focus Links`,
-//     description: user.bio.substring(0, 160),
-//     openGraph: {
-//       title: `${user.name} | Focus Links`,
-//       description: user.bio.substring(0, 160),
-//       images: [
-//         {
-//           url: user.avatarUrl,
-//           width: 800,
-//           height: 600,
-//           alt: user.name,
-//         },
-//       ],
-//       type: 'profile',
-//       profile: {
-//         firstName: user.name.split(' ')[0],
-//         lastName: user.name.split(' ').slice(1).join(' '),
-//         username: user.id,
-//       },
-//     },
-//   };
-// }
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
   return (
@@ -90,6 +54,20 @@ function EducationItem({ education }: { education: Education }) {
   )
 }
 
+function generateMailto(email?: string, name?: string, recipientName?: string) {
+    if (!email) return '#';
+    const subject = `Connecting from Focus Links`;
+    const body = `Hi ${recipientName || 'there'},
+
+I came across your profile on Focus Links and would like to connect.
+
+Best regards,
+${name || ''}
+`;
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
+
 function StudentProfile({ user }: { user: UserProfile }) {
 
   return (
@@ -110,7 +88,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
               <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                 <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
                    {user.avatarUrl ? (
-                    <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"portrait person"} />
+                    <AvatarImage src={user.avatarUrl} alt={`${user.name} - ${user.type}`} data-ai-hint={"portrait person"} />
                    ) : null}
                   <AvatarFallback className="text-6xl">
                     {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-20 w-20" />}
@@ -125,14 +103,14 @@ function StudentProfile({ user }: { user: UserProfile }) {
                    <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                     {user.links.email && (
                       <Button asChild variant="outline" size="icon">
-                        <a href={`mailto:${user.links.email}`} aria-label="Email">
+                        <a href={generateMailto(user.links.email, '', user.name)} aria-label={`Email ${user.name}`}>
                           <Mail className="h-5 w-5" />
                         </a>
                       </Button>
                     )}
                     {user.links.linkedin && (
                       <Button asChild variant="outline" size="icon">
-                        <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={"LinkedIn"}>
+                        <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${user.name}'s LinkedIn profile`}>
                           <Linkedin className="h-5 w-5" />
                         </a>
                       </Button>
@@ -248,7 +226,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                     <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
                         <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 md:-mt-24 relative z-10 shrink-0">
                             {user.avatarUrl ? (
-                                <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
+                                <AvatarImage src={user.avatarUrl} alt={`${user.name} logo`} data-ai-hint={"logo building"} />
                             ) : null}
                             <AvatarFallback className="text-6xl rounded-md">
                                 {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <Building className="h-16 w-16" />}
@@ -264,7 +242,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                         </div>
                         <div className="flex shrink-0 items-center gap-2 self-start md:self-end w-full md:w-auto">
                             <Button asChild className="flex-1 md:flex-initial">
-                              <a href="#">Join</a>
+                              <a href={generateMailto(user.links.email, '', user.name)}>Connect via Email</a>
                             </Button>
                             {user.links.linkedin && (
                             <Button asChild variant="secondary" className="flex-1 md:flex-initial">
@@ -337,7 +315,7 @@ function CollegeProfile({ user }: { user: UserProfile }) {
   const [inquiryEmail, setInquiryEmail] = useState('');
   const [inquiryPhone, setInquiryPhone] = useState('');
 
-  const generateMailto = () => {
+  const generateInquiryMailto = () => {
     const subject = `Inquiry from Focus Links Website: Application for ${user.name}`;
     const body = `
 Hello ${user.name},
@@ -368,13 +346,12 @@ Thank you.
             <Card className="overflow-hidden">
                 <div className="relative h-48 md:h-64 w-full">
                     <Image src={bannerImage} alt={`${user.name} banner`} fill style={{objectFit: 'cover'}} data-ai-hint="college campus"/>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 </div>
                 <div className="p-6 bg-card">
                     <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
                         <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card relative z-10 shrink-0">
                           {user.avatarUrl ? (
-                              <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={"logo building"} />
+                              <AvatarImage src={user.avatarUrl} alt={`${user.name} logo`} data-ai-hint={"logo building"} />
                           ) : null}
                           <AvatarFallback className="text-6xl rounded-md">
                               {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <Building className="h-16 w-16" />}
@@ -390,7 +367,7 @@ Thank you.
                         <div className="flex shrink-0 items-center gap-2 self-start md:self-end w-full md:w-auto">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                  <Button className="flex-1 md:flex-initial">Apply Now</Button>
+                                  <Button className="flex-1 md:flex-initial">Inquire via Email</Button>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-md">
                                     <DialogHeader>
@@ -399,7 +376,7 @@ Thank you.
                                             Enter your details below to send an application inquiry to {user.name}. Your email client will open with a pre-filled message.
                                         </DialogDescription>
                                     </DialogHeader>
-                                    <div className="grid gap-4 py-4">
+                                    <div className="space-y-4 py-4">
                                         <div className="space-y-2">
                                             <Label htmlFor="name">Name</Label>
                                             <Input id="name" value={inquiryName} onChange={(e) => setInquiryName(e.target.value)} />
@@ -415,7 +392,7 @@ Thank you.
                                     </div>
                                     <DialogFooter>
                                         <Button asChild>
-                                            <a href={generateMailto()}>Send Inquiry</a>
+                                            <a href={generateInquiryMailto()}>Send Inquiry</a>
                                         </Button>
                                     </DialogFooter>
                                 </DialogContent>
@@ -439,7 +416,7 @@ Thank you.
                             <div className="md:col-span-2 space-y-8">
                                 <section>
                                     <h2 className="text-xl md:text-2xl font-bold font-headline mb-4 text-slate-800">About Us</h2>
-                                    <div className="prose prose-lg max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                                    <div className="prose-lg max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                                 </section>
                             </div>
                             <div className="md:col-span-1 space-y-6">
@@ -511,6 +488,42 @@ export default function ProfilePage() {
   const id = params.id as string;
   const user = allUsers.find((u) => u.id === id);
 
+  useEffect(() => {
+    if (user) {
+        document.title = `${user.name} - ${user.type} | Focus Links`;
+        
+        const setMeta = (name: string, content: string) => {
+            let element = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute('name', name);
+                document.head.appendChild(element);
+            }
+            element.setAttribute('content', content);
+        };
+
+        const setOg = (property: string, content: string) => {
+             let element = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+            if (!element) {
+                element = document.createElement('meta');
+                element.setAttribute('property', property);
+                document.head.appendChild(element);
+            }
+            element.setAttribute('content', content);
+        }
+
+        setMeta('description', user.bio.substring(0, 160));
+        setOg('og:title', `${user.name} | Focus Links`);
+        setOg('og:description', user.bio.substring(0, 160));
+        if (user.avatarUrl) {
+           setOg('og:image', user.avatarUrl);
+        }
+        setOg('og:type', 'profile');
+        setOg('og:url', `https://focuslinks.pro/profile/${user.id}`);
+    }
+  }, [user]);
+
+
   if (!user) {
     notFound();
   }
@@ -552,12 +565,6 @@ export default function ProfilePage() {
         "address": user.location
       }
     };
-  }
-
-  // Set metadata dynamically
-  if (typeof window !== 'undefined') {
-      document.title = `${user.name} - ${user.type} | Focus Links`;
-      document.querySelector('meta[name="description"]')?.setAttribute('content', user.bio.substring(0, 160));
   }
 
 
@@ -627,7 +634,7 @@ export default function ProfilePage() {
                 <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                   <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
                     {user.avatarUrl ? (
-                      <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" data-ai-hint={isOrg ? "logo building" : "portrait person"} />
+                      <AvatarImage src={user.avatarUrl} alt={`${user.name} - ${user.type}`} data-ai-hint={isOrg ? "logo building" : "portrait person"} />
                     ) : null}
                     <AvatarFallback className="text-6xl">
                       {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-20 w-20" />}
@@ -642,14 +649,14 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                       {user.links.email && (
                         <Button asChild variant="outline" size="icon">
-                          <a href={`mailto:${user.links.email}`} aria-label="Email">
+                          <a href={generateMailto(user.links.email, '', user.name)} aria-label={`Email ${user.name}`}>
                             <Mail className="h-5 w-5" />
                           </a>
                         </Button>
                       )}
                       {user.links.linkedin && (
                         <Button asChild variant="outline" size="icon">
-                          <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={isIndividual ? "LinkedIn" : "Website"}>
+                          <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label={isIndividual ? `${user.name}'s LinkedIn profile` : `${user.name} Website`}>
                             {isIndividual ? <Linkedin className="h-5 w-5" /> : <Globe className="h-5 w-5" />}
                           </a>
                         </Button>
