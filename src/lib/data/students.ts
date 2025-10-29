@@ -262,5 +262,43 @@ My goal is to build a career that combines clinical leadership with education an
     ],
     languages: ['English', 'Tamil'],
     verified: false
+  },
+  {
+    id: '11',
+    name: 'Rudra Kumar Sinha',
+    type: 'Student',
+    experience: 'Optometry Intern at CL Gupta Eye Institute | B.Optometry Student',
+    location: 'Moradabad, Uttar Pradesh, India',
+    skills: [
+      'Refraction', 'Applanation Tonometer', 'Marketing and Outreach', 'Patient Counseling', 'Teamwork'
+    ],
+    interests: ['Innovation in healthcare', 'Contact Lenses', 'Ocular Diseases', 'Vision Science'],
+    bio: `I’m Rudra Kumar Sinha, a dedicated and enthusiastic optometry intern at CL Gupta Eye Institute, currently pursuing a Bachelor of Optometry at Chandigarh University. My core interests lie in contact lenses, ocular diseases, and vision science innovation. With a strong academic foundation and hands-on clinical exposure, I’ve conducted research on AI-based digital handheld ophthalmoscopes — exploring how technology can revolutionize eye care in underserved regions. As a former Class Representative, I honed my leadership and teamwork skills, while also winning multiple cultural and sports awards, showcasing my dynamic personality. I’m a confident public speaker, a strong believer in interdisciplinary collaboration, and someone who thrives in learning-rich environments. I aim to bring value to eye care through a blend of clinical expertise, research insight, and people-centered communication. Let’s connect to collaborate, learn, and grow in the field of optometry and beyond!`,
+    links: {
+      linkedin: 'https://www.linkedin.com/in/rudra-kumar-sinha-29499617a',
+      email: 'rudrakumarsinha4@gmail.com',
+    },
+    avatarUrl: 'https://i.ibb.co/v6XJ3B7X/1747244504223.jpg',
+    workExperience: [
+      {
+        title: 'Intern Optometrist',
+        company: 'C L Gupta Eye Institute',
+        startDate: 'Jul 2025',
+        endDate: 'Present',
+        description: ''
+      }
+    ],
+    education: [
+      {
+        school: 'Chandigarh University',
+        university: 'Chandigarh University',
+        degree: 'Bachelor of Optometry',
+        fieldOfStudy: 'Medical',
+        startYear: '2022',
+        endYear: '2026'
+      }
+    ],
+    languages: ['English (Full Professional)', 'Hindi (Full Professional)', 'Bhojpuri (Professional Working)'],
+    verified: true,
   }
 ];
