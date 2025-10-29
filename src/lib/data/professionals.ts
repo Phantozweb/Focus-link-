@@ -365,5 +365,82 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['English', 'Arabic', 'Urdu', 'Pushto'],
     verified: true
+  },
+  {
+    id: '13',
+    name: 'Ummer Farooq',
+    type: 'Optometrist',
+    experience: 'Clinical optometrist, Myopia Controller',
+    location: 'India',
+    skills: [
+      'Contact lens fitting', 'Binocular vision and vision therapy', 'Low vision rehabilitation',
+      'Sports vision', 'Pediatric Optometry', 'Myopia control', 'Clinical investigation',
+      'Refraction', 'Ocularist'
+    ],
+    interests: [],
+    bio: 'A passionate optometrist with 6 years of clinical experience and 7 years of teaching experience. Specializing in myopia control, pediatric optometry, and advanced contact lens fitting.',
+    links: {
+      email: 'dar32790@gmail.com'
+    },
+    avatarUrl: 'https://i.ibb.co/nZ68C4s/IMG-20251019-WA0045.jpg',
+    workExperience: [
+      {
+        title: 'Senior Optometrist',
+        company: 'Vision eye clinic and optical',
+        startDate: 'Jan 2020',
+        endDate: 'Present',
+        description: ''
+      },
+      {
+        title: 'Senior Optometrist',
+        company: 'Nadeem eye care',
+        startDate: 'May 2020',
+        endDate: 'Present',
+        description: ''
+      },
+      {
+        title: 'Pediatric optometrist',
+        company: 'Khan optician',
+        startDate: 'Aug 2020',
+        endDate: 'Present',
+        description: ''
+      }
+    ],
+    education: [
+      {
+        school: 'Kapil Eye Hospital',
+        university: 'Kapil Eye Hospital',
+        degree: 'Fellowship of pediatric Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2023',
+        endYear: '2024'
+      },
+      {
+        school: 'LV Prasad Eye Institute',
+        university: 'LV Prasad Eye Institute',
+        degree: 'Fellowship of myopia control',
+        fieldOfStudy: 'Optometry',
+        startYear: '2022',
+        endYear: '2022'
+      },
+      {
+        school: 'Chitkara University',
+        university: 'Chitkara University',
+        degree: 'Msc Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2020',
+        endYear: '2022'
+      },
+      {
+        school: 'MADAHAV university',
+        university: 'MADAHAV university',
+        degree: 'Bsc optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2015',
+        endYear: '2019'
+      }
+    ],
+    languages: ['English', 'Urdu', 'Kashmiri'],
+    verified: true
   }
 ];
