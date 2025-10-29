@@ -222,23 +222,26 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                         </div>
                         {isQuiz ? (
-                            <div className="space-y-3 pt-3">
-                              <Button size="lg" className="w-full text-lg py-6" asChild>
-                                  <Link href={`/academy/quiz/${webinar.id}`}>
-                                      <Trophy className="mr-2 h-6 w-6" />
-                                      Enter Arena Now
-                                  </Link>
-                              </Button>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button size="lg" variant="outline" className="w-full">
-                                      <Bell className="mr-2 h-5 w-5" />
-                                      Remind Me
-                                  </Button>
-                                </DialogTrigger>
-                                <ReminderDialog webinar={webinar} />
-                              </Dialog>
-                            </div>
+                            <Dialog>
+                                <div className="space-y-3 pt-3">
+                                  <DialogTrigger asChild>
+                                      <Button size="lg" className="w-full text-lg py-6">
+                                          <Trophy className="mr-2 h-6 w-6" />
+                                          Enter Arena Now
+                                      </Button>
+                                  </DialogTrigger>
+                                  <Dialog>
+                                    <DialogTrigger asChild>
+                                      <Button size="lg" variant="outline" className="w-full">
+                                          <Bell className="mr-2 h-5 w-5" />
+                                          Remind Me
+                                      </Button>
+                                    </DialogTrigger>
+                                    <ReminderDialog webinar={webinar} />
+                                  </Dialog>
+                                </div>
+                                <QuizEntryDialog webinarId={webinar.id} />
+                            </Dialog>
                         ) : (
                           <div className='space-y-3 pt-4'>
                             <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
