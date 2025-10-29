@@ -223,9 +223,11 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                         </div>
                         {isQuiz ? (
                             <div className="space-y-3 pt-3">
-                              <Button size="lg" className="w-full text-lg py-6" disabled>
-                                  <Lock className="mr-2 h-6 w-6" />
-                                  Arena is Locked
+                              <Button size="lg" className="w-full text-lg py-6" asChild>
+                                  <Link href={`/academy/quiz/${webinar.id}`}>
+                                      <Trophy className="mr-2 h-6 w-6" />
+                                      Enter Arena Now
+                                  </Link>
                               </Button>
                               <Dialog>
                                 <DialogTrigger asChild>
@@ -273,15 +275,12 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             case 'LIVE':
                  return (
                     isQuiz ? (
-                        <Dialog>
-                          <DialogTrigger asChild>
-                              <Button size="lg" className="w-full text-lg py-6 animate-pulse">
-                                  <Trophy className="mr-2 h-6 w-6" />
-                                  Enter Arena Now
-                              </Button>
-                          </DialogTrigger>
-                          <QuizEntryDialog webinarId={webinar.id} />
-                        </Dialog>
+                        <Button asChild size="lg" className="w-full text-lg py-6 animate-pulse">
+                            <Link href={`/academy/quiz/${webinar.id}`}>
+                                <Trophy className="mr-2 h-6 w-6" />
+                                Enter Arena Now
+                            </Link>
+                        </Button>
                     ) : (
                         <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
                             <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
