@@ -291,5 +291,79 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['English', 'Yoruba'],
     verified: true
+  },
+  {
+    id: '12',
+    name: 'Sajjad Iqbal',
+    type: 'Optometrist',
+    experience: 'Clinical Optometrist with 18+ years of experience across three countries.',
+    location: 'Kuwait',
+    skills: [
+      'All types of Refraction',
+      'OCT',
+      'Perimetry',
+      'B-Scan',
+      'Pentacam',
+      'Orthoptic assessment',
+      'Biometry',
+      'RGP assessment and Fitting'
+    ],
+    interests: ['AI in Optometry'],
+    bio: 'A highly experienced Clinical Optometrist with over 18 years in diverse healthcare systems across Pakistan, Oman, and Kuwait. Currently serving as a Senior Optometrist at the Ministry of Health in Kuwait, specializing in advanced diagnostic procedures and patient care in a tertiary hospital setting.',
+    links: {
+      email: 'sajjadpak81@gmail.com',
+      linkedin: ''
+    },
+    avatarUrl: 'https://i.ibb.co/wNH01SSV/8e04a6da-88d7-4a3e-97de-dff67da8adba-1-all-470.jpg',
+    workExperience: [
+      {
+        title: 'Senior Optometrist',
+        company: 'Ministry of Health Kuwait',
+        startDate: 'April 2021',
+        endDate: 'Present',
+        description: 'Tertiary Hospital'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Ministry Of Health Pakistan',
+        startDate: 'Aug 2019',
+        endDate: 'March 2021',
+        description: 'Clinical Optometrist'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Ministry Of Health Oman',
+        startDate: 'Jan 2007',
+        endDate: 'April 2019',
+        description: 'Clinical Optometrist'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Private Clinic',
+        startDate: 'Jan 2004',
+        endDate: 'Dec 2006',
+        description: 'Clinical Optometrist'
+      }
+    ],
+    education: [
+      {
+        school: 'Khyber Medical University peshawar Pakistan',
+        university: 'Khyber Medical University peshawar Pakistan',
+        degree: 'Bachelor degree in vision sciences',
+        fieldOfStudy: 'Optometry',
+        startYear: '2005',
+        endYear: '2008'
+      },
+      {
+        school: 'Allama IQBAL Open University Islamabad Pakistan',
+        university: 'Allama IQBAL Open University Islamabad Pakistan',
+        degree: 'Bachelor degree in Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2002',
+        endYear: '2004'
+      }
+    ],
+    languages: ['English', 'Arabic', 'Urdu', 'Pushto'],
+    verified: true
   }
 ];
