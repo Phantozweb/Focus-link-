@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useMemo, Suspense } from 'react';
+import { useState, useEffect, useMemo, Suspense, useCallback } from 'react';
 import { webinars } from '@/lib/academy';
 import { quizModules, questions as allQuestions, type Question } from '@/lib/quiz-questions';
 import { notFound, useParams, useSearchParams } from 'next/navigation';
@@ -14,6 +14,7 @@ import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XC
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { sendQuizStartNotification, sendQuizResultNotification } from '@/lib/webhook';
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
@@ -143,7 +144,7 @@ function QuizComponent() {
     notFound();
   }
 
-  const startQuiz = () => {
+  const startQuiz = useCallback(() => {
     const storedSession = localStorage.getItem(`quizSession-${id}`);
     if (storedSession) {
         const currentSession: QuizSession = JSON.parse(storedSession);
@@ -159,12 +160,15 @@ function QuizComponent() {
             const updatedSession = { ...currentSession, attemptsLeft: currentSession.attemptsLeft - 1 };
             setSession(updatedSession);
             localStorage.setItem(`quizSession-${id}`, JSON.stringify(updatedSession));
+            
+            // Send Discord notification
+            sendQuizStartNotification(currentSession.membershipId);
         } else {
              // No attempts left, force back to not-started
             setQuizState('not-started');
         }
     }
-  };
+  }, [id]);
 
   const calculateModuleScore = () => {
     const moduleQuestions = allQuestions.filter(q => q.module === currentModule.topic);
@@ -190,11 +194,35 @@ function QuizComponent() {
     return {score, totalPoints, bonusPoints, timeTaken};
   };
 
-  const handleNextModule = () => {
+  const handleFinishQuiz = (finalResults: ModuleResult[]) => {
+      const totalScore = finalResults.reduce((acc, r) => acc + r.score, 0);
+      const totalBonus = finalResults.reduce((acc, r) => acc + r.bonusPoints, 0);
+      const finalScore = totalScore + totalBonus;
+      const totalPossiblePoints = finalResults.reduce((acc, r) => acc + r.totalPoints + r.bonusPoints, 0);
+      const totalTimeTaken = finalResults.reduce((acc, r) => acc + r.timeTaken, 0);
+      const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
+      const overallPassed = overallPercentage >= PASS_PERCENTAGE;
+
+      if (session) {
+        sendQuizResultNotification({
+            membershipId: session.membershipId,
+            finalScore,
+            totalPossiblePoints,
+            totalTimeTaken,
+            overallPercentage,
+            overallPassed,
+            moduleResults: finalResults,
+            attemptsLeft: session.attemptsLeft
+        });
+      }
+      setQuizState('finished');
+  }
+
+  const handleNextModule = useCallback(() => {
     const {score, totalPoints, bonusPoints, timeTaken} = calculateModuleScore();
     const passed = (score / totalPoints) >= PASS_PERCENTAGE;
     
-    setModuleResults(prev => [...prev, {
+    const newResult: ModuleResult = {
       topic: currentModule.topic,
       score,
       total: currentQuestions.length,
@@ -203,15 +231,18 @@ function QuizComponent() {
       passed,
       totalPoints,
       bonusPoints,
-    }]);
+    };
+    
+    const updatedResults = [...moduleResults, newResult];
+    setModuleResults(updatedResults);
 
     if (currentModuleIndex < quizModules.length - 1) {
       setQuizState('break');
       setBreakTimeLeft(BREAK_TIME_SECONDS);
     } else {
-      setQuizState('finished');
+      handleFinishQuiz(updatedResults);
     }
-  };
+  }, [currentModule, currentQuestions.length, moduleResults, currentModuleIndex, timeLeftInModule]);
   
   const startNextModule = () => {
      const nextModuleIndex = currentModuleIndex + 1;
@@ -222,7 +253,7 @@ function QuizComponent() {
         setModuleStartTime(Date.now());
         setQuizState('active');
       } else {
-        setQuizState('finished');
+        handleFinishQuiz(moduleResults);
       }
   }
 
@@ -370,7 +401,7 @@ function QuizComponent() {
                 </CardContent>
              </Card>
              <div className="mt-8 flex gap-4">
-                <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')} disabled={!session || session.attemptsLeft < 0}>
+                <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')} disabled={!session || session.attemptsLeft <= 0}>
                     Try Again ({session ? Math.max(0, session.attemptsLeft) : MAX_ATTEMPTS - 1} attempts left)
                 </Button>
                 <Button size="lg" className="flex-1" asChild>
