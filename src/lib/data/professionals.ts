@@ -447,7 +447,7 @@ export const professionals: UserProfile[] = [
     id: 'IN20251030102233',
     name: 'Harini L',
     type: 'Optometrist',
-    experience: 'instrumentation',
+    experience: 'Aspiring Optometrist | Patient-Focused Diagnostics',
     location: 'India',
     skills: [
       'Contact Lens Fitting and care',
