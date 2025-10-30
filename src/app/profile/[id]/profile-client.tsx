@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { notFound, useParams } from 'next/navigation';
@@ -226,7 +227,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                 </div>
                 <div className="p-6">
                     <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
-                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card -mt-20 md:-mt-24 relative z-10 shrink-0">
+                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-contain rounded-md shadow-lg border-4 border-card -mt-20 md:-mt-24 relative z-10 shrink-0">
                             {user.avatarUrl ? (
                                 <AvatarImage src={user.avatarUrl} alt={`${user.name} logo`} data-ai-hint={"logo building"} />
                             ) : null}
@@ -355,7 +356,7 @@ Thank you.
                 </div>
                 <div className="p-6 bg-card">
                     <div className="flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
-                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-cover rounded-md shadow-lg border-4 border-card relative z-10 shrink-0">
+                        <Avatar className="h-24 w-24 sm:h-32 sm:w-32 object-contain rounded-md shadow-lg border-4 border-card relative z-10 shrink-0">
                           {user.avatarUrl ? (
                               <AvatarImage src={user.avatarUrl} alt={`${user.name} logo`} data-ai-hint={"logo building"} />
                           ) : null}
@@ -522,7 +523,7 @@ Thank you.
   return (
      <Dialog>
         <DialogTrigger asChild>
-            <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white hover:text-slate-900">
+            <Button size="lg" variant="outline" className="bg-transparent text-slate-800 border-slate-800 hover:bg-slate-800 hover:text-white">
                 {triggerText}
             </Button>
         </DialogTrigger>
@@ -687,11 +688,11 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
     return (
         <div className="bg-background">
             {/* Hero Section */}
-            <section className="py-20 md:py-28 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
+            <section className="py-20 md:py-28 bg-gradient-to-r from-slate-50 to-slate-100 text-slate-800">
                 <div className="container mx-auto px-4 text-center">
                     <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={100} height={100} className="mx-auto mb-4" data-ai-hint="logo eye"/>
                     <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Revolutionary Eye Care Technology</h1>
-                    <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                    <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
                         दृष्टिKit - The world's most portable and affordable eye testing solution. Conduct comprehensive vision screenings anywhere with our revolutionary all-in-one portable phoropter.
                     </p>
                     <div className="flex justify-center gap-4 mt-8">
@@ -790,7 +791,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                             <h2 className="text-3xl font-bold text-slate-800">Government Recognized & Proudly Made in India</h2>
                             <p className="text-lg text-slate-600 mt-4">DrishtiKit is a proud Indian innovation, officially recognized by DPIIT under the Startup India initiative. Our indigenous healthcare technology represents the best of Indian innovation in portable eye care solutions.</p>
                         </div>
-                        <div className="flex justify-center md:justify-end items-center gap-8">
+                        <div className="flex flex-wrap justify-center md:justify-end items-center gap-8">
                             <Image src="https://www.drishtikit.com/dpiit.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
                             <Image src="https://www.drishtikit.com/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
                         </div>
@@ -1123,3 +1124,4 @@ export function ProfileClient({ user }: { user: UserProfile }) {
     </div>
   );
 }
+
