@@ -20,7 +20,7 @@ import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from '@/components/ui/textarea';
-import Autoplay from 'embla-carousel-autoplay';
+import Autoplay from "embla-carousel-autoplay";
 
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
@@ -506,16 +506,16 @@ Hello ${user.name},
 
 I found your profile on Focus Links and would like to make an inquiry.
 
-**My Details:**
-**Name:** ${name}
-**Email:** ${email}
+My Details:
+Name: ${name}
+Email: ${email}
 
-**Message:**
+Message:
 ${message}
 
 Thank you.
 ---
-*Sent via Focus Links - The Global Eye Care Community*
+Sent via Focus Links - The Global Eye Care Community
     `;
     return `mailto:${user.links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
@@ -567,24 +567,22 @@ function OrderDialog({ user }: { user: UserProfile }) {
 
   const generateOrderMailto = () => {
     const subject = `Order Request from Focus Links: DrishtiKit Complete`;
-    const body = `
-Hello DrishtiKit Team,
+    const body = `Hello DrishtiKit Team,
 
 I would like to place an order for the DrishtiKit Complete system, as seen on Focus Links.
 
-**Order Details:**
-**Contact Name:** ${name}
-**Organization:** ${organization}
-**Email:** ${email}
-**Country:** ${country}
-**Number of Units:** ${units}
+Order Details:
+Contact Name: ${name}
+Organization: ${organization}
+Email: ${email}
+Country: ${country}
+Number of Units: ${units}
 
 Please provide a quote and further instructions to complete this order.
 
 Thank you.
 ---
-*Sent via Focus Links - The Global Eye Care Community*
-    `;
+Sent via Focus Links - The Global Eye Care Community`;
     return `mailto:${user.links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
@@ -644,11 +642,11 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
       { value: "50+", label: "Healthcare Organizations" },
       { value: "15,000+", label: "Vision Screenings Completed" },
       { value: "10+", label: "Countries Reached" },
-      { value: "95%", label: "Clinician Satisfaction Rate" },
+      { value: "95%", label: "Accuracy Rate" },
     ];
 
     const mobileAppFeatures = [
-        { title: "Patient Registration", description: "Complete patient data collection.", icon: <Users className="w-6 h-6 text-primary"/> },
+        { title: "Patient Registration", description: "Complete patient data collection.", icon: <UserPlus className="w-6 h-6 text-primary"/> },
         { title: "Patient Management", description: "Organize screening campaigns.", icon: <Briefcase className="w-6 h-6 text-primary"/> },
         { title: "Health Records", description: "Detailed vision test results.", icon: <Stethoscope className="w-6 h-6 text-primary"/> },
         { title: "Secure Login", description: "Multi-user access control.", icon: <ShieldCheck className="w-6 h-6 text-primary"/> },
@@ -685,6 +683,10 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
         { value: "q6", question: "Is the data secure?", answer: "Yes, all patient data is encrypted end-to-end and stored in secure cloud infrastructure. We follow strict data protection protocols to ensure compliance with healthcare regulations." }
     ];
 
+    const handleWatchDemo = () => {
+        document.getElementById('product-video')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <div className="bg-background">
             {/* Hero Section */}
@@ -699,12 +701,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         <Button size="lg" asChild>
                             <a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a>
                         </Button>
-                        <InquiryDialog 
-                            triggerText="Request a Demo"
-                            title="Request a Product Demo"
-                            description="Please provide your details, and our team will contact you to schedule a live demonstration of DrishtiKit."
-                            user={user}
-                        />
+                        <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
                     </div>
                 </div>
             </section>
@@ -764,7 +761,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                 </section>
 
                 {/* Product Demo Video */}
-                <section className="text-center">
+                <section className="text-center" id="product-video">
                     <h2 className="text-3xl md:text-4xl font-bold text-slate-800">See DrishtiKit in Action</h2>
                     <p className="mt-2 text-lg text-slate-600 max-w-2xl mx-auto">
                         Watch how DrishtiKit is transforming vision screening in communities around the world with our revolutionary portable eye testing solution.
@@ -793,7 +790,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         </div>
                         <div className="flex flex-wrap justify-center md:justify-end items-center gap-8">
                             <Image src="https://www.drishtikit.com/dpiit.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
-                            <Image src="https://www.drishtikit.com/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
+                            <Image src="https://www/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
                         </div>
                     </div>
                 </section>
@@ -823,25 +820,38 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     </div>
                      <div className="grid md:grid-cols-2 gap-8 items-center">
                         <div className="space-y-6">
-                            <div className="p-6 border rounded-lg">
-                                <h3 className="text-xl font-bold text-slate-800 mb-2">Portable Phoropter</h3>
-                                <p className="text-slate-600">Complete refraction testing in a compact, portable device with digital precision. Sphere: -3D to +3D (0.5D intervals).</p>
+                           <div className="p-6 border rounded-lg flex items-start gap-4">
+                                <div className="p-3 bg-primary/10 rounded-full"><Package className="w-6 h-6 text-primary"/></div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-1">Portable Phoropter</h3>
+                                    <p className="text-slate-600">Complete refraction testing in a compact device. Sphere: -3D to +3D (0.5D intervals).</p>
+                                </div>
                             </div>
-                            <div className="p-6 border rounded-lg">
-                                <h3 className="text-xl font-bold text-slate-800 mb-2">AI-Powered Mobile App</h3>
-                                <p className="text-slate-600">Manage patients, get AI summaries, and sync data to the cloud, even when offline.</p>
+                            <div className="p-6 border rounded-lg flex items-start gap-4">
+                                <div className="p-3 bg-primary/10 rounded-full"><Globe className="w-6 h-6 text-primary"/></div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-1">AI-Powered Mobile App</h3>
+                                    <p className="text-slate-600">Manage patients, get AI summaries, and sync data, even offline.</p>
+                                </div>
                             </div>
-                            <div className="p-6 border rounded-lg">
-                                <h3 className="text-xl font-bold text-slate-800 mb-2">Training & Support</h3>
-                                <p className="text-slate-600">Comprehensive video modules, live virtual sessions, and 24/7 technical support.</p>
+                             <div className="p-6 border rounded-lg flex items-start gap-4">
+                                <div className="p-3 bg-primary/10 rounded-full"><Server className="w-6 h-6 text-primary"/></div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-1">Data Management System</h3>
+                                    <p className="text-slate-600">Secure cloud-based patient record management with analytics and reporting.</p>
+                                </div>
+                            </div>
+                            <div className="p-6 border rounded-lg flex items-start gap-4">
+                                <div className="p-3 bg-primary/10 rounded-full"><Wrench className="w-6 h-6 text-primary"/></div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-1">Training & Support</h3>
+                                    <p className="text-slate-600">Comprehensive video modules, live sessions, and 24/7 technical support.</p>
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-center">
                             <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} />
                         </div>
-                    </div>
-                    <div className="mt-8">
-                        <Image src="https://www.drishtikit.com/whats_inside.png" alt="What's inside the DrishtiKit" width={1200} height={400} className="w-full rounded-lg shadow-lg" />
                     </div>
                 </section>
 
@@ -897,15 +907,19 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         <CardContent className="text-center">
                             <div className="max-w-md mx-auto bg-white/20 p-6 rounded-lg backdrop-blur-sm">
                                 <h4 className="text-2xl font-bold">DrishtiKit Complete</h4>
-                                <ul className="text-left space-y-2 my-4">
+                                 <ul className="text-left space-y-2 my-4">
                                     <li className="flex items-center gap-2"><Check/> Portable Phoropter</li>
-                                    <li className="flex items-center gap-2"><Check/> Vision Charts (Distance & Near)</li>
-                                    <li className="flex items-center gap-2"><Check/> AI-Powered Mobile App License</li>
-                                    <li className="flex items-center gap-2"><Check/> 2-Year Warranty & Support</li>
+                                    <li className="flex items-center gap-2"><Check/> Distance Vision Charts</li>
+                                    <li className="flex items-center gap-2"><Check/> Near Vision Testing Charts</li>
+                                    <li className="flex items-center gap-2"><Check/> Color Vision Testing Book</li>
+                                    <li className="flex items-center gap-2"><Check/> Amsler Grid for Macular Testing</li>
+                                    <li className="flex items-center gap-2"><Check/> Durable carrying case</li>
+                                    <li className="flex items-center gap-2"><Check/> AI-powered mobile application</li>
+                                    <li className="flex items-center gap-2"><Check/> 2-year warranty and technical support</li>
                                 </ul>
                                 <OrderDialog user={user} />
                             </div>
-                            <p className="mt-4 text-sm text-blue-200">Special bulk discounts available for NGOs, healthcare organizations, and government programs.</p>
+                            <p className="mt-4 text-sm text-blue-200">Bulk discounts available for 10+ units. Contact us for institutional pricing.</p>
                         </CardContent>
                     </Card>
                 </section>
