@@ -1,11 +1,6 @@
 
 'use client';
 
-import { allUsers } from '@/lib/data';
-import { webinars } from '@/lib/academy';
-import { demoJobs } from '@/lib/jobs';
-import { demoDiscussions } from '@/lib/forum';
-
 const WEBHOOK_URL = 'https://discord.com/api/webhooks/1433518247705186415/HU3nmKoZYX17z3S0bPwoEJ_QAglEvuOngD3jVrfQ4fvpUIy67BwNwp7Rgu4oRYkf9Ach';
 
 const TRACKING_ID_KEY = 'focuslinks_tracking_id';
@@ -44,21 +39,17 @@ function getPageTitle(pathname: string): string {
     const lastPart = parts[parts.length - 1];
 
     if (pathname.startsWith('/profile/')) {
-        const user = allUsers.find(u => u.id === lastPart);
-        return `👤 Viewing Profile: **${user ? user.name : lastPart}**`;
+        return `👤 Viewing Profile: **${lastPart}**`;
     }
     if (pathname.startsWith('/events/') || pathname.startsWith('/academy/')) {
-        const event = webinars.find(e => e.id === lastPart);
         const prefix = pathname.startsWith('/academy/') ? 'Academy Event' : 'Event';
-        return `🗓️ Viewing ${prefix}: **${event ? event.title : lastPart}**`;
+        return `🗓️ Viewing ${prefix}: **${lastPart}**`;
     }
      if (pathname.startsWith('/jobs/')) {
-        const job = demoJobs.find(j => j.id === lastPart);
-        return `💼 Viewing Job: **${job ? job.title : lastPart}**`;
+        return `💼 Viewing Job: **${lastPart}**`;
     }
     if (pathname.startsWith('/forum/')) {
-        const discussion = demoDiscussions.find(d => d.id === lastPart);
-        return `💬 Viewing Forum Post: **${discussion ? discussion.title : lastPart}**`;
+        return `💬 Viewing Forum Post: **${lastPart}**`;
     }
 
     const pageName = (lastPart || 'page').replace(/-/g, ' ');
