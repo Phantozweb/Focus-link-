@@ -4,6 +4,11 @@
 import { useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { logActivity } from '@/lib/activity-logger';
+import { allUsers } from '@/lib/data';
+import { webinars } from '@/lib/academy';
+import { demoJobs } from '@/lib/jobs';
+import { demoDiscussions } from '@/lib/forum';
+
 
 function getPageTitle(pathname: string): string {
     if (pathname === '/') return '🏠 Viewing Homepage';
@@ -12,19 +17,24 @@ function getPageTitle(pathname: string): string {
     const lastPart = parts[parts.length - 1];
 
     if (pathname.startsWith('/profile/')) {
-        return `👤 Viewing Profile: **${lastPart}**`;
+        const user = allUsers.find(u => u.id === lastPart);
+        return `👤 Viewing Profile: **${user ? user.name : lastPart}**`;
     }
     if (pathname.startsWith('/events/')) {
-         return `🗓️ Viewing Event: **${lastPart}**`;
+        const event = webinars.find(e => e.id === lastPart);
+        return `🗓️ Viewing Event: **${event ? event.title : lastPart}**`;
     }
     if (pathname.startsWith('/academy/')) {
-         return `🗓️ Viewing Academy Event: **${lastPart}**`;
+        const event = webinars.find(e => e.id === lastPart);
+        return `🗓️ Viewing Academy Event: **${event ? event.title : lastPart}**`;
     }
      if (pathname.startsWith('/jobs/')) {
-         return `💼 Viewing Job: **${lastPart}**`;
+        const job = demoJobs.find(j => j.id === lastPart);
+        return `💼 Viewing Job: **${job ? job.title : lastPart}**`;
     }
     if (pathname.startsWith('/forum/')) {
-         return `💬 Viewing Forum Post: **${lastPart}**`;
+        const discussion = demoDiscussions.find(d => d.id === lastPart);
+        return `💬 Viewing Forum Post: **${discussion ? discussion.title : lastPart}**`;
     }
 
     // Generic fallback
