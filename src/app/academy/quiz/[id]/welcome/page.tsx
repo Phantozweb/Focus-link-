@@ -10,7 +10,7 @@ import { quizModules } from '@/lib/quiz-questions';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import type { UserProfile } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
