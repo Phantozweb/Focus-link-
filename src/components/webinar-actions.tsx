@@ -1,16 +1,25 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+
+// Debounce function
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
 
 interface WebinarActionsProps {
     webinar: Webinar;
@@ -25,6 +34,37 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
 
 function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   const [membershipId, setMembershipId] = useState('');
+  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+
+  const checkIdValidity = useCallback(debounce(async (id: string) => {
+    if (!id || id.trim().length < 5) {
+      setIdStatus('idle');
+      return;
+    }
+    setIdStatus('loading');
+    try {
+      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
+      const data = await response.json();
+      if (data.isValid) {
+        setIdStatus('valid');
+      } else {
+        setIdStatus('invalid');
+      }
+    } catch (error) {
+      console.error('ID validation failed:', error);
+      setIdStatus('invalid');
+    }
+  }, 500), []);
+  
+   useEffect(() => {
+    if (membershipId) {
+      checkIdValidity(membershipId);
+    } else {
+      setIdStatus('idle');
+    }
+  }, [membershipId, checkIdValidity]);
+
+
   return (
     <DialogContent>
       <DialogHeader>
@@ -36,12 +76,20 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
       <div className="space-y-4 py-4">
         <div className="space-y-2">
           <Label htmlFor="membership-id">Membership ID</Label>
-          <Input 
-            id="membership-id" 
-            value={membershipId}
-            onChange={(e) => setMembershipId(e.target.value)}
-            placeholder="e.g., FL-12345" 
-          />
+           <div className="relative">
+            <Input 
+              id="membership-id" 
+              value={membershipId}
+              onChange={(e) => setMembershipId(e.target.value)}
+              placeholder="e.g., FL-12345" 
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+              {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+              {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+            </div>
+          </div>
+          {idStatus === 'invalid' && <p className="text-sm text-destructive">This Membership ID is not valid or does not exist.</p>}
         </div>
       </div>
       <DialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-2">
@@ -51,7 +99,7 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
                 <Link href="/membership#membership-join">Join for free</Link>
             </Button>
         </div>
-        <Button asChild disabled={!membershipId}>
+        <Button asChild disabled={idStatus !== 'valid'}>
             <Link href={`/academy/quiz/${webinarId}`}>
             <Trophy className="mr-2 h-4 w-4" />
             Start Quiz
@@ -227,7 +275,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                   <DialogTrigger asChild>
                                       <Button size="lg" className="w-full text-lg py-6">
                                           <Trophy className="mr-2 h-6 w-6" />
-                                          Enter Arena Now
+                                          Enter Arena
                                       </Button>
                                   </DialogTrigger>
                                   <Dialog>
