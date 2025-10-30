@@ -1,17 +1,29 @@
+
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BookOpen, Check, Clock, Play, Trophy, Users, Award, Star } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, Clock, Play, Trophy, Users, Award, Star, User } from 'lucide-react';
 import Link from 'next/link';
 import { quizModules } from '@/lib/quiz-questions';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useEffect, useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function QuizWelcomePage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
+  const [membershipId, setMembershipId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedSession = localStorage.getItem(`quizSession-${id}`);
+    if (storedSession) {
+      const session = JSON.parse(storedSession);
+      setMembershipId(session.membershipId);
+    }
+  }, [id]);
 
   const totalQuestions = quizModules.length * 10;
   const totalTime = quizModules.reduce((acc, m) => acc + m.time, 0) / 60;
@@ -25,7 +37,7 @@ export default function QuizWelcomePage() {
     { text: `A total of ${grandTotalPoints} points are available, including bonus points for speed.` },
     { text: `A score of 50% or higher is required to pass and earn a certificate.` },
     { text: `Top performers get a Certificate of Excellence and a profile badge.` },
-    { text: `Your performance points will be recorded for future platform rewards!` },
+    { text: `Your performance points will be recorded for your future platform rewards!` },
   ];
 
   return (
@@ -47,6 +59,16 @@ export default function QuizWelcomePage() {
           </CardHeader>
           <CardContent className="p-6 md:p-8 space-y-8">
             
+            {membershipId && (
+              <Alert className="bg-blue-50 border-blue-200">
+                <AlertDescription className="flex items-center gap-3 text-blue-800">
+                    <User className="h-5 w-5"/>
+                    <span className="font-semibold">Playing as:</span>
+                    <span className="font-mono text-sm tracking-wider">{membershipId}</span>
+                </AlertDescription>
+              </Alert>
+            )}
+
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Key Instructions</h2>
               <ul className="space-y-3">
