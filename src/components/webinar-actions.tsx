@@ -11,6 +11,8 @@ import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPl
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+
 
 // Debounce function
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
@@ -35,6 +37,7 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
 function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+  const router = useRouter();
 
   const checkIdValidity = useCallback(debounce(async (id: string) => {
     if (!id || id.trim().length < 5) {
@@ -64,6 +67,11 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
     }
   }, [membershipId, checkIdValidity]);
 
+  const handleStartQuiz = () => {
+    if (idStatus === 'valid') {
+      router.push(`/academy/quiz/${webinarId}`);
+    }
+  };
 
   return (
     <DialogContent className="sm:max-w-md">
@@ -103,11 +111,9 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
                 <Link href="/membership#membership-join">Join for free</Link>
             </Button>
         </div>
-        <Button asChild disabled={idStatus !== 'valid'}>
-            <Link href={`/academy/quiz/${webinarId}`}>
-                <Trophy className="mr-2 h-4 w-4" />
-                Start Quiz
-            </Link>
+        <Button onClick={handleStartQuiz} disabled={idStatus !== 'valid'}>
+            <Trophy className="mr-2 h-4 w-4" />
+            Start Quiz
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -216,8 +222,11 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             const liveGracePeriod = webinarEndTime + (3 * 60 * 60 * 1000); // 3-hour grace period for LIVE status
             const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); // 7 days after event end
 
-            if (now < webinarStartTime) {
-                if (now < registrationCloseTime || isQuiz) {
+            if (isQuiz) {
+                // For testing, always show the LIVE state for the quiz
+                setStatus('LIVE');
+            } else if (now < webinarStartTime) {
+                if (now < registrationCloseTime) {
                     setStatus('UPCOMING');
                 } else {
                     setStatus('REGISTRATION_CLOSED');
@@ -261,6 +270,34 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                 </div>
             )
         }
+
+        if (isQuiz) {
+            return (
+                <div className="space-y-4 text-center">
+                    <h3 className="font-semibold text-slate-700 mb-3">The Arena is Open!</h3>
+                    <Dialog>
+                        <div className="space-y-3 pt-3">
+                           <DialogTrigger asChild>
+                                <Button size="lg" className="w-full text-lg py-6 animate-pulse">
+                                    <Trophy className="mr-2 h-6 w-6" />
+                                    Enter Arena Now
+                                </Button>
+                            </DialogTrigger>
+                           <Dialog>
+                            <DialogTrigger asChild>
+                              <Button size="lg" variant="outline" className="w-full">
+                                  <Bell className="mr-2 h-5 w-5" />
+                                  Remind Me Later
+                              </Button>
+                            </DialogTrigger>
+                            <ReminderDialog webinar={webinar} />
+                          </Dialog>
+                        </div>
+                        <QuizEntryDialog webinarId={webinar.id} />
+                    </Dialog>
+                </div>
+            );
+        }
         
         switch (status) {
             case 'UPCOMING':
@@ -273,46 +310,23 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             <CountdownUnit value={timeLeft.minutes} label="Minutes" />
                             <CountdownUnit value={timeLeft.seconds} label="Seconds" />
                         </div>
-                        {isQuiz ? (
-                            <Dialog>
-                                <div className="space-y-3 pt-3">
-                                  <DialogTrigger asChild>
-                                      <Button size="lg" className="w-full text-lg py-6" disabled>
-                                          <Lock className="mr-2 h-6 w-6" />
-                                          Arena is Locked
-                                      </Button>
-                                  </DialogTrigger>
-                                  <Dialog>
-                                    <DialogTrigger asChild>
-                                      <Button size="lg" variant="outline" className="w-full">
-                                          <Bell className="mr-2 h-5 w-5" />
-                                          Remind Me
-                                      </Button>
-                                    </DialogTrigger>
-                                    <ReminderDialog webinar={webinar} />
-                                  </Dialog>
-                                </div>
-                                <QuizEntryDialog webinarId={webinar.id} />
-                            </Dialog>
-                        ) : (
-                          <div className='space-y-3 pt-4'>
-                            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
-                              <p className="font-bold text-primary flex items-center justify-center gap-2"><Users className="h-5 w-5" /> 100+ People Registered!</p>
-                            </div>
-                            <Button size="lg" className="w-full text-lg py-6" asChild>
-                                <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
-                                    <Ticket className="mr-2 h-6 w-6" />
-                                    Register Now
-                                </a>
-                            </Button>
-                            <Button size="lg" variant="outline" className="w-full" asChild>
-                                <Link href="/membership">
-                                    <UserPlus className="mr-2 h-5 w-5" />
-                                    Become a Member
-                                </Link>
-                            </Button>
+                        <div className='space-y-3 pt-4'>
+                          <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                            <p className="font-bold text-primary flex items-center justify-center gap-2"><Users className="h-5 w-5" /> 100+ People Registered!</p>
                           </div>
-                        )}
+                          <Button size="lg" className="w-full text-lg py-6" asChild>
+                              <a href={webinar.registrationLink} target="_blank" rel="noopener noreferrer" onClick={handleRegister}>
+                                  <Ticket className="mr-2 h-6 w-6" />
+                                  Register Now
+                              </a>
+                          </Button>
+                          <Button size="lg" variant="outline" className="w-full" asChild>
+                              <Link href="/membership">
+                                  <UserPlus className="mr-2 h-5 w-5" />
+                                  Become a Member
+                              </Link>
+                          </Button>
+                        </div>
                     </div>
                 );
             case 'REGISTRATION_CLOSED':
@@ -329,30 +343,18 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                  );
             case 'LIVE':
                  return (
-                    isQuiz ? (
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button size="lg" className="w-full text-lg py-6 animate-pulse">
-                                    <Trophy className="mr-2 h-6 w-6" />
-                                    Enter Arena Now
-                                </Button>
-                            </DialogTrigger>
-                           <QuizEntryDialog webinarId={webinar.id} />
-                        </Dialog>
-                    ) : (
-                        <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
-                            <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
-                                <PlayCircle className="mr-2 h-6 w-6" />
-                                Join Live Session
-                            </a>
-                        </Button>
-                    )
+                    <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
+                        <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
+                            <PlayCircle className="mr-2 h-6 w-6" />
+                            Join Live Session
+                        </a>
+                    </Button>
                 );
             case 'ENDED':
                  return (
                      <>
                         <Button size="lg" className="w-full text-lg py-6" variant="secondary" disabled>
-                            {isQuiz ? 'Competition Ended' : 'Session Ended'}
+                            {'Session Ended'}
                         </Button>
                         {showCertificateInfo && (
                             <div className="text-center p-4 bg-blue-50 border-blue-200 border rounded-lg">
