@@ -37,7 +37,7 @@ export default function QuizWelcomePage() {
   const instructions = [
     { text: `${totalQuestions} questions across ${quizModules.length} timed modules.` },
     { text: `A total of ${grandTotalPoints} points are available, including bonus points for speed.` },
-    { text: `A score of 35% or higher is required to pass and earn a certificate.` },
+    { text: `A score of 35% or higher on each module is required to pass and earn a certificate.` },
     { text: `Top performers get a Certificate of Excellence and a profile badge.` },
     { text: `Your performance points will be recorded for your future platform rewards!` },
   ];

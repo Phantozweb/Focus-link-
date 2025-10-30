@@ -17,7 +17,7 @@ export const quizModules = [
   { topic: 'Iris & Pupil', time: 6 * 60, totalPoints: 15, timeBonus: 1 },
   { topic: 'Crystalline Lens & Accommodation', time: 7 * 60, totalPoints: 19, timeBonus: 2 },
   { topic: 'Vitreous Body', time: 5 * 60, totalPoints: 15, timeBonus: 1 },
-  { topic: 'Retina', time: 9 * 60, totalPoints: 25, timeBonus: 2 },
+  { topic: 'Retina', time: 9 * 60, totalPoints: 24, timeBonus: 2 },
   { topic: 'Optic Nerve & Pathways', time: 9 * 60, totalPoints: 24, timeBonus: 2 },
   { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60, totalPoints: 16, timeBonus: 1 },
 ];
@@ -498,7 +498,7 @@ export const questions: Question[] = [
     { id: 'm7q9', module: 'Vitreous Body', text: 'The vitreous humor makes up approximately what percentage of the eye\'s total volume?', options: [{ id: 'a', text: '20%' },{ id: 'b', text: '40%' },{ id: 'c', text: '60%' },{ id: 'd', text: '80%' }], correctAnswer: 'd', difficulty: 'easy', points: 1 },
     { id: 'm7q10', module: 'Vitreous Body', text: 'Which of the following is NOT a common cause of a vitreous hemorrhage?', options: [{ id: 'a', text: 'Proliferative diabetic retinopathy' },{ id: 'b', text: 'A retinal tear with vessel involvement' },{ id: 'c', text: 'Posterior vitreous detachment with a vessel avulsion' },{ id: 'd', text: 'Open-angle glaucoma' }], correctAnswer: 'd', difficulty: 'easy', points: 1 },
 
-    // Module 8: Retina (Total Points: 25)
+    // Module 8: Retina (Total Points: 24)
     { id: 'm8q1', module: 'Retina', text: 'Which photoreceptor cell is responsible for high-acuity color vision in bright light (photopic vision)?', options: [{ id: 'a', text: 'Rods' },{ id: 'b', text: 'Cones' },{ id: 'c', text: 'Ganglion cells' },{ id: 'd', text: 'Bipolar cells' }], correctAnswer: 'b', difficulty: 'easy', points: 1 },
     { id: 'm8q2', module: 'Retina', text: 'The fovea centralis, the area of sharpest central vision, is characterized by a high density of which cells and an absence of which others?', options: [{ id: 'a', text: 'High density of rods, absence of cones' },{ id: 'b', text: 'High density of cones, absence of rods and overlying retinal layers' },{ id: 'c', text: 'Equal density of rods and cones' },{ id: 'd', text: 'High density of ganglion cells, absence of photoreceptors' }], correctAnswer: 'b', difficulty: 'easy', points: 1 },
     { id: 'm8q3', module: 'Retina', text: 'A 75-year-old patient reports that straight lines, like a door frame, appear wavy or distorted (metamorphopsia). This symptom is highly specific for pathology in which retinal area?', options: [{ id: 'a', text: 'The peripheral retina' },{ id: 'b', text: 'The optic nerve head' },{ id: 'c', text: 'The macula' },{ id: 'd', text: 'The retinal vasculature' }], correctAnswer: 'c', difficulty: 'hard', points: 5 },
