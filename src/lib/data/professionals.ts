@@ -442,5 +442,49 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['English', 'Urdu', 'Kashmiri'],
     verified: true
+  },
+  {
+    id: 'IN20251030102233',
+    name: 'Harini L',
+    type: 'Optometrist',
+    experience: 'instrumentation',
+    location: 'India',
+    skills: [
+      'Contact Lens Fitting and care',
+      'Binocular vision assessment',
+      'Ophthalmic instrument: AR, Retinoscope,slit lamp examination'
+    ],
+    interests: [
+      'Health care technology',
+      'Patient communication',
+      'Reading books',
+      'Drawing'
+    ],
+    bio: 'Motivated Junior Optometrist with a strong foundation in eye care and diagnostics. Eager to contribute to a healthcare team while further developing skills in providing quality vision care and patient satisfaction.',
+    links: {
+      email: 'harinilakshamanavel003@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/harini-l-43b089281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app'
+    },
+    avatarUrl: 'https://i.ibb.co/wNrCZ5SW/1000245623.jpg',
+    workExperience: [
+      {
+        title: 'Optometrist (internship)',
+        company: 'Sathyan eye care hospital and coimbatore glaucoma foundation',
+        startDate: 'June 2024',
+        endDate: 'May 2026',
+        description: ''
+      }
+    ],
+    education: [
+      {
+        school: 'Karunya institute of technology and science',
+        degree: 'B.Sc optometry',
+        fieldOfStudy: 'Allied Health Sciences',
+        startYear: '2021',
+        endYear: '2025'
+      }
+    ],
+    languages: ['English', 'Tamil', 'Telugu'],
+    verified: false,
   }
 ];
