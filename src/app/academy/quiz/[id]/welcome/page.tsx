@@ -10,18 +10,26 @@ import { quizModules } from '@/lib/quiz-questions';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { allUsers } from '@/lib/data';
+import type { UserProfile } from '@/types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function QuizWelcomePage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
   const [membershipId, setMembershipId] = useState<string | null>(null);
+  const [participant, setParticipant] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     const storedSession = localStorage.getItem(`quizSession-${id}`);
     if (storedSession) {
       const session = JSON.parse(storedSession);
       setMembershipId(session.membershipId);
+      const user = allUsers.find(u => u.id === session.membershipId);
+      if (user) {
+        setParticipant(user);
+      }
     }
   }, [id]);
 
@@ -59,14 +67,24 @@ export default function QuizWelcomePage() {
           </CardHeader>
           <CardContent className="p-6 md:p-8 space-y-8">
             
-            {membershipId && (
-              <Alert className="bg-blue-50 border-blue-200">
-                <AlertDescription className="flex items-center gap-3 text-blue-800">
-                    <User className="h-5 w-5"/>
-                    <span className="font-semibold">Participant:</span>
-                    <span className="font-mono text-sm tracking-wider">{membershipId}</span>
-                </AlertDescription>
-              </Alert>
+            {participant && (
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-4 flex items-center gap-4">
+                  <Avatar className="h-14 w-14 border-2 border-blue-200">
+                      <AvatarImage src={participant.avatarUrl} alt={participant.name} />
+                      <AvatarFallback className="text-xl">
+                          {participant.name.charAt(0)}
+                      </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-grow">
+                      <p className="font-bold text-lg text-blue-900">{participant.name}</p>
+                      <p className="text-sm text-blue-800">
+                        <span className="font-semibold">Participant ID:</span> 
+                        <span className="font-mono ml-2 tracking-wider">{membershipId}</span>
+                      </p>
+                  </div>
+                </CardContent>
+              </Card>
             )}
 
             <section>
