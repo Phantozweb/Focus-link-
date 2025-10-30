@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/footer';
 import { Announcement } from '@/components/layout/announcement';
 import { BottomNav } from '@/components/layout/bottom-nav';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ActivityTracker } from '@/components/activity-tracker';
 
 
 export const metadata: Metadata = {
@@ -87,6 +88,7 @@ export default function RootLayout({
             </div>
             <Toaster />
         </TooltipProvider>
+        <ActivityTracker />
       </body>
     </html>
   );
