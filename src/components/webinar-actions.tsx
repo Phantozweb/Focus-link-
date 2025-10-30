@@ -326,12 +326,15 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             case 'LIVE':
                  return (
                     isQuiz ? (
-                        <Button asChild size="lg" className="w-full text-lg py-6 animate-pulse">
-                            <Link href={`/academy/quiz/${webinar.id}`}>
-                                <Trophy className="mr-2 h-6 w-6" />
-                                Enter Arena Now
-                            </Link>
-                        </Button>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button size="lg" className="w-full text-lg py-6 animate-pulse">
+                                    <Trophy className="mr-2 h-6 w-6" />
+                                    Enter Arena Now
+                                </Button>
+                            </DialogTrigger>
+                           <QuizEntryDialog webinarId={webinar.id} />
+                        </Dialog>
                     ) : (
                         <Button size="lg" className="w-full text-lg py-6 animate-pulse" asChild>
                             <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">
