@@ -69,7 +69,7 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
 
   const handleStartQuiz = () => {
     if (idStatus === 'valid') {
-      router.push(`/academy/quiz/${webinarId}`);
+      router.push(`/academy/quiz/${webinarId}/welcome`);
     }
   };
 
@@ -272,6 +272,27 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         }
 
         if (isQuiz) {
+             if (status === 'UPCOMING') {
+                return (
+                    <div className="space-y-4 text-center">
+                         <div className="space-y-3 pt-3">
+                            <Button size="lg" variant="secondary" className="w-full" disabled>
+                                <Lock className="mr-2 h-5 w-5" />
+                                Arena is Locked
+                            </Button>
+                           <Dialog>
+                            <DialogTrigger asChild>
+                              <Button size="lg" variant="outline" className="w-full">
+                                  <Bell className="mr-2 h-5 w-5" />
+                                  Remind Me
+                              </Button>
+                            </DialogTrigger>
+                            <ReminderDialog webinar={webinar} />
+                          </Dialog>
+                        </div>
+                    </div>
+                )
+            }
             return (
                 <div className="space-y-4 text-center">
                     <h3 className="font-semibold text-slate-700 mb-3">The Arena is Open!</h3>
