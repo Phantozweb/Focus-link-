@@ -27,7 +27,7 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
         <div className="flex flex-1 flex-col p-6 items-center text-center">
              <Avatar className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4">
               {user.avatarUrl ? (
-                <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover object-center" data-ai-hint={getAvatarHint()} />
+                <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" style={{ objectPosition: 'center 60%' }} data-ai-hint={getAvatarHint()} />
               ) : null}
               <AvatarFallback className="text-4xl">
                 {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-12 w-12" />}
