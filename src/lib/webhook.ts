@@ -53,11 +53,15 @@ export async function sendQuizStartNotification(membershipId: string) {
         }
     };
 
-    await fetch(START_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeds: [embed] }),
-    });
+    try {
+        await fetch(START_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [embed] }),
+        });
+    } catch (error) {
+        console.error("Failed to send quiz start notification:", error);
+    }
 }
 
 
@@ -100,9 +104,13 @@ export async function sendQuizResultNotification(payload: QuizResultPayload) {
         }
     };
 
-    await fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeds: [embed] }),
-    });
+    try {
+        await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [embed] }),
+        });
+    } catch (error) {
+        console.error("Failed to send quiz result notification:", error);
+    }
 }
