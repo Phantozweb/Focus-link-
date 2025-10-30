@@ -46,5 +46,42 @@ export const organizations: UserProfile[] = [
     education: [],
     languages: [],
     verified: true,
+  },
+  {
+    id: '15',
+    name: 'DrishtiKit',
+    type: 'Industry',
+    experience: 'Revolutionizing Eye Care with Portable Technology',
+    location: 'India',
+    skills: [
+        'Portable Phoropter',
+        'Comprehensive Vision Screening',
+        'AI-Powered Mobile App',
+        'Offline Patient Data Management',
+        'Battery Powered (8+ hours)',
+        'Lightweight (2kg)',
+        'Cost-Effective Solution'
+    ],
+    interests: [
+        'Rural Eye Camps',
+        'School Health Programs',
+        'Community Outreach',
+        'Healthcare Technology',
+        'Tele-Optometry',
+        'Public Health'
+    ],
+    bio: `DrishtiKit is a proud Indian innovation, recognized by DPIIT under the Startup India initiative, bringing professional-grade vision screening to every community with the world's most portable and affordable eye testing solution.
+
+Our mission is to make quality eye care accessible everywhere. The DrishtiKit ecosystem enables healthcare workers, NGOs, and eye care professionals to conduct comprehensive vision exams and manage patient data—even offline in remote areas. Weighing only 2kg and costing 90% less than traditional setups, our device has already been trusted by over 50 healthcare organizations to complete more than 15,000 vision screenings.`,
+    links: {
+      email: 'contact@drishtikit.com',
+      linkedin: 'https://app.drishtikit.com'
+    },
+    avatarUrl: 'https://i.ibb.co/VvZ1g3q/drishtikit-logo.png',
+    gallery: [],
+    workExperience: [],
+    education: [],
+    languages: [],
+    verified: true,
   }
 ];
