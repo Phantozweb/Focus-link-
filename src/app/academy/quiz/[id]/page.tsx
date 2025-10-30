@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { webinars } from '@/lib/academy';
 import { quizModules, questions as allQuestions, type Question } from '@/lib/quiz-questions';
-import { notFound, useParams } from 'next/navigation';
+import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -31,13 +31,17 @@ type ModuleResult = {
   bonusPoints: number;
 };
 
-
-export default function QuizPage() {
+function QuizComponent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const id = params.id as string;
   const quiz = webinars.find(w => w.id === id && w.id === 'eye-q-arena-2025');
 
-  const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished'>('not-started');
+  const getInitialState = () => {
+    return searchParams.get('start') === 'true' ? 'active' : 'not-started';
+  }
+
+  const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished'>(getInitialState);
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
@@ -53,6 +57,15 @@ export default function QuizPage() {
   
   const [timeLeftInModule, setTimeLeftInModule] = useState(currentModule?.time || 0);
   const [breakTimeLeft, setBreakTimeLeft] = useState(BREAK_TIME_SECONDS);
+
+  // Set initial start time when quiz becomes active
+  useEffect(() => {
+    if (quizState === 'active' && moduleStartTime === 0) {
+      setModuleStartTime(Date.now());
+      setTimeLeftInModule(quizModules[0].time);
+    }
+  }, [quizState, moduleStartTime]);
+
 
   // Module Timer
   useEffect(() => {
@@ -362,5 +375,14 @@ export default function QuizPage() {
          </Card>
       </div>
     </div>
+  );
+}
+
+
+export default function QuizPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QuizComponent />
+    </Suspense>
   );
 }

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -96,7 +95,7 @@ export default function QuizWelcomePage() {
             </section>
 
             <div className="text-center pt-6">
-                <Button size="lg" className="w-full max-w-sm text-lg py-6" onClick={() => router.push(`/academy/quiz/${id}`)}>
+                <Button size="lg" className="w-full max-w-sm text-lg py-6" onClick={() => router.push(`/academy/quiz/${id}?start=true`)}>
                     <Play className="mr-2 h-6 w-6" />
                     I'm Ready, Begin Quiz!
                 </Button>
