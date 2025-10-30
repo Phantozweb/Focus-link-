@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useTransition, useMemo } from 'react';
+import { useState, useTransition, useMemo, useEffect } from 'react';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,12 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
   const [sortedUsers, setSortedUsers] = useState<UserProfile[]>(allUsers);
   const [isSorted, setIsSorted] = useState(false);
+
+   useEffect(() => {
+    // When the initial user list changes (e.g., from navigation), reset sorting.
+    setSortedUsers(allUsers);
+    setIsSorted(false);
+  }, [allUsers]);
 
   const createQueryString = (newParams: Record<string, string>) => {
     const currentParams = new URLSearchParams(Array.from(searchParams.entries()));
@@ -60,26 +66,45 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
       setSearchTerm('');
       setSelectedCountry('all');
       setIsSorted(false);
-      setSortedUsers(allUsers);
       router.push(`/directory/${category}`);
     });
   };
 
   const filteredUsers = useMemo(() => {
-    const searchParam = searchParams.get('q');
-    const countryParam = searchParams.get('country');
+    const searchParam = searchParams.get('q')?.toLowerCase() || '';
+    const countryParam = searchParams.get('country')?.toLowerCase() || 'all';
 
-    const usersToFilter = isSorted ? sortedUsers : allUsers;
+    let usersToFilter = allUsers;
 
+    if (isSorted) {
+      usersToFilter = sortedUsers;
+    }
+    
     return usersToFilter.filter(user => {
-      const matchesSearch = !searchParam ||
-        user.name.toLowerCase().includes(searchParam.toLowerCase()) ||
-        (user.skills && user.skills.some(skill => skill.toLowerCase().includes(searchParam.toLowerCase()))) ||
-        (user.interests && user.interests.some(interest => interest.toLowerCase().includes(searchParam.toLowerCase())));
-      
-      const matchesCountry = !countryParam || countryParam === 'all' || user.location.toLowerCase().includes(countryParam.toLowerCase());
+      const matchesCountry = countryParam === 'all' || user.location.toLowerCase().includes(countryParam);
 
-      return matchesSearch && matchesCountry;
+      if (!matchesCountry) return false;
+
+      if (!searchParam) return true;
+
+      // Check all relevant text fields for the search term
+      return (
+        user.name.toLowerCase().includes(searchParam) ||
+        user.experience.toLowerCase().includes(searchParam) ||
+        user.location.toLowerCase().includes(searchParam) ||
+        user.bio.toLowerCase().includes(searchParam) ||
+        user.type.toLowerCase().includes(searchParam) ||
+        (user.skills && user.skills.some(skill => skill.toLowerCase().includes(searchParam))) ||
+        (user.interests && user.interests.some(interest => interest.toLowerCase().includes(searchParam))) ||
+        (user.workExperience && user.workExperience.some(exp => 
+          exp.title.toLowerCase().includes(searchParam) ||
+          exp.company.toLowerCase().includes(searchParam)
+        )) ||
+        (user.education && user.education.some(edu => 
+          edu.school.toLowerCase().includes(searchParam) ||
+          edu.degree.toLowerCase().includes(searchParam)
+        ))
+      );
     });
   }, [allUsers, searchParams, isSorted, sortedUsers]);
 
