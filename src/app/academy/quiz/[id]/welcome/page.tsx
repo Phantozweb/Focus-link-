@@ -18,18 +18,12 @@ export default function QuizWelcomePage() {
   const router = useRouter();
   const id = params.id as string;
   const [membershipId, setMembershipId] = useState<string | null>(null);
-  const [participant, setParticipant] = useState<UserProfile | null>(null);
-
 
   useEffect(() => {
     const storedSession = localStorage.getItem(`quizSession-${id}`);
     if (storedSession) {
       const session = JSON.parse(storedSession);
       setMembershipId(session.membershipId);
-      const user = allUsers.find(u => u.id === session.membershipId);
-      if (user) {
-        setParticipant(user);
-      }
     }
   }, [id]);
 
