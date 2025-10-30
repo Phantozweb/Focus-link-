@@ -598,6 +598,27 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     </div>
                 </section>
 
+                {/* Product Demo Video */}
+                <section className="text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-800">See DrishtiKit in Action</h2>
+                    <p className="mt-2 text-lg text-slate-600 max-w-2xl mx-auto">
+                        Watch how DrishtiKit is transforming vision screening in communities around the world with our revolutionary portable eye testing solution.
+                    </p>
+                    <Card className="mt-8 shadow-2xl overflow-hidden">
+                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                            <iframe 
+                                className="absolute top-0 left-0 w-full h-full"
+                                src="https://www.youtube.com/embed/_AeNy3nE928" 
+                                title="DrishtiKit: Bringing Professional Vision Screening to Every Community" 
+                                frameBorder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowFullScreen>
+                            </iframe>
+                        </div>
+                    </Card>
+                </section>
+
+
                 {/* Made in India Section */}
                 <section className="bg-slate-50 p-8 md:p-12 rounded-lg border">
                     <div className="grid md:grid-cols-3 gap-8 items-center text-center">
