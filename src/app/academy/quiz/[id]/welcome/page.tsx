@@ -63,7 +63,7 @@ export default function QuizWelcomePage() {
               <Alert className="bg-blue-50 border-blue-200">
                 <AlertDescription className="flex items-center gap-3 text-blue-800">
                     <User className="h-5 w-5"/>
-                    <span className="font-semibold">Playing as:</span>
+                    <span className="font-semibold">Participant:</span>
                     <span className="font-mono text-sm tracking-wider">{membershipId}</span>
                 </AlertDescription>
               </Alert>
