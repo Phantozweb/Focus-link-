@@ -66,22 +66,26 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
 
 
   return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Enter Your Membership ID</DialogTitle>
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader className="text-center items-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 mb-2">
+            <Trophy className="h-8 w-8 text-amber-500" />
+        </div>
+        <DialogTitle className="text-2xl font-headline">Enter the Arena</DialogTitle>
         <DialogDescription>
-          Please enter your Focus Links membership ID to participate in the Eye Q Arena.
+          Please enter your Focus Links membership ID to begin the quiz.
         </DialogDescription>
       </DialogHeader>
       <div className="space-y-4 py-4">
         <div className="space-y-2">
-          <Label htmlFor="membership-id">Membership ID</Label>
+          <Label htmlFor="membership-id" className="sr-only">Membership ID</Label>
            <div className="relative">
             <Input 
               id="membership-id" 
               value={membershipId}
               onChange={(e) => setMembershipId(e.target.value)}
-              placeholder="e.g., FL-12345" 
+              placeholder="Your Membership ID"
+              className="text-center h-12 text-base"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
               {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
@@ -89,20 +93,20 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
               {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
             </div>
           </div>
-          {idStatus === 'invalid' && <p className="text-sm text-destructive">This Membership ID is not valid or does not exist.</p>}
+          {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid or does not exist.</p>}
         </div>
       </div>
       <DialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-2">
          <div className="text-sm text-muted-foreground">
-            Not a member yet?{' '}
+            Not a member?{' '}
             <Button variant="link" asChild className="p-0 h-auto">
                 <Link href="/membership#membership-join">Join for free</Link>
             </Button>
         </div>
         <Button asChild disabled={idStatus !== 'valid'}>
             <Link href={`/academy/quiz/${webinarId}`}>
-            <Trophy className="mr-2 h-4 w-4" />
-            Start Quiz
+                <Trophy className="mr-2 h-4 w-4" />
+                Start Quiz
             </Link>
         </Button>
       </DialogFooter>
@@ -273,9 +277,9 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             <Dialog>
                                 <div className="space-y-3 pt-3">
                                   <DialogTrigger asChild>
-                                      <Button size="lg" className="w-full text-lg py-6">
-                                          <Trophy className="mr-2 h-6 w-6" />
-                                          Enter Arena
+                                      <Button size="lg" className="w-full text-lg py-6" disabled>
+                                          <Lock className="mr-2 h-6 w-6" />
+                                          Arena is Locked
                                       </Button>
                                   </DialogTrigger>
                                   <Dialog>
