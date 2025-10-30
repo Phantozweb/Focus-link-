@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from '@/components/ui/textarea';
+import Autoplay from 'embla-carousel-autoplay';
 
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
@@ -749,7 +750,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         </div>
                     </div>
                     <div className="flex justify-center">
-                         <Carousel className="w-full max-w-xs" plugins={[Carousel.plugins.autoplay({ delay: 2000, stopOnInteraction: true })]}>
+                         <Carousel className="w-full max-w-xs" plugins={[Autoplay({ delay: 2000, stopOnInteraction: true })]}>
                             <CarouselContent>
                                 {appScreenshots.map((src, index) => (
                                 <CarouselItem key={index}>
