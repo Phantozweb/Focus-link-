@@ -16,14 +16,17 @@ export default function QuizWelcomePage() {
 
   const totalQuestions = quizModules.length * 10;
   const totalTime = quizModules.reduce((acc, m) => acc + m.time, 0) / 60;
-  const totalPoints = quizModules.reduce((acc, m) => acc + m.totalPoints, 0);
+  const totalQuestionPoints = quizModules.reduce((acc, m) => acc + m.totalPoints, 0);
+  const totalBonusPoints = quizModules.reduce((acc, m) => acc + m.timeBonus, 0);
+  const grandTotalPoints = totalQuestionPoints + totalBonusPoints;
+
 
   const instructions = [
     { text: `${totalQuestions} questions across ${quizModules.length} timed modules.` },
-    { text: `${totalTime} minutes total quiz time. Time saved in one module carries over to the next.` },
-    { text: 'A score of 50% or higher is required to pass and earn a certificate.' },
-    { text: 'Top performers get a Certificate of Excellence and a profile badge.' },
-    { text: 'Your performance points will be recorded for future platform rewards!' },
+    { text: `A total of ${grandTotalPoints} points are available, including bonus points for speed.` },
+    { text: `A score of 50% or higher is required to pass and earn a certificate.` },
+    { text: `Top performers get a Certificate of Excellence and a profile badge.` },
+    { text: `Your performance points will be recorded for future platform rewards!` },
   ];
 
   return (
@@ -58,14 +61,15 @@ export default function QuizWelcomePage() {
             </section>
             
             <section>
-              <h2 className="text-2xl font-bold font-headline mb-4">Quiz Modules</h2>
+              <h2 className="text-2xl font-bold font-headline mb-4">Quiz Modules & Scoring</h2>
               <div className="rounded-lg border">
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Module</TableHead>
                       <TableHead>Topic</TableHead>
-                      <TableHead className="text-right">Points</TableHead>
+                      <TableHead className="text-right">Question Points</TableHead>
+                      <TableHead className="text-right">Time Bonus</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -74,11 +78,17 @@ export default function QuizWelcomePage() {
                         <TableCell className="font-medium">{index + 1}</TableCell>
                         <TableCell>{module.topic}</TableCell>
                         <TableCell className="text-right font-mono">{module.totalPoints}</TableCell>
+                        <TableCell className="text-right font-mono">{module.timeBonus}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow className="bg-slate-50 font-bold">
                         <TableCell colSpan={2}>Total</TableCell>
-                        <TableCell className="text-right font-mono">{totalPoints} Points</TableCell>
+                        <TableCell className="text-right font-mono">{totalQuestionPoints}</TableCell>
+                        <TableCell className="text-right font-mono">{totalBonusPoints}</TableCell>
+                    </TableRow>
+                     <TableRow className="bg-slate-100 font-black">
+                        <TableCell colSpan={3}>Grand Total Possible</TableCell>
+                        <TableCell className="text-right font-mono">{grandTotalPoints} Points</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

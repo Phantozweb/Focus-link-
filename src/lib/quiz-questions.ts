@@ -10,16 +10,16 @@ export type Question = {
 };
 
 export const quizModules = [
-  { topic: 'Eyelids & Adnexa', time: 5 * 60, totalPoints: 18 },
-  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17 },
-  { topic: 'Cornea', time: 7 * 60, totalPoints: 20 },
-  { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60, totalPoints: 16 },
-  { topic: 'Iris & Pupil', time: 6 * 60, totalPoints: 15 },
-  { topic: 'Crystalline Lens & Accommodation', time: 7 * 60, totalPoints: 19 },
-  { topic: 'Vitreous Body', time: 5 * 60, totalPoints: 15 },
-  { topic: 'Retina', time: 9 * 60, totalPoints: 25 },
-  { topic: 'Optic Nerve & Pathways', time: 9 * 60, totalPoints: 24 },
-  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60, totalPoints: 16 },
+  { topic: 'Eyelids & Adnexa', time: 5 * 60, totalPoints: 18, timeBonus: 2 },
+  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17, timeBonus: 1 },
+  { topic: 'Cornea', time: 7 * 60, totalPoints: 20, timeBonus: 2 },
+  { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60, totalPoints: 16, timeBonus: 1 },
+  { topic: 'Iris & Pupil', time: 6 * 60, totalPoints: 15, timeBonus: 1 },
+  { topic: 'Crystalline Lens & Accommodation', time: 7 * 60, totalPoints: 19, timeBonus: 2 },
+  { topic: 'Vitreous Body', time: 5 * 60, totalPoints: 15, timeBonus: 1 },
+  { topic: 'Retina', time: 9 * 60, totalPoints: 25, timeBonus: 2 },
+  { topic: 'Optic Nerve & Pathways', time: 9 * 60, totalPoints: 24, timeBonus: 2 },
+  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60, totalPoints: 16, timeBonus: 1 },
 ];
 
 export const questions: Question[] = [

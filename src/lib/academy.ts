@@ -64,7 +64,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
 - **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate.
 - **Passing Score**: A score of **50% or higher** is required to pass each module and to pass the quiz overall.
 - **Fair Play**: We trust our community to compete with integrity. Any detected form of malpractice may result in disqualification.
-- **Scoring**: Questions are assigned points based on difficulty (Easy: 1, Medium: 2, Hard: 5). Your final score is the sum of points from correctly answered questions.
+- **Scoring**: The total score of 200 points is based on question difficulty and completion speed. Faster completion times in each module award bonus points.
 - **Certification & Rewards**: 
     - All participants who meet the passing score will receive a digital **Certificate of Participation**.
     - Top performers, based on a combination of high scores and fast completion times, will earn a prestigious **Certificate of Excellence** and a **special achievement badge** on their Focus Links profile.
@@ -80,25 +80,25 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
 ### Event Highlights:
 - **International-Level Competition**: Open to optometry students & practitioners worldwide.
 - **100 Questions in 60 Minutes**: Test your knowledge across 10 in-depth modules.
-- **Variable Scoring**: Questions weighted by difficulty (Easy, Medium, Hard).
+- **Dynamic Scoring**: Score is based on question difficulty and speed, with a total of 200 points available.
 - **Live Leaderboard Ranking**: See where you stand based on score, accuracy & completion time.
 - **Digital Certificates**: Earn a Certificate of Participation or Excellence.
 - **Organized by FocusLinks**: The world's largest global eye care community.
 - **Global Recognition**: An opportunity to showcase your expertise and shine.
 
 ---QUIZ_MODULES_TABLE---
-| Module | Topic | Questions | Total Points |
-|---|---|---|---|
-| 1 | Eyelids & Adnexa | 10 | 18 |
-| 2 | Conjunctiva & Sclera | 10 | 17 |
-| 3 | Cornea | 10 | 20 |
-| 4 | Anterior Chamber & Aqueous Humor | 10 | 16 |
-| 5 | Iris & Pupil | 10 | 15 |
-| 6 | Crystalline Lens & Accommodation | 10 | 19 |
-| 7 | Vitreous Body | 10 | 15 |
-| 8 | Retina | 10 | 25 |
-| 9 | Optic Nerve & Pathways | 10 | 24 |
-| 10 | Extraocular Muscles & Ocular Motility | 10 | 16 |
+| Module | Topic | Questions | Max Question Points | Max Time Bonus |
+|---|---|---|---|---|
+| 1 | Eyelids & Adnexa | 10 | 18 | 2 |
+| 2 | Conjunctiva & Sclera | 10 | 17 | 1 |
+| 3 | Cornea | 10 | 20 | 2 |
+| 4 | Anterior Chamber & Aqueous Humor| 10 | 16 | 1 |
+| 5 | Iris & Pupil | 10 | 15 | 1 |
+| 6 | Crystalline Lens & Accommodation| 10 | 19 | 2 |
+| 7 | Vitreous Body | 10 | 15 | 1 |
+| 8 | Retina | 10 | 25 | 2 |
+| 9 | Optic Nerve & Pathways | 10 | 24 | 2 |
+| 10 | Extraocular Muscles & Ocular Motility | 10 | 16 | 1 |
 `,
     speaker: {
       name: 'V.M. Ram Kumar',

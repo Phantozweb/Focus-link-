@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -28,6 +28,7 @@ type ModuleResult = {
   totalTime: number;
   passed: boolean;
   totalPoints: number;
+  bonusPoints: number;
 };
 
 
@@ -102,12 +103,21 @@ export default function QuizPage() {
         score += question.points;
       }
     });
-    return {score, totalPoints};
+
+    const timeTaken = currentModule.time - timeLeftInModule;
+    // Award bonus points: Give max bonus if completed in less than 75% of the time, scaled down to 0.
+    const timeThreshold = currentModule.time * 0.75;
+    let bonusPoints = 0;
+    if (timeTaken < currentModule.time) {
+        const timeRatio = Math.max(0, (currentModule.time - timeTaken) / currentModule.time);
+        bonusPoints = Math.round(currentModule.timeBonus * timeRatio);
+    }
+
+    return {score, totalPoints, bonusPoints, timeTaken};
   };
 
   const handleNextModule = () => {
-    const {score, totalPoints} = calculateModuleScore();
-    const timeTaken = currentModule.time - timeLeftInModule;
+    const {score, totalPoints, bonusPoints, timeTaken} = calculateModuleScore();
     const passed = (score / totalPoints) >= PASS_PERCENTAGE;
     
     setModuleResults(prev => [...prev, {
@@ -117,7 +127,8 @@ export default function QuizPage() {
       timeTaken,
       totalTime: currentModule.time,
       passed,
-      totalPoints
+      totalPoints,
+      bonusPoints,
     }]);
 
     if (currentModuleIndex < quizModules.length - 1) {
@@ -165,7 +176,7 @@ export default function QuizPage() {
             <CardContent className="space-y-4 text-muted-foreground">
               <p>The quiz consists of {quizModules.length} modules with {TOTAL_QUESTIONS_PER_MODULE} questions each, for a total of {quizModules.length * TOTAL_QUESTIONS_PER_MODULE} questions.</p>
               <p>You will have a total of {quizModules.reduce((acc, m) => acc + m.time, 0) / 60} minutes to complete the entire quiz. Each module is timed individually.</p>
-              <p>Your rank will be determined by your score, accuracy, and overall completion time.</p>
+              <p>Your rank will be determined by your score (knowledge + speed bonus), accuracy, and overall completion time.</p>
               <p>Are you ready to test your knowledge?</p>
             </CardContent>
           </Card>
@@ -202,9 +213,11 @@ export default function QuizPage() {
     
      if (quizState === 'finished') {
        const totalScore = moduleResults.reduce((acc, r) => acc + r.score, 0);
-       const totalPossiblePoints = moduleResults.reduce((acc, r) => acc + r.totalPoints, 0);
+       const totalBonus = moduleResults.reduce((acc, r) => acc + r.bonusPoints, 0);
+       const finalScore = totalScore + totalBonus;
+       const totalPossiblePoints = moduleResults.reduce((acc, r) => acc + r.totalPoints + r.bonusPoints, 0);
        const totalTimeTaken = moduleResults.reduce((acc, r) => acc + r.timeTaken, 0);
-       const overallPercentage = totalPossiblePoints > 0 ? (totalScore / totalPossiblePoints) : 0;
+       const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
        const overallPassed = overallPercentage >= PASS_PERCENTAGE;
 
       return (
@@ -220,8 +233,8 @@ export default function QuizPage() {
                    <div className={cn("flex flex-col sm:flex-row justify-around items-center text-center p-4 rounded-lg", overallPassed ? "bg-green-50" : "bg-red-50")}>
                       <div className={cn("mb-4 sm:mb-0", overallPassed ? "text-green-800" : "text-red-800")}>
                           <p className="text-sm font-semibold">{overallPassed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</p>
-                          <p className="text-4xl font-bold">{(overallPercentage * 100).toFixed(0)}<span className="text-2xl">%</span></p>
-                          <p className="text-sm">Overall Score ({totalScore}/{totalPossiblePoints} points)</p>
+                          <p className="text-4xl font-bold">{finalScore}<span className="text-2xl">/{totalPossiblePoints}</span></p>
+                          <p className="text-sm">Final Score ({totalScore} from questions + {totalBonus} bonus)</p>
                       </div>
                        <div className="text-slate-800">
                           <p className="text-sm text-muted-foreground">Total Time</p>
@@ -233,7 +246,8 @@ export default function QuizPage() {
                       <TableHeader>
                         <TableRow>
                           <TableHead>Module</TableHead>
-                          <TableHead className="text-right">Score (%)</TableHead>
+                          <TableHead className="text-right">Score</TableHead>
+                          <TableHead className="text-right">Bonus</TableHead>
                           <TableHead className="text-right">Time</TableHead>
                           <TableHead className="text-right">Result</TableHead>
                         </TableRow>
@@ -242,9 +256,10 @@ export default function QuizPage() {
                         {moduleResults.map(result => (
                           <TableRow key={result.topic}>
                             <TableCell className="font-medium">{result.topic}</TableCell>
-                             <TableCell className="text-right font-mono">
-                                {result.totalPoints > 0 ? ((result.score / result.totalPoints) * 100).toFixed(0) : 0}%
-                                <span className="text-xs text-muted-foreground ml-1">({result.score}/{result.totalPoints})</span>
+                            <TableCell className="text-right font-mono">{result.score}/{result.totalPoints}</TableCell>
+                             <TableCell className="text-right font-mono flex items-center justify-end gap-1">
+                                <Sparkles className="h-4 w-4 text-amber-500" />
+                                {result.bonusPoints}
                             </TableCell>
                             <TableCell className="text-right font-mono">{formatTime(result.timeTaken)}</TableCell>
                             <TableCell className="text-right">
