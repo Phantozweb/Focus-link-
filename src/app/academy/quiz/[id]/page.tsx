@@ -18,6 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
 const PASS_PERCENTAGE = 0.5; // 50%
+const COUNTDOWN_SECONDS = 5;
 
 type Answer = { questionId: string; selectedOption: string };
 type ModuleResult = {
@@ -38,15 +39,17 @@ function QuizComponent() {
   const quiz = webinars.find(w => w.id === id && w.id === 'eye-q-arena-2025');
 
   const getInitialState = () => {
-    return searchParams.get('start') === 'true' ? 'active' : 'not-started';
+    return searchParams.get('start') === 'true' ? 'countdown' : 'not-started';
   }
 
-  const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished'>(getInitialState);
+  const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished' | 'countdown'>(getInitialState);
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [moduleStartTime, setModuleStartTime] = useState(0);
   const [moduleResults, setModuleResults] = useState<ModuleResult[]>([]);
+  const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
+
 
   const currentModule = useMemo(() => quizModules[currentModuleIndex], [currentModuleIndex]);
   const currentQuestions = useMemo(() => {
@@ -90,6 +93,19 @@ function QuizComponent() {
       startNextModule();
     }
   }, [quizState, breakTimeLeft]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (quizState === 'countdown' && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (quizState === 'countdown' && countdown === 0) {
+      startQuiz();
+    }
+  }, [quizState, countdown]);
+
 
   if (!quiz) {
     notFound();
@@ -193,12 +209,22 @@ function QuizComponent() {
               <p>Are you ready to test your knowledge?</p>
             </CardContent>
           </Card>
-          <Button size="lg" className="mt-8 text-lg" onClick={startQuiz}>
+          <Button size="lg" className="mt-8 text-lg" onClick={() => setQuizState('countdown')}>
             <Play className="mr-2 h-6 w-6" />
             Start Quiz
           </Button>
         </div>
       );
+    }
+    
+    if (quizState === 'countdown') {
+        return (
+            <div className="text-center flex flex-col items-center justify-center min-h-[300px]">
+                <h1 className="text-2xl font-bold font-headline mb-2">Get Ready!</h1>
+                <p className="text-muted-foreground">The quiz will begin in...</p>
+                <div className="text-8xl font-bold font-mono text-primary my-4">{countdown}</div>
+            </div>
+        );
     }
     
     if (quizState === 'break') {
@@ -289,7 +315,7 @@ function QuizComponent() {
                 </CardContent>
              </Card>
              <div className="mt-8 flex gap-4">
-                <Button size="lg" className="flex-1" variant="outline" onClick={startQuiz}>Try Again (2 attempts left)</Button>
+                <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')}>Try Again (2 attempts left)</Button>
                 <Button size="lg" className="flex-1" asChild>
                     <Link href={`/academy/${id}`}>Back to Leaderboard</Link>
                 </Button>
