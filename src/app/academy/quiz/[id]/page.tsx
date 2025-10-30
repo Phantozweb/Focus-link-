@@ -19,6 +19,7 @@ const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
 const PASS_PERCENTAGE = 0.5; // 50%
 const COUNTDOWN_SECONDS = 5;
+const MAX_ATTEMPTS = 3;
 
 type Answer = { questionId: string; selectedOption: string };
 type ModuleResult = {
@@ -31,6 +32,11 @@ type ModuleResult = {
   totalPoints: number;
   bonusPoints: number;
 };
+type QuizSession = {
+  membershipId: string;
+  attemptsLeft: number;
+};
+
 
 function QuizComponent() {
   const params = useParams();
@@ -38,8 +44,21 @@ function QuizComponent() {
   const id = params.id as string;
   const quiz = webinars.find(w => w.id === id && w.id === 'eye-q-arena-2025');
 
+  const [session, setSession] = useState<QuizSession | null>(null);
+
   const getInitialState = () => {
-    return searchParams.get('start') === 'true' ? 'countdown' : 'not-started';
+    // Check if we are coming from the welcome page to start the quiz
+    if (searchParams.get('start') === 'true') {
+        const storedSession = localStorage.getItem(`quizSession-${id}`);
+        if (storedSession) {
+            const parsedSession: QuizSession = JSON.parse(storedSession);
+            if (parsedSession.attemptsLeft > 0) {
+                return 'countdown';
+            }
+        }
+    }
+    // If not starting, or if attempts are used up, go back to the beginning.
+    return 'not-started';
   }
 
   const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished' | 'countdown'>(getInitialState);
@@ -60,6 +79,14 @@ function QuizComponent() {
   
   const [timeLeftInModule, setTimeLeftInModule] = useState(currentModule?.time || 0);
   const [breakTimeLeft, setBreakTimeLeft] = useState(BREAK_TIME_SECONDS);
+
+  // Load session from local storage on mount
+  useEffect(() => {
+    const storedSession = localStorage.getItem(`quizSession-${id}`);
+    if (storedSession) {
+        setSession(JSON.parse(storedSession));
+    }
+  }, [id]);
 
   // Set initial start time when quiz becomes active
   useEffect(() => {
@@ -112,13 +139,26 @@ function QuizComponent() {
   }
 
   const startQuiz = () => {
-    setCurrentModuleIndex(0);
-    setCurrentQuestionIndex(0);
-    setTimeLeftInModule(quizModules[0].time);
-    setModuleStartTime(Date.now());
-    setAnswers({});
-    setModuleResults([]);
-    setQuizState('active');
+    const storedSession = localStorage.getItem(`quizSession-${id}`);
+    if (storedSession) {
+        const currentSession: QuizSession = JSON.parse(storedSession);
+        if (currentSession.attemptsLeft > 0) {
+            setCurrentModuleIndex(0);
+            setCurrentQuestionIndex(0);
+            setTimeLeftInModule(quizModules[0].time);
+            setModuleStartTime(Date.now());
+            setAnswers({});
+            setModuleResults([]);
+            setQuizState('active');
+
+            const updatedSession = { ...currentSession, attemptsLeft: currentSession.attemptsLeft - 1 };
+            setSession(updatedSession);
+            localStorage.setItem(`quizSession-${id}`, JSON.stringify(updatedSession));
+        } else {
+             // No attempts left, force back to not-started
+            setQuizState('not-started');
+        }
+    }
   };
 
   const calculateModuleScore = () => {
@@ -209,9 +249,11 @@ function QuizComponent() {
               <p>Are you ready to test your knowledge?</p>
             </CardContent>
           </Card>
-          <Button size="lg" className="mt-8 text-lg" onClick={() => setQuizState('countdown')}>
-            <Play className="mr-2 h-6 w-6" />
-            Start Quiz
+          <Button size="lg" className="mt-8 text-lg" asChild>
+            <Link href={`/academy/quiz/${id}/welcome`}>
+                <Play className="mr-2 h-6 w-6" />
+                Start Quiz
+            </Link>
           </Button>
         </div>
       );
@@ -315,7 +357,9 @@ function QuizComponent() {
                 </CardContent>
              </Card>
              <div className="mt-8 flex gap-4">
-                <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')}>Try Again (2 attempts left)</Button>
+                <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')} disabled={!session || session.attemptsLeft < 0}>
+                    Try Again ({session ? Math.max(0, session.attemptsLeft) : MAX_ATTEMPTS - 1} attempts left)
+                </Button>
                 <Button size="lg" className="flex-1" asChild>
                     <Link href={`/academy/${id}`}>Back to Leaderboard</Link>
                 </Button>

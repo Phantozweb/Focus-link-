@@ -26,6 +26,7 @@ function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
 interface WebinarActionsProps {
     webinar: Webinar;
 }
+const MAX_ATTEMPTS = 3;
 
 const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   <div className="flex flex-col items-center p-2 bg-slate-100 rounded-md w-20">
@@ -69,6 +70,12 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
 
   const handleStartQuiz = () => {
     if (idStatus === 'valid') {
+       // Save session to local storage before navigating
+      const session = {
+        membershipId: membershipId,
+        attemptsLeft: MAX_ATTEMPTS,
+      };
+      localStorage.setItem(`quizSession-${webinarId}`, JSON.stringify(session));
       router.push(`/academy/quiz/${webinarId}/welcome`);
     }
   };
@@ -218,14 +225,17 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             const registrationCloseTime = webinarStartTime - (2 * 60 * 60 * 1000); // 2 hours before start
             const durationParts = webinar.duration.split(' ');
             const durationValue = parseInt(durationParts[0], 10);
-            const webinarEndTime = webinarStartTime + (durationValue * 60 * 1000);
-            const liveGracePeriod = webinarEndTime + (3 * 60 * 60 * 1000); // 3-hour grace period for LIVE status
-            const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); // 7 days after event end
+            // Quiz duration is in days, webinar in minutes
+            const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24) : (1000 * 60);
+            const webinarEndTime = webinarStartTime + (durationValue * durationMultiplier);
 
+            // For testing: force quiz to be "LIVE"
             if (isQuiz) {
-                // For testing, always show the LIVE state for the quiz
                 setStatus('LIVE');
-            } else if (now < webinarStartTime) {
+                return;
+            }
+
+            if (now < webinarStartTime) {
                 if (now < registrationCloseTime) {
                     setStatus('UPCOMING');
                 } else {
@@ -238,10 +248,11 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                     minutes: Math.floor((difference / 1000 / 60) % 60),
                     seconds: Math.floor((difference / 1000) % 60),
                 });
-            } else if (now >= webinarStartTime && now < liveGracePeriod) {
+            } else if (now >= webinarStartTime && now < webinarEndTime) {
                 setStatus('LIVE');
             } else {
                 setStatus('ENDED');
+                const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); // 7 days after event end
                 if (now < certificateDeadline) {
                     setShowCertificateInfo(true);
                 } else {
@@ -272,27 +283,6 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         }
 
         if (isQuiz) {
-             if (status === 'UPCOMING') {
-                return (
-                    <div className="space-y-4 text-center">
-                         <div className="space-y-3 pt-3">
-                            <Button size="lg" variant="secondary" className="w-full" disabled>
-                                <Lock className="mr-2 h-5 w-5" />
-                                Arena is Locked
-                            </Button>
-                           <Dialog>
-                            <DialogTrigger asChild>
-                              <Button size="lg" variant="outline" className="w-full">
-                                  <Bell className="mr-2 h-5 w-5" />
-                                  Remind Me
-                              </Button>
-                            </DialogTrigger>
-                            <ReminderDialog webinar={webinar} />
-                          </Dialog>
-                        </div>
-                    </div>
-                )
-            }
             return (
                 <div className="space-y-4 text-center">
                     <h3 className="font-semibold text-slate-700 mb-3">The Arena is Open!</h3>
