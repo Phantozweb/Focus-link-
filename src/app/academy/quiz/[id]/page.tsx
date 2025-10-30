@@ -313,7 +313,15 @@ function QuizComponent() {
             <p className="text-muted-foreground mt-2">You have finished the Eye Q Arena challenge. Here are your results.</p>
              <Card className="mt-8 text-left">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><BarChart /> Performance Report</CardTitle>
+                    <CardTitle className="flex items-center justify-between">
+                        <span className="flex items-center gap-2"><BarChart /> Performance Report</span>
+                    </CardTitle>
+                    {membershipId && (
+                        <CardDescription className="flex items-center gap-1.5 font-mono pt-2">
+                            <User className="h-4 w-4" />
+                            {membershipId}
+                        </CardDescription>
+                    )}
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <div className={cn("flex flex-col sm:flex-row justify-around items-center text-center p-4 rounded-lg", overallPassed ? "bg-green-50" : "bg-red-50")}>
@@ -471,6 +479,8 @@ export default function QuizPage() {
     </Suspense>
   );
 }
+
+    
 
     
 
