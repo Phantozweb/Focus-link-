@@ -10,6 +10,7 @@ import { countries } from '@/lib/countries';
 import { Search, SlidersHorizontal, ArrowLeft, Map } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { UserProfile } from '@/types';
+import { logActivity } from '@/lib/activity-logger';
 
 export function DirectoryClient({ allUsers, title, category }: { allUsers: UserProfile[], title: string, category: string }) {
   const router = useRouter();
@@ -39,6 +40,10 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
         q: searchTerm,
         country: selectedCountry,
       });
+      logActivity(`**Directory Search in \`${title}\`:**
+*   **Query:** \`${searchTerm || 'none'}\`
+*   **Country:** \`${selectedCountry}\``
+      );
       router.push(`/directory/${category}?${queryString}`);
     });
   };

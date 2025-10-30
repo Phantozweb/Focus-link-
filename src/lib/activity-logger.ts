@@ -36,7 +36,7 @@ function getTrackingId(): string {
 
 
 export async function logActivity(message: string) {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !WEBHOOK_URL) return;
 
     const trackingId = getTrackingId();
 
@@ -50,7 +50,7 @@ export async function logActivity(message: string) {
     };
 
     try {
-        await fetch(WEBHOOK_URL, {
+       await fetch(WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ embeds: [embed] }),

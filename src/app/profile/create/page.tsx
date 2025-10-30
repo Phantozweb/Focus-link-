@@ -16,6 +16,7 @@ import { useDynamicFields } from '@/hooks/use-dynamic-fields';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { logActivity } from '@/lib/activity-logger';
 
 // Debounce function
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
@@ -184,6 +185,10 @@ export default function CreateProfilePage() {
             description: 'A profile with this Membership ID has already been created.',
          });
       } else if (result.status === "success") {
+        logActivity(`✅ **Profile Submitted for Review**
+*   **Name:** ${data.name}
+*   **ID:** \`${data.id}\``
+        );
         toast({
           title: 'Profile Submitted!',
           description: 'Your profile has been submitted for review! Our Team will Review and make a Profile for you!',
