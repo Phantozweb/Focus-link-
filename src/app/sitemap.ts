@@ -26,7 +26,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/profile/create',
     '/help-center',
     '/terms',
-    '/drishtikit'
   ].map(route => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
