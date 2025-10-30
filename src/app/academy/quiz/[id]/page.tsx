@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
-const PASS_PERCENTAGE = 0.5; // 50%
+const PASS_PERCENTAGE = 0.35; // 35%
 const COUNTDOWN_SECONDS = 5;
 const MAX_ATTEMPTS = 3;
 
@@ -479,9 +479,3 @@ export default function QuizPage() {
     </Suspense>
   );
 }
-
-    
-
-    
-
-    

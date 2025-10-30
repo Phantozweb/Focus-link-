@@ -10,18 +10,26 @@ import { quizModules } from '@/lib/quiz-questions';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { allUsers } from '@/lib/data';
+import type { UserProfile } from '@/types';
 
 export default function QuizWelcomePage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
   const [membershipId, setMembershipId] = useState<string | null>(null);
+  const [participant, setParticipant] = useState<UserProfile | null>(null);
+
 
   useEffect(() => {
     const storedSession = localStorage.getItem(`quizSession-${id}`);
     if (storedSession) {
       const session = JSON.parse(storedSession);
       setMembershipId(session.membershipId);
+      const user = allUsers.find(u => u.id === session.membershipId);
+      if (user) {
+        setParticipant(user);
+      }
     }
   }, [id]);
 
@@ -35,7 +43,7 @@ export default function QuizWelcomePage() {
   const instructions = [
     { text: `${totalQuestions} questions across ${quizModules.length} timed modules.` },
     { text: `A total of ${grandTotalPoints} points are available, including bonus points for speed.` },
-    { text: `A score of 50% or higher is required to pass and earn a certificate.` },
+    { text: `A score of 35% or higher is required to pass and earn a certificate.` },
     { text: `Top performers get a Certificate of Excellence and a profile badge.` },
     { text: `Your performance points will be recorded for your future platform rewards!` },
   ];

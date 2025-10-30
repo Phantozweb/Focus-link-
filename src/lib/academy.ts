@@ -62,7 +62,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
 - **Event Duration**: The quiz will be open from **November 2nd to November 12th, 2025**.
 - **Membership Required**: To participate, you must be an official member of Focus Links. <a href="/membership" class="text-primary underline font-semibold">Join for free</a> if you haven't already. It only takes a few minutes!
 - **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate.
-- **Passing Score**: A score of **50% or higher** is required to pass each module and to pass the quiz overall.
+- **Passing Score**: A score of **35% or higher** is required to pass each module and to pass the quiz overall.
 - **Fair Play**: We trust our community to compete with integrity. Any detected form of malpractice may result in disqualification.
 - **Scoring**: The total score of 200 points is based on question difficulty and completion speed. Faster completion times in each module award bonus points.
 - **Certification & Rewards**: 
