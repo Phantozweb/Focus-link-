@@ -26,7 +26,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Label } from '@/components/ui/label';
-import { logActivity } from '@/lib/activity-logger';
+import { logSearch } from '@/lib/activity-logger';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -148,7 +148,7 @@ export default function Home() {
     const params = new URLSearchParams();
     if (searchTerm) params.set('q', searchTerm);
 
-    logActivity(`🔍 **Homepage Search:**
+    logSearch(`🔍 **Homepage Search:**
 *   **Query:** \`${searchTerm || 'none'}\`
 *   **Type:** \`${filterType}\`
 *   **Country:** \`${filterCountry}\``

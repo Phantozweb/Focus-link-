@@ -25,7 +25,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { logActivity } from '@/lib/activity-logger';
+import { logFormSubmission } from '@/lib/activity-logger';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry'];
 
@@ -115,7 +115,7 @@ export function MembershipForm() {
       } else if (result.result === 'success') {
         setMembershipId(newId);
         setSubmissionData(data);
-        logActivity(`✅ **New Membership Application Submitted**
+        logFormSubmission(`✅ **New Membership Application Submitted**
 *   **Name:** ${data.name}
 *   **Role:** ${data.role}
 *   **ID:** \`${newId}\``
