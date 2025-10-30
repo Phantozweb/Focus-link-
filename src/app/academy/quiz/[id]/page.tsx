@@ -45,23 +45,7 @@ function QuizComponent() {
   const quiz = webinars.find(w => w.id === id && w.id === 'eye-q-arena-2025');
 
   const [session, setSession] = useState<QuizSession | null>(null);
-
-  const getInitialState = () => {
-    // Check if we are coming from the welcome page to start the quiz
-    if (searchParams.get('start') === 'true') {
-        const storedSession = localStorage.getItem(`quizSession-${id}`);
-        if (storedSession) {
-            const parsedSession: QuizSession = JSON.parse(storedSession);
-            if (parsedSession.attemptsLeft > 0) {
-                return 'countdown';
-            }
-        }
-    }
-    // If not starting, or if attempts are used up, go back to the beginning.
-    return 'not-started';
-  }
-
-  const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished' | 'countdown'>(getInitialState);
+  const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished' | 'countdown'>('not-started');
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
@@ -69,6 +53,24 @@ function QuizComponent() {
   const [moduleResults, setModuleResults] = useState<ModuleResult[]>([]);
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
 
+  // This effect runs only on the client-side after hydration to determine initial state
+  useEffect(() => {
+    const getInitialState = () => {
+      if (searchParams.get('start') === 'true') {
+        const storedSession = localStorage.getItem(`quizSession-${id}`);
+        if (storedSession) {
+          const parsedSession: QuizSession = JSON.parse(storedSession);
+          if (parsedSession.attemptsLeft > 0) {
+            setQuizState('countdown');
+            return;
+          }
+        }
+      }
+      setQuizState('not-started');
+    };
+
+    getInitialState();
+  }, [id, searchParams]);
 
   const currentModule = useMemo(() => quizModules[currentModuleIndex], [currentModuleIndex]);
   const currentQuestions = useMemo(() => {
@@ -424,7 +426,11 @@ function QuizComponent() {
        )
     }
 
-    return null;
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   };
 
   return (
@@ -451,8 +457,10 @@ function QuizComponent() {
 
 export default function QuizPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
       <QuizComponent />
     </Suspense>
   );
 }
+
+    
