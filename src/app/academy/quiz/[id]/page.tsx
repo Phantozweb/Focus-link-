@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -45,6 +45,7 @@ function QuizComponent() {
   const quiz = webinars.find(w => w.id === id && w.id === 'eye-q-arena-2025');
 
   const [session, setSession] = useState<QuizSession | null>(null);
+  const [membershipId, setMembershipId] = useState<string | null>(null);
   const [quizState, setQuizState] = useState<'not-started' | 'active' | 'break' | 'finished' | 'countdown'>('not-started');
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -86,7 +87,9 @@ function QuizComponent() {
   useEffect(() => {
     const storedSession = localStorage.getItem(`quizSession-${id}`);
     if (storedSession) {
-        setSession(JSON.parse(storedSession));
+        const sessionData = JSON.parse(storedSession);
+        setSession(sessionData);
+        setMembershipId(sessionData.membershipId);
     }
   }, [id]);
 
@@ -378,6 +381,12 @@ function QuizComponent() {
               <div>
                 <p className="text-sm text-muted-foreground">Module {currentModuleIndex + 1}/{quizModules.length}</p>
                 <h2 className="text-lg font-bold">{currentModule.topic}</h2>
+                 {membershipId && (
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono mt-1">
+                        <User className="h-3 w-3" />
+                        {membershipId}
+                    </div>
+                 )}
               </div>
               <div className={cn("flex items-center gap-2 text-lg font-semibold", timeLeftInModule <= 60 ? 'text-destructive' : 'text-primary')}>
                   <Clock className="h-5 w-5" />
@@ -462,5 +471,7 @@ export default function QuizPage() {
     </Suspense>
   );
 }
+
+    
 
     
