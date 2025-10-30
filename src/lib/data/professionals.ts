@@ -485,6 +485,6 @@ export const professionals: UserProfile[] = [
       }
     ],
     languages: ['English', 'Tamil', 'Telugu'],
-    verified: false,
+    verified: true,
   }
 ];
