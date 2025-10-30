@@ -4,7 +4,6 @@
 import { useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { logActivity } from '@/lib/activity-logger';
-import { allUsers } from '@/lib/data';
 
 function getPageTitle(pathname: string): string {
     if (pathname === '/') return '🏠 Viewing Homepage';
@@ -13,11 +12,13 @@ function getPageTitle(pathname: string): string {
     const lastPart = parts[parts.length - 1];
 
     if (pathname.startsWith('/profile/')) {
-        const user = allUsers.find(u => u.id === lastPart);
-        return `👤 Viewing Profile: **${user ? user.name : lastPart}**`;
+        return `👤 Viewing Profile: **${lastPart}**`;
     }
     if (pathname.startsWith('/events/')) {
          return `🗓️ Viewing Event: **${lastPart}**`;
+    }
+    if (pathname.startsWith('/academy/')) {
+         return `🗓️ Viewing Academy Event: **${lastPart}**`;
     }
      if (pathname.startsWith('/jobs/')) {
          return `💼 Viewing Job: **${lastPart}**`;
