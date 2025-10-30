@@ -10,16 +10,16 @@ export type Question = {
 };
 
 export const quizModules = [
-  { topic: 'Eyelids & Adnexa', time: 5 * 60 },
-  { topic: 'Conjunctiva & Sclera', time: 6 * 60 },
-  { topic: 'Cornea', time: 7 * 60 },
-  { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60 },
-  { topic: 'Iris & Pupil', time: 6 * 60 },
-  { topic: 'Crystalline Lens & Accommodation', time: 7 * 60 },
-  { topic: 'Vitreous Body', time: 5 * 60 },
-  { topic: 'Retina', time: 9 * 60 },
-  { topic: 'Optic Nerve & Pathways', time: 9 * 60 },
-  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60 },
+  { topic: 'Eyelids & Adnexa', time: 5 * 60, totalPoints: 18 },
+  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17 },
+  { topic: 'Cornea', time: 7 * 60, totalPoints: 20 },
+  { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60, totalPoints: 16 },
+  { topic: 'Iris & Pupil', time: 6 * 60, totalPoints: 15 },
+  { topic: 'Crystalline Lens & Accommodation', time: 7 * 60, totalPoints: 19 },
+  { topic: 'Vitreous Body', time: 5 * 60, totalPoints: 15 },
+  { topic: 'Retina', time: 9 * 60, totalPoints: 25 },
+  { topic: 'Optic Nerve & Pathways', time: 9 * 60, totalPoints: 24 },
+  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60, totalPoints: 16 },
 ];
 
 export const questions: Question[] = [
