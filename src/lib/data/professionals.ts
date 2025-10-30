@@ -444,7 +444,7 @@ export const professionals: UserProfile[] = [
     verified: true
   },
   {
-    id: 'IN20251030102233',
+    id: '14',
     name: 'Harini L',
     type: 'Optometrist',
     experience: 'Aspiring Optometrist | Patient-Focused Diagnostics',

@@ -560,7 +560,12 @@ export function ProfileClient({ user }: { user: UserProfile }) {
               <div className="flex flex-col sm:flex-row sm:items-end sm:gap-6">
                 <Avatar className="h-36 w-36 border-4 border-background bg-background shadow-lg mx-auto sm:mx-0">
                   {user.avatarUrl ? (
-                    <AvatarImage src={user.avatarUrl} alt={`${user.name} - ${user.type}`} data-ai-hint={isOrg ? "logo building" : "portrait person"} />
+                    <AvatarImage 
+                      src={user.avatarUrl} 
+                      alt={`${user.name} - ${user.type}`} 
+                      data-ai-hint={isOrg ? "logo building" : "portrait person"} 
+                      style={{ objectPosition: 'center 20%' }}
+                    />
                   ) : null}
                   <AvatarFallback className="text-6xl">
                     {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-20 w-20" />}
