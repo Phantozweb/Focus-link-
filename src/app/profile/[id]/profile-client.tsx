@@ -18,6 +18,7 @@ import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Textarea } from '@/components/ui/textarea';
 
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
@@ -491,6 +492,151 @@ Thank you.
   );
 }
 
+function InquiryDialog({ triggerText, title, description, user }: { triggerText: string, title: string, description: string, user: UserProfile }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const generateInquiryMailto = () => {
+    const subject = `Focus Links Inquiry: ${title} for ${user.name}`;
+    const body = `
+Hello ${user.name},
+
+I found your profile on Focus Links and would like to make an inquiry.
+
+**My Details:**
+**Name:** ${name}
+**Email:** ${email}
+
+**Message:**
+${message}
+
+Thank you.
+---
+*Sent via Focus Links - The Global Eye Care Community*
+    `;
+    return `mailto:${user.links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  return (
+     <Dialog>
+        <DialogTrigger asChild>
+            <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white hover:text-slate-900">
+                {triggerText}
+            </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+                <DialogTitle>{title}</DialogTitle>
+                <DialogDescription>{description}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="inquiry-name">Name</Label>
+                        <Input id="inquiry-name" value={name} onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="inquiry-email">Email</Label>
+                        <Input id="inquiry-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="inquiry-message">Message</Label>
+                    <Textarea id="inquiry-message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Your message..." />
+                </div>
+            </div>
+            <DialogFooter>
+                <Button asChild>
+                    <a href={generateInquiryMailto()}>Send Inquiry</a>
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+  );
+}
+
+function OrderDialog({ user }: { user: UserProfile }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [organization, setOrganization] = useState('');
+  const [country, setCountry] = useState('');
+  const [units, setUnits] = useState(1);
+
+  const generateOrderMailto = () => {
+    const subject = `Order Request from Focus Links: DrishtiKit Complete`;
+    const body = `
+Hello DrishtiKit Team,
+
+I would like to place an order for the DrishtiKit Complete system, as seen on Focus Links.
+
+**Order Details:**
+**Contact Name:** ${name}
+**Organization:** ${organization}
+**Email:** ${email}
+**Country:** ${country}
+**Number of Units:** ${units}
+
+Please provide a quote and further instructions to complete this order.
+
+Thank you.
+---
+*Sent via Focus Links - The Global Eye Care Community*
+    `;
+    return `mailto:${user.links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  return (
+    <Dialog>
+        <DialogTrigger asChild>
+             <Button size="lg" className="w-full mt-4 bg-white text-primary hover:bg-slate-100">
+                Order DrishtiKit Now
+            </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+                <DialogTitle>Order DrishtiKit</DialogTitle>
+                <DialogDescription>
+                    Fill out your details below to request an order. We will respond with a quote and payment details. Bulk discounts are available.
+                </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="order-name">Your Name</Label>
+                        <Input id="order-name" value={name} onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="order-email">Your Email</Label>
+                        <Input id="order-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="order-org">Organization / Hospital</Label>
+                    <Input id="order-org" value={organization} onChange={(e) => setOrganization(e.target.value)} />
+                </div>
+                 <div className="grid grid-cols-2 gap-4">
+                     <div className="space-y-2">
+                        <Label htmlFor="order-country">Country</Label>
+                        <Input id="order-country" value={country} onChange={(e) => setCountry(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="order-units">Number of Units</Label>
+                        <Input id="order-units" type="number" min="1" value={units} onChange={(e) => setUnits(parseInt(e.target.value, 10))} />
+                    </div>
+                </div>
+            </div>
+            <DialogFooter>
+                <Button asChild>
+                    <a href={generateOrderMailto()}>Request Order</a>
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+  );
+}
+
+
 function DrishtiKitProfile({ user }: { user: UserProfile }) {
     const stats = [
       { value: "50+", label: "Healthcare Organizations" },
@@ -513,18 +659,19 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
         { title: "Cost Effective", description: "90% lower cost than traditional setups.", icon: <Star className="w-8 h-8 text-primary"/> },
     ];
 
-    const ecosystemComponents = [
-        { title: "Portable Phoropter", description: "Complete refraction testing with digital precision. Sphere: -3D to +3D (0.5D intervals).", icon: <Package className="w-8 h-8 text-primary"/> },
-        { title: "AI-Powered Mobile App", description: "Manage patients, get AI summaries, and sync data to the cloud, even when offline.", icon: <PlayCircle className="w-8 h-8 text-primary"/> },
-        { title: "Data Management System", description: "Secure cloud-based patient record management with analytics and reporting capabilities.", icon: <Server className="w-8 h-8 text-primary"/> },
-        { title: "Training & Support", description: "Comprehensive video modules, live virtual sessions, and 24/7 technical support.", icon: <Wrench className="w-8 h-8 text-primary"/> },
-    ]
+    const appScreenshots = [
+        "https://www.drishtikit.com/app-screenshots/app_screenshot_1.png",
+        "https://www.drishtikit.com/app-screenshots/app_screenshot_2.png",
+        "https://www.drishtikit.com/app-screenshots/app_screenshot_3.png",
+        "https://www.drishtikit.com/app-screenshots/app_screenshot_4.png",
+        "https://www.drishtikit.com/app-screenshots/app_screenshot_5.png",
+    ];
 
     const testimonials = [
-        { name: "Dr. Priya Sharma", title: "Rural Eye Care Specialist", quote: "DrishtiKit has revolutionized our rural eye camps. We can now screen hundreds of patients in remote villages without electricity or specialized equipment. The accuracy is comparable to our clinic-based equipment.", avatar: "https://picsum.photos/seed/doc1/80/80" },
-        { name: "Dr. Puneet", title: "Founder, Curesee", quote: "The innovative design and portability of DrishtiKit make it a game-changer for eye care accessibility. It's exactly what we need to revolutionize vision screening in India's underserved communities.", avatar: "https://picsum.photos/seed/doc2/80/80" },
-        { name: "Meera Patel", title: "School Health Program Coordinator", quote: "Our school screening program has been able to reach twice as many children since we started using DrishtiKit. It's simple enough for teachers to use effectively for basic screenings.", avatar: "https://picsum.photos/seed/doc3/80/80" },
-        { name: "Optom. Subrata Roy", title: "Director, Eye Vision Prosthetic Lab", quote: "The portability of DrishtiKit has been a game-changer for our disaster response team. We can now include comprehensive vision screening in our medical relief efforts.", avatar: "https://picsum.photos/seed/doc4/80/80" },
+        { name: "Dr. Priya Sharma", title: "Rural Eye Care Specialist", quote: "DrishtiKit has revolutionized our rural eye camps. We can now screen hundreds of patients in remote villages without electricity or specialized equipment. The accuracy is comparable to our clinic-based equipment." },
+        { name: "Dr. Puneet", title: "Founder, Curesee", quote: "The innovative design and portability of DrishtiKit make it a game-changer for eye care accessibility. It's exactly what we need to revolutionize vision screening in India's underserved communities." },
+        { name: "Meera Patel", title: "School Health Program Coordinator", quote: "Our school screening program has been able to reach twice as many children since we started using DrishtiKit. It's simple enough for teachers to use effectively for basic screenings." },
+        { name: "Optom. Subrata Roy", title: "Director, Eye Vision Prosthetic Lab", quote: "The portability of DrishtiKit has been a game-changer for our disaster response team. We can now include comprehensive vision screening in our medical relief efforts." },
     ]
 
     const faqs = [
@@ -541,7 +688,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
             {/* Hero Section */}
             <section className="py-20 md:py-28 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
                 <div className="container mx-auto px-4 text-center">
-                    <Image src="https://i.ibb.co/VvZ1g3q/drishtikit-logo.png" alt="DrishtiKit Logo" width={100} height={100} className="mx-auto mb-4 invert" data-ai-hint="logo eye"/>
+                    <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={100} height={100} className="mx-auto mb-4" data-ai-hint="logo eye"/>
                     <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Revolutionary Eye Care Technology</h1>
                     <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
                         दृष्टिKit - The world's most portable and affordable eye testing solution. Conduct comprehensive vision screenings anywhere with our revolutionary all-in-one portable phoropter.
@@ -550,9 +697,12 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         <Button size="lg" asChild>
                             <a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a>
                         </Button>
-                         <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white hover:text-slate-900" asChild>
-                             <Link href="/contact">Request a Demo</Link>
-                         </Button>
+                        <InquiryDialog 
+                            triggerText="Request a Demo"
+                            title="Request a Product Demo"
+                            description="Please provide your details, and our team will contact you to schedule a live demonstration of DrishtiKit."
+                            user={user}
+                        />
                     </div>
                 </div>
             </section>
@@ -588,13 +738,26 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                                 </div>
                             ))}
                         </div>
-                        <div className="mt-8 flex gap-4">
+                         <div className="mt-8 flex gap-4">
                             <Button asChild><a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Access Mobile App</a></Button>
-                             <Button variant="outline" asChild><Link href="/contact">Request Demo</Link></Button>
+                             <InquiryDialog 
+                                triggerText="Request Demo"
+                                title="Request a Product Demo"
+                                description="Please provide your details, and our team will contact you to schedule a live demonstration of DrishtiKit."
+                                user={user}
+                            />
                         </div>
                     </div>
                     <div className="flex justify-center">
-                        <Image src="https://i.ibb.co/L5w2b8b/drishtikit-app.png" alt="DrishtiKit Mobile App" width={400} height={600} className="rounded-2xl shadow-2xl" data-ai-hint="mobile phone"/>
+                         <Carousel className="w-full max-w-xs" plugins={[Carousel.plugins.autoplay({ delay: 2000, stopOnInteraction: true })]}>
+                            <CarouselContent>
+                                {appScreenshots.map((src, index) => (
+                                <CarouselItem key={index}>
+                                    <Image src={src} alt={`DrishtiKit App Screenshot ${index + 1}`} width={400} height={800} className="rounded-2xl shadow-2xl" data-ai-hint="mobile phone"/>
+                                </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                        </Carousel>
                     </div>
                 </section>
 
@@ -627,8 +790,8 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                             <p className="text-lg text-slate-600 mt-4">DrishtiKit is a proud Indian innovation, officially recognized by DPIIT under the Startup India initiative. Our indigenous healthcare technology represents the best of Indian innovation in portable eye care solutions.</p>
                         </div>
                         <div className="flex justify-center md:justify-end items-center gap-8">
-                            <Image src="https://i.ibb.co/dMvH17H/dpiit-logo.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
-                            <Image src="https://i.ibb.co/JqjT7M1/make-in-india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
+                            <Image src="https://www.drishtikit.com/dpiit.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
+                            <Image src="https://www.drishtikit.com/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
                         </div>
                     </div>
                 </section>
@@ -656,16 +819,27 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-800">The Complete Ecosystem</h2>
                         <p className="mt-2 text-lg text-slate-600">Everything you need for professional eye care, anywhere.</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                       {ecosystemComponents.map(component => (
-                           <Card key={component.title} className="flex flex-col sm:flex-row items-start gap-6 p-6">
-                               <div className="bg-primary/10 p-4 rounded-lg">{component.icon}</div>
-                               <div>
-                                   <h3 className="text-xl font-bold text-slate-800">{component.title}</h3>
-                                   <p className="text-slate-600 mt-1">{component.description}</p>
-                               </div>
-                           </Card>
-                       ))}
+                     <div className="grid md:grid-cols-2 gap-8 items-center">
+                        <div className="space-y-6">
+                            <div className="p-6 border rounded-lg">
+                                <h3 className="text-xl font-bold text-slate-800 mb-2">Portable Phoropter</h3>
+                                <p className="text-slate-600">Complete refraction testing in a compact, portable device with digital precision. Sphere: -3D to +3D (0.5D intervals).</p>
+                            </div>
+                            <div className="p-6 border rounded-lg">
+                                <h3 className="text-xl font-bold text-slate-800 mb-2">AI-Powered Mobile App</h3>
+                                <p className="text-slate-600">Manage patients, get AI summaries, and sync data to the cloud, even when offline.</p>
+                            </div>
+                            <div className="p-6 border rounded-lg">
+                                <h3 className="text-xl font-bold text-slate-800 mb-2">Training & Support</h3>
+                                <p className="text-slate-600">Comprehensive video modules, live virtual sessions, and 24/7 technical support.</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-center">
+                            <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} />
+                        </div>
+                    </div>
+                    <div className="mt-8">
+                        <Image src="https://www.drishtikit.com/whats_inside.png" alt="What's inside the DrishtiKit" width={1200} height={400} className="w-full rounded-lg shadow-lg" />
                     </div>
                 </section>
 
@@ -682,10 +856,6 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                                 <CardContent className="p-0">
                                     <p className="text-slate-700 italic mb-6">"{testimonial.quote}"</p>
                                     <div className="flex items-center gap-4">
-                                        <Avatar className="h-14 w-14">
-                                            <AvatarImage src={testimonial.avatar} alt={testimonial.name} data-ai-hint="portrait person" />
-                                            <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                                        </Avatar>
                                         <div>
                                             <p className="font-bold text-slate-800">{testimonial.name}</p>
                                             <p className="text-sm text-muted-foreground">{testimonial.title}</p>
@@ -731,9 +901,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                                     <li className="flex items-center gap-2"><Check/> AI-Powered Mobile App License</li>
                                     <li className="flex items-center gap-2"><Check/> 2-Year Warranty & Support</li>
                                 </ul>
-                                <Button size="lg" className="w-full mt-4 bg-white text-primary hover:bg-slate-100" asChild>
-                                    <Link href="/contact">Order DrishtiKit Now</Link>
-                                </Button>
+                                <OrderDialog user={user} />
                             </div>
                             <p className="mt-4 text-sm text-blue-200">Special bulk discounts available for NGOs, healthcare organizations, and government programs.</p>
                         </CardContent>
@@ -745,12 +913,12 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     <h2 className="text-3xl font-bold text-slate-800">Ready to Transform Eye Care in Your Community?</h2>
                     <p className="text-lg text-slate-600 mt-2 max-w-2xl mx-auto">Join the revolution in portable eye testing technology. Contact us today to learn how DrishtiKit can help you bring professional vision screening to underserved populations.</p>
                     <div className="flex justify-center gap-4 mt-8">
-                       <Button size="lg" asChild>
-                            <a href="mailto:contact@drishtikit.com"><Mail className="mr-2 h-5 w-5"/> Contact Us</a>
-                        </Button>
-                        <Button size="lg" variant="outline" asChild>
-                            <a href="tel:+919244094145"><Phone className="mr-2 h-5 w-5"/> Call Us</a>
-                        </Button>
+                       <InquiryDialog 
+                            triggerText="Enquire Now"
+                            title="General Inquiry"
+                            description="Have a question? Fill out the form and our team will get back to you shortly."
+                            user={user}
+                        />
                     </div>
                 </section>
             </div>

@@ -77,7 +77,7 @@ Our mission is to make quality eye care accessible everywhere. The DrishtiKit ec
       email: 'contact@drishtikit.com',
       linkedin: 'https://app.drishtikit.com'
     },
-    avatarUrl: 'https://i.ibb.co/VvZ1g3q/drishtikit-logo.png',
+    avatarUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png',
     gallery: [],
     workExperience: [],
     education: [],
