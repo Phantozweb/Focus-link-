@@ -65,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
-        <link rel="icon" href="https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg" type="image/jpeg" />
+        <link rel="icon" href="https://i.ibb.co/pwnL1Xy/IMG-20251025-WA0014.jpg" type="image/jpeg" />
         <meta name="google-site-verification" content="fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE" />
         <meta name="google-site-verification" content="8mO8b4Ylc2hheiV-tqdNspyLlP22f8oE8-M8PRiab-U" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
