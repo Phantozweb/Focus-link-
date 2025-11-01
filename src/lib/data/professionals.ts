@@ -494,25 +494,14 @@ export const professionals: UserProfile[] = [
     experience: 'Speciality Contact Lens Practitioner | Trainer | Consultant Optometrist',
     location: 'Bareilly, Uttar Pradesh, India',
     skills: [
-      'Scleral Lens Fittings',
-      'Orthok Lens Fittings',
-      'Corneal RGP Lens Fittings',
-      'Optometry Training',
-      'Vision Therapy',
-      'Effective Communication',
-      'Myopia Control',
-      'Management',
-      'Marketing'
+      'Scleral Lens Fittings', 'Orthok Lens Fittings', 'Corneal RGP Lens Fittings', 'Optometry Training',
+      'Vision Therapy', 'Effective Communication', 'Myopia Control', 'Management', 'Marketing'
     ],
     interests: [
-      'AI in Eye Care',
-      'Contact lens advancement',
-      'Awareness among General Public',
-      'Treatment in Complex Eye Conditions',
-      'New Research in Eye Care',
-      'Advancement in Vision Therapy'
+      'AI in Eye Care', 'Contact lens advancement', 'Awareness among General Public',
+      'Treatment in Complex Eye Conditions', 'New Research in Eye Care', 'Advancement in Vision Therapy'
     ],
-    bio: "Passionate and dedicated Speciality Contact Lens Practitioner and Optometrist providing comprehensive eye care and personalized contact lens solutions. Expertise in fitting and managing specialty contact lenses for complex corneal conditions.\n\nSkilled in delivering engaging and informative presentations, translating complex concepts into accessible knowledge for diverse audiences. Committed to continuous learning and staying abreast of the latest advancements in eye care.\n\nAs a dedicated Scleral Lens Specialist, Orthokeratology Advocate, and Myopia Control Enthusiast, I'm on a mission to transform lives through exceptional vision care. I've honed my skills to provide custom solutions that go beyond conventional eye care.",
+    bio: "Passionate and dedicated Speciality Contact Lens Practitioner and Optometrist in providing comprehensive eye care and personalized contact lens solutions. Expertise in fitting and managing specialty contact lenses for complex corneal conditions.\n\nSkilled in delivering engaging and informative presentations, translating complex concepts into accessible knowledge for diverse audiences. Committed to continuous learning and staying abreast of the latest advancements in eye care.\n\nAs a dedicated Scleral Lens Specialist, Orthokeratology Advocate, and Myopia Control Enthusiast, I'm on a mission to transform lives through exceptional vision care. I've honed my skills to provide custom solutions that go beyond conventional eye care.",
     links: {
       email: 'tahseenrazakhan123@gmail.com',
       linkedin: 'https://www.linkedin.com/in/mohd-tahseen-raza-khan-mtrk'
@@ -547,8 +536,8 @@ export const professionals: UserProfile[] = [
         company: 'Global Eye Hospital India',
         startDate: 'October 2022',
         endDate: 'June 2023',
+        description: '',
         duration: '9 months',
-        description: ''
       },
       {
         title: 'Optometrist',
@@ -560,7 +549,7 @@ export const professionals: UserProfile[] = [
       }
     ],
     education: [
-       {
+      {
         school: 'Sikkim Skill University',
         degree: 'MSc. Optometry',
         fieldOfStudy: 'Optometry',
@@ -568,21 +557,21 @@ export const professionals: UserProfile[] = [
         endYear: '2024'
       },
       {
-        school: 'SRMS Institutions',
-        degree: 'Bachelor of Science (BS) in Optometry',
-        fieldOfStudy: 'Optometry',
-        startYear: '2017',
-        endYear: '2022'
-      },
-      {
         school: 'Silver Line Laboratories Delhi',
         degree: 'Fellowship in Speciality Contact Lenses, Optometry',
         fieldOfStudy: 'Optometry',
         startYear: 'July 2023',
         endYear: 'September 2023'
+      },
+       {
+        school: 'SRMS Institutions',
+        degree: 'Bachelor of Science (BS) in Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2017',
+        endYear: '2022'
       }
     ],
-    languages: ['Hindi (Full Professional)', 'English (Professional Working)', 'Urdu (Limited Working)'],
+    languages: ['Hindi (Full Professional)', 'English (Professional)', 'Urdu (Limited Working)'],
     verified: true
   },
   {
@@ -633,5 +622,54 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['Tamil', 'English'],
     verified: false,
+  },
+  {
+    id: '17',
+    name: 'Vedant Dhingra',
+    type: 'Optometrist',
+    experience: 'Optometrist | Co-Founder, DrishtiKit',
+    location: 'India',
+    skills: ["Retail Operations", "Product Development", "Ideation and Validation", "Contact Lens Fitting", "Low Vision"],
+    interests: ["Accessibility in Eyecare and Management", "Data Analysis"],
+    bio: "I’m Vedant Dhingra, an optometrist and entrepreneur passionate about building accessible, scalable solutions for vision care. I co-founded DrishtiKit, a portable eye screening kit designed to make mass vision testing simple and affordable for communities with limited access to clinical infrastructure. Alongside this, I lead Jay Optical, a growing optical practice focused on quality, affordability, and outreach-based care, and Sightly, an innovation initiative developing assistive and sensory learning tools for children with visual impairment. I also run Optometry Guide, an online resource aimed at empowering young optometrists through knowledge sharing and community engagement. My work lies at the intersection of eye health, technology, and social innovation driven by a belief that clear vision should never depend on geography or privilege.",
+    links: {
+      email: 'dhingra.vedant3@gmail.com',
+      linkedin: 'https://www.drishtikit.com/'
+    },
+    avatarUrl: 'https://i.ibb.co/Zp9QjjM6/Ved-pic.jpg',
+    workExperience: [
+      {
+        title: 'Head of Retail Operations',
+        company: 'Jay Optical and Optometrist',
+        startDate: '',
+        endDate: '',
+        description: 'As Retail Operations Head at Jay Optical, I’ve overseen the end-to-end management of optical retail operations  from inventory and supply chain optimization to patient experience, workforce training, and digital transformation. Under my leadership, Jay Optical expanded its footprint and streamlined its clinical-retail workflow, integrating eye testing, dispensing, and follow-up care into a cohesive service model. The store was also honored with the ZEISS You&Eye Award, becoming the only optical retail outlet in Madhya Pradesh to receive this national recognition. My focus has always been on building scalable retail systems that combine affordability, precision, and patient trust  ensuring that every pair of glasses delivered represents both clinical accuracy and community impact.'
+      },
+      {
+        title: 'CEO',
+        company: 'Sightly Lenses',
+        startDate: '',
+        endDate: '',
+        description: 'Sightly is an intelligent recommendation algorithm I developed to enhance patient awareness and decision-making in eyewear selection. It educates users about different types of spectacle lenses their features, benefits, and pricing and suggests the most suitable options based on an individual’s budget, lifestyle, occupation, and visual needs. Sightly aims to simplify the complex process of lens selection, bridging the gap between clinical advice and consumer understanding, while empowering patients to make informed, value-based eyewear choices.'
+      },
+      {
+        title: 'Co-Founder and Director',
+        company: 'ARV innovations LLP',
+        startDate: '',
+        endDate: '',
+        description: 'As Director of ARV Innovations LLP, I lead the design and development of DrishtiKit, a portable, low-cost vision screening solution built to make eye testing accessible at the last mile. Under my direction, the team focused on combining clinical accuracy with field practicality creating a compact kit that enables rapid, standardized vision assessments in schools, rural areas, and community health programs. At ARV Innovations, my role centers on bridging innovation with public health impact, translating complex eye care diagnostics into simple, scalable tools that empower frontline workers and transform how preventive vision care is delivered in India.'
+      }
+    ],
+    education: [
+      {
+        school: 'Amity University Gurugram',
+        degree: 'Bachelors in Clinical Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2016',
+        endYear: '2020'
+      }
+    ],
+    languages: ['English', 'Hindi'],
+    verified: true
   }
 ];
