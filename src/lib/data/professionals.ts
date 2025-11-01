@@ -568,11 +568,11 @@ export const professionals: UserProfile[] = [
         endYear: '2024'
       },
       {
-        school: 'SRMS Institute',
-        degree: 'B.Optometry',
+        school: 'SRMS Institutions',
+        degree: 'Bachelor of Science (BS) in Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2017',
-        endYear: '2021'
+        endYear: '2022'
       },
       {
         school: 'Silver Line Laboratories Delhi',
@@ -582,7 +582,56 @@ export const professionals: UserProfile[] = [
         endYear: 'September 2023'
       }
     ],
-    languages: ['Hindi (Native)', 'English (Professional)', 'Urdu'],
+    languages: ['Hindi (Full Professional)', 'English (Professional Working)', 'Urdu (Limited Working)'],
     verified: true
+  },
+  {
+    id: '16',
+    name: 'Shivashangari M',
+    type: 'Optometrist',
+    experience: 'Masters in Optometry | Contact Lens Specialist',
+    location: 'Chennai, Tamil Nadu, India',
+    skills: [
+      'Spectacle dispensing',
+      'Contact lens fittings guidance',
+      'Patient counselling',
+      'Teaching'
+    ],
+    interests: ['Teaching', 'Dispensing'],
+    bio: `A highly dedicated optometrist with a strong academic background, holding a post-graduate degree from Vasan Institute of Ophthalmology and Research, Chennai. I have extensive experience in conducting over 30+ eye screening camps during my undergraduate internship, as well as private screening camps. My passion lies in developing web-based tools for optometry, advising on spectacle and contact lens care, and ensuring patient comfort through clear vision.`,
+    links: {
+      email: 'shivashangarimoptom@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/shivashangari-m-optom'
+    },
+    avatarUrl: '',
+    workExperience: [
+      {
+        title: 'Dispensing Optometrist',
+        company: 'Local Practice',
+        startDate: 'Ongoing',
+        endDate: '',
+        description: 'Provided spectacle dispensing and patient counseling services.'
+      }
+    ],
+    education: [
+      {
+        school: 'Vasan Institute of Ophthalmology and Research',
+        university: 'Tamil Nadu Dr. M.G.R. Medical University (TNMGRMU)',
+        degree: 'M.Optom',
+        fieldOfStudy: 'Masters in Optometry',
+        startYear: '2022',
+        endYear: '2024'
+      },
+      {
+        school: 'Lotus Institute of Ophthalmology and Research',
+        university: 'Tamil Nadu Dr. M.G.R. Medical University (TNMGRMU)',
+        degree: 'B.Sc Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2018',
+        endYear: '2022'
+      }
+    ],
+    languages: ['Tamil', 'English'],
+    verified: false,
   }
 ];
