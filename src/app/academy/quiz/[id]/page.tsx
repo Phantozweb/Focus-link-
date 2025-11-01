@@ -10,15 +10,19 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User, Info } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User, Info, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { sendQuizResultNotification, sendQuizStartNotification } from '@/lib/webhook';
+import { sendQuizResultNotification, sendQuizStartNotification, sendFeedbackNotification } from '@/lib/webhook';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { allUsers } from '@/lib/data';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
@@ -50,6 +54,79 @@ function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
     timeout = setTimeout(() => func.apply(this, args), delay);
   };
 }
+
+function FeedbackDialog({ open, onOpenChange, session, overallPassed, finalScore, totalPossiblePoints }: { open: boolean, onOpenChange: (open: boolean) => void, session: QuizSession | null, overallPassed: boolean, finalScore: number, totalPossiblePoints: number }) {
+  const [feedback, setFeedback] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const userName = useMemo(() => {
+    if (!session) return 'Participant';
+    const user = allUsers.find(u => u.id === session.membershipId);
+    return user ? user.name : session.membershipId;
+  }, [session]);
+  
+  const handleFeedbackSubmit = async () => {
+    if (!feedback.trim()) {
+      toast({ variant: 'destructive', title: 'Feedback cannot be empty.' });
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await sendFeedbackNotification({
+        feedback,
+        membershipId: session?.membershipId || 'N/A',
+        userName,
+        overallPassed,
+        finalScore,
+        totalPossiblePoints
+      });
+      toast({ title: "Thank you!", description: "Your feedback has been submitted." });
+      onOpenChange(false);
+      setFeedback('');
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Submission Failed', description: 'Could not send feedback. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Share Your Feedback</DialogTitle>
+          <DialogDescription>
+            Help us improve the Eye Q Arena! How was your experience?
+          </DialogDescription>
+        </DialogHeader>
+        <div className="py-4 space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="feedback-textarea">Your Feedback</Label>
+                <Textarea 
+                    id="feedback-textarea"
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="What did you like? What could be better?"
+                    rows={5}
+                />
+            </div>
+             <div className="text-xs text-muted-foreground">
+                Submitting as: {userName} ({session?.membershipId})
+            </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Skip</Button>
+          <Button onClick={handleFeedbackSubmit} disabled={isSubmitting}>
+            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Submit Feedback
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 
 function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   const [membershipId, setMembershipId] = useState('');
@@ -172,6 +249,9 @@ function QuizComponent() {
   const [moduleStartTime, setModuleStartTime] = useState(0);
   const [moduleResults, setModuleResults] = useState<ModuleResult[]>([]);
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
+  const [lastQuizResult, setLastQuizResult] = useState<{ overallPassed: boolean, finalScore: number, totalPossiblePoints: number } | null>(null);
+
 
   // This effect runs only on the client-side after hydration to determine initial state
   useEffect(() => {
@@ -321,6 +401,9 @@ function QuizComponent() {
       
       const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
       const overallPassed = allModulesPassed && (overallPercentage >= PASS_PERCENTAGE);
+      
+      setLastQuizResult({ overallPassed, finalScore, totalPossiblePoints });
+
 
       if (session) {
         sendQuizResultNotification({
@@ -335,6 +418,7 @@ function QuizComponent() {
         });
       }
       setQuizState('finished');
+      setTimeout(() => setIsFeedbackDialogOpen(true), 1500);
   }
 
   const handleNextModule = useCallback(() => {
@@ -550,13 +634,16 @@ function QuizComponent() {
                     </Table>
                 </CardContent>
              </Card>
-             <div className="mt-8 flex gap-4">
+             <div className="mt-8 flex flex-col gap-4">
                 {!overallPassed && session && session.attemptsLeft > 0 && (
-                    <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')}>
+                    <Button size="lg" className="w-full" variant="outline" onClick={() => setQuizState('countdown')}>
                         Try Again ({session.attemptsLeft} {session.attemptsLeft === 1 ? 'attempt' : 'attempts'} left)
                     </Button>
                 )}
-                <Button size="lg" className="flex-1" asChild>
+                <Button size="lg" className="w-full" variant="secondary" onClick={() => setIsFeedbackDialogOpen(true)}>
+                    <MessageSquare className="mr-2 h-5 w-5" /> Share Feedback
+                </Button>
+                <Button size="lg" className="w-full" asChild>
                     <Link href={`/academy/${id}`}>Back to Leaderboard</Link>
                 </Button>
              </div>
@@ -635,6 +722,16 @@ function QuizComponent() {
 
   return (
     <div className="bg-muted/40 min-h-screen py-12">
+       {lastQuizResult && (
+          <FeedbackDialog
+            open={isFeedbackDialogOpen}
+            onOpenChange={setIsFeedbackDialogOpen}
+            session={session}
+            overallPassed={lastQuizResult.overallPassed}
+            finalScore={lastQuizResult.finalScore}
+            totalPossiblePoints={lastQuizResult.totalPossiblePoints}
+          />
+        )}
       <div className="container mx-auto max-w-2xl">
          <div className="mb-6">
            <Button variant="ghost" asChild className="text-muted-foreground">
