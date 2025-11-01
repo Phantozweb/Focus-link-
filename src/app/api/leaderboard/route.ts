@@ -33,7 +33,7 @@ export async function GET(request: Request) {
         
         return {
             rank: index + 1,
-            name: userProfile?.name || row.MembershipID,
+            name: userProfile?.name || row.MembershipID, // Fallback to ID if name not found
             avatar: userProfile?.avatarUrl || '',
             score: Math.round(score),
             time: formatTime(row['TotalTimeTaken (Seconds)']),
