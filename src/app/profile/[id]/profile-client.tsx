@@ -689,7 +689,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
 
     return (
         <div className="bg-background">
-             {/* Partnership Section */}
+            {/* Partnership Section */}
             <section className="bg-blue-50 border-b">
                 <div className="container mx-auto px-4 py-4 text-center">
                     <p className="font-semibold text-blue-800 flex items-center justify-center gap-2">
@@ -700,20 +700,20 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
             </section>
             
             {/* Hero Section */}
-             <section className="bg-white">
-                 <div className="container mx-auto px-4 py-12 md:py-20 text-center">
+            <section className="bg-white">
+                <div className="container mx-auto px-4 py-12 md:py-20 text-center">
                     <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto mb-4 object-contain" data-ai-hint="logo eye"/>
                     <h1 className="text-4xl md:text-5xl font-bold text-slate-800 font-headline">DrishtiKit</h1>
                     <p className="mt-2 text-lg text-slate-600">A New Vision for Portable Eye Care</p>
                     <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mt-8 font-headline">Revolutionary Eye Care Technology</h2>
-                    <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
+                     <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
                         The world's most portable and affordable eye testing solution, making professional vision screenings accessible to every community.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
                         <Button size="lg" asChild><a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a></Button>
                         <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
                     </div>
-                 </div>
+                </div>
             </section>
             
             <div className="container mx-auto py-12 md:py-16 px-4 sm:px-6 lg:px-8 space-y-16 md:space-y-20">
@@ -818,6 +818,9 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-800">The Portable Advantage</h2>
                         <p className="mt-2 text-lg text-slate-600">The ultimate solution for accurate vision screening, anywhere.</p>
+                         <div className="mt-8 flex justify-center">
+                            <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Portable Phoropter" width={400} height={400} className="object-contain" data-ai-hint="medical device" />
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {whyChooseFeatures.map(feature => (
@@ -835,11 +838,11 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-800">The Complete Ecosystem</h2>
                         <p className="mt-2 text-lg text-slate-600">Everything you need for professional eye care, anywhere.</p>
-                    </div>
-                     <div className="grid md:grid-cols-1 gap-8 items-center">
-                        <div className="flex justify-center">
+                         <div className="mt-8 flex justify-center">
                             <Image src="https://www.drishtikit.com/whats_inside.png" alt="What's inside the DrishtiKit" width={600} height={600} />
                         </div>
+                    </div>
+                     <div className="grid md:grid-cols-1 gap-8 items-center">
                         <div className="space-y-6">
                             <Card className="flex items-start gap-4 p-6">
                                 <div className="p-3 bg-primary/10 rounded-full"><Globe className="w-6 h-6 text-primary"/></div>
