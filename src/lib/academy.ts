@@ -110,7 +110,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
       title: 'Official Organizer'
     },
     platform: 'Online Platform',
-    dateTime: '2025-11-02T13:00:00Z',
+    dateTime: new Date().toISOString(),
     duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
