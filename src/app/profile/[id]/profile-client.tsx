@@ -705,7 +705,6 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto mb-4 object-contain" data-ai-hint="logo eye"/>
                     <h1 className="text-4xl md:text-5xl font-bold text-slate-800 font-headline">DrishtiKit</h1>
                     <p className="mt-2 text-lg text-slate-600">A New Vision for Portable Eye Care</p>
-                    <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} className="mx-auto mt-8"/>
                     <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mt-8 font-headline">Revolutionary Eye Care Technology</h2>
                     <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
                         The world's most portable and affordable eye testing solution, making professional vision screenings accessible to every community.
