@@ -378,7 +378,7 @@ export default function Home() {
                                 <WebinarTime dateTime={webinar.dateTime} />
                               </div>
                               <Button asChild className="w-full mt-4" variant="destructive">
-                                <Link href={`/events/${webinar.id}`}>
+                                <Link href={`/academy/${webinar.id}`}>
                                   {webinar.id === 'eye-q-arena-2025' ? (
                                     <><Trophy className="mr-2 h-4 w-4" /> Enter The Quiz</>
                                   ) : 'Join Live'}

@@ -7,12 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { sendQuizStartNotification } from '@/lib/webhook';
+import { cn } from '@/lib/utils';
 
 
 // Debounce function
@@ -298,10 +299,16 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                             </DialogTrigger>
                             <QuizEntryDialog webinarId={webinar.id} />
                         </Dialog>
-                        <Button size="lg" variant="outline" className="w-full" asChild>
+                        <Button size="lg" variant="secondary" className="w-full" asChild>
+                            <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS?mode=wwt" target="_blank" rel="noopener noreferrer">
+                                <MessageCircle className="mr-2 h-5 w-5" />
+                                Join the WhatsApp Community
+                            </a>
+                        </Button>
+                        <Button size="lg" variant="outline" className="w-full shining-button" asChild>
                             <Link href="#leaderboard">
                               <BarChart className="mr-2 h-5 w-5" />
-                              Check Leaderboard!
+                              Check Leaderboard
                             </Link>
                         </Button>
                     </div>

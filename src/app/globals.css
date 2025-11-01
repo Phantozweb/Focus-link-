@@ -85,3 +85,35 @@
     width: 2rem; /* 32px */
   }
 }
+
+@layer components {
+  .shining-button {
+    position: relative;
+    overflow: hidden;
+  }
+  .shining-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transform: rotate(30deg);
+    animation: shine 3s infinite linear;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
