@@ -710,7 +710,12 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         The world's most portable and affordable eye testing solution, making professional vision screenings accessible to every community.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-                        <Button size="lg" asChild><a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a></Button>
+                        <Button size="lg" asChild>
+                            <a href="https://www.drishtikit.com/" target="_blank" rel="noopener noreferrer">
+                                <Globe className="mr-2 h-5 w-5" />
+                                Website
+                            </a>
+                        </Button>
                         <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
                     </div>
                 </div>
