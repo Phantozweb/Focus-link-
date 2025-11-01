@@ -32,6 +32,20 @@ const formatTime = (seconds: number) => {
 };
 
 export async function sendQuizStartNotification(membershipId: string) {
+    // This logs the entry to your Google Sheet via the new API route
+    try {
+        await fetch('/api/log-quiz-entry', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ membershipId }),
+        });
+    } catch (error) {
+        console.error("Failed to log quiz entry to Google Sheet:", error);
+    }
+    
+    // This sends a notification to your Discord channel
     const embed = {
         title: '🚀 Quiz Arena Entry',
         description: `A new participant has entered the arena!`,

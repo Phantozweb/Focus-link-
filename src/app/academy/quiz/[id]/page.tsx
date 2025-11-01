@@ -161,7 +161,7 @@ function QuizComponent() {
             setSession(updatedSession);
             localStorage.setItem(`quizSession-${id}`, JSON.stringify(updatedSession));
             
-            // Send Discord notification
+            // Log entry to backend and send Discord notification
             sendQuizStartNotification(currentSession.membershipId);
         } else {
              // No attempts left, force back to not-started
