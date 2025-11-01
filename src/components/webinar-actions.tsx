@@ -12,6 +12,7 @@ import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { sendQuizStartNotification } from '@/lib/webhook';
 
 
 // Debounce function
@@ -76,6 +77,8 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
         attemptsLeft: MAX_ATTEMPTS,
       };
       localStorage.setItem(`quizSession-${webinarId}`, JSON.stringify(session));
+      // Log entry to backend and send Discord notification
+      sendQuizStartNotification(membershipId);
       router.push(`/academy/quiz/${webinarId}/welcome`);
     }
   };

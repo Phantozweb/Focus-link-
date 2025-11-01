@@ -14,7 +14,7 @@ import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XC
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { sendQuizStartNotification, sendQuizResultNotification } from '@/lib/webhook';
+import { sendQuizResultNotification } from '@/lib/webhook';
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
@@ -160,9 +160,6 @@ function QuizComponent() {
             const updatedSession = { ...currentSession, attemptsLeft: currentSession.attemptsLeft - 1 };
             setSession(updatedSession);
             localStorage.setItem(`quizSession-${id}`, JSON.stringify(updatedSession));
-            
-            // Log entry to backend and send Discord notification
-            sendQuizStartNotification(currentSession.membershipId);
         } else {
              // No attempts left, force back to not-started
             setQuizState('not-started');
