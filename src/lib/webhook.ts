@@ -23,6 +23,7 @@ interface QuizResultPayload {
 
 const START_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433513938867196049/Vj3XRu2e1IttN_mvwdRK9RWv-SaIywdSI_cqlrxZpIuMi9KcvDMp6v759xe2CMRNOHQp';
 const RESULTS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyJGaDf-xT9XnI49HmKdktKrxti3N5cxKGGfJZEUAZQCaGvPCJR9iR00FnbqqGbo6bhdw/exec';
+const DISCORD_RESULTS_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433514964987150477/7KpL0rAmZIOihjNOMFxbibt-tHeD_M7JNQjKnEuzpm1o101vGCZjgWKw0mJ8Uar2MjA2';
 
 
 const formatTime = (seconds: number) => {
@@ -95,10 +96,6 @@ export async function sendQuizResultNotification(payload: QuizResultPayload) {
     }
 
     // Send to Discord
-    const webhookUrl = overallPassed 
-        ? 'https://discord.com/api/webhooks/1433514964987150477/7KpL0rAmZIOihjNOMFxbibt-tHeD_M7JNQjKnEuzpm1o101vGCZjgWKw0mJ8Uar2MjA2' 
-        : 'https://discord.com/api/webhooks/1433515934475223040/ZMFuaw1Qlv02vhSBujdo1TvdogNQXngfJurDfDORvP02-p4asokLauPysL8xToo6zDu5';
-        
     const title = overallPassed ? '✅ Quiz Passed!' : '❌ Quiz Failed';
     const color = overallPassed ? 3066993 : 15158332; // Green or Red
 
@@ -135,7 +132,7 @@ export async function sendQuizResultNotification(payload: QuizResultPayload) {
     };
 
     try {
-        await fetch(webhookUrl, {
+        await fetch(DISCORD_RESULTS_WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ embeds: [embed] }),
