@@ -22,8 +22,8 @@ interface QuizResultPayload {
 }
 
 const START_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433513938867196049/Vj3XRu2e1IttN_mvwdRK9RWv-SaIywdSI_cqlrxZpIuMi9KcvDMp6v759xe2CMRNOHQp';
-const PASS_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433514964987150477/7KpL0rAmZIOihjNOMFxbibt-tHeD_M7JNQjKnEuzpm1o101vGCZjgWKw0mJ8Uar2MjA2';
-const FAIL_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433515934475223040/ZMFuaw1Qlv02vhSBujdo1TvdogNQXngfJurDfDORvP02-p4asokLauPysL8xToo6zDu5';
+const RESULTS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyJGaDf-xT9XnI49HmKdktKrxti3N5cxKGGfJZEUAZQCaGvPCJR9iR00FnbqqGbo6bhdw/exec';
+
 
 const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -81,8 +81,24 @@ export async function sendQuizStartNotification(membershipId: string) {
 
 export async function sendQuizResultNotification(payload: QuizResultPayload) {
     const { membershipId, finalScore, totalPossiblePoints, totalTimeTaken, overallPercentage, overallPassed, moduleResults, attemptsLeft } = payload;
+    
+    // Send to Google Apps Script
+    try {
+        await fetch(RESULTS_WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Use no-cors as Apps Script webhooks often have CORS issues
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    } catch (error) {
+        console.error("Failed to send quiz result to Google Sheet:", error);
+    }
 
-    const webhookUrl = overallPassed ? PASS_WEBHOOK_URL : FAIL_WEBHOOK_URL;
+    // Send to Discord
+    const webhookUrl = overallPassed 
+        ? 'https://discord.com/api/webhooks/1433514964987150477/7KpL0rAmZIOihjNOMFxbibt-tHeD_M7JNQjKnEuzpm1o101vGCZjgWKw0mJ8Uar2MjA2' 
+        : 'https://discord.com/api/webhooks/1433515934475223040/ZMFuaw1Qlv02vhSBujdo1TvdogNQXngfJurDfDORvP02-p4asokLauPysL8xToo6zDu5';
+        
     const title = overallPassed ? '✅ Quiz Passed!' : '❌ Quiz Failed';
     const color = overallPassed ? 3066993 : 15158332; // Green or Red
 
@@ -125,6 +141,6 @@ export async function sendQuizResultNotification(payload: QuizResultPayload) {
             body: JSON.stringify({ embeds: [embed] }),
         });
     } catch (error) {
-        console.error("Failed to send quiz result notification:", error);
+        console.error("Failed to send quiz result notification to Discord:", error);
     }
 }
