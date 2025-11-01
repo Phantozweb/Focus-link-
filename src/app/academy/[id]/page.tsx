@@ -327,7 +327,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                 </h3>
                                 {demoLeaderboardData.length > 0 && <p className="text-sm text-muted-foreground font-semibold">{demoLeaderboardData.length} Participants</p>}
                             </div>
-                            <Leaderboard data={demoLeaderboardData} itemsPerPage={30} />
+                            <Leaderboard data={demoLeaderboardData} itemsPerPage={10} />
                           </section>
                         </>
                        )}
