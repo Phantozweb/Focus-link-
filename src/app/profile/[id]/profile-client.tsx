@@ -790,7 +790,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         </div>
                         <div className="flex flex-wrap justify-center md:justify-end items-center gap-8">
                             <Image src="https://www.drishtikit.com/dpiit.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
-                            <Image src="https://www/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
+                            <Image src="https://www.drishtikit.com/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
                         </div>
                     </div>
                 </section>
@@ -1020,7 +1020,7 @@ export function ProfileClient({ user }: { user: UserProfile }) {
                       src={user.avatarUrl} 
                       alt={`${user.name} - ${user.type}`} 
                       data-ai-hint={isOrg ? "logo building" : "portrait person"} 
-                      style={{ objectPosition: 'center 20%' }}
+                      style={{ objectPosition: user.id === '14' ? 'center 20%' : 'center' }}
                     />
                   ) : null}
                   <AvatarFallback className="text-6xl">
@@ -1139,3 +1139,6 @@ export function ProfileClient({ user }: { user: UserProfile }) {
   );
 }
 
+
+
+    
