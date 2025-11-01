@@ -18,6 +18,7 @@ import { sendQuizResultNotification, sendQuizStartNotification } from '@/lib/web
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
@@ -312,10 +313,14 @@ function QuizComponent() {
       const totalScore = finalResults.reduce((acc, r) => acc + r.score, 0);
       const totalBonus = finalResults.reduce((acc, r) => acc + r.bonusPoints, 0);
       const finalScore = totalScore + totalBonus;
-      const totalPossiblePoints = finalResults.reduce((acc, r) => acc + r.totalPoints + r.bonusPoints, 0);
+      const totalPossiblePoints = finalResults.reduce((acc, r) => acc + r.totalPoints + r.timeBonus, 0);
       const totalTimeTaken = finalResults.reduce((acc, r) => acc + r.timeTaken, 0);
+      
+      // Check if EVERY module was passed
+      const allModulesPassed = finalResults.every(r => r.passed);
+      
       const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
-      const overallPassed = overallPercentage >= PASS_PERCENTAGE;
+      const overallPassed = allModulesPassed && (overallPercentage >= PASS_PERCENTAGE);
 
       if (session) {
         sendQuizResultNotification({
@@ -334,7 +339,7 @@ function QuizComponent() {
 
   const handleNextModule = useCallback(() => {
     const {score, totalPoints, bonusPoints, timeTaken} = calculateModuleScore();
-    const passed = (score / totalPoints) >= PASS_PERCENTAGE;
+    const passed = (totalPoints > 0 ? (score / totalPoints) : 0) >= PASS_PERCENTAGE;
     
     const newResult: ModuleResult = {
       topic: currentModule.topic,
@@ -449,16 +454,23 @@ function QuizComponent() {
        const totalScore = moduleResults.reduce((acc, r) => acc + r.score, 0);
        const totalBonus = moduleResults.reduce((acc, r) => acc + r.bonusPoints, 0);
        const finalScore = totalScore + totalBonus;
-       const totalPossiblePoints = moduleResults.reduce((acc, r) => acc + r.totalPoints + r.bonusPoints, 0);
+       const totalPossiblePoints = moduleResults.reduce((acc, r) => acc + r.totalPoints + r.timeBonus, 0);
        const totalTimeTaken = moduleResults.reduce((acc, r) => acc + r.timeTaken, 0);
+       const allModulesPassed = moduleResults.every(r => r.passed);
        const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
-       const overallPassed = overallPercentage >= PASS_PERCENTAGE;
+       const overallPassed = allModulesPassed && (overallPercentage >= PASS_PERCENTAGE);
 
       return (
          <div className="text-center">
             <Trophy className="h-16 w-16 text-amber-500 mx-auto mb-4" />
             <h1 className="text-3xl font-bold font-headline">Quiz Complete!</h1>
-            <p className="text-muted-foreground mt-2">You have finished the Eye Q Arena challenge. Here are your results.</p>
+            
+            {overallPassed ? (
+              <p className="text-muted-foreground mt-2">Congratulations! You've passed the Eye Q Arena challenge. Here are your results.</p>
+            ) : (
+              <p className="text-muted-foreground mt-2">You have finished this attempt. Here are your results.</p>
+            )}
+
              <Card className="mt-8 text-left">
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between">
@@ -483,6 +495,27 @@ function QuizComponent() {
                           <p className="text-4xl font-bold font-mono">{formatTime(totalTimeTaken)}</p>
                       </div>
                    </div>
+
+                    {overallPassed ? (
+                        <Alert className="bg-green-50 border-green-200">
+                            <CheckCircle className="h-4 w-4 text-green-700" />
+                            <AlertTitle className="font-bold text-green-800">Certificate Information</AlertTitle>
+                            <AlertDescription className="text-green-700">
+                                You will receive your official Certificate of Participation after the event ends on November 12th, 2025.
+                            </AlertDescription>
+                        </Alert>
+                    ) : (
+                        session && session.attemptsLeft > 0 && (
+                             <Alert variant="destructive">
+                                <XCircle className="h-4 w-4" />
+                                <AlertTitle>Don't Give Up!</AlertTitle>
+                                <AlertDescription>
+                                    You have <strong>{session.attemptsLeft} {session.attemptsLeft === 1 ? 'attempt' : 'attempts'} left</strong>. Review your results and try again to earn your certificate!
+                                </AlertDescription>
+                            </Alert>
+                        )
+                    )}
+
                    <h3 className="font-semibold pt-4">Module Breakdown</h3>
                     <Table>
                       <TableHeader>
@@ -518,9 +551,11 @@ function QuizComponent() {
                 </CardContent>
              </Card>
              <div className="mt-8 flex gap-4">
-                <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')} disabled={!session || session.attemptsLeft <= 0}>
-                    Try Again ({session ? Math.max(0, session.attemptsLeft) : MAX_ATTEMPTS - 1} attempts left)
-                </Button>
+                {!overallPassed && session && session.attemptsLeft > 0 && (
+                    <Button size="lg" className="flex-1" variant="outline" onClick={() => setQuizState('countdown')}>
+                        Try Again ({session.attemptsLeft} {session.attemptsLeft === 1 ? 'attempt' : 'attempts'} left)
+                    </Button>
+                )}
                 <Button size="lg" className="flex-1" asChild>
                     <Link href={`/academy/${id}`}>Back to Leaderboard</Link>
                 </Button>
