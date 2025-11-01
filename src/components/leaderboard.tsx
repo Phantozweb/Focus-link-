@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Trophy, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
+import { Dialog, DialogTrigger } from './ui/dialog';
+import { QuizEntryDialog } from './webinar-actions';
 
 export type LeaderboardEntry = {
   rank: number;
@@ -77,11 +79,19 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
     return (
         <Card className="text-center">
             <CardContent className="p-8">
-                <Info className="h-10 w-10 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-semibold text-xl">The Leaderboard is Empty</h3>
-                <p className="text-muted-foreground mt-1">
-                    No participants have completed the quiz yet. Be the first to make it to the top!
+                <Trophy className="h-10 w-10 text-amber-500 mx-auto mb-4" />
+                <h3 className="font-semibold text-xl">Be the First on the Leaderboard!</h3>
+                <p className="text-muted-foreground mt-1 mb-4">
+                    No one has completed the quiz yet. Enter the arena now to claim the top spot.
                 </p>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button>
+                           <Trophy className="mr-2 h-4 w-4" /> Enter the Arena
+                        </Button>
+                    </DialogTrigger>
+                    <QuizEntryDialog webinarId="eye-q-arena-2025" />
+                </Dialog>
             </CardContent>
         </Card>
     );

@@ -36,7 +36,7 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   </div>
 );
 
-function QuizEntryDialog({ webinarId }: { webinarId: string }) {
+export function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
   const router = useRouter();
@@ -288,23 +288,23 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             return (
                 <div className="space-y-4 text-center">
                     <h3 className="font-semibold text-slate-700 mb-3">The Arena is Open!</h3>
-                    <Dialog>
-                        <div className="space-y-3 pt-3">
+                    <div className="space-y-3 pt-3">
+                        <Dialog>
                            <DialogTrigger asChild>
                                 <Button size="lg" className="w-full text-lg py-6 animate-pulse">
                                     <Trophy className="mr-2 h-6 w-6" />
                                     Enter Arena Now
                                 </Button>
                             </DialogTrigger>
-                            <Button size="lg" variant="outline" className="w-full" asChild>
-                                <Link href="#leaderboard">
-                                  <BarChart className="mr-2 h-5 w-5" />
-                                  Check Leaderboard!
-                                </Link>
-                            </Button>
-                        </div>
-                        <QuizEntryDialog webinarId={webinar.id} />
-                    </Dialog>
+                            <QuizEntryDialog webinarId={webinar.id} />
+                        </Dialog>
+                        <Button size="lg" variant="outline" className="w-full" asChild>
+                            <Link href="#leaderboard">
+                              <BarChart className="mr-2 h-5 w-5" />
+                              Check Leaderboard!
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             );
         }

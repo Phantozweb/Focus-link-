@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { allUsers } from '@/lib/data';
 
 // IMPORTANT: This must be the URL of your deployed Google Apps Script.
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJGaDf-xT9XnI49HmKdktKrxti3N5cxKGGfJZEUAZQCaGvPCJR9iR00FnbqqGbo6bhdw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7nvFaSoZeh5dFi_3lUc5rzNsFq0N7zobIn9nXNM8zMo7w6hCSszBCvOq-w5uv-kbW1A/exec';
 
 const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
