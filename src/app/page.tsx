@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, Info, MessageSquare, Building2 as CommunityIcon } from 'lucide-react';
+import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, Info, MessageSquare, Building2 as CommunityIcon, Trophy } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Label } from '@/components/ui/label';
 import { logSearch } from '@/lib/activity-logger';
+import { Leaderboard } from '@/components/leaderboard';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -334,6 +335,19 @@ export default function Home() {
                 </div>
               </Carousel>
             </section>
+            
+              <section id="leaderboard">
+                <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-slate-800 text-3xl font-bold font-headline flex items-center gap-2">
+                        <Trophy className="text-amber-500"/>
+                        Eye Q Arena Leaderboard
+                    </h2>
+                     <Button asChild variant="link" className="text-primary pr-0">
+                      <Link href="/academy/eye-q-arena-2025">View Full Leaderboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    </Button>
+                </div>
+                <Leaderboard itemsPerPage={5} />
+              </section>
 
               {liveWebinars.length > 0 && (
                 <section>

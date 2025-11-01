@@ -11,7 +11,7 @@ export type Question = {
 
 export const quizModules = [
   { topic: 'Eyelids & Adnexa', time: 5 * 60, totalPoints: 18, timeBonus: 2 },
-  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17, timeBonus: 2 },
+  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17, timeBonus: 1 },
   { topic: 'Cornea', time: 7 * 60, totalPoints: 20, timeBonus: 2 },
   { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60, totalPoints: 16, timeBonus: 1 },
   { topic: 'Iris & Pupil', time: 6 * 60, totalPoints: 15, timeBonus: 1 },
