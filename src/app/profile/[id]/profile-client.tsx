@@ -653,7 +653,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
     ];
 
     const whyChooseFeatures = [
-        { title: "Portable &amp; Lightweight", description: "Weighs only 2kg, fits in a briefcase.", icon: <Weight className="w-8 h-8 text-primary"/> },
+        { title: "Portable & Lightweight", description: "Weighs only 2kg, fits in a briefcase.", icon: <Weight className="w-8 h-8 text-primary"/> },
         { title: "Battery Powered", description: "8+ hours continuous operation.", icon: <BatteryCharging className="w-8 h-8 text-primary"/> },
         { title: "Easy to Use", description: "Minimal training required.", icon: <Puzzle className="w-8 h-8 text-primary"/> },
         { title: "Cost Effective", description: "90% lower cost than traditional setups.", icon: <Star className="w-8 h-8 text-primary"/> },
@@ -911,7 +911,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                  {/* Pricing */}
                 <section>
                     <Card className="bg-gradient-to-br from-primary to-cyan-600 text-white shadow-xl">
-                        <div className="grid md:grid-cols-2 items-center">
+                        <div className="grid md:grid-cols-1 items-center">
                             <div className="p-8">
                                  <h2 className="text-3xl font-bold">The DrishtiKit Complete System</h2>
                                 <p className="text-blue-100 text-lg mt-2">One kit with everything you need for professional vision screenings.</p>
@@ -926,9 +926,6 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                                 </ul>
                                 <OrderDialog user={user} />
                                 <p className="mt-4 text-sm text-blue-200">Bulk discounts available for 10+ units.</p>
-                            </div>
-                            <div className="p-8 hidden md:flex items-center justify-center">
-                                <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} />
                             </div>
                         </div>
                     </Card>
