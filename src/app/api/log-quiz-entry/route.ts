@@ -1,8 +1,9 @@
+
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   // IMPORTANT: Replace this with your actual Google Apps Script URL for logging quiz entries.
-  const scriptUrl = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+  const scriptUrl = "https://script.google.com/macros/s/AKfycby9IVSbEhppYKaW52xigSWGjIBnYfqtIobFf9inNrzP2CUPHa5qwVmTPF7U8VN277fAUw/exec";
   
   try {
     const { membershipId } = await request.json();
