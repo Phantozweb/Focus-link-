@@ -11,7 +11,7 @@ export type Question = {
 
 export const quizModules = [
   { topic: 'Eyelids & Adnexa', time: 5 * 60, totalPoints: 18, timeBonus: 2 },
-  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17, timeBonus: 1 },
+  { topic: 'Conjunctiva & Sclera', time: 6 * 60, totalPoints: 17, timeBonus: 2 },
   { topic: 'Cornea', time: 7 * 60, totalPoints: 20, timeBonus: 2 },
   { topic: 'Anterior Chamber & Aqueous Humor', time: 6 * 60, totalPoints: 16, timeBonus: 1 },
   { topic: 'Iris & Pupil', time: 6 * 60, totalPoints: 15, timeBonus: 1 },
@@ -451,7 +451,7 @@ export const questions: Question[] = [
     
     // Module 4: Anterior Chamber & Aqueous Humor (Total Points: 16)
     { id: 'm4q1', module: 'Anterior Chamber & Aqueous Humor', text: 'Aqueous humor is actively secreted by which specific structure?', options: [{ id: 'a', text: 'Pigmented epithelium of the ciliary body' }, { id: 'b', text: 'Non-pigmented epithelium of the ciliary body' }, { id: 'c', text: 'Ciliary muscle' }, { id: 'd', text: 'Iris stroma' }], correctAnswer: 'b', difficulty: 'medium', points: 2 },
-    { id: 'm4q2', module: 'Anterior Chamber & Aqueous Humor', text: 'The conventional (trabecular) pathway accounts for approximately 80-90% of aqueous humor outflow. What is the correct sequence of this pathway?', options: [{ id: 'a', text: 'Uveoscleral pathway -> Suprachoroidal space' }, { id: 'b', text: 'Trabecular meshwork -> Schlemm\'s canal -> Episcleral veins' }, { id: 'c', text: 'Iris root -> Suprachoroidal space' }, { id: 'd', text: 'Schlemm\'s canal -> Trabecular meshwork -> Episcleral veins' }], correctAnswer: 'd', difficulty: 'easy', points: 1 },
+    { id: 'm4q2', module: 'Anterior Chamber & Aqueous Humor', text: 'The conventional (trabecular) pathway accounts for approximately 80-90% of aqueous humor outflow. What is the correct sequence of this pathway?', options: [{ id: 'a', text: 'Uveoscleral pathway -> Suprachoroidal space' }, { id: 'b', text: 'Trabecular meshwork -> Schlemm\'s canal -> Episcleral veins' }, { id: 'c', text: 'Iris root -> Suprachoroidal space' }, { id: 'd', text: 'Schlemm\'s canal -> Trabecular meshwork -> Episcleral veins' }], correctAnswer: 'b', difficulty: 'easy', points: 1 },
     { id: 'm4q3', module: 'Anterior Chamber & Aqueous Humor', text: 'Hyphema, a medical emergency, is defined as the presence of what in the anterior chamber?', options: [{ id: 'a', text: 'Pus (hypopyon)' },{ id: 'b', text: 'Red blood cells' },{ id: 'c', text: 'Lens particles (phacolytic uveitis)' },{ id: 'd', text: 'Pigment cells' }], correctAnswer: 'b', difficulty: 'easy', points: 1 },
     { id: 'm4q4', module: 'Anterior Chamber & Aqueous Humor', text: 'A patient with open-angle glaucoma is prescribed latanoprost (a prostaglandin analog). What is the primary mechanism of action for this class of medication?', options: [{ id: 'a', text: 'Decreasing aqueous production' },{ id: 'b', text: 'Increasing outflow through the trabecular meshwork' },{ id: 'c', text: 'Increasing outflow through the uveoscleral (unconventional) pathway' },{ id: 'd', text: 'Causing miosis to stretch the trabecular meshwork' }], correctAnswer: 'c', difficulty: 'hard', points: 5 },
     { id: 'm4q5', module: 'Anterior Chamber & Aqueous Humor', text: 'The normal depth of the central anterior chamber in a healthy adult eye is typically around:', options: [{ id: 'a', text: '1.5 mm' },{ id: 'b', text: '2.0 mm' },{ id: 'c', text: '3.0 - 3.5 mm' },{ id: 'd', text: '5.0 mm' }], correctAnswer: 'c', difficulty: 'easy', points: 1 },
