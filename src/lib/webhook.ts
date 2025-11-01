@@ -109,7 +109,7 @@ export async function sendQuizResultNotification(payload: QuizResultPayload) {
             },
             {
                 name: '--- Module Breakdown ---',
-                value: '\u200b' // Zero-width space
+                value: '​' // Zero-width space
             },
             ...moduleFields
         ],
