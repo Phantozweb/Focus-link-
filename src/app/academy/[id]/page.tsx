@@ -132,9 +132,6 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     notFound();
   }
 
-  const eventStartTime = new Date(webinar.dateTime).getTime();
-  const hasStarted = new Date().getTime() >= eventStartTime;
-
   const eventSchema = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -319,7 +316,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
                       {isQuiz ? <OrganizerInfo webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
 
-                       {isQuiz && hasStarted && (
+                       {isQuiz && (
                         <>
                           <Separator />
                           <section>
