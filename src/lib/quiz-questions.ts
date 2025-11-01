@@ -19,7 +19,7 @@ export const quizModules = [
   { topic: 'Vitreous Body', time: 5 * 60, totalPoints: 15, timeBonus: 1 },
   { topic: 'Retina', time: 9 * 60, totalPoints: 24, timeBonus: 2 },
   { topic: 'Optic Nerve & Pathways', time: 9 * 60, totalPoints: 24, timeBonus: 2 },
-  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60, totalPoints: 16, timeBonus: 1 },
+  { topic: 'Extraocular Muscles & Ocular Motility', time: 5 * 60, totalPoints: 16, timeBonus: 2 },
 ];
 
 export const questions: Question[] = [
