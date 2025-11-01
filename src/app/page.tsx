@@ -336,19 +336,6 @@ export default function Home() {
               </Carousel>
             </section>
             
-              <section id="leaderboard">
-                <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-slate-800 text-3xl font-bold font-headline flex items-center gap-2">
-                        <Trophy className="text-amber-500"/>
-                        Eye Q Arena Leaderboard
-                    </h2>
-                     <Button asChild variant="link" className="text-primary pr-0">
-                      <Link href="/academy/eye-q-arena-2025">View Full Leaderboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                    </Button>
-                </div>
-                <Leaderboard itemsPerPage={5} />
-              </section>
-
               {liveWebinars.length > 0 && (
                 <section>
                   <div className="flex justify-between items-center mb-8">
