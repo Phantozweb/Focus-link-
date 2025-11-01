@@ -24,8 +24,11 @@ export default function QuizWelcomePage() {
     if (storedSession) {
       const session = JSON.parse(storedSession);
       setMembershipId(session.membershipId);
+    } else {
+        // If there's no session, they shouldn't be here. Redirect them.
+        router.replace(`/academy/quiz/${id}`);
     }
-  }, [id]);
+  }, [id, router]);
 
   const totalQuestions = quizModules.length * 10;
   const totalTime = quizModules.reduce((acc, m) => acc + m.time, 0) / 60;

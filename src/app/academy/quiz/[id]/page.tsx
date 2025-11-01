@@ -10,11 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User, Info } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { sendQuizResultNotification } from '@/lib/webhook';
+import { sendQuizResultNotification, sendQuizStartNotification } from '@/lib/webhook';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 
 const TOTAL_QUESTIONS_PER_MODULE = 10;
 const BREAK_TIME_SECONDS = 120; // 2 minutes
@@ -37,6 +40,120 @@ type QuizSession = {
   membershipId: string;
   attemptsLeft: number;
 };
+
+// Debounce function
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+function QuizEntryDialog({ webinarId }: { webinarId: string }) {
+  const [membershipId, setMembershipId] = useState('');
+  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+  const router = useRouter();
+
+  const checkIdValidity = useCallback(debounce(async (id: string) => {
+    if (!id || id.trim().length < 5) {
+      setIdStatus('idle');
+      return;
+    }
+    setIdStatus('loading');
+    try {
+      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
+      const data = await response.json();
+      if (data.isValid) {
+        setIdStatus('valid');
+      } else {
+        setIdStatus('invalid');
+      }
+    } catch (error) {
+      console.error('ID validation failed:', error);
+      setIdStatus('invalid');
+    }
+  }, 500), []);
+  
+   useEffect(() => {
+    if (membershipId) {
+      checkIdValidity(membershipId);
+    } else {
+      setIdStatus('idle');
+    }
+  }, [membershipId, checkIdValidity]);
+
+  const handleStartQuiz = () => {
+    if (idStatus === 'valid') {
+       // Save session to local storage before navigating
+      const storedSession = localStorage.getItem(`quizSession-${webinarId}`);
+      let attemptsLeft = MAX_ATTEMPTS;
+
+      if (storedSession) {
+          const parsedSession = JSON.parse(storedSession);
+          if (parsedSession.membershipId === membershipId) {
+            attemptsLeft = parsedSession.attemptsLeft > 0 ? parsedSession.attemptsLeft : MAX_ATTEMPTS;
+          }
+      }
+      
+      const session = {
+        membershipId: membershipId,
+        attemptsLeft: attemptsLeft,
+      };
+      localStorage.setItem(`quizSession-${webinarId}`, JSON.stringify(session));
+
+      // Log entry to backend and send Discord notification
+      sendQuizStartNotification(membershipId);
+      router.push(`/academy/quiz/${webinarId}/welcome`);
+    }
+  };
+
+  return (
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader className="text-center items-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 mb-2">
+            <Trophy className="h-8 w-8 text-amber-500" />
+        </div>
+        <DialogTitle className="text-2xl font-headline">Enter the Arena</DialogTitle>
+        <DialogDescription>
+          Please enter your Focus Links membership ID to begin the quiz.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="space-y-4 py-4">
+        <div className="space-y-2">
+          <Label htmlFor="membership-id" className="sr-only">Membership ID</Label>
+           <div className="relative">
+            <Input 
+              id="membership-id" 
+              value={membershipId}
+              onChange={(e) => setMembershipId(e.target.value)}
+              placeholder="Your Membership ID"
+              className="text-center h-12 text-base"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+              {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+              {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+            </div>
+          </div>
+          {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid or does not exist.</p>}
+        </div>
+      </div>
+      <DialogFooter className="sm:justify-between flex-col-reverse sm:flex-row gap-2">
+         <div className="text-sm text-muted-foreground">
+            Not a member?{' '}
+            <Button variant="link" asChild className="p-0 h-auto">
+                <Link href="/membership#membership-join">Join for free</Link>
+            </Button>
+        </div>
+        <Button onClick={handleStartQuiz} disabled={idStatus !== 'valid'}>
+            <Trophy className="mr-2 h-4 w-4" />
+            Start Quiz
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  )
+}
 
 
 function QuizComponent() {
@@ -282,12 +399,15 @@ function QuizComponent() {
               <p>Are you ready to test your knowledge?</p>
             </CardContent>
           </Card>
-          <Button size="lg" className="mt-8 text-lg" asChild>
-            <Link href={`/academy/quiz/${id}/welcome`}>
-                <Play className="mr-2 h-6 w-6" />
-                Start Quiz
-            </Link>
-          </Button>
+           <Dialog>
+              <DialogTrigger asChild>
+                <Button size="lg" className="mt-8 text-lg w-full">
+                    <Play className="mr-2 h-6 w-6" />
+                    Start Quiz
+                </Button>
+              </DialogTrigger>
+              <QuizEntryDialog webinarId={id} />
+            </Dialog>
         </div>
       );
     }
