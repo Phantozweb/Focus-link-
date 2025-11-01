@@ -182,7 +182,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
                 )}
               
                 <section>
-                  <h2 className="text-xl font-bold font-headline mb-4">Skills & Interests</h2>
+                  <h2 className="text-xl font-bold font-headline mb-4">Skills &amp; Interests</h2>
                    <div className="mb-6">
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
                           <Lightbulb className="h-5 w-5 text-accent" /> Skills
@@ -653,7 +653,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
     ];
 
     const whyChooseFeatures = [
-        { title: "Portable & Lightweight", description: "Weighs only 2kg, fits in a briefcase.", icon: <Weight className="w-8 h-8 text-primary"/> },
+        { title: "Portable &amp; Lightweight", description: "Weighs only 2kg, fits in a briefcase.", icon: <Weight className="w-8 h-8 text-primary"/> },
         { title: "Battery Powered", description: "8+ hours continuous operation.", icon: <BatteryCharging className="w-8 h-8 text-primary"/> },
         { title: "Easy to Use", description: "Minimal training required.", icon: <Puzzle className="w-8 h-8 text-primary"/> },
         { title: "Cost Effective", description: "90% lower cost than traditional setups.", icon: <Star className="w-8 h-8 text-primary"/> },
@@ -700,7 +700,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
             </section>
             
             {/* Hero Section */}
-            <section className="bg-white">
+             <section className="bg-white">
                  <div className="container mx-auto px-4 py-12 md:py-20 text-center">
                     <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto mb-4 object-contain" data-ai-hint="logo eye"/>
                     <h1 className="text-4xl md:text-5xl font-bold text-slate-800 font-headline">DrishtiKit</h1>
@@ -836,7 +836,10 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-800">The Complete Ecosystem</h2>
                         <p className="mt-2 text-lg text-slate-600">Everything you need for professional eye care, anywhere.</p>
                     </div>
-                     <div className="grid md:grid-cols-2 gap-8 items-center">
+                     <div className="grid md:grid-cols-1 gap-8 items-center">
+                        <div className="flex justify-center">
+                            <Image src="https://www.drishtikit.com/whats_inside.png" alt="What's inside the DrishtiKit" width={600} height={600} />
+                        </div>
                         <div className="space-y-6">
                             <Card className="flex items-start gap-4 p-6">
                                 <div className="p-3 bg-primary/10 rounded-full"><Globe className="w-6 h-6 text-primary"/></div>
@@ -855,13 +858,10 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                             <Card className="flex items-start gap-4 p-6">
                                 <div className="p-3 bg-primary/10 rounded-full"><Wrench className="w-6 h-6 text-primary"/></div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-800 mb-1">Training & Support</h3>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-1">Training &amp; Support</h3>
                                     <p className="text-slate-600">Comprehensive video modules, live sessions, and 24/7 technical support.</p>
                                 </div>
                             </Card>
-                        </div>
-                         <div className="hidden sm:flex justify-center">
-                            <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} />
                         </div>
                     </div>
                 </section>
@@ -917,18 +917,18 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                                 <p className="text-blue-100 text-lg mt-2">One kit with everything you need for professional vision screenings.</p>
                                 <ul className="text-left space-y-2 my-6">
                                     <li className="flex items-center gap-2"><Check/> Portable Phoropter</li>
-                                    <li className="flex items-center gap-2"><Check/> Distance & Near Vision Charts</li>
+                                    <li className="flex items-center gap-2"><Check/> Distance &amp; Near Vision Charts</li>
                                     <li className="flex items-center gap-2"><Check/> Color Vision Testing Book</li>
                                     <li className="flex items-center gap-2"><Check/> Amsler Grid</li>
                                     <li className="flex items-center gap-2"><Check/> Durable Carrying Case</li>
                                     <li className="flex items-center gap-2"><Check/> AI-Powered Mobile App</li>
-                                    <li className="flex items-center gap-2"><Check/> 2-Year Warranty & Support</li>
+                                    <li className="flex items-center gap-2"><Check/> 2-Year Warranty &amp; Support</li>
                                 </ul>
                                 <OrderDialog user={user} />
                                 <p className="mt-4 text-sm text-blue-200">Bulk discounts available for 10+ units.</p>
                             </div>
                             <div className="p-8 hidden md:flex items-center justify-center">
-                                <Image src="https://www.drishtikit.com/whats_inside.png" alt="What's inside the DrishtiKit" width={500} height={500} />
+                                <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} />
                             </div>
                         </div>
                     </Card>
@@ -990,7 +990,7 @@ export function ProfileClient({ user }: { user: UserProfile }) {
       switch (user.type) {
         case 'Hospital': return 'Services';
         case 'Optical': return 'Brands';
-        case 'Industry': return 'Products & Services';
+        case 'Industry': return 'Products &amp; Services';
         case 'College': 
         default: return 'Focus Areas';
       }
@@ -1122,7 +1122,7 @@ export function ProfileClient({ user }: { user: UserProfile }) {
                 )}
               
                 <section>
-                  <h2 className="text-xl font-bold font-headline mb-4">{isIndividual ? 'Skills & Interests' : 'Focus Areas & Keywords'}</h2>
+                  <h2 className="text-xl font-bold font-headline mb-4">{isIndividual ? 'Skills &amp; Interests' : 'Focus Areas &amp; Keywords'}</h2>
                   <div className="mb-6">
                       <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
                           <Lightbulb className="h-5 w-5 text-accent" /> {isIndividual ? 'Skills' : getOrgSpecificTitle('skills')}
