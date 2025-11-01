@@ -486,5 +486,103 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['English', 'Tamil', 'Telugu'],
     verified: true,
+  },
+  {
+    id: '15',
+    name: 'Mohd Tahseen Raza Khan',
+    type: 'Optometrist',
+    experience: 'Speciality Contact Lens Practitioner | Trainer | Consultant Optometrist',
+    location: 'Bareilly, Uttar Pradesh, India',
+    skills: [
+      'Scleral Lens Fittings',
+      'Orthok Lens Fittings',
+      'Corneal RGP Lens Fittings',
+      'Optometry Training',
+      'Vision Therapy',
+      'Effective Communication',
+      'Myopia Control',
+      'Management',
+      'Marketing'
+    ],
+    interests: [
+      'AI in Eye Care',
+      'Contact lens advancement',
+      'Awareness among General Public',
+      'Treatment in Complex Eye Conditions',
+      'New Research in Eye Care',
+      'Advancement in Vision Therapy'
+    ],
+    bio: "Passionate and dedicated Speciality Contact Lens Practitioner and Optometrist providing comprehensive eye care and personalized contact lens solutions. Expertise in fitting and managing specialty contact lenses for complex corneal conditions.\n\nSkilled in delivering engaging and informative presentations, translating complex concepts into accessible knowledge for diverse audiences. Committed to continuous learning and staying abreast of the latest advancements in eye care.\n\nAs a dedicated Scleral Lens Specialist, Orthokeratology Advocate, and Myopia Control Enthusiast, I'm on a mission to transform lives through exceptional vision care. I've honed my skills to provide custom solutions that go beyond conventional eye care.",
+    links: {
+      email: 'tahseenrazakhan123@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/mohd-tahseen-raza-khan-mtrk'
+    },
+    avatarUrl: 'https://i.ibb.co/XrNB2vVJ/5-S9-A8865-2.jpg',
+    workExperience: [
+      {
+        title: 'Professional Services',
+        company: 'VisiXpert',
+        startDate: 'Nov 2024',
+        endDate: 'Present',
+        description: 'Speciality contact lens - manage, presentation, training, practitioner, communication, sales'
+      },
+      {
+        title: 'Sales Manager and CL Specialist',
+        company: 'Parekh Integrated Services Pvt. Ltd.',
+        startDate: 'December 2023',
+        endDate: 'June 2024',
+        duration: '7 months',
+        description: 'Speciality contact lens - manage, presentation, training, practitioner, communication, sales'
+      },
+      {
+        title: 'Speciality Contact Lens Practice/Presentation',
+        company: 'Freelance',
+        startDate: 'August 2023',
+        endDate: 'November 2023',
+        duration: '4 months',
+        description: 'Speciality Contact Lens Practice, Presentations and Trainings to Eye Care Professionals'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Global Eye Hospital India',
+        startDate: 'October 2022',
+        endDate: 'June 2023',
+        duration: '9 months',
+        description: ''
+      },
+      {
+        title: 'Optometrist',
+        company: 'SRMS Institutions',
+        startDate: 'August 2021',
+        endDate: 'September 2022',
+        duration: '1 year 2 months',
+        description: 'I spent a year as an intern in the Ophthalmology Department at SRMS Hospital, Bareilly, UP. This experience taught me so much and helped me to gain self-confidence in talking to patients, diagnosing, and treating them.'
+      }
+    ],
+    education: [
+       {
+        school: 'Sikkim Skill University',
+        degree: 'MSc. Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2022',
+        endYear: '2024'
+      },
+      {
+        school: 'SRMS Institute',
+        degree: 'B.Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2017',
+        endYear: '2021'
+      },
+      {
+        school: 'Silver Line Laboratories Delhi',
+        degree: 'Fellowship in Speciality Contact Lenses, Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: 'July 2023',
+        endYear: 'September 2023'
+      }
+    ],
+    languages: ['Hindi (Native)', 'English (Professional)', 'Urdu'],
+    verified: true
   }
 ];
