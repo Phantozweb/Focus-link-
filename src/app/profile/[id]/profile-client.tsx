@@ -6,7 +6,7 @@ import { notFound, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone, Check, Star, Users, ShieldCheck, BatteryCharging, Weight, Puzzle, Award, PlayCircle, Package, Server, Wrench } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone, Check, Star, Users, ShieldCheck, BatteryCharging, Weight, Puzzle, Award, PlayCircle, Package, Server, Wrench, Handshake } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
@@ -533,7 +533,7 @@ Sent via Focus Links - The Global Eye Care Community
                 <DialogDescription>{description}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="inquiry-name">Name</Label>
                         <Input id="inquiry-name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -601,7 +601,7 @@ Sent via Focus Links - The Global Eye Care Community`;
                 </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="order-name">Your Name</Label>
                         <Input id="order-name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -615,7 +615,7 @@ Sent via Focus Links - The Global Eye Care Community`;
                     <Label htmlFor="order-org">Organization / Hospital</Label>
                     <Input id="order-org" value={organization} onChange={(e) => setOrganization(e.target.value)} />
                 </div>
-                 <div className="grid grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                      <div className="space-y-2">
                         <Label htmlFor="order-country">Country</Label>
                         <Input id="order-country" value={country} onChange={(e) => setCountry(e.target.value)} />
@@ -689,42 +689,56 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
 
     return (
         <div className="bg-background">
-            {/* Hero Section */}
-            <section className="bg-slate-50 border-b">
-                <div className="container mx-auto px-4 py-16 grid md:grid-cols-2 gap-8 items-center">
+            {/* Banner Section */}
+            <section className="relative h-64 md:h-80 w-full">
+                 <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter Banner" fill style={{objectFit: 'cover'}} className="opacity-20" />
+                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+                 <div className="relative container mx-auto px-4 h-full flex flex-col justify-end pb-8 md:pb-12 text-center">
+                    <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto mb-4 rounded-lg" data-ai-hint="logo eye"/>
+                     <h1 className="text-3xl md:text-5xl font-bold text-slate-800 mb-2 font-headline">A New Vision for Portable Eye Care</h1>
+                     <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+                        The world's most portable and affordable eye testing solution, making professional vision screenings accessible to every community.
+                     </p>
+                 </div>
+            </section>
+
+             {/* Partnership Section */}
+            <section className="bg-blue-50 border-y">
+                <div className="container mx-auto px-4 py-4 text-center">
+                    <p className="font-semibold text-blue-800 flex items-center justify-center gap-2">
+                        <Handshake className="h-5 w-5"/>
+                        Focus Links is proud to partner with DrishtiKit to advance global eye care innovation.
+                    </p>
+                </div>
+            </section>
+
+            
+            <div className="container mx-auto py-12 md:py-16 px-4 sm:px-6 lg:px-8 space-y-16 md:space-y-20">
+                 {/* Hero Section */}
+                <section className="grid md:grid-cols-2 gap-8 items-center">
                     <div className="text-center md:text-left">
-                        <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto md:mx-0 mb-4" data-ai-hint="logo eye"/>
-                        <h1 className="text-3xl lg:text-4xl font-bold text-slate-800 mb-4 font-headline">A New Vision for Portable Eye Care</h1>
-                        <p className="text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
-                            The DrishtiKit is a complete, all-in-one phoropter solution, making professional vision screenings accessible and affordable for every community.
+                        <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 font-headline">Revolutionary Eye Care Technology</h2>
+                        <p className="text-base md:text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
+                             Conduct comprehensive vision screenings anywhere with our revolutionary all-in-one portable phoropter.
                         </p>
-                        <div className="flex justify-center md:justify-start gap-4 mt-8">
+                        <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mt-8">
                             <Button size="lg" asChild><a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a></Button>
                             <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center">
-                        <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter Device" width={400} height={400} className="drop-shadow-2xl" />
+                     <div className="flex items-center justify-center">
+                        <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+                            {stats.map(stat => (
+                                <div key={stat.label} className="text-center">
+                                    <h3 className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</h3>
+                                    <p className="text-muted-foreground text-sm">{stat.label}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
-            
-            {/* Stats Section */}
-            <section className="bg-muted/50 py-12">
-                <div className="container mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {stats.map(stat => (
-                            <div key={stat.label} className="text-center flex flex-col items-center">
-                                {stat.icon}
-                                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mt-2">{stat.value}</h3>
-                                <p className="text-muted-foreground text-sm">{stat.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+                </section>
 
-             <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-20">
+
                 {/* Mobile App Section */}
                 <section className="grid md:grid-cols-2 gap-12 items-center">
                     <div className="flex justify-center md:order-2">
@@ -732,7 +746,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                             <CarouselContent>
                                 {appScreenshots.map((src, index) => (
                                 <CarouselItem key={index}>
-                                    <Image src={src} alt={`DrishtiKit App Screenshot ${index + 1}`} width={400} height={800} className="rounded-2xl shadow-2xl" data-ai-hint="mobile phone"/>
+                                    <Image src={src} alt={`DrishtiKit App Screenshot ${index + 1}`} width={400} height={800} className="rounded-2xl shadow-xl border" data-ai-hint="mobile phone"/>
                                 </CarouselItem>
                                 ))}
                             </CarouselContent>
@@ -741,7 +755,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     <div className="md:order-1">
                         <h2 className="text-3xl font-bold text-slate-800 mb-4">Your Digital Eye Care Companion</h2>
                         <p className="text-lg text-slate-600 mb-8">Our powerful app enables healthcare workers to conduct professional-level exams and manage patient data—even offline.</p>
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {mobileAppFeatures.map(feature => (
                                 <div key={feature.title} className="flex items-start gap-4">
                                     <div className="bg-primary/10 p-3 rounded-full">{feature.icon}</div>
@@ -771,8 +785,8 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     <p className="mt-2 text-lg text-slate-600 max-w-2xl mx-auto">
                         Watch how DrishtiKit is transforming vision screening in communities around the world.
                     </p>
-                    <Card className="mt-8 shadow-2xl overflow-hidden">
-                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    <Card className="mt-8 shadow-xl overflow-hidden border">
+                        <div className="relative w-full aspect-video">
                             <iframe 
                                 className="absolute top-0 left-0 w-full h-full"
                                 src="https://www.youtube.com/embed/_AeNy3nE928" 
@@ -787,13 +801,13 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
 
 
                 {/* Made in India Section */}
-                <section className="bg-slate-50 p-8 md:p-12 rounded-lg border">
+                <section className="bg-slate-50 p-8 rounded-lg border">
                     <div className="grid md:grid-cols-3 gap-8 items-center text-center">
                         <div className="md:col-span-2 md:text-left">
                             <h2 className="text-3xl font-bold text-slate-800">Proudly Made in India</h2>
                             <p className="text-lg text-slate-600 mt-4">DrishtiKit is an indigenous healthcare technology, officially recognized by DPIIT under the Startup India initiative, representing the best of Indian innovation in portable eye care.</p>
                         </div>
-                        <div className="flex flex-wrap justify-center md:justify-end items-center gap-8">
+                        <div className="flex flex-col sm:flex-row justify-center md:justify-end items-center gap-8">
                             <Image src="https://www.drishtikit.com/dpiit.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
                             <Image src="https://www.drishtikit.com/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
                         </div>
@@ -806,9 +820,9 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-800">The Portable Advantage</h2>
                         <p className="mt-2 text-lg text-slate-600">The ultimate solution for accurate vision screening, anywhere.</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {whyChooseFeatures.map(feature => (
-                            <div key={feature.title} className="text-center p-8 bg-card rounded-lg shadow-md hover:shadow-xl transition-shadow border">
+                            <div key={feature.title} className="text-center p-6 bg-card rounded-lg shadow-md hover:shadow-xl transition-shadow border">
                                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">{feature.icon}</div>
                                 <h3 className="text-xl font-bold text-slate-800 mb-2">{feature.title}</h3>
                                 <p className="text-slate-600">{feature.description}</p>
@@ -854,7 +868,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                                 </div>
                             </Card>
                         </div>
-                        <div className="flex justify-center">
+                         <div className="hidden sm:flex justify-center">
                             <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} />
                         </div>
                     </div>

@@ -19,6 +19,20 @@ export async function generateMetadata(
       title: 'Profile Not Found',
     }
   }
+  
+  if (user.id === 'DrishtiKit') {
+    return {
+      title: 'DrishtiKit - Portable Eye Testing Solution | Focus Links Partner',
+      description: 'Discover DrishtiKit, the revolutionary all-in-one portable phoropter for professional vision screening. A proud partner of the Focus Links community.',
+       keywords: ['portable phoropter', 'vision screening device', 'tele-optometry', 'rural eye care', 'community health', 'DrishtiKit', 'eye testing equipment', 'Made in India healthcare'],
+      openGraph: {
+        title: 'DrishtiKit - Portable Eye Testing Solution | Focus Links Partner',
+        description: 'Revolutionizing community eye care with a portable, affordable, and accurate vision screening solution.',
+        images: [user.avatarUrl, `https://www.drishtikit.com/phoropter.png`],
+      },
+    }
+  }
+
 
   const title = `${user.name} - ${user.type} | Focus Links`;
   const description = user.bio.substring(0, 160);
