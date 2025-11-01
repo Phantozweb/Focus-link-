@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Trophy, Info } from 'lucide-react';
+import { Trophy, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
 
@@ -18,14 +18,62 @@ export type LeaderboardEntry = {
 };
 
 interface LeaderboardProps {
-  data: LeaderboardEntry[];
   itemsPerPage?: number;
 }
 
-export function Leaderboard({ data, itemsPerPage = 10 }: LeaderboardProps) {
+export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState<LeaderboardEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!data || data.length === 0) {
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await fetch('/api/leaderboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch leaderboard data.');
+        }
+        const leaderboardData: LeaderboardEntry[] = await response.json();
+        setData(leaderboardData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchLeaderboard();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="p-8 text-center flex flex-col items-center justify-center h-48">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+          <p className="text-muted-foreground">Loading Leaderboard...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+     return (
+        <Card className="text-center bg-red-50 border-red-200">
+            <CardContent className="p-8">
+                <Info className="h-10 w-10 text-destructive mx-auto mb-4" />
+                <h3 className="font-semibold text-xl text-destructive">Could Not Load Leaderboard</h3>
+                <p className="text-red-800 mt-1">
+                    There was an error fetching the results. Please try refreshing the page.
+                </p>
+            </CardContent>
+        </Card>
+    );
+  }
+  
+  if (data.length === 0) {
     return (
         <Card className="text-center">
             <CardContent className="p-8">
@@ -84,7 +132,7 @@ export function Leaderboard({ data, itemsPerPage = 10 }: LeaderboardProps) {
                     <span className="font-medium">{entry.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-right font-semibold">{entry.score}</TableCell>
+                <TableCell className="text-right font-semibold">{entry.score}%</TableCell>
                 <TableCell className="text-right">{entry.time}</TableCell>
               </TableRow>
             ))}

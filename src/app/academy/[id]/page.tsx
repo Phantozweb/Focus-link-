@@ -13,7 +13,6 @@ import { WebinarActions } from '@/components/webinar-actions';
 import { WebinarBanner } from '@/components/webinar-banner';
 import { WebinarTime } from '@/components/webinar-time';
 import { Leaderboard } from '@/components/leaderboard';
-import { demoLeaderboardData } from '@/lib/data';
 import { QuizBanner } from '@/components/quiz-banner';
 
 type WebinarPageProps = {
@@ -325,9 +324,8 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                     <Trophy className="text-amber-500"/>
                                     Live Leaderboard
                                 </h3>
-                                {demoLeaderboardData.length > 0 && <p className="text-sm text-muted-foreground font-semibold">{demoLeaderboardData.length} Participants</p>}
                             </div>
-                            <Leaderboard data={demoLeaderboardData} itemsPerPage={10} />
+                            <Leaderboard itemsPerPage={10} />
                           </section>
                         </>
                        )}
