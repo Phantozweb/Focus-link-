@@ -817,10 +817,10 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                 <section>
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-800">The Portable Advantage</h2>
-                        <p className="mt-2 text-lg text-slate-600">The ultimate solution for accurate vision screening, anywhere.</p>
-                         <div className="mt-8 flex justify-center">
-                            <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Portable Phoropter" width={400} height={400} className="object-contain" data-ai-hint="medical device" />
+                        <div className="mt-8 flex justify-center">
+                            <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Portable Phoropter" width={400} height={400} className="object-contain rounded-lg" data-ai-hint="medical device" />
                         </div>
+                        <p className="mt-2 text-lg text-slate-600">The ultimate solution for accurate vision screening, anywhere.</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {whyChooseFeatures.map(feature => (
