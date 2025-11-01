@@ -595,39 +595,6 @@ export default function Home() {
 
               <section>
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Eye Care Clinics & Opticals</h2>
-                  {clinicsAndOpticals.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
-                    <Link href="/directory/clinics">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                  </Button>}
-                </div>
-                {clinicsAndOpticals.length > 0 ? (
-                    <Carousel 
-                        opts={{ align: "start", loop: true }}
-                        plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]}
-                        className="w-full"
-                    >
-                    <CarouselContent className="-ml-4">
-                        {clinicsAndOpticals.map((user) => (
-                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                            <ProfileCard user={user} />
-                        </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                    </Carousel>
-                ) : (
-                    <EmptyStateCTA
-                        title="No Clinics Found"
-                        ctaText="Add Your Practice"
-                        ctaLink="/membership"
-                        icon={<Hospital className="h-12 w-12" />}
-                    />
-                )}
-              </section>
-              
-              <section>
-                <div className="flex justify-between items-center mb-8">
                   <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Industry Partners</h2>
                   {industry.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
                     <Link href="/directory/industry">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -655,6 +622,39 @@ export default function Home() {
                         ctaText="Join as a Partner"
                         ctaLink="/membership"
                         icon={<Factory className="h-12 w-12" />}
+                    />
+                )}
+              </section>
+
+              <section>
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Clinics & Opticals</h2>
+                  {clinicsAndOpticals.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
+                    <Link href="/directory/clinics">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  </Button>}
+                </div>
+                {clinicsAndOpticals.length > 0 ? (
+                    <Carousel 
+                        opts={{ align: "start", loop: true }}
+                        plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]}
+                        className="w-full"
+                    >
+                    <CarouselContent className="-ml-4">
+                        {clinicsAndOpticals.map((user) => (
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                            <ProfileCard user={user} />
+                        </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                    </Carousel>
+                ) : (
+                    <EmptyStateCTA
+                        title="No Clinics Found"
+                        ctaText="Add Your Practice"
+                        ctaLink="/membership"
+                        icon={<Hospital className="h-12 w-12" />}
                     />
                 )}
               </section>

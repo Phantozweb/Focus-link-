@@ -948,7 +948,7 @@ export function ProfileClient({ user }: { user: UserProfile }) {
   const isIndividual = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(user.type);
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
 
-  if (user.id === '15') {
+  if (user.id === 'DrishtiKit') {
     return <DrishtiKitProfile user={user} />;
   }
 

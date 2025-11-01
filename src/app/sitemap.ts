@@ -6,7 +6,7 @@ import { demoJobs } from '@/lib/jobs';
 import { demoDiscussions } from '@/lib/forum';
  
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = 'https://focuslinks.in';
+  const siteUrl = 'https://focuslinks.pro';
 
   const staticPages = [
     '', 

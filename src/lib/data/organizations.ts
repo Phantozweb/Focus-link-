@@ -48,7 +48,7 @@ export const organizations: UserProfile[] = [
     verified: true,
   },
   {
-    id: '15',
+    id: 'DrishtiKit',
     name: 'DrishtiKit',
     type: 'Industry',
     experience: 'Revolutionizing Eye Care with Portable Technology',
