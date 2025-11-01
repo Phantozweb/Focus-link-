@@ -22,7 +22,7 @@ interface QuizResultPayload {
 }
 
 const START_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433513938867196049/Vj3XRu2e1IttN_mvwdRK9RWv-SaIywdSI_cqlrxZpIuMi9KcvDMp6v759xe2CMRNOHQp';
-const RESULTS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyJGaDf-xT9XnI49HmKdktKrxti3N5cxKGGfJZEUAZQCaGvPCJR9iR00FnbqqGbo6bhdw/exec';
+const RESULTS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz-6iziIubh3YdvVH53Yhgu2CfZSbe2fZ9tEBu4V96zutJ3f5q_iXkC6L-mG0M_GYEl-w/exec';
 const DISCORD_RESULTS_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433514964987150477/7KpL0rAmZIOihjNOMFxbibt-tHeD_M7JNQjKnEuzpm1o101vGCZjgWKw0mJ8Uar2MjA2';
 
 
