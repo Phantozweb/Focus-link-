@@ -5,6 +5,7 @@ import type { UserProfile } from '@/types';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 
 interface ProfileCardProps {
@@ -21,13 +22,23 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
     return "portrait person";
   }
 
+  const isDrishtiKit = user.id === 'DrishtiKit';
+
   // Card without banner for individuals
   return (
     <div className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg h-full">
         <div className="flex flex-1 flex-col p-6 items-center text-center">
              <Avatar className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4">
               {user.avatarUrl ? (
-                <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" style={{ objectPosition: 'center 20%' }} data-ai-hint={getAvatarHint()} />
+                <AvatarImage 
+                    src={user.avatarUrl} 
+                    alt={user.name} 
+                    className={cn(
+                        "object-cover",
+                        isDrishtiKit ? "object-contain" : "object-cover"
+                    )}
+                    style={{ objectPosition: 'center 20%' }} 
+                    data-ai-hint={getAvatarHint()} />
               ) : null}
               <AvatarFallback className="text-4xl">
                 {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-12 w-12" />}
