@@ -1094,6 +1094,26 @@ export function ProfileClient({ user }: { user: UserProfile }) {
                       )}
                   </div>
                 </section>
+
+                {user.id === '17' && (
+                  <Card className="bg-blue-50 border-blue-200">
+                    <CardHeader className="flex-row items-center gap-4">
+                      <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={48} height={48} />
+                      <div>
+                        <CardTitle className="text-lg text-blue-900">Co-Founder of DrishtiKit</CardTitle>
+                        <CardDescription className="text-blue-800">A revolutionary portable eye-testing solution.</CardDescription>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                       <Button asChild className="w-full" variant="outline">
+                          <Link href="/profile/DrishtiKit">
+                            View Project
+                          </Link>
+                        </Button>
+                    </CardContent>
+                  </Card>
+                )}
+
               </div>
 
               {/* Right Column / Main Content */}
