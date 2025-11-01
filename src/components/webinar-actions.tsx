@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2 } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -232,7 +232,6 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24) : (1000 * 60);
             const webinarEndTime = webinarStartTime + (durationValue * durationMultiplier);
 
-            // For testing: force quiz to be "LIVE"
             if (isQuiz) {
                 setStatus('LIVE');
                 return;
@@ -297,15 +296,12 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                     Enter Arena Now
                                 </Button>
                             </DialogTrigger>
-                           <Dialog>
-                            <DialogTrigger asChild>
-                              <Button size="lg" variant="outline" className="w-full">
-                                  <Bell className="mr-2 h-5 w-5" />
-                                  Remind Me Later
-                              </Button>
-                            </DialogTrigger>
-                            <ReminderDialog webinar={webinar} />
-                          </Dialog>
+                            <Button size="lg" variant="outline" className="w-full" asChild>
+                                <Link href="#leaderboard">
+                                  <BarChart className="mr-2 h-5 w-5" />
+                                  Check Leaderboard!
+                                </Link>
+                            </Button>
                         </div>
                         <QuizEntryDialog webinarId={webinar.id} />
                     </Dialog>

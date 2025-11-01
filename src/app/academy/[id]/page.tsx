@@ -319,7 +319,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                        {isQuiz && (
                         <>
                           <Separator />
-                          <section>
+                          <section id="leaderboard">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-2xl font-bold font-headline text-slate-800 flex items-center gap-2">
                                     <Trophy className="text-amber-500"/>
