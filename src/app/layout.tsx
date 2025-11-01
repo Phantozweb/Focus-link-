@@ -12,7 +12,7 @@ import { ActivityTracker } from '@/components/activity-tracker';
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://focuslinks.pro'),
+  metadataBase: new URL('https://focuslinks.in'),
   title: {
     default: 'Focus Links | Global Eye Care Community',
     template: '%s | Focus Links',
@@ -24,13 +24,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: 'https://i.ibb.co/pwnL1Xy/IMG-20251025-WA0014.jpg',
+  }
 };
 
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Focus Links',
-  url: 'https://focuslinks.pro',
+  url: 'https://focuslinks.in',
   logo: 'https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg',
   contactPoint: {
     '@type': 'ContactPoint',
@@ -46,12 +49,12 @@ const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Focus Links',
-    url: 'https://focuslinks.pro',
+    url: 'https://focuslinks.in',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        'urlTemplate': 'https://focuslinks.pro/directory/all?q={search_term_string}'
+        'urlTemplate': 'https://focuslinks.in/directory/all?q={search_term_string}'
       },
       'query-input': 'required name=search_term_string'
     }
@@ -65,7 +68,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
-        <link rel="icon" href="https://i.ibb.co/pwnL1Xy/IMG-20251025-WA0014.jpg" type="image/jpeg" />
         <meta name="google-site-verification" content="fSr_QLZTbWD5LoE_1W24DXS2WzwufIajevt9RIR2ijE" />
         <meta name="google-site-verification" content="8mO8b4Ylc2hheiV-tqdNspyLlP22f8oE8-M8PRiab-U" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
