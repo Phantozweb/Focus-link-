@@ -679,8 +679,8 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
         { value: "q2", question: "How much training is required to use DrishtiKit?", answer: "Basic operation can be learned in 2-3 hours with our training modules. For comprehensive proficiency, we recommend 1-2 days of training. We provide video tutorials, live sessions, and ongoing support." },
         { value: "q3", question: "What is the battery life and power requirements?", answer: "DrishtiKit operates for 8+ hours on a single charge, making it ideal for full-day screening programs. It can be charged using standard power outlets or portable power banks." },
         { value: "q4", question: "How does the mobile app work offline?", answer: "The DrishtiKit mobile app stores patient data locally when internet isn't available. Once connectivity is restored, all data automatically syncs to the cloud, ensuring uninterrupted operation in remote areas." },
-        { value: "q5", question: "What support and warranty is provided?", answer: "We provide 24/7 technical support, comprehensive training materials, and a 2-year warranty on all hardware components. Our team offers ongoing support for implementation and training." },
-        { value: "q6", question: "Is the data secure?", answer: "Yes, all patient data is encrypted end-to-end and stored in secure cloud infrastructure. We follow strict data protection protocols to ensure compliance with healthcare regulations." }
+        { value: 'q5', question: 'What support and warranty is provided?', answer: 'We provide 24/7 technical support, comprehensive training materials, and a 2-year warranty on all hardware components. Our team offers ongoing support for implementation and training.' },
+        { value: 'q6', question: 'Is the data secure?', answer: 'Yes, all patient data is encrypted end-to-end and stored in secure cloud infrastructure. We follow strict data protection protocols to ensure compliance with healthcare regulations.' }
     ];
 
     const handleWatchDemo = () => {
@@ -689,21 +689,8 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
 
     return (
         <div className="bg-background">
-            {/* Banner Section */}
-            <section className="relative h-64 md:h-80 w-full">
-                 <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter Banner" fill style={{objectFit: 'cover'}} className="opacity-20" />
-                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
-                 <div className="relative container mx-auto px-4 h-full flex flex-col justify-end pb-8 md:pb-12 text-center">
-                    <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto mb-4 rounded-lg" data-ai-hint="logo eye"/>
-                     <h1 className="text-3xl md:text-5xl font-bold text-slate-800 mb-2 font-headline">A New Vision for Portable Eye Care</h1>
-                     <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
-                        The world's most portable and affordable eye testing solution, making professional vision screenings accessible to every community.
-                     </p>
-                 </div>
-            </section>
-
              {/* Partnership Section */}
-            <section className="bg-blue-50 border-y">
+            <section className="bg-blue-50 border-b">
                 <div className="container mx-auto px-4 py-4 text-center">
                     <p className="font-semibold text-blue-800 flex items-center justify-center gap-2">
                         <Handshake className="h-5 w-5"/>
@@ -711,20 +698,33 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     </p>
                 </div>
             </section>
-
+            
+            {/* Hero Section */}
+            <section className="bg-white">
+                 <div className="container mx-auto px-4 py-12 md:py-20 text-center">
+                    <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png" alt="DrishtiKit Logo" width={80} height={80} className="mx-auto mb-4 object-contain" data-ai-hint="logo eye"/>
+                    <h1 className="text-4xl md:text-5xl font-bold text-slate-800 font-headline">DrishtiKit</h1>
+                    <p className="mt-2 text-lg text-slate-600">A New Vision for Portable Eye Care</p>
+                    <Image src="https://www.drishtikit.com/phoropter.png" alt="DrishtiKit Phoropter" width={500} height={500} className="mx-auto mt-8"/>
+                    <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mt-8 font-headline">Revolutionary Eye Care Technology</h2>
+                    <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mt-4">
+                        The world's most portable and affordable eye testing solution, making professional vision screenings accessible to every community.
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                        <Button size="lg" asChild><a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a></Button>
+                        <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
+                    </div>
+                 </div>
+            </section>
             
             <div className="container mx-auto py-12 md:py-16 px-4 sm:px-6 lg:px-8 space-y-16 md:space-y-20">
                  {/* Hero Section */}
                 <section className="grid md:grid-cols-2 gap-8 items-center">
                     <div className="text-center md:text-left">
-                        <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 font-headline">Revolutionary Eye Care Technology</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 font-headline">Trusted By Leading Organizations</h2>
                         <p className="text-base md:text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
-                             Conduct comprehensive vision screenings anywhere with our revolutionary all-in-one portable phoropter.
+                             DrishtiKit has empowered over 50 healthcare organizations to complete more than 15,000 vision screenings across 10+ countries.
                         </p>
-                        <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mt-8">
-                            <Button size="lg" asChild><a href="https://app.drishtikit.com/" target="_blank" rel="noopener noreferrer">Try Mobile App</a></Button>
-                            <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
-                        </div>
                     </div>
                      <div className="flex items-center justify-center">
                         <div className="grid grid-cols-2 gap-x-8 gap-y-6">
@@ -807,7 +807,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                             <h2 className="text-3xl font-bold text-slate-800">Proudly Made in India</h2>
                             <p className="text-lg text-slate-600 mt-4">DrishtiKit is an indigenous healthcare technology, officially recognized by DPIIT under the Startup India initiative, representing the best of Indian innovation in portable eye care.</p>
                         </div>
-                        <div className="flex flex-col sm:flex-row justify-center md:justify-end items-center gap-8">
+                        <div className="flex flex-wrap justify-center md:justify-end items-center gap-8">
                             <Image src="https://www.drishtikit.com/dpiit.png" alt="DPIIT Recognized" width={120} height={120} data-ai-hint="logo government"/>
                             <Image src="https://www.drishtikit.com/make_in_india.png" alt="Made in India" width={120} height={120} data-ai-hint="logo india"/>
                         </div>
@@ -839,13 +839,6 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                     </div>
                      <div className="grid md:grid-cols-2 gap-8 items-center">
                         <div className="space-y-6">
-                           <Card className="flex items-start gap-4 p-6">
-                                <div className="p-3 bg-primary/10 rounded-full"><Package className="w-6 h-6 text-primary"/></div>
-                                <div>
-                                    <h3 className="text-xl font-bold text-slate-800 mb-1">Portable Phoropter</h3>
-                                    <p className="text-slate-600">Complete refraction testing in a compact device. Sphere: -3D to +3D (0.5D intervals).</p>
-                                </div>
-                            </Card>
                             <Card className="flex items-start gap-4 p-6">
                                 <div className="p-3 bg-primary/10 rounded-full"><Globe className="w-6 h-6 text-primary"/></div>
                                 <div>
