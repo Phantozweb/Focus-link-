@@ -9,21 +9,21 @@ import { Trophy, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
 
-// Simplified entry type that matches the direct API response
-export type LeaderboardEntry = {
-  rank: number;
-  avatar: string; // Will be empty for now
-  name: string;
-  score: number;
-  time: string;
-};
-
 // This type represents the raw data coming from the Google Sheet
 type RawLeaderboardData = {
   MembershipID: string;
   Name?: string;
   OverallPercentage: number | string;
   'TotalTimeTaken (Seconds)': number | string;
+};
+
+// This is the type for the data displayed in the table
+export type LeaderboardEntry = {
+  rank: number;
+  avatar: string; // Will be empty for now
+  name: string;
+  score: string;
+  time: string;
 };
 
 const formatTime = (seconds: number) => {
@@ -62,7 +62,8 @@ export function Leaderboard({ itemsPerPage = 10 }: { itemsPerPage?: number }) {
         
         const processedData = rawData.map((row, index) => {
           const scoreValue = parseFloat(String(row.OverallPercentage));
-          const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
+          // Correctly format the score to one decimal place, without multiplying by 100.
+          const score = !isNaN(scoreValue) ? scoreValue.toFixed(1) : '0.0';
           
           let formattedTime: string;
           const timeValue = row['TotalTimeTaken (Seconds)'];
@@ -84,7 +85,7 @@ export function Leaderboard({ itemsPerPage = 10 }: { itemsPerPage?: number }) {
               time: formattedTime,
           };
         })
-        .filter(entry => entry.name && entry.score > 0);
+        .filter(entry => entry.name && parseFloat(entry.score) > 0);
 
         setData(processedData);
 
