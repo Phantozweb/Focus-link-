@@ -19,7 +19,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 
@@ -436,17 +436,16 @@ function QuizComponent() {
       bonusPoints,
     };
     
-    setModuleResults(prevResults => {
-        const updatedResults = [...prevResults, newResult];
-        if (currentModuleIndex < quizModules.length - 1) {
-            setQuizState('break');
-            setBreakTimeLeft(BREAK_TIME_SECONDS);
-        } else {
-            handleFinishQuiz(updatedResults);
-        }
-        return updatedResults;
-    });
-  }, [currentModule, currentQuestions.length, currentModuleIndex, timeLeftInModule, answers, handleFinishQuiz]);
+    const updatedResults = [...moduleResults, newResult];
+    setModuleResults(updatedResults);
+
+    if (currentModuleIndex < quizModules.length - 1) {
+        setQuizState('break');
+        setBreakTimeLeft(BREAK_TIME_SECONDS);
+    } else {
+        handleFinishQuiz(updatedResults);
+    }
+  }, [currentModule, currentQuestions.length, currentModuleIndex, timeLeftInModule, answers, handleFinishQuiz, moduleResults]);
   
   const startNextModule = () => {
      const nextModuleIndex = currentModuleIndex + 1;
