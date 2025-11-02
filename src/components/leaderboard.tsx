@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
 import { Dialog, DialogTrigger } from './ui/dialog';
 import { QuizEntryDialog } from './webinar-actions';
-import { allUsers } from '@/lib/data'; // Corrected import
+import { allUsers } from '@/lib/data';
 
 export type LeaderboardEntry = {
   rank: number;
@@ -24,6 +24,19 @@ interface LeaderboardProps {
   itemsPerPage?: number;
 }
 
+// IMPORTANT: This must be the URL of your deployed Google Apps Script.
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjQxDtM0oZ9hM68Lw593ZZL9YdLz-o4wJONvFAp5krz3A8xyNB1qGPttjh6C2d_JbLjg/exec';
+
+const formatTime = (seconds: number) => {
+    if (isNaN(seconds) || seconds < 0) {
+        return '00:00';
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+};
+
+
 export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState<LeaderboardEntry[]>([]);
@@ -35,15 +48,60 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await fetch('/api/leaderboard');
+        
+        const response = await fetch(SCRIPT_URL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
+        });
+
         if (!response.ok) {
-          throw new Error('Failed to fetch leaderboard data.');
+            throw new Error(`Google Script Error: ${response.statusText}`);
         }
-        const leaderboardData: LeaderboardEntry[] = await response.json();
-        setData(leaderboardData);
+
+        const scriptData: any[] = await response.json();
+
+        if (!Array.isArray(scriptData)) {
+            throw new Error("Invalid data format received from Google Script.");
+        }
+
+        const leaderboard = scriptData
+          .map((row, index) => {
+              if (!row || typeof row !== 'object' || !row['MembershipID']) return null;
+
+              const userProfile = allUsers.find(u => u.id === row.MembershipID);
+              const scoreValue = parseFloat(row.OverallPercentage);
+              const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
+              
+              const timeValue = row['TotalTimeTaken (Seconds)'];
+              let formattedTime: string;
+
+              if (typeof timeValue === 'number' && !isNaN(timeValue)) {
+                  formattedTime = formatTime(timeValue);
+              } else if (typeof timeValue === 'string') {
+                  const parsedNumber = parseFloat(timeValue);
+                  formattedTime = !isNaN(parsedNumber) ? formatTime(parsedNumber) : timeValue;
+              } else {
+                  formattedTime = 'N/A';
+              }
+
+              return {
+                  rank: index + 1,
+                  name: userProfile?.name || row.Name || row.MembershipID,
+                  avatar: userProfile?.avatarUrl || '',
+                  score: score,
+                  time: formattedTime,
+              };
+          })
+          .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+          
+        setData(leaderboard);
+
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-        console.error(err);
+        console.error("Failed to fetch or process leaderboard data:", err);
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +120,7 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
     );
   }
 
-  if (error) {
+  if (error || data.length === 0) {
      return (
         <Card className="text-center bg-blue-50 border-blue-200">
             <CardContent className="p-8">
@@ -71,28 +129,6 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
                 <p className="text-blue-700 mt-1">
                     Waiting for more members to participate. Please check back after 24 hours to see the latest rankings.
                 </p>
-            </CardContent>
-        </Card>
-    );
-  }
-  
-  if (data.length === 0) {
-    return (
-        <Card className="text-center">
-            <CardContent className="p-8">
-                <Trophy className="h-10 w-10 text-amber-500 mx-auto mb-4" />
-                <h3 className="font-semibold text-xl">Be the First on the Leaderboard!</h3>
-                <p className="text-muted-foreground mt-1 mb-4">
-                    No one has completed the quiz yet. Enter the arena now to claim the top spot.
-                </p>
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button>
-                           <Trophy className="mr-2 h-4 w-4" /> Enter the Arena
-                        </Button>
-                    </DialogTrigger>
-                    <QuizEntryDialog webinarId="eye-q-arena-2025" />
-                </Dialog>
             </CardContent>
         </Card>
     );
