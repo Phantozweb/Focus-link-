@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User, Info, MessageSquare } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Loader2, Play, Trophy, Coffee, BarChart, XCircle, CheckCircle, Sparkles, User, Info, MessageSquare, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -390,7 +390,7 @@ function QuizComponent() {
     return {score, totalPoints, bonusPoints, timeTaken};
   };
 
-  const handleFinishQuiz = (finalResults: ModuleResult[]) => {
+  const handleFinishQuiz = useCallback((finalResults: ModuleResult[]) => {
       const totalScore = finalResults.reduce((acc, r) => acc + r.score, 0);
       const totalBonus = finalResults.reduce((acc, r) => acc + r.bonusPoints, 0);
       const finalScore = totalScore + totalBonus;
@@ -419,7 +419,7 @@ function QuizComponent() {
       }
       setQuizState('finished');
       setTimeout(() => setIsFeedbackDialogOpen(true), 1500);
-  }
+  }, [session]);
 
   const handleNextModule = useCallback(() => {
     const {score, totalPoints, bonusPoints, timeTaken} = calculateModuleScore();
@@ -436,16 +436,17 @@ function QuizComponent() {
       bonusPoints,
     };
     
-    const updatedResults = [...moduleResults, newResult];
-    setModuleResults(updatedResults);
-
-    if (currentModuleIndex < quizModules.length - 1) {
-      setQuizState('break');
-      setBreakTimeLeft(BREAK_TIME_SECONDS);
-    } else {
-      handleFinishQuiz(updatedResults);
-    }
-  }, [currentModule, currentQuestions.length, moduleResults, currentModuleIndex, timeLeftInModule, answers, session]);
+    setModuleResults(prevResults => {
+        const updatedResults = [...prevResults, newResult];
+        if (currentModuleIndex < quizModules.length - 1) {
+            setQuizState('break');
+            setBreakTimeLeft(BREAK_TIME_SECONDS);
+        } else {
+            handleFinishQuiz(updatedResults);
+        }
+        return updatedResults;
+    });
+  }, [currentModule, currentQuestions.length, currentModuleIndex, timeLeftInModule, answers, handleFinishQuiz]);
   
   const startNextModule = () => {
      const nextModuleIndex = currentModuleIndex + 1;
