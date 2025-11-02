@@ -47,12 +47,13 @@ type QuizSession = {
 };
 
 // Debounce function
-function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
   let timeout: NodeJS.Timeout;
-  return function (this: any, ...args: Parameters<T>) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
+  return (...args: Parameters<F>): Promise<ReturnType<F>> =>
+    new Promise(resolve => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => resolve(func(...args)), waitFor);
+    });
 }
 
 function FeedbackDialog({ open, onOpenChange, session, overallPassed, finalScore, totalPossiblePoints }: { open: boolean, onOpenChange: (open: boolean) => void, session: QuizSession | null, overallPassed: boolean, finalScore: number, totalPossiblePoints: number }) {
@@ -134,31 +135,27 @@ function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   const router = useRouter();
 
   const checkIdValidity = useCallback(debounce(async (id: string) => {
-    if (!id || id.trim().length < 5) {
-      setIdStatus('idle');
-      return;
-    }
-    setIdStatus('loading');
     try {
       const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
       const data = await response.json();
-      if (data.isValid) {
-        setIdStatus('valid');
-      } else {
-        setIdStatus('invalid');
-      }
+      return data.isValid;
     } catch (error) {
       console.error('ID validation failed:', error);
-      setIdStatus('invalid');
+      return false;
     }
   }, 500), []);
   
    useEffect(() => {
-    if (membershipId) {
-      checkIdValidity(membershipId);
-    } else {
+    if (!membershipId || membershipId.trim().length < 5) {
       setIdStatus('idle');
+      return;
     }
+
+    setIdStatus('loading');
+    checkIdValidity(membershipId).then(isValid => {
+      setIdStatus(isValid ? 'valid' : 'invalid');
+    });
+
   }, [membershipId, checkIdValidity]);
 
   const handleStartQuiz = () => {
