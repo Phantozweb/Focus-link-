@@ -8,17 +8,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Trophy, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
-import { allUsers } from '@/lib/data';
 
+// Simplified entry type that matches the direct API response
 export type LeaderboardEntry = {
   rank: number;
-  avatar: string;
+  avatar: string; // Will be empty for now
   name: string;
   score: number;
   time: string;
 };
 
-// This type represents the raw data coming from the Google Sheet via our API
+// This type represents the raw data coming from the Google Sheet
 type RawLeaderboardData = {
   MembershipID: string;
   Name?: string;
@@ -35,8 +35,7 @@ const formatTime = (seconds: number) => {
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 };
 
-
-export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
+export function Leaderboard({ itemsPerPage = 10 }: { itemsPerPage?: number }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,29 +47,25 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
         setIsLoading(true);
         setError(null);
         
-        // 1. Fetch raw data from our simplified API route
         const response = await fetch('/api/leaderboard', { cache: 'no-store' });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData?.error || 'Failed to load leaderboard data.');
+            const errorText = await response.text();
+            throw new Error(`Failed to load leaderboard data. Status: ${response.status}. Response: ${errorText}`);
         }
 
         const rawData: RawLeaderboardData[] = await response.json();
-
+        
         if (!Array.isArray(rawData)) {
             throw new Error("Invalid data format received from the server.");
         }
         
-        // 2. Process and enrich the data on the client-side
         const processedData = rawData.map((row, index) => {
-          const userProfile = allUsers.find(u => u.id === row.MembershipID);
-          
           const scoreValue = parseFloat(String(row.OverallPercentage));
           const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
           
-          const timeValue = row['TotalTimeTaken (Seconds)'];
           let formattedTime: string;
+          const timeValue = row['TotalTimeTaken (Seconds)'];
 
           if (typeof timeValue === 'number' && !isNaN(timeValue)) {
             formattedTime = formatTime(timeValue);
@@ -83,13 +78,13 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
           
           return {
               rank: index + 1,
-              name: userProfile?.name || row.Name || row.MembershipID,
-              avatar: userProfile?.avatarUrl || '',
+              name: row.Name || row.MembershipID,
+              avatar: '', // Simplified: No avatar lookup for now
               score: score,
               time: formattedTime,
           };
         })
-        .filter(entry => entry.name && entry.score > 0); // Filter out invalid entries
+        .filter(entry => entry.name && entry.score > 0);
 
         setData(processedData);
 
@@ -103,7 +98,6 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
     
     fetchAndProcessLeaderboard();
     
-    // Refresh data every 30 seconds
     const interval = setInterval(fetchAndProcessLeaderboard, 30000);
     return () => clearInterval(interval);
 
@@ -125,9 +119,9 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
         <Card className="text-center bg-blue-50 border-blue-200">
             <CardContent className="p-8">
                 <Info className="h-10 w-10 text-blue-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-xl text-blue-800">Leaderboard is Being Updated</h3>
+                <h3 className="font-semibold text-xl text-blue-800">Be the First on the Leaderboard!</h3>
                 <p className="text-blue-700 mt-1">
-                    Waiting for more members to participate. Please check back after 24 hours to see the latest rankings.
+                    The arena is open! Complete the quiz to see your name rise to the top.
                 </p>
             </CardContent>
         </Card>
@@ -177,7 +171,7 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={entry.avatar} alt={entry.name} />
-                      <AvatarFallback>{entry.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback>{entry.name ? entry.name.charAt(0) : '?'}</AvatarFallback>
                     </Avatar>
                     <span className="font-medium">{entry.name}</span>
                   </div>
