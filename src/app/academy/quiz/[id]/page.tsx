@@ -19,7 +19,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { allUsers } from '@/lib/data/index';
+import { allUsers } from '@/lib/data';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 
@@ -341,55 +341,7 @@ function QuizComponent() {
   if (!quiz) {
     notFound();
   }
-
-  const startQuiz = useCallback(() => {
-    const storedSession = localStorage.getItem(`quizSession-${id}`);
-    if (storedSession) {
-        const currentSession: QuizSession = JSON.parse(storedSession);
-        if (currentSession.attemptsLeft > 0) {
-            setCurrentModuleIndex(0);
-            setCurrentQuestionIndex(0);
-            setCountdown(COUNTDOWN_SECONDS);
-            setTimeLeftInModule(quizModules[0].time);
-            setModuleStartTime(Date.now());
-            setAnswers({});
-            setModuleResults([]);
-            setQuizState('active');
-
-            const updatedSession = { ...currentSession, attemptsLeft: currentSession.attemptsLeft - 1 };
-            setSession(updatedSession);
-            localStorage.setItem(`quizSession-${id}`, JSON.stringify(updatedSession));
-        } else {
-             // No attempts left, force back to not-started
-            setQuizState('not-started');
-        }
-    }
-  }, [id]);
-
-  const calculateModuleScore = () => {
-    const moduleQuestions = allQuestions.filter(q => q.module === currentModule.topic);
-    let score = 0;
-    let totalPoints = 0;
-    moduleQuestions.forEach(question => {
-      totalPoints += question.points;
-      const userAnswer = answers[question.id];
-      if (userAnswer && userAnswer.selectedOption === question.correctAnswer) {
-        score += question.points;
-      }
-    });
-
-    const timeTaken = currentModule.time - timeLeftInModule;
-    // Award bonus points: Give max bonus if completed in less than 75% of the time, scaled down to 0.
-    const timeThreshold = currentModule.time * 0.75;
-    let bonusPoints = 0;
-    if (timeTaken < currentModule.time) {
-        const timeRatio = Math.max(0, (currentModule.time - timeTaken) / currentModule.time);
-        bonusPoints = Math.round(currentModule.timeBonus * timeRatio);
-    }
-
-    return {score, totalPoints, bonusPoints, timeTaken};
-  };
-
+  
   const handleFinishQuiz = useCallback((finalResults: ModuleResult[]) => {
       const totalScore = finalResults.reduce((acc, r) => acc + r.score, 0);
       const totalBonus = finalResults.reduce((acc, r) => acc + r.bonusPoints, 0);
@@ -400,7 +352,7 @@ function QuizComponent() {
       const allModulesPassed = finalResults.every(r => r.passed);
       
       const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
-      const overallPassed = allModulesPassed && (overallPercentage >= PASS_PERCENTAGE);
+      const overallPassed = allModulesPassed;
       
       setLastQuizResult({ overallPassed, finalScore, totalPossiblePoints });
 
@@ -446,6 +398,30 @@ function QuizComponent() {
         handleFinishQuiz(updatedResults);
     }
   }, [currentModule, currentQuestions.length, currentModuleIndex, timeLeftInModule, answers, handleFinishQuiz, moduleResults]);
+
+  const startQuiz = useCallback(() => {
+    const storedSession = localStorage.getItem(`quizSession-${id}`);
+    if (storedSession) {
+        const currentSession: QuizSession = JSON.parse(storedSession);
+        if (currentSession.attemptsLeft > 0) {
+            setCurrentModuleIndex(0);
+            setCurrentQuestionIndex(0);
+            setCountdown(COUNTDOWN_SECONDS);
+            setTimeLeftInModule(quizModules[0].time);
+            setModuleStartTime(Date.now());
+            setAnswers({});
+            setModuleResults([]);
+            setQuizState('active');
+
+            const updatedSession = { ...currentSession, attemptsLeft: currentSession.attemptsLeft - 1 };
+            setSession(updatedSession);
+            localStorage.setItem(`quizSession-${id}`, JSON.stringify(updatedSession));
+        } else {
+             // No attempts left, force back to not-started
+            setQuizState('not-started');
+        }
+    }
+  }, [id, handleNextModule]);
   
   const startNextModule = () => {
      const nextModuleIndex = currentModuleIndex + 1;
@@ -468,6 +444,30 @@ function QuizComponent() {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  const calculateModuleScore = () => {
+    const moduleQuestions = allQuestions.filter(q => q.module === currentModule.topic);
+    let score = 0;
+    let totalPoints = 0;
+    moduleQuestions.forEach(question => {
+      totalPoints += question.points;
+      const userAnswer = answers[question.id];
+      if (userAnswer && userAnswer.selectedOption === question.correctAnswer) {
+        score += question.points;
+      }
+    });
+
+    const timeTaken = currentModule.time - timeLeftInModule;
+    // Award bonus points: Give max bonus if completed in less than 75% of the time, scaled down to 0.
+    const timeThreshold = currentModule.time * 0.75;
+    let bonusPoints = 0;
+    if (timeTaken < currentModule.time) {
+        const timeRatio = Math.max(0, (currentModule.time - timeTaken) / currentModule.time);
+        bonusPoints = Math.round(currentModule.timeBonus * timeRatio);
+    }
+
+    return {score, totalPoints, bonusPoints, timeTaken};
   };
 
   const renderContent = () => {
@@ -542,7 +542,7 @@ function QuizComponent() {
        const totalTimeTaken = moduleResults.reduce((acc, r) => acc + r.timeTaken, 0);
        const allModulesPassed = moduleResults.every(r => r.passed);
        const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
-       const overallPassed = allModulesPassed && (overallPercentage >= PASS_PERCENTAGE);
+       const overallPassed = allModulesPassed;
 
       return (
          <div className="text-center">
