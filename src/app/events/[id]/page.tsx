@@ -13,7 +13,6 @@ import { WebinarActions } from '@/components/webinar-actions';
 import { WebinarBanner } from '@/components/webinar-banner';
 import { WebinarTime } from '@/components/webinar-time';
 import { Leaderboard } from '@/components/leaderboard';
-import { demoLeaderboardData } from '@/lib/data';
 import { QuizBanner } from '@/components/quiz-banner';
 
 type WebinarPageProps = {
@@ -131,9 +130,6 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
   if (!webinar) {
     notFound();
   }
-
-  const eventStartTime = new Date(webinar.dateTime).getTime();
-  const hasStarted = new Date().getTime() >= eventStartTime;
 
   const eventSchema = {
     "@context": "https://schema.org",
@@ -319,18 +315,17 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
                       {isQuiz ? <OrganizerInfo webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
 
-                       {isQuiz && hasStarted && (
+                       {isQuiz && (
                         <>
                           <Separator />
-                          <section>
+                          <section id="leaderboard">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-2xl font-bold font-headline text-slate-800 flex items-center gap-2">
                                     <Trophy className="text-amber-500"/>
                                     Live Leaderboard
                                 </h3>
-                                {demoLeaderboardData.length > 0 && <p className="text-sm text-muted-foreground font-semibold">{demoLeaderboardData.length} Participants</p>}
                             </div>
-                            <Leaderboard data={demoLeaderboardData} itemsPerPage={30} />
+                            <Leaderboard itemsPerPage={10} />
                           </section>
                         </>
                        )}

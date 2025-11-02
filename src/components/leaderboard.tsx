@@ -115,6 +115,9 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
 
   return (
     <div>
+        <div className="text-right mb-4">
+            <p className="text-sm font-semibold text-muted-foreground">{data.length} Participants</p>
+        </div>
       <div className="rounded-lg border">
         <Table>
           <TableHeader>
