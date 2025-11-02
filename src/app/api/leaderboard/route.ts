@@ -6,10 +6,15 @@ import { allUsers } from '@/lib/data';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7nvFaSoZeh5dFi_3lUc5rzNsFq0N7zobIn9nXNM8zMo7w6hCSszBCvOq-w5uv-kbW1A/exec';
 
 const formatTime = (seconds: number) => {
+    if (isNaN(seconds) || seconds < 0) {
+        return '00:00';
+    }
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 };
+
+export const dynamic = 'force-dynamic'; // Ensures the route is always dynamic
 
 export async function GET(request: Request) {
   try {
@@ -18,33 +23,44 @@ export async function GET(request: Request) {
         headers: {
             'Content-Type': 'application/json',
         },
-        next: { revalidate: 60 } // Revalidate every 60 seconds
+        cache: 'no-store', // Disable caching to get fresh data
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to fetch leaderboard from Google Script: ${response.statusText}`);
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch leaderboard from Google Script: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const scriptData: any[] = await response.json();
 
-    const leaderboard = scriptData.map((row, index) => {
-        const userProfile = allUsers.find(u => u.id === row.MembershipID);
-        const score = parseFloat(row.OverallPercentage) * 100;
-        
-        return {
-            rank: index + 1,
-            name: userProfile?.name || row.MembershipID, // Fallback to ID if name not found
-            avatar: userProfile?.avatarUrl || '',
-            score: Math.round(score),
-            time: formatTime(row['TotalTimeTaken (Seconds)']),
-        };
-    });
+    if (!Array.isArray(scriptData)) {
+      throw new Error("Invalid data format received from Google Script. Expected an array.");
+    }
+
+    const leaderboard = scriptData
+      .map((row, index) => {
+          if (!row || typeof row !== 'object') return null; // Skip invalid rows
+
+          const userProfile = allUsers.find(u => u.id === row.MembershipID);
+          const scoreValue = parseFloat(row.OverallPercentage);
+          const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
+          const timeValue = parseInt(row['TotalTimeTaken (Seconds)'], 10);
+
+          return {
+              rank: index + 1,
+              name: userProfile?.name || row.MembershipID || 'Unknown Participant', // Fallback to ID
+              avatar: userProfile?.avatarUrl || '',
+              score: score,
+              time: formatTime(timeValue),
+          };
+      })
+      .filter((entry): entry is NonNullable<typeof entry> => entry !== null); // Filter out null entries
     
     return NextResponse.json(leaderboard);
 
   } catch (error) {
     console.error("API Error fetching leaderboard:", error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json({ error: `Failed to load leaderboard data: ${errorMessage}` }, { status: 500 });
   }
 }
