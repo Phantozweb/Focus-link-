@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
 import { Dialog, DialogTrigger } from './ui/dialog';
 import { QuizEntryDialog } from './webinar-actions';
+import { allUsers } from '@/lib/data'; // Corrected import
 
 export type LeaderboardEntry = {
   rank: number;

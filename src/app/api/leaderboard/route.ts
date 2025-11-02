@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     if (!response.ok) {
         const errorText = await response.text();
         console.error(`Google Script Error: ${response.status} ${response.statusText} - ${errorText}`);
-        throw new Error(`Failed to fetch leaderboard from Google Script.`);
+        throw new Error(`Failed to fetch leaderboard from Google Script. Please ensure the script is deployed and permissions are set to "Anyone".`);
     }
 
     const scriptData: any[] = await response.json();
@@ -53,8 +53,13 @@ export async function GET(request: Request) {
           if (typeof timeValue === 'number' && !isNaN(timeValue)) {
             formattedTime = formatTime(timeValue);
           } else if (typeof timeValue === 'string') {
-            // If it's already a string like "19:59", use it directly.
-            formattedTime = timeValue;
+            const parsedNumber = parseFloat(timeValue);
+            if (!isNaN(parsedNumber)) {
+                formattedTime = formatTime(parsedNumber);
+            } else {
+                // If it's already a formatted string like "19:59", use it directly.
+                formattedTime = timeValue;
+            }
           } else {
             formattedTime = 'N/A';
           }
