@@ -292,20 +292,20 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                     <div className="space-y-3 pt-3">
                         <Dialog>
                            <DialogTrigger asChild>
-                                <Button size="lg" className="w-full text-lg py-6 animate-pulse">
+                                <Button size="lg" variant="destructive" className="w-full text-lg py-6 animate-pulse">
                                     <Trophy className="mr-2 h-6 w-6" />
                                     Enter Arena Now
                                 </Button>
                             </DialogTrigger>
                             <QuizEntryDialog webinarId={webinar.id} />
                         </Dialog>
-                        <Button size="lg" variant="secondary" className="w-full" asChild>
+                        <Button size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white shining-button" asChild>
                             <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS?mode=wwt" target="_blank" rel="noopener noreferrer">
                                 <MessageCircle className="mr-2 h-5 w-5" />
                                 Join the WhatsApp Community
                             </a>
                         </Button>
-                        <Button size="lg" variant="outline" className="w-full shining-button" asChild>
+                        <Button size="lg" variant="outline" className="w-full" asChild>
                             <Link href="#leaderboard">
                               <BarChart className="mr-2 h-5 w-5" />
                               Check Leaderboard
@@ -393,3 +393,5 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
+
+    
