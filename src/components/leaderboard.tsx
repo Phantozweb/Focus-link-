@@ -33,12 +33,13 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
         setIsLoading(true);
         setError(null);
         
-        // Fetch from the local API route, not the external script URL
+        // Fetch from the local API route
         const response = await fetch('/api/leaderboard', { cache: 'no-store' });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to load leaderboard data.');
+            // Safely access the error message
+            throw new Error(errorData?.error || 'Failed to load leaderboard data.');
         }
 
         const leaderboardData: LeaderboardEntry[] = await response.json();
