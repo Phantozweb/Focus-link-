@@ -19,7 +19,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 
@@ -460,7 +460,6 @@ function QuizComponent() {
 
     const timeTaken = currentModule.time - timeLeftInModule;
     // Award bonus points: Give max bonus if completed in less than 75% of the time, scaled down to 0.
-    const timeThreshold = currentModule.time * 0.75;
     let bonusPoints = 0;
     if (timeTaken < currentModule.time) {
         const timeRatio = Math.max(0, (currentModule.time - timeTaken) / currentModule.time);
