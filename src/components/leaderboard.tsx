@@ -8,8 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Trophy, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
-import { Dialog, DialogTrigger } from './ui/dialog';
-import { QuizEntryDialog } from './webinar-actions';
 import { allUsers } from '@/lib/data';
 
 export type LeaderboardEntry = {
@@ -24,7 +22,7 @@ interface LeaderboardProps {
   itemsPerPage?: number;
 }
 
-// IMPORTANT: This must be the URL of your deployed Google Apps Script.
+// Hardcode the Google Apps Script URL directly in the component.
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjQxDtM0oZ9hM68Lw593ZZL9YdLz-o4wJONvFAp5krz3A8xyNB1qGPttjh6C2d_JbLjg/exec';
 
 const formatTime = (seconds: number) => {
@@ -35,7 +33,6 @@ const formatTime = (seconds: number) => {
     const secs = seconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 };
-
 
 export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,13 +55,14 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
         });
 
         if (!response.ok) {
-            throw new Error(`Google Script Error: ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`Google Script Error: ${response.status} ${response.statusText} - ${errorText}`);
         }
 
         const scriptData: any[] = await response.json();
 
         if (!Array.isArray(scriptData)) {
-            throw new Error("Invalid data format received from Google Script.");
+            throw new Error("Invalid data format received from Google Script. Expected an array.");
         }
 
         const leaderboard = scriptData
@@ -72,6 +70,7 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
               if (!row || typeof row !== 'object' || !row['MembershipID']) return null;
 
               const userProfile = allUsers.find(u => u.id === row.MembershipID);
+              
               const scoreValue = parseFloat(row.OverallPercentage);
               const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
               
@@ -79,12 +78,17 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
               let formattedTime: string;
 
               if (typeof timeValue === 'number' && !isNaN(timeValue)) {
-                  formattedTime = formatTime(timeValue);
+                formattedTime = formatTime(timeValue);
               } else if (typeof timeValue === 'string') {
-                  const parsedNumber = parseFloat(timeValue);
-                  formattedTime = !isNaN(parsedNumber) ? formatTime(parsedNumber) : timeValue;
+                const parsedNumber = parseFloat(timeValue);
+                if (!isNaN(parsedNumber)) {
+                    formattedTime = formatTime(parsedNumber);
+                } else {
+                    // If it's already a formatted string like "19:59", use it directly.
+                    formattedTime = timeValue;
+                }
               } else {
-                  formattedTime = 'N/A';
+                formattedTime = 'N/A';
               }
 
               return {
@@ -95,7 +99,7 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
                   time: formattedTime,
               };
           })
-          .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+          .filter((entry): entry is NonNullable<typeof entry> => entry !== null); // Filter out null entries
           
         setData(leaderboard);
 
@@ -106,6 +110,7 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
         setIsLoading(false);
       }
     }
+    
     fetchLeaderboard();
   }, []);
 
