@@ -28,7 +28,8 @@ export async function GET(request: Request) {
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Failed to fetch leaderboard from Google Script: ${response.status} ${response.statusText} - ${errorText}`);
+        console.error(`Google Script Error: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(`Failed to fetch leaderboard from Google Script.`);
     }
 
     const scriptData: any[] = await response.json();
@@ -39,19 +40,31 @@ export async function GET(request: Request) {
 
     const leaderboard = scriptData
       .map((row, index) => {
-          if (!row || typeof row !== 'object') return null; // Skip invalid rows
+          if (!row || typeof row !== 'object' || !row['MembershipID']) return null;
 
           const userProfile = allUsers.find(u => u.id === row.MembershipID);
+          
           const scoreValue = parseFloat(row.OverallPercentage);
           const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
-          const timeValue = parseInt(row['TotalTimeTaken (Seconds)'], 10);
+          
+          const timeValue = row['TotalTimeTaken (Seconds)'];
+          let formattedTime: string;
+
+          if (typeof timeValue === 'number' && !isNaN(timeValue)) {
+            formattedTime = formatTime(timeValue);
+          } else if (typeof timeValue === 'string') {
+            // If it's already a string like "19:59", use it directly.
+            formattedTime = timeValue;
+          } else {
+            formattedTime = 'N/A';
+          }
 
           return {
               rank: index + 1,
-              name: userProfile?.name || row.MembershipID || 'Unknown Participant', // Fallback to ID
+              name: userProfile?.name || row.Name || row.MembershipID,
               avatar: userProfile?.avatarUrl || '',
               score: score,
-              time: formatTime(timeValue),
+              time: formattedTime,
           };
       })
       .filter((entry): entry is NonNullable<typeof entry> => entry !== null); // Filter out null entries
