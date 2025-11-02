@@ -63,12 +63,12 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
 
   if (error) {
      return (
-        <Card className="text-center bg-red-50 border-red-200">
+        <Card className="text-center bg-blue-50 border-blue-200">
             <CardContent className="p-8">
-                <Info className="h-10 w-10 text-destructive mx-auto mb-4" />
-                <h3 className="font-semibold text-xl text-destructive">Could Not Load Leaderboard</h3>
-                <p className="text-red-800 mt-1">
-                    There was an error fetching the results. Please try refreshing the page.
+                <Info className="h-10 w-10 text-blue-600 mx-auto mb-4" />
+                <h3 className="font-semibold text-xl text-blue-800">Leaderboard is Being Updated</h3>
+                <p className="text-blue-700 mt-1">
+                    Waiting for more members to participate. Please check back after 24 hours to see the latest rankings.
                 </p>
             </CardContent>
         </Card>
