@@ -6,7 +6,7 @@ import { notFound, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone, Check, Star, Users, ShieldCheck, BatteryCharging, Weight, Puzzle, Award, PlayCircle, Package, Server, Wrench, Handshake } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone, Check, Star, Users, ShieldCheck, BatteryCharging, Weight, Puzzle, Award, PlayCircle, Package, Server, Wrench, Handshake, Share2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Education, WorkExperience, UserProfile } from '@/types';
@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from '@/components/ui/textarea';
 import Autoplay from "embla-carousel-autoplay";
+import { ShareButton } from '@/components/share-button';
 
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
@@ -76,12 +77,15 @@ function StudentProfile({ user }: { user: UserProfile }) {
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-        <Button variant="outline" asChild className="mb-4">
-          <Link href="/directory/students">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Students
-          </Link>
-        </Button>
+        <div className="flex justify-between items-center mb-4">
+          <Button variant="outline" asChild>
+            <Link href="/directory/students">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Students
+            </Link>
+          </Button>
+          <ShareButton title={`${user.name} - ${user.type} on Focus Links`} text={`Check out ${user.name}'s profile on Focus Links!`} />
+        </div>
         <Card className="overflow-hidden">
           <div className="relative h-48 w-full bg-primary/10">
             {/* Placeholder for a banner image */}
@@ -214,12 +218,15 @@ function AssociationProfile({ user }: { user: UserProfile }) {
   return (
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-            <Button variant="outline" asChild className="mb-4">
-              <Link href="/directory/associations">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-              </Link>
-            </Button>
+            <div className="flex justify-between items-center mb-4">
+                <Button variant="outline" asChild>
+                  <Link href="/directory/associations">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back
+                  </Link>
+                </Button>
+                <ShareButton title={`${user.name} on Focus Links`} text={`Check out ${user.name}, an association on Focus Links!`} />
+            </div>
             <Card>
                 <div className="relative h-48 md:h-64 w-full">
                     <Image src={`https://picsum.photos/seed/${user.id}b/1200/300`} alt={`${user.name} banner`} fill style={{objectFit: 'cover'}} data-ai-hint="office building"/>
@@ -344,12 +351,15 @@ Thank you.
   return (
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-            <Button variant="outline" asChild className="mb-4">
-            <Link href="/directory/colleges">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-            </Link>
-            </Button>
+            <div className="flex justify-between items-center mb-4">
+                <Button variant="outline" asChild>
+                  <Link href="/directory/colleges">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back
+                  </Link>
+                </Button>
+                <ShareButton title={`${user.name} on Focus Links`} text={`Check out ${user.name}, a college on Focus Links!`} />
+            </div>
             <Card className="overflow-hidden">
                 <div className="relative h-48 md:h-64 w-full">
                     <Image src={bannerImage} alt={`${user.name} banner`} fill style={{objectFit: 'cover'}} data-ai-hint="college campus"/>
@@ -717,6 +727,7 @@ function DrishtiKitProfile({ user }: { user: UserProfile }) {
                             </a>
                         </Button>
                         <Button size="lg" variant="outline" onClick={handleWatchDemo}>Watch Demo</Button>
+                        <ShareButton title="DrishtiKit on Focus Links" text="Check out DrishtiKit, a revolutionary portable eye care solution, featured on Focus Links!" />
                     </div>
                 </div>
             </section>
@@ -1016,12 +1027,15 @@ export function ProfileClient({ user }: { user: UserProfile }) {
   return (
     <div className="bg-muted/40">
       <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-        <Button variant="outline" asChild className="mb-4">
-          <Link href="/directory">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Directory
-          </Link>
-        </Button>
+        <div className="flex justify-between items-center mb-4">
+          <Button variant="outline" asChild>
+            <Link href="/directory">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Directory
+            </Link>
+          </Button>
+          <ShareButton title={`${user.name} - ${user.type} on Focus Links`} text={`Check out ${user.name}'s profile on Focus Links!`} />
+        </div>
         <Card className="overflow-hidden">
           <div className="relative h-48 w-full bg-primary/10">
             {/* Placeholder for a banner image */}

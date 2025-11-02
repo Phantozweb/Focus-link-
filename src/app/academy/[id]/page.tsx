@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -14,6 +14,8 @@ import { WebinarBanner } from '@/components/webinar-banner';
 import { WebinarTime } from '@/components/webinar-time';
 import { Leaderboard } from '@/components/leaderboard';
 import { QuizBanner } from '@/components/quiz-banner';
+import { ShareButton } from '@/components/share-button';
+import { Button } from '@/components/ui/button';
 
 type WebinarPageProps = {
   params: { id: string }
@@ -189,10 +191,13 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
       />
       <div className="bg-muted/40">
         <div className="container mx-auto max-w-5xl py-12 px-4 sm:px-6 lg:px-8">
-          <Link href="/academy" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary mb-6">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Academy
-          </Link>
+          <div className="flex justify-between items-center mb-6">
+            <Link href="/academy" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Academy
+            </Link>
+            <ShareButton title={webinar.title} text={`Check out this event on Focus Links: ${webinar.title}`} />
+          </div>
           <Card className="overflow-hidden shadow-xl">
              <div className="relative aspect-[16/9] md:aspect-[2/1] lg:aspect-[3/1]">
               {isQuiz ? <QuizBanner webinar={webinar} /> : <WebinarBanner webinar={webinar} />}
@@ -324,6 +329,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                     <Trophy className="text-amber-500"/>
                                     Live Leaderboard
                                 </h3>
+                                <Button onClick={() => document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' })} variant="outline" size="sm">Go to Leaderboard</Button>
                             </div>
                             <Leaderboard itemsPerPage={10} />
                           </section>
