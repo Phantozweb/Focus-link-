@@ -303,38 +303,41 @@ function QuizComponent() {
 
   // Module Timer
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (quizState === 'active' && timeLeftInModule > 0) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         setTimeLeftInModule(prev => prev - 1);
       }, 1000);
-      return () => clearInterval(timer);
     } else if (quizState === 'active' && timeLeftInModule <= 0) {
       handleNextModule();
     }
+    return () => clearInterval(timer);
   }, [quizState, timeLeftInModule]);
 
   // Break Timer
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (quizState === 'break' && breakTimeLeft > 0) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         setBreakTimeLeft(prev => prev - 1);
       }, 1000);
-      return () => clearInterval(timer);
     } else if (quizState === 'break' && breakTimeLeft <= 0) {
       startNextModule();
     }
+    return () => clearInterval(timer);
   }, [quizState, breakTimeLeft]);
 
   // Countdown timer
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (quizState === 'countdown' && countdown > 0) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         setCountdown(prev => prev - 1);
       }, 1000);
-      return () => clearInterval(timer);
     } else if (quizState === 'countdown' && countdown === 0) {
       startQuiz();
     }
+    return () => clearInterval(timer);
   }, [quizState, countdown]);
 
 
@@ -349,6 +352,7 @@ function QuizComponent() {
         if (currentSession.attemptsLeft > 0) {
             setCurrentModuleIndex(0);
             setCurrentQuestionIndex(0);
+            setCountdown(COUNTDOWN_SECONDS);
             setTimeLeftInModule(quizModules[0].time);
             setModuleStartTime(Date.now());
             setAnswers({});
@@ -396,7 +400,6 @@ function QuizComponent() {
       const totalPossiblePoints = finalResults.reduce((acc, r) => acc + r.totalPoints + r.timeBonus, 0);
       const totalTimeTaken = finalResults.reduce((acc, r) => acc + r.timeTaken, 0);
       
-      // Check if EVERY module was passed
       const allModulesPassed = finalResults.every(r => r.passed);
       
       const overallPercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints) : 0;
@@ -445,7 +448,7 @@ function QuizComponent() {
     } else {
       handleFinishQuiz(updatedResults);
     }
-  }, [currentModule, currentQuestions.length, moduleResults, currentModuleIndex, timeLeftInModule]);
+  }, [currentModule, currentQuestions.length, moduleResults, currentModuleIndex, timeLeftInModule, answers, session]);
   
   const startNextModule = () => {
      const nextModuleIndex = currentModuleIndex + 1;
@@ -636,7 +639,7 @@ function QuizComponent() {
              </Card>
              <div className="mt-8 flex flex-col gap-4">
                 {!overallPassed && session && session.attemptsLeft > 0 && (
-                    <Button size="lg" className="w-full" variant="outline" onClick={() => setQuizState('countdown')}>
+                    <Button size="lg" className="w-full" variant="outline" onClick={() => { setQuizState('countdown'); setCountdown(COUNTDOWN_SECONDS); }}>
                         Try Again ({session.attemptsLeft} {session.attemptsLeft === 1 ? 'attempt' : 'attempts'} left)
                     </Button>
                 )}
