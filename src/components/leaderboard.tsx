@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Trophy, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from './ui/card';
+import { allUsers } from '@/lib/data';
 
 export type LeaderboardEntry = {
   rank: number;
@@ -17,9 +18,23 @@ export type LeaderboardEntry = {
   time: string;
 };
 
-interface LeaderboardProps {
-  itemsPerPage?: number;
-}
+// This type represents the raw data coming from the Google Sheet via our API
+type RawLeaderboardData = {
+  MembershipID: string;
+  Name?: string;
+  OverallPercentage: number | string;
+  'TotalTimeTaken (Seconds)': number | string;
+};
+
+const formatTime = (seconds: number) => {
+    if (isNaN(seconds) || seconds < 0) {
+        return '00:00';
+    }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+};
+
 
 export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,22 +43,55 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchLeaderboard() {
+    async function fetchAndProcessLeaderboard() {
       try {
         setIsLoading(true);
         setError(null);
         
-        // Fetch from the local API route
+        // 1. Fetch raw data from our simplified API route
         const response = await fetch('/api/leaderboard', { cache: 'no-store' });
 
         if (!response.ok) {
             const errorData = await response.json();
-            // Safely access the error message
             throw new Error(errorData?.error || 'Failed to load leaderboard data.');
         }
 
-        const leaderboardData: LeaderboardEntry[] = await response.json();
-        setData(leaderboardData);
+        const rawData: RawLeaderboardData[] = await response.json();
+
+        if (!Array.isArray(rawData)) {
+            throw new Error("Invalid data format received from the server.");
+        }
+        
+        // 2. Process and enrich the data on the client-side
+        const processedData = rawData.map((row, index) => {
+          const userProfile = allUsers.find(u => u.id === row.MembershipID);
+          
+          const scoreValue = parseFloat(String(row.OverallPercentage));
+          const score = !isNaN(scoreValue) ? Math.round(scoreValue * 100) : 0;
+          
+          const timeValue = row['TotalTimeTaken (Seconds)'];
+          let formattedTime: string;
+
+          if (typeof timeValue === 'number' && !isNaN(timeValue)) {
+            formattedTime = formatTime(timeValue);
+          } else if (typeof timeValue === 'string') {
+            const parsedNumber = parseFloat(timeValue);
+            formattedTime = !isNaN(parsedNumber) ? formatTime(parsedNumber) : timeValue;
+          } else {
+            formattedTime = 'N/A';
+          }
+          
+          return {
+              rank: index + 1,
+              name: userProfile?.name || row.Name || row.MembershipID,
+              avatar: userProfile?.avatarUrl || '',
+              score: score,
+              time: formattedTime,
+          };
+        })
+        .filter(entry => entry.name && entry.score > 0); // Filter out invalid entries
+
+        setData(processedData);
 
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -53,10 +101,10 @@ export function Leaderboard({ itemsPerPage = 10 }: LeaderboardProps) {
       }
     }
     
-    fetchLeaderboard();
+    fetchAndProcessLeaderboard();
     
     // Refresh data every 30 seconds
-    const interval = setInterval(fetchLeaderboard, 30000);
+    const interval = setInterval(fetchAndProcessLeaderboard, 30000);
     return () => clearInterval(interval);
 
   }, []);
