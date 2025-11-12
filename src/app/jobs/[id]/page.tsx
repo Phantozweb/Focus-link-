@@ -82,10 +82,43 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     notFound();
   }
 
-  const applyLink = job.applyUrl || '#';
-  const isHttpLink = applyLink.startsWith('http');
+  const isHttpLink = job.applyUrl.startsWith('http');
+  const isMailtoLink = job.applyUrl.startsWith('mailto:');
+  const isWhatsAppLink = job.applyUrl.startsWith('https://wa.me/');
   
+  const jobPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": job.title,
+    "description": `<p>${job.description.replace(/\n/g, ' ').replace(/###/g, '')}</p>`,
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "Focus Links Job ID",
+      "value": job.id
+    },
+    "datePosted": job.posted,
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": job.company,
+      "logo": job.logo
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": job.location.split(',')[0],
+        "addressCountry": job.location.split(',').pop()?.trim()
+      }
+    },
+    "employmentType": job.type.toUpperCase().replace('-', '_'),
+  };
+
   return (
+    <>
+    <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingSchema) }}
+    />
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center mb-6">
@@ -111,7 +144,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </div>
                         <div className="w-full sm:w-auto flex-shrink-0">
                            <Button size="lg" className="w-full" asChild>
-                                <a href={applyLink} target={isHttpLink ? "_blank" : "_self"} rel={isHttpLink ? "noopener noreferrer" : undefined}>
+                                <a 
+                                  href={job.applyUrl} 
+                                  target={(isHttpLink || isWhatsAppLink) ? "_blank" : "_self"} 
+                                  rel={(isHttpLink || isWhatsAppLink) ? "noopener noreferrer" : undefined}
+                                >
                                     Apply Now
                                 </a>
                            </Button>
@@ -129,7 +166,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                        <h3 className="text-lg font-semibold">Ready to Apply?</h3>
                        <p className="text-muted-foreground max-w-md mx-auto">Click the button below to be redirected to the application page for this exciting opportunity.</p>
                        <Button size="lg" asChild>
-                            <a href={applyLink} target={isHttpLink ? "_blank" : "_self"} rel={isHttpLink ? "noopener noreferrer" : undefined}>
+                            <a 
+                              href={job.applyUrl} 
+                              target={(isHttpLink || isWhatsAppLink) ? "_blank" : "_self"} 
+                              rel={(isHttpLink || isWhatsAppLink) ? "noopener noreferrer" : undefined}
+                            >
                                 Apply Now
                             </a>
                         </Button>
@@ -141,5 +182,6 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
             </div>
         </div>
     </div>
+    </>
   );
 }

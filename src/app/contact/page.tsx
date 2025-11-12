@@ -19,7 +19,7 @@ const contactPageSchema = {
     "description": "Get in touch with the Focus Links team for support, partnerships, or general inquiries.",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://focuslinks.pro/contact"
+        "@id": "https://focuslinks.in/contact"
     }
 };
 

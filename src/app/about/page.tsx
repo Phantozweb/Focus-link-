@@ -20,13 +20,13 @@ const aboutPageSchema = {
   "mainEntity": {
     "@type": "Organization",
     "name": "Focus Links",
-    "url": "https://focuslinks.pro/about",
+    "url": "https://focuslinks.in/about",
     "logo": "https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg",
     "founder": {
       "@type": "Person",
       "name": "Janarthan Veeramani",
       "jobTitle": "Founder",
-      "url": "https://focuslinks.pro/profile/1"
+      "url": "https://focuslinks.in/profile/1"
     }
   }
 };

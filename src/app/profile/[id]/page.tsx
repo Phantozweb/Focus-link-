@@ -84,7 +84,7 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      url: `https://focuslinks.pro/profile/${user.id}`,
+      url: `https://focuslinks.in/profile/${user.id}`,
       type: 'profile',
       images: ogImage,
     },

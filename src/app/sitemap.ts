@@ -6,7 +6,7 @@ import { demoDiscussions } from '@/lib/forum';
 import type { Job } from '@/types';
  
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = 'https://focuslinks.pro';
+  const siteUrl = 'https://focuslinks.in';
 
   const staticPages = [
     '', 
