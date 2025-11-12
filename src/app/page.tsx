@@ -28,6 +28,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Label } from '@/components/ui/label';
 import { logSearch } from '@/lib/activity-logger';
 import { Leaderboard } from '@/components/leaderboard';
+import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -124,10 +125,10 @@ export default function Home() {
       isDialog: false,
     },
     {
-      title: "215+ Members in our WhatsApp Community",
-      description: "Join our active WhatsApp group for discussions, quick updates, and informal networking. Note: This is separate from official membership.",
+      title: "350+ Members in our WhatsApp Community",
+      description: "Join our active WhatsApp group for discussions, quick updates, and informal networking. This is separate from official membership.",
       href: "https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2",
-      icon: <CommunityIcon className="h-8 w-8 text-white" />,
+      icon: <AnimatedCommunityGraph />,
       cta: "Join WhatsApp Community",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
       isDialog: false,
@@ -710,5 +711,3 @@ export default function Home() {
       </TooltipProvider>
   );
 }
-
-    
