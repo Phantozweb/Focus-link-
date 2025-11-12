@@ -3,15 +3,50 @@ import { demoJobs } from '@/lib/jobs';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Building, Briefcase, Check, Users } from 'lucide-react';
+import { ArrowLeft, MapPin, Building, Briefcase, Check } from 'lucide-react';
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import type { Metadata, ResolvingMetadata } from 'next';
+import { ShareButton } from '@/components/share-button';
 
 type JobDetailPageProps = {
   params: { id: string }
 }
+
+export async function generateMetadata(
+  { params }: JobDetailPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const job = demoJobs.find(j => j.id === params.id);
+
+  if (!job) {
+    return {
+      title: 'Job Not Found',
+    }
+  }
+
+  const previousImages = (await parent).openGraph?.images || []
+  const title = `${job.title} at ${job.company} | Focus Links Jobs`;
+  const description = job.description.substring(0, 160);
+  
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [job.logo, ...previousImages],
+    },
+     twitter: {
+      card: 'summary',
+      title,
+      description,
+      images: [job.logo],
+    },
+  }
+}
+
 
 export default function JobDetailPage({ params }: JobDetailPageProps) {
   const job = demoJobs.find(j => j.id === params.id);
@@ -23,10 +58,15 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   return (
     <div className="bg-muted/40">
         <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
-            <Link href="/jobs" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary mb-6">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to All Jobs
-            </Link>
+            <div className="flex justify-between items-center mb-6">
+                 <Button variant="outline" asChild>
+                    <Link href="/jobs">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to All Jobs
+                    </Link>
+                </Button>
+                <ShareButton title={`${job.title} at ${job.company}`} text={`Check out this job opening on Focus Links: ${job.title} at ${job.company}`} />
+            </div>
 
             <Card>
                 <CardHeader className="p-6 flex flex-col sm:flex-row items-start gap-6">

@@ -4,7 +4,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Briefcase, MapPin, Search, Building, Lock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { demoJobs } from '@/lib/jobs';
 import {
@@ -97,9 +96,6 @@ export default function JobsPage() {
                         </CardContent>
                     </Card>
                 ))}
-            </div>
-            <div className="text-center mt-8">
-                <Button variant="outline">Load More Jobs</Button>
             </div>
         </div>
       </div>
