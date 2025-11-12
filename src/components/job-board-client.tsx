@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { Job } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,13 +12,43 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { TimeAgo } from '@/components/time-ago';
 import { logSearch } from '@/lib/activity-logger';
 
+// Debounce function
+function debounce(func: Function, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function(this: any, ...args: any[]) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
 export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
   const [keyword, setKeyword] = useState('');
   const [location, setLocation] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const debouncedLogSearch = useMemo(
+    () =>
+      debounce((kw: string, loc: string) => {
+        if (kw || loc) {
+          logSearch(`**Job Board Search:**
+*   **Keyword:** \`${kw || 'none'}\`
+*   **Location:** \`${loc || 'none'}\``);
+        }
+      }, 500),
+    []
+  );
   
+  useEffect(() => {
+    if (keyword || location) {
+      setHasSearched(true);
+      debouncedLogSearch(keyword, location);
+    } else {
+      setHasSearched(false);
+    }
+  }, [keyword, location, debouncedLogSearch]);
+
   const filteredJobs = useMemo(() => {
-    if (!isSearching) {
+    if (!keyword && !location) {
       return allJobs;
     }
     
@@ -37,19 +67,11 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
 
       return matchesKeyword && matchesLocation;
     });
-  }, [allJobs, keyword, location, isSearching]);
+  }, [allJobs, keyword, location]);
 
-  const handleSearch = () => {
-     logSearch(`**Job Board Search:**
-*   **Keyword:** \`${keyword || 'none'}\`
-*   **Location:** \`${location || 'none'}\``);
-    setIsSearching(true);
-  };
-  
   const clearFilters = () => {
     setKeyword('');
     setLocation('');
-    setIsSearching(false);
   };
 
   return (
@@ -65,7 +87,6 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                             className="pl-10 h-12"
                             value={keyword}
                             onChange={(e) => setKeyword(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         />
                     </div>
                     <div className="relative flex-grow w-full">
@@ -75,15 +96,14 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                             className="pl-10 h-12"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         />
                     </div>
                 </div>
                  <div className="w-full flex-shrink-0 sm:w-auto flex flex-col md:flex-row gap-2">
-                  <Button onClick={handleSearch} className="w-full md:w-auto h-12">Find Jobs</Button>
-                   {isSearching && (
-                     <Button onClick={clearFilters} variant="ghost" size="icon" className="w-full md:w-auto h-12" aria-label="Clear filters">
-                        <X className="h-5 w-5" />
+                   {hasSearched && (
+                     <Button onClick={clearFilters} variant="ghost" className="w-full md:w-auto h-12">
+                        <X className="h-5 w-5 mr-2" />
+                        Clear
                     </Button>
                    )}
                   <TooltipProvider>
@@ -104,14 +124,14 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
         </Card>
 
         {/* Job Listings */}
-        {isSearching && (
+        {hasSearched && (
           <div className="mb-4">
             <h2 className="text-xl font-bold">Search Results</h2>
             <p className="text-muted-foreground">{filteredJobs.length} jobs found.</p>
           </div>
         )}
         
-        {!isSearching && (
+        {!hasSearched && (
           <div className="mb-4">
             <h2 className="text-xl font-bold">Latest Jobs</h2>
           </div>
