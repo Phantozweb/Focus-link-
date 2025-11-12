@@ -380,33 +380,31 @@ export default async function Home() {
                     <CarouselContent className="-ml-4">
                       {demoJobs.map((job) => (
                         <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
-                           <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                            <div className="p-6 flex flex-col flex-grow">
-                              <div className="flex items-start justify-between mb-4">
-                                  <div className="flex items-center gap-3">
-                                      <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center border">
-                                          <Image src={job.logo} alt={`${job.company} logo`} width={40} height={40} className="object-contain" data-ai-hint="logo building" />
-                                      </div>
-                                      <div>
-                                          <p className="font-semibold text-slate-800 line-clamp-1">{job.company}</p>
-                                          <p className="text-sm text-muted-foreground flex items-center gap-1.5"><MapPin className="h-3 w-3"/>{job.location}</p>
-                                      </div>
-                                  </div>
-                                  <Badge variant="secondary">{job.type}</Badge>
-                              </div>
-
-                              <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow hover:text-primary transition-colors">
-                                <Link href={`/jobs/${job.id}`}>{job.title}</Link>
-                              </h3>
-                              
-                              <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                                <Button asChild className="w-full">
+                           <Card className="hover:shadow-md transition-shadow h-full">
+                              <CardContent className="p-6 flex flex-col h-full">
+                                <div className="flex-grow">
+                                    <h3 className="text-xl font-bold text-slate-800 hover:text-primary">
+                                        <Link href={`/jobs/${job.id}`}>{job.title}</Link>
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-muted-foreground font-semibold mt-1">
+                                      <Building className="h-4 w-4" />
+                                      <span>{job.company}</span>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
+                                        <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{job.location}</div>
+                                        <div className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" />{job.type}</div>
+                                    </div>
+                                </div>
+                                <div className="mt-auto pt-4">
+                                  <Button asChild className="w-full">
                                     <Link href={`/jobs/${job.id}`}>View Details</Link>
-                                </Button>
-                                <p className="text-xs text-center">Posted <TimeAgo dateString={job.posted} /></p>
-                              </div>
-                            </div>
-                          </Card>
+                                  </Button>
+                                  <div className="text-xs text-muted-foreground text-center mt-2">
+                                      Posted <TimeAgo dateString={job.posted} />
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
