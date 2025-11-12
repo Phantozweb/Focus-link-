@@ -1,4 +1,3 @@
-
 // This file is no longer in use.
 // Job data is now fetched dynamically from the external URL:
 // https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json
