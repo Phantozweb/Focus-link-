@@ -138,15 +138,6 @@ export default function Home() {
       isDialog: false,
       tooltipText: "Last updated on Nov 12 2025"
     },
-    {
-      title: "Create Your Professional Profile",
-      description: "Already a member? Complete your profile to showcase your skills, experience, and interests to the global community.",
-      href: "/profile/create",
-      icon: <UserPlus className="h-8 w-8 text-white" />,
-      cta: "Create Profile",
-      className: "bg-gradient-to-br from-cyan-700 to-blue-800",
-      isDialog: false,
-    },
   ];
 
   const handleSearch = () => {
@@ -712,3 +703,5 @@ export default function Home() {
       </TooltipProvider>
   );
 }
+
+    
