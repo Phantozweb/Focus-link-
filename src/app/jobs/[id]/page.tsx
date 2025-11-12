@@ -3,10 +3,9 @@ import { demoJobs } from '@/lib/jobs';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Building, Briefcase, Check, Sparkles } from 'lucide-react';
+import { ArrowLeft, MapPin, Building, Check, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { ShareButton } from '@/components/share-button';
 import { Separator } from '@/components/ui/separator';
@@ -48,6 +47,19 @@ export async function generateMetadata(
   }
 }
 
+function formatJobDescription(markdown: string) {
+  return markdown
+    .replace(/^### (.*?)$/gm, '<h2 class="text-xl font-bold font-headline mb-4 text-slate-800">$1</h2>')
+    .replace(/^\* (.*?)$/gm, (match, content) => {
+        const iconClass = match.includes('Benefits') ? 'text-amber-500' : 'text-primary';
+        const icon = match.includes('Benefits') ? Sparkles : Check;
+        // This is a bit of a hack, but we'll use a placeholder to render the icon later
+        return `<li class="flex items-start gap-3"><span class="icon-placeholder ${iconClass}"></span><span class="text-slate-600">${content}</span></li>`;
+    })
+    .replace(/(<li.*<\/li>)/gs, '<ul class="space-y-3">$1</ul>')
+    .replace(/\n\n/g, '<br /><br />');
+}
+
 
 export default function JobDetailPage({ params }: JobDetailPageProps) {
   const job = demoJobs.find(j => j.id === params.id);
@@ -55,6 +67,36 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   if (!job) {
     notFound();
   }
+
+  const renderDescription = () => {
+    const html = formatJobDescription(job.description);
+    const parts = html.split(/<span class="icon-placeholder.*?"/);
+    const reactElements: (string | JSX.Element)[] = [];
+
+    parts.forEach((part, index) => {
+        reactElements.push(<span key={`part-${index}`} dangerouslySetInnerHTML={{ __html: part.split('</span>')[0] }} />);
+
+        if (index < parts.length - 1) {
+            const match = html.match(/<span class="icon-placeholder (.*?)">/);
+            if (match) {
+                const isBenefit = match[1].includes('amber');
+                 if(isBenefit) {
+                    reactElements.push(<Sparkles key={`icon-${index}`} className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />);
+                 } else {
+                    reactElements.push(<Check key={`icon-${index}`} className="h-5 w-5 text-primary mt-1 flex-shrink-0" />);
+                 }
+            }
+             reactElements.push(<span key={`span-end-${index}`} dangerouslySetInnerHTML={{ __html: part.split('</span>')[1] || ''}}/>);
+        }
+    });
+     // A bit of a hacky way to reconstruct the list items correctly
+    const finalRender = [];
+    for(let i=0; i<reactElements.length; i+=4) {
+        finalRender.push(<li key={i} className="flex items-start gap-3">{reactElements[i+2]}{reactElements[i+3]}</li>)
+    }
+
+    return <div className="prose-lg max-w-none" dangerouslySetInnerHTML={{__html: formatJobDescription(job.description)}}></div>;
+  };
   
   return (
     <div className="bg-muted/40">
@@ -87,54 +129,16 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                 </CardHeader>
                 <CardContent className="p-6 pt-4">
                    <Separator className="my-6" />
-
-                   <div className="space-y-8">
-                        <section>
-                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Job Description</h2>
-                            <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">{job.description}</p>
-                        </section>
-                         <section>
-                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Responsibilities</h2>
-                            <ul className="space-y-3">
-                              {job.responsibilities.map((item, index) => (
-                                <li key={index} className="flex items-start gap-3">
-                                  <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                  <span className="text-slate-600">{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-                        </section>
-                         <section>
-                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Qualifications</h2>
-                             <ul className="space-y-3">
-                              {job.qualifications.map((item, index) => (
-                                <li key={index} className="flex items-start gap-3">
-                                  <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                  <span className="text-slate-600">{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-                        </section>
-                         <section>
-                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Benefits</h2>
-                             <ul className="space-y-3">
-                              {job.benefits.map((item, index) => (
-                                <li key={index} className="flex items-start gap-3">
-                                  <Sparkles className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />
-                                  <span className="text-slate-600">{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-                        </section>
-
-                        <Separator className="my-6" />
-                        
-                        <div className="text-center space-y-4">
-                           <h3 className="text-lg font-semibold">Ready to Apply?</h3>
-                           <p className="text-muted-foreground max-w-md mx-auto">Click the button below to be redirected to the application page for this exciting opportunity.</p>
-                           <Button size="lg">Apply Now</Button>
-                        </div>
-                   </div>
+                   
+                    <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: formatJobDescription(job.description) }} />
+                   
+                    <Separator className="my-8" />
+                    
+                    <div className="text-center space-y-4">
+                       <h3 className="text-lg font-semibold">Ready to Apply?</h3>
+                       <p className="text-muted-foreground max-w-md mx-auto">Click the button below to be redirected to the application page for this exciting opportunity.</p>
+                       <Button size="lg">Apply Now</Button>
+                    </div>
                 </CardContent>
             </Card>
             <div className="text-xs text-center text-muted-foreground mt-4">
