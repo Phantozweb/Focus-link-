@@ -15,9 +15,13 @@ export function TimeAgo({ dateString }: TimeAgoProps) {
     if (dateString) {
       try {
         const date = new Date(dateString);
+        // Check if the date is valid before formatting
+        if (isNaN(date.getTime())) {
+          throw new Error("Invalid date object");
+        }
         setTimeAgo(formatDistanceToNow(date, { addSuffix: true }));
       } catch (error) {
-        console.error("Invalid date string for TimeAgo:", dateString);
+        // We will no longer log this to the console to prevent error overlays.
         setTimeAgo('Invalid date');
       }
     }
@@ -25,3 +29,4 @@ export function TimeAgo({ dateString }: TimeAgoProps) {
 
   return <span>{timeAgo}</span>;
 }
+
