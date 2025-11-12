@@ -6,7 +6,7 @@ export const students: UserProfile[] = [
     id: '1',
     name: 'Janarthan Veeramani',
     type: 'Student',
-    experience: 'Founder of FocusLinks | Head of Administration at Optobharat | B.Optom Student',
+    experience: 'Founder of FocusLinks & Focus-IN | B.Optom Student',
     location: 'Madurai, Tamil Nadu, India',
     isFounder: true,
     skills: [
@@ -15,7 +15,7 @@ export const students: UserProfile[] = [
       'Microsoft Excel', 'Pediatric Vision Screening', 'Clinical Patient Counseling', 'Visual Acuity Testing'
     ],
     interests: ['AI in Optometry', 'Visual Telepathy', 'Bionic Eyes', 'Entrepreneurship', 'Student Collaboration'],
-    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student and the founder of FocusLinks, on a mission to make eye care smarter, more accessible, and deeply human-centered.
+    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student on a mission to make eye care smarter and more accessible. As the founder of FocusLinks and Focus-IN, I am building an ecosystem of AI-powered tools to empower optometry students and practitioners worldwide.
 
 My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration for the global eye care community.
 
@@ -36,11 +36,10 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     workExperience: [
       {
         title: 'Founder',
-        company: 'FocusLinks',
+        company: 'FocusLinks & Focus-IN',
         startDate: 'Jul 2024',
         endDate: 'Present',
-        duration: '1 yr 3 mos',
-        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners.'
+        description: 'Building an ecosystem of AI-powered tools to empower optometry students and practitioners worldwide. FocusLinks was officially established on October 5th, 2025.'
       },
        {
         title: 'Head of Administration',
