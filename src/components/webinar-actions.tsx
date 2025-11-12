@@ -94,7 +94,7 @@ export function CertificateClaimDialog() {
   };
 
   if (verificationResult === 'success' && participantData) {
-    const passed = participantData.score >= PASS_PERCENTAGE;
+    const passed = participantData.passed;
     return (
         <DialogContent className="sm:max-w-2xl">
              <DialogHeader className="text-center items-center">
