@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Building, Check, Sparkles } from 'lucide-react';
+import { ArrowLeft, MapPin, Building, Check } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -15,10 +15,10 @@ type JobDetailPageProps = {
 }
 
 async function getJob(id: string): Promise<Job | undefined> {
-  // TODO: Replace this with your raw GitHub URL
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs.json`, { cache: 'no-store' });
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+  const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
   if (!response.ok) {
-    // If the file isn't found or there's an error, we can't find the job.
+    console.error('Failed to fetch jobs.json');
     return undefined;
   }
   const jobs: Job[] = await response.json();

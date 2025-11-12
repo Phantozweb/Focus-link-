@@ -5,7 +5,6 @@ import { useRef, useState, useEffect } from 'react';
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
 import { demoDiscussions } from '@/lib/forum';
-import { demoJobs } from '@/lib/jobs';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -18,7 +17,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { UserProfile } from '@/types';
+import type { UserProfile, Job } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
@@ -32,6 +31,23 @@ import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 import { AnimatedSearchCard } from '@/components/animated-search-card';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
+
+async function getJobs(): Promise<Job[]> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+  // Use a relative path for fetching within the same app, or keep the full URL if it's on a different domain.
+  const response = await fetch(`/jobs.json`, { cache: 'no-store' });
+  if (!response.ok) {
+    console.error('Failed to fetch jobs.json, returning empty array.');
+    return [];
+  }
+  try {
+    const jobs = await response.json();
+    return Array.isArray(jobs) ? jobs : [];
+  } catch (error) {
+    console.error('Failed to parse jobs.json:', error);
+    return [];
+  }
+}
 
 const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaText: string, ctaLink: string, icon: React.ReactNode }) => (
     <div className="text-center p-8 bg-card rounded-lg shadow-sm border-2 border-dashed flex flex-col items-center justify-center h-full">
@@ -64,6 +80,7 @@ export default function Home() {
   const [clinicsAndOpticals, setClinicsAndOpticals] = useState<UserProfile[]>([]);
   const [students, setStudents] = useState<UserProfile[]>([]);
   const [industry, setIndustry] = useState<UserProfile[]>([]);
+  const [demoJobs, setDemoJobs] = useState<Job[]>([]);
 
   const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
   const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
@@ -76,6 +93,12 @@ export default function Home() {
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   
   useEffect(() => {
+    async function loadJobs() {
+        const jobsData = await getJobs();
+        setDemoJobs(jobsData);
+    }
+    loadJobs();
+
     // Randomize all user types on client-side mount
     const allProfessionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
     setProfessionals(shuffleArray([...allProfessionals]));
@@ -525,7 +548,7 @@ export default function Home() {
                   </Carousel>
                 </section>
 
-                <section>
+                {demoJobs && demoJobs.length > 0 && <section>
                   <div className="flex justify-between items-center mb-8">
                     <h2 className="text-slate-800 text-3xl font-bold font-headline">Latest Job Postings</h2>
                     <Button asChild variant="link" className="text-primary pr-0">
@@ -565,7 +588,7 @@ export default function Home() {
                     <CarouselPrevious />
                     <CarouselNext />
                   </Carousel>
-                </section>
+                </section>}
               <section>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
@@ -703,4 +726,3 @@ export default function Home() {
       </TooltipProvider>
   );
 }
-

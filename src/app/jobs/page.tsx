@@ -19,12 +19,18 @@ export const metadata: Metadata = {
 };
 
 async function getJobs(): Promise<Job[]> {
-  // TODO: Replace this with your raw GitHub URL
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs.json`, { cache: 'no-store' });
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+  const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
   if (!response.ok) {
-    throw new Error('Failed to fetch jobs');
+    console.error('Failed to fetch jobs.json, returning empty array.');
+    return [];
   }
-  return response.json();
+  try {
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to parse jobs.json:', error);
+    return [];
+  }
 }
 
 export default async function JobsPage() {
