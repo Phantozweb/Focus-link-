@@ -15,7 +15,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { BellRing, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { demoJobs } from '@/lib/jobs';
+import type { Job } from '@/types';
 
 interface NotificationSettingsProps {
   isOpen: boolean;
@@ -28,6 +28,20 @@ const initialPreferences = {
   jobs: true,
   forum: false,
 };
+
+async function getJobsForNotification(): Promise<Job[]> {
+  const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
+  try {
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) {
+      return [];
+    }
+    return await response.json();
+  } catch (error) {
+    return [];
+  }
+}
+
 
 // This component is no longer used in the header but is kept for potential future use.
 // If you want to re-enable it, you'll need to add a trigger for it somewhere in the UI.
@@ -51,12 +65,16 @@ export function NotificationSettings({
     setPreferences((prev) => ({ ...prev, [id]: checked }));
   };
 
-  const showDemoNotification = () => {
+  const showDemoNotification = async () => {
     if (typeof window === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
       return;
     }
     
-    const demoJob = demoJobs[0];
+    const jobs = await getJobsForNotification();
+    const demoJob = jobs.length > 0 ? jobs[0] : null;
+
+    if (!demoJob) return;
+    
     const title = 'New Job Posting!';
     const options: NotificationOptions = {
       body: `${demoJob.title} at ${demoJob.company}`,

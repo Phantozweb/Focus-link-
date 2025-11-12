@@ -2,11 +2,11 @@
 import { MetadataRoute } from 'next'
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
-import { demoJobs } from '@/lib/jobs';
 import { demoDiscussions } from '@/lib/forum';
+import type { Job } from '@/types';
  
-export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = 'https://focuslinks.in';
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const siteUrl = 'https://focuslinks.pro';
 
   const staticPages = [
     '', 
@@ -41,15 +41,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
   }));
 
-  const jobPages = demoJobs.map(job => ({
-    url: `${siteUrl}/jobs/${job.id}`,
-    lastModified: new Date(),
-  }));
-
   const forumPages = demoDiscussions.map(discussion => ({
     url: `${siteUrl}/forum/${discussion.id}`,
     lastModified: new Date(),
   }));
+  
+  let jobPages: MetadataRoute.Sitemap = [];
+  try {
+    const jobsUrl = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
+    const response = await fetch(jobsUrl, { cache: 'no-store' });
+    if (response.ok) {
+        const jobs: Job[] = await response.json();
+        jobPages = jobs.map(job => ({
+            url: `${siteUrl}/jobs/${job.id}`,
+            lastModified: new Date(),
+        }));
+    }
+  } catch (error) {
+    console.error('Failed to fetch jobs for sitemap:', error);
+  }
+
 
   return [
     ...staticPages,
