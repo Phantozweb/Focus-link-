@@ -16,7 +16,7 @@ export { type LeaderboardEntry };
 
 export function Leaderboard({ itemsPerPage = 10 }: { itemsPerPage?: number }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const data = quizWinnersData;
+  const data = quizWinnersData.slice(0, 50);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
