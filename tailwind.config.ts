@@ -21,6 +21,7 @@ export default {
       fontFamily: {
         sans: ['Public Sans', 'Noto Sans', 'sans-serif'],
         headline: ['Public Sans', 'Noto Sans', 'sans-serif'],
+        serif: ['"Ms Madi"', 'cursive'],
       },
       colors: {
         slate: colors.slate,
@@ -102,5 +103,3 @@ export default {
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/forms')],
 } satisfies Config;
-
-    

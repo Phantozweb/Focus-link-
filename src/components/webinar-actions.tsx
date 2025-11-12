@@ -1,13 +1,13 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Webinar } from '@/lib/academy';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award, Download } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -18,6 +18,7 @@ import { quizWinnersData, type LeaderboardEntry, type ModuleResult } from '@/lib
 import { certificateParticipants } from '@/lib/data/verifycertificatedids';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import Image from 'next/image';
+import { toPng } from 'html-to-image';
 
 
 // Debounce function
@@ -49,6 +50,7 @@ export function CertificateClaimDialog() {
   const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail'>('idle');
   const [participantData, setParticipantData] = useState<LeaderboardEntry | null>(null);
   const [participantName, setParticipantName] = useState<string | null>(null);
+  const certificateRef = useRef<HTMLDivElement>(null);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -93,6 +95,24 @@ export function CertificateClaimDialog() {
     }
   };
 
+  const handleDownload = useCallback(() => {
+    if (certificateRef.current === null) {
+      return;
+    }
+
+    toPng(certificateRef.current, { cacheBust: true, pixelRatio: 3 })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `FocusLinks_Certificate_${participantName?.replace(/\s/g, '_')}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [participantName]);
+
+
   if (verificationResult === 'success' && participantName) {
     const passed = participantData ? participantData.passed : false;
     const score = participantData ? participantData.score : 0;
@@ -108,16 +128,17 @@ export function CertificateClaimDialog() {
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
                   Participation confirmed for <strong>{participantName}</strong>. Here is your certificate.
-                   <a href={certificateUrl} target="_blank" rel="noopener noreferrer" className="text-xs block text-blue-500 underline mt-1 break-all">{certificateUrl}</a>
                 </DialogDescription>
             </DialogHeader>
 
-            <div className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
+            <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
               <Image src={certificateUrl} alt="Certificate of Participation" layout="fill" objectFit="contain" quality={100} />
               <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantName}</p>
+                  <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(10px)' }}>{participantName}</p>
               </div>
             </div>
+            
+            <a href={certificateUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-center block text-blue-500 underline mt-1 break-all">{certificateUrl}</a>
 
             {participantData && (
               <>
@@ -156,8 +177,9 @@ export function CertificateClaimDialog() {
                 )}
               </>
             )}
-            <DialogFooter>
+            <DialogFooter className="flex-col sm:flex-row gap-2 pt-4">
                 <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
+                <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download Certificate</Button>
             </DialogFooter>
         </DialogContent>
     )
