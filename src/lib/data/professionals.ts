@@ -587,7 +587,7 @@ export const professionals: UserProfile[] = [
       'Teaching'
     ],
     interests: ['Teaching', 'Dispensing'],
-    bio: `A highly dedicated optometrist with a strong academic background, holding a post-graduate degree from Vasan Institute of Ophthalmology and Research, Chennai. I have extensive experience in conducting over 30+ eye screening camps during my undergraduate internship, as well as private screening camps. My passion lies in developing web-based tools for optometry, advising on spectacle and contact lens care, and ensuring patient comfort through clear vision.`,
+    bio: `A highly dedicated optometrist with a strong academic background, holding a post-graduate degree from Vasan Institute of Ophthalmology and Research, Chennai. I have extensive experience in conducting over 30+ eye screening camps during my undergraduate internship, as well as private screening camps. My passion lies in developing web-based tools for optometry, advising on spectacle and contact lens care,, and ensuring patient comfort through clear vision.`,
     links: {
       email: 'shivashangarimoptom@gmail.com',
       linkedin: 'https://www.linkedin.com/in/shivashangari-m-optom'
@@ -670,6 +670,75 @@ export const professionals: UserProfile[] = [
       }
     ],
     languages: ['English', 'Hindi'],
+    verified: true
+  },
+  {
+    id: '18',
+    name: 'Anandhan Kaliyamoorthy',
+    type: 'Optometrist',
+    experience: 'Consultant Optometrist at L V PRASAD EYE INSTITUTE',
+    location: 'Chennai, Tamil Nadu, India',
+    skills: [
+      'Binocular Vision Assesment',
+      'Subjective Refraction',
+      'Retinoscopy',
+      'Contact Lens Fitting',
+      'Optometry',
+      'Low Vision Rehabilitation',
+      'Ocular Disease Management'
+    ],
+    interests: ['Pediatric Optometry', 'Myopia Management', 'Clinical Research'],
+    bio: 'A dedicated and detail-oriented optometrist with a Master\'s degree focused on advanced clinical skills and ocular disease management. Currently serving as a Consultant Optometrist at the prestigious L V Prasad Eye Institute. My academic research centered on evaluating lag of accommodation and binocular vision changes in children with myopia, fueling my passion for pediatric optometry and evidence-based practice. I am committed to providing comprehensive eye care and leveraging my expertise in binocular vision, contact lenses, and low vision to improve patient outcomes.',
+    links: {
+      email: 'anandkaliyamoorthy@gmail.com',
+      linkedin: 'https://in.linkedin.com/in/anandk2001'
+    },
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D5603AQGjl4IT0wf23Q/profile-displayphoto-shrink_800_800/B56ZTc1rqzGoAg-/0/1738871848470?e=1764806400&v=beta&t=o4tmvud8v6Y4yFx_bibi0al9DTc73-pC_IOUzEtcyEo',
+    workExperience: [
+      {
+        title: 'Consultant Optometrist',
+        company: 'L V PRASAD EYE INSTITUTE',
+        startDate: 'Mar 2025',
+        endDate: 'Present',
+        description: 'Working as a consultant optometrist in a leading eye care institution.',
+        duration: ''
+      },
+      {
+        title: 'Optometrist Apprentice',
+        company: 'MN Eye Hospital - India',
+        startDate: 'Nov 2022',
+        endDate: 'Dec 2024',
+        description: '',
+        duration: ''
+      },
+      {
+        title: 'Optometrist Intern',
+        company: 'MN Eye Hospital - India',
+        startDate: 'Nov 2021',
+        endDate: 'Dec 2022',
+        description: '',
+        duration: ''
+      }
+    ],
+    education: [
+      {
+        school: 'M.N. COLLEGE OF OPTOMETRY, CHENNAI',
+        university: 'M.N. COLLEGE OF OPTOMETRY',
+        degree: 'Master of Optometry (M.Optom)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2022',
+        endYear: '2024'
+      },
+      {
+        school: 'MN SCHOOL OF OPTOMETRY',
+        university: 'MN SCHOOL OF OPTOMETRY',
+        degree: 'Bachelor of Science (B.Sc)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2018',
+        endYear: '2022'
+      }
+    ],
+    languages: ['English', 'Tamil', 'Telugu'],
     verified: true
   }
 ];
