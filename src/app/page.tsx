@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, MessageSquare, Building2 as CommunityIcon, Trophy, BarChart } from 'lucide-react';
+import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, MessageSquare, Building2 as CommunityIcon, Trophy, BarChart, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile, Job } from '@/types';
@@ -135,7 +135,7 @@ export default async function Home() {
                       {card.isAnimated ? (
                           <AnimatedSearchCard />
                       ) : (
-                          <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl flex-grow ${card.className}`}>
+                          <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl flex-grow h-full ${card.className}`}>
                             <div>
                               <div className="mb-4">{card.icon}</div>
                               <div className='flex items-center gap-2'>
@@ -380,22 +380,23 @@ export default async function Home() {
                     <CarouselContent className="-ml-4">
                       {demoJobs.map((job) => (
                         <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
-                          <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                           <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                             <CardContent className="p-6 flex flex-col flex-grow">
                               <div className="flex items-center gap-4 mb-4">
-                                  <Image src={job.logo} alt={`${job.company} logo`} width={48} height={48} className="rounded-md object-contain" data-ai-hint="logo building" />
+                                  <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center">
+                                      <Image src={job.logo} alt={`${job.company} logo`} width={40} height={40} className="object-contain" data-ai-hint="logo building" />
+                                  </div>
                                   <div>
                                       <p className="font-semibold text-slate-800">{job.company}</p>
-                                      <Badge variant="outline">{job.type}</Badge>
+                                      <p className="text-sm text-muted-foreground">{job.location}</p>
                                   </div>
                               </div>
                               <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
                                 <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
                               </h3>
                               <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                                  <p><span className="font-semibold text-slate-700">Location:</span> {job.location}</p>
-                                  <p><span className="font-semibold text-slate-700">Posted by:</span> {job.postedBy}</p>
-                                  <p><span className="font-semibold text-slate-700">Posted:</span> <TimeAgo dateString={job.posted} /></p>
+                                  <div className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-primary" /> {job.type}</div>
+                                  <div className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" /> <TimeAgo dateString={job.posted} /></div>
                               </div>
                             </CardContent>
                           </Card>
