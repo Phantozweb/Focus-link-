@@ -133,9 +133,9 @@ export function CertificateClaimDialog() {
 
             <div className="space-y-6">
                 <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg">
-                  <Image src={certificateUrl} alt="Certificate of Participation" layout="fill" objectFit="contain" quality={100} />
+                  <Image src={certificateUrl} alt="Certificate of Participation" quality={100} width={1123} height={794} className="w-full h-auto" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(10px)' }}>{participantName}</p>
+                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(-10px)' }}>{participantName}</p>
                   </div>
                 </div>
 
