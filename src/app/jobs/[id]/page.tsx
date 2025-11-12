@@ -82,20 +82,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     notFound();
   }
 
-  const generateApplyLink = () => {
-    if (!job.applyUrl || job.applyUrl.startsWith('http')) {
-      return job.applyUrl || '#';
-    }
-    if (job.applyUrl.toLowerCase() === 'email') {
-      const email = 'tellersecret894@gmail.com';
-      const subject = `Job Application: ${job.title} at ${job.company}`;
-      const body = `Dear Hiring Manager,\n\nI am interested in the ${job.title} position advertised on Focus Links.\n\nPlease find my resume attached.\n\nThank you for your consideration.`;
-      return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }
-    return job.applyUrl;
-  };
-
-  const applyLink = generateApplyLink();
+  const applyLink = job.applyUrl || '#';
   const isHttpLink = applyLink.startsWith('http');
   
   return (
