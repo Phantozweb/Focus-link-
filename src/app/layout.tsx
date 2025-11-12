@@ -25,8 +25,17 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   icons: {
-    icon: 'https://i.ibb.co/pwnL1Xy/IMG-20251025-WA0014.jpg',
-  }
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+    other: [
+      {
+        rel: 'icon',
+        url: 'https://i.ibb.co/pwnL1Xy/IMG-20251025-WA0014.jpg',
+        sizes: '32x32',
+      },
+    ],
+  },
 };
 
 const organizationSchema = {
