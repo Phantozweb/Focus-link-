@@ -58,7 +58,7 @@ export function AnimatedSearchCard() {
   return (
      <div className="rounded-xl p-8 flex flex-col justify-between shadow-lg h-80 bg-white border overflow-hidden">
         <div className="relative">
-            <h3 className="font-bold text-2xl mb-2 text-slate-800 flex items-center gap-2"><Sparkles className="text-amber-500" /> Get Discovered on Google</h3>
+            <h3 className="font-bold text-2xl mb-2 text-slate-800 flex items-center gap-2"><Sparkles className="text-amber-500" /> Rank Higher on Google. Get Seen.</h3>
             <p className="text-slate-600">An SEO-friendly profile helps you rank higher in searches, making you visible to peers and employers worldwide.</p>
 
             <div className="mt-4 bg-slate-50 p-2 rounded-lg border border-slate-200">
@@ -78,7 +78,7 @@ export function AnimatedSearchCard() {
                     <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800 text-xs font-bold">FL</div>
                         <div className="flex flex-col">
-                            <span className="text-slate-600 text-xs">focuslinks.in/profile</span>
+                            <span className="text-slate-600 text-xs">focuslinks.pro/profile</span>
                             <span className="text-blue-600 text-base leading-tight hover:underline cursor-pointer">{currentProfileData.name} | Focus Links</span>
                         </div>
                     </div>
@@ -113,5 +113,3 @@ export function AnimatedSearchCard() {
     </div>
   );
 }
-
-    
