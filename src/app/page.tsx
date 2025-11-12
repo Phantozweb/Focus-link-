@@ -125,7 +125,7 @@ export default function Home() {
       href: "/membership",
       icon: <Award className="h-8 w-8 text-white" />,
       cta: "Apply Now",
-      className: "bg-gradient-to-br from-blue-600 to-cyan-500",
+      className: "bg-gradient-to-br from-blue-600 to-cyan-500 shining-button",
       isDialog: false,
     },
     {
