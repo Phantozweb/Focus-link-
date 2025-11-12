@@ -764,7 +764,7 @@ export const professionals: UserProfile[] = [
         company: 'Bansara Institute of Ophthalmic Science',
         startDate: 'Jul 2024',
         endDate: 'Present',
-        description: 'Dedicated to shaping the future of Optometrists by imparting knowledge and skills in various procedures and techniques.'
+        description: 'Dedicated to shaping the future of Optometrists by imparting knowledge and skills in various procedures and techniques. Committed to fostering a learning environment that empowers students to excel in their field.'
       },
       {
         title: 'Assistant Manager - BANROPP',
@@ -841,35 +841,7 @@ export const professionals: UserProfile[] = [
         endDate: 'Sep 2023',
         description: 'Worked as a part-time clinical optometrist.'
       },
-      {
-        title: 'Optometrist',
-        company: 'Specialist Eye Center, Tinu Hospital',
-        startDate: 'Jan 2019',
-        endDate: 'Sep 2020',
-        description: ''
-      },
-      {
-        title: 'Optometrist',
-        company: 'Hygeia HMO',
-        startDate: 'Jan 2017',
-        endDate: 'Jan 2019',
-        description: ''
-      },
-      {
-        title: 'Corper Optometrist',
-        company: 'Wuse General Hospital',
-        startDate: 'Dec 2015',
-        endDate: 'Oct 2016',
-        description: ''
-      },
-      {
-        title: 'Intern Optometrist',
-        company: 'Supreme Vision Eye Clinic',
-        startDate: 'Jan 2015',
-        endDate: 'Oct 2015',
-        description: ''
-      },
-      {
+       {
         title: 'Volunteer Optometrist',
         company: 'Senator Abana Foundation',
         startDate: 'Dec 2014',
@@ -883,17 +855,22 @@ export const professionals: UserProfile[] = [
         degree: 'Doctor of Optometry (OD)',
         fieldOfStudy: 'Optometry',
         startYear: '2007',
-        endYear: '2013'
+        endYear: '2013',
+        university: 'University of Benin'
       },
       {
         school: 'Nigerian Institute of Management',
         degree: 'Proficiency in Management',
         fieldOfStudy: 'Management',
         startYear: '2016',
-        endYear: '2028'
+        endYear: '2028',
+        university: 'Nigerian Institute of Management'
       }
     ],
     languages: ['English', 'Igbo'],
     verified: true
   }
 ];
+
+    
+    
