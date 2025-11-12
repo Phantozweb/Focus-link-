@@ -64,20 +64,22 @@ export function AnimatedSearchCard() {
                 </div>
             </div>
             
-            <div className="relative h-20 mt-2">
-                 <div key={currentIndex} className="absolute inset-0 flex items-center p-3 bg-slate-700/30 rounded-lg animate-fade-in-out">
-                    <Avatar className="h-10 w-10 border-2 border-slate-500">
-                        <AvatarImage src={currentProfileData.avatar} />
-                        <AvatarFallback>{currentProfileData.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="ml-3">
-                        <p className="font-semibold text-white text-sm">{currentProfileData.name}</p>
-                        <p className="text-xs text-slate-400">{currentProfileData.title}</p>
+            <div className="relative h-[84px] mt-2">
+                 <div key={currentIndex} className="absolute inset-0 p-3 bg-slate-700/30 rounded-lg animate-fade-in-out text-left">
+                    <div className="flex items-center gap-2">
+                        <div className="h-6 w-6 rounded-full bg-cyan-200 flex items-center justify-center text-cyan-800 text-xs font-bold">FL</div>
+                        <div className="flex flex-col">
+                            <span className="text-white/70 text-xs">focuslinks.pro/profile</span>
+                            <span className="text-blue-400 text-base leading-tight hover:underline cursor-pointer">{currentProfileData.name} | Focus Links</span>
+                        </div>
                     </div>
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                        Connect with {currentProfileData.name}, a skilled {currentProfileData.title} on Focus Links, the global eye care community...
+                    </p>
                 </div>
             </div>
         </div>
-        <div className="mt-6">
+        <div className="mt-4">
             <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
                 <Link href="/profile/create">
                 Create Your Profile <ArrowRight className="ml-2 h-4 w-4" />
