@@ -381,24 +381,31 @@ export default async function Home() {
                       {demoJobs.map((job) => (
                         <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                            <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                            <CardContent className="p-6 flex flex-col flex-grow">
-                              <div className="flex items-center gap-4 mb-4">
-                                  <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center">
-                                      <Image src={job.logo} alt={`${job.company} logo`} width={40} height={40} className="object-contain" data-ai-hint="logo building" />
+                            <div className="p-6 flex flex-col flex-grow">
+                              <div className="flex items-start justify-between mb-4">
+                                  <div className="flex items-center gap-3">
+                                      <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center border">
+                                          <Image src={job.logo} alt={`${job.company} logo`} width={40} height={40} className="object-contain" data-ai-hint="logo building" />
+                                      </div>
+                                      <div>
+                                          <p className="font-semibold text-slate-800 line-clamp-1">{job.company}</p>
+                                          <p className="text-sm text-muted-foreground flex items-center gap-1.5"><MapPin className="h-3 w-3"/>{job.location}</p>
+                                      </div>
                                   </div>
-                                  <div>
-                                      <p className="font-semibold text-slate-800">{job.company}</p>
-                                      <p className="text-sm text-muted-foreground">{job.location}</p>
-                                  </div>
+                                  <Badge variant="secondary">{job.type}</Badge>
                               </div>
-                              <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                                <Link href={`/jobs/${job.id}`} className="hover:text-primary transition-colors">{job.title}</Link>
+
+                              <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow hover:text-primary transition-colors">
+                                <Link href={`/jobs/${job.id}`}>{job.title}</Link>
                               </h3>
+                              
                               <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                                  <div className="flex items-center gap-2"><Briefcase className="h-4 w-4 text-primary" /> {job.type}</div>
-                                  <div className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" /> <TimeAgo dateString={job.posted} /></div>
+                                <Button asChild className="w-full">
+                                    <Link href={`/jobs/${job.id}`}>View Details</Link>
+                                </Button>
+                                <p className="text-xs text-center">Posted <TimeAgo dateString={job.posted} /></p>
                               </div>
-                            </CardContent>
+                            </div>
                           </Card>
                         </CarouselItem>
                       ))}
