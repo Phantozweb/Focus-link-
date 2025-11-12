@@ -501,7 +501,7 @@ export const professionals: UserProfile[] = [
       'AI in Eye Care', 'Contact lens advancement', 'Awareness among General Public',
       'Treatment in Complex Eye Conditions', 'New Research in Eye Care', 'Advancement in Vision Therapy'
     ],
-    bio: "Passionate and dedicated Speciality Contact Lens Practitioner and Optometrist in providing comprehensive eye care and personalized contact lens solutions. Expertise in fitting and managing specialty contact lenses for complex corneal conditions.\n\nSkilled in delivering engaging and informative presentations, translating complex concepts into accessible knowledge for diverse audiences. Committed to continuous learning and staying abreast of the latest advancements in eye care.\n\nAs a dedicated Scleral Lens Specialist, Orthokeratology Advocate, and Myopia Control Enthusiast, I'm on a mission to transform lives through exceptional vision care. I've honed my skills to provide custom solutions that go beyond conventional eye care.",
+    bio: `Passionate and dedicated Speciality Contact Lens Practitioner and Optometrist in providing comprehensive eye care and personalized contact lens solutions. Expertise in fitting and managing specialty contact lenses for complex corneal conditions.\n\nSkilled in delivering engaging and informative presentations, translating complex concepts into accessible knowledge for diverse audiences. Committed to continuous learning and staying abreast of the latest advancements in eye care.\n\nAs a dedicated Scleral Lens Specialist, Orthokeratology Advocate, and Myopia Control Enthusiast, I'm on a mission to transform lives through exceptional vision care. I've honed my skills to provide custom solutions that go beyond conventional eye care.`,
     links: {
       email: 'tahseenrazakhan123@gmail.com',
       linkedin: 'https://www.linkedin.com/in/mohd-tahseen-raza-khan-mtrk'
@@ -739,6 +739,74 @@ export const professionals: UserProfile[] = [
       }
     ],
     languages: ['English', 'Tamil', 'Telugu'],
+    verified: true
+  },
+  {
+    id: '19',
+    name: 'Appu Raj',
+    type: 'Optometrist',
+    experience: 'Consultant | Clinical Instructor | Telemedicine Program Manager',
+    location: 'Shillong, Meghalaya, India',
+    skills: [
+      'Clinical Optometry', 'Telemedicine Program Management', 'ROP Screening', 'Clinical Instruction', 
+      'Patient Care & Counseling', 'Teamwork', 'Project Management'
+    ],
+    interests: ['AI in Healthcare', 'Hospital and Health Care Management', 'Public Health Initiatives'],
+    bio: `A multifaceted clinical optometrist dedicated to advancing eye care through direct patient service, education, and innovative telemedicine solutions. As a Clinical Instructor, I am passionate about shaping the next generation of optometrists. In my role as Assistant Manager for the BANROPP program, I spearhead a pioneering telemedicine initiative focused on preventing vision loss in premature infants by screening for Retinopathy of Prematurity (ROP). My goal is to combine clinical expertise with healthcare management to improve patient outcomes and expand access to quality eye care.`,
+    links: {
+      email: 'appuraj418@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/appu-raj-741023229'
+    },
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQFAMHHdRW1IOQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1680667917933?e=1764806400&v=beta&t=MfJDNQWJ1-PACcIBd7uYjwObQ_b_R4lHyV8k-phZnP8',
+    workExperience: [
+      {
+        title: 'Clinical Instructor',
+        company: 'Bansara Institute of Ophthalmic Science',
+        startDate: 'Jul 2024',
+        endDate: 'Present',
+        description: 'Dedicated to shaping the future of Optometrists by imparting knowledge and skills in various procedures and techniques.'
+      },
+      {
+        title: 'Assistant Manager - BANROPP',
+        company: 'Bansara Eye Care Centre',
+        startDate: 'Nov 2023',
+        endDate: 'Present',
+        description: 'Spearheading the BANROPP program, a pioneering telemedicine initiative focused on preventing vision loss in premature infants by screening for Retinopathy of Prematurity (ROP).'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Bansara Eye Care Centre',
+        startDate: 'Sep 2023',
+        endDate: 'Present',
+        description: ''
+      },
+      {
+        title: 'Internship Trainee',
+        company: 'LV Prasad Eye Institute',
+        startDate: 'Sep 2022',
+        endDate: 'Nov 2022',
+        description: 'Completed a 3-month internship, gaining experience in various sub-specialties of eye care diagnostic and management.'
+      }
+    ],
+    education: [
+       {
+        school: 'Dr. D Y Patil Vidyapeeth - Centre for Online Learning',
+        university: 'Dr. D Y Patil Vidyapeeth',
+        degree: 'Master of Business Administration (MBA)',
+        fieldOfStudy: 'Hospital and Health Care Management',
+        startYear: '2024',
+        endYear: '2026'
+      },
+      {
+        school: 'Martin Luther Christian University, Shillong',
+        university: 'Martin Luther Christian University, Shillong',
+        degree: 'Bachelor of Optometry',
+        fieldOfStudy: 'Health Sciences',
+        startYear: '2019',
+        endYear: '2023'
+      }
+    ],
+    languages: ['English', 'Hindi'],
     verified: true
   }
 ];
