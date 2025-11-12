@@ -195,7 +195,7 @@ export const professionals: UserProfile[] = [
       'Corneal Topography', 'Automated Perimetry', 'Clinical Instruction & Mentoring'
     ],
     interests: ['Clinical Research', 'Specialty Contact Lenses', 'Glaucoma Diagnosis'],
-    bio: 'A clinically-focused and detail-oriented Optometrist with a Master\'s degree and hands-on experience in advanced diagnostics, ocular disease management, and specialty lens fitting. Combines a strong foundation in clinical research with a commitment to quality patient evaluation and low vision rehabilitation. Proven ability to operate a wide range of ophthalmic instruments and manage complex patient cases effectively.',
+    bio: "A clinically-focused and detail-oriented Optometrist with a Master's degree and hands-on experience in advanced diagnostics, ocular disease management, and specialty lens fitting. Combines a strong foundation in clinical research with a commitment to quality patient evaluation and low vision rehabilitation. Proven ability to operate a wide range of ophthalmic instruments and manage complex patient cases effectively.",
     links: {
       email: 'ramkumar4111999@gmail.com',
     },
@@ -634,7 +634,7 @@ export const professionals: UserProfile[] = [
     bio: "I’m Vedant Dhingra, an optometrist and entrepreneur passionate about building accessible, scalable solutions for vision care. I co-founded DrishtiKit, a portable eye screening kit designed to make mass vision testing simple and affordable for communities with limited access to clinical infrastructure. Alongside this, I lead Jay Optical, a growing optical practice focused on quality, affordability, and outreach-based care, and Sightly, an innovation initiative developing assistive and sensory learning tools for children with visual impairment. I also run Optometry Guide, an online resource aimed at empowering young optometrists through knowledge sharing and community engagement. My work lies at the intersection of eye health, technology, and social innovation driven by a belief that clear vision should never depend on geography or privilege.",
     links: {
       email: 'dhingra.vedant3@gmail.com',
-      linkedin: 'https://www.drishtikit.com/'
+      linkedin: 'https://www.linkedin.com/in/vedant-dhingra-970183184/'
     },
     avatarUrl: 'https://i.ibb.co/Zp9QjjM6/Ved-pic.jpg',
     workExperience: [
