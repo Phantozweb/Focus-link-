@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, MessageSquare, Building2 as CommunityIcon, Trophy } from 'lucide-react';
+import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, MessageSquare, Building2 as CommunityIcon, Trophy, BarChart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile, Job } from '@/types';
@@ -89,12 +89,13 @@ export default async function Home() {
     },
     {
       title: "Eye Q Arena Has Ended!",
-      description: "The International Optometry Knowledge Championship is complete. Thank you to all participants! You can now view the final leaderboard and claim your certificate.",
+      description: "With 320+ participants, only 50 survived the quiz! The International Optometry Knowledge Championship is complete. View the final leaderboard and claim your certificate now.",
       href: "/academy/eye-q-arena-2025",
-      icon: <Trophy className="h-8 w-8 text-white" />,
+      icon: <Trophy className="h-8 w-8 text-white animate-bounce" />,
       cta: "Claim Certificate",
+      cta2: "View Leaderboard",
+      href2: "/academy/eye-q-arena-2025#leaderboard",
       className: "bg-gradient-to-br from-amber-500 to-orange-600 shining-button",
-      isDialog: false,
     },
     {
       title: "350+ Members in our WhatsApp Community",
@@ -103,7 +104,6 @@ export default async function Home() {
       icon: <AnimatedCommunityGraph />,
       cta: "Join WhatsApp Community",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
-      isDialog: false,
       tooltipText: "Last updated on Nov 12 2025"
     },
   ];
@@ -146,12 +146,21 @@ export default async function Home() {
                               </div>
                               <p className="text-white/80">{card.description}</p>
                             </div>
-                            <div className="mt-6">
-                              <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                                <Link href={card.href || '#'} target={card.href?.startsWith('http') ? '_blank' : '_self'}>
-                                  {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                                </Link>
-                              </Button>
+                            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                              {card.cta && (
+                                <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
+                                  <Link href={card.href || '#'} target={card.href?.startsWith('http') ? '_blank' : '_self'}>
+                                    {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                                  </Link>
+                                </Button>
+                              )}
+                              {card.cta2 && (
+                                 <Button asChild variant="ghost" className="bg-transparent text-white hover:bg-white/20 hover:text-white transition-colors">
+                                  <Link href={card.href2 || '#'}>
+                                    {card.cta2} <BarChart className="ml-2 h-4 w-4" />
+                                  </Link>
+                                </Button>
+                              )}
                             </div>
                           </div>
                       )}
@@ -178,7 +187,7 @@ export default async function Home() {
                   <Carousel opts={{ align: "start" }} className="w-full">
                     <CarouselContent className="-ml-4">
                       {liveWebinars.map((webinar) => (
-                        <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4 h-full">
+                        <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                           <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                             <Link href={`/events/${webinar.id}`} className="block">
                               <div className="relative w-full aspect-video">
@@ -219,7 +228,7 @@ export default async function Home() {
                     <Carousel opts={{ align: "start" }} className="w-full">
                     <CarouselContent className="-ml-4">
                         {upcomingWebinars.map((webinar) => (
-                        <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4 h-full">
+                        <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                             <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                                 <Link href={`/events/${webinar.id}`} className="block">
                                     <div className="relative w-full aspect-video">
@@ -261,7 +270,7 @@ export default async function Home() {
                 >
                   <CarouselContent className="-ml-4">
                     {professionals.map((user) => (
-                      <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                         <ProfileCard user={user} />
                       </CarouselItem>
                     ))}
@@ -284,7 +293,7 @@ export default async function Home() {
                 >
                   <CarouselContent className="-ml-4">
                     {students.map((student) => (
-                      <CarouselItem key={student.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
+                      <CarouselItem key={student.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4 flex flex-col">
                          <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
                             <div className="p-6 flex flex-col items-center flex-grow">
                               <Avatar className="h-24 w-24 mb-4 border-2 border-background shadow-md">
@@ -325,7 +334,7 @@ export default async function Home() {
                   >
                     <CarouselContent className="-ml-4">
                       {demoDiscussions.map((discussion) => (
-                        <CarouselItem key={discussion.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <CarouselItem key={discussion.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                           <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                             <CardContent className="p-6 flex flex-col flex-grow">
                               <Badge variant="secondary" className="mb-2 w-fit">{discussion.category}</Badge>
@@ -370,7 +379,7 @@ export default async function Home() {
                   >
                     <CarouselContent className="-ml-4">
                       {demoJobs.map((job) => (
-                        <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                           <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                             <CardContent className="p-6 flex flex-col flex-grow">
                               <div className="flex items-center gap-4 mb-4">
@@ -411,7 +420,7 @@ export default async function Home() {
                     >
                         <CarouselContent className="-ml-4">
                             {associations.map((user) => (
-                            <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                            <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                                 <ProfileCard user={user} />
                             </CarouselItem>
                             ))}
@@ -443,7 +452,7 @@ export default async function Home() {
                     >
                     <CarouselContent className="-ml-4">
                         {colleges.map((user) => (
-                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                             <ProfileCard user={user} />
                         </CarouselItem>
                         ))}
@@ -475,7 +484,7 @@ export default async function Home() {
                     >
                     <CarouselContent className="-ml-4">
                         {industry.map((user) => (
-                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                             <ProfileCard user={user} />
                         </CarouselItem>
                         ))}
@@ -507,7 +516,7 @@ export default async function Home() {
                     >
                     <CarouselContent className="-ml-4">
                         {clinicsAndOpticals.map((user) => (
-                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                             <ProfileCard user={user} />
                         </CarouselItem>
                         ))}
