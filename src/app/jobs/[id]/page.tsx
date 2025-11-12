@@ -72,7 +72,6 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
             <Card>
                 <CardHeader className="p-6">
                     <div className="flex flex-col sm:flex-row items-start gap-6">
-                        <Image src={job.logo} alt={`${job.company} logo`} width={80} height={80} className="rounded-md object-contain border p-2 bg-white" data-ai-hint="logo building" />
                         <div className="flex-grow">
                             <Badge className="mb-2">{job.type}</Badge>
                             <CardTitle className="text-3xl font-headline text-slate-800">{job.title}</CardTitle>
