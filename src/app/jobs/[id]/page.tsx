@@ -81,6 +81,22 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
   if (!job) {
     notFound();
   }
+
+  const generateApplyLink = () => {
+    if (!job.applyUrl || job.applyUrl.startsWith('http')) {
+      return job.applyUrl || '#';
+    }
+    if (job.applyUrl.toLowerCase() === 'email') {
+      const email = 'tellersecret894@gmail.com';
+      const subject = `Job Application: ${job.title} at ${job.company}`;
+      const body = `Dear Hiring Manager,\n\nI am interested in the ${job.title} position advertised on Focus Links.\n\nPlease find my resume attached.\n\nThank you for your consideration.`;
+      return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+    return job.applyUrl;
+  };
+
+  const applyLink = generateApplyLink();
+  const isHttpLink = applyLink.startsWith('http');
   
   return (
     <div className="bg-muted/40">
@@ -108,7 +124,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                         </div>
                         <div className="w-full sm:w-auto flex-shrink-0">
                            <Button size="lg" className="w-full" asChild>
-                                <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
+                                <a href={applyLink} target={isHttpLink ? "_blank" : "_self"} rel={isHttpLink ? "noopener noreferrer" : undefined}>
                                     Apply Now
                                 </a>
                            </Button>
@@ -126,7 +142,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                        <h3 className="text-lg font-semibold">Ready to Apply?</h3>
                        <p className="text-muted-foreground max-w-md mx-auto">Click the button below to be redirected to the application page for this exciting opportunity.</p>
                        <Button size="lg" asChild>
-                            <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
+                            <a href={applyLink} target={isHttpLink ? "_blank" : "_self"} rel={isHttpLink ? "noopener noreferrer" : undefined}>
                                 Apply Now
                             </a>
                         </Button>
