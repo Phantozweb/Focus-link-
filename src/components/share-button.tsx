@@ -33,9 +33,11 @@ export function ShareButton({ title, text, className }: ShareButtonProps) {
       try {
         await navigator.share(shareData);
       } catch (err) {
-        // Silently fail if user cancels share dialog
+        // Silently fail if user cancels share dialog.
+        // We check for AbortError, but also just ignore other errors
+        // as some browsers might throw different permission errors on cancel.
         if ((err as Error).name !== 'AbortError') {
-           console.error('Share failed:', err);
+           // Intentionally left blank to prevent error overlay on share cancel.
         }
       }
     } else {
