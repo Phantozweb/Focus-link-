@@ -443,6 +443,49 @@ export default function Home() {
                   <CarouselNext />
                 </Carousel>
               </section>}
+              
+              {students.length > 0 && <section>
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Student Directory</h2>
+                  <Button asChild variant="link" className="text-primary pr-0">
+                    <Link href="/directory/students">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  </Button>
+                </div>
+                <Carousel 
+                    opts={{ align: "start", loop: true }}
+                    plugins={[Autoplay({ delay: 4200, stopOnInteraction: true })]}
+                    className="w-full"
+                >
+                  <CarouselContent className="-ml-4">
+                    {students.map((student) => (
+                      <CarouselItem key={student.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
+                         <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
+                            <div className="p-6 flex flex-col items-center flex-grow">
+                              <Avatar className="h-24 w-24 mb-4 border-2 border-background shadow-md">
+                                <AvatarImage src={student.avatarUrl} alt={student.name} className="object-cover" data-ai-hint="portrait person" />
+                                <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              <h3 className="text-lg font-bold text-slate-800 flex items-center justify-center gap-2">
+                                {student.name}
+                                {student.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                              </h3>
+                              <p className="text-sm text-primary font-medium">{student.experience.split('|')[0]}</p>
+                              <p className="text-sm text-muted-foreground mt-2 flex-grow line-clamp-3">{student.bio.substring(0,100)}...</p>
+                            </div>
+                            <div className="p-4 border-t bg-muted/50 mt-auto">
+                              <Button asChild className="w-full">
+                                  <Link href={`/profile/${student.id}`}>View Profile</Link>
+                                </Button>
+                            </div>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+              </section>}
+              
               <section>
                   <div className="flex justify-between items-center mb-8">
                     <h2 className="text-slate-800 text-3xl font-bold font-headline">From the Forum</h2>
@@ -662,49 +705,10 @@ export default function Home() {
                 )}
               </section>
 
-              {students.length > 0 && <section>
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-slate-800 text-3xl font-bold font-headline">Student Directory</h2>
-                  <Button asChild variant="link" className="text-primary pr-0">
-                    <Link href="/directory/students">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                  </Button>
-                </div>
-                <Carousel 
-                    opts={{ align: "start", loop: true }}
-                    plugins={[Autoplay({ delay: 4200, stopOnInteraction: true })]}
-                    className="w-full"
-                >
-                  <CarouselContent className="-ml-4">
-                    {students.map((student) => (
-                      <CarouselItem key={student.id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
-                         <Card className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col text-center">
-                            <div className="p-6 flex flex-col items-center flex-grow">
-                              <Avatar className="h-24 w-24 mb-4 border-2 border-background shadow-md">
-                                <AvatarImage src={student.avatarUrl} alt={student.name} className="object-cover" data-ai-hint="portrait person" />
-                                <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <h3 className="text-lg font-bold text-slate-800 flex items-center justify-center gap-2">
-                                {student.name}
-                                {student.verified && <CheckCircle2 className="h-5 w-5 text-primary" />}
-                              </h3>
-                              <p className="text-sm text-primary font-medium">{student.experience.split('|')[0]}</p>
-                              <p className="text-sm text-muted-foreground mt-2 flex-grow line-clamp-3">{student.bio.substring(0,100)}...</p>
-                            </div>
-                            <div className="p-4 border-t bg-muted/50 mt-auto">
-                              <Button asChild className="w-full">
-                                  <Link href={`/profile/${student.id}`}>View Profile</Link>
-                                </Button>
-                            </div>
-                        </Card>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
-              </section>}
           </div>
         </div>
       </TooltipProvider>
   );
 }
+
+    
