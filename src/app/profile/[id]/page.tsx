@@ -45,6 +45,19 @@ export async function generateMetadata(
       },
     }
   }
+  
+  if (user.id === '21') {
+    return {
+      title: `${user.name} | Optometrist & M.Optom Student | Focus Links`,
+      description: `Connect with ${user.name}, a skilled optometrist and Master of Optometry student at The Sankara Nethralaya Academy, specializing in pediatric vision and contact lenses.`,
+      keywords: ['Optometrist in Chennai', 'Sankara Nethralaya student', 'Esakkiammal Iyyappan', 'Pediatric Optometry', 'Aravind Eye Care System Alumna', 'Contact Lens Specialist', 'Clinical Tutor'],
+      openGraph: {
+        title: `${user.name} | Optometrist & M.Optom Student`,
+        description: 'Experienced Clinical Optometrist and Academic Tutor from Aravind Eye Hospital, now pursuing a Master of Optometry at The Sankara Nethralaya Academy.',
+        images: [user.avatarUrl],
+      },
+    }
+  }
 
 
   const title = `${user.name} - ${user.type} | Focus Links`;

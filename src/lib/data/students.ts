@@ -261,7 +261,7 @@ My goal is to build a career that combines clinical leadership with education an
       }
     ],
     languages: ['English', 'Tamil'],
-    verified: false
+    verified: false,
   },
   {
     id: '11',
@@ -299,6 +299,62 @@ My goal is to build a career that combines clinical leadership with education an
       }
     ],
     languages: ['English (Full Professional)', 'Hindi (Full Professional)', 'Bhojpuri (Professional Working)'],
+    verified: true,
+  },
+  {
+    id: '21',
+    name: 'Esakkiammal Iyyappan',
+    type: 'Student',
+    experience: 'Master of Optometry Student | Former Clinical Optometrist',
+    location: 'Chennai, Tamil Nadu, India',
+    skills: [
+      'Comprehensive Eye Examination', 'Pediatric Refraction', 'Orthoptic Evaluations', 'Specialty Contact Lens Fitting (Soft, RGP, Scleral)',
+      'Diagnostic Procedures (OCT, Biometry, Fundus Photography, VF Analysis)', 'Patient Counseling', 'Academic Tutoring', 'Low Vision & Rehabilitation'
+    ],
+    interests: ['Pediatric Optometry', 'Contact Lenses', 'Low Vision', 'Evidence-Based Practice', 'Clinical Research'],
+    bio: `I am Optom. Esakkiammal Iyyappan, passionate about advancing vision care through clinical excellence and continuous learning. With experience as both a Clinical Optometrist and Academic Tutor at the renowned Aravind Eye Hospital, I have a strong foundation in patient care and education.
+
+My goal is to bridge the gap between practice and education. I am currently pursuing a Master of Optometry at The Sankara Nethralaya Academy to further specialize and contribute to improving visual health through evidence-based practice, research, and teaching.`,
+    links: {
+      linkedin: 'https://www.linkedin.com/in/esakkiammal-iyyappan-263953217',
+      email: 'dhanasriiyyappan2020@gmail.com',
+    },
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D5603AQGqudTp058K9g/profile-displayphoto-crop_800_800/B56ZpaKBmYKEAI-/0/1762449170789?e=1764806400&v=beta&t=I8iXNg6bkBhjaw8LvLO4oFfyGkxhWJ01yQLEd3qdRoU',
+    workExperience: [
+      {
+        title: 'Clinical Optometrist & Academic Tutor',
+        company: 'Aravind Eye Care System',
+        startDate: 'Aug 2024',
+        endDate: 'Aug 2025',
+        description: 'Efficiently managed and performed comprehensive eye examinations daily for over 3700 patients, conducted over 140 classes for students, and specialized in pediatric refraction and orthoptic evaluations. Gained proficiency in a wide range of diagnostic procedures and specialty contact lens fitting.'
+      },
+      {
+        title: 'Optometry Intern',
+        company: 'Bejan Singh Eye Hospital',
+        startDate: 'Feb 2023',
+        endDate: 'Mar 2024',
+        description: 'Completed a comprehensive internship gaining foundational clinical experience.'
+      }
+    ],
+    education: [
+      {
+        school: 'The Sankara Nethralaya Academy',
+        university: 'Sankara Nethralaya',
+        degree: 'Master of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2025',
+        endYear: '2027'
+      },
+      {
+        school: 'Bejan Singh Institute of Ophthalmology',
+        university: 'Tamil Nadu Dr. M.G.R. Medical University',
+        degree: 'Bachelor of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2019',
+        endYear: '2024'
+      }
+    ],
+    languages: ['English (Professional)', 'Tamil (Native)', 'Malayalam (Limited)'],
     verified: true,
   }
 ];
