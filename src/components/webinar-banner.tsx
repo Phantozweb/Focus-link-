@@ -57,11 +57,12 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
     }
     
     if (status === 'ENDED') {
+        const badgeText = isQuiz ? 'Event Ended' : 'Webinar Ended';
         return (
             <div className="absolute top-4 left-4 z-20">
                 <Badge variant="destructive" className={cn("bg-red-100/80 backdrop-blur-sm flex items-center gap-1.5 py-1 px-2.5 text-sm text-red-900")}>
                     <XCircle className="h-4 w-4" />
-                    Event Ended
+                    {badgeText}
                 </Badge>
             </div>
         );
@@ -125,42 +126,16 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
   // Default, detailed banner for the webinar page
   return (
-     <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden p-6 flex flex-col justify-between", className)}>
-      <div className="absolute inset-0 -translate-x-1/4 -translate-y-1/4 w-[150%] h-[150%] rounded-full bg-blue-500/20 blur-3xl opacity-60"></div>
-      
-       <StatusBadge />
+     <div className={cn("relative w-full h-full bg-gradient-to-br from-cyan-800 to-blue-900 text-white overflow-hidden p-6 flex flex-col justify-center items-center text-center", className)}>
+        <div className="absolute inset-0 bg-blue-500/20 blur-3xl opacity-60"></div>
+        
+        <StatusBadge />
 
-      <div className="relative z-10 flex flex-col md:flex-row gap-4 h-full items-center">
-         <div className="flex-shrink-0 mx-auto md:mx-0">
-             <Avatar className="h-20 w-20 md:h-28 md:w-28 border-4 border-white/30 shadow-lg">
-                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
-                <AvatarFallback className="text-4xl md:text-5xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-         </div>
-         <div className="flex flex-col justify-center text-center md:text-left">
-            <h1 className="text-lg md:text-2xl font-bold font-headline leading-tight mb-2">
-              {webinar.title}
+        <div className="relative z-10 flex flex-col items-center gap-4">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-headline leading-tight max-w-2xl">
+                {webinar.title}
             </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs md:text-sm">
-                <div className="flex items-center justify-center md:justify-start gap-2">
-                    <Calendar className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span><WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></span>
-                </div>
-                 <div className="flex items-center justify-center md:justify-start gap-2">
-                    <Clock className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span><WebinarTime dateTime={webinar.dateTime} format={{ timeOnly: true }} /></span>
-                </div>
-                 <div className="flex items-center justify-center md:justify-start gap-2">
-                    <Users className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span>Organized by {webinar.speaker.name}</span>
-                </div>
-                 <div className="flex items-center justify-center md:justify-start gap-2">
-                    <Tv className="h-4 w-4 text-cyan-300 flex-shrink-0" />
-                    <span>Hosted by {webinar.host.name}</span>
-                </div>
-            </div>
-         </div>
-      </div>
+        </div>
     </div>
   );
 }
