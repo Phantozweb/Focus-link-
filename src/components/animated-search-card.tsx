@@ -56,7 +56,7 @@ export function AnimatedSearchCard() {
   const currentProfileData = searchProfiles[currentIndex];
 
   return (
-     <div className="rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-lg h-full bg-white border overflow-hidden">
+     <div className="rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-lg bg-white border overflow-hidden h-full">
         <div className="relative">
             <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800 flex items-center gap-2 animate-pulse">
                 <Sparkles className="text-amber-500" />
