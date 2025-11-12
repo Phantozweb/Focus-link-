@@ -132,16 +132,16 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
 
       <div className="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 h-full items-center">
          <div className="flex-shrink-0 mx-auto md:mx-0">
-             <Avatar className="h-24 w-24 md:h-32 md:w-32 lg:h-40 lg:w-40 border-4 border-white/30 shadow-lg">
+             <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-white/30 shadow-lg">
                 <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} />
                 <AvatarFallback className="text-5xl md:text-6xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
             </Avatar>
          </div>
          <div className="flex flex-col justify-center text-center md:text-left">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-headline leading-tight mb-4">
+            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold font-headline leading-tight mb-4">
               {webinar.title}
             </h1>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm md:text-base">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                 <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-cyan-300 flex-shrink-0" />
                     <span><WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></span>
