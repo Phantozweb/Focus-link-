@@ -6,10 +6,10 @@ import { notFound, useParams } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone, Check, Star, Users, ShieldCheck, BatteryCharging, Weight, Puzzle, Award, PlayCircle, Package, Server, Wrench, Handshake, Share2 } from 'lucide-react';
+import { Briefcase, Building, GraduationCap, Languages, Linkedin, Mail, MapPin, Stethoscope, Lightbulb, Globe, Hospital, Glasses, Factory, UserPlus, ArrowLeft, CheckCircle2, User, Phone, Check, Star, Users, ShieldCheck, BatteryCharging, Weight, Puzzle, Award, PlayCircle, Package, Server, Wrench, Handshake, Share2, Trophy } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { Education, WorkExperience, UserProfile } from '@/types';
+import type { Education, WorkExperience, UserProfile, Achievement } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -58,6 +58,22 @@ function EducationItem({ education }: { education: Education }) {
   )
 }
 
+function AchievementItem({ achievement }: { achievement: Achievement }) {
+  return (
+    <div className="flex gap-4">
+       <div className="bg-amber-100 rounded-md p-3 flex-shrink-0 h-14 w-14 flex items-center justify-center">
+        <Trophy className="h-7 w-7 text-amber-600" />
+      </div>
+      <div>
+        <h4 className="font-semibold text-lg">{achievement.event}</h4>
+        <p className="text-amber-700 font-bold">{achievement.place}</p>
+        <p className="text-sm text-muted-foreground">{achievement.description}</p>
+      </div>
+    </div>
+  )
+}
+
+
 function generateMailto(email?: string, name?: string, recipientName?: string) {
     if (!email) return '#';
     const subject = `Connecting from Focus Links`;
@@ -102,17 +118,25 @@ function StudentProfile({ user }: { user: UserProfile }) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
-                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-1">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 mb-1">
                       <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
                         {user.name}
                         {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
                       </h1>
-                      {user.isFounder && (
-                        <Badge className="bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 py-1 px-3 text-sm">
-                            <Star className="h-4 w-4 mr-1.5" />
-                            Founder
-                        </Badge>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {user.isFounder && (
+                          <Badge className="bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 py-1 px-3 text-sm">
+                              <Star className="h-4 w-4 mr-1.5" />
+                              Founder
+                          </Badge>
+                        )}
+                        {user.achievements && user.achievements.map((ach, index) => (
+                           <Badge key={index} className="bg-amber-400 text-amber-900 border-amber-500 hover:bg-amber-500 py-1 px-3 text-sm">
+                              <Trophy className="h-4 w-4 mr-1.5" />
+                              {ach.place}
+                          </Badge>
+                        ))}
+                      </div>
                   </div>
                   <p className="text-lg text-muted-foreground">{user.experience}</p>
                    <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
@@ -174,6 +198,15 @@ function StudentProfile({ user }: { user: UserProfile }) {
                   <h2 className="text-xl font-bold font-headline mb-4">About</h2>
                   <div className="text-foreground/80 whitespace-pre-wrap space-y-4" dangerouslySetInnerHTML={{ __html: user.bio.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                 </section>
+
+                 {user.achievements && user.achievements.length > 0 && (
+                   <section>
+                    <h2 className="text-xl font-bold font-headline mb-4">Achievements</h2>
+                    <div className="space-y-6">
+                      {user.achievements.map((ach, index) => <AchievementItem key={index} achievement={ach} />)}
+                    </div>
+                  </section>
+                )}
                 
                 {user.workExperience.length > 0 && (
                    <section>
@@ -1195,10 +1228,3 @@ export function ProfileClient({ user }: { user: UserProfile }) {
     </div>
   );
 }
-
-
-
-    
-
-
-    

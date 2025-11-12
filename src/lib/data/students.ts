@@ -279,6 +279,13 @@ My goal is to build a career that combines clinical leadership with education an
       email: 'rudrakumarsinha4@gmail.com',
     },
     avatarUrl: 'https://i.ibb.co/v6XJ3B7X/1747244504223.jpg',
+    achievements: [
+      {
+        event: 'Eye Q Arena 2025',
+        place: '1st Place Winner',
+        description: 'Secured first place in the international optometry knowledge championship hosted by Focus Links.'
+      }
+    ],
     workExperience: [
       {
         title: 'Intern Optometrist',
@@ -386,5 +393,3 @@ My goal is to bridge the gap between practice and education. I am currently purs
     verified: true,
   }
 ];
-
-    

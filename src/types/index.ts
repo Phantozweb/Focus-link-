@@ -19,6 +19,12 @@ export type Education = {
   university?: string;
 };
 
+export type Achievement = {
+  event: string;
+  place: string;
+  description: string;
+};
+
 export type UserProfile = {
   id: string;
   name: string;
@@ -39,6 +45,7 @@ export type UserProfile = {
   verified?: boolean;
   gallery?: string[];
   isFounder?: boolean;
+  achievements?: Achievement[];
 };
 
 // This type is for the form data structure before it's processed.
@@ -80,5 +87,3 @@ export const UserProfileSchema = z.object({
   verified: z.boolean().optional(),
   languages: z.array(z.object({ value: z.string().min(1, "Language cannot be empty.") })).optional(),
 });
-
-    
