@@ -98,12 +98,16 @@ export function CertificateClaimDialog() {
     }
   };
 
+  const imageFilter = (node: HTMLElement) => {
+    return (node.tagName !== 'LINK' || (node as HTMLLinkElement).rel !== 'stylesheet');
+  };
+
   const handleDownload = useCallback(() => {
     if (certificateRef.current === null) {
       return;
     }
 
-    toPng(certificateRef.current, { cacheBust: true, pixelRatio: 3 })
+    toPng(certificateRef.current, { cacheBust: true, pixelRatio: 3, filter: imageFilter })
       .then((dataUrl) => {
         const link = document.createElement('a');
         link.download = `FocusLinks_Certificate_${participantName?.replace(/\s/g, '_')}.png`;
@@ -126,7 +130,7 @@ export function CertificateClaimDialog() {
     }
 
     try {
-      const blob = await toBlob(certificateRef.current, { pixelRatio: 2 });
+      const blob = await toBlob(certificateRef.current, { pixelRatio: 2, filter: imageFilter });
       if (!blob) {
           throw new Error('Could not generate image for sharing.');
       }
@@ -182,43 +186,45 @@ export function CertificateClaimDialog() {
                   </div>
                 </div>
 
-                {participantData && (
-                  <div className="space-y-4">
-                    <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
-                        <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
-                        <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
-                    </div>
-                    {participantData.moduleResults && (
-                      <div className="pt-2">
-                          <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
-                          <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Module</TableHead>
-                                <TableHead className="text-right">Status</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {participantData.moduleResults.map((result) => (
-                                  <TableRow key={result.topic}>
-                                        <TableCell className="font-medium">{result.topic}</TableCell>
-                                        <TableCell className="text-right">
-                                            {result.status === 'Passed' ? (
-                                                <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
-                                            ) : (
-                                                <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
-                                            )}
-                                        </TableCell>
-                                  </TableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                          </div>
+                <div className="space-y-4">
+                  {participantData && (
+                    <>
+                      <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
+                          <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
+                          <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
                       </div>
-                    )}
-                  </div>
-                )}
+                      {participantData.moduleResults && (
+                        <div className="pt-2">
+                            <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
+                            <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Module</TableHead>
+                                  <TableHead className="text-right">Status</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                  {participantData.moduleResults.map((result) => (
+                                    <TableRow key={result.topic}>
+                                          <TableCell className="font-medium">{result.topic}</TableCell>
+                                          <TableCell className="text-right">
+                                              {result.status === 'Passed' ? (
+                                                  <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
+                                              ) : (
+                                                  <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
+                                              )}
+                                          </TableCell>
+                                    </TableRow>
+                                  ))}
+                              </TableBody>
+                            </Table>
+                            </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
             </div>
 
             <DialogFooter className="flex-col sm:flex-row gap-2 pt-6">
