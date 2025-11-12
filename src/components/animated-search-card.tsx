@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -57,8 +58,8 @@ export function AnimatedSearchCard() {
   return (
      <div className="rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-lg h-full bg-white border overflow-hidden">
         <div className="relative">
-            <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800 flex items-center gap-2">
-                <Sparkles className="text-amber-500 animate-pulse" />
+            <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800 flex items-center gap-2 animate-pulse">
+                <Sparkles className="text-amber-500" />
                 Rank Higher on Google. Get Seen.
             </h3>
             <p className="text-slate-600 text-sm sm:text-base">An SEO-friendly profile helps you rank higher in searches, making you visible to peers and employers worldwide.</p>
