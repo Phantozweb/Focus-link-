@@ -1,37 +1,23 @@
 
-"use client";
-
-import { useRef, useState, useEffect } from 'react';
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
 import { demoDiscussions } from '@/lib/forum';
 import { ProfileCard } from '@/components/profile-card';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, Search, SlidersHorizontal, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Clock, User, Tv, Radio, Sparkles, BookUser, Award, Briefcase, MapPin, Users, ThumbsUp, Eye, Mail, Info, MessageSquare, Building2 as CommunityIcon, Trophy } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
-import { countries } from '@/lib/countries';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useRouter } from 'next/navigation';
+import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, MessageSquare, Building2 as CommunityIcon, Trophy } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile, Job } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
-import Autoplay from "embla-carousel-autoplay";
-import { Input } from '@/components/ui/input';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Label } from '@/components/ui/label';
-import { logSearch } from '@/lib/activity-logger';
-import { Leaderboard } from '@/components/leaderboard';
+import { TimeAgo } from '@/components/time-ago';
 import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 import { AnimatedSearchCard } from '@/components/animated-search-card';
-import { TimeAgo } from '@/components/time-ago';
-
-const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
+import { HomepageSearch } from '@/components/homepage-search';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -42,24 +28,12 @@ async function getJobs(): Promise<Job[]> {
       return [];
     }
     const jobs = await response.json();
-    return Array.isArray(jobs) ? jobs : [];
+    return Array.isArray(jobs) ? jobs.filter(job => job.id !== 'docs') : [];
   } catch (error) {
     console.error('Error fetching or parsing jobs.json:', error);
     return [];
   }
 }
-
-
-const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaText: string, ctaLink: string, icon: React.ReactNode }) => (
-    <div className="text-center p-8 bg-card rounded-lg shadow-sm border-2 border-dashed flex flex-col items-center justify-center h-full">
-        <div className="mb-4 text-muted-foreground">{icon}</div>
-        <h3 className="font-semibold text-xl text-card-foreground mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm mb-4">Be the first to represent your category.</p>
-        <Button asChild>
-            <Link href={ctaLink}>{ctaText}</Link>
-        </Button>
-    </div>
-);
 
 // Fisher-Yates shuffle algorithm
 const shuffleArray = (array: any[]) => {
@@ -73,71 +47,41 @@ const shuffleArray = (array: any[]) => {
   return array;
 }
 
+const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaText: string, ctaLink: string, icon: React.ReactNode }) => (
+    <div className="text-center p-8 bg-card rounded-lg shadow-sm border-2 border-dashed flex flex-col items-center justify-center h-full">
+        <div className="mb-4 text-muted-foreground">{icon}</div>
+        <h3 className="font-semibold text-xl text-card-foreground mb-2">{title}</h3>
+        <p className="text-muted-foreground text-sm mb-4">Be the first to represent your category.</p>
+        <Button asChild>
+            <Link href={ctaLink}>{ctaText}</Link>
+        </Button>
+    </div>
+);
 
-export default function Home() {
-  const [professionals, setProfessionals] = useState<UserProfile[]>([]);
-  const [associations, setAssociations] = useState<UserProfile[]>([]);
-  const [colleges, setColleges] = useState<UserProfile[]>([]);
-  const [clinicsAndOpticals, setClinicsAndOpticals] = useState<UserProfile[]>([]);
-  const [students, setStudents] = useState<UserProfile[]>([]);
-  const [industry, setIndustry] = useState<UserProfile[]>([]);
-  const [demoJobs, setDemoJobs] = useState<Job[]>([]);
 
-  const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
-  const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
+export default async function Home() {
+  const professionals = shuffleArray([...allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type))]);
+  const associations = shuffleArray([...allUsers.filter(u => u.type === 'Association')]);
+  const colleges = shuffleArray([...allUsers.filter(u => u.type === 'College')]);
+  const clinicsAndOpticals = shuffleArray([...allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type))]);
+  const students = shuffleArray([...allUsers.filter(u => u.type === 'Student')]);
+  const industry = shuffleArray([...allUsers.filter(u => u.type === 'Industry')]);
+  const demoJobs = await getJobs();
 
-  const router = useRouter();
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('all'); // Can be 'all', 'forum', 'jobs', or a profile type
-  const [filterCountry, setFilterCountry] = useState('all');
-  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
-  
-  useEffect(() => {
-    async function loadJobs() {
-        const jobsData = await getJobs();
-        setDemoJobs(jobsData);
+  const now = new Date().getTime();
+  const liveWebinars: typeof webinars = [];
+  const upcomingWebinars: typeof webinars = [];
+  webinars.forEach(w => {
+    const startTime = new Date(w.dateTime).getTime();
+    const durationParts = w.duration.split(' ');
+    const durationValue = parseInt(durationParts[0], 10);
+    const endTime = startTime + (durationValue * 60 * 60 * 1000) * (w.id === 'eye-q-arena-2025' ? 24 * 11 : 1);
+    if (now >= startTime && now < endTime) {
+      liveWebinars.push(w);
+    } else if (now < startTime) {
+      upcomingWebinars.push(w);
     }
-    loadJobs();
-
-    // Randomize all user types on client-side mount
-    const allProfessionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
-    setProfessionals(shuffleArray([...allProfessionals]));
-
-    const allAssociations = allUsers.filter(u => u.type === 'Association');
-    setAssociations(shuffleArray([...allAssociations]));
-    
-    const allColleges = allUsers.filter(u => u.type === 'College');
-    setColleges(shuffleArray([...allColleges]));
-
-    const allClinics = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
-    setClinicsAndOpticals(shuffleArray([...allClinics]));
-    
-    const allStudents = allUsers.filter(u => u.type === 'Student');
-    setStudents(shuffleArray([...allStudents]));
-
-    const allIndustry = allUsers.filter(u => u.type === 'Industry');
-    setIndustry(shuffleArray([...allIndustry]));
-
-
-    const now = new Date().getTime();
-    const live: typeof webinars = [];
-    const upcoming: typeof webinars = [];
-    webinars.forEach(w => {
-      const startTime = new Date(w.dateTime).getTime();
-      const durationParts = w.duration.split(' ');
-      const durationValue = parseInt(durationParts[0], 10);
-      const endTime = startTime + (durationValue * 60 * 60 * 1000) * (w.id === 'eye-q-arena-2025' ? 24 * 11 : 1);
-      if (now >= startTime && now < endTime) {
-        live.push(w);
-      } else if (now < startTime) {
-        upcoming.push(w);
-      }
-    });
-    setLiveWebinars(live);
-    setUpcomingWebinars(upcoming);
-  }, []);
-
+  });
 
   const ctaCards = [
     {
@@ -164,141 +108,14 @@ export default function Home() {
     },
   ];
 
-  const handleSearch = () => {
-    setIsFilterDialogOpen(false);
-    const params = new URLSearchParams();
-    if (searchTerm) params.set('q', searchTerm);
-
-    logSearch(`🔍 **Homepage Search:**
-*   **Query:** \`${searchTerm || 'none'}\`
-*   **Type:** \`${filterType}\`
-*   **Country:** \`${filterCountry}\``
-    );
-
-    let path = '/directory/all'; // Default search path
-
-    if (filterType === 'forum') {
-        path = '/forum';
-    } else if (filterType === 'jobs') {
-        path = '/jobs';
-    } else if (filterType !== 'all') {
-        // It's a profile type, map to the correct category
-        const categoryMap: { [key: string]: string } = {
-            'Student': 'students',
-            'Optometrist': 'professionals',
-            'Ophthalmologist': 'professionals',
-            'Optician': 'professionals',
-            'Academic': 'professionals',
-            'Researcher': 'professionals',
-            'Association': 'associations',
-            'College': 'colleges',
-            'Hospital': 'clinics',
-            'Optical': 'clinics',
-            'Industry': 'industry',
-        };
-        const category = categoryMap[filterType] || 'all';
-        path = `/directory/${category}`;
-        if (filterCountry !== 'all') {
-          params.set('country', filterCountry);
-        }
-    } else { // 'all' profiles
-       if (filterCountry !== 'all') {
-          params.set('country', filterCountry);
-       }
-    }
-    
-    router.push(`${path}?${params.toString()}`);
-  };
-
   return (
-      <TooltipProvider>
         <div className="bg-muted/40">
           <section className="relative bg-gradient-to-r from-cyan-600 to-blue-700 text-white overflow-hidden py-20 md:py-28">
               <div className="container mx-auto px-4 text-center">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">A Global Community for Eye Care</h1>
                   <p className="text-lg md:text-xl mb-8 max-w-3xl text-blue-100 mx-auto">Connecting vision professionals, students, and organizations worldwide. Find peers, discover opportunities, and grow your network.</p>
                   
-                  <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
-                    <div className="flex gap-2">
-                      <div className="relative flex-grow">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
-                          <Input 
-                              className="w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500 h-12 text-base" 
-                              placeholder="Search by name, skill, job title..."
-                              value={searchTerm}
-                              onChange={(e) => setSearchTerm(e.target.value)}
-                              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                          />
-                      </div>
-                      
-                      <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
-                        <DialogTrigger asChild>
-                          <Button variant="secondary" size="icon" className="h-12 w-12 flex-shrink-0 bg-white text-gray-800 hover:bg-gray-200">
-                              <SlidersHorizontal className="h-5 w-5" />
-                              <span className="sr-only">Advanced Filters</span>
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Advanced Search</DialogTitle>
-                              <DialogDescription>
-                                Narrow down your search by content type and location.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4 py-4">
-                              <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="filter-type" className="text-right">
-                                  Content
-                                </Label>
-                                <div className="col-span-3">
-                                  <Select onValueChange={setFilterType} value={filterType}>
-                                    <SelectTrigger id="filter-type">
-                                        <SelectValue placeholder="All Content" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">All Profiles</SelectItem>
-                                        <SelectItem value="forum">Case Forum</SelectItem>
-                                        <SelectItem value="jobs">Job Board</SelectItem>
-                                        <SelectGroup>
-                                            <SelectLabel>Profile Types</SelectLabel>
-                                            {profileTypes.map(type => (
-                                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              </div>
-                              {filterType !== 'forum' && filterType !== 'jobs' && (
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                  <Label htmlFor="filter-country" className="text-right">
-                                    Country
-                                  </Label>
-                                  <div className="col-span-3">
-                                    <Select onValueChange={setFilterCountry} value={filterCountry}>
-                                        <SelectTrigger id="filter-country">
-                                            <SelectValue placeholder="Location" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">All Countries</SelectItem>
-                                            {countries.map(country => (
-                                                <SelectItem key={country.code} value={country.name.toLowerCase()}>{country.name}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                            <Button onClick={handleSearch} className="w-full">Apply Filters & Search</Button>
-                        </DialogContent>
-                      </Dialog>
-
-                      <Button className="h-12 w-auto px-6 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>
-                          Search
-                      </Button>
-                    </div>
-                  </div>
+                 <HomepageSearch />
               </div>
           </section>
 
@@ -310,12 +127,6 @@ export default function Home() {
                   align: "start",
                   loop: true,
                 }}
-                plugins={[
-                  Autoplay({
-                    delay: 8000,
-                    stopOnInteraction: true,
-                  }),
-                ]}
                 className="w-full"
               >
                 <CarouselContent>
@@ -364,7 +175,7 @@ export default function Home() {
                       <Link href="/events">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                   </div>
-                  <Carousel opts={{ align: "start" }} plugins={[ Autoplay({ delay: 3000, stopOnInteraction: true }) ]} className="w-full">
+                  <Carousel opts={{ align: "start" }} className="w-full">
                     <CarouselContent className="-ml-4">
                       {liveWebinars.map((webinar) => (
                         <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -405,7 +216,7 @@ export default function Home() {
                         <Link href="/events">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                     </Button>
                     </div>
-                    <Carousel opts={{ align: "start" }} plugins={[ Autoplay({ delay: 4000, stopOnInteraction: true }) ]} className="w-full">
+                    <Carousel opts={{ align: "start" }} className="w-full">
                     <CarouselContent className="-ml-4">
                         {upcomingWebinars.map((webinar) => (
                         <CarouselItem key={webinar.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
@@ -446,7 +257,6 @@ export default function Home() {
                 </div>
                  <Carousel 
                     opts={{ align: "start", loop: true }}
-                    plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
                     className="w-full"
                 >
                   <CarouselContent className="-ml-4">
@@ -470,7 +280,6 @@ export default function Home() {
                 </div>
                 <Carousel 
                     opts={{ align: "start", loop: true }}
-                    plugins={[Autoplay({ delay: 4200, stopOnInteraction: true })]}
                     className="w-full"
                 >
                   <CarouselContent className="-ml-4">
@@ -512,7 +321,6 @@ export default function Home() {
                   </div>
                   <Carousel 
                     opts={{ align: "start", loop: true }}
-                    plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
                     className="w-full"
                   >
                     <CarouselContent className="-ml-4">
@@ -558,7 +366,6 @@ export default function Home() {
                   </div>
                   <Carousel 
                     opts={{ align: "start", loop: true }}
-                    plugins={[Autoplay({ delay: 6000, stopOnInteraction: true })]}
                     className="w-full"
                   >
                     <CarouselContent className="-ml-4">
@@ -600,7 +407,6 @@ export default function Home() {
                 {associations.length > 0 ? (
                     <Carousel 
                         opts={{ align: "start", loop: true }}
-                        plugins={[Autoplay({ delay: 4500, stopOnInteraction: true })]}
                         className="w-full"
                     >
                         <CarouselContent className="-ml-4">
@@ -633,7 +439,6 @@ export default function Home() {
                 {colleges.length > 0 ? (
                     <Carousel 
                         opts={{ align: "start", loop: true }}
-                        plugins={[Autoplay({ delay: 5500, stopOnInteraction: true })]}
                         className="w-full"
                     >
                     <CarouselContent className="-ml-4">
@@ -666,7 +471,6 @@ export default function Home() {
                 {industry.length > 0 ? (
                     <Carousel 
                         opts={{ align: "start", loop: true }}
-                        plugins={[Autoplay({ delay: 6500, stopOnInteraction: true })]}
                         className="w-full"
                     >
                     <CarouselContent className="-ml-4">
@@ -699,7 +503,6 @@ export default function Home() {
                 {clinicsAndOpticals.length > 0 ? (
                     <Carousel 
                         opts={{ align: "start", loop: true }}
-                        plugins={[Autoplay({ delay: 3500, stopOnInteraction: true })]}
                         className="w-full"
                     >
                     <CarouselContent className="-ml-4">
@@ -724,6 +527,5 @@ export default function Home() {
 
           </div>
         </div>
-      </TooltipProvider>
   );
 }
