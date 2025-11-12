@@ -5,6 +5,7 @@ import { ArrowRight, Search, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { Skeleton } from './ui/skeleton';
 
 const searchProfiles = [
   { name: 'Mohd Tahseen Raza Khan', title: 'Speciality Contact Lens Practitioner', avatar: 'https://i.ibb.co/XrNB2vVJ/5-S9-A8865-2.jpg' },
@@ -17,7 +18,7 @@ export function AnimatedSearchCard() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [displayedName, setDisplayedName] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [typingDelay, setTypingDelay] = useState(150);
+  const [typingDelay, setTypingDelay] = useState(100);
   const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
@@ -29,20 +30,19 @@ export function AnimatedSearchCard() {
         setShowResult(false);
         if (displayedName.length > 0) {
           setDisplayedName((prev) => prev.slice(0, -1));
-          setTypingDelay(80);
+          setTypingDelay(50);
         } else {
           setIsDeleting(false);
           setCurrentIndex((prev) => (prev + 1) % searchProfiles.length);
-          setTypingDelay(150);
+          setTypingDelay(100);
         }
       } else {
         if (displayedName.length < fullName.length) {
           setDisplayedName((prev) => fullName.slice(0, prev.length + 1));
-          setTypingDelay(150);
+          setTypingDelay(100);
         } else {
-          // Finished typing
           setShowResult(true);
-          setTypingDelay(2000); // Pause before deleting
+          setTypingDelay(2000); 
           setIsDeleting(true);
         }
       }
@@ -69,7 +69,6 @@ export function AnimatedSearchCard() {
             
             <div className="relative h-[84px] mt-2">
                  <div 
-                    key={currentIndex} 
                     className={cn(
                         "absolute inset-0 p-3 bg-white rounded-lg transition-opacity duration-500",
                         showResult ? "opacity-100" : "opacity-0"
@@ -85,6 +84,21 @@ export function AnimatedSearchCard() {
                     <p className="text-xs text-slate-500 mt-1 line-clamp-2">
                         Connect with {currentProfileData.name}, a skilled {currentProfileData.title} on Focus Links, the global eye care community...
                     </p>
+                </div>
+                 <div
+                    className={cn(
+                        "absolute inset-0 p-3 space-y-2 transition-opacity duration-300",
+                        showResult ? "opacity-0" : "opacity-100"
+                    )}
+                >
+                    <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 rounded-full" />
+                        <Skeleton className="h-3 w-3/4" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 rounded-full" />
+                        <Skeleton className="h-3 w-1/2" />
+                    </div>
                 </div>
             </div>
         </div>
