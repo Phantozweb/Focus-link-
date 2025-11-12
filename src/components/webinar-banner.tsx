@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { Webinar } from '@/lib/academy';
@@ -137,10 +136,10 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
                 <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="text-center md:text-left">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-headline leading-tight max-w-2xl">
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold font-headline leading-tight max-w-2xl">
                     {webinar.title}
                 </h1>
-                <p className="mt-2 text-base text-blue-200">with {webinar.speaker.name}</p>
+                <p className="mt-2 text-sm md:text-base text-blue-200">with {webinar.speaker.name}</p>
             </div>
         </div>
     </div>
