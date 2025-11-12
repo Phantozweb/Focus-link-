@@ -134,26 +134,26 @@ export function CertificateClaimDialog() {
                 <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-blue-100")}>
                     {passed ? <CheckCircle className={cn("h-8 w-8", "text-green-500")} /> : <Award className={cn("h-8 w-8", "text-blue-500")} />}
                 </div>
-                <DialogTitle className="text-2xl font-headline">{passed ? "Congratulations!" : "Verification Successful!"}</DialogTitle>
+                <DialogTitle className="text-2xl font-headline">{passed ? "Congratulations!" : "Thank You for Participating!"}</DialogTitle>
                 <DialogDescription>
-                  {passed ? `Well done, ${participantName}! Here is your Certificate of Excellence.` : `Participation confirmed for ${participantName}. Here is your certificate.`}
+                  {passed ? `Well done, ${participantName}! Here is your Certificate of Excellence.` : `Your participation is valued, ${participantName}. Here is your Certificate of Participation.`}
                 </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6">
                 <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg">
                   <Image src={certificateUrl} alt="Certificate" quality={100} layout="fill" objectFit="cover" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(-15px)' }}>{participantName}</p>
+                  <div className="absolute inset-0 flex items-center justify-center" style={{transform: 'translateY(-15px)'}}>
+                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive" }}>{participantName}</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   {participantData && (
-                    <>
-                      <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
-                          <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Quiz Passed!' : 'Attempt Unsuccessful'}</h4>
-                          <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
+                    <div className="space-y-4">
+                      <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-blue-50 border-blue-200")}>
+                          <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-blue-800")}>{passed ? 'Quiz Passed!' : 'Great Effort!'}</h4>
+                          <p className={cn("text-sm", passed ? "text-green-700" : "text-blue-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
                       </div>
                       {participantData.moduleResults && (
                         <div className="pt-2">
@@ -184,7 +184,7 @@ export function CertificateClaimDialog() {
                             </div>
                         </div>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
             </div>
