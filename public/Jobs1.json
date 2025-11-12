@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": "1",
+    "title": "Full-Time Optometrist",
+    "company": "VisionCare Associates",
+    "logo": "https://picsum.photos/seed/vc-logo/100/100",
+    "location": "New York, NY",
+    "type": "Full-Time",
+    "posted": "2024-10-24T10:00:00Z",
+    "postedBy": "Jane Doe",
+    "description": "### Job Description\nVisionCare Associates is seeking a motivated and compassionate Optometrist to join our thriving practice in the heart of New York City. We are a full-scope practice with a focus on primary eye care, contact lenses, and the management of ocular disease.\n\n### Responsibilities\n* Perform comprehensive eye examinations for patients of all ages.\n* Diagnose and manage a wide range of ocular diseases, including glaucoma, macular degeneration, and diabetic retinopathy.\n* Prescribe and fit contact lenses, including specialty lenses.\n* Co-manage post-operative surgical patients.\n* Provide patient education on eye health and preventative care.\n* Maintain accurate and detailed patient records.\n\n### Qualifications\n* Doctor of Optometry (O.D.) degree from an accredited optometry school.\n* License to practice optometry in the state of New York.\n* Therapeutic Pharmaceutical Agent (TPA) certification.\n* Strong clinical and communication skills.\n* A passion for providing exceptional patient care.\n* New graduates are welcome to apply.\n\n### Benefits\n* Competitive salary and bonus structure.\n* Comprehensive health, dental, and vision insurance.\n* 401(k) with company match.\n* Paid time off and holidays.\n* Continuing education allowance.\n* Malpractice insurance coverage.",
+    "applyUrl": "https://example.com/apply/1"
+  },
+  {
+    "id": "2",
+    "title": "Pediatric Optometrist",
+    "company": "Bright Eyes Clinic",
+    "logo": "https://picsum.photos/seed/be-logo/100/100",
+    "location": "San Francisco, CA",
+    "type": "Part-Time",
+    "posted": "2024-10-21T14:30:00Z",
+    "postedBy": "John Smith",
+    "description": "### Job Description\nBright Eyes Clinic is a leading pediatric eye care center looking for a dedicated Part-Time Optometrist to join our team. We specialize in providing comprehensive vision care for children in a friendly and welcoming environment.\n\n### Responsibilities\n* Perform eye exams tailored for pediatric patients, including infants and toddlers.\n* Diagnose and manage common childhood vision problems such as amblyopia, strabismus, and refractive errors.\n* Work closely with parents to educate them on their child's vision health.\n* Collaborate with other healthcare professionals to provide integrated care.\n\n### Qualifications\n* Doctor of Optometry (O.D.) degree.\n* Residency or demonstrated experience in pediatric optometry is highly preferred.\n* Excellent interpersonal skills and a patient, gentle demeanor with children.\n* Licensed to practice in California.\n\n### Benefits\n* Flexible part-time schedule.\n* Competitive hourly rate.\n* Opportunity to make a real impact in the community.\n* A fun and supportive team environment.",
+    "applyUrl": "https://example.com/apply/2"
+  }
+]
