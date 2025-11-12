@@ -102,10 +102,18 @@ function StudentProfile({ user }: { user: UserProfile }) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
-                  <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
-                    {user.name}
-                    {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
-                  </h1>
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-1">
+                      <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
+                        {user.name}
+                        {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                      </h1>
+                      {user.isFounder && (
+                        <Badge className="bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 py-1 px-3 text-sm">
+                            <Star className="h-4 w-4 mr-1.5" />
+                            Founder
+                        </Badge>
+                      )}
+                  </div>
                   <p className="text-lg text-muted-foreground">{user.experience}</p>
                    <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                     {user.links.email && (
@@ -1188,6 +1196,9 @@ export function ProfileClient({ user }: { user: UserProfile }) {
   );
 }
 
+
+
+    
 
 
     

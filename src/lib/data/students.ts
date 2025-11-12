@@ -6,19 +6,20 @@ export const students: UserProfile[] = [
     id: '1',
     name: 'Janarthan Veeramani',
     type: 'Student',
-    experience: 'Founder of Focus-IN | Head of Administration at Optobharat | B.Optom Student',
+    experience: 'Founder of FocusLinks | Head of Administration at Optobharat | B.Optom Student',
     location: 'Madurai, Tamil Nadu, India',
+    isFounder: true,
     skills: [
       'Administration', 'Keratometry', 'Scientific Writing', 'Business Ownership', 'Start-up Leadership', 'Team Leadership', 
       'Organization Skills', 'Project Management', 'Event Planning', 'Optometry', 'Creativity Skills', 'Artificial Intelligence (AI)',
       'Microsoft Excel', 'Pediatric Vision Screening', 'Clinical Patient Counseling', 'Visual Acuity Testing'
     ],
     interests: ['AI in Optometry', 'Visual Telepathy', 'Bionic Eyes', 'Entrepreneurship', 'Student Collaboration'],
-    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student, on a mission to make eye care smarter, more accessible, and deeply human-centered.
+    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student and the founder of FocusLinks, on a mission to make eye care smarter, more accessible, and deeply human-centered.
 
-My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration.
+My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration for the global eye care community.
 
-I’m the founder of Focus-IN, a growing ecosystem of AI-powered tools designed to empower optometry students and practitioners across India. As the Head of Administration at OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
+As the Head of Administration at OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
 
 I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
 
@@ -35,7 +36,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     workExperience: [
       {
         title: 'Founder',
-        company: 'Focus-IN',
+        company: 'FocusLinks',
         startDate: 'Jul 2024',
         endDate: 'Present',
         duration: '1 yr 3 mos',
@@ -367,7 +368,7 @@ My goal is to bridge the gap between practice and education. I am currently purs
     interests: ['Content Creation', 'Eye Care Awareness', 'Public Health'],
     bio: "Hi everyone! I’m Monalisa, a first‑year Optometry student at Trilochan School of Optometry. I’m passionate about all aspects of eye health and love creating engaging content to raise awareness about the importance of optometry and proper eye care.",
     links: {
-      linkedin: 'https://www.linkedin.com/in/monalisa-behera-997361321',
+      linkedin: 'https://www.linkedin.com/in/monalisa-behera-997361321?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
       email: 'monalisabehers30@gmail.com',
     },
     avatarUrl: 'https://i.ibb.co/q3nPKVwx/IMG-20250825-203303-668.webp',
@@ -375,8 +376,8 @@ My goal is to bridge the gap between practice and education. I am currently purs
     education: [
       {
         school: 'Trilochan school of Optometry, Sambalpur',
-        university: 'Trilochan school of Optometry, Sambalpur',
-        degree: 'Bachelor of Optometry',
+        university: 'Trilochan Netralaya School of Optometry',
+        degree: 'B.Sc. Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2024',
         endYear: '2028',
@@ -386,3 +387,5 @@ My goal is to bridge the gap between practice and education. I am currently purs
     verified: true,
   }
 ];
+
+    

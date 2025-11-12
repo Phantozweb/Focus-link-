@@ -38,6 +38,7 @@ export type UserProfile = {
   languages: string[];
   verified?: boolean;
   gallery?: string[];
+  isFounder?: boolean;
 };
 
 // This type is for the form data structure before it's processed.
@@ -79,3 +80,5 @@ export const UserProfileSchema = z.object({
   verified: z.boolean().optional(),
   languages: z.array(z.object({ value: z.string().min(1, "Language cannot be empty.") })).optional(),
 });
+
+    
