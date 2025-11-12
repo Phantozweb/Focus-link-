@@ -352,9 +352,8 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-2xl font-bold font-headline text-slate-800 flex items-center gap-2">
                                     <Trophy className="text-amber-500"/>
-                                    Final Leaderboard
+                                    Top 50 Participants
                                 </h3>
-                                <Button onClick={() => document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' })} variant="outline" size="sm">Go to Leaderboard</Button>
                             </div>
                             <Leaderboard itemsPerPage={10} />
                           </section>

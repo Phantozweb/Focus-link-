@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { allUsers } from '@/lib/data';
+import Link from 'next/link';
 
 export type LeaderboardEntry = {
   rank: number;
@@ -107,26 +108,35 @@ export function Leaderboard({ itemsPerPage = 10 }: { itemsPerPage?: number }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentData.map((entry) => (
-              <TableRow key={entry.rank}>
-                <TableCell className="text-center font-bold text-lg">
-                    <div className="flex items-center justify-center gap-2">
-                        {entry.rank <= 3 ? <Trophy className={cn("h-5 w-5", getRankColor(entry.rank))} /> : <span className={cn("h-5 w-5 flex items-center justify-center", getRankColor(entry.rank))}>{entry.rank}</span>}
+            {currentData.map((entry) => {
+              const userProfile = allUsers.find(u => u.name === entry.name);
+              return (
+                <TableRow key={entry.rank}>
+                  <TableCell className="text-center font-bold text-lg">
+                      <div className="flex items-center justify-center gap-2">
+                          {entry.rank <= 3 ? <Trophy className={cn("h-5 w-5", getRankColor(entry.rank))} /> : <span className={cn("h-5 w-5 flex items-center justify-center", getRankColor(entry.rank))}>{entry.rank}</span>}
+                      </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={userProfile?.avatarUrl || entry.avatar} alt={entry.name} />
+                        <AvatarFallback>{entry.name ? entry.name.charAt(0) : '?'}</AvatarFallback>
+                      </Avatar>
+                      {userProfile ? (
+                        <Link href={`/profile/${userProfile.id}`} className="font-medium hover:underline hover:text-primary">
+                          {entry.name}
+                        </Link>
+                      ) : (
+                        <span className="font-medium">{entry.name}</span>
+                      )}
                     </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={entry.avatar} alt={entry.name} />
-                      <AvatarFallback>{entry.name ? entry.name.charAt(0) : '?'}</AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium">{entry.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="text-right font-semibold">{entry.score}</TableCell>
-                <TableCell className="text-right">{entry.time}</TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                  <TableCell className="text-right font-semibold">{entry.score}</TableCell>
+                  <TableCell className="text-right">{entry.time}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
