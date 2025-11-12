@@ -97,7 +97,7 @@ export function CertificateClaimDialog() {
     const passed = participantData ? participantData.passed : false;
     const score = participantData ? participantData.score : 0;
     const time = participantData ? participantData.time : 0;
-    const certificateUrl = "https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png";
+    const certificateUrl = "https://i.ibb.co/G3cZtZZG/Copy-of-Copy-of-of-participation-20251112-190305-0000.png";
     
     return (
         <DialogContent className="sm:max-w-2xl">
