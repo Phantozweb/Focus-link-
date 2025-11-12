@@ -97,21 +97,23 @@ export function CertificateClaimDialog() {
     const passed = participantData ? participantData.passed : false;
     const score = participantData ? participantData.score : 0;
     const time = participantData ? participantData.time : 0;
+    const certificateUrl = "https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png";
     
     return (
         <DialogContent className="sm:max-w-2xl">
              <DialogHeader className="text-center items-center">
-                <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-blue-100")}>
-                    <CheckCircle className={cn("h-8 w-8", passed ? "text-green-500" : "text-blue-500")} />
+                <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", "bg-blue-100")}>
+                    <CheckCircle className={cn("h-8 w-8", "text-blue-500")} />
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
                   Participation confirmed for <strong>{participantName}</strong>. Here is your certificate.
+                   <a href={certificateUrl} target="_blank" rel="noopener noreferrer" className="text-xs block text-blue-500 underline mt-1 break-all">{certificateUrl}</a>
                 </DialogDescription>
             </DialogHeader>
 
             <div className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
-              <Image src="https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" quality={100} />
+              <Image src={certificateUrl} alt="Certificate of Participation" layout="fill" objectFit="cover" quality={100} />
               <div className="absolute inset-0 flex items-center justify-center">
                   <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantName}</p>
               </div>
