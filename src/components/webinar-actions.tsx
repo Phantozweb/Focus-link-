@@ -97,6 +97,7 @@ export function CertificateClaimDialog() {
     const passed = participantData ? participantData.passed : false;
     const score = participantData ? participantData.score : 0;
     const time = participantData ? participantData.time : 0;
+    
     return (
         <DialogContent className="sm:max-w-2xl">
              <DialogHeader className="text-center items-center">
@@ -571,5 +572,3 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
-
-    
