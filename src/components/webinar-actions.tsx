@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { sendQuizStartNotification } from '@/lib/webhook';
 import { cn } from '@/lib/utils';
-import { certificateParticipants } from '@/lib/data/verifycertificatedids';
+import { quizWinnersData, type LeaderboardEntry } from '@/lib/data/quiz-winners';
 
 
 // Debounce function
@@ -30,6 +30,8 @@ interface WebinarActionsProps {
     webinar: Webinar;
 }
 const MAX_ATTEMPTS = 3;
+const PASS_PERCENTAGE = 35;
+
 
 const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   <div className="flex flex-col items-center p-2 bg-slate-100 rounded-md w-20">
@@ -41,8 +43,14 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
 export function CertificateClaimDialog() {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
-  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail' >('idle');
-  const [participantName, setParticipantName] = useState('');
+  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail'>('idle');
+  const [participantData, setParticipantData] = useState<LeaderboardEntry | null>(null);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
 
   const checkIdValidity = useCallback(debounce((id: string) => {
     if (!id || id.trim().length < 5) {
@@ -50,13 +58,13 @@ export function CertificateClaimDialog() {
       return;
     }
     setIdStatus('loading');
-    const participant = certificateParticipants.find(p => p.id === id);
+    const participant = quizWinnersData.find(p => p.id === id);
     if (participant) {
-        setIdStatus('valid');
-        setParticipantName(participant.name);
+      setIdStatus('valid');
+      setParticipantData(participant);
     } else {
-        setIdStatus('invalid');
-        setParticipantName('');
+      setIdStatus('invalid');
+      setParticipantData(null);
     }
   }, 300), []);
   
@@ -65,18 +73,19 @@ export function CertificateClaimDialog() {
       checkIdValidity(membershipId);
     } else {
       setIdStatus('idle');
+      setParticipantData(null);
     }
   }, [membershipId, checkIdValidity]);
 
   const handleClaim = () => {
-    if (idStatus === 'valid') {
+    if (idStatus === 'valid' && participantData && participantData.score >= PASS_PERCENTAGE) {
        setVerificationResult('success');
     } else {
        setVerificationResult('fail');
     }
   };
 
-  if (verificationResult === 'success') {
+  if (verificationResult === 'success' && participantData) {
     return (
         <DialogContent>
              <DialogHeader className="text-center items-center">
@@ -85,8 +94,13 @@ export function CertificateClaimDialog() {
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Congratulations, <strong>{participantName}</strong>! Your participation has been confirmed. Your certificate has been sent to your registered email address.
+                  Congratulations, <strong>{participantData.name}</strong>! Your participation has been confirmed. Your certificate has been sent to your registered email address.
                 </DialogDescription>
+                 <div className="p-4 bg-green-50/50 rounded-lg text-center mt-4 border border-green-200">
+                    <h4 className="font-semibold text-green-800">Your Results</h4>
+                    <p className="text-sm text-green-700">Score: <strong className="font-mono">{participantData.score}%</strong></p>
+                    <p className="text-sm text-green-700">Time: <strong className="font-mono">{formatTime(participantData.time)}</strong></p>
+                 </div>
             </DialogHeader>
             <DialogFooter>
                 <DialogClose asChild>
@@ -144,7 +158,7 @@ export function CertificateClaimDialog() {
               {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
             </div>
           </div>
-          {idStatus === 'valid' && <p className="text-center text-sm text-green-600">Verified for: <strong>{participantName}</strong></p>}
+          {idStatus === 'valid' && participantData && <p className="text-center text-sm text-green-600">Verified for: <strong>{participantData.name}</strong></p>}
           {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid.</p>}
         </div>
       </div>
