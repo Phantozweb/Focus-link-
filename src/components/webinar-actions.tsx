@@ -106,16 +106,17 @@ export function CertificateClaimDialog() {
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Participation confirmed for <strong>{participantName}</strong>. Here is your certificate of participation.
+                  Participation confirmed for <strong>{participantName}</strong>. Here is your certificate.
                 </DialogDescription>
             </DialogHeader>
 
-            <div className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
-              <Image src="https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" quality={100} />
+            <div className="relative w-full overflow-hidden rounded-md border shadow-lg my-4">
+              <Image src="https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png" alt="Certificate of Participation" width={1240} height={877} className="w-full h-auto" quality={100} />
               <div className="absolute inset-0 flex items-center justify-center">
                   <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantName}</p>
               </div>
             </div>
+
             {participantData && (
               <>
                 <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
