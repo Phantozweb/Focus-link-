@@ -120,12 +120,12 @@ export default function Home() {
       isAnimated: true,
     },
     {
-      title: "Become an Official Member",
-      description: "Submit an application to get verified, create your official profile, and unlock exclusive community perks.",
-      href: "/membership",
-      icon: <Award className="h-8 w-8 text-white" />,
-      cta: "Apply Now",
-      className: "bg-gradient-to-br from-blue-600 to-cyan-500 shining-button",
+      title: "Eye Q Arena Has Ended!",
+      description: "The International Optometry Knowledge Championship is complete. Thank you to all participants! You can now view the final leaderboard and claim your certificate.",
+      href: "/academy/eye-q-arena-2025",
+      icon: <Trophy className="h-8 w-8 text-white" />,
+      cta: "Claim Certificate",
+      className: "bg-gradient-to-br from-amber-500 to-orange-600 shining-button",
       isDialog: false,
     },
     {
@@ -704,4 +704,3 @@ export default function Home() {
   );
 }
 
-    
