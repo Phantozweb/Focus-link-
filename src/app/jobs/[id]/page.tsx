@@ -49,12 +49,9 @@ export async function generateMetadata(
 
 function formatJobDescription(markdown: string) {
   return markdown
-    .replace(/^### (.*?)$/gm, '<h2 class="text-xl font-bold font-headline mb-4 text-slate-800">$1</h2>')
+    .replace(/^### (.*?)$/gm, '<h2 class="text-xl font-bold font-headline mt-8 mb-4 text-slate-800">$1</h2>')
     .replace(/^\* (.*?)$/gm, (match, content) => {
-        const iconClass = match.includes('Benefits') ? 'text-amber-500' : 'text-primary';
-        const icon = match.includes('Benefits') ? Sparkles : Check;
-        // This is a bit of a hack, but we'll use a placeholder to render the icon later
-        return `<li class="flex items-start gap-3"><span class="icon-placeholder ${iconClass}"></span><span class="text-slate-600">${content}</span></li>`;
+        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1 flex-shrink-0">&#10003;</span><span class="text-slate-600">${content}</span></li>`;
     })
     .replace(/(<li.*<\/li>)/gs, '<ul class="space-y-3">$1</ul>')
     .replace(/\n\n/g, '<br /><br />');
@@ -67,36 +64,6 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   if (!job) {
     notFound();
   }
-
-  const renderDescription = () => {
-    const html = formatJobDescription(job.description);
-    const parts = html.split(/<span class="icon-placeholder.*?"/);
-    const reactElements: (string | JSX.Element)[] = [];
-
-    parts.forEach((part, index) => {
-        reactElements.push(<span key={`part-${index}`} dangerouslySetInnerHTML={{ __html: part.split('</span>')[0] }} />);
-
-        if (index < parts.length - 1) {
-            const match = html.match(/<span class="icon-placeholder (.*?)">/);
-            if (match) {
-                const isBenefit = match[1].includes('amber');
-                 if(isBenefit) {
-                    reactElements.push(<Sparkles key={`icon-${index}`} className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />);
-                 } else {
-                    reactElements.push(<Check key={`icon-${index}`} className="h-5 w-5 text-primary mt-1 flex-shrink-0" />);
-                 }
-            }
-             reactElements.push(<span key={`span-end-${index}`} dangerouslySetInnerHTML={{ __html: part.split('</span>')[1] || ''}}/>);
-        }
-    });
-     // A bit of a hacky way to reconstruct the list items correctly
-    const finalRender = [];
-    for(let i=0; i<reactElements.length; i+=4) {
-        finalRender.push(<li key={i} className="flex items-start gap-3">{reactElements[i+2]}{reactElements[i+3]}</li>)
-    }
-
-    return <div className="prose-lg max-w-none" dangerouslySetInnerHTML={{__html: formatJobDescription(job.description)}}></div>;
-  };
   
   return (
     <div className="bg-muted/40">
@@ -127,7 +94,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="p-6 pt-4">
+                <CardContent className="p-6 pt-0">
                    <Separator className="my-6" />
                    
                     <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: formatJobDescription(job.description) }} />
