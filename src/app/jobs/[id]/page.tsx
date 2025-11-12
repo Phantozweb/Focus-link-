@@ -15,9 +15,9 @@ type JobDetailPageProps = {
 }
 
 async function getJob(id: string): Promise<Job | undefined> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
+  const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
   try {
-    const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
+    const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) {
       console.error('Failed to fetch jobs.json');
       return undefined;
