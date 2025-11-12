@@ -1,10 +1,10 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { ArrowRight, Search, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const searchProfiles = [
   { name: 'Mohd Tahseen Raza Khan', title: 'Speciality Contact Lens Practitioner', avatar: 'https://i.ibb.co/XrNB2vVJ/5-S9-A8865-2.jpg' },
@@ -18,6 +18,7 @@ export function AnimatedSearchCard() {
   const [displayedName, setDisplayedName] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingDelay, setTypingDelay] = useState(150);
+  const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
     const currentProfile = searchProfiles[currentIndex];
@@ -25,6 +26,7 @@ export function AnimatedSearchCard() {
 
     const handleTyping = () => {
       if (isDeleting) {
+        setShowResult(false);
         if (displayedName.length > 0) {
           setDisplayedName((prev) => prev.slice(0, -1));
           setTypingDelay(80);
@@ -38,6 +40,8 @@ export function AnimatedSearchCard() {
           setDisplayedName((prev) => fullName.slice(0, prev.length + 1));
           setTypingDelay(150);
         } else {
+          // Finished typing
+          setShowResult(true);
           setTypingDelay(2000); // Pause before deleting
           setIsDeleting(true);
         }
@@ -64,7 +68,13 @@ export function AnimatedSearchCard() {
             </div>
             
             <div className="relative h-[84px] mt-2">
-                 <div key={currentIndex} className="absolute inset-0 p-3 bg-white rounded-lg animate-fade-in-out text-left">
+                 <div 
+                    key={currentIndex} 
+                    className={cn(
+                        "absolute inset-0 p-3 bg-white rounded-lg transition-opacity duration-500",
+                        showResult ? "opacity-100" : "opacity-0"
+                    )}
+                 >
                     <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800 text-xs font-bold">FL</div>
                         <div className="flex flex-col">
