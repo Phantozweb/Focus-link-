@@ -109,7 +109,7 @@ export function CertificateClaimDialog() {
 
             {passed && (
                  <div className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
-                    <Image src="https://i.ibb.co/G3cZtZZG/Copy-of-Copy-of-of-participation-20251112-190305-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" />
+                    <Image src="https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" />
                     <div className="absolute inset-0 flex items-center justify-center">
                         <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantData.name}</p>
                     </div>
@@ -569,5 +569,3 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
-
-    
