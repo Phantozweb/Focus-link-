@@ -78,7 +78,7 @@ export function AnimatedSearchCard() {
                     <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800 text-xs font-bold">FL</div>
                         <div className="flex flex-col">
-                            <span className="text-slate-600 text-xs">focuslinks.pro/profile</span>
+                            <span className="text-slate-600 text-xs">focuslinks.in/profile</span>
                             <span className="text-blue-600 text-base leading-tight hover:underline cursor-pointer">{currentProfileData.name} | Focus Links</span>
                         </div>
                     </div>
