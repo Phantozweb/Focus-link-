@@ -131,51 +131,54 @@ export function CertificateClaimDialog() {
                 </DialogDescription>
             </DialogHeader>
 
-            <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
-              <Image src={certificateUrl} alt="Certificate of Participation" layout="fill" objectFit="contain" quality={100} />
-              <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(10px)' }}>{participantName}</p>
-              </div>
+            <div className="space-y-6">
+                <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg">
+                  <Image src={certificateUrl} alt="Certificate of Participation" layout="fill" objectFit="contain" quality={100} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(10px)' }}>{participantName}</p>
+                  </div>
+                </div>
+
+                {participantData && (
+                  <>
+                    <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
+                        <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
+                        <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
+                    </div>
+                    {participantData.moduleResults && (
+                      <div className="pt-2">
+                          <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
+                          <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Module</TableHead>
+                                <TableHead className="text-right">Status</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {participantData.moduleResults.map((result) => (
+                                  <TableRow key={result.topic}>
+                                        <TableCell className="font-medium">{result.topic}</TableCell>
+                                        <TableCell className="text-right">
+                                            {result.status === 'Passed' ? (
+                                                <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
+                                            ) : (
+                                                <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
+                                            )}
+                                        </TableCell>
+                                  </TableRow>
+                                ))}
+                            </TableBody>
+                          </Table>
+                          </div>
+                      </div>
+                    )}
+                  </>
+                )}
             </div>
 
-            {participantData && (
-              <>
-                <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
-                    <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
-                    <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
-                </div>
-                {participantData.moduleResults && (
-                  <div className="pt-4">
-                      <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
-                      <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Module</TableHead>
-                            <TableHead className="text-right">Status</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {participantData.moduleResults.map((result) => (
-                              <TableRow key={result.topic}>
-                                    <TableCell className="font-medium">{result.topic}</TableCell>
-                                    <TableCell className="text-right">
-                                        {result.status === 'Passed' ? (
-                                            <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
-                                        ) : (
-                                            <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
-                                        )}
-                                    </TableCell>
-                              </TableRow>
-                            ))}
-                        </TableBody>
-                      </Table>
-                      </div>
-                  </div>
-                )}
-              </>
-            )}
-            <DialogFooter className="flex-col sm:flex-row gap-2 pt-4">
+            <DialogFooter className="flex-col sm:flex-row gap-2 pt-6">
                 <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
                 <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download Certificate</Button>
             </DialogFooter>
