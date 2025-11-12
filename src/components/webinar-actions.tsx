@@ -86,67 +86,71 @@ export function CertificateClaimDialog() {
   }, [membershipId, checkIdValidity]);
 
   const handleClaim = () => {
-    if (idStatus === 'valid' && participantData) {
+    if (idStatus === 'valid') {
        setVerificationResult('success');
     } else {
        setVerificationResult('fail');
     }
   };
 
-  if (verificationResult === 'success' && participantData) {
-    const passed = participantData.passed;
+  if (verificationResult === 'success' && participantName) {
+    const passed = participantData ? participantData.passed : false;
+    const score = participantData ? participantData.score : 0;
+    const time = participantData ? participantData.time : 0;
     return (
         <DialogContent className="sm:max-w-2xl">
              <DialogHeader className="text-center items-center">
-                <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-yellow-100")}>
-                    {passed ? <CheckCircle className="h-8 w-8 text-green-500" /> : <Info className="h-8 w-8 text-yellow-500" />}
+                <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2 bg-green-100")}>
+                    <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Participation confirmed for <strong>{participantData.name}</strong>. Here is your certificate of participation.
+                  Participation confirmed for <strong>{participantName}</strong>. Here is your certificate of participation.
                 </DialogDescription>
             </DialogHeader>
 
             <div className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
-              <Image src="https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" />
+              <Image src="https://i.ibb.co/vChGWMXV/Copy-of-of-participation-20251112-194540-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" quality={100} />
               <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantData.name}</p>
+                  <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantName}</p>
               </div>
             </div>
-
-             <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
-                <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
-                <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{participantData.score}%</strong> | Time: <strong className="font-mono">{formatTime(participantData.time)}</strong></p>
-             </div>
-            
-            {participantData.moduleResults && (
-              <div className="pt-4">
-                  <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
-                  <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Module</TableHead>
-                        <TableHead className="text-right">Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {participantData.moduleResults.map((result) => (
-                           <TableRow key={result.topic}>
-                                <TableCell className="font-medium">{result.topic}</TableCell>
-                                <TableCell className="text-right">
-                                    {result.status === 'Passed' ? (
-                                        <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
-                                    ) : (
-                                        <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
-                                    )}
-                                </TableCell>
-                           </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
+            {participantData && (
+              <>
+                <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
+                    <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
+                    <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
+                </div>
+                {participantData.moduleResults && (
+                  <div className="pt-4">
+                      <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
+                      <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Module</TableHead>
+                            <TableHead className="text-right">Status</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {participantData.moduleResults.map((result) => (
+                              <TableRow key={result.topic}>
+                                    <TableCell className="font-medium">{result.topic}</TableCell>
+                                    <TableCell className="text-right">
+                                        {result.status === 'Passed' ? (
+                                            <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
+                                        ) : (
+                                            <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
+                                        )}
+                                    </TableCell>
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                      </div>
                   </div>
-              </div>
+                )}
+              </>
             )}
             <DialogFooter>
                 <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
@@ -567,3 +571,5 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
+
+    
