@@ -136,7 +136,7 @@ export default function Home() {
       cta: "Join WhatsApp Community",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
       isDialog: false,
-      tooltipText: "Last updated Oct 24, 2025"
+      tooltipText: "Last updated on Nov 12 2025"
     },
     {
       title: "Create Your Professional Profile",
@@ -315,15 +315,8 @@ export default function Home() {
                               <div className='flex items-center gap-2'>
                                 <h3 className="font-bold text-2xl mb-2 text-white">{card.title}</h3>
                                 {card.tooltipText && (
-                                    <Tooltip>
-                                      <TooltipTrigger>
-                                        <Info className="h-4 w-4 text-white/70" />
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p>{card.tooltipText}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  )}
+                                  <p className="text-xs text-white/70 mt-1">{card.tooltipText}</p>
+                                )}
                               </div>
                               <p className="text-white/80">{card.description}</p>
                             </div>
