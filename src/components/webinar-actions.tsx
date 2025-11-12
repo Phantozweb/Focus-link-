@@ -120,7 +120,7 @@ export function CertificateClaimDialog() {
     const certificateUrl = "https://i.postimg.cc/rp0jdmrb/1.png";
     
     return (
-        <DialogContent className="sm:max-w-2xl">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
              <DialogHeader className="text-center items-center">
                 <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-blue-100")}>
                     {passed ? <CheckCircle className={cn("h-8 w-8", "text-green-500")} /> : <Award className={cn("h-8 w-8", "text-blue-500")} />}
@@ -137,8 +137,6 @@ export function CertificateClaimDialog() {
                   <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(10px)' }}>{participantName}</p>
               </div>
             </div>
-            
-            <a href={certificateUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-center block text-blue-500 underline mt-1 break-all">{certificateUrl}</a>
 
             {participantData && (
               <>
