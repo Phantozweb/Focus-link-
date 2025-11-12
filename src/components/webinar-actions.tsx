@@ -85,7 +85,7 @@ export function CertificateClaimDialog() {
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Congratulations, **{participantName}**! Your participation has been confirmed. Your certificate has been sent to your registered email address.
+                  Congratulations, <strong>{participantName}</strong>! Your participation has been confirmed. Your certificate has been sent to your registered email address.
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -144,7 +144,7 @@ export function CertificateClaimDialog() {
               {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
             </div>
           </div>
-          {idStatus === 'valid' && <p className="text-center text-sm text-green-600">Verified for: **{participantName}**</p>}
+          {idStatus === 'valid' && <p className="text-center text-sm text-green-600">Verified for: <strong>{participantName}</strong></p>}
           {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid.</p>}
         </div>
       </div>
@@ -406,17 +406,16 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         if (isQuiz) {
              return (
                 <div className="space-y-4 text-center">
-                    <h3 className="font-semibold text-slate-700 text-lg">The Arena is Closed</h3>
                     <div className="p-4 bg-blue-50 border-blue-200 rounded-lg text-center">
                         <Trophy className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                        <h4 className="font-bold text-blue-800">Thank you to all participants!</h4>
-                        <p className="text-sm text-blue-700 mt-1">Check out the final standings below.</p>
+                        <h4 className="font-bold text-blue-800">Event Concluded!</h4>
+                        <p className="text-sm text-blue-700 mt-1">Thank you to all participants! Check out the final standings below.</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                          <Button size="lg" className="w-full" asChild>
                             <Link href="#leaderboard">
                                 <BarChart className="mr-2 h-5 w-5" />
-                                View Final Leaderboard
+                                Final Leaderboard
                             </Link>
                         </Button>
                         <Dialog>
@@ -510,5 +509,3 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
-
-    
