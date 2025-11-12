@@ -29,6 +29,7 @@ import { Label } from '@/components/ui/label';
 import { logSearch } from '@/lib/activity-logger';
 import { Leaderboard } from '@/components/leaderboard';
 import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
+import { AnimatedSearchCard } from '@/components/animated-search-card';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -115,6 +116,9 @@ export default function Home() {
 
 
   const ctaCards = [
+    {
+      isAnimated: true,
+    },
     {
       title: "Become an Official Member",
       description: "Submit an application to get verified, create your official profile, and unlock exclusive community perks.",
@@ -293,7 +297,7 @@ export default function Home() {
                 }}
                 plugins={[
                   Autoplay({
-                    delay: 5000,
+                    delay: 8000,
                     stopOnInteraction: true,
                   }),
                 ]}
@@ -302,32 +306,36 @@ export default function Home() {
                 <CarouselContent>
                   {ctaCards.map((card, index) => (
                     <CarouselItem key={index}>
-                      <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl h-80 ${card.className}`}>
-                        <div>
-                          <div className="mb-4">{card.icon}</div>
-                           <div className='flex items-center gap-2'>
-                             <h3 className="font-bold text-2xl mb-2 text-white">{card.title}</h3>
-                             {card.tooltipText && (
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <Info className="h-4 w-4 text-white/70" />
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>{card.tooltipText}</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              )}
-                           </div>
-                          <p className="text-white/80">{card.description}</p>
-                        </div>
-                        <div className="mt-6">
-                          <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
-                            <Link href={card.href} target={card.href.startsWith('http') ? '_blank' : '_self'}>
-                              {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </div>
-                      </div>
+                      {card.isAnimated ? (
+                          <AnimatedSearchCard />
+                      ) : (
+                          <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl h-80 ${card.className}`}>
+                            <div>
+                              <div className="mb-4">{card.icon}</div>
+                              <div className='flex items-center gap-2'>
+                                <h3 className="font-bold text-2xl mb-2 text-white">{card.title}</h3>
+                                {card.tooltipText && (
+                                    <Tooltip>
+                                      <TooltipTrigger>
+                                        <Info className="h-4 w-4 text-white/70" />
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>{card.tooltipText}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  )}
+                              </div>
+                              <p className="text-white/80">{card.description}</p>
+                            </div>
+                            <div className="mt-6">
+                              <Button asChild variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary transition-colors">
+                                <Link href={card.href || '#'} target={card.href?.startsWith('http') ? '_blank' : '_self'}>
+                                  {card.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                                </Link>
+                              </Button>
+                            </div>
+                          </div>
+                      )}
                     </CarouselItem>
                   ))}
                 </CarouselContent>
