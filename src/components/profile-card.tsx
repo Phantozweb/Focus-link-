@@ -3,9 +3,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { UserProfile } from '@/types';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, User } from 'lucide-react';
+import { CheckCircle2, User, Building } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { Card, CardContent } from './ui/card';
 
 
 interface ProfileCardProps {
@@ -26,9 +27,9 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
 
   // Card without banner for individuals
   return (
-    <div className="group flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg h-full">
-        <div className="flex flex-1 flex-col p-6 items-center text-center">
-             <Avatar className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4">
+    <Card className="group flex flex-col overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:shadow-lg h-full">
+        <CardContent className="flex flex-1 flex-col p-6 items-center text-center">
+             <Avatar className="w-24 h-24 rounded-full object-cover border-4 border-background shadow-md mb-4">
               {user.avatarUrl ? (
                 <AvatarImage 
                     src={user.avatarUrl} 
@@ -41,7 +42,7 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
                     data-ai-hint={getAvatarHint()} />
               ) : null}
               <AvatarFallback className="text-4xl">
-                {user.avatarUrl ? (user.name?.charAt(0) ?? 'U') : <User className="h-12 w-12" />}
+                {isOrg ? <Building className="h-12 w-12" /> : <User className="h-12 w-12" />}
               </AvatarFallback>
             </Avatar>
             <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
@@ -57,7 +58,7 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
                   </Button>
               </div>
             )}
-        </div>
-    </div>
+        </CardContent>
+    </Card>
   )
 }
