@@ -32,6 +32,19 @@ export async function generateMetadata(
       },
     }
   }
+  
+   if (user.id === '20') {
+    return {
+      title: `${user.name} | Clinical Optometrist & Low Vision Specialist | Focus Links`,
+      description: `Connect with ${user.name}, an experienced clinical optometrist in Lagos, Nigeria, with over 10 years of expertise in low vision, contact lenses, and ocular disease management.`,
+       keywords: ['Optometrist in Nigeria', 'Low Vision Specialist Lagos', 'Atueyi Onyinye Perpetua', 'Clinical Optometrist', 'Lagos University Teaching Hospital', 'Eye Care Nigeria', 'Contact Lens Fitting', 'Glaucoma Management'],
+      openGraph: {
+        title: `${user.name} | Clinical Optometrist & Low Vision Specialist`,
+        description: 'Over 10 years of experience in providing comprehensive eye care, low vision rehabilitation, and managing ocular diseases at LUTH, Nigeria.',
+        images: [user.avatarUrl],
+      },
+    }
+  }
 
 
   const title = `${user.name} - ${user.type} | Focus Links`;

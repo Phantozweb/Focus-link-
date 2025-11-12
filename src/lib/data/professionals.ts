@@ -808,5 +808,92 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['English', 'Hindi'],
     verified: true
+  },
+  {
+    id: '20',
+    name: 'Atueyi Onyinye Perpetua',
+    type: 'Optometrist',
+    experience: 'Experienced Clinical Optometrist & Low Vision Specialist',
+    location: 'Amuwo Odofin, Lagos State, Nigeria',
+    skills: [
+        'Comprehensive Eye Exams', 'Low Vision Rehabilitation', 'Contact Lens Fitting', 'Slit-lamp Biomicroscopy',
+        'OCT & Visual Field Interpretation', 'A-Scan Biometry', 'Pachymetry', 'Dry Eye Management', 'Glaucoma Management'
+    ],
+    interests: ['Public Health', 'AI in Healthcare', 'Health Care Data Management'],
+    bio: `An experienced and dedicated Clinical Optometrist with over 11 years in the hospital and health care industry. With a Doctor of Optometry (OD) from the University of Benin and a certification in management from the Nigerian Institute of Management, I have a proven history of providing detailed and compassionate patient care. My expertise spans a wide range of clinical skills, including advanced diagnostics, low vision rehabilitation, and the management of ocular conditions like dry eye and glaucoma. I am passionate about restoring independence and improving quality of life through excellent vision care.`,
+    links: {
+      email: 'onyinyemalibe@gmail.com',
+      linkedin: 'https://www.linkedin.com/in/onyinye-atueyi-4a3452131'
+    },
+    avatarUrl: 'https://i.ibb.co/ksxQMK9Y/1000324482.jpg',
+    workExperience: [
+      {
+        title: 'Optometrist',
+        company: 'Lagos University Teaching Hospital (LUTH)',
+        startDate: 'Jan 2023',
+        endDate: 'Present',
+        description: 'Providing comprehensive eye care services in a leading teaching hospital.'
+      },
+      {
+        title: 'Clinical Optometrist',
+        company: 'St Edmund’s Clinic and Eye Hospital Surulere',
+        startDate: 'Sep 2020',
+        endDate: 'Sep 2023',
+        description: 'Worked as a part-time clinical optometrist.'
+      },
+      {
+        title: 'Optometrist',
+        company: 'Specialist Eye Center, Tinu Hospital',
+        startDate: 'Jan 2019',
+        endDate: 'Sep 2020',
+        description: ''
+      },
+      {
+        title: 'Optometrist',
+        company: 'Hygeia HMO',
+        startDate: 'Jan 2017',
+        endDate: 'Jan 2019',
+        description: ''
+      },
+      {
+        title: 'Corper Optometrist',
+        company: 'Wuse General Hospital',
+        startDate: 'Dec 2015',
+        endDate: 'Oct 2016',
+        description: ''
+      },
+      {
+        title: 'Intern Optometrist',
+        company: 'Supreme Vision Eye Clinic',
+        startDate: 'Jan 2015',
+        endDate: 'Oct 2015',
+        description: ''
+      },
+      {
+        title: 'Volunteer Optometrist',
+        company: 'Senator Abana Foundation',
+        startDate: 'Dec 2014',
+        endDate: 'Dec 2017',
+        description: 'Provided detailed examination, diagnosis, and treatment, including prescription of free eye drops, drugs, and corrective glasses during community outreach.'
+      }
+    ],
+    education: [
+      {
+        school: 'University of Benin',
+        degree: 'Doctor of Optometry (OD)',
+        fieldOfStudy: 'Optometry',
+        startYear: '2007',
+        endYear: '2013'
+      },
+      {
+        school: 'Nigerian Institute of Management',
+        degree: 'Proficiency in Management',
+        fieldOfStudy: 'Management',
+        startYear: '2016',
+        endYear: '2028'
+      }
+    ],
+    languages: ['English', 'Igbo'],
+    verified: true
   }
 ];
