@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 };
 
 async function getJobs(): Promise<Job[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-  const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
-  if (!response.ok) {
-    console.error('Failed to fetch jobs.json, returning empty array.');
-    return [];
-  }
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
   try {
+    const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
+    if (!response.ok) {
+      console.error('Failed to fetch jobs.json, returning empty array.');
+      return [];
+    }
     return await response.json();
   } catch (error) {
-    console.error('Failed to parse jobs.json:', error);
+    console.error('Error fetching or parsing jobs.json:', error);
     return [];
   }
 }

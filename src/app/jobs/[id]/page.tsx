@@ -15,14 +15,19 @@ type JobDetailPageProps = {
 }
 
 async function getJob(id: string): Promise<Job | undefined> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-  const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
-  if (!response.ok) {
-    console.error('Failed to fetch jobs.json');
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
+  try {
+    const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
+    if (!response.ok) {
+      console.error('Failed to fetch jobs.json');
+      return undefined;
+    }
+    const jobs: Job[] = await response.json();
+    return jobs.find(j => j.id === id);
+  } catch (error) {
+    console.error('Error fetching or parsing jobs.json:', error);
     return undefined;
   }
-  const jobs: Job[] = await response.json();
-  return jobs.find(j => j.id === id);
 }
 
 export async function generateMetadata(

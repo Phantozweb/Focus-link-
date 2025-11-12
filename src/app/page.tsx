@@ -33,14 +33,13 @@ import { AnimatedSearchCard } from '@/components/animated-search-card';
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
 async function getJobs(): Promise<Job[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-  // Use a relative path for fetching within the same app, or keep the full URL if it's on a different domain.
-  const response = await fetch(`/jobs.json`, { cache: 'no-store' });
-  if (!response.ok) {
-    console.error('Failed to fetch jobs.json, returning empty array.');
-    return [];
-  }
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
   try {
+    const response = await fetch(`${baseUrl}/jobs.json`, { cache: 'no-store' });
+    if (!response.ok) {
+      console.error('Failed to fetch jobs.json, returning empty array.');
+      return [];
+    }
     const jobs = await response.json();
     return Array.isArray(jobs) ? jobs : [];
   } catch (error) {
