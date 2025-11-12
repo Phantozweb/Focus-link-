@@ -70,21 +70,21 @@ export default function JobsPage() {
                 {demoJobs.map(job => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-6">
-                           <div className="flex flex-col sm:flex-row items-start gap-6">
-                              <div className="flex-shrink-0">
-                                <Image src={job.logo} alt={`${job.company} logo`} width={64} height={64} className="rounded-md object-contain border" data-ai-hint="logo building" />
-                              </div>
+                           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
                               <div className="flex-grow">
                                   <h3 className="text-xl font-bold text-slate-800 hover:text-primary">
                                       <Link href={`/jobs/${job.id}`}>{job.title}</Link>
                                   </h3>
-                                  <p className="text-muted-foreground font-semibold">{job.company}</p>
+                                  <div className="flex items-center gap-2 text-muted-foreground font-semibold">
+                                    <Building className="h-4 w-4" />
+                                    <span>{job.company}</span>
+                                  </div>
                                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
                                       <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{job.location}</div>
                                       <div className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" />{job.type}</div>
                                   </div>
                               </div>
-                              <div className="sm:text-right flex-shrink-0">
+                              <div className="md:text-right flex-shrink-0">
                                   <Button asChild>
                                       <Link href={`/jobs/${job.id}`}>View Details</Link>
                                   </Button>
