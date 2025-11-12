@@ -362,20 +362,11 @@ export default function Home() {
                                 <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                               </h3>
                                <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                                {webinar.id === 'eye-q-arena-2025' ? (
-                                    <div className="flex items-center gap-2">
-                                        <Calendar className="h-4 w-4 text-primary" />
-                                        <span>Nov 2 - Nov 12, 2025</span>
-                                    </div>
-                                ) : (
-                                    <WebinarTime dateTime={webinar.dateTime} />
-                                )}
+                                <WebinarTime dateTime={webinar.dateTime} />
                                 </div>
                               <Button asChild className="w-full mt-4" variant="destructive">
                                 <Link href={`/events/${webinar.id}`}>
-                                  {webinar.id === 'eye-q-arena-2025' ? (
-                                    <><Trophy className="mr-2 h-4 w-4" /> Enter The Quiz</>
-                                  ) : 'Join Live'}
+                                  Join Live
                                 </Link>
                               </Button>
                             </div>
@@ -412,14 +403,7 @@ export default function Home() {
                                         <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                                     </h3>
                                     <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                                      {webinar.id === 'eye-q-arena-2025' ? (
-                                        <div className="flex items-center gap-2">
-                                          <Calendar className="h-4 w-4 text-primary" />
-                                          <span>Ends: Nov 12, 2025</span>
-                                        </div>
-                                      ) : (
-                                        <WebinarTime dateTime={webinar.dateTime} />
-                                      )}
+                                      <WebinarTime dateTime={webinar.dateTime} />
                                     </div>
                                     
                                     <Button asChild className="w-full mt-4">

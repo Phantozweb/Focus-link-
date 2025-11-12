@@ -229,20 +229,16 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
             const registrationCloseTime = webinarStartTime - (2 * 60 * 60 * 1000); // 2 hours before start
             const durationParts = webinar.duration.split(' ');
             const durationValue = parseInt(durationParts[0], 10);
-            // Quiz duration is in days, webinar in minutes
             const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24) : (1000 * 60);
             const webinarEndTime = webinarStartTime + (durationValue * durationMultiplier);
 
-            if (isQuiz) {
-                setStatus('LIVE');
-                return;
-            }
-
             if (now < webinarStartTime) {
-                if (now < registrationCloseTime) {
+                if (now < registrationCloseTime && !isQuiz) {
                     setStatus('UPCOMING');
-                } else {
+                } else if (!isQuiz) {
                     setStatus('REGISTRATION_CLOSED');
+                } else {
+                    setStatus('UPCOMING');
                 }
                 const difference = webinarStartTime - now;
                  setTimeLeft({
@@ -255,7 +251,7 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                 setStatus('LIVE');
             } else {
                 setStatus('ENDED');
-                const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); // 7 days after event end
+                const certificateDeadline = webinarEndTime + (7 * 24 * 60 * 60 * 1000); 
                 if (now < certificateDeadline) {
                     setShowCertificateInfo(true);
                 } else {
@@ -288,30 +284,18 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         if (isQuiz) {
             return (
                 <div className="space-y-4 text-center">
-                    <h3 className="font-semibold text-slate-700 mb-3">The Arena is Open!</h3>
-                    <div className="space-y-3 pt-3">
-                        <Dialog>
-                           <DialogTrigger asChild>
-                                <Button size="lg" variant="destructive" className="w-full text-lg py-6 animate-pulse">
-                                    <Trophy className="mr-2 h-6 w-6" />
-                                    Enter Arena Now
-                                </Button>
-                            </DialogTrigger>
-                            <QuizEntryDialog webinarId={webinar.id} />
-                        </Dialog>
-                        <Button size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white shining-button" asChild>
-                            <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS?mode=wwt" target="_blank" rel="noopener noreferrer">
-                                <MessageCircle className="mr-2 h-5 w-5" />
-                                Join the WhatsApp Community
-                            </a>
-                        </Button>
-                        <Button size="lg" variant="outline" className="w-full" asChild>
-                            <Link href="#leaderboard">
-                              <BarChart className="mr-2 h-5 w-5" />
-                              Check Leaderboard
-                            </Link>
-                        </Button>
+                    <h3 className="font-semibold text-slate-700 mb-3">The Arena is Closed</h3>
+                    <div className="p-4 bg-blue-50 border-blue-200 rounded-lg">
+                        <Info className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                        <h4 className="font-bold text-blue-800">Event Concluded</h4>
+                        <p className="text-sm text-blue-700 mt-1">Thank you to all participants! Check out the final standings below.</p>
                     </div>
+                    <Button size="lg" className="w-full" asChild>
+                        <Link href="#leaderboard">
+                            <BarChart className="mr-2 h-5 w-5" />
+                            View Final Leaderboard
+                        </Link>
+                    </Button>
                 </div>
             );
         }
@@ -393,5 +377,3 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
-
-    

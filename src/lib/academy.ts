@@ -38,9 +38,9 @@ export const webinars: Webinar[] = [
       title: 'Managing Director of Academic, Focus Links'
     },
     platform: 'Google Meet',
-    dateTime: '2025-10-05T04:30:00Z',
+    dateTime: '2024-10-05T04:30:00Z',
     duration: '60 minutes',
-    tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Upcoming'],
+    tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Past Event'],
     registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
     attendance: {
       registered: 114,
@@ -52,39 +52,16 @@ export const webinars: Webinar[] = [
     title: 'Eye Q Arena 2025: The International Optometry Knowledge Championship',
     description: `**"Where Global Vision Meets Knowledge."**
 
-**Eye Q Arena 2025** is an international-level optometry quiz competition that brings together passionate optometry students, interns, and professionals from across the globe. Organized by FocusLinks — The World’s Largest Eye Care Community, this event aims to promote academic excellence, global collaboration, and clinical reasoning skills in the field of eye care.
+**The Eye Q Arena 2025 has concluded!** This international optometry quiz competition brought together passionate optometry students, interns, and professionals from across the globe for a thrilling test of knowledge. Organized by Focus Links, this event successfully promoted academic excellence, global collaboration, and clinical reasoning skills in the field of eye care.
 
-This is your chance to test your knowledge from the anterior to the posterior segment of the eye and see how you stack up against peers worldwide. Scores, accuracy, and completion time will determine placement on the global leaderboard.
+Participants competed on their knowledge from the anterior to the posterior segment of the eye, with final rankings determined by score, accuracy, and completion time. We extend our immense gratitude to all participants for making this a landmark event.
 
-Step into the Arena — Compete, Learn, and Lead the Vision.
-
-### Rules & Regulations
-- **Event Duration**: The quiz will be open from **November 2nd to November 12th, 2025**.
-- **Membership Required**: To participate, you must be an official member of Focus Links. <a href="/membership" class="text-primary underline font-semibold">Join for free</a> if you haven't already. It only takes a few minutes!
-- **Multiple Attempts**: Each participant is allowed **three attempts** to pass the quiz and earn their certificate.
-- **Passing Score**: A score of **35% or higher** is required on **each module** to pass the quiz overall.
-- **Fair Play**: We trust our community to compete with integrity. Any detected form of malpractice may result in disqualification.
-- **Scoring**: The total score of 200 points is based on question difficulty and completion speed. Faster completion times in each module award bonus points.
-- **Certification & Rewards**: 
-    - All participants who meet the passing score will receive a digital **Certificate of Participation**.
-    - Top performers, based on a combination of high scores and fast completion times, will earn a prestigious **Certificate of Excellence** and a **special achievement badge** on their Focus Links profile.
-
-### Instructions for Participants
-- The quiz takes place directly on this webpage. No external links will be sent.
-- The quiz consists of 10 timed modules. Your 60-minute clock is the sum of all module times.
-- When you begin a module, its specific timer starts. Time saved from one module will be carried over, giving you extra time for more challenging sections.
-- If a module's time expires, your submitted answers will be saved, and you will automatically proceed to the next module. Unanswered questions will be marked as incorrect.
-- **Optional Breaks**: Between each module, you can take an optional 2-minute break. This break time does not count against your total 60-minute quiz time.
-- At the end of the quiz, you will receive a detailed report of your overall score, module-by-module performance, and timing.
-
-### Event Highlights:
-- **International-Level Competition**: Open to optometry students & practitioners worldwide.
-- **100 Questions in 60 Minutes**: Test your knowledge across 10 in-depth modules.
-- **Dynamic Scoring**: Score is based on question difficulty and speed, with a total of 200 points available.
-- **Live Leaderboard Ranking**: See where you stand based on score, accuracy & completion time.
-- **Digital Certificates**: Earn a Certificate of Participation or Excellence.
-- **Organized by FocusLinks**: The world's largest global eye care community.
-- **Global Recognition**: An opportunity to showcase your expertise and shine.
+### Event Highlights
+- **International Competition**: The event was a massive success, with participants from over 15 countries.
+- **100 Challenging Questions**: Contestants were tested on 10 in-depth modules over 60 minutes.
+- **Dynamic Scoring**: The final leaderboard reflects a combination of question difficulty and speed.
+- **Digital Certificates**: All qualifying participants will receive their certificates via email. Top performers will receive a prestigious **Certificate of Excellence**.
+- **Organized by FocusLinks**: Proudly hosted by the world's largest global eye care community.
 
 ---QUIZ_MODULES_TABLE---
 | Module | Topic | Questions | Max Question Points | Max Time Bonus |
@@ -110,7 +87,7 @@ Step into the Arena — Compete, Learn, and Lead the Vision.
       title: 'Official Organizer'
     },
     platform: 'Online Platform',
-    dateTime: new Date().toISOString(),
+    dateTime: '2024-11-02T00:00:00Z',
     duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',

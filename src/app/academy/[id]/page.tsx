@@ -1,11 +1,10 @@
 
-
 import { webinars } from '@/lib/academy';
 import { notFound } from 'next/navigation';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv, Share2 } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv, Share2, Quote } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -35,17 +34,21 @@ export async function generateMetadata(
   }
   
   const previousImages = (await parent).openGraph?.images || []
-  const description = (webinar.description || '')
-    .replace(/<[^>]*>/g, '') // strip html
-    .replace(/\*+/g, '') // strip markdown bold
-    .replace(/###/g, '') // strip markdown headings
-    .replace(/\n/g, ' ') // strip newlines
-    .replace(/\|/g, ''); // strip table pipes
+
+  let description = 'Join the Focus Links community for expert-led events, webinars, and quiz competitions. Advance your knowledge in optometry and connect with peers worldwide.';
+  let keywords = ['optometry quiz', 'eye care competition', 'clinical knowledge', 'anterior segment', 'posterior segment', ...webinar.tags];
+  let title = `${webinar.title} | Focus Links Academy`;
+  
+  if (webinar.id === 'eye-q-arena-2025') {
+    title = 'Eye Q Arena 2025: Results & Highlights | Focus Links';
+    description = 'The Eye Q Arena 2025 has concluded! See the final leaderboard, read testimonials, and learn about the winners of the international optometry knowledge championship.';
+    keywords.push('quiz results', 'optometry winner', 'leaderboard');
+  }
 
   return {
-    title: `${webinar.title} | Focus Links Academy`,
+    title: title,
     description: description,
-    keywords: ['optometry quiz', 'eye care competition', 'clinical knowledge', 'anterior segment', 'posterior segment', ...webinar.tags],
+    keywords: keywords,
     openGraph: {
       title: webinar.title,
       description: description,
@@ -55,7 +58,6 @@ export async function generateMetadata(
 }
 
 function formatDescription(text: string) {
-    // Correctly split the text by the table marker to process it separately
     const tableMarker = '---QUIZ_MODULES_TABLE---';
     const parts = text.split(tableMarker);
     const textBeforeTable = parts[0];
@@ -67,7 +69,7 @@ function formatDescription(text: string) {
     if (tableAndAfter.match(tableRegex)) {
         processedTable = tableAndAfter.replace(tableRegex, (match) => {
             const rows = match.trim().split('\n');
-            const header = rows[1]; // The separator line, like |---|---|
+            const header = rows[1]; 
             if (!header) return '';
 
             const tableHead = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${rows[0].split('|').slice(1, -1).map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</th>`).join('')}</tr></thead>`;
@@ -80,7 +82,7 @@ function formatDescription(text: string) {
     }
 
     const processedText = textBeforeTable
-        .replace(/<a href="([^"]*)" class="([^"]*)">([^<]*)<\/a>/g, '<a href="$1" class="$2" target="_blank" rel="noopener noreferrer">$3</a>') // Add target and rel to links
+        .replace(/<a href="([^"]*)" class="([^"]*)">([^<]*)<\/a>/g, '<a href="$1" class="$2" target="_blank" rel="noopener noreferrer">$3</a>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/### (.*?)(?:\n|$)/g, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>')
         .replace(/^- (.*?)(?:\n|$)/gm, '<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>$1</span></li>')
@@ -124,6 +126,36 @@ const DefaultSpeakerInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
     </section>
 );
 
+const Testimonials = () => (
+    <section>
+        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">What Participants Are Saying</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-white">
+                <CardContent className="p-6">
+                    <div className="flex gap-4">
+                        <div><Quote className="h-8 w-8 text-slate-300" /></div>
+                        <div>
+                            <p className="text-slate-600 italic">"The Eye Q Arena was a fantastic experience! The questions were challenging and covered a great breadth of topics. It really pushed me to review my knowledge. Can't wait for the next one!"</p>
+                            <p className="font-bold text-slate-700 mt-3">– Farhan Sheikh, Participant</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card className="bg-white">
+                <CardContent className="p-6">
+                    <div className="flex gap-4">
+                        <div><Quote className="h-8 w-8 text-slate-300" /></div>
+                        <div>
+                            <p className="text-slate-600 italic">"An incredibly well-organized event. The platform was seamless, and the live leaderboard added a thrilling competitive edge. A huge congratulations to the Focus Links team for putting this together."</p>
+                            <p className="font-bold text-slate-700 mt-3">– Kritika Dey, Participant</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    </section>
+);
+
 
 export default function WebinarDetailPage({ params }: WebinarPageProps) {
   const webinar = webinars.find(w => w.id === params.id);
@@ -139,11 +171,11 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
     "name": webinar.title,
     "startDate": webinar.dateTime,
     "description": (webinar.description || '').replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' ').replace(/\|/g, ''),
-    "eventStatus": new Date() > new Date(webinar.dateTime) ? "https://schema.org/EventCompleted" : "https://schema.org/EventScheduled",
+    "eventStatus": "https://schema.org/EventCompleted",
     "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
     "location": {
       "@type": "VirtualLocation",
-      "url": webinar.registrationLink
+      "url": "https://focuslinks.pro/academy/eye-q-arena-2025"
     },
     "image": webinar.speaker.avatarUrl,
     "performer": {
@@ -154,13 +186,6 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
       "@type": "Organization",
       "name": webinar.host.name,
       "url": "https://focuslinks.pro"
-    },
-     "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
-        "url": webinar.registrationLink
     }
   };
   
@@ -180,7 +205,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
   })();
 
   const founderNote = isQuiz
-    ? `"This International Quiz Competition marks a major milestone for Focus Links. I want to extend my deepest gratitude to my esteemed lecturer, V.M. Ramkumar, whose guidance in conducting this quiz was seriously impressive. A special thank you to every participant who joins us. Your engagement and passion are what make this community thrive. We are incredibly excited to see you on the leaderboard!"`
+    ? `"The Eye Q Arena 2025 has been a monumental success, far exceeding our expectations. I want to extend my deepest gratitude to my esteemed lecturer, V.M. Ramkumar, whose guidance was invaluable. A massive thank you to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited to see you on the leaderboard and can't wait for the next event!"`
     : `"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"`;
 
   return (
@@ -258,6 +283,10 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
                       <Separator />
                       
+                      {isQuiz && <Testimonials />}
+                      
+                      <Separator />
+                      
                       <section>
                           <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Event Details</h2>
                           <Card className="bg-slate-50">
@@ -304,12 +333,8 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                   <div className="flex items-start gap-3 sm:col-span-2">
                                       <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
-                                          <h4 className="font-semibold">How to Join</h4>
-                                          {isQuiz ? (
-                                              <p className="text-sm text-muted-foreground">The quiz will be available on this page at the scheduled start time. Make sure you are logged in as a member.</p>
-                                          ) : (
-                                              <p className="text-sm text-muted-foreground">The meeting link was emailed to registered attendees 1 hour before the session started.</p>
-                                          )}
+                                          <h4 className="font-semibold">Event Status</h4>
+                                          <p className="text-sm text-muted-foreground">This event has now concluded.</p>
                                       </div>
                                   </div>
                               </CardContent>
@@ -327,7 +352,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-2xl font-bold font-headline text-slate-800 flex items-center gap-2">
                                     <Trophy className="text-amber-500"/>
-                                    Live Leaderboard
+                                    Final Leaderboard
                                 </h3>
                                 <Button onClick={() => document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' })} variant="outline" size="sm">Go to Leaderboard</Button>
                             </div>
