@@ -129,13 +129,13 @@ export default async function Home() {
                 }}
                 className="w-full"
               >
-                <CarouselContent>
+                <CarouselContent className="-ml-4">
                   {ctaCards.map((card, index) => (
-                    <CarouselItem key={index} className="h-full">
+                    <CarouselItem key={index} className="pl-4 flex flex-col">
                       {card.isAnimated ? (
                           <AnimatedSearchCard />
                       ) : (
-                          <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl h-full ${card.className}`}>
+                          <div className={`rounded-xl p-8 flex flex-col justify-between shadow-xl flex-grow ${card.className}`}>
                             <div>
                               <div className="mb-4">{card.icon}</div>
                               <div className='flex items-center gap-2'>
