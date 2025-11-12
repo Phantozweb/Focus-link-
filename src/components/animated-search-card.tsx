@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -81,7 +80,7 @@ export function AnimatedSearchCard() {
                     <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800 text-xs font-bold">FL</div>
                         <div className="flex flex-col">
-                            <span className="text-slate-600 text-xs">focuslinks.pro/profile</span>
+                            <span className="text-slate-600 text-xs">focuslinks.in/profile</span>
                             <span className="text-blue-600 text-base leading-tight hover:underline cursor-pointer">{currentProfileData.name} | Focus Links</span>
                         </div>
                     </div>
@@ -106,7 +105,7 @@ export function AnimatedSearchCard() {
                 </div>
             </div>
         </div>
-        <div className="mt-6">
+        <div className="mt-auto pt-6">
             <Button asChild className="w-full">
                 <Link href="/profile/create">
                     Create Your Profile <ArrowRight className="ml-2 h-4 w-4" />
