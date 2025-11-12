@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award, Download } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award, Download, Share2 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -18,7 +19,7 @@ import { quizWinnersData, type LeaderboardEntry, type ModuleResult } from '@/lib
 import { certificateParticipants } from '@/lib/data/verifycertificatedids';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import Image from 'next/image';
-import { toPng } from 'html-to-image';
+import { toPng, toBlob } from 'html-to-image';
 
 
 // Debounce function
@@ -51,6 +52,8 @@ export function CertificateClaimDialog() {
   const [participantData, setParticipantData] = useState<LeaderboardEntry | null>(null);
   const [participantName, setParticipantName] = useState<string | null>(null);
   const certificateRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -112,6 +115,46 @@ export function CertificateClaimDialog() {
       });
   }, [participantName]);
 
+  const handleShare = async () => {
+    if (certificateRef.current === null || !navigator.share) {
+      toast({
+        variant: 'destructive',
+        title: 'Share Not Supported',
+        description: 'Your browser does not support sharing files.',
+      });
+      return;
+    }
+
+    try {
+      const blob = await toBlob(certificateRef.current, { pixelRatio: 2 });
+      if (!blob) {
+          throw new Error('Could not generate image for sharing.');
+      }
+      const file = new File([blob], `FocusLinks_Certificate_${participantName?.replace(/\s/g, '_')}.png`, { type: 'image/png' });
+
+      const shareData = {
+        files: [file],
+        title: 'I earned a certificate from Focus Links!',
+        text: `I just earned a certificate from the Eye Q Arena 2025 on Focus Links! Check it out.`,
+      };
+
+      if (navigator.canShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+         throw new Error("Sharing not supported for this file type.");
+      }
+    } catch (err) {
+      console.error('Share failed:', err);
+      if ((err as Error).name !== 'AbortError') { // Don't show error if user cancels
+        toast({
+            variant: 'destructive',
+            title: 'Share Failed',
+            description: 'Could not share the certificate at this time.',
+        });
+      }
+    }
+  };
+
 
   if (verificationResult === 'success' && participantName) {
     const passed = participantData ? participantData.passed : false;
@@ -135,12 +178,12 @@ export function CertificateClaimDialog() {
                 <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg">
                   <Image src={certificateUrl} alt="Certificate of Participation" quality={100} width={1123} height={794} className="w-full h-auto" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(-10px)' }}>{participantName}</p>
+                      <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(-15px)' }}>{participantName}</p>
                   </div>
                 </div>
 
                 {participantData && (
-                  <>
+                  <div className="space-y-4">
                     <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
                         <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
                         <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
@@ -174,13 +217,15 @@ export function CertificateClaimDialog() {
                           </div>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
             </div>
 
             <DialogFooter className="flex-col sm:flex-row gap-2 pt-6">
                 <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
-                <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download Certificate</Button>
+                <div className="flex-grow" />
+                <Button variant="outline" onClick={handleShare}><Share2 className="mr-2 h-4 w-4" /> Share</Button>
+                <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download</Button>
             </DialogFooter>
         </DialogContent>
     )
