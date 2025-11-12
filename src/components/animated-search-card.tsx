@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -56,9 +55,12 @@ export function AnimatedSearchCard() {
   const currentProfileData = searchProfiles[currentIndex];
 
   return (
-     <div className="rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-lg min-h-[18rem] bg-white border overflow-hidden">
+     <div className="rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-lg h-full bg-white border overflow-hidden">
         <div className="relative">
-            <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800 flex items-center gap-2"><Sparkles className="text-amber-500" /> Rank Higher on Google. Get Seen.</h3>
+            <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800 flex items-center gap-2">
+                <Sparkles className="text-amber-500 animate-pulse" />
+                Rank Higher on Google. Get Seen.
+            </h3>
             <p className="text-slate-600 text-sm sm:text-base">An SEO-friendly profile helps you rank higher in searches, making you visible to peers and employers worldwide.</p>
 
             <div className="mt-4 bg-slate-50 p-2 rounded-lg border border-slate-200">
@@ -102,6 +104,13 @@ export function AnimatedSearchCard() {
                     </div>
                 </div>
             </div>
+        </div>
+        <div className="mt-6">
+            <Button asChild className="w-full">
+                <Link href="/profile/create">
+                    Create Your Profile <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+            </Button>
         </div>
     </div>
   );
