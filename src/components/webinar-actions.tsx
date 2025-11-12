@@ -65,9 +65,9 @@ export function CertificateClaimDialog() {
     const participant = certificateParticipants.find(p => p.id === id);
     if (participant) {
       setIdStatus('valid');
-      setParticipantName(participant.name);
       const winnerData = quizWinnersData.find(p => p.id === id);
       setParticipantData(winnerData || null);
+       setParticipantName(winnerData?.name || participant.name);
     } else {
       setIdStatus('invalid');
       setParticipantName(null);
@@ -569,3 +569,5 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
+
+    
