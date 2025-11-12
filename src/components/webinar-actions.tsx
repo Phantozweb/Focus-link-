@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { quizWinnersData, type LeaderboardEntry, type ModuleResult } from '@/lib/data/quiz-winners';
 import { certificateParticipants } from '@/lib/data/verifycertificatedids';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
+import Image from 'next/image';
 
 
 // Debounce function
@@ -95,24 +96,35 @@ export function CertificateClaimDialog() {
   if (verificationResult === 'success' && participantData) {
     const passed = participantData.score >= PASS_PERCENTAGE;
     return (
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-2xl">
              <DialogHeader className="text-center items-center">
                 <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-yellow-100")}>
                     {passed ? <CheckCircle className="h-8 w-8 text-green-500" /> : <Info className="h-8 w-8 text-yellow-500" />}
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Participation confirmed for <strong>{participantData.name}</strong>. {passed ? "Your certificate has been sent to your registered email." : "Thank you for your effort!"}
+                  Participation confirmed for <strong>{participantData.name}</strong>. {passed ? "Congratulations! Here is your certificate preview." : "Thank you for your effort!"}
                 </DialogDescription>
-                 <div className={cn("p-4 rounded-lg text-center mt-4 border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
-                    <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
-                    <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{participantData.score}%</strong> | Time: <strong className="font-mono">{formatTime(participantData.time)}</strong></p>
-                 </div>
             </DialogHeader>
+
+            {passed && (
+                 <div className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg my-4">
+                    <Image src="https://i.ibb.co/G3cZtZZG/Copy-of-Copy-of-of-participation-20251112-190305-0000.png" alt="Certificate of Participation" layout="fill" objectFit="cover" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <p className="text-black text-3xl font-serif font-bold" style={{ transform: 'translateY(10px)' }}>{participantData.name}</p>
+                    </div>
+                </div>
+            )}
+
+             <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
+                <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
+                <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{participantData.score}%</strong> | Time: <strong className="font-mono">{formatTime(participantData.time)}</strong></p>
+             </div>
+            
             {participantData.moduleResults && (
               <div className="pt-4">
                   <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
-                  <div className="max-h-60 overflow-y-auto pr-2">
+                  <div className="max-h-40 overflow-y-auto pr-2 rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -192,7 +204,7 @@ export function CertificateClaimDialog() {
               {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
             </div>
           </div>
-          {idStatus === 'valid' && participantName && <p className="text-center text-sm text-green-600">Verified for: <strong>{participantName}</strong></p>}
+          {idStatus === 'valid' && participantName && <p className="text-center text-sm text-green-600">Verified for: {participantName}</p>}
           {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid.</p>}
         </div>
       </div>
