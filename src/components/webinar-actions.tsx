@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { sendQuizStartNotification } from '@/lib/webhook';
 import { cn } from '@/lib/utils';
+import { certificateParticipants } from '@/lib/data/verifycertificatedids';
 
 
 // Debounce function
@@ -41,26 +42,23 @@ export function CertificateClaimDialog() {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
   const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail' >('idle');
+  const [participantName, setParticipantName] = useState('');
 
-  const checkIdValidity = useCallback(debounce(async (id: string) => {
+  const checkIdValidity = useCallback(debounce((id: string) => {
     if (!id || id.trim().length < 5) {
       setIdStatus('idle');
       return;
     }
     setIdStatus('loading');
-    try {
-      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
-      const data = await response.json();
-      if (data.isValid) {
+    const participant = certificateParticipants.find(p => p.id === id);
+    if (participant) {
         setIdStatus('valid');
-      } else {
+        setParticipantName(participant.name);
+    } else {
         setIdStatus('invalid');
-      }
-    } catch (error) {
-      console.error('ID validation failed:', error);
-      setIdStatus('invalid');
+        setParticipantName('');
     }
-  }, 500), []);
+  }, 300), []);
   
    useEffect(() => {
     if (membershipId) {
@@ -87,7 +85,7 @@ export function CertificateClaimDialog() {
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Congratulations! Your participation has been confirmed. Your certificate has been sent to your registered email address.
+                  Congratulations, **{participantName}**! Your participation has been confirmed. Your certificate has been sent to your registered email address.
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -146,6 +144,7 @@ export function CertificateClaimDialog() {
               {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
             </div>
           </div>
+          {idStatus === 'valid' && <p className="text-center text-sm text-green-600">Verified for: **{participantName}**</p>}
           {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid.</p>}
         </div>
       </div>
@@ -407,17 +406,17 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         if (isQuiz) {
              return (
                 <div className="space-y-4 text-center">
-                    <h3 className="font-semibold text-slate-700 text-lg">Event Concluded</h3>
+                    <h3 className="font-semibold text-slate-700 text-lg">The Arena is Closed</h3>
                     <div className="p-4 bg-blue-50 border-blue-200 rounded-lg text-center">
                         <Trophy className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                        <h4 className="font-bold text-blue-800">Thank You for Participating!</h4>
+                        <h4 className="font-bold text-blue-800">Thank you to all participants!</h4>
                         <p className="text-sm text-blue-700 mt-1">Check out the final standings below.</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                          <Button size="lg" className="w-full" asChild>
                             <Link href="#leaderboard">
                                 <BarChart className="mr-2 h-5 w-5" />
-                                Final Leaderboard
+                                View Final Leaderboard
                             </Link>
                         </Button>
                         <Dialog>
@@ -511,3 +510,5 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         </div>
     );
 }
+
+    
