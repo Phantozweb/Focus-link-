@@ -381,34 +381,29 @@ export default async function Home() {
                       {demoJobs.map((job) => (
                         <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                            <Card className="hover:shadow-md transition-shadow h-full">
-                              <CardContent className="p-6 flex flex-col h-full">
-                                <div className="flex-grow">
-                                    <div className="flex items-center gap-4 mb-4">
-                                      <Avatar className="h-14 w-14 rounded-md border p-1">
-                                        <AvatarImage src={job.logo} alt={`${job.company} logo`} className="object-contain" />
-                                        <AvatarFallback><Building /></AvatarFallback>
-                                      </Avatar>
-                                      <div>
+                                <CardContent className="p-6 flex flex-col h-full">
+                                    <div className="flex-grow">
                                         <h3 className="text-lg font-bold text-slate-800 hover:text-primary leading-tight">
                                             <Link href={`/jobs/${job.id}`}>{job.title}</Link>
                                         </h3>
-                                        <p className="text-muted-foreground font-semibold text-sm">{job.company}</p>
+                                        <p className="text-muted-foreground font-semibold text-sm flex items-center gap-2 mt-1">
+                                            <Building className="h-4 w-4" />
+                                            {job.company}
+                                        </p>
+                                        <div className="flex flex-col gap-2 text-sm text-muted-foreground mt-4">
+                                            <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{job.location}</div>
+                                            <div className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" />{job.type}</div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-auto pt-4">
+                                      <Button asChild className="w-full">
+                                        <Link href={`/jobs/${job.id}`}>View Details</Link>
+                                      </Button>
+                                      <div className="text-xs text-muted-foreground text-center mt-2">
+                                          Posted <TimeAgo dateString={job.posted} />
                                       </div>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
-                                        <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{job.location}</div>
-                                        <div className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" />{job.type}</div>
-                                    </div>
-                                </div>
-                                <div className="mt-auto pt-4">
-                                  <Button asChild className="w-full">
-                                    <Link href={`/jobs/${job.id}`}>View Details</Link>
-                                  </Button>
-                                  <div className="text-xs text-muted-foreground text-center mt-2">
-                                      Posted <TimeAgo dateString={job.posted} />
-                                  </div>
-                                </div>
-                              </CardContent>
+                                </CardContent>
                             </Card>
                         </CarouselItem>
                       ))}
