@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -282,20 +282,26 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         }
 
         if (isQuiz) {
-            return (
+             return (
                 <div className="space-y-4 text-center">
-                    <h3 className="font-semibold text-slate-700 mb-3">The Arena is Closed</h3>
-                    <div className="p-4 bg-blue-50 border-blue-200 rounded-lg">
-                        <Info className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-                        <h4 className="font-bold text-blue-800">Event Concluded</h4>
-                        <p className="text-sm text-blue-700 mt-1">Thank you to all participants! Check out the final standings below.</p>
+                    <h3 className="font-semibold text-slate-700 mb-3 text-lg">The Arena is Closed</h3>
+                    <div className="p-4 bg-blue-50 border-blue-200 rounded-lg text-center">
+                        <Trophy className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                        <h4 className="font-bold text-blue-800">Thank You for Participating!</h4>
+                        <p className="text-sm text-blue-700 mt-1">The competition has concluded. Check out the final results and see where you stand.</p>
                     </div>
-                    <Button size="lg" className="w-full" asChild>
-                        <Link href="#leaderboard">
-                            <BarChart className="mr-2 h-5 w-5" />
-                            View Final Leaderboard
-                        </Link>
-                    </Button>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                         <Button size="lg" className="w-full" asChild>
+                            <Link href="#leaderboard">
+                                <BarChart className="mr-2 h-5 w-5" />
+                                Final Leaderboard
+                            </Link>
+                        </Button>
+                         <Button size="lg" variant="outline" className="w-full" disabled>
+                             <Award className="mr-2 h-5 w-5" />
+                             Claim Certificate
+                         </Button>
+                    </div>
                 </div>
             );
         }
