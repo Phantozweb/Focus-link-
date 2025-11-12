@@ -22,12 +22,12 @@ export async function generateMetadata(
   
   if (user.id === 'DrishtiKit') {
     return {
-      title: 'DrishtiKit - Portable Eye Testing Solution | Focus Links Partner',
-      description: 'Discover DrishtiKit, the revolutionary all-in-one portable phoropter for professional vision screening. A proud partner of the Focus Links community.',
-       keywords: ['portable phoropter', 'vision screening device', 'tele-optometry', 'rural eye care', 'community health', 'DrishtiKit', 'eye testing equipment', 'Made in India healthcare'],
+      title: 'DrishtiKit: Portable Eye Testing Solution - Focus Links',
+      description: 'Explore DrishtiKit, the innovative, all-in-one portable phoropter for professional vision screening. Learn about this revolutionary eye care technology, proudly partnered with Focus Links.',
+       keywords: ['DrishtiKit', 'portable phoropter', 'vision screening device', 'tele-optometry', 'rural eye care', 'community health', 'eye testing equipment', 'Made in India healthcare', 'Focus Links Partner', 'vision care technology'],
       openGraph: {
-        title: 'DrishtiKit - Portable Eye Testing Solution | Focus Links Partner',
-        description: 'Revolutionizing community eye care with a portable, affordable, and accurate vision screening solution.',
+        title: 'DrishtiKit: The Future of Portable Vision Screening | Focus Links',
+        description: 'Revolutionizing community eye care with a portable, affordable, and accurate vision screening solution featured on Focus Links.',
         images: [user.avatarUrl, `https://www.drishtikit.com/phoropter.png`],
       },
     }
