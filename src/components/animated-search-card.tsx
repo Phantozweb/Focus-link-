@@ -54,8 +54,8 @@ export function AnimatedSearchCard() {
   return (
      <div className="rounded-xl p-8 flex flex-col justify-between shadow-xl h-80 bg-gradient-to-br from-slate-800 to-gray-900 overflow-hidden">
         <div className="relative">
-            <h3 className="font-bold text-2xl mb-2 text-white flex items-center gap-2"><Sparkles className="text-amber-400" /> Rank Higher on Search</h3>
-            <p className="text-white/80">A complete profile makes you more visible to peers, employers, and collaborators searching for your skills.</p>
+            <h3 className="font-bold text-2xl mb-2 text-white flex items-center gap-2"><Sparkles className="text-amber-400" /> Get Discovered on Google</h3>
+            <p className="text-white/80">An SEO-friendly profile helps you rank higher in searches, making you visible to peers and employers worldwide.</p>
 
             <div className="mt-4 bg-slate-700/50 backdrop-blur-sm p-2 rounded-lg border border-slate-600">
                 <div className="flex items-center gap-2">
