@@ -14,8 +14,9 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { sendQuizStartNotification } from '@/lib/webhook';
 import { cn } from '@/lib/utils';
-import { quizWinnersData, type LeaderboardEntry } from '@/lib/data/quiz-winners';
+import { quizWinnersData, type LeaderboardEntry, type ModuleResult } from '@/lib/data/quiz-winners';
 import { certificateParticipants } from '@/lib/data/verifycertificatedids';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
 
 // Debounce function
@@ -44,7 +45,7 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
 export function CertificateClaimDialog() {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
-  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail' | 'not_qualified'>('idle');
+  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail'>('idle');
   const [participantData, setParticipantData] = useState<LeaderboardEntry | null>(null);
   const [participantName, setParticipantName] = useState<string | null>(null);
 
@@ -64,7 +65,6 @@ export function CertificateClaimDialog() {
     if (participant) {
       setIdStatus('valid');
       setParticipantName(participant.name);
-      // Now check if they are in the winners/results data
       const winnerData = quizWinnersData.find(p => p.id === id);
       setParticipantData(winnerData || null);
     } else {
@@ -85,53 +85,59 @@ export function CertificateClaimDialog() {
   }, [membershipId, checkIdValidity]);
 
   const handleClaim = () => {
-    if (idStatus === 'valid' && participantData && participantData.score >= PASS_PERCENTAGE) {
+    if (idStatus === 'valid' && participantData) {
        setVerificationResult('success');
-    } else if (idStatus === 'valid' && participantData) {
-       setVerificationResult('not_qualified');
-    }
-    else {
+    } else {
        setVerificationResult('fail');
     }
   };
 
   if (verificationResult === 'success' && participantData) {
+    const passed = participantData.score >= PASS_PERCENTAGE;
     return (
-        <DialogContent>
+        <DialogContent className="sm:max-w-lg">
              <DialogHeader className="text-center items-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mb-2">
-                    <CheckCircle className="h-8 w-8 text-green-500" />
+                <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-yellow-100")}>
+                    {passed ? <CheckCircle className="h-8 w-8 text-green-500" /> : <Info className="h-8 w-8 text-yellow-500" />}
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
                 <DialogDescription>
-                  Congratulations, <strong>{participantData.name}</strong>! Your participation has been confirmed. Your certificate has been sent to your registered email address.
+                  Participation confirmed for <strong>{participantData.name}</strong>. {passed ? "Your certificate has been sent to your registered email." : "Thank you for your effort!"}
                 </DialogDescription>
-                 <div className="p-4 bg-green-50/50 rounded-lg text-center mt-4 border border-green-200">
-                    <h4 className="font-semibold text-green-800">Your Results</h4>
-                    <p className="text-sm text-green-700">Score: <strong className="font-mono">{participantData.score}%</strong></p>
-                    <p className="text-sm text-green-700">Time: <strong className="font-mono">{formatTime(participantData.time)}</strong></p>
+                 <div className={cn("p-4 rounded-lg text-center mt-4 border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
+                    <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
+                    <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{participantData.score}%</strong> | Time: <strong className="font-mono">{formatTime(participantData.time)}</strong></p>
                  </div>
             </DialogHeader>
-            <DialogFooter>
-                <DialogClose asChild>
-                    <Button>Close</Button>
-                </DialogClose>
-            </DialogFooter>
-        </DialogContent>
-    )
-  }
-   if (verificationResult === 'not_qualified' && participantData) {
-    return (
-         <DialogContent>
-             <DialogHeader className="text-center items-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 mb-2">
-                    <Info className="h-8 w-8 text-yellow-500" />
-                </div>
-                <DialogTitle className="text-2xl font-headline">Participation Confirmed</DialogTitle>
-                <DialogDescription>
-                  Thank you for participating, <strong>{participantData.name}</strong>. While your score of <strong>{participantData.score}%</strong> did not meet the 35% requirement for a certificate this time, we appreciate your effort!
-                </DialogDescription>
-            </DialogHeader>
+            {participantData.moduleResults && (
+              <div className="pt-4">
+                  <h4 className="font-semibold text-center mb-2">Module Breakdown</h4>
+                  <div className="max-h-60 overflow-y-auto pr-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Module</TableHead>
+                        <TableHead className="text-right">Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {participantData.moduleResults.map((result) => (
+                           <TableRow key={result.topic}>
+                                <TableCell className="font-medium">{result.topic}</TableCell>
+                                <TableCell className="text-right">
+                                    {result.status === 'Passed' ? (
+                                        <span className="flex items-center justify-end gap-1 text-green-600 font-semibold"><CheckCircle className="h-4 w-4"/> Pass</span>
+                                    ) : (
+                                        <span className="flex items-center justify-end gap-1 text-red-600 font-semibold"><XCircle className="h-4 w-4"/> Fail</span>
+                                    )}
+                                </TableCell>
+                           </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                  </div>
+              </div>
+            )}
             <DialogFooter>
                 <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
             </DialogFooter>
