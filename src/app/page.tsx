@@ -100,7 +100,7 @@ export default async function Home() {
     {
       title: "350+ Members in our WhatsApp Community",
       description: "Join our active WhatsApp group for discussions, quick updates, and informal networking. This is separate from official membership.",
-      href: "https://chat.whatsapp.com/E5O5Y5Z2Y3Z2Z5Y5Z2Y3Z2",
+      href: "https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS",
       icon: <AnimatedCommunityGraph />,
       cta: "Join WhatsApp Community",
       className: "bg-gradient-to-br from-slate-700 to-slate-900",
