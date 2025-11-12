@@ -119,52 +119,14 @@ export function CertificateClaimDialog() {
       });
   }, [participantName]);
 
-  const handleShare = async () => {
-    if (certificateRef.current === null || !navigator.share) {
-      toast({
-        variant: 'destructive',
-        title: 'Share Not Supported',
-        description: 'Your browser does not support sharing files.',
-      });
-      return;
-    }
-
-    try {
-      const blob = await toBlob(certificateRef.current, { pixelRatio: 2, filter: imageFilter });
-      if (!blob) {
-          throw new Error('Could not generate image for sharing.');
-      }
-      const file = new File([blob], `FocusLinks_Certificate_${participantName?.replace(/\s/g, '_')}.png`, { type: 'image/png' });
-
-      const shareData = {
-        files: [file],
-        title: 'I earned a certificate from Focus Links!',
-        text: `I just earned a certificate from the Eye Q Arena 2025 on Focus Links! Check it out.`,
-      };
-
-      if (navigator.canShare && navigator.canShare(shareData)) {
-        await navigator.share(shareData);
-      } else {
-         throw new Error("Sharing not supported for this file type.");
-      }
-    } catch (err) {
-      console.error('Share failed:', err);
-      if ((err as Error).name !== 'AbortError') { // Don't show error if user cancels
-        toast({
-            variant: 'destructive',
-            title: 'Share Failed',
-            description: 'Could not share the certificate at this time.',
-        });
-      }
-    }
-  };
-
-
   if (verificationResult === 'success' && participantName) {
     const passed = participantData ? participantData.passed : false;
     const score = participantData ? participantData.score : 0;
     const time = participantData ? participantData.time : 0;
-    const certificateUrl = "https://i.postimg.cc/rp0jdmrb/1.png";
+    
+    const excellenceCertificateUrl = "https://i.postimg.cc/Kv6kxD2T/1.png";
+    const participationCertificateUrl = "https://i.postimg.cc/rp0jdmrb/1.png";
+    const certificateUrl = passed ? excellenceCertificateUrl : participationCertificateUrl;
     
     return (
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -172,15 +134,15 @@ export function CertificateClaimDialog() {
                 <div className={cn("mx-auto flex h-12 w-12 items-center justify-center rounded-full mb-2", passed ? "bg-green-100" : "bg-blue-100")}>
                     {passed ? <CheckCircle className={cn("h-8 w-8", "text-green-500")} /> : <Award className={cn("h-8 w-8", "text-blue-500")} />}
                 </div>
-                <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
+                <DialogTitle className="text-2xl font-headline">{passed ? "Congratulations!" : "Verification Successful!"}</DialogTitle>
                 <DialogDescription>
-                  Participation confirmed for <strong>{participantName}</strong>. Here is your certificate.
+                  {passed ? `Well done, ${participantName}! Here is your Certificate of Excellence.` : `Participation confirmed for ${participantName}. Here is your certificate.`}
                 </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6">
                 <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg">
-                  <Image src={certificateUrl} alt="Certificate of Participation" quality={100} width={1123} height={794} className="w-full h-auto" />
+                  <Image src={certificateUrl} alt="Certificate" quality={100} layout="fill" objectFit="cover" />
                   <div className="absolute inset-0 flex items-center justify-center">
                       <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive", transform: 'translateY(-15px)' }}>{participantName}</p>
                   </div>
@@ -190,7 +152,7 @@ export function CertificateClaimDialog() {
                   {participantData && (
                     <>
                       <div className={cn("p-4 rounded-lg text-center border", passed ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200")}>
-                          <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Congratulations! You Passed!' : 'Attempt Unsuccessful'}</h4>
+                          <h4 className={cn("font-semibold", passed ? "text-green-800" : "text-yellow-800")}>{passed ? 'Quiz Passed!' : 'Attempt Unsuccessful'}</h4>
                           <p className={cn("text-sm", passed ? "text-green-700" : "text-yellow-700")}>Score: <strong className="font-mono">{score}%</strong> | Time: <strong className="font-mono">{formatTime(time)}</strong></p>
                       </div>
                       {participantData.moduleResults && (
@@ -230,8 +192,7 @@ export function CertificateClaimDialog() {
             <DialogFooter className="flex-col sm:flex-row gap-2 pt-6">
                 <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
                 <div className="flex-grow" />
-                <Button variant="outline" onClick={handleShare}><Share2 className="mr-2 h-4 w-4" /> Share</Button>
-                <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download</Button>
+                <Button onClick={handleDownload}><Download className="mr-2 h-4 w-4" /> Download Certificate</Button>
             </DialogFooter>
         </DialogContent>
     )
