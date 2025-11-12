@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { sendQuizStartNotification } from '@/lib/webhook';
 import { cn } from '@/lib/utils';
 import { quizWinnersData, type LeaderboardEntry } from '@/lib/data/quiz-winners';
+import { certificateParticipants } from '@/lib/data/verifycertificatedids';
 
 
 // Debounce function
@@ -43,8 +44,9 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
 export function CertificateClaimDialog() {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
-  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail'>('idle');
+  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail' | 'not_qualified'>('idle');
   const [participantData, setParticipantData] = useState<LeaderboardEntry | null>(null);
+  const [participantName, setParticipantName] = useState<string | null>(null);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -58,12 +60,16 @@ export function CertificateClaimDialog() {
       return;
     }
     setIdStatus('loading');
-    const participant = quizWinnersData.find(p => p.id === id);
+    const participant = certificateParticipants.find(p => p.id === id);
     if (participant) {
       setIdStatus('valid');
-      setParticipantData(participant);
+      setParticipantName(participant.name);
+      // Now check if they are in the winners/results data
+      const winnerData = quizWinnersData.find(p => p.id === id);
+      setParticipantData(winnerData || null);
     } else {
       setIdStatus('invalid');
+      setParticipantName(null);
       setParticipantData(null);
     }
   }, 300), []);
@@ -74,13 +80,17 @@ export function CertificateClaimDialog() {
     } else {
       setIdStatus('idle');
       setParticipantData(null);
+      setParticipantName(null);
     }
   }, [membershipId, checkIdValidity]);
 
   const handleClaim = () => {
     if (idStatus === 'valid' && participantData && participantData.score >= PASS_PERCENTAGE) {
        setVerificationResult('success');
-    } else {
+    } else if (idStatus === 'valid' && participantData) {
+       setVerificationResult('not_qualified');
+    }
+    else {
        setVerificationResult('fail');
     }
   };
@@ -110,6 +120,24 @@ export function CertificateClaimDialog() {
         </DialogContent>
     )
   }
+   if (verificationResult === 'not_qualified' && participantData) {
+    return (
+         <DialogContent>
+             <DialogHeader className="text-center items-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 mb-2">
+                    <Info className="h-8 w-8 text-yellow-500" />
+                </div>
+                <DialogTitle className="text-2xl font-headline">Participation Confirmed</DialogTitle>
+                <DialogDescription>
+                  Thank you for participating, <strong>{participantData.name}</strong>. While your score of <strong>{participantData.score}%</strong> did not meet the 35% requirement for a certificate this time, we appreciate your effort!
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setVerificationResult('idle')}>Back</Button>
+            </DialogFooter>
+        </DialogContent>
+    )
+  }
   
   if (verificationResult === 'fail') {
     return (
@@ -120,7 +148,7 @@ export function CertificateClaimDialog() {
                 </div>
                 <DialogTitle className="text-2xl font-headline">Verification Failed</DialogTitle>
                 <DialogDescription>
-                  The Membership ID provided does not match a qualifying participant. Please check the ID and try again, or contact support if you believe this is an error.
+                  The Membership ID provided does not match a participant. Please check the ID and try again, or contact support if you believe this is an error.
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -158,7 +186,7 @@ export function CertificateClaimDialog() {
               {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
             </div>
           </div>
-          {idStatus === 'valid' && participantData && <p className="text-center text-sm text-green-600">Verified for: <strong>{participantData.name}</strong></p>}
+          {idStatus === 'valid' && participantName && <p className="text-center text-sm text-green-600">Verified for: <strong>{participantName}</strong></p>}
           {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid.</p>}
         </div>
       </div>
