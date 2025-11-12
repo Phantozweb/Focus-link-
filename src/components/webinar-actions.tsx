@@ -37,6 +37,129 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   </div>
 );
 
+export function CertificateClaimDialog() {
+  const [membershipId, setMembershipId] = useState('');
+  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+  const [verificationResult, setVerificationResult] = useState<'idle' | 'success' | 'fail' >('idle');
+
+  const checkIdValidity = useCallback(debounce(async (id: string) => {
+    if (!id || id.trim().length < 5) {
+      setIdStatus('idle');
+      return;
+    }
+    setIdStatus('loading');
+    try {
+      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
+      const data = await response.json();
+      if (data.isValid) {
+        setIdStatus('valid');
+      } else {
+        setIdStatus('invalid');
+      }
+    } catch (error) {
+      console.error('ID validation failed:', error);
+      setIdStatus('invalid');
+    }
+  }, 500), []);
+  
+   useEffect(() => {
+    if (membershipId) {
+      checkIdValidity(membershipId);
+    } else {
+      setIdStatus('idle');
+    }
+  }, [membershipId, checkIdValidity]);
+
+  const handleClaim = () => {
+    if (idStatus === 'valid') {
+       setVerificationResult('success');
+    } else {
+       setVerificationResult('fail');
+    }
+  };
+
+  if (verificationResult === 'success') {
+    return (
+        <DialogContent>
+             <DialogHeader className="text-center items-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mb-2">
+                    <CheckCircle className="h-8 w-8 text-green-500" />
+                </div>
+                <DialogTitle className="text-2xl font-headline">Verification Successful!</DialogTitle>
+                <DialogDescription>
+                  Congratulations! Your participation has been confirmed. Your certificate has been sent to your registered email address.
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+                <DialogClose asChild>
+                    <Button>Close</Button>
+                </DialogClose>
+            </DialogFooter>
+        </DialogContent>
+    )
+  }
+  
+  if (verificationResult === 'fail') {
+    return (
+         <DialogContent>
+             <DialogHeader className="text-center items-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-2">
+                    <XCircle className="h-8 w-8 text-red-500" />
+                </div>
+                <DialogTitle className="text-2xl font-headline">Verification Failed</DialogTitle>
+                <DialogDescription>
+                  The Membership ID provided does not match a qualifying participant. Please check the ID and try again, or contact support if you believe this is an error.
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+                <Button variant="outline" onClick={() => setVerificationResult('idle')}>Try Again</Button>
+            </DialogFooter>
+        </DialogContent>
+    )
+  }
+
+  return (
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader className="text-center items-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 mb-2">
+            <Award className="h-8 w-8 text-amber-500" />
+        </div>
+        <DialogTitle className="text-2xl font-headline">Claim Certificate</DialogTitle>
+        <DialogDescription>
+          Enter the membership ID you used to participate in the quiz to verify and receive your certificate.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="space-y-4 py-4">
+        <div className="space-y-2">
+          <Label htmlFor="membership-id" className="sr-only">Membership ID</Label>
+           <div className="relative">
+            <Input 
+              id="membership-id" 
+              value={membershipId}
+              onChange={(e) => setMembershipId(e.target.value)}
+              placeholder="Your Membership ID"
+              className="text-center h-12 text-base"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+              {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+              {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+            </div>
+          </div>
+          {idStatus === 'invalid' && <p className="text-center text-sm text-destructive">This Membership ID is not valid.</p>}
+        </div>
+      </div>
+      <DialogFooter className="sm:justify-end">
+        <Button onClick={handleClaim} disabled={idStatus !== 'valid'}>
+            <Award className="mr-2 h-4 w-4" />
+            Verify & Claim
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  )
+}
+
+
 export function QuizEntryDialog({ webinarId }: { webinarId: string }) {
   const [membershipId, setMembershipId] = useState('');
   const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
@@ -284,11 +407,11 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
         if (isQuiz) {
              return (
                 <div className="space-y-4 text-center">
-                    <h3 className="font-semibold text-slate-700 mb-3 text-lg">The Arena is Closed</h3>
+                    <h3 className="font-semibold text-slate-700 text-lg">Event Concluded</h3>
                     <div className="p-4 bg-blue-50 border-blue-200 rounded-lg text-center">
                         <Trophy className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                         <h4 className="font-bold text-blue-800">Thank You for Participating!</h4>
-                        <p className="text-sm text-blue-700 mt-1">The competition has concluded. Check out the final results and see where you stand.</p>
+                        <p className="text-sm text-blue-700 mt-1">Check out the final standings below.</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                          <Button size="lg" className="w-full" asChild>
@@ -297,10 +420,15 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
                                 Final Leaderboard
                             </Link>
                         </Button>
-                         <Button size="lg" variant="outline" className="w-full" disabled>
-                             <Award className="mr-2 h-5 w-5" />
-                             Claim Certificate
-                         </Button>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                 <Button size="lg" variant="outline" className="w-full">
+                                    <Award className="mr-2 h-5 w-5" />
+                                    Claim Certificate
+                                </Button>
+                            </DialogTrigger>
+                            <CertificateClaimDialog />
+                        </Dialog>
                     </div>
                 </div>
             );
