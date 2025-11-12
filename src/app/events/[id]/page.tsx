@@ -241,7 +241,9 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                           <Card className="bg-blue-50 border-blue-100">
                               <CardContent className="p-6">
                                   <div className="flex gap-4">
-                                      <div><Award className="h-8 w-8 text-blue-600" /></div>
+                                      <div className="flex-shrink-0 pt-1">
+                                          <Award className="h-8 w-8 text-blue-600" />
+                                      </div>
                                       <div className="text-blue-800">
                                           <p className="font-semibold italic">{founderNote}</p>
                                           <p className="font-bold mt-3">– Janarthan Veeramani, Founder of Focus Links</p>
