@@ -52,6 +52,12 @@ const nextConfig: NextConfig = {
         hostname: 'www.drishtikit.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
