@@ -3,12 +3,13 @@ import { demoJobs } from '@/lib/jobs';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Building, Briefcase, Check } from 'lucide-react';
+import { ArrowLeft, MapPin, Building, Briefcase, Check, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { ShareButton } from '@/components/share-button';
+import { Separator } from '@/components/ui/separator';
 
 type JobDetailPageProps = {
   params: { id: string }
@@ -69,68 +70,77 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
             </div>
 
             <Card>
-                <CardHeader className="p-6 flex flex-col sm:flex-row items-start gap-6">
-                    <Image src={job.logo} alt={`${job.company} logo`} width={80} height={80} className="rounded-md object-contain" data-ai-hint="logo building" />
-                    <div>
-                        <Badge className="mb-2">{job.type}</Badge>
-                        <CardTitle className="text-3xl font-headline text-slate-800">{job.title}</CardTitle>
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground mt-2">
-                            <div className="flex items-center gap-2"><Building className="h-5 w-5" />{job.company}</div>
-                            <div className="flex items-center gap-2"><MapPin className="h-5 w-5" />{job.location}</div>
+                <CardHeader className="p-6">
+                    <div className="flex flex-col sm:flex-row items-start gap-6">
+                        <Image src={job.logo} alt={`${job.company} logo`} width={80} height={80} className="rounded-md object-contain border p-2 bg-white" data-ai-hint="logo building" />
+                        <div className="flex-grow">
+                            <Badge className="mb-2">{job.type}</Badge>
+                            <CardTitle className="text-3xl font-headline text-slate-800">{job.title}</CardTitle>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1 text-muted-foreground mt-2">
+                                <div className="flex items-center gap-2"><Building className="h-5 w-5" />{job.company}</div>
+                                <div className="flex items-center gap-2"><MapPin className="h-5 w-5" />{job.location}</div>
+                            </div>
+                        </div>
+                        <div className="w-full sm:w-auto flex-shrink-0">
+                           <Button size="lg" className="w-full">Apply Now</Button>
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="p-6 pt-0">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {/* Main Content */}
-                        <div className="md:col-span-2 space-y-8">
-                            <section>
-                                <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Job Description</h2>
-                                <p className="text-slate-600 whitespace-pre-wrap">{job.description}</p>
-                            </section>
-                             <section>
-                                <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Responsibilities</h2>
-                                <ul className="space-y-3">
-                                  {job.responsibilities.map((item, index) => (
-                                    <li key={index} className="flex items-start gap-3">
-                                      <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                      <span className="text-slate-600">{item}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                            </section>
-                             <section>
-                                <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Qualifications</h2>
-                                 <ul className="space-y-3">
-                                  {job.qualifications.map((item, index) => (
-                                    <li key={index} className="flex items-start gap-3">
-                                      <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                      <span className="text-slate-600">{item}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                            </section>
+                <CardContent className="p-6 pt-4">
+                   <Separator className="my-6" />
+
+                   <div className="space-y-8">
+                        <section>
+                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Job Description</h2>
+                            <p className="text-slate-600 whitespace-pre-wrap leading-relaxed">{job.description}</p>
+                        </section>
+                         <section>
+                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Responsibilities</h2>
+                            <ul className="space-y-3">
+                              {job.responsibilities.map((item, index) => (
+                                <li key={index} className="flex items-start gap-3">
+                                  <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                  <span className="text-slate-600">{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                        </section>
+                         <section>
+                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Qualifications</h2>
+                             <ul className="space-y-3">
+                              {job.qualifications.map((item, index) => (
+                                <li key={index} className="flex items-start gap-3">
+                                  <Check className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                  <span className="text-slate-600">{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                        </section>
+                         <section>
+                            <h2 className="text-xl font-bold font-headline mb-4 text-slate-800">Benefits</h2>
+                             <ul className="space-y-3">
+                              {job.benefits.map((item, index) => (
+                                <li key={index} className="flex items-start gap-3">
+                                  <Sparkles className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />
+                                  <span className="text-slate-600">{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                        </section>
+
+                        <Separator className="my-6" />
+                        
+                        <div className="text-center space-y-4">
+                           <h3 className="text-lg font-semibold">Ready to Apply?</h3>
+                           <p className="text-muted-foreground max-w-md mx-auto">Click the button below to be redirected to the application page for this exciting opportunity.</p>
+                           <Button size="lg">Apply Now</Button>
                         </div>
-                        {/* Sidebar */}
-                        <div className="md:col-span-1">
-                            <div className="sticky top-24 space-y-4">
-                               <Button size="lg" className="w-full">Apply Now</Button>
-                               <Card className="bg-slate-50">
-                                   <CardHeader>
-                                        <CardTitle className="text-lg font-bold">About {job.company}</CardTitle>
-                                   </CardHeader>
-                                   <CardContent>
-                                        <p className="text-sm text-slate-600">More information about the company would go here, describing their mission, values, and work environment.</p>
-                                   </CardContent>
-                               </Card>
-                                <div className="text-sm text-center text-muted-foreground">
-                                    Posted {job.posted}. By <span className="font-semibold text-slate-700">{job.postedBy}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   </div>
                 </CardContent>
             </Card>
+            <div className="text-xs text-center text-muted-foreground mt-4">
+                Posted {job.posted} by <span className="font-semibold text-slate-700">{job.postedBy}</span>
+            </div>
         </div>
     </div>
   );
