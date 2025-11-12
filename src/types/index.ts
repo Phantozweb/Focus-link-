@@ -95,7 +95,8 @@ export type Job = {
   logo: string;
   location: string;
   type: string;
-  posted: string;
+  posted: string; // ISO 8601 date string
   postedBy: string;
   description: string;
+  applyUrl: string;
 };

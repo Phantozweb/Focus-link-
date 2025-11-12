@@ -52,10 +52,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const response = await fetch(jobsUrl, { cache: 'no-store' });
     if (response.ok) {
         const jobs: Job[] = await response.json();
-        jobPages = jobs.map(job => ({
+        jobPages = Array.isArray(jobs) ? jobs.map(job => ({
             url: `${siteUrl}/jobs/${job.id}`,
             lastModified: new Date(),
-        }));
+        })) : [];
     }
   } catch (error) {
     console.error('Failed to fetch jobs for sitemap:', error);

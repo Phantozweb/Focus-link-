@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { TimeAgo } from '@/components/time-ago';
 
 export const metadata: Metadata = {
   title: 'Job Board | Focus Links',
@@ -26,7 +27,8 @@ async function getJobs(): Promise<Job[]> {
       console.error('Failed to fetch jobs.json, returning empty array.');
       return [];
     }
-    return await response.json();
+    const jobs = await response.json();
+    return Array.isArray(jobs) ? jobs : [];
   } catch (error) {
     console.error('Error fetching or parsing jobs.json:', error);
     return [];
@@ -83,7 +85,7 @@ export default async function JobsPage() {
 
             {/* Job Listings */}
             <div className="space-y-4">
-                {jobs.map(job => (
+                {jobs.length > 0 ? jobs.map(job => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-6">
                            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
@@ -107,11 +109,17 @@ export default async function JobsPage() {
                               </div>
                            </div>
                            <div className="border-t mt-4 pt-3 text-xs text-muted-foreground text-right">
-                                Posted {job.posted} by <span className="font-semibold text-slate-600">{job.postedBy}</span>
+                                Posted <TimeAgo dateString={job.posted} /> by <span className="font-semibold text-slate-600">{job.postedBy}</span>
                             </div>
                         </CardContent>
                     </Card>
-                ))}
+                )) : (
+                  <Card>
+                    <CardContent className="p-8 text-center text-muted-foreground">
+                      No job listings available at the moment. Please check back later.
+                    </CardContent>
+                  </Card>
+                )}
             </div>
         </div>
       </div>

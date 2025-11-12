@@ -36,7 +36,8 @@ async function getJobsForNotification(): Promise<Job[]> {
     if (!response.ok) {
       return [];
     }
-    return await response.json();
+    const jobs = await response.json();
+    return Array.isArray(jobs) ? jobs : [];
   } catch (error) {
     return [];
   }

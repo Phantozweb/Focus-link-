@@ -29,6 +29,7 @@ import { logSearch } from '@/lib/activity-logger';
 import { Leaderboard } from '@/components/leaderboard';
 import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 import { AnimatedSearchCard } from '@/components/animated-search-card';
+import { TimeAgo } from '@/components/time-ago';
 
 const profileTypes: UserProfile['type'][] = ['Student', 'Optometrist', 'Academic', 'Researcher', 'Association', 'College', 'Hospital', 'Optical', 'Industry', 'Ophthalmologist', 'Optician'];
 
@@ -578,7 +579,7 @@ export default function Home() {
                               <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                                   <p><span className="font-semibold text-slate-700">Location:</span> {job.location}</p>
                                   <p><span className="font-semibold text-slate-700">Posted by:</span> {job.postedBy}</p>
-                                  <p><span className="font-semibold text-slate-700">Posted:</span> {job.posted}</p>
+                                  <p><span className="font-semibold text-slate-700">Posted:</span> <TimeAgo dateString={job.posted} /></p>
                               </div>
                             </CardContent>
                           </Card>

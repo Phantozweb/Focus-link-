@@ -9,6 +9,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import type { Job } from '@/types';
 import { ShareButton } from '@/components/share-button';
 import { Separator } from '@/components/ui/separator';
+import { TimeAgo } from '@/components/time-ago';
 
 type JobDetailPageProps = {
   params: { id: string }
@@ -23,7 +24,7 @@ async function getJob(id: string): Promise<Job | undefined> {
       return undefined;
     }
     const jobs: Job[] = await response.json();
-    return jobs.find(j => j.id === id);
+    return Array.isArray(jobs) ? jobs.find(j => j.id === id) : undefined;
   } catch (error) {
     console.error('Error fetching or parsing jobs.json:', error);
     return undefined;
@@ -106,7 +107,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                             </div>
                         </div>
                         <div className="w-full sm:w-auto flex-shrink-0">
-                           <Button size="lg" className="w-full">Apply Now</Button>
+                           <Button size="lg" className="w-full" asChild>
+                                <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
+                                    Apply Now
+                                </a>
+                           </Button>
                         </div>
                     </div>
                 </CardHeader>
@@ -120,12 +125,16 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                     <div className="text-center space-y-4">
                        <h3 className="text-lg font-semibold">Ready to Apply?</h3>
                        <p className="text-muted-foreground max-w-md mx-auto">Click the button below to be redirected to the application page for this exciting opportunity.</p>
-                       <Button size="lg">Apply Now</Button>
+                       <Button size="lg" asChild>
+                            <a href={job.applyUrl} target="_blank" rel="noopener noreferrer">
+                                Apply Now
+                            </a>
+                        </Button>
                     </div>
                 </CardContent>
             </Card>
             <div className="text-xs text-center text-muted-foreground mt-4">
-                Posted {job.posted} by <span className="font-semibold text-slate-700">{job.postedBy}</span>
+                Posted <TimeAgo dateString={job.posted} /> by <span className="font-semibold text-slate-700">{job.postedBy}</span>
             </div>
         </div>
     </div>
