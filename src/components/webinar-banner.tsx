@@ -131,10 +131,17 @@ export function WebinarBanner({ webinar, className, variant = 'default' }: Webin
         
         <StatusBadge />
 
-        <div className="relative z-10 flex flex-col items-center gap-4">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-headline leading-tight max-w-2xl">
-                {webinar.title}
-            </h1>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full">
+            <Avatar className={cn("h-24 w-24 md:h-32 md:w-32 border-4 border-white/20", isCard ? "h-20 w-20" : "")}>
+                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} className="object-cover" />
+                <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div className="text-center md:text-left">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold font-headline leading-tight max-w-2xl">
+                    {webinar.title}
+                </h1>
+                <p className="mt-2 text-base text-blue-200">with {webinar.speaker.name}</p>
+            </div>
         </div>
     </div>
   );
