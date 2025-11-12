@@ -59,6 +59,19 @@ export async function generateMetadata(
     }
   }
 
+  if (user.id === 'IN20251102095356') {
+    return {
+      title: `${user.name} | Optometry Student & Content Creator | Focus Links`,
+      description: `Connect with ${user.name}, a passionate first-year optometry student from Odisha, India, with a keen interest in creating content to raise eye health awareness.`,
+      keywords: ['Optometry Student India', 'Monalisa Behera', 'Future Optometrist', 'Eye Care Awareness', 'Trilochan School of Optometry', 'Student Content Creator'],
+      openGraph: {
+        title: `${user.name} | Optometry Student & Content Creator`,
+        description: `Follow the journey of Monalisa Behera, a first-year student at Trilochan School of Optometry, passionate about eye health and community awareness.`,
+        images: [user.avatarUrl],
+      },
+    }
+  }
+
 
   const title = `${user.name} - ${user.type} | Focus Links`;
   const description = user.bio.substring(0, 160);

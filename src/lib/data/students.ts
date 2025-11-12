@@ -356,5 +356,33 @@ My goal is to bridge the gap between practice and education. I am currently purs
     ],
     languages: ['English (Professional)', 'Tamil (Native)', 'Malayalam (Limited)'],
     verified: true,
+  },
+  {
+    id: 'IN20251102095356',
+    name: 'Monalisa Behera',
+    type: 'Student',
+    experience: 'First-Year Optometry Student',
+    location: 'Khurda, Odisha, India',
+    skills: [],
+    interests: ['Content Creation', 'Eye Care Awareness', 'Public Health'],
+    bio: "Hi everyone! I’m Monalisa, a first‑year Optometry student at Trilochan School of Optometry. I’m passionate about all aspects of eye health and love creating engaging content to raise awareness about the importance of optometry and proper eye care.",
+    links: {
+      linkedin: 'https://www.linkedin.com/in/monalisa-behera-997361321',
+      email: 'monalisabehers30@gmail.com',
+    },
+    avatarUrl: 'https://i.ibb.co/q3nPKVwx/IMG-20250825-203303-668.webp',
+    workExperience: [],
+    education: [
+      {
+        school: 'Trilochan school of Optometry, Sambalpur',
+        university: 'Trilochan school of Optometry, Sambalpur',
+        degree: 'Bachelor of Optometry',
+        fieldOfStudy: 'Optometry',
+        startYear: '2024',
+        endYear: '2028',
+      }
+    ],
+    languages: ['English', 'Hindi', 'Odia'],
+    verified: true,
   }
 ];
