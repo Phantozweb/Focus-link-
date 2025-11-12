@@ -87,3 +87,15 @@ export const UserProfileSchema = z.object({
   verified: z.boolean().optional(),
   languages: z.array(z.object({ value: z.string().min(1, "Language cannot be empty.") })).optional(),
 });
+
+export type Job = {
+  id: string;
+  title: string;
+  company: string;
+  logo: string;
+  location: string;
+  type: string;
+  posted: string;
+  postedBy: string;
+  description: string;
+};

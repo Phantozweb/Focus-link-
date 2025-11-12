@@ -5,21 +5,31 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Briefcase, MapPin, Search, Building, Lock } from 'lucide-react';
 import Link from 'next/link';
-import { demoJobs } from '@/lib/jobs';
+import type { Job } from '@/types';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Job Board | Focus Links',
   description: 'Find your next career opportunity in the eye care industry on the Focus Links job board. Browse listings from top clinics, hospitals, and companies.',
 };
 
-export default function JobsPage() {
+async function getJobs(): Promise<Job[]> {
+  // TODO: Replace this with your raw GitHub URL
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs.json`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error('Failed to fetch jobs');
+  }
+  return response.json();
+}
+
+export default async function JobsPage() {
+  const jobs = await getJobs();
+
   return (
     <div className="bg-muted/40">
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
@@ -67,7 +77,7 @@ export default function JobsPage() {
 
             {/* Job Listings */}
             <div className="space-y-4">
-                {demoJobs.map(job => (
+                {jobs.map(job => (
                     <Card key={job.id} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-6">
                            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">

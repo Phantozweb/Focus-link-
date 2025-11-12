@@ -1,5 +1,4 @@
 
-import { demoJobs } from '@/lib/jobs';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +6,7 @@ import { ArrowLeft, MapPin, Building, Check, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import type { Metadata, ResolvingMetadata } from 'next';
+import type { Job } from '@/types';
 import { ShareButton } from '@/components/share-button';
 import { Separator } from '@/components/ui/separator';
 
@@ -14,11 +14,22 @@ type JobDetailPageProps = {
   params: { id: string }
 }
 
+async function getJob(id: string): Promise<Job | undefined> {
+  // TODO: Replace this with your raw GitHub URL
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs.json`, { cache: 'no-store' });
+  if (!response.ok) {
+    // If the file isn't found or there's an error, we can't find the job.
+    return undefined;
+  }
+  const jobs: Job[] = await response.json();
+  return jobs.find(j => j.id === id);
+}
+
 export async function generateMetadata(
   { params }: JobDetailPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const job = demoJobs.find(j => j.id === params.id);
+  const job = await getJob(params.id);
 
   if (!job) {
     return {
@@ -58,8 +69,8 @@ function formatJobDescription(markdown: string) {
 }
 
 
-export default function JobDetailPage({ params }: JobDetailPageProps) {
-  const job = demoJobs.find(j => j.id === params.id);
+export default async function JobDetailPage({ params }: JobDetailPageProps) {
+  const job = await getJob(params.id);
 
   if (!job) {
     notFound();
