@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MessageSquare, ThumbsUp, Eye, Lock, Share2, Check, Info, AlertTriangle, MessageCircle, Copy } from 'lucide-react';
+import { ArrowLeft, MessageSquare, ThumbsUp, Eye, Lock, Share2, Check, Info, AlertTriangle, MessageCircle, Copy, User } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
