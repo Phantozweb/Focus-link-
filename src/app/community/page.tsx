@@ -1,14 +1,13 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock, Search, Info, Radio } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { demoDiscussions } from '@/lib/forum';
+import type { ForumPost } from '@/types';
 import { webinars } from '@/lib/academy';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,10 +16,10 @@ import { WebinarTime } from '@/components/webinar-time';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
-function ForumList() {
+function ForumList({ discussions }: { discussions: ForumPost[] }) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredDiscussions = demoDiscussions.filter((discussion) => {
+  const filteredDiscussions = discussions.filter((discussion) => {
     const term = searchTerm.toLowerCase();
     return (
       discussion.title.toLowerCase().includes(term) ||
@@ -212,6 +211,28 @@ function EventsList() {
 }
 
 export default function CommunityPage() {
+  const [discussions, setDiscussions] = useState<ForumPost[]>([]);
+
+  useEffect(() => {
+    async function getDiscussions(): Promise<ForumPost[]> {
+        const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Case1.json";
+        try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) {
+                console.error('Failed to fetch discussions, returning empty array.');
+                return [];
+            }
+            const discussions: ForumPost[] = await response.json();
+            return Array.isArray(discussions) ? discussions.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()) : [];
+        } catch (error) {
+            console.error('Error fetching or parsing discussions:', error);
+            return [];
+        }
+    }
+    
+    getDiscussions().then(setDiscussions);
+  }, []);
+
   return (
     <div className="bg-muted/40 md:hidden">
       <div className="container mx-auto py-8 px-4">
@@ -224,7 +245,7 @@ export default function CommunityPage() {
                 <EventsList />
             </TabsContent>
             <TabsContent value="forum">
-                <ForumList />
+                <ForumList discussions={discussions} />
             </TabsContent>
         </Tabs>
       </div>

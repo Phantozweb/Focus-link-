@@ -1,7 +1,6 @@
-
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
-import { demoDiscussions } from '@/lib/forum';
+import type { ForumPost } from '@/types';
 import { ProfileCard } from '@/components/profile-card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -32,6 +31,22 @@ async function getJobs(): Promise<Job[]> {
   } catch (error) {
     console.error('Error fetching or parsing jobs.json:', error);
     return [];
+  }
+}
+
+async function getDiscussions(): Promise<ForumPost[]> {
+  const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Case1.json";
+  try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) {
+          console.error('Failed to fetch discussions, returning empty array.');
+          return [];
+      }
+      const discussions: ForumPost[] = await response.json();
+      return Array.isArray(discussions) ? discussions.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()) : [];
+  } catch (error) {
+      console.error('Error fetching or parsing discussions:', error);
+      return [];
   }
 }
 
@@ -67,6 +82,7 @@ export default async function Home() {
   const students = shuffleArray([...allUsers.filter(u => u.type === 'Student')]);
   const industry = shuffleArray([...allUsers.filter(u => u.type === 'Industry')]);
   const demoJobs = await getJobs();
+  const demoDiscussions = await getDiscussions();
 
   const now = new Date().getTime();
   const liveWebinars: typeof webinars = [];
