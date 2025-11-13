@@ -45,7 +45,15 @@ export async function generateMetadata(
 
   const previousImages = (await parent).openGraph?.images || []
   const title = `${job.title} at ${job.company} | Focus Links Jobs`;
-  const description = job.description.substring(0, 160);
+  const description = job.description
+    .replace(/#+\s/g, '') // Remove headings
+    .replace(/\*\*/g, '') // Remove bold
+    .replace(/>\s/g, '') // Remove blockquotes
+    .replace(/:(\w+):/g, '') // Remove icon placeholders
+    .replace(/\|/g, '') // Remove table pipes
+    .replace(/(\r\n|\n|\r)/gm, " ") // Replace newlines with spaces
+    .replace(/\s+/g, ' ') // Condense whitespace
+    .substring(0, 160);
   
   return {
     title,
