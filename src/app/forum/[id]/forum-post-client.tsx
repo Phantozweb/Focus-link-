@@ -241,4 +241,3 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
             </div>
         </div>
     );
-}
