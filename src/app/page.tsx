@@ -17,6 +17,7 @@ import { TimeAgo } from '@/components/time-ago';
 import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 import { HomepageSearch } from '@/components/homepage-search';
 import { AnimatedSearchCard } from '@/components/animated-search-card';
+import { AnimatedCommunityUpdateCard } from '@/components/animated-community-update-card';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -105,14 +106,8 @@ export default async function Home() {
       component: <AnimatedSearchCard />,
     },
     {
-      title: "Eye Q Arena Has Ended!",
-      description: "With 320+ participants, only 50 survived the quiz! The International Optometry Knowledge Championship is complete. View the final leaderboard and claim your certificate now.",
-      href: "/academy/eye-q-arena-2025",
-      icon: <Trophy className="h-8 w-8 text-white animate-bounce" />,
-      cta: "Claim Certificate",
-      cta2: "View Leaderboard",
-      href2: "/academy/eye-q-arena-2025#leaderboard",
-      className: "bg-gradient-to-br from-amber-500 to-orange-600 shining-button",
+      isAnimated: true,
+      component: <AnimatedCommunityUpdateCard />,
     },
     {
       title: "350+ Members in our WhatsApp Community",
