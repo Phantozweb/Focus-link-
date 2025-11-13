@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// IMPORTANT: Replace this with your actual Google Apps Script URL.
-const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8FU1aVNk1j0lvbIqt6YJseZIoCwevTRU5zcPeu2r9cRjqyHy--Bd-dZJqcnBBaAg2/exec";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
