@@ -2,80 +2,31 @@
 [
   {
     "id": "1",
-    "title": "Unusual Presentation of Keratoconus in a Young Patient",
-    "author": "Dr. Emily Carter",
-    "authorId": "4",
-    "avatar": "https://i.ibb.co/27Z4CkpY/IMG-20251004-WA0001.jpg",
+    "title": "Progressive Keratoconus in a Young Adult",
+    "author": "Dr. Sarah Miller",
+    "authorId": "10",
+    "avatar": "https://i.ibb.co/yQWzVvj/corneal-topography-keratoconus.jpg",
     "category": "Cornea & External Disease",
-    "tags": ["Keratoconus", "Topography", "Corneal Ectasia"],
-    "description": "A 19-year-old male presented with rapidly progressing astigmatism and visual distortion. Topography reveals an atypical pattern. Seeking opinions on differential diagnosis and management strategies...",
-    "content": "A 19-year-old male presented to my clinic with a chief complaint of progressively blurry vision and shadowing in his left eye over the past 6 months. His right eye is asymptomatic.\n\n### History\n- No significant past ocular history.\n- No history of eye rubbing.\n- Family history is negative for keratoconus or other corneal ectasias.\n- Systemic history is unremarkable.\n\n### Examination (Left Eye)\n- **UCVA:** 20/80\n- **BSCVA:** 20/40 with -1.50 / -4.50 x 075\n- **Slit Lamp:** Clear cornea, no visible Vogt's striae or Fleischer ring. Deep and quiet anterior chamber.\n- **Topography:** Shows inferior steepening, but the axis is atypical and the classic \"kissing doves\" pattern is not present. Pachymetry shows thinning inferiorly, but not as dramatic as expected for classic KC.\n\n> #### Clinical Question\n> What are your thoughts on the differential diagnosis? What would be your next steps in management? Would you consider corneal cross-linking at this stage given the documented progression of astigmatism? Any insights would be greatly appreciated.",
+    "tags": ["Keratoconus", "Corneal Cross-Linking", "Ectasia"],
+    "description": "A 22-year-old patient presents with a one-year history of decreasing vision in the left eye, now requiring frequent prescription changes. Examination confirms progressive keratoconus. This case explores the decision-making process for corneal cross-linking.",
+    "content": "### Patient Presentation\nA 22-year-old male presents with a chief complaint of progressively worsening vision in his left eye over the past 12 months. He reports increasing glare and halos around lights, making night driving difficult. He has a history of seasonal allergies and admits to frequent eye rubbing.\n\n### Examination Findings\n- **Visual Acuity (OD):** 20/20\n- **Visual Acuity (OS):** 20/60, improving to 20/40 with glasses (-2.00 / -3.50 x 095)\n- **Slit Lamp (OS):** Prominent corneal nerves, mild Vogt's striae, and a faint Fleischer ring at the base of the cone.\n- **Corneal Topography (OS):** Shows significant inferior steepening with a maximum keratometry (Kmax) reading of 54.5 D, an increase from 52.0 D recorded 6 months prior.\n- **Pachymetry (OS):** Thinnest point is 450 microns inferiorly.\n\n### Diagnosis\nProgressive keratoconus in the left eye.\n\n> ### Clinical Discussion\n> Given the patient's age, documented progression of ectasia (increase in Kmax), and subjective worsening of symptoms, he is a clear candidate for treatment. The primary management goal is to halt the progression of the disease.\n> \n> **Proposed Plan:**\n> 1.  **Corneal Collagen Cross-Linking (CXL):** Epi-off CXL is recommended for the left eye to stiffen the cornea and prevent further steepening.\n> 2.  **Refractive Management:** Following CXL (typically 3-6 months post-op), the patient will be refit with a rigid gas permeable (RGP) or scleral contact lens to achieve optimal visual acuity.\n> 3.  **Patient Education:** Advise the patient to cease all eye rubbing, as this is a significant risk factor for progression. Manage ocular allergies with appropriate topical mast cell stabilizers or antihistamines.\n\nThis case highlights the importance of early detection and intervention in managing keratoconus. Timely CXL can prevent the need for more invasive procedures like corneal transplantation in the future. What are your standard protocols for CXL in similar cases?",
     "media": [
-      { "type": "image", "url": "https://i.ibb.co/yQWzVvj/corneal-topography-keratoconus.jpg", "caption": "Corneal Topography - Axial Map" },
-      { "type": "image", "url": "https://i.ibb.co/Vvz8r7Y/oct-keratoconus.jpg", "caption": "Anterior Segment OCT" }
+      {
+        "type": "image",
+        "url": "https://i.ibb.co/yQWzVvj/corneal-topography-keratoconus.jpg",
+        "caption": "Baseline Corneal Topography (OS)"
+      },
+      {
+        "type": "image",
+        "url": "https://i.ibb.co/Vvz8r7Y/oct-keratoconus.jpg",
+        "caption": "Anterior Segment OCT showing corneal thinning"
+      }
     ],
     "mediaCount": 2,
-    "replies": 12,
-    "views": 156,
-    "upvotes": 45,
-    "lastReply": "2 hours ago",
-    "postedDate": "2025-10-27T10:00:00Z"
-  },
-  {
-    "id": "2",
-    "title": "Managing Progressive Myopia in Children: What’s Working?",
-    "author": "Dr. Ben Hanson",
-    "authorId": "5",
-    "avatar": "https://i.ibb.co/v6XJ3B7X/1747244504223.jpg",
-    "category": "Pediatric Optometry",
-    "tags": ["Myopia Control", "Pediatrics", "Atropine"],
-    "description": "Sharing a case of an 8-year-old with a -1.50D/year progression rate. We've tried multifocal soft lenses with limited success. Has anyone had consistent results with low-dose Atropine or new DIMS lenses?",
-    "content": "I have an 8-year-old patient who has shown a rapid myopic progression of -1.50D over the past year. Current Rx is -3.75D in both eyes. Axial length has increased by 0.6mm in the same period.\n\n### Interventions Tried\n- **Single Vision Spectacles:** Initially prescribed, but progression continued.\n- **Multifocal Soft Contact Lenses:** Switched to center-distance multifocal lenses 6 months ago. While the progression slowed slightly, it did not stabilize as much as hoped.\n\n> #### Seeking Clinical Advice\n> I am now considering either low-dose Atropine (0.05%) therapy or transitioning the patient to DIMS (Defocus Incorporated Multiple Segments) spectacle lenses. I would love to hear from colleagues about their clinical experiences: Has anyone seen more consistent results with one modality over the other in similar high-progressor cases? Are there any specific pearls or pitfalls to watch out for with either option?",
-    "media": [],
-    "mediaCount": 0,
-    "replies": 34,
-    "views": 432,
-    "upvotes": 88,
-    "lastReply": "5 hours ago",
-    "postedDate": "2025-10-27T08:00:00Z"
-  },
-  {
-    "id": "3",
-    "title": "Atypical Macular Degeneration Case Study",
-    "author": "Dr. Aisha Khan",
-    "authorId": "6",
-    "avatar": "https://i.ibb.co/YF1PmkBm/IMG-20251025-170957.jpg",
-    "category": "Retina",
-    "tags": ["AMD", "Macular Dystrophy", "OCT"],
-    "description": "Patient is a 55-year-old female with drusen deposits but no CNV, yet experiencing significant central vision loss. OCT and FAF images attached. Is this a rare form of AMD or a macular dystrophy?",
-    "content": "A 55-year-old female patient presents with a complaint of significant central vision loss and metamorphopsia in her right eye, which has worsened over the last few months. Her left eye is stable.\n\n### Clinical Findings (Right Eye)\n- **Visual Acuity:** 20/100 (pinholes to 20/80)\n- **Amsler Grid:** Shows central scotoma and significant waviness of lines.\n- **Fundus Examination:** Reveals multiple large, soft drusen throughout the macula. No evidence of hemorrhage or subretinal fluid.\n- **OCT Scan:** Confirms the presence of large drusen and shows some RPE disruption, but crucially, there is no evidence of Choroidal Neovascularization (CNV) or fluid.\n- **FAF:** Shows areas of hyper-autofluorescence corresponding to the drusen.\n\n> #### Diagnostic Dilemma\n> The visual loss seems disproportionately severe for non-exudative ('dry') AMD, especially given the lack of CNV. Could this be a form of geographic atrophy that is not clearly visible, or are we potentially looking at an underlying macular dystrophy (e.g., Pattern Dystrophy, Best's) presenting in an unusual way? The patient is very anxious about her vision loss, and I want to ensure we have the right diagnosis before discussing prognosis and management (AREDS2, etc.). Any thoughts from the retina specialists in the community would be highly valuable.",
-    "media": [
-      { "type": "image", "url": "https://i.ibb.co/qjF1PqH/amd-oct.jpg", "caption": "Macular OCT" },
-      { "type": "image", "url": "https://i.ibb.co/GPDj6zR/amd-fundus.jpg", "caption": "Fundus Autofluorescence" }
-    ],
-    "mediaCount": 2,
-    "replies": 21,
-    "views": 289,
-    "upvotes": 62,
+    "replies": 8,
+    "views": 112,
+    "upvotes": 35,
     "lastReply": "1 day ago",
-    "postedDate": "2025-10-26T14:00:00Z"
-  },
-  {
-    "id": "4",
-    "title": "Best Practices for Fitting Scleral Lenses Post-Corneal Transplant",
-    "author": "Optom. David Chen",
-    "authorId": "8",
-    "avatar": "https://i.ibb.co/LhnqwR5t/IMG-20251025-WA0020.jpg",
-    "category": "Contact Lenses",
-    "tags": ["Scleral Lenses", "Post-PKP", "Specialty Contact Lens"],
-    "description": "A patient who underwent a penetrating keratoplasty 1 year ago requires a scleral lens for visual rehabilitation. The graft is clear, but topography is highly irregular. Seeking tips on initial lens selection and vaulting strategies.",
-    "content": "I'm managing a 45-year-old patient who underwent a full-thickness penetrating keratoplasty (PKP) in his left eye one year ago for advanced keratoconus. The graft is clear and sutures have been removed, but he is left with significant irregular astigmatism, uncorrectable with spectacles.\n\n### Current Status\n- **BSCVA (Spectacles):** 20/200\n- **Refraction:** Highly variable and unreliable retinoscopy reflex.\n- **Topography:** Shows a highly irregular and asymmetric graft surface, with a steep-flat meridian difference of over 10D.\n\n### Plan\nA scleral lens is the next logical step for visual rehabilitation. However, given the post-PKP topography, I anticipate challenges with achieving a stable fit and adequate vault over the graft-host junction.\n\n> #### Questions for the Community\n> For those experienced in fitting sclerals on post-graft corneas:\n> 1. What are your go-to initial diagnostic lens designs or diameters?\n> 2. Any specific strategies for managing vault over the often-proud graft-host junction?\n> 3. Do you prefer using OCT to guide your fitting, and what are your key clearance targets? All advice is welcome!",
-    "media": [],
-    "mediaCount": 0,
-    "replies": 18,
-    "views": 205,
-    "upvotes": 51,
-    "lastReply": "3 days ago",
-    "postedDate": "2025-10-24T11:00:00Z"
+    "postedDate": "2025-11-01T09:00:00Z"
   }
 ]
