@@ -1,4 +1,3 @@
-
 'use client';
 import { usePathname } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,7 +23,8 @@ function WhatsAppShareBlock({ title }: { title: string }) {
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(fullMessage);
+        const messageToCopy = `Check out this interesting case study on Focus Links: "${title}". See the full details here: ${caseUrl}`;
+        navigator.clipboard.writeText(messageToCopy);
         toast({
             title: 'Copied to Clipboard',
             description: 'The case details and link have been copied.',
@@ -241,3 +241,4 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
             </div>
         </div>
     );
+}
