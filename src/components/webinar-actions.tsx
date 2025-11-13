@@ -147,7 +147,7 @@ export function CertificateClaimDialog() {
             <div className="space-y-6">
                 <div ref={certificateRef} className="relative w-full aspect-[1.414] overflow-hidden rounded-md border shadow-lg">
                   <Image src={certificateUrl} alt="Certificate" quality={100} layout="fill" objectFit="cover" />
-                   <div className="absolute inset-0 flex items-center justify-center" style={{ transform: passed ? 'translateY(10px)' : 'translateY(-15px)' }}>
+                   <div className="absolute inset-0 flex items-center justify-center" style={{ transform: passed ? 'translateY(5px)' : 'translateY(-15px)' }}>
                       <p className="text-black/80 text-4xl sm:text-5xl md:text-6xl" style={{ fontFamily: "'Ms Madi', cursive" }}>{participantName}</p>
                   </div>
                 </div>
