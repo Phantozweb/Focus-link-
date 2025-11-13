@@ -58,16 +58,20 @@ function formatForumContent(text: string): string {
 
     const processInline = (line: string) => line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    const blocks = text.trim().split(/\n\s*\n/);
+    const blocks = text.trim().split(/(\n\s*\n)/);
     let html = '';
+    let inList = false;
+    let listType = '';
 
     for (const block of blocks) {
+        if (block.trim() === '') continue;
+
         if (block.startsWith('>')) {
             const blockquoteContent = block.split('\n').map(line => line.replace(/^>\s?/, '')).join('\n');
             const titleMatch = blockquoteContent.match(/^####\s(.*?)(?:\n|$)/);
             const title = titleMatch ? titleMatch[1] : 'Clinical Note';
             const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length).trim() : blockquoteContent.trim();
-
+            
             const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
             const isDilemma = title.toLowerCase().includes('dilemma');
             let variant: 'info' | 'destructive' | 'default' = 'default';
@@ -89,28 +93,27 @@ function formatForumContent(text: string): string {
             const processedContent = formatForumContent(content); // Recursive call for nested content
 
             html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
+
         } else if (block.startsWith('### ')) {
             html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processInline(block.substring(4))}</h3>`;
         } else if (block.match(/^- /) || block.match(/^\d+\.\s/)) {
             const isOrdered = block.match(/^\d+\.\s/);
             const listTag = isOrdered ? 'ol' : 'ul';
-            const listClass = isOrdered ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-none p-0 space-y-1 my-4';
+            const listClass = isOrdered ? 'list-decimal list-inside space-y-1 my-4 pl-4' : 'list-none p-0 space-y-1 my-4';
             const itemTag = 'li';
 
             const items = block.split('\n').map(item => {
                 const itemContent = processInline(item.replace(/^(-|\d+\.)\s/, ''));
-                if (isOrdered) {
+                 if (isOrdered) {
                     return `<${itemTag}>${itemContent}</${itemTag}>`;
                 }
                 return `<${itemTag} class="flex items-start gap-3 mt-2"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${itemContent}</span></${itemTag}>`;
             }).join('');
-
-            html += `<${listTag} class="${listClass}">${items}</${listTag}>`;
+             html += `<${listTag} class="${listClass}">${items}</${listTag}>`;
         } else {
-            html += `<p>${processInline(block)}</p>`;
+             html += `<p>${processInline(block)}</p>`;
         }
     }
-
     return html;
 }
 
@@ -181,7 +184,7 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                         </div>
                     </CardHeader>
                     <CardContent className="p-6 pt-0">
-                        <div className="prose prose-lg max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: formatForumContent(discussion.content) }} />
+                        <div className="prose max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: formatForumContent(discussion.content) }} />
                         
                         <WhatsAppShareBlock title={discussion.title} description={discussion.description} />
 
