@@ -65,14 +65,47 @@ export async function generateMetadata(
 }
 
 function formatJobDescription(markdown: string) {
-  return markdown
-    .replace(/^### (.*?)$/gm, '<h2 class="text-xl font-bold font-headline mt-8 mb-4 text-slate-800">$1</h2>')
-    .replace(/^\* (.*?)$/gm, (match, content) => {
-        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1 flex-shrink-0">&#10003;</span><span class="text-slate-600">${content}</span></li>`;
-    })
-    .replace(/(<li.*<\/li>)/gs, '<ul class="space-y-3">$1</ul>')
-    .replace(/\n\n/g, '<br /><br />');
+    let html = markdown;
+
+    // Headings
+    html = html.replace(/^# (.*?)$/gm, '<h1 class="text-2xl font-bold font-headline mt-8 mb-4 text-slate-800">$1</h1>');
+    html = html.replace(/^## (.*?)$/gm, '<h2 class="text-xl font-bold font-headline mt-8 mb-4 text-slate-800">$1</h2>');
+    html = html.replace(/^### (.*?)$/gm, '<h3 class="text-lg font-bold font-headline mt-6 mb-3 text-slate-800">$1</h3>');
+
+    // Blockquotes
+    html = html.replace(/^> (.*?)$/gm, '<blockquote class="border-l-4 border-primary pl-4 italic text-slate-600 my-4">$1</blockquote>');
+
+    // Unordered lists with :check: icon support
+    html = html.replace(/^\* (.*?)$/gm, (match, content) => {
+        const iconHtml = content.includes(':check:') 
+            ? `<span class="icon-placeholder text-primary mt-1 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span>`
+            : `<span class="icon-placeholder text-primary mt-2.5 flex-shrink-0 w-1.5 h-1.5 bg-current rounded-full"></span>`;
+        const textContent = content.replace(/:check:/g, '').trim();
+        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1 flex-shrink-0">${iconHtml}</span><span class="text-slate-600">${textContent}</span></li>`;
+    });
+    html = html.replace(/(<li.*<\/li>)/gs, '<ul class="space-y-3">$1</ul>');
+
+    // Tables
+    const tableRegex = /(\|.*\|(?:\n\|.*\|)+)/g;
+    html = html.replace(tableRegex, (match) => {
+        const rows = match.trim().split('\n');
+        const headerSeparator = rows[1];
+        if (!headerSeparator || !headerSeparator.includes('|')) return match; // Not a valid table
+
+        const header = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${rows[0].split('|').slice(1, -1).map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</th>`).join('')}</tr></thead>`;
+        
+        const bodyRows = rows.slice(2);
+        const body = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+        return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${header}${body}</table></div>`;
+    });
+
+    // Paragraphs and line breaks
+    html = html.replace(/\n\n/g, '<br /><br />');
+
+    return html;
 }
+
 
 
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
