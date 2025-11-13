@@ -24,7 +24,7 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
 
     const copyToClipboard = () => {
-        const messageToCopy = `Check out this interesting case study on Focus Links:\n\n**${title}**\n*${description}*\n\nSee the full details here: ${caseUrl}`;
+        const messageToCopy = `Check out this interesting case study on Focus Links:\n\n*${title}*\n${description}\n\nSee the full details here: ${caseUrl}`;
         navigator.clipboard.writeText(messageToCopy);
         toast({
             title: 'Copied to Clipboard',
@@ -55,65 +55,64 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
 
 function formatForumContent(text: string) {
     if (!text) return '';
-    let html = text.trim();
+    const blocks = text.trim().split(/\n\s*\n/);
 
-    // Block-level elements first
-    
-    // Headings
-    html = html.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
-    
-    // Blockquotes with special formatting for "Clinical Question" or "Diagnostic Dilemma"
-    html = html.replace(/^> #### (.*?)\n((?:> .*(?:\n|$))+)/gm, (match, title, content) => {
-        const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
-        const isDilemma = title.toLowerCase().includes('dilemma');
-        
-        let variant: 'info' | 'destructive' | 'default' = 'default';
-        if (isQuestion) variant = 'info';
-        if (isDilemma) variant = 'destructive';
+    const processInline = (line: string) => line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-        const icon = {
-            info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
-            destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
-            default: ''
-        }[variant];
+    let html = '';
+    let inList = false;
 
-        const variantClass = {
-            destructive: "bg-red-50 border-red-200 text-red-900",
-            info: "bg-blue-50 border-blue-200 text-blue-900",
-            default: "bg-slate-50 border-slate-200 text-slate-900"
-        }[variant];
+    for (const block of blocks) {
+        // Handle blockquotes
+        if (block.startsWith('>')) {
+            const blockquoteContent = block.split('\n').map(line => line.replace(/^>\s?/, '')).join('\n');
+            const titleMatch = blockquoteContent.match(/^####\s(.*?)\n/);
+            const title = titleMatch ? titleMatch[1] : 'Clinical Note';
+            const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length) : blockquoteContent;
 
-        const cleanedContent = content.replace(/^> /gm, '').replace(/\n/g, '<br/>');
-        return `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${cleanedContent}</div></div>`;
-    });
+            const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
+            const isDilemma = title.toLowerCase().includes('dilemma');
+            let variant: 'info' | 'destructive' | 'default' = 'default';
+            if (isQuestion) variant = 'info';
+            if (isDilemma) variant = 'destructive';
 
-    // Unordered lists
-    html = html.replace(/((?:^- .*(?:\n|$))+)/gm, (match) => {
-        const items = match.trim().split('\n').map(item => {
-            const content = item.replace(/^- /, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            return `<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${content}</span></li>`;
-        }).join('');
-        return `<ul class="list-none p-0 space-y-1">${items}</ul>`;
-    });
+            const icon = {
+                info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+                destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+                default: ''
+            }[variant];
 
-    // Ordered lists
-    html = html.replace(/((?:^\d+\. .*(?:\n|$))+)/gm, (match) => {
-        const items = match.trim().split('\n').map(item => {
-            const content = item.replace(/^\d+\. /, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            return `<li>${content}</li>`;
-        }).join('');
-        return `<ol class="list-decimal list-inside space-y-2 my-4">${items}</ol>`;
-    });
+            const variantClass = {
+                destructive: "bg-red-50 border-red-200 text-red-900",
+                info: "bg-blue-50 border-blue-200 text-blue-900",
+                default: "bg-slate-50 border-slate-200 text-slate-900"
+            }[variant];
+            
+            const processedContent = formatForumContent(content.trim());
 
-    // Paragraphs and bold text
-    html = html.split(/\n\s*\n/).map(paragraph => {
-        if (paragraph.match(/^(<h3|<div|<ul|<ol)/)) {
-            return paragraph;
+            html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
+            continue;
         }
-        const bolded = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        return `<p>${bolded.replace(/\n/g, '<br/>')}</p>`;
-    }).join('');
 
+        // Headings
+        if (block.startsWith('### ')) {
+            html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processInline(block.substring(4))}</h3>`;
+        }
+        // Unordered Lists
+        else if (block.startsWith('- ')) {
+            const items = block.split('\n').map(item => `<li class="flex items-start gap-3 mt-2"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${processInline(item.substring(2))}</span></li>`).join('');
+            html += `<ul class="list-none p-0 space-y-1 my-4">${items}</ul>`;
+        }
+        // Ordered Lists
+        else if (block.match(/^\d+\.\s/)) {
+            const items = block.split('\n').map(item => `<li>${processInline(item.replace(/^\d+\.\s/, ''))}</li>`).join('');
+            html += `<ol class="list-decimal list-inside space-y-2 my-4 pl-4">${items}</ol>`;
+        }
+        // Paragraphs
+        else {
+            html += `<p>${processInline(block)}</p>`;
+        }
+    }
 
     return html;
 }
