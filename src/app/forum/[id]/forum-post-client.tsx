@@ -56,27 +56,24 @@ function formatForumContent(markdown: string): string {
 
   const processLine = (line: string): string => {
     return line
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/### (.*?)/g, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   };
-
+  
   const lines = markdown.split('\n');
   let html = '';
-  let inList = false;
-  let listType: 'ul' | 'ol' | null = null;
+  let inList: 'ul' | 'ol' | null = null;
   let inBlockquote = false;
-  
-  const endList = () => {
-    if (inList && listType) {
-      html += `</${listType}>`;
-      inList = false;
-      listType = null;
+
+  const closeList = () => {
+    if (inList) {
+      html += `</${inList}>`;
+      inList = null;
     }
   };
-
-  const endBlockquote = () => {
-    if (inBlockquote) {
-      endList(); // End any list before closing blockquote
+  
+  const closeBlockquote = () => {
+     if (inBlockquote) {
+      closeList();
       html += `</div>`;
       inBlockquote = false;
     }
@@ -88,7 +85,7 @@ function formatForumContent(markdown: string): string {
     // Handle blockquotes
     if (trimmedLine.startsWith('>')) {
       if (!inBlockquote) {
-        endList(); // End previous list if any
+        closeList();
         html += `<div class="my-6 border-l-4 border-primary pl-4 italic text-slate-600 space-y-4">`;
         inBlockquote = true;
       }
@@ -97,52 +94,44 @@ function formatForumContent(markdown: string): string {
       
       // Process markdown inside the blockquote line
       if (blockquoteContent.match(/^\d+\.\s/)) { // Ordered list item
-        if (listType !== 'ol') { endList(); }
-        if (!inList) {
-          listType = 'ol';
-          html += `<ol class="list-decimal list-inside space-y-2">`;
-          inList = true;
-        }
+        if (inList !== 'ol') { closeList(); html += `<ol class="list-decimal list-inside space-y-2">`; inList = 'ol'; }
         html += `<li>${processLine(blockquoteContent.replace(/^\d+\.\s/, ''))}</li>`;
       } else if (blockquoteContent.startsWith('- ')) { // Unordered list item
-        if (listType !== 'ul') { endList(); }
-        if (!inList) {
-          listType = 'ul';
-          html += `<ul class="list-disc list-inside space-y-2">`;
-          inList = true;
-        }
+        if (inList !== 'ul') { closeList(); html += `<ul class="list-disc list-inside space-y-2">`; inList = 'ul'; }
         html += `<li>${processLine(blockquoteContent.substring(2))}</li>`;
-      } else if (blockquoteContent.startsWith('###')) {
-         endList();
-         html += processLine(blockquoteContent);
-      }
-       else if (blockquoteContent === '') {
-        // Handle empty lines within blockquote for paragraph breaks
-        endList();
-        html += '<p>&nbsp;</p>';
+      } else if (blockquoteContent.startsWith('### ')) {
+         closeList();
+         html += `<h3 class="text-xl font-bold text-slate-800 not-italic mt-6 mb-2">${processLine(blockquoteContent.replace('### ', ''))}</h3>`;
+      } else if (blockquoteContent === '') {
+        closeList();
       } else {
-        endList();
+        closeList();
         html += `<p>${processLine(blockquoteContent)}</p>`;
       }
-
     } else {
-      endBlockquote(); // End blockquote if line doesn't start with '>'
-      endList(); // Also end lists when exiting a blockquote
+      closeBlockquote();
+      closeList();
       
       if (trimmedLine.startsWith('### ')) {
-        html += processLine(trimmedLine);
+        html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processLine(trimmedLine.replace('### ', ''))}</h3>`;
+      } else if (trimmedLine.match(/^\d+\.\s/)) {
+        if (inList !== 'ol') { html += `<ol class="list-decimal list-inside space-y-2 my-4">`; inList = 'ol'; }
+        html += `<li>${processLine(trimmedLine.replace(/^\d+\.\s/, ''))}</li>`;
+      } else if (trimmedLine.startsWith('- ')) {
+        if (inList !== 'ul') { html += `<ul class="list-disc list-inside space-y-2 my-4">`; inList = 'ul'; }
+        html += `<li>${processLine(trimmedLine.substring(2))}</li>`;
       } else if (trimmedLine === '') {
-        html += '<p>&nbsp;</p>';
+        // This will be handled by block-level elements, effectively creating paragraph breaks
       } else {
-        html += `<p>${processLine(trimmedLine)}</p>`;
+        html += `<p class="my-4">${processLine(trimmedLine)}</p>`;
       }
     }
   });
 
-  endList();
-  endBlockquote();
+  closeList();
+  closeBlockquote();
 
-  return html.replace(/(<p>&nbsp;<\/p>)+/g, '<p>&nbsp;</p>');
+  return html;
 }
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
@@ -183,9 +172,7 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                             Back to All Discussions
                         </Link>
                     </Button>
-                    <Button onClick={handleShare} variant="ghost" size="icon">
-                        <Share2 className="h-5 w-5 text-muted-foreground" />
-                    </Button>
+                    <ShareButton title={`${discussion.title} on Focus Links`} text={`Check out this case on Focus Links: ${discussion.title}`} />
                 </div>
 
                 <Card>
