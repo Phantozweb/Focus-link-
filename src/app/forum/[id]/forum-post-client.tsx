@@ -58,18 +58,24 @@ function formatForumContent(text: string): string {
 
     const processInline = (line: string) => line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    const blocks = text.trim().split(/(\n\s*\n)/);
+    const lines = text.split('\n');
     let html = '';
     let inList = false;
-    let listType = '';
+    let listType = ''; 
+    let inBlockquote = false;
+    let blockquoteContent = '';
 
-    for (const block of blocks) {
-        if (block.trim() === '') continue;
-
-        if (block.startsWith('>')) {
-            const blockquoteContent = block.split('\n').map(line => line.replace(/^>\s?/, '')).join('\n');
-            const titleMatch = blockquoteContent.match(/^####\s(.*?)(?:\n|$)/);
-            const title = titleMatch ? titleMatch[1] : 'Clinical Note';
+    const closeList = () => {
+        if (inList) {
+            html += `</${listType}>`;
+            inList = false;
+        }
+    };
+    
+    const closeBlockquote = () => {
+        if(inBlockquote) {
+            const titleMatch = blockquoteContent.match(/^###\s(.*?)(?:\n|$)/);
+            const title = titleMatch ? titleMatch[1] : 'Clinical Discussion';
             const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length).trim() : blockquoteContent.trim();
             
             const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
@@ -77,43 +83,66 @@ function formatForumContent(text: string): string {
             let variant: 'info' | 'destructive' | 'default' = 'default';
             if (isQuestion) variant = 'info';
             if (isDilemma) variant = 'destructive';
-
-            const icon = {
+             const icon = {
                 info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
                 destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
                 default: ''
             }[variant];
-
-            const variantClass = {
+             const variantClass = {
                 destructive: "bg-red-50 border-red-200 text-red-900",
                 info: "bg-blue-50 border-blue-200 text-blue-900",
                 default: "bg-slate-50 border-slate-200 text-slate-900"
             }[variant];
-            
-            const processedContent = formatForumContent(content); // Recursive call for nested content
 
+            const processedContent = formatForumContent(content); // Recursive call for nested content
             html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
 
-        } else if (block.startsWith('### ')) {
-            html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processInline(block.substring(4))}</h3>`;
-        } else if (block.match(/^- /) || block.match(/^\d+\.\s/)) {
-            const isOrdered = block.match(/^\d+\.\s/);
-            const listTag = isOrdered ? 'ol' : 'ul';
-            const listClass = isOrdered ? 'list-decimal list-inside space-y-1 my-4 pl-4' : 'list-none p-0 space-y-1 my-4';
-            const itemTag = 'li';
+            blockquoteContent = '';
+            inBlockquote = false;
+        }
+    };
 
-            const items = block.split('\n').map(item => {
-                const itemContent = processInline(item.replace(/^(-|\d+\.)\s/, ''));
-                 if (isOrdered) {
-                    return `<${itemTag}>${itemContent}</${itemTag}>`;
-                }
-                return `<${itemTag} class="flex items-start gap-3 mt-2"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${itemContent}</span></${itemTag}>`;
-            }).join('');
-             html += `<${listTag} class="${listClass}">${items}</${listTag}>`;
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+
+        if (line.startsWith('>')) {
+            closeList();
+            if (!inBlockquote) {
+                inBlockquote = true;
+            }
+            blockquoteContent += line.replace(/^>\s?/, '') + '\n';
+            continue;
+        } else if(inBlockquote) {
+            closeBlockquote();
+        }
+
+        if (line.startsWith('### ')) {
+            closeList();
+            html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processInline(line.substring(4))}</h3>`;
+        } else if (line.match(/^- /) || line.match(/^\d+\. /)) {
+            const isOrdered = line.match(/^\d+\. /);
+            const currentListType = isOrdered ? 'ol' : 'ul';
+
+            if (!inList || listType !== currentListType) {
+                closeList();
+                inList = true;
+                listType = currentListType;
+                html += `<${listType} class="${isOrdered ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-disc list-inside space-y-2 my-4 pl-4'}">`;
+            }
+            
+            const itemContent = processInline(line.replace(/^(- |\d+\. )/, ''));
+            html += `<li>${itemContent}</li>`;
+        } else if (line.trim() === '') {
+            closeList();
+            html += '<br />';
         } else {
-             html += `<p>${processInline(block)}</p>`;
+            closeList();
+            html += `<p>${processInline(line)}</p>`;
         }
     }
+
+    closeList();
+    closeBlockquote();
     return html;
 }
 
