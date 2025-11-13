@@ -1,4 +1,3 @@
-
 import type {Config} from 'tailwindcss';
 const colors = require('tailwindcss/colors')
 
@@ -18,6 +17,12 @@ export default {
       },
     },
     extend: {
+      backgroundImage: {
+        'grid-white': "linear-gradient(to right, theme('colors.white / 0.1') 1px, transparent 1px), linear-gradient(to bottom, theme('colors.white / 0.1') 1px, transparent 1px)"
+      },
+      backgroundSize: {
+        'grid-white': '40px 40px',
+      },
       fontFamily: {
         sans: ['Public Sans', 'Noto Sans', 'sans-serif'],
         headline: ['Public Sans', 'Noto Sans', 'sans-serif'],
