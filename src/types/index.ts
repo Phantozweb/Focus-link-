@@ -114,7 +114,6 @@ export type ForumPost = {
   content: string; // Simplified to a single markdown string
   media: { type: 'image' | 'video'; url: string; caption: string }[];
   mediaCount: number;
-  replies: number;
   views: number;
   upvotes: number;
   lastReply: string;

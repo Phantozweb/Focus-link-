@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TimeAgo } from '@/components/time-ago';
 import { useToast } from '@/hooks/use-toast';
 import { ShareButton } from '@/components/share-button';
+import { useState, useEffect } from 'react';
 
 function WhatsAppShareBlock({ title, description }: { title: string, description: string }) {
     const { toast } = useToast();
@@ -136,30 +137,50 @@ function formatForumContent(markdown: string): string {
 }
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
-    const pathname = usePathname();
     const { toast } = useToast();
+    const [stats, setStats] = useState({ likes: discussion.upvotes, views: discussion.views });
+    const [liked, setLiked] = useState(false);
 
-    const handleShare = async () => {
-        const shareData = {
-          title: discussion.title,
-          text: discussion.description,
-          url: window.location.href,
-        };
+    useEffect(() => {
+        // Fetch initial stats and increment view count
+        const fetchStats = async () => {
+            try {
+                // Increment view
+                fetch(`/api/case-stats?id=${discussion.id}&action=view`, { method: 'POST' });
 
-        if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-          } catch (err) {
-             if ((err as Error).name !== 'AbortError') {
-               console.error('Share failed:', err);
+                // Get latest stats
+                const response = await fetch(`/api/case-stats?id=${discussion.id}`);
+                const data = await response.json();
+                if (data.likes !== undefined && data.views !== undefined) {
+                    setStats(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch case stats:", error);
             }
-          }
-        } else {
-          await navigator.clipboard.writeText(shareData.url);
-          toast({
-            title: 'Link Copied!',
-            description: 'The link to this discussion has been copied to your clipboard.',
-          });
+        };
+        fetchStats();
+    }, [discussion.id]);
+    
+    const handleLike = async () => {
+        if (liked) {
+            toast({ title: "You've already liked this case." });
+            return;
+        }
+        setLiked(true);
+        setStats(prev => ({ ...prev, likes: prev.likes + 1 }));
+
+        try {
+            const response = await fetch(`/api/case-stats?id=${discussion.id}&action=like`, {
+                method: 'POST',
+            });
+            const data = await response.json();
+            if (data.likes) {
+                setStats(prev => ({ ...prev, likes: data.likes }));
+            }
+        } catch (error) {
+            console.error("Failed to update likes:", error);
+            setStats(prev => ({ ...prev, likes: prev.likes - 1 })); // Revert on error
+            setLiked(false);
         }
     };
     
@@ -181,8 +202,10 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                         <div className="flex items-center justify-between">
                             <Badge variant="secondary">{discussion.category}</Badge>
                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <div className="flex items-center gap-1.5"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
-                                <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
+                                <Button variant="ghost" size="sm" onClick={handleLike} disabled={liked} className="flex items-center gap-1.5">
+                                  <ThumbsUp className="h-4 w-4" /> {stats.likes}
+                                </Button>
+                                <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {stats.views}</div>
                             </div>
                         </div>
                         <CardTitle className="text-3xl font-headline text-slate-800 mt-4">{discussion.title}</CardTitle>
