@@ -15,9 +15,8 @@ import { WebinarTime } from '@/components/webinar-time';
 import { WebinarBanner } from '@/components/webinar-banner';
 import { TimeAgo } from '@/components/time-ago';
 import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
-import { AnimatedSearchCard } from '@/components/animated-search-card';
 import { HomepageSearch } from '@/components/homepage-search';
-import { AnimatedAnnouncementCard } from '@/components/animated-announcement-card';
+import { AnimatedSearchCard } from '@/components/animated-search-card';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -104,10 +103,6 @@ export default async function Home() {
     {
       isAnimated: true,
       component: <AnimatedSearchCard />,
-    },
-    {
-      isAnimated: true,
-      component: <AnimatedAnnouncementCard />,
     },
     {
       title: "Eye Q Arena Has Ended!",
