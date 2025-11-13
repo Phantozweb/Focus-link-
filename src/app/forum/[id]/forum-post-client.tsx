@@ -62,61 +62,58 @@ function formatForumContent(text: string) {
     // Headings
     html = html.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
     
-    // Blockquotes with special formatting
+    // Blockquotes with special formatting for "Clinical Question" or "Diagnostic Dilemma"
     html = html.replace(/^> #### (.*?)\n((?:> .*(?:\n|$))+)/gm, (match, title, content) => {
-        const variant = title.toLowerCase().includes('question') ? 'info' : (title.toLowerCase().includes('dilemma') ? 'destructive' : 'default');
+        const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
+        const isDilemma = title.toLowerCase().includes('dilemma');
+        
+        let variant: 'info' | 'destructive' | 'default' = 'default';
+        if (isQuestion) variant = 'info';
+        if (isDilemma) variant = 'destructive';
+
         const icon = {
             info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
             destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
             default: ''
         }[variant];
+
         const variantClass = {
             destructive: "bg-red-50 border-red-200 text-red-900",
             info: "bg-blue-50 border-blue-200 text-blue-900",
             default: "bg-slate-50 border-slate-200 text-slate-900"
         }[variant];
+
         const cleanedContent = content.replace(/^> /gm, '').replace(/\n/g, '<br/>');
         return `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${cleanedContent}</div></div>`;
     });
 
-    // Tables
-    const tableRegex = /(\|.*\|(?:\r?\n|\r|\n\|.*\|)+)/g;
-    html = html.replace(tableRegex, (match) => {
-        const rows = match.trim().split('\n');
-        const headerSeparator = rows[1];
-        if (!headerSeparator || !headerSeparator.includes('|')) return match; 
-        const tableHead = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${rows[0].split('|').slice(1, -1).map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</th>`).join('')}</tr></thead>`;
-        const bodyRows = rows.slice(2);
-        const tableBody = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
-        return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${tableHead}${tableBody}</table></div>`;
-    });
-
-    // Lists (unordered and ordered)
-    html = html.replace(/((?:(?:- |\d+\.) .*(?:\n|$))+)/gm, (match) => {
-        const items = match.trim().split('\n');
-        const isOrdered = /^\d+\./.test(items[0]);
-        const listTag = isOrdered ? 'ol' : 'ul';
-        const listClass = isOrdered ? 'list-decimal list-inside space-y-2' : 'list-none p-0 space-y-2';
-
-        const listItems = items.map(item => {
-            const content = item.replace(/^(?:- |\d+\.) /, '');
-            if (isOrdered) {
-                return `<li>${content}</li>`;
-            }
-            return `<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>${content}</span></li>`;
+    // Unordered lists
+    html = html.replace(/((?:^- .*(?:\n|$))+)/gm, (match) => {
+        const items = match.trim().split('\n').map(item => {
+            const content = item.replace(/^- /, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return `<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${content}</span></li>`;
         }).join('');
-
-        return `<${listTag} class="${listClass}">${listItems}</${listTag}>`;
+        return `<ul class="list-none p-0 space-y-1">${items}</ul>`;
     });
-    
+
+    // Ordered lists
+    html = html.replace(/((?:^\d+\. .*(?:\n|$))+)/gm, (match) => {
+        const items = match.trim().split('\n').map(item => {
+            const content = item.replace(/^\d+\. /, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return `<li>${content}</li>`;
+        }).join('');
+        return `<ol class="list-decimal list-inside space-y-2 my-4">${items}</ol>`;
+    });
+
     // Paragraphs and bold text
     html = html.split(/\n\s*\n/).map(paragraph => {
-        if (paragraph.startsWith('<h3') || paragraph.startsWith('<div') || paragraph.startsWith('<ul') || paragraph.startsWith('<ol')) {
+        if (paragraph.match(/^(<h3|<div|<ul|<ol)/)) {
             return paragraph;
         }
         const bolded = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         return `<p>${bolded.replace(/\n/g, '<br/>')}</p>`;
     }).join('');
+
 
     return html;
 }
