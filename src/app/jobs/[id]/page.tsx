@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MapPin, Building, Check } from 'lucide-react';
+import { ArrowLeft, MapPin, Building, Check, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -64,6 +64,11 @@ export async function generateMetadata(
   }
 }
 
+const lucideIconSVGs: { [key: string]: string } = {
+  briefcase: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`,
+  check: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+};
+
 function formatJobDescription(markdown: string) {
     let html = markdown;
 
@@ -75,15 +80,22 @@ function formatJobDescription(markdown: string) {
     // Blockquotes
     html = html.replace(/^> (.*?)$/gm, '<blockquote class="border-l-4 border-primary pl-4 italic text-slate-600 my-4">$1</blockquote>');
 
-    // Unordered lists with :check: icon support
-    html = html.replace(/^\* (.*?)$/gm, (match, content) => {
-        const iconHtml = content.includes(':check:') 
-            ? `<span class="icon-placeholder text-primary mt-1 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><polyline points="20 6 9 17 4 12"></polyline></svg></span>`
-            : `<span class="icon-placeholder text-primary mt-2.5 flex-shrink-0 w-1.5 h-1.5 bg-current rounded-full"></span>`;
-        const textContent = content.replace(/:check:/g, '').trim();
-        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1 flex-shrink-0">${iconHtml}</span><span class="text-slate-600">${textContent}</span></li>`;
+    // General Icon Replacement
+    html = html.replace(/:(\w+):/g, (match, iconName) => {
+        const key = iconName.toLowerCase();
+        if (lucideIconSVGs[key]) {
+            return `<span class="inline-flex items-center justify-center align-middle mr-2">${lucideIconSVGs[key]}</span>`;
+        }
+        return match;
     });
-    html = html.replace(/(<li.*<\/li>)/gs, '<ul class="space-y-3">$1</ul>');
+    
+    // Unordered lists
+    html = html.replace(/^\* (.*?)$/gm, (match, content) => {
+        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1.5 flex-shrink-0 w-1.5 h-1.5 bg-current rounded-full"></span><span class="text-slate-600">${content.trim()}</span></li>`;
+    });
+    html = html.replace(/(<li class="flex items-start gap-3">.*?<\/li>)/gs, '<ul class="space-y-2 my-4">$1</ul>');
+    html = html.replace(/<\/ul>\n<ul/g, '');
+
 
     // Tables
     const tableRegex = /(\|.*\|(?:\n\|.*\|)+)/g;
@@ -101,7 +113,7 @@ function formatJobDescription(markdown: string) {
     });
 
     // Paragraphs and line breaks
-    html = html.replace(/\n\n/g, '<br /><br />');
+    html = html.replace(/\n\n/g, '<br /><br />').replace(/\n/g, '<br />');
 
     return html;
 }
