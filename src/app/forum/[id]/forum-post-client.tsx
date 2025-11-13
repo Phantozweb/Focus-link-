@@ -11,17 +11,17 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import type { ForumPost, ForumPostContentItem } from '@/types';
+import type { ForumPost } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TimeAgo } from '@/components/time-ago';
 import { useToast } from '@/hooks/use-toast';
 
-function WhatsAppShareBlock({ number, message, title }: { number: string, message: string, title: string }) {
+function WhatsAppShareBlock({ title }: { title: string }) {
     const { toast } = useToast();
     const pathname = usePathname();
     const caseUrl = `https://focuslinks.in${pathname}`;
-    const fullMessage = `${title}\n\n${message}\n\nRead more on Focus Links:\n${caseUrl}`;
-    const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(fullMessage)}`;
+    const fullMessage = `Check out this case on Focus Links:\n"${title}"\n\nRead more here:\n${caseUrl}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(fullMessage);
@@ -36,7 +36,7 @@ function WhatsAppShareBlock({ number, message, title }: { number: string, messag
             <MessageCircle className="h-5 w-5 !text-green-700" />
             <AlertTitle className="font-bold">Share Case on WhatsApp</AlertTitle>
             <AlertDescription>
-                Need a second opinion? Share this case summary with a colleague for a quick consultation.
+                Need a second opinion? Share this case with a colleague for a quick consultation.
                 <div className="flex flex-col sm:flex-row gap-2 mt-3">
                     <Button asChild size="sm" className="bg-green-600 hover:bg-green-700 text-white">
                         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
@@ -57,19 +57,32 @@ function formatForumContent(text: string) {
     let html = text;
     // Headings
     html = html.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
+    // Blockquotes
+    html = html.replace(/^> #### (.*?)\n> (.*)/gm, (match, title, content) => {
+        const variant = title.toLowerCase().includes('question') ? 'info' : (title.toLowerCase().includes('dilemma') ? 'destructive' : 'default');
+        const icon = {
+            info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+            destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+            default: ''
+        }[variant];
+        const variantClass = {
+            destructive: "bg-red-50 border-red-200 text-red-900",
+            info: "bg-blue-50 border-blue-200 text-blue-900",
+            default: "bg-slate-50 border-slate-200 text-slate-900"
+        }[variant];
+         return `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${content.replace(/\n> /g, '<br/>')}</div></div>`;
+    });
     // Bold
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // Links
-    html = html.replace(/<a href="([^"]*)" class="([^"]*)">([^<]*)<\/a>/g, '<a href="$1" class="$2" target="_blank" rel="noopener noreferrer">$3</a>');
     // Unordered lists
     html = html.replace(/^- (.*?)(?:\n|$)/gm, '<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>$1</span></li>');
-    html = html.replace(/(<li.*<\/li>)/gs, (match) => `<ul class="list-none p-0">${match}</ul>`);
+    html = html.replace(/(<li.*<\/li>)/gs, (match) => `<ul class="list-none p-0">${match.replace(/\n\n/g, '\n')}</ul>`);
     // Tables
-    const tableRegex = /(\|.*\|(?:\n\|.*\|)+)/g;
+    const tableRegex = /(\|.*\|(?:\r?\n|\r|\n\|.*\|)+)/g;
     html = html.replace(tableRegex, (match) => {
         const rows = match.trim().split('\n');
-        const header = rows[1]; 
-        if (!header) return '';
+        const headerSeparator = rows[1];
+        if (!headerSeparator || !headerSeparator.includes('|')) return match; 
         const tableHead = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${rows[0].split('|').slice(1, -1).map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</th>`).join('')}</tr></thead>`;
         const bodyRows = rows.slice(2);
         const tableBody = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
@@ -79,61 +92,6 @@ function formatForumContent(text: string) {
     html = html.replace(/\n/g, '<br />');
 
     return html;
-}
-
-function ContentRenderer({ content, title }: { content: ForumPostContentItem[], title: string }) {
-  return (
-    <div className="prose prose-lg max-w-none text-slate-700">
-      {content.map((item, index) => {
-        switch (item.type) {
-          case 'heading':
-            return <h2 key={index} className="text-2xl font-bold text-slate-800 mt-10 mb-4">{item.content}</h2>;
-          case 'subheading':
-            return <h3 key={index} className="text-xl font-bold text-slate-800 mt-8 mb-4">{item.content}</h3>;
-          case 'paragraph':
-            return <p key={index} dangerouslySetInnerHTML={{ __html: formatForumContent(item.content as string) }} />;
-          case 'list':
-            return (
-              <ul key={index} className="list-none p-0 space-y-3">
-                {(item.content as string[]).map((li, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="text-primary mt-1 flex-shrink-0"><Check className="h-5 w-5" /></span>
-                    <span dangerouslySetInnerHTML={{ __html: formatForumContent(li) }}/>
-                  </li>
-                ))}
-              </ul>
-            );
-          case 'alert':
-            const Icon = item.variant === 'destructive' ? AlertTriangle : Info;
-            const variantClass = {
-                destructive: "bg-red-50 border-red-200 text-red-900",
-                info: "bg-blue-50 border-blue-200 text-blue-900",
-                default: "bg-slate-50 border-slate-200 text-slate-900"
-            }[item.variant || 'default'];
-            const iconClass = {
-                 destructive: "!text-red-700",
-                 info: "!text-blue-700",
-                 default: "!text-slate-700"
-            }[item.variant || 'default'];
-
-            return (
-              <Alert key={index} className={`my-6 ${variantClass}`}>
-                <Icon className={`h-5 w-5 ${iconClass}`} />
-                {item.title && <AlertTitle className="font-bold">{item.title}</AlertTitle>}
-                <AlertDescription dangerouslySetInnerHTML={{ __html: formatForumContent(item.content as string) }} />
-              </Alert>
-            );
-          case 'whatsapp':
-            if (item.whatsapp) {
-              return <WhatsAppShareBlock key={index} number={item.whatsapp.number} message={item.content as string} title={title} />;
-            }
-            return null;
-          default:
-            return null;
-        }
-      })}
-    </div>
-  );
 }
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
@@ -203,8 +161,10 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                         </div>
                     </CardHeader>
                     <CardContent className="p-6 pt-0">
-                        <ContentRenderer content={discussion.content} title={discussion.title} />
+                        <div className="prose prose-lg max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: formatForumContent(discussion.content) }} />
                         
+                        <WhatsAppShareBlock title={discussion.title} />
+
                         {discussion.media.length > 0 && (
                             <div className="mt-8">
                                 <h3 className="text-lg font-bold mb-4 text-slate-800">Attached Media</h3>

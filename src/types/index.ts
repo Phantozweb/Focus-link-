@@ -102,17 +102,6 @@ export type Job = {
 };
 
 // Types for Forum
-export type ForumPostContentItem = {
-  type: 'paragraph' | 'heading' | 'subheading' | 'list' | 'alert' | 'whatsapp';
-  content: string | string[];
-  title?: string;
-  variant?: 'default' | 'destructive' | 'info';
-  whatsapp?: {
-    number: string;
-    message: string;
-  };
-};
-
 export type ForumPost = {
   id: string;
   title: string;
@@ -122,7 +111,7 @@ export type ForumPost = {
   category: string;
   tags: string[];
   description: string;
-  content: ForumPostContentItem[];
+  content: string; // Simplified to a single markdown string
   media: { type: 'image' | 'video'; url: string; caption: string }[];
   mediaCount: number;
   replies: number;
