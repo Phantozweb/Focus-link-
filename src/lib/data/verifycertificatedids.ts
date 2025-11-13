@@ -64,6 +64,7 @@ export const certificateParticipants: CertificateParticipant[] = [
   { id: 'NG20251103055512', name: 'Oladimeji Ismail opeyemi' },
   { id: 'KW20251111145553', name: 'Sajjad Iqbal' },
   { id: 'IN20251105094812', name: 'Irbaz Miraji' },
+  { id: 'IN20251102130059', name: 'P.kaviya' }
 ];
 
     
