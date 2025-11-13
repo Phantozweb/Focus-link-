@@ -1,3 +1,4 @@
+
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
 import type { ForumPost } from '@/types';
@@ -6,7 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, MessageSquare, Building2 as CommunityIcon, Trophy, BarChart, MapPin } from 'lucide-react';
+import { Globe, ArrowRight, CheckCircle2, UserPlus, Building, Hospital, Factory, Calendar, Radio, Sparkles, BookUser, Award, Briefcase, Users, ThumbsUp, Eye, Building2 as CommunityIcon, Trophy, BarChart, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile, Job } from '@/types';
@@ -364,7 +365,6 @@ export default async function Home() {
                                 </div>
                                 <div className="flex justify-between items-center text-sm text-muted-foreground">
                                     <div className="flex items-center gap-1.5"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
-                                    <div className="flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
                                     <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
                                 </div>
                               </div>

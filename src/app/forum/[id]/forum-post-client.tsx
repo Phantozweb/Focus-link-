@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, MessageSquare, ThumbsUp, Eye, Lock, Share2, Check, Info, AlertTriangle, MessageCircle, Copy, User } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, Eye, Lock, Share2, Check, Info, AlertTriangle, MessageCircle, Copy, User } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
@@ -56,21 +56,16 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
 function formatForumContent(markdown: string): string {
   if (!markdown) return '';
 
-  const lines = markdown.split('\n');
-  let html = '';
-  let listType: 'ul' | 'ol' | null = null;
-  let inBlockquote = false;
-  let blockquoteContent = '';
+  const blocks = markdown.split(/\n\s*\n/);
 
-  const closeList = () => {
-    if (listType) {
-      html += `</${listType}>`;
-      listType = null;
+  const html = blocks.map(block => {
+    // Headings
+    if (block.startsWith('### ')) {
+      return `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${block.substring(4)}</h3>`;
     }
-  };
-  
-  const closeBlockquote = () => {
-    if (inBlockquote) {
+    // Blockquotes
+    if (block.startsWith('>')) {
+      const blockquoteContent = block.split('\n').map(line => line.replace(/^>\s?/, '')).join('\n').trim();
       const titleMatch = blockquoteContent.match(/^###\s(.*?)(?:\n|$)/);
       const title = titleMatch ? titleMatch[1] : 'Clinical Discussion';
       const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length).trim() : blockquoteContent.trim();
@@ -80,67 +75,34 @@ function formatForumContent(markdown: string): string {
       let variant: 'info' | 'destructive' | 'default' = 'default';
       if (isQuestion) variant = 'info';
       if (isDilemma) variant = 'destructive';
-       const icon = {
+      const icon = {
           info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
           destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
           default: ''
       }[variant];
-       const variantClass = {
+      const variantClass = {
           destructive: "bg-red-50 border-red-200 text-red-900",
           info: "bg-blue-50 border-blue-200 text-blue-900",
           default: "bg-slate-50 border-slate-200 text-slate-900"
       }[variant];
 
       const processedContent = formatForumContent(content); // Recursive call
-      html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
-
-      blockquoteContent = '';
-      inBlockquote = false;
+      return `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
     }
-  };
-
-  for (const line of lines) {
-    if (line.startsWith('>')) {
-      closeList();
-      if (!inBlockquote) {
-        inBlockquote = true;
-      }
-      blockquoteContent += line.replace(/^>\s?/, '') + '\n';
-      continue;
+    // Lists
+    if (block.startsWith('- ') || block.match(/^\d+\.\s/)) {
+        const isOrdered = block.match(/^\d+\.\s/);
+        const listTag = isOrdered ? 'ol' : 'ul';
+        const listClass = isOrdered ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-disc list-inside space-y-2 my-4 pl-4';
+        const items = block.split('\n').map(line => {
+            const itemContent = line.replace(/^-\s|^\d+\.\s/, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return `<li>${itemContent}</li>`;
+        }).join('');
+        return `<${listTag} class="${listClass}">${items}</${listTag}>`;
     }
-
-    if (inBlockquote) {
-      closeBlockquote();
-    }
-    
-    if (line.startsWith('### ')) {
-      closeList();
-      html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${line.substring(4)}</h3>`;
-    } else if (line.startsWith('- ')) {
-      if (listType !== 'ul') {
-        closeList();
-        html += `<ul class="list-disc list-inside space-y-2 my-4 pl-4">`;
-        listType = 'ul';
-      }
-      html += `<li>${line.substring(2)}</li>`;
-    } else if (line.match(/^\d+\.\s/)) {
-      if (listType !== 'ol') {
-        closeList();
-        html += `<ol class="list-decimal list-inside space-y-2 my-4 pl-4">`;
-        listType = 'ol';
-      }
-      html += `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
-    } else if (line.trim() === '') {
-      closeList();
-      html += '<br />';
-    } else {
-      closeList();
-      html += `<p>${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
-    }
-  }
-
-  closeList();
-  closeBlockquote();
+    // Paragraphs
+    return `<p>${block.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+  }).join('');
 
   return html;
 }
@@ -194,7 +156,6 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                             <Badge variant="secondary">{discussion.category}</Badge>
                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-1.5"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
-                                <div className="flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
                                 <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
                             </div>
                         </div>

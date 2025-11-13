@@ -1,10 +1,11 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageSquare, ThumbsUp, Eye, Lock, Search, User } from 'lucide-react';
+import { ThumbsUp, Eye, Lock, Search, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
@@ -131,7 +132,6 @@ export default function ForumPage() {
                                       <Badge variant="secondary">{discussion.category}</Badge>
                                       <div className="flex items-center gap-4 text-sm text-muted-foreground flex-shrink-0">
                                         <div className="flex items-center gap-1.5" title="Upvotes"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
-                                        <div className="flex items-center gap-1.5" title="Replies"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
                                         <div className="flex items-center gap-1.5" title="Views"><Eye className="h-4 w-4" /> {discussion.views}</div>
                                       </div>
                                   </div>

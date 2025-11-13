@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -67,7 +68,6 @@ function ForumList({ discussions }: { discussions: ForumPost[] }) {
                                     <ThumbsUp className="h-4 w-4 mr-2" /> {discussion.upvotes}
                                 </Button>
                                 <div className="flex items-center gap-4 text-sm text-muted-foreground sm:w-full">
-                                  <div className="flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
                                   <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
                                 </div>
                             </div>
