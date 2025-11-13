@@ -85,9 +85,9 @@ export default function ForumPage() {
                                 <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="flex-grow">
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-y-2">
                                     <Badge variant="secondary">{discussion.category}</Badge>
-                                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                    <div className="flex items-center gap-4 text-sm text-muted-foreground flex-shrink-0">
                                       <div className="flex items-center gap-1.5" title="Upvotes"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
                                       <div className="flex items-center gap-1.5" title="Replies"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
                                       <div className="flex items-center gap-1.5" title="Views"><Eye className="h-4 w-4" /> {discussion.views}</div>

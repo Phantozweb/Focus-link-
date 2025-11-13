@@ -1,6 +1,6 @@
 
 import type { ForumPost } from '@/types';
-import { forumContent } from './forum-content';
+import forumContent from '@/lib/data/forum-content.json';
 
 export const demoDiscussions: ForumPost[] = [
   {
