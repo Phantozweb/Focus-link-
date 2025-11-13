@@ -13,6 +13,7 @@ import type { ForumPost } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TimeAgo } from '@/components/time-ago';
 import { useToast } from '@/hooks/use-toast';
+import { ShareButton } from '@/components/share-button';
 
 function WhatsAppShareBlock({ title, description }: { title: string, description: string }) {
     const { toast } = useToast();
