@@ -55,11 +55,15 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
 
 function formatForumContent(text: string) {
     if (!text) return '';
-    let html = text;
+    let html = text.trim();
+
+    // Block-level elements first
+    
     // Headings
     html = html.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
-    // Blockquotes
-    html = html.replace(/^> #### (.*?)\n> (.*)/gm, (match, title, content) => {
+    
+    // Blockquotes with special formatting
+    html = html.replace(/^> #### (.*?)\n((?:> .*(?:\n|$))+)/gm, (match, title, content) => {
         const variant = title.toLowerCase().includes('question') ? 'info' : (title.toLowerCase().includes('dilemma') ? 'destructive' : 'default');
         const icon = {
             info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
@@ -71,13 +75,10 @@ function formatForumContent(text: string) {
             info: "bg-blue-50 border-blue-200 text-blue-900",
             default: "bg-slate-50 border-slate-200 text-slate-900"
         }[variant];
-         return `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${content.replace(/\n> /g, '<br/>')}</div></div>`;
+        const cleanedContent = content.replace(/^> /gm, '').replace(/\n/g, '<br/>');
+        return `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${cleanedContent}</div></div>`;
     });
-    // Bold
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // Unordered lists
-    html = html.replace(/^- (.*?)(?:\n|$)/gm, '<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>$1</span></li>');
-    html = html.replace(/(<li.*<\/li>)/gs, (match) => `<ul class="list-none p-0">${match.replace(/\n\n/g, '\n')}</ul>`);
+
     // Tables
     const tableRegex = /(\|.*\|(?:\r?\n|\r|\n\|.*\|)+)/g;
     html = html.replace(tableRegex, (match) => {
@@ -89,8 +90,33 @@ function formatForumContent(text: string) {
         const tableBody = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
         return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${tableHead}${tableBody}</table></div>`;
     });
-    // Paragraphs and line breaks
-    html = html.replace(/\n/g, '<br />');
+
+    // Lists (unordered and ordered)
+    html = html.replace(/((?:(?:- |\d+\.) .*(?:\n|$))+)/gm, (match) => {
+        const items = match.trim().split('\n');
+        const isOrdered = /^\d+\./.test(items[0]);
+        const listTag = isOrdered ? 'ol' : 'ul';
+        const listClass = isOrdered ? 'list-decimal list-inside space-y-2' : 'list-none p-0 space-y-2';
+
+        const listItems = items.map(item => {
+            const content = item.replace(/^(?:- |\d+\.) /, '');
+            if (isOrdered) {
+                return `<li>${content}</li>`;
+            }
+            return `<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>${content}</span></li>`;
+        }).join('');
+
+        return `<${listTag} class="${listClass}">${listItems}</${listTag}>`;
+    });
+    
+    // Paragraphs and bold text
+    html = html.split(/\n\s*\n/).map(paragraph => {
+        if (paragraph.startsWith('<h3') || paragraph.startsWith('<div') || paragraph.startsWith('<ul') || paragraph.startsWith('<ol')) {
+            return paragraph;
+        }
+        const bolded = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        return `<p>${bolded.replace(/\n/g, '<br/>')}</p>`;
+    }).join('');
 
     return html;
 }
