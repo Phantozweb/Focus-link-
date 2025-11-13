@@ -52,8 +52,25 @@ export default function ForumPage() {
             if (!response.ok) {
                 throw new Error('Failed to fetch discussions');
             }
-            const data: ForumPost[] = await response.json();
-            setDiscussions(Array.isArray(data) ? data.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()) : []);
+            let data: ForumPost[] = await response.json();
+
+            if (Array.isArray(data)) {
+              // Fetch stats for all discussions
+              const statsPromises = data.map(discussion => 
+                fetch(`/api/case-stats?id=${discussion.id}`).then(res => res.json())
+              );
+              const statsResults = await Promise.all(statsPromises);
+
+              data = data.map((discussion, index) => ({
+                ...discussion,
+                upvotes: statsResults[index]?.likes ?? discussion.upvotes,
+                views: statsResults[index]?.views ?? discussion.views,
+              }));
+
+              setDiscussions(data.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime()));
+            } else {
+              setDiscussions([]);
+            }
         } catch (error) {
             console.error('Error fetching discussions:', error);
             setDiscussions([]);
