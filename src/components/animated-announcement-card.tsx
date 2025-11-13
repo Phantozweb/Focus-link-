@@ -25,7 +25,7 @@ export function AnimatedAnnouncementCard() {
   }, []);
 
   return (
-    <div className="relative rounded-xl p-8 flex flex-col justify-between shadow-xl flex-grow h-full bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
+    <div className="relative rounded-xl p-8 flex flex-col justify-between shadow-xl flex-grow h-full bg-gradient-to-br from-red-600 to-rose-700 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-grid-white/[0.05] [mask-image:linear-gradient(to_bottom,white_0%,transparent_100%)]"></div>
         <div className="relative z-10">
             <h3 className="font-bold text-2xl mb-2 text-white">Community Update!</h3>
