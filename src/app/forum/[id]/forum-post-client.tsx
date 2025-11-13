@@ -1,3 +1,4 @@
+
 'use client';
 import { usePathname } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TimeAgo } from '@/components/time-ago';
 import { useToast } from '@/hooks/use-toast';
 
-function WhatsAppShareBlock({ title }: { title: string }) {
+function WhatsAppShareBlock({ title, description }: { title: string, description: string }) {
     const { toast } = useToast();
     const pathname = usePathname();
     const caseUrl = `https://focuslinks.in${pathname}`;
@@ -23,7 +24,7 @@ function WhatsAppShareBlock({ title }: { title: string }) {
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
 
     const copyToClipboard = () => {
-        const messageToCopy = `Check out this interesting case study on Focus Links: "${title}". See the full details here: ${caseUrl}`;
+        const messageToCopy = `Check out this interesting case study on Focus Links:\n\n**${title}**\n*${description}*\n\nSee the full details here: ${caseUrl}`;
         navigator.clipboard.writeText(messageToCopy);
         toast({
             title: 'Copied to Clipboard',
@@ -163,7 +164,7 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                     <CardContent className="p-6 pt-0">
                         <div className="prose prose-lg max-w-none text-slate-700" dangerouslySetInnerHTML={{ __html: formatForumContent(discussion.content) }} />
                         
-                        <WhatsAppShareBlock title={discussion.title} />
+                        <WhatsAppShareBlock title={discussion.title} description={discussion.description} />
 
                         {discussion.media.length > 0 && (
                             <div className="mt-8">
