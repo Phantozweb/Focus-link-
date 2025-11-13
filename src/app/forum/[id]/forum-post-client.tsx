@@ -54,25 +54,18 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
 function formatForumContent(markdown: string): string {
   if (!markdown) return '';
 
+  const processLine = (line: string): string => {
+    return line
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/### (.*?)/g, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
+  };
+
   const lines = markdown.split('\n');
   let html = '';
   let inList = false;
   let listType: 'ul' | 'ol' | null = null;
   let inBlockquote = false;
-
-  const processLine = (line: string): string => {
-    return line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  };
-
-  const startList = (type: 'ul' | 'ol') => {
-    if (!inList) {
-      listType = type;
-      const listClass = type === 'ol' ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-disc list-inside space-y-2 my-4 pl-4';
-      html += `<${type} class="${listClass}">`;
-      inList = true;
-    }
-  };
-
+  
   const endList = () => {
     if (inList && listType) {
       html += `</${listType}>`;
@@ -80,56 +73,76 @@ function formatForumContent(markdown: string): string {
       listType = null;
     }
   };
-  
+
   const endBlockquote = () => {
-      if (inBlockquote) {
-        html += `</div>`;
-        inBlockquote = false;
-      }
+    if (inBlockquote) {
+      endList(); // End any list before closing blockquote
+      html += `</div>`;
+      inBlockquote = false;
+    }
   };
 
+  lines.forEach(line => {
+    const trimmedLine = line.trim();
 
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-
-    if (line === '') {
-      endList();
-      endBlockquote();
-      html += '<p>&nbsp;</p>';
-      continue;
-    }
-
-    if (line.startsWith('>')) {
-      endList();
+    // Handle blockquotes
+    if (trimmedLine.startsWith('>')) {
       if (!inBlockquote) {
-          html += `<div class="my-6 border-l-4 border-primary pl-4 italic text-slate-600">`;
-          inBlockquote = true;
+        endList(); // End previous list if any
+        html += `<div class="my-6 border-l-4 border-primary pl-4 italic text-slate-600 space-y-4">`;
+        inBlockquote = true;
       }
-      const blockquoteLine = processLine(line.substring(1).trim());
-      html += `<p>${blockquoteLine}</p>`;
-    } else {
-       endBlockquote();
-
-        if (line.startsWith('### ')) {
-          endList();
-          html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processLine(line.substring(4))}</h3>`;
-        } else if (line.startsWith('- ')) {
-          startList('ul');
-          html += `<li>${processLine(line.substring(2))}</li>`;
-        } else if (line.match(/^\d+\.\s/)) {
-          startList('ol');
-          html += `<li>${processLine(line.replace(/^\d+\.\s/, ''))}</li>`;
-        } else {
-          endList();
-          html += `<p>${processLine(line)}</p>`;
+      
+      let blockquoteContent = trimmedLine.substring(1).trim();
+      
+      // Process markdown inside the blockquote line
+      if (blockquoteContent.match(/^\d+\.\s/)) { // Ordered list item
+        if (listType !== 'ol') { endList(); }
+        if (!inList) {
+          listType = 'ol';
+          html += `<ol class="list-decimal list-inside space-y-2">`;
+          inList = true;
         }
+        html += `<li>${processLine(blockquoteContent.replace(/^\d+\.\s/, ''))}</li>`;
+      } else if (blockquoteContent.startsWith('- ')) { // Unordered list item
+        if (listType !== 'ul') { endList(); }
+        if (!inList) {
+          listType = 'ul';
+          html += `<ul class="list-disc list-inside space-y-2">`;
+          inList = true;
+        }
+        html += `<li>${processLine(blockquoteContent.substring(2))}</li>`;
+      } else if (blockquoteContent.startsWith('###')) {
+         endList();
+         html += processLine(blockquoteContent);
+      }
+       else if (blockquoteContent === '') {
+        // Handle empty lines within blockquote for paragraph breaks
+        endList();
+        html += '<p>&nbsp;</p>';
+      } else {
+        endList();
+        html += `<p>${processLine(blockquoteContent)}</p>`;
+      }
+
+    } else {
+      endBlockquote(); // End blockquote if line doesn't start with '>'
+      endList(); // Also end lists when exiting a blockquote
+      
+      if (trimmedLine.startsWith('### ')) {
+        html += processLine(trimmedLine);
+      } else if (trimmedLine === '') {
+        html += '<p>&nbsp;</p>';
+      } else {
+        html += `<p>${processLine(trimmedLine)}</p>`;
+      }
     }
-  }
+  });
 
   endList();
   endBlockquote();
 
-  return html;
+  return html.replace(/(<p>&nbsp;<\/p>)+/g, '<p>&nbsp;</p>');
 }
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
