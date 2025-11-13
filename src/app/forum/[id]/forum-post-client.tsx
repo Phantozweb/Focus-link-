@@ -32,14 +32,14 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
 
     return (
         <Alert className="bg-green-50 border-green-200 text-green-900 my-6">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="h-5 w-5 !text-green-700"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91z"></path><path d="M16.99 13.28c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14-.18.27-.69.87-.85 1.04-.15.18-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.24-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.38.12-.51.12-.12.27-.31.4-.42.14-.12.18-.2.27-.34.09-.14.05-.26-.02-.37-.07-.12-1.59-3.84-1.84-4.59-.24-.72-.49-.62-.67-.63-.17 0-.36-.01-.54-.01-.18 0-.48.07-.73.34-.25.27-.96.93-1.18 2.2s.22 3.12.25 3.34.96 2.21 2.33 3.65c1.93 2.03 3.15 2.65 4.34 3.25.98.49 1.58.53 2.12.51.58-.02 1.59-.65 1.81-1.28.23-.63.23-1.17.16-1.28l-.07.02z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 !text-green-700"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91z"></path><path d="M16.99 13.28c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14-.18.27-.69.87-.85 1.04-.15.18-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.24-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.38.12-.51.12-.12.27-.31.4-.42.14-.12.18-.2.27-.34.09-.14.05-.26-.02-.37-.07-.12-1.59-3.84-1.84-4.59-.24-.72-.49-.62-.67-.63-.17 0-.36-.01-.54-.01-.18 0-.48.07-.73.34-.25.27-.96.93-1.18 2.2s.22 3.12.25 3.34.96 2.21 2.33 3.65c1.93 2.03 3.15 2.65 4.34 3.25.98.49 1.58.53 2.12.51.58-.02 1.59-.65 1.81-1.28.23-.63.23-1.17.16-1.28l-.07.02z"></path></svg>
             <AlertTitle className="font-bold">Share Case on WhatsApp</AlertTitle>
             <AlertDescription>
                 Need a second opinion? Share this case with a colleague for a quick consultation.
                 <div className="flex flex-col sm:flex-row gap-2 mt-3">
                     <Button asChild size="sm" className="bg-green-600 hover:bg-green-700 text-white">
                         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mr-2 h-4 w-4"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91z"></path><path d="M16.99 13.28c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14-.18.27-.69.87-.85 1.04-.15.18-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.24-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.38.12-.51.12-.12.27-.31.4-.42.14-.12.18-.2.27-.34.09-.14.05-.26-.02-.37-.07-.12-1.59-3.84-1.84-4.59-.24-.72-.49-.62-.67-.63-.17 0-.36-.01-.54-.01-.18 0-.48.07-.73.34-.25.27-.96.93-1.18 2.2s.22 3.12.25 3.34.96 2.21 2.33 3.65c1.93 2.03 3.15 2.65 4.34 3.25.98.49 1.58.53 2.12.51.58-.02 1.59-.65 1.81-1.28.23-.63.23-1.17.16-1.28l-.07.02z"></path></svg> Share via WhatsApp
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91z"></path><path d="M16.99 13.28c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14-.18.27-.69.87-.85 1.04-.15.18-.3.19-.55.06-.25-.12-1.06-.39-2.02-1.24-.75-.66-1.25-1.48-1.4-1.73-.14-.25-.01-.38.12-.51.12-.12.27-.31.4-.42.14-.12.18-.2.27-.34.09-.14.05-.26-.02-.37-.07-.12-1.59-3.84-1.84-4.59-.24-.72-.49-.62-.67-.63-.17 0-.36-.01-.54-.01-.18 0-.48.07-.73.34-.25.27-.96.93-1.18 2.2s.22 3.12.25 3.34.96 2.21 2.33 3.65c1.93 2.03 3.15 2.65 4.34 3.25.98.49 1.58.53 2.12.51.58-.02 1.59-.65 1.81-1.28.23-.63.23-1.17.16-1.28l-.07.02z"></path></svg> Share via WhatsApp
                         </a>
                     </Button>
                     <Button size="sm" variant="outline" onClick={copyToClipboard} className="bg-white">
@@ -52,121 +52,84 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
 }
 
 function formatForumContent(markdown: string): string {
-    if (!markdown) return '';
-    
-    const lines = markdown.split('\n');
-    let html = '';
-    let inList = false;
-    let listType: 'ul' | 'ol' | null = null;
-    let inBlockquote = false;
+  if (!markdown) return '';
 
-    const processLine = (line: string) => {
-        let processedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        return processedLine;
-    };
+  const lines = markdown.split('\n');
+  let html = '';
+  let inList = false;
+  let listType: 'ul' | 'ol' | null = null;
+  let inBlockquote = false;
 
-    const startList = (type: 'ul' | 'ol') => {
-        if (!inList) {
-            listType = type;
-            const listClass = type === 'ol' ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-disc list-inside space-y-2 my-4 pl-4';
-            html += `<${type} class="${listClass}">`;
-            inList = true;
-        }
-    };
+  const processLine = (line: string): string => {
+    return line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  };
 
-    const endList = () => {
-        if (inList && listType) {
-            html += `</${listType}>`;
-            inList = false;
-            listType = null;
-        }
-    };
+  const startList = (type: 'ul' | 'ol') => {
+    if (!inList) {
+      listType = type;
+      const listClass = type === 'ol' ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-disc list-inside space-y-2 my-4 pl-4';
+      html += `<${type} class="${listClass}">`;
+      inList = true;
+    }
+  };
 
-    const endBlockquote = () => {
-        if (inBlockquote) {
-            html += `</div></div>`; // Close the description and alert divs
-            inBlockquote = false;
-        }
-    };
+  const endList = () => {
+    if (inList && listType) {
+      html += `</${listType}>`;
+      inList = false;
+      listType = null;
+    }
+  };
+  
+  const endBlockquote = () => {
+      if (inBlockquote) {
+        html += `</div>`;
+        inBlockquote = false;
+      }
+  };
 
-    for (let i = 0; i < lines.length; i++) {
-        let line = lines[i];
 
-        if (line.trim() === '') {
-            endList();
-            endBlockquote();
-            html += '<br />';
-            continue;
-        }
-        
-        // Blockquotes
-        if (line.startsWith('>')) {
-            endList();
-            if (!inBlockquote) {
-                let blockquoteContent = [line.replace(/^>\s?/, '')];
-                let j = i + 1;
-                while (j < lines.length && lines[j].startsWith('>')) {
-                    blockquoteContent.push(lines[j].replace(/^>\s?/, ''));
-                    j++;
-                }
-                i = j - 1;
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
 
-                const fullBlockquote = blockquoteContent.join('\n').trim();
-                const titleMatch = fullBlockquote.match(/^###\s(.*?)(?:\n|$)/);
-                const title = titleMatch ? titleMatch[1] : 'Clinical Discussion';
-                const content = titleMatch ? fullBlockquote.substring(titleMatch[0].length).trim() : fullBlockquote;
+    if (line === '') {
+      endList();
+      endBlockquote();
+      html += '<p>&nbsp;</p>';
+      continue;
+    }
 
-                const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
-                const isDilemma = title.toLowerCase().includes('dilemma');
-                let variant: 'info' | 'destructive' | 'default' = 'default';
-                if (isQuestion) variant = 'info';
-                if (isDilemma) variant = 'destructive';
-                
-                const icon = {
-                    info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
-                    destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
-                    default: ''
-                }[variant];
-                 const variantClass = {
-                    destructive: "bg-red-50 border-red-200 text-red-900",
-                    info: "bg-blue-50 border-blue-200 text-blue-900",
-                    default: "bg-slate-50 border-slate-200 text-slate-900"
-                }[variant];
+    if (line.startsWith('>')) {
+      endList();
+      if (!inBlockquote) {
+          html += `<div class="my-6 border-l-4 border-primary pl-4 italic text-slate-600">`;
+          inBlockquote = true;
+      }
+      const blockquoteLine = processLine(line.substring(1).trim());
+      html += `<p>${blockquoteLine}</p>`;
+    } else {
+       endBlockquote();
 
-                html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${formatForumContent(content)}</div></div>`;
-                
-                // Since formatForumContent is recursive, we don't set inBlockquote to true
-                continue;
-            }
-        } else {
-            endBlockquote();
-        }
-
-        // Headings
         if (line.startsWith('### ')) {
-            endList();
-            html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processLine(line.substring(4))}</h3>`;
-        }
-        // Unordered Lists
-        else if (line.startsWith('- ')) {
-            startList('ul');
-            html += `<li>${processLine(line.substring(2))}</li>`;
-        }
-        // Ordered Lists
-        else if (line.match(/^\d+\.\s/)) {
-            startList('ol');
-            html += `<li>${processLine(line.replace(/^\d+\.\s/, ''))}</li>`;
-        }
-        // Paragraphs
-        else {
-            endList();
-            html += `<p>${processLine(line)}</p>`;
+          endList();
+          html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processLine(line.substring(4))}</h3>`;
+        } else if (line.startsWith('- ')) {
+          startList('ul');
+          html += `<li>${processLine(line.substring(2))}</li>`;
+        } else if (line.match(/^\d+\.\s/)) {
+          startList('ol');
+          html += `<li>${processLine(line.replace(/^\d+\.\s/, ''))}</li>`;
+        } else {
+          endList();
+          html += `<p>${processLine(line)}</p>`;
         }
     }
-    endList(); // Close any open list at the end
-    endBlockquote(); // Close any open blockquote at the end
+  }
 
-    return html;
+  endList();
+  endBlockquote();
+
+  return html;
 }
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
