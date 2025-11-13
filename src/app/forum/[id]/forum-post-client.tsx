@@ -52,6 +52,35 @@ function WhatsAppShareBlock({ number, message, title }: { number: string, messag
     );
 }
 
+function formatForumContent(text: string) {
+    if (!text) return '';
+    let html = text;
+    // Headings
+    html = html.replace(/^### (.*?)$/gm, '<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">$1</h3>');
+    // Bold
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Links
+    html = html.replace(/<a href="([^"]*)" class="([^"]*)">([^<]*)<\/a>/g, '<a href="$1" class="$2" target="_blank" rel="noopener noreferrer">$3</a>');
+    // Unordered lists
+    html = html.replace(/^- (.*?)(?:\n|$)/gm, '<li class="flex items-start gap-3 mt-3"><span class="text-primary mt-1 flex-shrink-0">&#10003;</span><span>$1</span></li>');
+    html = html.replace(/(<li.*<\/li>)/gs, (match) => `<ul class="list-none p-0">${match}</ul>`);
+    // Tables
+    const tableRegex = /(\|.*\|(?:\n\|.*\|)+)/g;
+    html = html.replace(tableRegex, (match) => {
+        const rows = match.trim().split('\n');
+        const header = rows[1]; 
+        if (!header) return '';
+        const tableHead = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${rows[0].split('|').slice(1, -1).map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</th>`).join('')}</tr></thead>`;
+        const bodyRows = rows.slice(2);
+        const tableBody = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
+        return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${tableHead}${tableBody}</table></div>`;
+    });
+    // Paragraphs and line breaks
+    html = html.replace(/\n/g, '<br />');
+
+    return html;
+}
+
 function ContentRenderer({ content, title }: { content: ForumPostContentItem[], title: string }) {
   return (
     <div className="prose prose-lg max-w-none text-slate-700">
@@ -62,14 +91,14 @@ function ContentRenderer({ content, title }: { content: ForumPostContentItem[], 
           case 'subheading':
             return <h3 key={index} className="text-xl font-bold text-slate-800 mt-8 mb-4">{item.content}</h3>;
           case 'paragraph':
-            return <p key={index}>{item.content}</p>;
+            return <p key={index} dangerouslySetInnerHTML={{ __html: formatForumContent(item.content as string) }} />;
           case 'list':
             return (
               <ul key={index} className="list-none p-0 space-y-3">
                 {(item.content as string[]).map((li, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="text-primary mt-1 flex-shrink-0"><Check className="h-5 w-5" /></span>
-                    <span>{li}</span>
+                    <span dangerouslySetInnerHTML={{ __html: formatForumContent(li) }}/>
                   </li>
                 ))}
               </ul>
@@ -91,7 +120,7 @@ function ContentRenderer({ content, title }: { content: ForumPostContentItem[], 
               <Alert key={index} className={`my-6 ${variantClass}`}>
                 <Icon className={`h-5 w-5 ${iconClass}`} />
                 {item.title && <AlertTitle className="font-bold">{item.title}</AlertTitle>}
-                <AlertDescription>{item.content}</AlertDescription>
+                <AlertDescription dangerouslySetInnerHTML={{ __html: formatForumContent(item.content as string) }} />
               </Alert>
             );
           case 'whatsapp':
