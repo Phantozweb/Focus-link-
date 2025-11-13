@@ -53,97 +53,96 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
     );
 }
 
-function formatForumContent(text: string): string {
-    if (!text) return '';
+function formatForumContent(markdown: string): string {
+  if (!markdown) return '';
 
-    const processInline = (line: string) => line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  const lines = markdown.split('\n');
+  let html = '';
+  let listType: 'ul' | 'ol' | null = null;
+  let inBlockquote = false;
+  let blockquoteContent = '';
 
-    const lines = text.split('\n');
-    let html = '';
-    let inList = false;
-    let listType = ''; 
-    let inBlockquote = false;
-    let blockquoteContent = '';
+  const closeList = () => {
+    if (listType) {
+      html += `</${listType}>`;
+      listType = null;
+    }
+  };
+  
+  const closeBlockquote = () => {
+    if (inBlockquote) {
+      const titleMatch = blockquoteContent.match(/^###\s(.*?)(?:\n|$)/);
+      const title = titleMatch ? titleMatch[1] : 'Clinical Discussion';
+      const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length).trim() : blockquoteContent.trim();
+      
+      const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
+      const isDilemma = title.toLowerCase().includes('dilemma');
+      let variant: 'info' | 'destructive' | 'default' = 'default';
+      if (isQuestion) variant = 'info';
+      if (isDilemma) variant = 'destructive';
+       const icon = {
+          info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+          destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+          default: ''
+      }[variant];
+       const variantClass = {
+          destructive: "bg-red-50 border-red-200 text-red-900",
+          info: "bg-blue-50 border-blue-200 text-blue-900",
+          default: "bg-slate-50 border-slate-200 text-slate-900"
+      }[variant];
 
-    const closeList = () => {
-        if (inList) {
-            html += `</${listType}>`;
-            inList = false;
-        }
-    };
-    
-    const closeBlockquote = () => {
-        if(inBlockquote) {
-            const titleMatch = blockquoteContent.match(/^###\s(.*?)(?:\n|$)/);
-            const title = titleMatch ? titleMatch[1] : 'Clinical Discussion';
-            const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length).trim() : blockquoteContent.trim();
-            
-            const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
-            const isDilemma = title.toLowerCase().includes('dilemma');
-            let variant: 'info' | 'destructive' | 'default' = 'default';
-            if (isQuestion) variant = 'info';
-            if (isDilemma) variant = 'destructive';
-             const icon = {
-                info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info h-5 w-5 !text-blue-700"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
-                destructive: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle h-5 w-5 !text-red-700"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
-                default: ''
-            }[variant];
-             const variantClass = {
-                destructive: "bg-red-50 border-red-200 text-red-900",
-                info: "bg-blue-50 border-blue-200 text-blue-900",
-                default: "bg-slate-50 border-slate-200 text-slate-900"
-            }[variant];
+      const processedContent = formatForumContent(content); // Recursive call
+      html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
 
-            const processedContent = formatForumContent(content); // Recursive call for nested content
-            html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
+      blockquoteContent = '';
+      inBlockquote = false;
+    }
+  };
 
-            blockquoteContent = '';
-            inBlockquote = false;
-        }
-    };
-
-    for (let i = 0; i < lines.length; i++) {
-        let line = lines[i];
-
-        if (line.startsWith('>')) {
-            closeList();
-            if (!inBlockquote) {
-                inBlockquote = true;
-            }
-            blockquoteContent += line.replace(/^>\s?/, '') + '\n';
-            continue;
-        } else if(inBlockquote) {
-            closeBlockquote();
-        }
-
-        if (line.startsWith('### ')) {
-            closeList();
-            html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processInline(line.substring(4))}</h3>`;
-        } else if (line.match(/^- /) || line.match(/^\d+\. /)) {
-            const isOrdered = line.match(/^\d+\. /);
-            const currentListType = isOrdered ? 'ol' : 'ul';
-
-            if (!inList || listType !== currentListType) {
-                closeList();
-                inList = true;
-                listType = currentListType;
-                html += `<${listType} class="${isOrdered ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-disc list-inside space-y-2 my-4 pl-4'}">`;
-            }
-            
-            const itemContent = processInline(line.replace(/^(- |\d+\. )/, ''));
-            html += `<li>${itemContent}</li>`;
-        } else if (line.trim() === '') {
-            closeList();
-            html += '<br />';
-        } else {
-            closeList();
-            html += `<p>${processInline(line)}</p>`;
-        }
+  for (const line of lines) {
+    if (line.startsWith('>')) {
+      closeList();
+      if (!inBlockquote) {
+        inBlockquote = true;
+      }
+      blockquoteContent += line.replace(/^>\s?/, '') + '\n';
+      continue;
     }
 
-    closeList();
-    closeBlockquote();
-    return html;
+    if (inBlockquote) {
+      closeBlockquote();
+    }
+    
+    if (line.startsWith('### ')) {
+      closeList();
+      html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${line.substring(4)}</h3>`;
+    } else if (line.startsWith('- ')) {
+      if (listType !== 'ul') {
+        closeList();
+        html += `<ul class="list-disc list-inside space-y-2 my-4 pl-4">`;
+        listType = 'ul';
+      }
+      html += `<li>${line.substring(2)}</li>`;
+    } else if (line.match(/^\d+\.\s/)) {
+      if (listType !== 'ol') {
+        closeList();
+        html += `<ol class="list-decimal list-inside space-y-2 my-4 pl-4">`;
+        listType = 'ol';
+      }
+      html += `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
+    } else if (line.trim() === '') {
+      closeList();
+      html += '<br />';
+    } else {
+      closeList();
+      html += `<p>${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+    }
+  }
+
+  closeList();
+  closeBlockquote();
+
+  return html;
 }
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
@@ -232,62 +231,6 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                                 </div>
                             </div>
                         )}
-
-                        <Separator className="my-8" />
-                        
-                        <div>
-                            <h3 className="text-xl font-bold mb-6 text-slate-800">{discussion.replies} Replies</h3>
-                            <div className="space-y-6">
-                                 <div className="flex items-start gap-4">
-                                    <Avatar className="h-10 w-10 border">
-                                        <AvatarFallback><User /></AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-grow">
-                                        <Textarea placeholder="Add your reply..." className="mb-2" disabled />
-                                        <div className="flex justify-end items-center gap-2">
-                                           <TooltipProvider>
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild>
-                                                        <Button disabled><MessageCircle className="h-4 w-4 mr-2" /> Submit Reply</Button>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                    <p>Login with your member account to reply.</p>
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                {/* Example Replies */}
-                                <div className="flex items-start gap-4">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarImage src="https://i.ibb.co/27Z4CkpY/IMG-20251004-WA0001.jpg" alt="Dr. Abhishek" data-ai-hint="portrait person" />
-                                        <AvatarFallback>A</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-grow rounded-lg border bg-white p-4">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <p className="font-bold text-slate-800">Dr. Abhishek Kumar Banaita</p>
-                                            <p className="text-xs text-muted-foreground">1 day ago</p>
-                                        </div>
-                                        <p className="text-slate-600">Great case. Given the rapid progression and atypical topography, I'd also consider Terrien's Marginal Degeneration, though the lack of vascularization makes it less likely. I agree that CXL seems like a prudent next step to stabilize the cornea before considering any refractive correction. Have you done a pachymetry map?</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarImage src="https://i.ibb.co/v6XJ3B7X/1747244504223.jpg" alt="Rudra Kumar Sinha" data-ai-hint="portrait person" />
-                                        <AvatarFallback>R</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-grow rounded-lg border bg-white p-4">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <p className="font-bold text-slate-800">Rudra Kumar Sinha</p>
-                                            <p className="text-xs text-muted-foreground">19 hours ago</p>
-                                        </div>
-                                        <p className="text-slate-600">I had a similar case last year. We proceeded with CXL, and the patient's cornea stabilized remarkably well. Six months post-op, we fitted a scleral lens, and the patient achieved 20/25 vision. Happy to share the follow-up data if interested.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </CardContent>
                 </Card>
             </div>
