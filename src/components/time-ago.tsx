@@ -29,4 +29,3 @@ export function TimeAgo({ dateString }: TimeAgoProps) {
 
   return <span>{timeAgo}</span>;
 }
-
