@@ -72,11 +72,19 @@ const lucideIconSVGs: { [key: string]: string } = {
   award: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
   'graduation-cap': `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 1.66 4 3 6 3s6-1.34 6-3v-5"/></svg>`,
   'bar-chart': `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>`,
+  scroll: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scroll"><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2Z"/></svg>`,
+  clipboard: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`,
+  white_check_mark: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>`,
+  moneybag: `<svg xmlns="http://www.w3org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>`,
+  truck: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>`,
 };
 
 function formatJobDescription(markdown: string) {
     let html = markdown;
 
+    // Bold text
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
     // Headings
     html = html.replace(/^# (.*?)$/gm, '<h1 class="text-2xl font-bold font-headline mt-8 mb-4 text-slate-800">$1</h1>');
     html = html.replace(/^## (.*?)$/gm, '<h2 class="text-xl font-bold font-headline mt-8 mb-4 text-slate-800">$1</h2>');
@@ -86,8 +94,8 @@ function formatJobDescription(markdown: string) {
     html = html.replace(/^> (.*?)$/gm, '<blockquote class="border-l-4 border-primary pl-4 italic text-slate-600 my-4">$1</blockquote>');
 
     // General Icon Replacement
-    html = html.replace(/:(\w+-?\w+):/g, (match, iconName) => {
-        const key = iconName.toLowerCase();
+    html = html.replace(/:(\w+):/g, (match, iconName) => {
+        const key = iconName.toLowerCase().replace(/ /g, '_');
         if (lucideIconSVGs[key]) {
             return `<span class="inline-flex items-center justify-center align-middle mr-2">${lucideIconSVGs[key]}</span>`;
         }
@@ -96,7 +104,8 @@ function formatJobDescription(markdown: string) {
     
     // Unordered lists
     html = html.replace(/^\* (.*?)$/gm, (match, content) => {
-        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1.5 flex-shrink-0 w-1.5 h-1.5 bg-current rounded-full"></span><span class="text-slate-600">${content.trim()}</span></li>`;
+        const processedContent = content.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        return `<li class="flex items-start gap-3"><span class="icon-placeholder text-primary mt-1.5 flex-shrink-0 w-1.5 h-1.5 bg-current rounded-full"></span><span class="text-slate-600">${processedContent}</span></li>`;
     });
     html = html.replace(/(<li class="flex items-start gap-3">.*?<\/li>)/gs, '<ul class="space-y-2 my-4">$1</ul>');
     html = html.replace(/<\/ul>\n<ul/g, '');
@@ -119,6 +128,8 @@ function formatJobDescription(markdown: string) {
 
     // Paragraphs and line breaks
     html = html.replace(/\n\n/g, '<br /><br />').replace(/\n/g, '<br />');
+    html = html.replace(/<br \/>(\s*<br \/>)+/g, '<br /><br />'); // Consolidate multiple line breaks
+    html = html.replace(/<br \/>(<h[1-3]>)/g, '$1'); // Remove line break before heading
 
     return html;
 }
