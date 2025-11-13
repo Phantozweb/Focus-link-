@@ -1,7 +1,7 @@
 
 'use client';
 import { demoDiscussions } from '@/lib/forum';
-import { notFound } from 'next/navigation';
+import { notFound, usePathname } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -20,14 +20,16 @@ import { useToast } from '@/hooks/use-toast';
 
 function WhatsAppShareBlock({ number, message, title }: { number: string, message: string, title: string }) {
     const { toast } = useToast();
-    const fullMessage = `${title}\n\n${message}\n\nShared via Focus Links Community Forum.`;
+    const pathname = usePathname();
+    const caseUrl = `https://focuslinks.in${pathname}`;
+    const fullMessage = `${title}\n\n${message}\n\nRead more on Focus Links:\n${caseUrl}`;
     const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(fullMessage)}`;
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(message);
+        navigator.clipboard.writeText(fullMessage);
         toast({
             title: 'Copied to Clipboard',
-            description: 'The case details have been copied.',
+            description: 'The case details and link have been copied.',
         });
     };
 
@@ -44,7 +46,7 @@ function WhatsAppShareBlock({ number, message, title }: { number: string, messag
                         </a>
                     </Button>
                     <Button size="sm" variant="outline" onClick={copyToClipboard} className="bg-white">
-                        <Copy className="h-4 w-4 mr-2" /> Copy Text
+                        <Copy className="h-4 w-4 mr-2" /> Copy Text & Link
                     </Button>
                 </div>
             </AlertDescription>
