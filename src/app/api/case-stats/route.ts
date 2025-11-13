@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8FU1aVNk1j0lvbIqt6YJseZIoCwevTRU5zcPeu2r9cRjqyHy--Bd-dZJqcnBBaAg2/exec";
@@ -34,6 +35,11 @@ export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const caseId = searchParams.get('id');
   const action = searchParams.get('action'); // 'like' or 'view'
+
+  // This endpoint is called from the frontend.
+  // - The 'view' action is triggered once when the detailed case page (`/forum/[id]`) loads.
+  // - The 'like' action is triggered when a user clicks the 'like' button on that same page.
+  // This ensures views are only counted for full page views of a case.
 
   if (!caseId || !action) {
     return NextResponse.json({ error: 'Case ID and action are required' }, { status: 400 });
