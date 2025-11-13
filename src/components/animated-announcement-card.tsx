@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -7,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 
 const AnimatedItem = ({ icon, label, className }: { icon: React.ReactNode, label: string, className?: string }) => (
-  <div className={cn("flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3 rounded-lg border border-white/20 transition-all duration-500", className)}>
+  <div className={cn("absolute top-0 flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3 rounded-lg border border-white/20 transition-all duration-500", className)}>
     {icon}
     <span className="font-semibold text-white">{label}</span>
   </div>
@@ -40,7 +41,7 @@ export function AnimatedAnnouncementCard() {
             <AnimatedItem 
                 icon={<MessageSquare className="h-6 w-6 text-white" />} 
                 label="Discuss Cases" 
-                className={cn("absolute top-0", visibleIndex === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+                className={cn(visibleIndex === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
             />
         </div>
 
