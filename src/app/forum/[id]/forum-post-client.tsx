@@ -53,22 +53,20 @@ function WhatsAppShareBlock({ title, description }: { title: string, description
     );
 }
 
-function formatForumContent(text: string) {
+function formatForumContent(text: string): string {
     if (!text) return '';
-    const blocks = text.trim().split(/\n\s*\n/);
 
     const processInline = (line: string) => line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+    const blocks = text.trim().split(/\n\s*\n/);
     let html = '';
-    let inList = false;
 
     for (const block of blocks) {
-        // Handle blockquotes
         if (block.startsWith('>')) {
             const blockquoteContent = block.split('\n').map(line => line.replace(/^>\s?/, '')).join('\n');
-            const titleMatch = blockquoteContent.match(/^####\s(.*?)\n/);
+            const titleMatch = blockquoteContent.match(/^####\s(.*?)(?:\n|$)/);
             const title = titleMatch ? titleMatch[1] : 'Clinical Note';
-            const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length) : blockquoteContent;
+            const content = titleMatch ? blockquoteContent.substring(titleMatch[0].length).trim() : blockquoteContent.trim();
 
             const isQuestion = title.toLowerCase().includes('question') || title.toLowerCase().includes('advice');
             const isDilemma = title.toLowerCase().includes('dilemma');
@@ -88,28 +86,27 @@ function formatForumContent(text: string) {
                 default: "bg-slate-50 border-slate-200 text-slate-900"
             }[variant];
             
-            const processedContent = formatForumContent(content.trim());
+            const processedContent = formatForumContent(content); // Recursive call for nested content
 
             html += `<div role="alert" class="relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground my-6 ${variantClass}">${icon}<h5 class="mb-1 font-bold leading-none tracking-tight">${title}</h5><div class="text-sm [&_p]:leading-relaxed">${processedContent}</div></div>`;
-            continue;
-        }
-
-        // Headings
-        if (block.startsWith('### ')) {
+        } else if (block.startsWith('### ')) {
             html += `<h3 class="text-xl font-bold text-slate-800 mt-8 mb-4">${processInline(block.substring(4))}</h3>`;
-        }
-        // Unordered Lists
-        else if (block.startsWith('- ')) {
-            const items = block.split('\n').map(item => `<li class="flex items-start gap-3 mt-2"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${processInline(item.substring(2))}</span></li>`).join('');
-            html += `<ul class="list-none p-0 space-y-1 my-4">${items}</ul>`;
-        }
-        // Ordered Lists
-        else if (block.match(/^\d+\.\s/)) {
-            const items = block.split('\n').map(item => `<li>${processInline(item.replace(/^\d+\.\s/, ''))}</li>`).join('');
-            html += `<ol class="list-decimal list-inside space-y-2 my-4 pl-4">${items}</ol>`;
-        }
-        // Paragraphs
-        else {
+        } else if (block.match(/^- /) || block.match(/^\d+\.\s/)) {
+            const isOrdered = block.match(/^\d+\.\s/);
+            const listTag = isOrdered ? 'ol' : 'ul';
+            const listClass = isOrdered ? 'list-decimal list-inside space-y-2 my-4 pl-4' : 'list-none p-0 space-y-1 my-4';
+            const itemTag = 'li';
+
+            const items = block.split('\n').map(item => {
+                const itemContent = processInline(item.replace(/^(-|\d+\.)\s/, ''));
+                if (isOrdered) {
+                    return `<${itemTag}>${itemContent}</${itemTag}>`;
+                }
+                return `<${itemTag} class="flex items-start gap-3 mt-2"><span class="text-primary mt-1.5 flex-shrink-0">&#8226;</span><span>${itemContent}</span></${itemTag}>`;
+            }).join('');
+
+            html += `<${listTag} class="${listClass}">${items}</${listTag}>`;
+        } else {
             html += `<p>${processInline(block)}</p>`;
         }
     }
