@@ -16,7 +16,40 @@ import type { ForumPostContentItem } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TimeAgo } from '@/components/time-ago';
 import { useToast } from '@/hooks/use-toast';
+import type { Metadata, ResolvingMetadata } from 'next';
 
+
+type ForumPostPageProps = {
+  params: { id: string }
+}
+
+export function generateMetadata({ params }: ForumPostPageProps): Metadata {
+    const discussion = demoDiscussions.find(d => d.id === params.id);
+    if (!discussion) {
+        return {
+            title: 'Discussion Not Found'
+        }
+    }
+
+    const title = `${discussion.title} | Focus Links Forum`;
+    const description = discussion.description;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            images: [discussion.avatar],
+        },
+        twitter: {
+            card: 'summary',
+            title,
+            description,
+            images: [discussion.avatar],
+        }
+    }
+}
 
 function WhatsAppShareBlock({ number, message, title }: { number: string, message: string, title: string }) {
     const { toast } = useToast();
@@ -110,9 +143,7 @@ function ContentRenderer({ content, title }: { content: ForumPostContentItem[], 
 }
 
 
-type ForumPostPageProps = {
-  params: { id: string }
-}
+
 
 export default function ForumPostPage({ params }: ForumPostPageProps) {
   const discussion = demoDiscussions.find(d => d.id === params.id);
