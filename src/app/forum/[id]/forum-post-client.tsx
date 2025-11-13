@@ -15,6 +15,7 @@ import { TimeAgo } from '@/components/time-ago';
 import { useToast } from '@/hooks/use-toast';
 import { ShareButton } from '@/components/share-button';
 import { useState, useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function WhatsAppShareBlock({ title, description }: { title: string, description: string }) {
     const { toast } = useToast();
@@ -138,7 +139,7 @@ function formatForumContent(markdown: string): string {
 
 export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
     const { toast } = useToast();
-    const [stats, setStats] = useState({ likes: discussion.upvotes, views: discussion.views });
+    const [stats, setStats] = useState<{ likes: number; views: number } | null>(null);
     const [liked, setLiked] = useState(false);
 
     useEffect(() => {
@@ -153,21 +154,24 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                 const data = await response.json();
                 if (data.likes !== undefined && data.views !== undefined) {
                     setStats(data);
+                } else {
+                    setStats({ likes: discussion.upvotes, views: discussion.views }); // Fallback
                 }
             } catch (error) {
                 console.error("Failed to fetch case stats:", error);
+                setStats({ likes: discussion.upvotes, views: discussion.views }); // Fallback on error
             }
         };
         fetchStats();
-    }, [discussion.id]);
+    }, [discussion.id, discussion.upvotes, discussion.views]);
     
     const handleLike = async () => {
-        if (liked) {
+        if (liked || !stats) {
             toast({ title: "You've already liked this case." });
             return;
         }
         setLiked(true);
-        setStats(prev => ({ ...prev, likes: prev.likes + 1 }));
+        setStats(prev => (prev ? { ...prev, likes: prev.likes + 1 } : null));
 
         try {
             const response = await fetch(`/api/case-stats?id=${discussion.id}&action=like`, {
@@ -175,11 +179,12 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
             });
             const data = await response.json();
             if (data.likes) {
-                setStats(prev => ({ ...prev, likes: data.likes }));
+                setStats(prev => (prev ? { ...prev, likes: data.likes } : null));
             }
         } catch (error) {
             console.error("Failed to update likes:", error);
-            setStats(prev => ({ ...prev, likes: prev.likes - 1 })); // Revert on error
+            // Revert on error
+            setStats(prev => (prev ? { ...prev, likes: prev.likes - 1 } : null));
             setLiked(false);
         }
     };
@@ -202,10 +207,14 @@ export function ForumPostClient({ discussion }: { discussion: ForumPost }) {
                         <div className="flex items-center justify-between">
                             <Badge variant="secondary">{discussion.category}</Badge>
                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <Button variant="ghost" size="sm" onClick={handleLike} disabled={liked} className="flex items-center gap-1.5">
-                                  <ThumbsUp className="h-4 w-4" /> {stats.likes}
+                                <Button variant="ghost" size="sm" onClick={handleLike} disabled={liked || !stats} className="flex items-center gap-1.5">
+                                  <ThumbsUp className="h-4 w-4" /> 
+                                  {stats ? stats.likes : <Skeleton className="h-4 w-6" />}
                                 </Button>
-                                <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {stats.views}</div>
+                                <div className="flex items-center gap-1.5">
+                                    <Eye className="h-4 w-4" /> 
+                                    {stats ? stats.views : <Skeleton className="h-4 w-8" />}
+                                </div>
                             </div>
                         </div>
                         <CardTitle className="text-3xl font-headline text-slate-800 mt-4">{discussion.title}</CardTitle>
