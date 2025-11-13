@@ -6,13 +6,14 @@ import type { Metadata } from 'next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock, Search, Construction } from 'lucide-react';
+import { MessageSquare, ThumbsUp, Eye, Paperclip, Lock, Search, Construction, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { demoDiscussions } from '@/lib/forum';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { TimeAgo } from '@/components/time-ago';
 
 
 export default function ForumPage() {
@@ -54,22 +55,22 @@ export default function ForumPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   placeholder="Search cases, tags, or categories..."
-                  className="pl-10"
+                  className="pl-10 h-11"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="text-right flex-shrink-0">
+              <div className="text-right flex-shrink-0 w-full md:w-auto">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button disabled>
+                      <Button disabled className="w-full">
                         <Lock className="mr-2 h-4 w-4" />
-                        Start a New Discussion (Coming Soon)
+                        Start a New Discussion
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Login with your member account to post.</p>
+                      <p>Official membership required to post.</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -78,40 +79,32 @@ export default function ForumPage() {
             <div className="space-y-4">
                 {filteredDiscussions.map((discussion) => (
                     <Card key={discussion.id} className="hover:shadow-md transition-shadow">
-                        <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-start">
-                            <div className="flex-shrink-0 flex flex-row sm:flex-col items-center gap-4 w-full sm:w-20 text-center">
-                                <Button variant="outline" size="sm" className="w-full" disabled>
-                                    <ThumbsUp className="h-4 w-4 mr-2" /> {discussion.upvotes}
-                                </Button>
-                                <div className="flex items-center gap-4 text-sm text-muted-foreground sm:w-full">
-                                  <div className="flex items-center gap-1.5"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
-                                  <div className="flex items-center gap-1.5"><Eye className="h-4 w-4" /> {discussion.views}</div>
-                                </div>
-                            </div>
+                        <CardContent className="p-4 sm:p-6 flex gap-4">
+                           <Avatar className="hidden sm:block h-12 w-12 border">
+                                <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
+                                <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
+                            </Avatar>
                             <div className="flex-grow">
-                                <Badge variant="secondary" className="mb-2">{discussion.category}</Badge>
-                                <h3 className="text-lg font-bold text-slate-800 hover:text-primary">
+                                <div className="flex items-center justify-between">
+                                    <Badge variant="secondary">{discussion.category}</Badge>
+                                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                      <div className="flex items-center gap-1.5" title="Upvotes"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
+                                      <div className="flex items-center gap-1.5" title="Replies"><MessageSquare className="h-4 w-4" /> {discussion.replies}</div>
+                                      <div className="flex items-center gap-1.5" title="Views"><Eye className="h-4 w-4" /> {discussion.views}</div>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-bold text-slate-800 hover:text-primary mt-2">
                                     <Link href={`/forum/${discussion.id}`}>{discussion.title}</Link>
                                 </h3>
                                  <p className="text-sm text-slate-600 mt-1 line-clamp-2">{discussion.description}</p>
-                                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
-                                    <div className="flex items-center gap-2">
-                                      <Avatar className="h-6 w-6">
-                                          <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
-                                          <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
-                                      </Avatar>
-                                      <span>{discussion.author}</span>
-                                    </div>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-3">
+                                    <Avatar className="sm:hidden h-6 w-6">
+                                        <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
+                                        <AvatarFallback>{discussion.author.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <Link href={`/profile/${discussion.authorId}`} className="font-semibold text-slate-700 hover:underline">{discussion.author}</Link>
                                     <span>&middot;</span>
-                                    <span>Last reply {discussion.lastReply}</span>
-                                     {discussion.mediaCount > 0 && (
-                                      <>
-                                        <span>&middot;</span>
-                                        <span className="flex items-center gap-1">
-                                          <Paperclip className="h-4 w-4" /> {discussion.mediaCount}
-                                        </span>
-                                      </>
-                                    )}
+                                    <span>Posted <TimeAgo dateString={discussion.postedDate} /></span>
                                 </div>
                             </div>
                         </CardContent>
@@ -123,5 +116,3 @@ export default function ForumPage() {
     </div>
   );
 }
-
-    

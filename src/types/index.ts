@@ -100,3 +100,34 @@ export type Job = {
   description: string;
   applyUrl: string;
 };
+
+// Types for Forum
+export type ForumPostContentItem = {
+  type: 'paragraph' | 'heading' | 'subheading' | 'list' | 'alert' | 'whatsapp';
+  content: string | string[];
+  title?: string;
+  variant?: 'default' | 'destructive' | 'info';
+  whatsapp?: {
+    number: string;
+    message: string;
+  };
+};
+
+export type ForumPost = {
+  id: string;
+  title: string;
+  author: string;
+  authorId: string;
+  avatar: string;
+  category: string;
+  tags: string[];
+  description: string;
+  content: ForumPostContentItem[];
+  media: { type: 'image' | 'video'; url: string; caption: string }[];
+  mediaCount: number;
+  replies: number;
+  views: number;
+  upvotes: number;
+  lastReply: string;
+  postedDate: string;
+};
