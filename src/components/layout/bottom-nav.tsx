@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, MessageSquare, Briefcase, Calendar, User as ProfileIcon } from 'lucide-react';
+import { Home, Users, MessageSquare, Briefcase, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { webinars } from '@/lib/academy';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ const navItems = [
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
 ];
 
+
 export function BottomNav() {
   const pathname = usePathname();
   const [hasUnseenLiveEvent, setHasUnseenLiveEvent] = useState(false);
@@ -23,9 +24,11 @@ export function BottomNav() {
   useEffect(() => {
     const liveWebinars = webinars.filter(w => {
       const startTime = new Date(w.dateTime).getTime();
+      const isQuiz = w.id === 'eye-q-arena-2025';
       const durationParts = w.duration.split(' ');
       const durationValue = parseInt(durationParts[0], 10);
-      const endTime = startTime + (durationValue * 60 * 1000);
+      const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24) : (1000 * 60);
+      const endTime = startTime + (durationValue * durationMultiplier);
       return Date.now() >= startTime && Date.now() < endTime;
     });
 
@@ -45,44 +48,53 @@ export function BottomNav() {
   }, [pathname, hasUnseenLiveEvent]);
 
   // Hide bottom nav on login and membership pages for a cleaner look
-  if (pathname === '/login' || pathname === '/membership' || pathname === '/profile/create') {
+  const hiddenPaths = ['/login', '/membership', '/profile/create'];
+  if (hiddenPaths.includes(pathname)) {
+    return null;
+  }
+  
+  const isDetailPage = !['/', '/directory', '/events', '/forum', '/jobs'].includes(pathname) && pathname.split('/').length > 2;
+  if(isDetailPage) {
     return null;
   }
 
-  // Hide on specific sub-pages like an individual profile or event
-  const isDetailPage = pathname.split('/').length > 2 && (pathname.startsWith('/profile/') || pathname.startsWith('/events/') || pathname.startsWith('/jobs/') || pathname.startsWith('/forum/'));
-  if (isDetailPage && !pathname.startsWith('/profile/create')) {
-      return null;
-  }
-
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-50">
-      <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
-        {navItems.map((item) => {
-          const isActive = (pathname === '/' && item.href === '/') || (item.href !== '/' && pathname.startsWith(item.href));
-          const showPing = item.hasLiveIndicator && hasUnseenLiveEvent;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'inline-flex flex-col items-center justify-center px-3 hover:bg-gray-50 group',
-                isActive ? 'text-primary' : 'text-gray-500'
-              )}
-            >
-              <div className="relative">
-                <item.icon className="w-6 h-6 mb-1" />
-                {showPing && (
-                    <span className="absolute top-0 right-0 -mr-1 -mt-1 flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-                    </span>
-                )}
-              </div>
-              <span className="text-[11px]">{item.label}</span>
-            </Link>
-          );
-        })}
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-transparent">
+      <div className="flex justify-center items-center relative transition-all duration-[450ms] ease-in-out w-auto">
+        <article
+          className="border border-solid border-gray-200/80 w-full ease-in-out duration-500 left-0 rounded-2xl flex shadow-2xl shadow-black/30 bg-white/80 backdrop-blur-md"
+        >
+          {navItems.map((item) => {
+             const isActive = (pathname === '/' && item.href === '/') || (item.href !== '/' && pathname.startsWith(item.href));
+             const showPing = item.hasLiveIndicator && hasUnseenLiveEvent;
+            return (
+              <Link href={item.href} key={item.href} className="w-full">
+                <div
+                  className={cn(
+                    "relative w-full h-16 p-4 ease-in-out duration-300 group flex flex-row gap-3 items-center justify-center text-slate-500 rounded-xl",
+                    isActive && "text-primary scale-110"
+                  )}
+                >
+                  <div className="relative">
+                    <item.icon className="w-7 h-7" />
+                     {showPing && (
+                        <span className="absolute top-0 right-0 -mr-1 -mt-1 flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        </span>
+                    )}
+                  </div>
+                   <span className={cn(
+                    "absolute -bottom-5 text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-semibold",
+                     isActive && "opacity-100"
+                   )}>
+                    {item.label}
+                  </span>
+                </div>
+              </Link>
+            )
+          })}
+        </article>
       </div>
     </div>
   );
