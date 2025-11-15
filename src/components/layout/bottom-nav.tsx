@@ -49,18 +49,21 @@ export function BottomNav() {
 
   // Hide bottom nav on login and membership pages for a cleaner look
   const hiddenPaths = ['/login', '/membership', '/profile/create'];
-  if (hiddenPaths.includes(pathname)) {
+  if (hiddenPaths.some(p => pathname.startsWith(p))) {
     return null;
   }
   
   const isDetailPage = !['/', '/directory', '/events', '/forum', '/jobs'].includes(pathname) && pathname.split('/').length > 2;
-  if(isDetailPage) {
+  if(isDetailPage && !pathname.startsWith('/directory/')) {
     return null;
   }
 
+
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-transparent">
-      <div className="flex justify-center items-center relative transition-all duration-[450ms] ease-in-out w-auto">
+      <div
+        className="flex justify-center items-center relative transition-all duration-[450ms] ease-in-out w-auto"
+      >
         <article
           className="border border-solid border-gray-200/80 w-full ease-in-out duration-500 left-0 rounded-2xl flex shadow-2xl shadow-black/30 bg-white/80 backdrop-blur-md"
         >
@@ -68,15 +71,18 @@ export function BottomNav() {
              const isActive = (pathname === '/' && item.href === '/') || (item.href !== '/' && pathname.startsWith(item.href));
              const showPing = item.hasLiveIndicator && hasUnseenLiveEvent;
             return (
-              <Link href={item.href} key={item.href} className="w-full">
+              <Link href={item.href} key={item.label} className="w-full group">
                 <div
                   className={cn(
-                    "relative w-full h-16 p-4 ease-in-out duration-300 group flex flex-row gap-3 items-center justify-center text-slate-500 rounded-xl",
-                    isActive && "text-primary scale-110"
+                    "relative w-full h-16 p-4 ease-in-out duration-300 flex flex-row gap-3 items-center justify-center text-slate-500 rounded-xl",
+                    isActive && "shadow-lg border-primary/20 border"
                   )}
                 >
                   <div className="relative">
-                    <item.icon className="w-7 h-7" />
+                    <item.icon className={cn(
+                        "w-7 h-7 ease-in-out duration-300 group-hover:scale-125 group-hover:text-primary",
+                        isActive && "scale-125 text-primary"
+                    )} />
                      {showPing && (
                         <span className="absolute top-0 right-0 -mr-1 -mt-1 flex h-2.5 w-2.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -84,12 +90,6 @@ export function BottomNav() {
                         </span>
                     )}
                   </div>
-                   <span className={cn(
-                    "absolute -bottom-5 text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-semibold",
-                     isActive && "opacity-100"
-                   )}>
-                    {item.label}
-                  </span>
                 </div>
               </Link>
             )
@@ -99,3 +99,4 @@ export function BottomNav() {
     </div>
   );
 }
+
