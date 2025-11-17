@@ -9,19 +9,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, UserPlus, Zap, Linkedin, CheckCircle } from 'lucide-react';
-import type { Metadata } from 'next';
+import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { logFormSubmission } from '@/lib/activity-logger';
 
 const roles = [
+  "Regional Leader / Ambassador",
+  "State Head (India)",
+  "Event Coordinator",
   "Clinical Content Creator",
   "Community Manager",
   "Tech Contributor (Web/AI/App)",
-  "Regional Ambassador",
-  "Event Coordinator",
   "Social Media Manager",
   "Graphic Designer"
 ];
@@ -106,28 +106,64 @@ export default function TeamApplicationPage() {
       <div className="bg-muted/40">
         <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Join Our Global Team</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Let's Build the Future of Eye Care, Together</h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-              We are looking for passionate volunteers to help us build the world's largest digital ecosystem for eye care. This is your chance to make a global impact.
+              We are a passionate, non-commercial team building the world's largest digital community for eye care. This is a volunteer opportunity to make a global impact.
             </p>
           </div>
         </section>
 
         <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
-          <section className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-800 text-center">What You'll Gain</h2>
-             <div className="grid md:grid-cols-2 gap-8 mt-8">
-                <Card className="p-6">
-                    <Zap className="h-8 w-8 text-primary mb-2" />
-                    <h3 className="text-xl font-bold">Build Your Portfolio</h3>
-                    <p className="text-muted-foreground mt-1">Gain real-world experience, lead projects, and build a portfolio that showcases your skills to a global audience.</p>
+           <section className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-slate-800 text-center">Why Join Us?</h2>
+            <p className="text-lg text-slate-600 mt-2 text-center">This is more than a volunteer role. It's a chance to lead, innovate, and grow.</p>
+             <div className="grid md:grid-cols-3 gap-8 mt-8">
+                <Card className="p-6 text-center">
+                    <Award className="h-10 w-10 text-primary mb-3 mx-auto" />
+                    <h3 className="text-xl font-bold">Gain Real Experience</h3>
+                    <p className="text-muted-foreground mt-1">Lead projects, manage teams, and build a portfolio that showcases your skills to a global audience.</p>
                 </Card>
-                 <Card className="p-6">
-                    <Linkedin className="h-8 w-8 text-primary mb-2" />
+                 <Card className="p-6 text-center">
+                    <Handshake className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Expand Your Network</h3>
                     <p className="text-muted-foreground mt-1">Connect with industry leaders, educators, and peers from around the world. Build relationships that last a lifetime.</p>
                 </Card>
+                 <Card className="p-6 text-center">
+                    <Zap className="h-10 w-10 text-primary mb-3 mx-auto" />
+                    <h3 className="text-xl font-bold">Make a Global Impact</h3>
+                    <p className="text-muted-foreground mt-1">Your contributions will directly help thousands of students and professionals connect, learn, and advance their careers.</p>
+                </Card>
             </div>
+          </section>
+
+          <section className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-slate-800 text-center mb-8">Open Volunteer Roles</h2>
+              <div className="space-y-4">
+                  <Card>
+                      <CardHeader>
+                          <CardTitle>Regional Leader / Ambassador</CardTitle>
+                          <CardDescription>Represent Focus Links in your country or region. You will be the key point of contact for local members, institutions, and partners, helping to grow our community presence and organize local initiatives.</CardDescription>
+                      </CardHeader>
+                  </Card>
+                   <Card>
+                      <CardHeader>
+                          <CardTitle>State Head (India)</CardTitle>
+                          <CardDescription>Lead community growth and engagement within your state in India. Your role is to build relationships with colleges, mentor student leaders, and coordinate state-level events and campaigns.</CardDescription>
+                      </CardHeader>
+                  </Card>
+                   <Card>
+                      <CardHeader>
+                          <CardTitle>Event Coordinator</CardTitle>
+                          <CardDescription>Plan and execute our online events, from webinars to international quiz competitions. You'll work with speakers, manage logistics, and ensure a seamless experience for all participants.</CardDescription>
+                      </CardHeader>
+                  </Card>
+                   <Card>
+                      <CardHeader>
+                          <CardTitle>Clinical Content Creator</CardTitle>
+                          <CardDescription>Are you passionate about sharing clinical knowledge? Create engaging case studies, educational articles, and quiz questions for our forum and academy to help others learn.</CardDescription>
+                      </CardHeader>
+                  </Card>
+              </div>
           </section>
 
           <section id="application-form" className="max-w-3xl mx-auto">
