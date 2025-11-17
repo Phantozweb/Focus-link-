@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
 
 const moduleData: { [key: number]: any } = {
   1: {
@@ -43,6 +45,13 @@ const moduleData: { [key: number]: any } = {
   }
 };
 
+const reflexExamples = [
+  { id: 1, type: 'with', description: 'Light reflex moves in the same direction as the retinoscope', condition: 'Myopia (Nearsightedness)' },
+  { id: 2, type: 'against', description: 'Light reflex moves opposite to the retinoscope direction', condition: 'Hyperopia (Farsightedness)' },
+  { id: 3, type: 'neutral', description: 'The entire pupil lights up uniformly - no movement', condition: 'Emmetropia (Perfect focus)' },
+  { id: 4, type: 'with', description: 'Reflex follows the movement of the streak', condition: 'Myopia' },
+  { id: 5, type: 'against', description: 'Reflex moves in the opposite direction', condition: 'Hyperopia' },
+];
 
 function ModulePageClient() {
     const params = useParams();
@@ -53,9 +62,19 @@ function ModulePageClient() {
 
     const currentModuleData = moduleData[moduleId];
     
+    // State for quizzes
     const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    
+    // State for checklists
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+    // State for Module 5 Reflex Quiz
+    const [currentReflex, setCurrentReflex] = useState(0);
+    const [selectedReflexAnswer, setSelectedReflexAnswer] = useState<string | null>(null);
+    const [score, setScore] = useState(0);
+    const [showResult, setShowResult] = useState(false);
+
     
     if (!module) {
         notFound();
@@ -76,6 +95,32 @@ function ModulePageClient() {
     const handleSubmitQuiz = () => {
         setIsSubmitted(true);
     };
+
+    const handleReflexAnswer = (answer: string) => {
+        setSelectedReflexAnswer(answer);
+        const correct = answer === reflexExamples[currentReflex].type;
+
+        if (correct) {
+        setScore(score + 1);
+        }
+
+        setTimeout(() => {
+        if (currentReflex < reflexExamples.length - 1) {
+            setCurrentReflex(currentReflex + 1);
+            setSelectedReflexAnswer(null);
+        } else {
+            setShowResult(true);
+        }
+        }, 1500);
+    };
+
+    const resetReflexQuiz = () => {
+        setCurrentReflex(0);
+        setSelectedReflexAnswer(null);
+        setScore(0);
+        setShowResult(false);
+    };
+
 
     const allQuestionsAnswered = Object.keys(selectedAnswers).length === quizQuestions.length;
     const allChecklistItemsCompleted = checklistItems.length > 0 && checklistItems.every((item: any) => checkedItems[item.id]);
@@ -184,6 +229,104 @@ function ModulePageClient() {
                          </Card>
                     </section>
                 );
+             case 5: {
+                if (showResult) {
+                    return (
+                    <section>
+                        <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2"><Eye className="h-6 w-6 text-primary" /> Reflex Identification Quiz</h3>
+                        <Card className="p-8 text-center">
+                        <h2 className="text-2xl font-bold mb-4">Quiz Complete!</h2>
+                        <div className="mb-6">
+                            <div className="text-lg text-muted-foreground mb-2">Your Score</div>
+                            <div className="text-4xl font-bold text-primary">
+                            {score} out of {reflexExamples.length}
+                            </div>
+                        </div>
+                        <p className="text-muted-foreground mb-6">
+                            {score === reflexExamples.length
+                            ? 'Perfect! You have mastered reflex identification!'
+                            : score >= reflexExamples.length * 0.7
+                            ? 'Great job! You have a good understanding of the concepts.'
+                            : 'Keep practicing! Review the concepts and try again.'}
+                        </p>
+                        <Button onClick={resetReflexQuiz} variant="outline">
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            Retake Quiz
+                        </Button>
+                        </Card>
+                    </section>
+                    );
+                }
+
+                const reflex = reflexExamples[currentReflex];
+                const isAnswered = selectedReflexAnswer !== null;
+                const isCorrect = selectedReflexAnswer === reflex.type;
+
+                return (
+                    <section>
+                         <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2"><Eye className="h-6 w-6 text-primary" /> Reflex Identification Quiz</h3>
+                         <div>
+                            <div className="mb-6">
+                                <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Question {currentReflex + 1} of {reflexExamples.length}
+                                </span>
+                                <span className="text-sm font-semibold text-primary">
+                                    Score: {score}/{reflexExamples.length}
+                                </span>
+                                </div>
+                                <Progress value={((currentReflex + 1) / reflexExamples.length) * 100} />
+                            </div>
+
+                            <Card className="p-6 mb-6 bg-slate-900 text-white">
+                                <div className="aspect-video flex items-center justify-center">
+                                    <p className="text-center text-slate-400">[Placeholder for animated reflex: {reflex.description}]</p>
+                                </div>
+                            </Card>
+
+                            <h4 className="text-lg font-semibold mb-4 text-center">What type of motion is this?</h4>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                            <Button
+                                onClick={() => handleReflexAnswer('with')}
+                                disabled={isAnswered}
+                                className={cn('h-20 text-lg', isAnswered && selectedReflexAnswer === 'with' && (isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-600'))}
+                            >
+                                With Motion
+                            </Button>
+
+                            <Button
+                                onClick={() => handleReflexAnswer('against')}
+                                disabled={isAnswered}
+                                className={cn('h-20 text-lg', isAnswered && selectedReflexAnswer === 'against' && (isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-600'))}
+                            >
+                                Against Motion
+                            </Button>
+
+                            <Button
+                                onClick={() => handleReflexAnswer('neutral')}
+                                disabled={isAnswered}
+                                className={cn('h-20 text-lg', isAnswered && selectedReflexAnswer === 'neutral' && (isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-600'))}
+                            >
+                                Neutral
+                            </Button>
+                            </div>
+
+                            {isAnswered && (
+                            <Alert className={cn(isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200')}>
+                                <AlertTitle className={cn('flex items-center gap-2', isCorrect ? 'text-green-800' : 'text-red-800')}>
+                                    {isCorrect ? <CheckCircle className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
+                                    {isCorrect ? 'Correct!' : 'Incorrect.'}
+                                </AlertTitle>
+                                <AlertDescription className={cn(isCorrect ? 'text-green-700' : 'text-red-700')}>
+                                This is <strong>{reflex.type}</strong> motion, indicating {reflex.condition}.
+                                </AlertDescription>
+                            </Alert>
+                            )}
+                        </div>
+                    </section>
+                )
+             }
             case 10:
                 return (
                     <section>
@@ -293,3 +436,5 @@ export default function ModulePage() {
         </Suspense>
     );
 }
+
+    
