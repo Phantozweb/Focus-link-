@@ -24,6 +24,53 @@ export type Webinar = {
 };
 
 export const webinars: Webinar[] = [
+    {
+    id: 'interactive-retinoscopy-course',
+    title: 'Interactive Retinoscopy: Master Objective Refraction',
+    description: `**"From Fundamentals to Final Prescription: Your AI-Powered Guide to Mastering Retinoscopy."**
+
+This 5-day interactive course is designed to transform your understanding and execution of retinoscopy, one of the most crucial skills for any eye care practitioner. Using a blend of AI-narrated videos, 3D models, and hands-on simulations, you will move from theory to practical mastery.
+
+### Why This Course is Different
+This isn't a passive lecture series. We use cutting-edge technology to create a dynamic learning environment:
+- **AI-Powered Simulations:** Practice your technique on a variety of virtual patients with AI-driven feedback.
+- **3D Interactive Models:** Explore a virtual retinoscope to understand every component in detail.
+- **Gamified Learning:** Test your knowledge with interactive quizzes, timed challenges, and video-based assessments.
+
+---QUIZ_MODULES_TABLE---
+| Module | Topic | Interactive Elements |
+|---|---|---|
+| 1 | **Introduction to Retinoscopy** | AI-narrated video, historical quiz. |
+| 2 | **The Retinoscope Deep Dive** | Interactive 3D model of a retinoscope. |
+| 3 | **Setting Up for Success** | Animated setup guide & interactive checklist. |
+| 4 | **Working Distance Mastery** | Simulation for adjusting and calculating working distance. |
+| 5 | **Decoding the Reflex** | Video demos & reflex identification exercises. |
+| 6 | **Core Retinoscopy Techniques** | In-depth tutorials on spot, streak, and cylinder. |
+| 7 | **The Optical Cross** | Animated explanations and a tool for plotting findings. |
+| 8 | **Calculating the Final Rx** | Step-by-step guides and an interactive calculator. |
+| 9 | **Cross Retinoscopy in 3 Steps** | Quick-reference video tutorials. |
+| 10 | **Practice Makes Perfect** | Advanced simulator with diverse patient cases. |
+| 11 | **Troubleshooting Common Issues** | AI-powered diagnostic tool for problem-solving. |
+| 12 | **Final Assessment & Certification**| Comprehensive final exam for course certification. |
+
+### Who Should Attend?
+This course is invaluable for optometry students, interns, and early-career optometrists who want to build deep confidence and precision in their objective refraction skills.
+`,
+    speaker: {
+      name: 'Janarthan Veeramani',
+      title: 'Course Visionary & Founder',
+      avatarUrl: 'https://iili.io/KTpEi9s.md.jpg'
+    },
+    host: {
+      name: 'Focus Links Academy',
+      title: 'Official Organizer'
+    },
+    platform: 'Online Platform',
+    dateTime: '2025-11-15T00:00:00Z',
+    duration: '5 days',
+    tags: ['Retinoscopy', 'Objective Refraction', 'Clinical Skills', 'Course', 'AI in Optometry'],
+    registrationLink: '#',
+  },
   {
     id: 'webinar-clik-1',
     title: 'Contact Lens Induced Keratitis',
