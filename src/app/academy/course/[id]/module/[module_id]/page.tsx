@@ -87,6 +87,23 @@ function ModulePageClient() {
             generateNewCase();
         }
     }, [moduleId]);
+    
+    // Effect to check for neutralization in the simulator
+    useEffect(() => {
+        if (moduleId === 10) {
+            const workingDistance = -1.5;
+            const netSphere = refractiveError.sphere - (trialLens.sphere + workingDistance);
+            const powerAtStreakAxis = netSphere + refractiveError.cylinder * Math.pow(Math.sin(Math.PI / 180 * (streakRotation - refractiveError.axis)), 2);
+
+            if (Math.abs(powerAtStreakAxis) < 0.25) {
+                const remainingCyl = refractiveError.cylinder + trialLens.cylinder;
+                setIsNeutralized(Math.abs(remainingCyl) < 0.25);
+            } else {
+                setIsNeutralized(false);
+            }
+        }
+    }, [moduleId, refractiveError, trialLens, streakRotation]);
+
 
     const generateNewCase = () => {
         const sphere = (Math.floor(Math.random() * 8) - 4) * 0.5; // -2.00 to +1.50
@@ -111,14 +128,6 @@ function ModulePageClient() {
         
         const speed = 1 / (Math.abs(powerAtStreakAxis) + 0.1);
         const width = 20 / (Math.abs(powerAtStreakAxis) + 1);
-
-        if (Math.abs(powerAtStreakAxis) < 0.25) {
-             const remainingCyl = refractiveError.cylinder + trialLens.cylinder;
-             if(Math.abs(remainingCyl) < 0.25) setIsNeutralized(true);
-             else setIsNeutralized(false);
-        } else {
-            setIsNeutralized(false);
-        }
 
         return { motion, speed, width };
     };
