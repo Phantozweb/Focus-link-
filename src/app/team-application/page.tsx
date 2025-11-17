@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe } from 'lucide-react';
+import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,14 +17,94 @@ import { logFormSubmission } from '@/lib/activity-logger';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const roles = [
-  "Regional Leader / Ambassador (International)",
-  "National Head (e.g., State Head for India)",
-  "Event Coordinator (Global & Local)",
+  "Regional Leader / Ambassador",
+  "National Head",
+  "Event Coordinator",
+  "Job Board Curator",
   "Clinical Content Creator",
   "Community Manager",
   "Tech Contributor (Web/AI/App)",
   "Social Media Manager",
   "Graphic Designer"
+];
+
+const roleDetails = [
+  {
+    role: "Regional Leader / Ambassador",
+    mission: "Serve as the primary representative for Focus Links in a major global region (e.g., Southeast Asia, Africa, Europe).",
+    responsibilities: [
+      "Establish strategic partnerships with continental or multi-national eye care associations.",
+      "Mentor and guide National Heads within the region.",
+      "Represent Focus Links at major international conferences.",
+      "Provide high-level feedback to the core team on global strategy."
+    ],
+    benefits: "Gain high-level leadership experience, build a global professional network, and directly shape the international growth of the community."
+  },
+  {
+    role: "National Head",
+    mission: "Lead Focus Links' growth, engagement, and operations within a specific country.",
+    responsibilities: [
+      "Build and manage a national team of volunteers (Event Coordinators, Community Managers, etc.).",
+      "Forge relationships with national optometry colleges, hospitals, and associations.",
+      "Adapt global campaigns for local relevance and execute country-specific initiatives.",
+      "Act as the main point of contact for all members and partners within the country."
+    ],
+    benefits: "Develop strong leadership and project management skills, become a recognized leader in your country's eye care community, and make a tangible national impact."
+  },
+  {
+    role: "Event Coordinator",
+    mission: "Plan and execute engaging online events for our global community.",
+    responsibilities: [
+      "Organize webinars with industry experts and international quiz competitions like the 'Eye Q Arena'.",
+      "Coordinate with speakers and partners on logistics and content.",
+      "Promote events across our platforms to maximize participation.",
+      "Ensure a seamless, high-quality experience for all attendees."
+    ],
+    benefits: "Develop expertise in event management, connect with leading professionals and speakers, and play a key role in the platform's most exciting initiatives."
+  },
+  {
+    role: "Job Board Curator",
+    mission: "Ensure the Focus Links Job Board is the leading source for high-quality, authentic clinical opportunities.",
+    responsibilities: [
+      "Source and verify job vacancies primarily from hospitals, clinics, and academic institutions, filtering out retail-only positions.",
+      "Maintain relationships with HR departments at leading eye care organizations.",
+      "Regularly update the job listings to ensure all information is current and accurate.",
+      "Develop strategies to attract premium employers to our platform."
+    ],
+    benefits: "Gain insight into the eye care job market, build connections with top employers, and directly help peers find meaningful clinical career opportunities."
+  },
+  {
+    role: "Clinical Content Creator",
+    mission: "Translate complex clinical knowledge into engaging, accessible content for our community.",
+    responsibilities: [
+      "Create high-quality case studies for the Case Forum.",
+      "Develop educational articles and tutorials for the Academy.",
+      "Design challenging and relevant questions for our quiz competitions.",
+      "Collaborate with subject matter experts to ensure clinical accuracy."
+    ],
+    benefits: "Sharpen your own clinical knowledge, build a reputation as an expert in your field, and contribute to the professional development of thousands of peers."
+  },
+  {
+    role: "Tech Contributor (Web/AI/App)",
+    mission: "Help build and improve the digital infrastructure of the Focus Links platform.",
+    responsibilities: [
+      "Contribute code for new features on our Next.js and React-based web application.",
+      "Assist in developing and integrating AI-powered tools (Genkit).",
+      "Troubleshoot bugs and optimize platform performance.",
+      "Collaborate with a team of developers shaping the future of eye care technology."
+    ],
+    benefits: "Gain hands-on experience with a modern tech stack (Next.js, React, Genkit), build a portfolio of impactful work, and solve real-world problems for a global community."
+  },
+  {
+    role: "Community & Social Media Roles",
+    mission: "Foster a vibrant, supportive, and rapidly growing community across all our digital platforms.",
+    responsibilities: [
+      "Manage and grow our presence on LinkedIn, Instagram, and other social channels (Social Media Manager).",
+      "Create engaging visual content, infographics, and event branding (Graphic Designer).",
+      "Moderate discussions, welcome new members, and facilitate connections within our community forums (Community Manager)."
+    ],
+    benefits: "Develop valuable digital marketing and community management skills, express your creativity on a global stage, and be the voice of a leading brand in the eye care industry."
+  }
 ];
 
 const formSchema = z.object({
@@ -140,40 +220,40 @@ export default function TeamApplicationPage() {
           <section className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-slate-800 text-center mb-8">Open Volunteer Roles</h2>
               <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="item-1">
-                      <AccordionTrigger className="text-lg font-semibold">Regional Leader / Ambassador (International)</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-600">
-                        Represent Focus Links in your country or geographic region. As a leader, you will be our key point of contact, responsible for building relationships with local members, optometry colleges, and professional associations. Your goal is to grow our community presence, onboard new members, and coordinate regional initiatives.
-                      </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-2">
-                      <AccordionTrigger className="text-lg font-semibold">National Head (e.g., Country Lead)</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-600">
-                        Lead community growth and engagement within a specific country. Your role is to build a local team, establish relationships with colleges, mentor student leaders, and coordinate country-specific events and campaigns that align with our global mission. This is a key leadership role for driving national-level impact.
-                      </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-3">
-                      <AccordionTrigger className="text-lg font-semibold">Event Coordinator (Global & Local)</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-600">
-                        Plan and execute our online events, from webinars with industry experts to our international "Eye Q Arena" quiz competitions. You'll work with speakers, manage logistics, promote events, and ensure a seamless, engaging experience for all participants worldwide.
-                      </AccordionContent>
-                  </AccordionItem>
-                   <AccordionItem value="item-4">
-                      <AccordionTrigger className="text-lg font-semibold">Clinical Content Creator</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-600">
-                       Are you passionate about sharing clinical knowledge? Create engaging case studies, educational articles, and quiz questions for our Case Forum and Academy. Help your peers learn by translating complex clinical topics into clear, insightful content.
-                      </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-5">
+                  {roleDetails.map(detail => (
+                      <AccordionItem key={detail.role} value={detail.role}>
+                          <AccordionTrigger className="text-lg font-semibold">{detail.role}</AccordionTrigger>
+                          <AccordionContent className="text-base text-slate-600 space-y-4 px-2">
+                              <p className="italic">{detail.mission}</p>
+                              <div>
+                                <h4 className="font-semibold text-slate-700 mb-2">Key Responsibilities:</h4>
+                                <ul className="list-disc pl-5 space-y-1">
+                                    {detail.responsibilities.map((resp, i) => <li key={i}>{resp}</li>)}
+                                </ul>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-slate-700 mb-2">What You Gain:</h4>
+                                <p>{detail.benefits}</p>
+                              </div>
+                          </AccordionContent>
+                      </AccordionItem>
+                  ))}
+                   <AccordionItem value="Community & Social Media Roles">
                       <AccordionTrigger className="text-lg font-semibold">Community & Social Media Roles</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-600">
-                       Manage our social media channels, create engaging visual content (as a Graphic Designer), and foster a vibrant, supportive environment as a Community Manager. These roles are vital for growing our reach and keeping our community connected.
-                      </AccordionContent>
-                  </AccordionItem>
-                   <AccordionItem value="item-6">
-                      <AccordionTrigger className="text-lg font-semibold">Tech Contributor (Web/AI/App)</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-600">
-                       Have skills in web development (React/Next.js), AI, or mobile app development? Join our tech team to help build and improve the Focus Links platform. Your work will directly enhance the tools and features available to the entire community.
+                      <AccordionContent className="text-base text-slate-600 space-y-4 px-2">
+                          <p className="italic">Foster a vibrant, supportive, and rapidly growing community across all our digital platforms.</p>
+                          <div>
+                            <h4 className="font-semibold text-slate-700 mb-2">Key Responsibilities:</h4>
+                            <ul className="list-disc pl-5 space-y-1">
+                                <li>Manage and grow our presence on LinkedIn, Instagram, and other social channels (as a <strong>Social Media Manager</strong>).</li>
+                                <li>Create engaging visual content, infographics, and event branding (as a <strong>Graphic Designer</strong>).</li>
+                                <li>Moderate discussions, welcome new members, and facilitate connections within our community forums (as a <strong>Community Manager</strong>).</li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-slate-700 mb-2">What You Gain:</h4>
+                            <p>Develop valuable digital marketing and community management skills, express your creativity on a global stage, and be the voice of a leading brand in the eye care industry.</p>
+                          </div>
                       </AccordionContent>
                   </AccordionItem>
               </Accordion>
