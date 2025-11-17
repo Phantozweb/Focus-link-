@@ -18,10 +18,12 @@ export default {
     },
     extend: {
       backgroundImage: {
-        'grid-white': "linear-gradient(to right, theme('colors.white / 0.1') 1px, transparent 1px), linear-gradient(to bottom, theme('colors.white / 0.1') 1px, transparent 1px)"
+        'grid-white': "linear-gradient(to right, theme('colors.white / 0.1') 1px, transparent 1px), linear-gradient(to bottom, theme('colors.white / 0.1') 1px, transparent 1px)",
+        'grid-slate-800': "linear-gradient(to right, theme('colors.slate.800') 1px, transparent 1px), linear-gradient(to bottom, theme('colors.slate.800') 1px, transparent 1px)",
       },
       backgroundSize: {
         'grid-white': '40px 40px',
+        'grid-slate-800': '30px 30px',
       },
       fontFamily: {
         sans: ['Public Sans', 'Noto Sans', 'sans-serif'],
