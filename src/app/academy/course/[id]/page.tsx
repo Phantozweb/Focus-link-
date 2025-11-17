@@ -13,15 +13,14 @@ import type { CourseModule } from '@/lib/data/course-modules';
 
 const iconMap: { [key: string]: React.ElementType } = {
   video: Video,
-  quiz: ListChecks,
-  '3d-model': Orbit,
-  chatbot: Bot,
-  simulation: Dna,
-  checklist: ListChecks,
-  tool: Puzzle,
-  assessment: CheckCircle,
-  exam: Trophy,
-  guide: FileText,
+  'list-checks': ListChecks,
+  'orbit': Orbit,
+  'bot': Bot,
+  'dna': Dna,
+  'puzzle': Puzzle,
+  'check-circle': CheckCircle,
+  'trophy': Trophy,
+  'file-text': FileText,
 };
 
 function CourseModuleItem({ module, index, id }: { module: CourseModule, index: number, id: string }) {

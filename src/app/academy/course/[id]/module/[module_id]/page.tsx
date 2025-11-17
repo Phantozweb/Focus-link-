@@ -7,13 +7,14 @@ import { retinoscopyModules } from '@/lib/data/course-modules';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, CheckCircle, Info, Lightbulb, PlayCircle, Video, XCircle, Orbit, ListChecks } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Info, Lightbulb, PlayCircle, Video, XCircle, Orbit, ListChecks, RefreshCw, Eye, Plus, Minus } from 'lucide-react';
 import Link from 'next/link';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const moduleData: { [key: number]: any } = {
   1: {
@@ -181,6 +182,57 @@ function ModulePageClient() {
                                 )}
                             </CardContent>
                          </Card>
+                    </section>
+                );
+            case 10:
+                return (
+                    <section>
+                        <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                            <Eye className="h-6 w-6 text-primary" /> Advanced Patient Simulator
+                        </h3>
+                        <Card>
+                            <CardContent className="p-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <Label htmlFor="patient-type">Patient Type</Label>
+                                        <Select defaultValue="astigmatism">
+                                            <SelectTrigger id="patient-type">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="myope">Myope</SelectItem>
+                                                <SelectItem value="hyperope">Hyperope</SelectItem>
+                                                <SelectItem value="astigmatism">Astigmatism</SelectItem>
+                                                <SelectItem value="mixed">Mixed Astigmatism</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="md:col-span-2">
+                                        <Label>Lens Power</Label>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="outline" size="icon"><Minus className="h-4 w-4" /></Button>
+                                            <Input readOnly value="+1.50 D" className="text-center font-mono" />
+                                            <Button variant="outline" size="icon"><Plus className="h-4 w-4" /></Button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="aspect-video bg-slate-900 rounded-md flex items-center justify-center p-4">
+                                    <p className="text-slate-400 text-center">[Interactive Retinoscopy Reflex Simulation]</p>
+                                </div>
+                                <div className="flex justify-end mt-4">
+                                    <Button variant="secondary">
+                                        <RefreshCw className="mr-2 h-4 w-4" /> New Case
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Alert className="mt-4">
+                            <Lightbulb className="h-4 w-4" />
+                            <AlertTitle>Simulation Goal</AlertTitle>
+                            <AlertDescription>
+                                Practice neutralizing the reflex for different refractive errors. Change the lens power until the reflex fills the entire pupil.
+                            </AlertDescription>
+                        </Alert>
                     </section>
                 );
             default:
