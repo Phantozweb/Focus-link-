@@ -19,9 +19,9 @@ const volunteerRoles = [
     description: 'Organize webinars and global competitions.',
   },
    {
-    icon: <BrainCircuit className="h-6 w-6 text-amber-300" />,
-    title: 'Content & AI Developers',
-    description: 'Contribute to our AI tools and clinical content.',
+    icon: <Briefcase className="h-6 w-6 text-amber-300" />,
+    title: 'Job Board Curators',
+    description: 'Source and verify high-quality clinical job opportunities.',
   },
   {
     icon: <Users className="h-6 w-6 text-emerald-300" />,
