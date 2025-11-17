@@ -147,9 +147,9 @@ export default function TeamApplicationPage() {
                       </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-2">
-                      <AccordionTrigger className="text-lg font-semibold">National Head (e.g., State Head for India)</AccordionTrigger>
+                      <AccordionTrigger className="text-lg font-semibold">National Head (e.g., Country Lead)</AccordionTrigger>
                       <AccordionContent className="text-base text-slate-600">
-                        Lead community growth and engagement within a specific country or a large sub-region like a state in India. Your role is to build a local team, establish relationships with colleges, mentor student leaders, and coordinate country-specific events and campaigns that align with our global mission.
+                        Lead community growth and engagement within a specific country. Your role is to build a local team, establish relationships with colleges, mentor student leaders, and coordinate country-specific events and campaigns that align with our global mission. This is a key leadership role for driving national-level impact.
                       </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-3">
@@ -162,6 +162,18 @@ export default function TeamApplicationPage() {
                       <AccordionTrigger className="text-lg font-semibold">Clinical Content Creator</AccordionTrigger>
                       <AccordionContent className="text-base text-slate-600">
                        Are you passionate about sharing clinical knowledge? Create engaging case studies, educational articles, and quiz questions for our Case Forum and Academy. Help your peers learn by translating complex clinical topics into clear, insightful content.
+                      </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-5">
+                      <AccordionTrigger className="text-lg font-semibold">Community & Social Media Roles</AccordionTrigger>
+                      <AccordionContent className="text-base text-slate-600">
+                       Manage our social media channels, create engaging visual content (as a Graphic Designer), and foster a vibrant, supportive environment as a Community Manager. These roles are vital for growing our reach and keeping our community connected.
+                      </AccordionContent>
+                  </AccordionItem>
+                   <AccordionItem value="item-6">
+                      <AccordionTrigger className="text-lg font-semibold">Tech Contributor (Web/AI/App)</AccordionTrigger>
+                      <AccordionContent className="text-base text-slate-600">
+                       Have skills in web development (React/Next.js), AI, or mobile app development? Join our tech team to help build and improve the Focus Links platform. Your work will directly enhance the tools and features available to the entire community.
                       </AccordionContent>
                   </AccordionItem>
               </Accordion>
