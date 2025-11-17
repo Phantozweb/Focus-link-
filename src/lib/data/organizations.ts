@@ -83,5 +83,41 @@ Our mission is to make quality eye care accessible everywhere. The DrishtiKit ec
     education: [],
     languages: [],
     verified: true,
+  },
+  {
+    id: 'NeuroptoTech',
+    name: 'NeuroptoTech',
+    type: 'Association',
+    experience: 'Global Community for Neuro-Optometry & Technology',
+    location: 'Online / Global',
+    skills: [
+        'Neuro-Optometric Rehabilitation',
+        'Vision Therapy for Brain Injury',
+        'AI in Diagnostic Optometry',
+        'Saccadic & Pursuit Eye Tracking',
+        'Virtual Reality (VR) Therapy',
+        'Visual Evoked Potential (VEP)',
+        'Electroretinography (ERG)'
+    ],
+    interests: [
+        'Acquired Brain Injury (ABI)',
+        'Traumatic Brain Injury (TBI)',
+        'Post-Concussion Vision Syndrome',
+        'Strabismus & Amblyopia',
+        'Vestibular Disorders',
+        'Developmental Delays'
+    ],
+    bio: `NeuroptoTech is a dedicated global community for professionals, researchers, and students passionate about the intersection of neuroscience, optometry, and technology. Our mission is to advance the practice of neuro-optometry by fostering collaboration, sharing cutting-edge research, and promoting innovative technologies.
+
+We serve as a hub for discussions on topics ranging from AI-driven diagnostics for neurological conditions to the use of virtual reality in vision therapy. Whether you are a clinician managing patients with acquired brain injuries, a researcher developing new diagnostic tools, or a student eager to learn about this exciting field, NeuroptoTech provides the platform to connect with pioneers and peers shaping the future of vision and brain health.`,
+    links: {
+      email: 'community.neuroptotech@outlook.com',
+    },
+    avatarUrl: 'https://i.ibb.co/Vvz8r7Y/oct-keratoconus.jpg',
+    gallery: [],
+    workExperience: [],
+    education: [],
+    languages: [],
+    verified: true,
   }
 ];
