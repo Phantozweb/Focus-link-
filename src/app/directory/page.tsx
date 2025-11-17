@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import { allUsers } from '@/lib/data/index';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
@@ -34,12 +35,36 @@ const shuffleArray = (array: any[]) => {
 }
 
 export default function DirectoryPage() {
-  const professionals = shuffleArray([...allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type))]);
-  const associations = shuffleArray([...allUsers.filter(u => u.type === 'Association')]);
-  const colleges = shuffleArray([...allUsers.filter(u => u.type === 'College')]);
-  const clinicsAndOpticals = shuffleArray([...allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type))]);
-  const students = shuffleArray([...allUsers.filter(u => u.type === 'Student')]);
-  const industry = shuffleArray([...allUsers.filter(u => u.type === 'Industry')]);
+  const [shuffledProfessionals, setShuffledProfessionals] = useState<UserProfile[]>([]);
+  const [shuffledAssociations, setShuffledAssociations] = useState<UserProfile[]>([]);
+  const [shuffledColleges, setShuffledColleges] = useState<UserProfile[]>([]);
+  const [shuffledClinics, setShuffledClinics] = useState<UserProfile[]>([]);
+  const [shuffledStudents, setShuffledStudents] = useState<UserProfile[]>([]);
+  const [shuffledIndustry, setShuffledIndustry] = useState<UserProfile[]>([]);
+
+  useEffect(() => {
+    // Filter and shuffle data on the client side to avoid hydration errors
+    setShuffledProfessionals(shuffleArray([...allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type))]));
+    setShuffledAssociations(shuffleArray([...allUsers.filter(u => u.type === 'Association')]));
+    setShuffledColleges(shuffleArray([...allUsers.filter(u => u.type === 'College')]));
+    setShuffledClinics(shuffleArray([...allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type))]));
+    setShuffledStudents(shuffleArray([...allUsers.filter(u => u.type === 'Student')]));
+    setShuffledIndustry(shuffleArray([...allUsers.filter(u => u.type === 'Industry')]));
+  }, []);
+  
+  const professionals = allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type));
+  const associations = allUsers.filter(u => u.type === 'Association');
+  const colleges = allUsers.filter(u => u.type === 'College');
+  const clinicsAndOpticals = allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type));
+  const students = allUsers.filter(u => u.type === 'Student');
+  const industry = allUsers.filter(u => u.type === 'Industry');
+  
+  const displayStudents = shuffledStudents.length > 0 ? shuffledStudents : students;
+  const displayProfessionals = shuffledProfessionals.length > 0 ? shuffledProfessionals : professionals;
+  const displayColleges = shuffledColleges.length > 0 ? shuffledColleges : colleges;
+  const displayAssociations = shuffledAssociations.length > 0 ? shuffledAssociations : associations;
+  const displayIndustry = shuffledIndustry.length > 0 ? shuffledIndustry : industry;
+  const displayClinics = shuffledClinics.length > 0 ? shuffledClinics : clinicsAndOpticals;
 
   return (
     <div className="bg-muted/40">
@@ -63,7 +88,7 @@ export default function DirectoryPage() {
             </div>
              <Carousel opts={{ align: "start" }} className="w-full">
               <CarouselContent className="-ml-4">
-                {students.map((user) => (
+                {displayStudents.map((user) => (
                   <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                     <ProfileCard user={user} />
                   </CarouselItem>
@@ -83,7 +108,7 @@ export default function DirectoryPage() {
             </div>
              <Carousel opts={{ align: "start" }} className="w-full">
               <CarouselContent className="-ml-4">
-                {professionals.map((user) => (
+                {displayProfessionals.map((user) => (
                   <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                     <ProfileCard user={user} />
                   </CarouselItem>
@@ -104,7 +129,7 @@ export default function DirectoryPage() {
             {colleges.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
                 <CarouselContent className="-ml-4">
-                    {colleges.map((user) => (
+                    {displayColleges.map((user) => (
                     <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                         <ProfileCard user={user} />
                     </CarouselItem>
@@ -133,7 +158,7 @@ export default function DirectoryPage() {
             {associations.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
                     <CarouselContent className="-ml-4">
-                        {associations.map((user) => (
+                        {displayAssociations.map((user) => (
                         <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                             <ProfileCard user={user} />
                         </CarouselItem>
@@ -162,7 +187,7 @@ export default function DirectoryPage() {
             {industry.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
                 <CarouselContent className="-ml-4">
-                    {industry.map((user) => (
+                    {displayIndustry.map((user) => (
                     <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                         <ProfileCard user={user} />
                     </CarouselItem>
@@ -191,7 +216,7 @@ export default function DirectoryPage() {
             {clinicsAndOpticals.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
                 <CarouselContent className="-ml-4">
-                    {clinicsAndOpticals.map((user) => (
+                    {displayClinics.map((user) => (
                     <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
                         <ProfileCard user={user} />
                     </CarouselItem>
