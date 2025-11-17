@@ -1,13 +1,13 @@
 
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { retinoscopyModules } from '@/lib/data/course-modules';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, CheckCircle, Info, Lightbulb, PlayCircle, Video, XCircle, Orbit, ListChecks, RefreshCw, Eye, Plus, Minus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Info, Lightbulb, PlayCircle, Video, XCircle, Orbit, ListChecks, RefreshCw, Eye, Plus, Minus, RotateCw } from 'lucide-react';
 import Link from 'next/link';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import { Slider } from '@/components/ui/slider';
 
 const moduleData: { [key: number]: any } = {
   1: {
@@ -74,6 +75,55 @@ function ModulePageClient() {
     const [selectedReflexAnswer, setSelectedReflexAnswer] = useState<string | null>(null);
     const [score, setScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
+
+    // State for Module 10 Simulator
+    const [refractiveError, setRefractiveError] = useState({ sphere: 0, cylinder: 0, axis: 90 });
+    const [trialLens, setTrialLens] = useState({ sphere: 0, cylinder: 0, axis: 90 });
+    const [streakRotation, setStreakRotation] = useState(90);
+    const [isNeutralized, setIsNeutralized] = useState(false);
+
+    useEffect(() => {
+        if(moduleId === 10) {
+            generateNewCase();
+        }
+    }, [moduleId]);
+
+    const generateNewCase = () => {
+        const sphere = (Math.floor(Math.random() * 8) - 4) * 0.5; // -2.00 to +1.50
+        const cylinder = -Math.floor(Math.random() * 5) * 0.5; // 0.00 to -2.00
+        const axis = Math.floor(Math.random() * 180);
+        setRefractiveError({ sphere, cylinder, axis });
+        setTrialLens({ sphere: 0, cylinder: 0, axis: 90 });
+        setStreakRotation(90);
+        setIsNeutralized(false);
+    };
+
+    const getReflexDetails = () => {
+        const workingDistance = -1.5; // Assuming a 67cm working distance
+        const netSphere = refractiveError.sphere - (trialLens.sphere + workingDistance);
+        
+        // This is a simplified model for demonstration
+        const powerAtStreakAxis = netSphere + refractiveError.cylinder * Math.pow(Math.sin(Math.PI / 180 * (streakRotation - refractiveError.axis)), 2);
+
+        let motion: 'with' | 'against' | 'neutral' = 'neutral';
+        if (powerAtStreakAxis > 0.25) motion = 'against';
+        if (powerAtStreakAxis < -0.25) motion = 'with';
+        
+        const speed = 1 / (Math.abs(powerAtStreakAxis) + 0.1);
+        const width = 20 / (Math.abs(powerAtStreakAxis) + 1);
+
+        if (Math.abs(powerAtStreakAxis) < 0.25) {
+             const remainingCyl = refractiveError.cylinder + trialLens.cylinder;
+             if(Math.abs(remainingCyl) < 0.25) setIsNeutralized(true);
+             else setIsNeutralized(false);
+        } else {
+            setIsNeutralized(false);
+        }
+
+        return { motion, speed, width };
+    };
+
+    const simulatorReflex = getReflexDetails();
 
     
     if (!module) {
@@ -334,36 +384,79 @@ function ModulePageClient() {
                             <Eye className="h-6 w-6 text-primary" /> Advanced Patient Simulator
                         </h3>
                         <Card>
-                            <CardContent className="p-4">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                    <div>
-                                        <Label htmlFor="patient-type">Patient Type</Label>
-                                        <Select defaultValue="astigmatism">
-                                            <SelectTrigger id="patient-type">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="myope">Myope</SelectItem>
-                                                <SelectItem value="hyperope">Hyperope</SelectItem>
-                                                <SelectItem value="astigmatism">Astigmatism</SelectItem>
-                                                <SelectItem value="mixed">Mixed Astigmatism</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                            <CardContent className="p-4 md:p-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    {/* Controls */}
+                                    <div className="space-y-4">
+                                        <Card>
+                                            <CardHeader className="p-3"><CardTitle className="text-base">Patient's Rx (Hidden)</CardTitle></CardHeader>
+                                            <CardContent className="p-3 pt-0 text-sm text-muted-foreground">
+                                                <p>Sphere: {refractiveError.sphere.toFixed(2)} D</p>
+                                                <p>Cylinder: {refractiveError.cylinder.toFixed(2)} D</p>
+                                                <p>Axis: {refractiveError.axis}°</p>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                            <CardHeader className="p-3"><CardTitle className="text-base">Trial Lens Power</CardTitle></CardHeader>
+                                            <CardContent className="p-3 pt-0 space-y-2">
+                                                <div className="flex items-center gap-2">
+                                                    <Label htmlFor="trial-sphere" className="w-16">Sphere</Label>
+                                                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setTrialLens(p => ({...p, sphere: p.sphere - 0.25}))}><Minus className="h-4 w-4" /></Button>
+                                                    <Input id="trial-sphere" readOnly value={`${trialLens.sphere.toFixed(2)} D`} className="text-center font-mono h-8" />
+                                                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setTrialLens(p => ({...p, sphere: p.sphere + 0.25}))}><Plus className="h-4 w-4" /></Button>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                             <CardHeader className="p-3"><CardTitle className="text-base">Streak Rotation</CardTitle></CardHeader>
+                                             <CardContent className="p-3 pt-0 space-y-2">
+                                                <div className="flex items-center gap-2">
+                                                    <Slider defaultValue={[90]} value={[streakRotation]} max={180} step={1} onValueChange={(v) => setStreakRotation(v[0])} />
+                                                    <Input readOnly value={`${streakRotation}°`} className="w-20 text-center font-mono h-8" />
+                                                </div>
+                                             </CardContent>
+                                        </Card>
                                     </div>
-                                    <div className="md:col-span-2">
-                                        <Label>Lens Power</Label>
-                                        <div className="flex items-center gap-2">
-                                            <Button variant="outline" size="icon"><Minus className="h-4 w-4" /></Button>
-                                            <Input readOnly value="+1.50 D" className="text-center font-mono" />
-                                            <Button variant="outline" size="icon"><Plus className="h-4 w-4" /></Button>
+                                    {/* Simulation View */}
+                                    <div className="flex flex-col items-center justify-center bg-slate-900 rounded-lg p-4 space-y-4">
+                                        <div className="w-40 h-40 rounded-full bg-black flex items-center justify-center overflow-hidden border-4 border-slate-700 relative">
+                                            {/* Pupil */}
+                                            <div className="absolute inset-0 bg-red-900/30"></div>
+                                            
+                                            {/* Reflex */}
+                                            <div 
+                                                className="bg-orange-400/80 rounded-full"
+                                                style={{
+                                                    height: '120%',
+                                                    width: `${simulatorReflex.width}px`,
+                                                    transform: `rotate(${streakRotation}deg)`,
+                                                    animation: simulatorReflex.motion === 'with' ? `move 1s linear infinite` : simulatorReflex.motion === 'against' ? `move-rev 1s linear infinite` : 'none',
+                                                    transition: 'width 0.3s ease',
+                                                    opacity: simulatorReflex.motion === 'neutral' ? 1 : 0.8,
+                                                }}
+                                            ></div>
+                                             <style>{`
+                                                @keyframes move { 0% { transform: translate(-10px, -10px) rotate(${streakRotation}deg); } 100% { transform: translate(10px, 10px) rotate(${streakRotation}deg); } }
+                                                @keyframes move-rev { 0% { transform: translate(10px, 10px) rotate(${streakRotation}deg); } 100% { transform: translate(-10px, -10px) rotate(${streakRotation}deg); } }
+                                            `}</style>
                                         </div>
+                                         <div className="text-center text-white">
+                                            <p className="font-mono text-lg">
+                                                {simulatorReflex.motion.charAt(0).toUpperCase() + simulatorReflex.motion.slice(1)} Motion
+                                            </p>
+                                            <p className="text-sm text-slate-400">
+                                                Speed: {simulatorReflex.speed.toFixed(1)}x, Width: {simulatorReflex.width.toFixed(1)}px
+                                            </p>
+                                        </div>
+                                         {isNeutralized && (
+                                            <div className="bg-green-500 text-white font-bold py-1 px-3 rounded-full text-sm">
+                                                NEUTRALIZED!
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                                <div className="aspect-video bg-slate-900 rounded-md flex items-center justify-center p-4">
-                                    <p className="text-slate-400 text-center">[Interactive Retinoscopy Reflex Simulation]</p>
                                 </div>
                                 <div className="flex justify-end mt-4">
-                                    <Button variant="secondary">
+                                    <Button onClick={generateNewCase} variant="secondary">
                                         <RefreshCw className="mr-2 h-4 w-4" /> New Case
                                     </Button>
                                 </div>
@@ -373,7 +466,7 @@ function ModulePageClient() {
                             <Lightbulb className="h-4 w-4" />
                             <AlertTitle>Simulation Goal</AlertTitle>
                             <AlertDescription>
-                                Practice neutralizing the reflex for different refractive errors. Change the lens power until the reflex fills the entire pupil.
+                                Your working distance is <strong>-1.50 D</strong>. Adjust the sphere power until you see neutral motion. Then, if astigmatism is present, find the two principal meridians, neutralize them, and calculate the final prescription.
                             </AlertDescription>
                         </Alert>
                     </section>
@@ -436,5 +529,7 @@ export default function ModulePage() {
         </Suspense>
     );
 }
+
+    
 
     
