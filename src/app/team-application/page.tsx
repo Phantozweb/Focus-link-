@@ -94,16 +94,6 @@ const roleDetails = [
       "Collaborate with a team of developers shaping the future of eye care technology."
     ],
     benefits: "Gain hands-on experience with a modern tech stack (Next.js, React, Genkit), build a portfolio of impactful work, and solve real-world problems for a global community."
-  },
-  {
-    role: "Community & Social Media Roles",
-    mission: "Foster a vibrant, supportive, and rapidly growing community across all our digital platforms.",
-    responsibilities: [
-      "Manage and grow our presence on LinkedIn, Instagram, and other social channels (Social Media Manager).",
-      "Create engaging visual content, infographics, and event branding (Graphic Designer).",
-      "Moderate discussions, welcome new members, and facilitate connections within our community forums (Community Manager)."
-    ],
-    benefits: "Develop valuable digital marketing and community management skills, express your creativity on a global stage, and be the voice of a leading brand in the eye care industry."
   }
 ];
 
