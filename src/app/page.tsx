@@ -18,7 +18,7 @@ import { TimeAgo } from '@/components/time-ago';
 import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 import { HomepageSearch } from '@/components/homepage-search';
 import { AnimatedSearchCard } from '@/components/animated-search-card';
-import { AnimatedCommunityUpdateCard } from '@/components/animated-community-update-card';
+import { AnimatedTeamApplicationCard } from '@/components/animated-team-application-card';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -108,7 +108,7 @@ export default async function Home() {
     },
     {
       isAnimated: true,
-      component: <AnimatedCommunityUpdateCard />,
+      component: <AnimatedTeamApplicationCard />,
     },
     {
       title: "350+ Members in our WhatsApp Community",
