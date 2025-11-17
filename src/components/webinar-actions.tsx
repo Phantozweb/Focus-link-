@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award, Download, Share2 } from 'lucide-react';
+import { PlayCircle, Ticket, Calendar, Clock, Info, XCircle, CheckCircle, UserPlus, Users, Trophy, Lock, Bell, Loader2, BarChart, MessageCircle, Award, Download, Share2, BookOpen } from 'lucide-react';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -271,7 +271,8 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     });
     const [isRegistered, setIsRegistered] = useState(false);
     const [showCertificateInfo, setShowCertificateInfo] = useState(false);
-    const isQuiz = webinar.id === 'eye-q-arena-2025';
+    const isQuiz = webinar.type === 'Quiz';
+    const isCourse = webinar.type === 'Course';
 
     useEffect(() => {
         const calculateState = () => {
@@ -322,6 +323,24 @@ export function WebinarActions({ webinar }: WebinarActionsProps) {
     };
 
     const renderContent = () => {
+        if (isCourse) {
+            return (
+                <div className="space-y-4 text-center">
+                    <div className="p-4 bg-blue-50 border-blue-200 rounded-lg text-center">
+                        <BookOpen className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                        <h4 className="font-bold text-blue-800">On-Demand Course</h4>
+                        <p className="text-sm text-blue-700 mt-1">This course is available to start anytime. Learn at your own pace.</p>
+                    </div>
+                     <Button size="lg" className="w-full text-lg py-6" asChild>
+                        <Link href={`/academy/course/${webinar.id}`}>
+                            <PlayCircle className="mr-2 h-6 w-6" />
+                            Start Course
+                        </Link>
+                    </Button>
+                </div>
+            );
+        }
+
          if (isRegistered && !isQuiz && (status === 'UPCOMING' || status === 'REGISTRATION_CLOSED')) {
              return (
                  <div className="text-center p-4 bg-green-50 border-green-200 border rounded-lg">

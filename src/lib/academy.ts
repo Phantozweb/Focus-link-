@@ -17,6 +17,7 @@ export type Webinar = {
   duration: string;
   tags: string[];
   registrationLink: string;
+  type: 'Webinar' | 'Quiz' | 'Course';
   attendance?: {
     registered: number;
     attended: number;
@@ -70,6 +71,7 @@ This course is invaluable for optometry students, interns, and early-career opto
     duration: '5 days',
     tags: ['Retinoscopy', 'Objective Refraction', 'Clinical Skills', 'Course', 'AI in Optometry'],
     registrationLink: '#',
+    type: 'Course',
   },
   {
     id: 'webinar-clik-1',
@@ -89,6 +91,7 @@ This course is invaluable for optometry students, interns, and early-career opto
     duration: '60 minutes',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Past Event'],
     registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
+    type: 'Webinar',
     attendance: {
       registered: 114,
       attended: 82,
@@ -138,5 +141,6 @@ Participants competed on their knowledge from the anterior to the posterior segm
     duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
+    type: 'Quiz'
   }
 ];

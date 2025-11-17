@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv, Share2, Quote } from 'lucide-react';
+import { ArrowLeft, User, Info, Video, Users, Tag, CheckCircle, Award, Trophy, Star, Tv, Share2, Quote, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { Separator } from '@/components/ui/separator';
@@ -39,10 +39,14 @@ export async function generateMetadata(
   let keywords = ['optometry quiz', 'eye care competition', 'clinical knowledge', 'anterior segment', 'posterior segment', ...webinar.tags];
   let title = `${webinar.title} | Focus Links Academy`;
   
-  if (webinar.id === 'eye-q-arena-2025') {
+  if (webinar.type === 'Quiz') {
     title = 'Eye Q Arena 2025: Results & Highlights | Focus Links';
     description = 'The Eye Q Arena 2025 has concluded! See the final leaderboard, read testimonials, and learn about the winners of the international optometry knowledge championship.';
     keywords.push('quiz results', 'optometry winner', 'leaderboard');
+  } else if (webinar.type === 'Course') {
+     title = `${webinar.title} | Focus Links Academy`;
+     description = 'Master objective refraction with our 5-day interactive retinoscopy course. Featuring AI simulations, 3D models, and hands-on exercises for optometry students and professionals.';
+     keywords.push('retinoscopy course', 'objective refraction', 'optometry training', 'clinical simulation');
   }
 
   return {
@@ -110,6 +114,22 @@ const OrganizerInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
     </section>
 );
 
+const CourseCreatorInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
+     <section>
+        <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Course Visionary</h3>
+        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 border rounded-lg bg-slate-50">
+            <Avatar className="h-28 w-28">
+                <AvatarImage src={webinar.speaker.avatarUrl} alt={webinar.speaker.name} data-ai-hint="portrait person" />
+                <AvatarFallback className="text-4xl">{webinar.speaker.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+                <p className="font-bold text-2xl text-slate-800">{webinar.speaker.name}</p>
+                <p className="text-lg text-muted-foreground">{webinar.speaker.title}</p>
+            </div>
+        </div>
+    </section>
+);
+
 const DefaultSpeakerInfo = ({webinar}: {webinar: (typeof webinars)[0]}) => (
     <section>
         <h3 className="text-2xl font-bold font-headline mb-6 text-slate-800">About the Speaker</h3>
@@ -159,7 +179,8 @@ const Testimonials = () => (
 
 export default function WebinarDetailPage({ params }: WebinarPageProps) {
   const webinar = webinars.find(w => w.id === params.id);
-  const isQuiz = webinar?.id === 'eye-q-arena-2025';
+  const isQuiz = webinar?.type === 'Quiz';
+  const isCourse = webinar?.type === 'Course';
 
   if (!webinar) {
     notFound();
@@ -167,30 +188,32 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
   const eventSchema = {
     "@context": "https://schema.org",
-    "@type": "Event",
+    "@type": isCourse ? "Course" : "Event",
     "name": webinar.title,
-    "startDate": webinar.dateTime,
     "description": (webinar.description || '').replace(/<[^>]*>/g, '').replace(/\*+/g, '').replace(/###/g, '').replace(/\n/g, ' ').replace(/\|/g, ''),
-    "eventStatus": "https://schema.org/EventCompleted",
-    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-    "location": {
-      "@type": "VirtualLocation",
-      "url": "https://focuslinks.pro/academy/eye-q-arena-2025"
+    "organizer": {
+      "@type": "Organization",
+      "name": webinar.host.name,
+      "url": "https://focuslinks.pro"
     },
+    ...(!isCourse && {
+      "startDate": webinar.dateTime,
+      "eventStatus": "https://schema.org/EventCompleted",
+      "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+      "location": {
+        "@type": "VirtualLocation",
+        "url": `https://focuslinks.pro/academy/${webinar.id}`
+      },
+    }),
     "image": webinar.speaker.avatarUrl,
     "performer": {
       "@type": "Person",
       "name": webinar.speaker.name
     },
-    "organizer": {
-      "@type": "Organization",
-      "name": webinar.host.name,
-      "url": "https://focuslinks.pro"
-    }
   };
   
   const { description, highlights, quizModules } = (() => {
-    if (isQuiz) {
+    if (isQuiz || isCourse) {
       const parts = (webinar.description || '').split('### Event Highlights:');
       const mainDesc = parts[0];
       const highlightsAndModules = parts[1] || '';
@@ -206,6 +229,8 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
 
   const founderNote = isQuiz
     ? `"The Eye Q Arena 2025 has been a monumental success, far exceeding our expectations. I want to extend my deepest gratitude to my esteemed lecturer, V.M. Ramkumar, whose guidance was invaluable. A massive thank you to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited to see you on the leaderboard and can't wait for the next event!"`
+    : isCourse
+    ? `"This interactive course represents our commitment to leveraging technology for better education. We wanted to create an experience that goes beyond traditional lectures, allowing students to learn by doing. I'm thrilled to offer this as a free resource to help elevate the skills of the next generation of eye care professionals."`
     : `"This webinar marked a significant milestone for Focus Links. I want to extend my deepest gratitude to our esteemed speaker, Abhishek Kumar Banaita, for sharing his invaluable expertise. A special thank you to our Organizer, Mohd Asad, for his exceptional organization, and to every participant who joined us. Your engagement and passion are what make this community thrive. We are incredibly excited for what's to come!"`;
 
   return (
@@ -285,7 +310,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                       
                       {isQuiz && <Testimonials />}
                       
-                      <Separator />
+                      {isQuiz && <Separator />}
                       
                       <section>
                           <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Event Details</h2>
@@ -297,13 +322,13 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                   <div className="flex items-start gap-3">
                                       <Users className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
-                                          <h4 className="font-semibold">Organizer</h4>
-                                          <p className="text-sm text-muted-foreground">Organized by {webinar.speaker.name}</p>
+                                          <h4 className="font-semibold">{isCourse ? 'Course Creator' : 'Organizer'}</h4>
+                                          <p className="text-sm text-muted-foreground">{isCourse ? 'Created' : 'Organized'} by {webinar.speaker.name}</p>
                                           <p className="text-sm text-muted-foreground">Powered by Focus Links</p>
                                       </div>
                                   </div>
                                   <div className="flex items-start gap-3">
-                                      <Tv className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      {isCourse ? <BookOpen className="h-5 w-5 text-primary mt-1 flex-shrink-0" /> : <Tv className="h-5 w-5 text-primary mt-1 flex-shrink-0" />}
                                       <div>
                                           <h4 className="font-semibold">Platform</h4>
                                           <p className="text-sm text-muted-foreground">Hosted by Focus Links</p>
@@ -334,7 +359,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                                       <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                       <div>
                                           <h4 className="font-semibold">Event Status</h4>
-                                          <p className="text-sm text-muted-foreground">This event has now concluded.</p>
+                                          <p className="text-sm text-muted-foreground">{isCourse ? 'This course is available on-demand.' : 'This event has now concluded.'}</p>
                                       </div>
                                   </div>
                               </CardContent>
@@ -343,7 +368,7 @@ export default function WebinarDetailPage({ params }: WebinarPageProps) {
                       
                       <Separator />
 
-                      {isQuiz ? <OrganizerInfo webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
+                      {isQuiz ? <OrganizerInfo webinar={webinar} /> : isCourse ? <CourseCreatorInfo webinar={webinar} /> : <DefaultSpeakerInfo webinar={webinar} />}
 
                        {isQuiz && (
                         <>
