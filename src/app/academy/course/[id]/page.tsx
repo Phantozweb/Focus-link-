@@ -4,7 +4,7 @@
 import { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BookOpen, PlayCircle, Video, Bot, ListChecks, Orbit, Dna, Puzzle, Star, FileText, CheckCircle, Trophy } from 'lucide-react';
+import { ArrowLeft, BookOpen, PlayCircle, Video, Bot, ListChecks, Orbit, Dna, Puzzle, Star, FileText, CheckCircle, Trophy, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -24,13 +24,15 @@ const iconMap: { [key: string]: React.ElementType } = {
   guide: FileText,
 };
 
-function CourseModuleItem({ module, index, isCompleted }: { module: CourseModule, index: number, isCompleted: boolean }) {
+function CourseModuleItem({ module, index, isCompleted, id }: { module: CourseModule, index: number, isCompleted: boolean, id: string }) {
+  const isEnabled = index === 0; // Only enable the first module for now
+
   return (
     <AccordionItem value={`item-${index}`}>
-      <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+      <AccordionTrigger className="text-lg font-semibold hover:no-underline disabled:opacity-50" disabled={!isEnabled}>
         <div className="flex items-center gap-4">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-full text-white ${isCompleted ? 'bg-green-600' : 'bg-primary'}`}>
-            {isCompleted ? <CheckCircle className="h-6 w-6" /> : <span className="text-xl font-bold">{index + 1}</span>}
+          <div className={`flex h-10 w-10 items-center justify-center rounded-full text-white ${isCompleted ? 'bg-green-600' : isEnabled ? 'bg-primary' : 'bg-slate-400'}`}>
+            {isCompleted ? <CheckCircle className="h-6 w-6" /> : isEnabled ? <span className="text-xl font-bold">{index + 1}</span> : <Lock className="h-5 w-5" />}
           </div>
           <span className="text-left">{module.title}</span>
         </div>
@@ -48,9 +50,18 @@ function CourseModuleItem({ module, index, isCompleted }: { module: CourseModule
                 );
             })}
         </div>
-        <Button size="sm" disabled>
-          <PlayCircle className="mr-2 h-4 w-4" />
-          Start Module
+        <Button size="sm" asChild={isEnabled} disabled={!isEnabled}>
+           {isEnabled ? (
+             <Link href={`/academy/course/${id}/module/${index + 1}`}>
+                <PlayCircle className="mr-2 h-4 w-4" />
+                Start Module
+             </Link>
+           ) : (
+            <>
+              <PlayCircle className="mr-2 h-4 w-4" />
+              Start Module
+            </>
+           )}
         </Button>
       </AccordionContent>
     </AccordionItem>
@@ -83,7 +94,7 @@ function CoursePageClient() {
            <CardContent className="p-6 md:p-8">
               <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
                 {retinoscopyModules.map((module, index) => (
-                    <CourseModuleItem key={index} module={module} index={index} isCompleted={false} />
+                    <CourseModuleItem key={index} module={module} index={index} isCompleted={false} id={id} />
                 ))}
             </Accordion>
             <div className="text-center mt-8">
