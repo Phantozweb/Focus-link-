@@ -1,14 +1,17 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { ArrowRight, Globe, Award, Handshake, Calendar, Briefcase, Code, BrainCircuit, Users } from 'lucide-react';
 import { Button } from './ui/button';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { Card, CardContent } from './ui/card';
 
 const volunteerRoles = [
   {
     icon: <Globe className="h-6 w-6 text-indigo-300" />,
     title: 'Regional & National Leaders',
-    description: 'Lead strategy and partnerships in your region.',
+    description: 'Lead strategy and build partnerships in your region.',
   },
   {
     icon: <Calendar className="h-6 w-6 text-rose-300" />,
@@ -28,6 +31,16 @@ const volunteerRoles = [
 ];
 
 export function AnimatedTeamApplicationCard() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % volunteerRoles.length);
+    }, 3000); // Change role every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative rounded-xl p-6 sm:p-8 flex flex-col justify-between shadow-lg bg-slate-900 border border-slate-800 overflow-hidden h-full">
         <div className="absolute inset-0 bg-grid-slate-800 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]"></div>
@@ -38,16 +51,22 @@ export function AnimatedTeamApplicationCard() {
             </h3>
             <p className="text-slate-400 text-sm sm:text-base">We are a volunteer-driven community. Join our global team to lead, innovate, and connect the world of vision.</p>
 
-            <div className="mt-6 space-y-2">
-                {volunteerRoles.map((role) => (
-                    <div key={role.title} className="group relative rounded-lg p-3 bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 transition-all duration-300">
-                        <div className="flex items-center gap-4">
+            <div className="relative h-20 mt-6">
+                {volunteerRoles.map((role, index) => (
+                    <div 
+                        key={index} 
+                        className={cn(
+                            "absolute w-full transition-all duration-500 ease-in-out",
+                            index === currentIndex ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+                        )}
+                    >
+                         <div className="flex items-center gap-4">
                             <div className="flex-shrink-0">
                                 {role.icon}
                             </div>
                             <div className="flex-grow">
                                 <h4 className="font-semibold text-white">{role.title}</h4>
-                                <p className="text-sm text-slate-400 h-5 group-hover:h-auto group-hover:opacity-100 opacity-0 transition-all duration-300">
+                                <p className="text-sm text-slate-400">
                                   {role.description}
                                 </p>
                             </div>
