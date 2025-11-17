@@ -24,15 +24,15 @@ const iconMap: { [key: string]: React.ElementType } = {
   guide: FileText,
 };
 
-function CourseModuleItem({ module, index, isCompleted, id }: { module: CourseModule, index: number, isCompleted: boolean, id: string }) {
-  const isEnabled = index === 0; // Only enable the first module for now
+function CourseModuleItem({ module, index, id }: { module: CourseModule, index: number, id: string }) {
+  const isCompleted = false; // Placeholder for future progress tracking
 
   return (
     <AccordionItem value={`item-${index}`}>
-      <AccordionTrigger className="text-lg font-semibold hover:no-underline disabled:opacity-50" disabled={!isEnabled}>
+      <AccordionTrigger className="text-lg font-semibold hover:no-underline">
         <div className="flex items-center gap-4">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-full text-white ${isCompleted ? 'bg-green-600' : isEnabled ? 'bg-primary' : 'bg-slate-400'}`}>
-            {isCompleted ? <CheckCircle className="h-6 w-6" /> : isEnabled ? <span className="text-xl font-bold">{index + 1}</span> : <Lock className="h-5 w-5" />}
+          <div className={`flex h-10 w-10 items-center justify-center rounded-full text-white ${isCompleted ? 'bg-green-600' : 'bg-primary'}`}>
+            {isCompleted ? <CheckCircle className="h-6 w-6" /> : <span className="text-xl font-bold">{index + 1}</span>}
           </div>
           <span className="text-left">{module.title}</span>
         </div>
@@ -50,18 +50,11 @@ function CourseModuleItem({ module, index, isCompleted, id }: { module: CourseMo
                 );
             })}
         </div>
-        <Button size="sm" asChild={isEnabled} disabled={!isEnabled}>
-           {isEnabled ? (
-             <Link href={`/academy/course/${id}/module/${index + 1}`}>
-                <PlayCircle className="mr-2 h-4 w-4" />
-                Start Module
-             </Link>
-           ) : (
-            <>
+        <Button size="sm" asChild>
+           <Link href={`/academy/course/${id}/module/${index + 1}`}>
               <PlayCircle className="mr-2 h-4 w-4" />
               Start Module
-            </>
-           )}
+           </Link>
         </Button>
       </AccordionContent>
     </AccordionItem>
@@ -94,7 +87,7 @@ function CoursePageClient() {
            <CardContent className="p-6 md:p-8">
               <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
                 {retinoscopyModules.map((module, index) => (
-                    <CourseModuleItem key={index} module={module} index={index} isCompleted={false} id={id} />
+                    <CourseModuleItem key={index} module={module} index={index} id={id} />
                 ))}
             </Accordion>
             <div className="text-center mt-8">
