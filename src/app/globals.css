@@ -82,7 +82,7 @@
   }
   
   .navbar {
-    @apply bg-white py-4 px-6 flex justify-between items-center sticky top-0 z-50 shadow-sm;
+    @apply bg-white/90 py-4 px-6 flex justify-between items-center sticky top-0 z-50 shadow-sm backdrop-blur-md border-b;
   }
   
   .brand {
@@ -98,19 +98,14 @@
     @apply font-semibold text-brand-dark;
   }
 
-
   .hero {
-    background: var(--hero-gradient);
-    color: white;
+    @apply bg-hero-gradient text-white text-center rounded-b-[40px] mb-8;
     padding: 60px 20px 80px;
-    text-align: center;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-    margin-bottom: 30px;
   }
 
   .search-box {
-    @apply bg-white p-2 rounded-full flex items-center max-w-lg mx-auto shadow-search -translate-y-10;
+    @apply bg-white p-2 rounded-full flex items-center max-w-lg mx-auto shadow-search;
+    transform: translateY(40px); /* Pushes it half out of hero */
   }
   .search-input {
     @apply border-none outline-none flex-1 py-3 px-5 text-base rounded-full;
@@ -139,27 +134,17 @@
   }
 
   .section-header {
-    @apply flex justify-between items-baseline mb-5;
+    @apply flex justify-between items-baseline;
   }
   .section-title {
-    @apply text-xl font-bold text-brand-dark;
+    @apply text-xl font-bold text-brand-dark flex items-center gap-3;
   }
   .view-all {
     @apply text-brand-blue text-sm font-semibold no-underline;
   }
-
-  .scroll-container {
-    @apply flex gap-5 overflow-x-auto pb-10;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .scroll-container::-webkit-scrollbar {
-    display: none;
-  }
   
   .profile-card {
-    @apply min-w-[280px] bg-white p-6 rounded-3xl text-center shadow-soft transition-transform duration-300 ease-in-out border border-transparent flex flex-col;
+    @apply bg-white p-6 rounded-3xl text-center shadow-soft transition-transform duration-300 ease-in-out border border-transparent flex flex-col h-full;
   }
   .profile-card:hover {
     @apply -translate-y-2 shadow-hover;
@@ -171,7 +156,7 @@
     @apply w-full h-full rounded-full object-cover border-4 border-blue-50;
   }
   .verified-badge {
-    @apply absolute bottom-1 right-0 text-brand-blue bg-white rounded-full p-0.5 text-2xl;
+    @apply absolute bottom-1 right-0 bg-white rounded-full p-0.5 text-2xl;
   }
   .p-name {
     @apply text-lg font-bold text-brand-dark mb-1;
@@ -224,34 +209,11 @@
     @apply text-slate-300;
   }
 
-  .logo-card {
-    @apply min-w-[160px] h-44 bg-white rounded-3xl flex flex-col items-center justify-center text-center p-5 shadow-soft border border-slate-50;
-  }
-  .logo-icon {
-    @apply text-4xl text-brand-blue mb-4 opacity-80;
-  }
-  .logo-name {
-    @apply font-bold text-sm leading-tight mb-2.5;
-  }
-
   .empty-state {
     @apply p-12 text-center border-2 border-dashed border-slate-300 rounded-3xl bg-slate-50;
   }
   .empty-icon {
     @apply text-5xl text-slate-300 mb-4;
-  }
-
-  .f-links {
-    @apply grid grid-cols-2 md:grid-cols-4 gap-8 mb-10;
-  }
-  .f-col h4 {
-    @apply mb-5 font-semibold;
-  }
-  .f-col a {
-    @apply block text-slate-400 no-underline mb-3 text-sm;
-  }
-  .f-copy {
-    @apply text-center text-slate-500 text-xs;
   }
 
   .dock {

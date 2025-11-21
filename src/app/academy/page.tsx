@@ -6,19 +6,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
-import { WebinarBanner } from '@/components/webinar-banner';
 import { useState, useEffect } from 'react';
-import type { Metadata } from 'next';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { cn } from '@/lib/utils';
+
 
 export default function AcademyPage() {
   const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
   const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
   const [pastWebinars, setPastWebinars] = useState<typeof webinars>([]);
+  const [activeFilter, setActiveFilter] = useState('All');
 
   useEffect(() => {
     const now = new Date().getTime();
@@ -32,7 +32,7 @@ export default function AcademyPage() {
       const durationParts = w.duration.split(' ');
       const durationValue = parseInt(durationParts[0], 10);
       const isQuiz = w.id === 'eye-q-arena-2025';
-      const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24) : (1000 * 60);
+      const durationMultiplier = isQuiz ? (1000 * 60 * 60 * 24 * 11) : (1000 * 60);
       const endTime = startTime + (durationValue * durationMultiplier);
 
       if (now >= startTime && now < endTime) {
@@ -48,135 +48,179 @@ export default function AcademyPage() {
     setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
     setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
   }, []);
+  
+  const filters = ['All', 'Webinars', 'Courses', 'Audio', 'E-Books', 'Resources'];
 
   return (
     <div className="bg-brand-bg">
-      {/* Hero Section */}
       <header className="hero">
-          <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Academy & Events</h1>
-          <p className="text-base opacity-90 max-w-xl mx-auto">
-            Stay at the forefront of vision care with expert-led sessions on the latest research, clinical techniques, and industry innovations.
-          </p>
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Academy & Knowledge Hub</h1>
+        <p className="text-base opacity-90 max-w-xl mx-auto mb-8">
+            Your all-in-one destination for webinars, courses, ebooks, and clinical resources.
+        </p>
+         <div className="filter-scroll-container">
+            <div className="flex justify-center gap-2 overflow-x-auto pb-2">
+              {filters.map(filter => (
+                <button 
+                  key={filter} 
+                  onClick={() => setActiveFilter(filter)}
+                  className={cn(
+                    "px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors",
+                    activeFilter === filter 
+                      ? 'bg-white text-primary' 
+                      : 'bg-white/20 text-white hover:bg-white/30'
+                  )}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+        </div>
       </header>
 
-      <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-16">
-        {/* Live Webinars */}
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-16 mt-16">
+        
         {liveWebinars.length > 0 && (
           <section>
-            <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800 flex items-center gap-3">
-              <Radio className="h-8 w-8 text-red-500 animate-pulse" />
-              Live Now
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {liveWebinars.map(webinar => (
-                <Card key={webinar.id} className="group overflow-hidden rounded-3xl shadow-soft hover:shadow-hover transition-shadow duration-300 h-full flex flex-col">
-                  <Link href={`/academy/${webinar.id}`} className="block">
-                    <div className="relative w-full aspect-video">
-                      <WebinarBanner webinar={webinar} variant="card" />
-                    </div>
-                  </Link>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                      <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
-                    </h3>
-                    <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                        <WebinarTime dateTime={webinar.dateTime} />
-                    </div>
-                    
-                    <Button asChild className="w-full mt-4 rounded-full-btn" variant="destructive">
-                      <Link href={`/academy/${webinar.id}`}>
-                        {webinar.id === 'eye-q-arena-2025' ? (
-                          <><Trophy className="mr-2 h-4 w-4" /> Enter The Quiz</>
-                        ) : 'Join Live'}
-                      </Link>
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+            <div className="section-header mb-4">
+                <h2 className="section-title"><Radio className="text-red-500" /> Live Now</h2>
             </div>
+             <Card className="overflow-hidden shadow-soft border-l-4 border-destructive">
+                <div className="md:flex">
+                    <div className="p-4 bg-red-50 text-center flex md:flex-col items-center justify-center min-w-[120px]">
+                        <span className="text-4xl font-bold text-destructive">24</span>
+                        <span className="font-semibold text-muted-foreground ml-2 md:ml-0">NOV</span>
+                    </div>
+                    <div className="p-6 flex-grow">
+                        <Badge variant="destructive" className="animate-pulse mb-2"><Radio className="h-3 w-3 mr-1.5" /> Live Webinar</Badge>
+                        <h3 className="text-xl font-bold font-headline text-slate-800">Advanced Scleral Lens Fitting</h3>
+                        <p className="text-muted-foreground mt-1 mb-4 text-sm">Join Dr. Sarah Miller as she demonstrates live fitting techniques on complex cornea cases.</p>
+                        <Button>Join Room</Button>
+                    </div>
+                </div>
+            </Card>
           </section>
         )}
 
-        {/* Upcoming Webinars */}
-        {upcomingWebinars.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Events</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {upcomingWebinars.map(webinar => (
-                <Card key={webinar.id} className="group overflow-hidden rounded-3xl shadow-soft hover:shadow-hover transition-shadow duration-300 h-full flex flex-col">
-                  <Link href={`/academy/${webinar.id}`} className="block">
-                    <div className="relative w-full aspect-video">
-                      <WebinarBanner webinar={webinar} variant="card" />
-                    </div>
-                  </Link>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                        <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
-                    </h3>
-                    <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                      <WebinarTime dateTime={webinar.dateTime} />
-                    </div>
-                    <Button asChild className="w-full mt-4 rounded-full-btn">
-                      <Link href={`/academy/${webinar.id}`}>View Details</Link>
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+        <section>
+            <div className="section-header mb-4">
+                <h2 className="section-title"><Video className="text-primary" /> Video Courses</h2>
+                <Link href="/academy" className="view-all">View All</Link>
             </div>
-          </section>
-        )}
-
-        {pastWebinars.length > 0 && (
-          <>
-            {/* Past Webinars */}
-            <section>
-              <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">On-Demand & Past Events</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {pastWebinars.map(webinar => (
-                   <Card key={webinar.id} className="group overflow-hidden rounded-3xl shadow-soft hover:shadow-hover transition-shadow duration-300 h-full flex flex-col">
-                    <Link href={`/academy/${webinar.id}`} className="block">
-                       <div className="relative w-full aspect-video">
-                          <WebinarBanner webinar={webinar} variant="card" />
-                       </div>
-                    </Link>
-                    <div className="p-6 flex flex-col flex-grow">
-                       {webinar.id === 'eye-q-arena-2025' ? (
-                          <div className="text-center flex-grow">
-                          <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">
-                            <h3 className="text-xl font-black text-slate-800">Eye Q Arena 2025</h3>
-                            <p className="text-sm text-muted-foreground">The International Optometry Knowledge Championship</p>
-                          </Link>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                 {webinars.filter(w => w.type === 'Course').map(course => (
+                  <CarouselItem key={course.id} className="basis-3/4 md:basis-1/2 lg:basis-1/3 pl-2 md:pl-4">
+                      <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
+                        <div className="relative aspect-video">
+                          <Image src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt={course.title} layout="fill" objectFit="cover" />
+                           <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                              <div className="h-14 w-14 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                                <PlayCircle className="h-8 w-8" />
+                              </div>
+                           </div>
                         </div>
-                      ) : (
-                        <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                          <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
-                        </h3>
-                      )}
-                      
-                       {webinar.id === 'eye-q-arena-2025' ? (
-                        <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
-                            <p className="line-clamp-2">Test your knowledge against peers worldwide in this international optometry quiz competition.</p>
-                            <div className="flex items-center gap-2 pt-2">
-                                <Calendar className="h-4 w-4 text-primary" />
-                                <span>Event Concluded</span>
-                            </div>
+                        <div className="p-4 flex-grow flex flex-col">
+                            <h4 className="font-bold text-slate-800 flex-grow">{course.title}</h4>
+                            <p className="text-sm text-muted-foreground mt-1">{course.speaker.name}</p>
                         </div>
-                      ) : (
-                        <p className="text-muted-foreground text-sm mt-auto border-t pt-4">Originally aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></p>
-                      )}
-                      
-                      <Button asChild variant="secondary" className="w-full mt-4 rounded-full-btn">
-                        <Link href={`/academy/${webinar.id}`}>
-                           <Info className="mr-2 h-4 w-4" />
-                           View Details
-                        </Link>
-                      </Button>
-                    </div>
-                  </Card>
+                      </Card>
+                  </CarouselItem>
                 ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+        </section>
+
+        <section>
+            <div className="section-header mb-4">
+                <h2 className="section-title"><Headphones className="text-purple-500" /> Audio Learning</h2>
+                 <Link href="/academy" className="view-all">Library</Link>
+            </div>
+            <Carousel opts={{ align: "start", slidesToScroll: 'auto' }} className="w-full">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {/* Placeholder Audio Cards */}
+                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 pl-2 md:pl-4">
+                    <div className="w-[160px]">
+                      <div className="relative aspect-square rounded-lg shadow-lg bg-gradient-to-br from-purple-500 to-indigo-600 group">
+                          <Image src="https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Myopia Control" layout="fill" objectFit="cover" className="rounded-lg"/>
+                           <div className="absolute bottom-2 right-2 h-9 w-9 bg-white rounded-full flex items-center justify-center shadow-md text-purple-600">
+                            <PlayCircle className="h-6 w-6"/>
+                           </div>
+                      </div>
+                      <h4 className="font-semibold text-sm mt-2 truncate">Myopia Control</h4>
+                      <p className="text-xs text-muted-foreground">Podcast Ep. 42</p>
+                    </div>
+                </CarouselItem>
+                <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 pl-2 md:pl-4">
+                    <div className="w-[160px]">
+                      <div className="relative aspect-square rounded-lg shadow-lg bg-gradient-to-br from-amber-500 to-orange-600 group">
+                          <BookOpen className="absolute h-12 w-12 text-white/50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
+                           <div className="absolute bottom-2 right-2 h-9 w-9 bg-white rounded-full flex items-center justify-center shadow-md text-amber-600">
+                            <PlayCircle className="h-6 w-6"/>
+                           </div>
+                      </div>
+                      <h4 className="font-semibold text-sm mt-2 truncate">Clinical Guides</h4>
+                      <p className="text-xs text-muted-foreground">Audiobook Ch. 1</p>
+                    </div>
+                </CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+        </section>
+
+         <section>
+            <div className="section-header mb-4">
+                <h2 className="section-title"><Newspaper className="text-slate-600" /> Latest Insights</h2>
+            </div>
+            <Carousel opts={{ align: "start" }} className="w-full">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3 pl-2 md:pl-4">
+                    <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
+                        <div className="relative aspect-video">
+                            <Image src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Blog post" layout="fill" objectFit="cover" />
+                        </div>
+                        <div className="p-4">
+                            <h4 className="font-bold text-base text-slate-800 mb-2">AI in Optometry: The Next Step</h4>
+                            <p className="text-sm text-muted-foreground mb-3">How artificial intelligence is changing diagnostics...</p>
+                            <Button variant="link" className="p-0 h-auto">Read Article</Button>
+                        </div>
+                    </Card>
+                </CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+        </section>
+        
+        {pastWebinars.length > 0 && (
+          <section>
+              <div className="section-header mb-4">
+                <h2 className="section-title"><Trophy className="text-amber-500" /> On-Demand & Past Events</h2>
+                <Link href="/academy" className="view-all">View All</Link>
               </div>
+               <Carousel opts={{ align: "start" }} className="w-full">
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {pastWebinars.map(webinar => (
+                    <CarouselItem key={webinar.id} className="basis-full sm:basis-1/2 lg:basis-1/3 pl-2 md:pl-4">
+                      <Card className="group overflow-hidden shadow-soft bg-slate-50 h-full flex flex-col">
+                        <div className="p-6 flex-grow">
+                            <Badge variant="secondary" className="mb-2">{webinar.id === 'eye-q-arena-2025' ? 'Event Concluded' : 'On-Demand'}</Badge>
+                            <h4 className="font-bold text-slate-800 text-base">{webinar.title}</h4>
+                        </div>
+                        <div className="px-6 pb-4 text-sm text-muted-foreground border-t mt-auto pt-4">
+                           Originally Aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} />
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                 </CarouselContent>
+                <CarouselPrevious className="hidden sm:flex" />
+                <CarouselNext className="hidden sm:flex" />
+              </Carousel>
             </section>
-          </>
         )}
       </main>
     </div>
