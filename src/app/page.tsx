@@ -75,6 +75,7 @@ export default async function Home() {
   const professionals = shuffleArray([...allUsers.filter(u => ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'].includes(u.type))]);
   const associations = shuffleArray([...allUsers.filter(u => u.type === 'Association')]);
   const colleges = shuffleArray([...allUsers.filter(u => u.type === 'College')]);
+  const institutions = shuffleArray([...associations, ...colleges]);
   const clinicsAndOpticals = shuffleArray([...allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type))]);
   const students = shuffleArray([...allUsers.filter(u => u.type === 'Student')]);
   const industry = shuffleArray([...allUsers.filter(u => u.type === 'Industry')]);
@@ -177,19 +178,8 @@ export default async function Home() {
                   <Link href="/directory/institutions" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
                 </div>
                  <div className="scroll-container">
-                    {associations.map((user) => (
-                      <div key={user.id} className="logo-card">
-                           <div className="logo-icon"><Handshake /></div>
-                           <div className="logo-name">{user.name}</div>
-                           <Link href={`/profile/${user.id}`} className='view-all text-sm'>View Profile</Link>
-                      </div>
-                    ))}
-                     {colleges.map((user) => (
-                      <div key={user.id} className="logo-card">
-                           <div className="logo-icon"><University /></div>
-                           <div className="logo-name">{user.name}</div>
-                           <Link href={`/profile/${user.id}`} className='view-all text-sm'>View Profile</Link>
-                      </div>
+                    {institutions.map((user) => (
+                        <ProfileCard user={user} key={user.id}/>
                     ))}
                   </div>
               </section>
