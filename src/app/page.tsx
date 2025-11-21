@@ -1,8 +1,9 @@
+
 import { allUsers } from '@/lib/data/index';
 import type { ForumPost } from '@/types';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselDots } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
 import { Globe, ArrowRight, UserPlus, Building, Hospital, Factory, MapPin, Briefcase, ThumbsUp, Eye, Building2 as CommunityIcon, MessageSquare, BookOpen, Users, Handshake, University, User } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -90,7 +91,7 @@ export default async function Home() {
               <HomepageSearch />
           </header>
 
-          <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-12">
+          <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-12">
             
             <section className="wa-card">
               <div className="wa-stats">350+</div>
@@ -100,31 +101,45 @@ export default async function Home() {
               </a>
             </section>
 
-              {professionals.length > 0 && 
-              <section>
-                <div className="section-header">
-                  <h2 className="section-title">Featured Professionals</h2>
-                  <Link href="/directory/professionals" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
-                </div>
-                 <div className="scroll-container">
-                    {professionals.map((user) => (
-                        <ProfileCard user={user} key={user.id}/>
-                    ))}
-                  </div>
-              </section>}
-              
-              {students.length > 0 && 
-              <section>
-                 <div className="section-header">
-                  <h2 className="section-title">Student Directory</h2>
-                  <Link href="/directory/students" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
-                </div>
-                <div className="scroll-container">
+            {professionals.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Featured Professionals</h2>
+                <Link href="/directory/professionals" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
+              </div>
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {professionals.map((user) => (
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
+                      <ProfileCard user={user} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </section>
+            )}
+            
+            {students.length > 0 && (
+            <section>
+               <div className="section-header">
+                <h2 className="section-title">Student Directory</h2>
+                <Link href="/directory/students" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
+              </div>
+              <Carousel className="w-full">
+                  <CarouselContent>
                     {students.map((student) => (
-                         <ProfileCard user={student} key={student.id}/>
+                      <CarouselItem key={student.id} className="md:basis-1/2 lg:basis-1/3">
+                        <ProfileCard user={student} />
+                      </CarouselItem>
                     ))}
-                </div>
-              </section>}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+              </Carousel>
+            </section>
+            )}
               
               {demoDiscussions.length > 0 &&
               <section>
@@ -177,11 +192,17 @@ export default async function Home() {
                   <h2 className="section-title">Associations & Colleges</h2>
                   <Link href="/directory/institutions" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
                 </div>
-                 <div className="scroll-container">
-                    {institutions.map((user) => (
-                        <ProfileCard user={user} key={user.id}/>
-                    ))}
-                  </div>
+                 <Carousel className="w-full">
+                    <CarouselContent>
+                      {institutions.map((user) => (
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
+                          <ProfileCard user={user} />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                 </Carousel>
               </section>
 
               <section>
@@ -190,11 +211,17 @@ export default async function Home() {
                    {clinicsAndOpticals.length > 0 && <Link href="/directory/clinics" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>}
                 </div>
                 {clinicsAndOpticals.length > 0 ? (
-                    <div className="scroll-container">
-                        {clinicsAndOpticals.map((user) => (
-                            <ProfileCard user={user} key={user.id} />
-                        ))}
-                    </div>
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                          {clinicsAndOpticals.map((user) => (
+                            <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
+                              <ProfileCard user={user} />
+                            </CarouselItem>
+                          ))}
+                      </CarouselContent>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </Carousel>
                 ) : (
                     <div className="empty-state">
                         <div className="empty-icon"><Hospital className="h-12 w-12" /></div>
