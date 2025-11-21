@@ -40,7 +40,7 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
             </Avatar>
             {user.verified && (
                 <div className="verified-badge">
-                    <CheckCircle2 className="h-6 w-6" />
+                    <CheckCircle2 className="h-5 w-5" />
                 </div>
             )}
         </div>

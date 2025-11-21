@@ -107,4 +107,160 @@
     border-bottom-right-radius: 40px;
     margin-bottom: 30px;
   }
+
+  .search-box {
+    @apply bg-white p-2 rounded-full flex items-center max-w-lg mx-auto shadow-search -translate-y-10;
+  }
+  .search-input {
+    @apply border-none outline-none flex-1 py-3 px-5 text-base rounded-full;
+  }
+  .filter-btn, .search-btn {
+    @apply border-none cursor-pointer font-semibold transition-colors duration-200;
+  }
+  .filter-btn {
+    @apply bg-slate-100 text-text-main w-10 h-10 rounded-full mr-2;
+  }
+  .search-btn {
+    @apply bg-brand-blue text-white py-2.5 px-6 rounded-full;
+  }
+
+  .wa-card {
+    @apply bg-brand-dark text-white mx-5 my-10 p-8 rounded-3xl relative overflow-hidden shadow-wa-card;
+  }
+  .wa-stats {
+    @apply text-2xl font-extrabold mb-1;
+  }
+  .wa-text {
+    @apply opacity-80 mb-5 text-sm leading-relaxed;
+  }
+  .btn-wa {
+    @apply border border-white/30 bg-white/10 text-white py-3 px-6 rounded-full text-sm inline-flex items-center gap-2 backdrop-blur-sm;
+  }
+
+  .section-header {
+    @apply flex justify-between items-baseline px-6 mb-5 mt-10;
+  }
+  .section-title {
+    @apply text-xl font-bold text-brand-dark;
+  }
+  .view-all {
+    @apply text-brand-blue text-sm font-semibold no-underline;
+  }
+
+  .scroll-container {
+    @apply flex gap-5 overflow-x-auto pb-10 px-6;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .profile-card {
+    @apply min-w-[280px] max-w-[280px] bg-white p-6 rounded-3xl text-center shadow-soft transition-transform duration-300 ease-in-out border border-transparent;
+  }
+  .profile-card:hover {
+    @apply -translate-y-2 shadow-hover;
+  }
+  .avatar-wrapper {
+    @apply relative w-24 h-24 mx-auto mb-4;
+  }
+  .verified-badge {
+    @apply absolute bottom-1 right-0 text-brand-blue bg-white rounded-full p-0.5 text-2xl;
+  }
+  .p-name {
+    @apply text-lg font-bold text-brand-dark mb-1;
+  }
+  .p-role {
+    @apply text-brand-blue text-xs font-semibold mb-3 block;
+  }
+  .p-desc {
+    @apply text-xs text-text-muted leading-normal mb-5 line-clamp-3;
+  }
+  .btn-view {
+    @apply block w-full bg-brand-blue text-white py-3 rounded-xl border-none font-semibold cursor-pointer transition-opacity duration-200;
+  }
+  .btn-view:hover {
+    @apply opacity-90;
+  }
+  .text-avatar {
+    @apply w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-3xl font-bold text-text-muted;
+  }
+
+  .forum-card {
+    @apply mx-6 bg-white rounded-3xl p-6 shadow-soft border-l-[6px] border-brand-blue;
+  }
+  .tag {
+    @apply bg-sky-100 text-brand-blue px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase inline-block mb-3;
+  }
+  .forum-title {
+    @apply text-lg font-bold text-brand-dark;
+  }
+  .forum-stats {
+    @apply flex gap-5 mt-4 text-text-muted text-xs border-t border-slate-100 pt-4;
+  }
+
+  .job-list {
+    @apply flex flex-col gap-4 px-6;
+  }
+  .job-item {
+    @apply bg-white p-5 rounded-2xl flex justify-between items-center shadow-sm transition-transform duration-200 cursor-pointer;
+  }
+  .job-item:hover {
+    @apply translate-x-1;
+  }
+  .job-main h4 {
+    @apply text-base font-semibold text-brand-dark mb-1;
+  }
+  .job-meta {
+    @apply text-xs text-text-muted flex gap-2.5 items-center;
+  }
+  .job-icon {
+    @apply text-slate-300;
+  }
+
+  .logo-card {
+    @apply min-w-[160px] h-44 bg-white rounded-3xl flex flex-col items-center justify-center text-center p-5 shadow-soft border border-slate-50;
+  }
+  .logo-icon {
+    @apply text-4xl text-brand-blue mb-4 opacity-80;
+  }
+  .logo-name {
+    @apply font-bold text-sm leading-tight mb-2.5;
+  }
+
+  .empty-state {
+    @apply mx-6 p-12 text-center border-2 border-dashed border-slate-300 rounded-3xl bg-slate-50;
+  }
+  .empty-icon {
+    @apply text-5xl text-slate-300 mb-4;
+  }
+
+  .f-links {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-8 mb-10;
+  }
+  .f-col h4 {
+    @apply mb-5 font-semibold;
+  }
+  .f-col a {
+    @apply block text-slate-400 no-underline mb-3 text-sm;
+  }
+  .f-copy {
+    @apply text-center text-slate-500 text-xs;
+  }
+
+  .dock {
+    @apply fixed bottom-5 left-1/2 -translate-x-1/2 bg-white/95 py-3 px-8 rounded-full flex gap-8 shadow-search z-50 backdrop-blur-md border border-white/50;
+  }
+  .dock-item {
+    @apply text-slate-400 text-xl relative p-1.5 transition-transform duration-300;
+  }
+  .dock-item.active {
+    @apply text-brand-blue -translate-y-1;
+  }
+  .dock-item.active::after {
+    content: '';
+    @apply absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-blue rounded-full;
+  }
 }

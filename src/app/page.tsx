@@ -63,8 +63,8 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
     <div className="empty-state">
         <div className="empty-icon">{icon}</div>
         <h3 className='text-xl font-bold mb-2'>{title}</h3>
-        <p className="empty-text">Be the first to represent your category.</p>
-        <Button asChild className="rounded-full-btn bg-brand-blue hover:bg-brand-blue/90">
+        <p className="text-sm text-text-muted mb-5">Be the first to represent your category.</p>
+        <Button asChild className="search-btn">
             <Link href={ctaLink}>{ctaText}</Link>
         </Button>
     </div>
@@ -86,18 +86,16 @@ export default async function Home() {
           <header className="hero">
               <h1 className="text-3xl md:text-4xl font-extrabold mb-3">A Global Community<br/>for Eye Care</h1>
               <p className="text-base opacity-90 max-w-xl mx-auto mb-12">Connecting vision professionals, students, and organizations worldwide. Find peers, discover opportunities, and grow.</p>
-              <div className="transform translate-y-10">
-                <HomepageSearch />
-              </div>
+              <HomepageSearch />
           </header>
 
-          <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-12">
+          <main className="container mx-auto px-0 md:px-6 lg:px-8 pt-16 space-y-12">
             
             <section className="wa-card">
               <div className="wa-stats">350+</div>
               <p className="wa-text">Members in our WhatsApp Community active right now.</p>
               <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" className="btn-wa" target="_blank" rel="noopener noreferrer">
-                  <MessageSquare /> Join WhatsApp Community
+                  <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
               </a>
             </section>
 
@@ -142,9 +140,9 @@ export default async function Home() {
                           </h3>
                           <p className="text-sm text-text-muted mt-1 line-clamp-2">{discussion.description}</p>
                           <div className="forum-stats">
-                              <span><User className="inline-flex mr-1.5 h-4 w-4" /> {discussion.author}</span>
-                              <span><ThumbsUp className="inline-flex mr-1.5 h-4 w-4" /> {discussion.upvotes}</span>
-                              <span><Eye className="inline-flex mr-1.5 h-4 w-4" /> {discussion.views}</span>
+                              <span className='flex items-center gap-1.5'><User className="h-4 w-4" /> {discussion.author}</span>
+                              <span className='flex items-center gap-1.5'><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</span>
+                              <span className='flex items-center gap-1.5'><Eye className="h-4 w-4" /> {discussion.views}</span>
                           </div>
                       </div>
                   ))}
@@ -163,8 +161,8 @@ export default async function Home() {
                            <div className="job-main">
                                 <h4>{job.title}</h4>
                                 <div className="job-meta">
-                                  <span><Building className="h-4 w-4 inline mr-1.5" />{job.company}</span>
-                                  <span><MapPin className="h-4 w-4 inline mr-1.5" />{job.location}</span>
+                                  <span className='flex items-center gap-1.5'><Building className="h-4 w-4" />{job.company}</span>
+                                  <span className='flex items-center gap-1.5'><MapPin className="h-4 w-4" />{job.location}</span>
                                 </div>
                             </div>
                             <div className="job-icon"><ArrowRight /></div>
