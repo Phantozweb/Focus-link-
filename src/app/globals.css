@@ -80,6 +80,17 @@
     padding-bottom: 100px;
     font-family: 'Manrope', sans-serif;
   }
+  
+  .navbar {
+    @apply bg-white py-4 px-6 flex justify-between items-center sticky top-0 z-50 shadow-sm;
+  }
+  
+  .brand {
+    @apply text-lg font-extrabold text-brand-dark flex items-center gap-2;
+  }
+  .brand .lucide {
+    @apply text-brand-blue;
+  }
 
   .hero {
     background: var(--hero-gradient);
@@ -141,13 +152,16 @@
   }
   
   .profile-card {
-    @apply min-w-[280px] max-w-[280px] bg-white p-6 rounded-3xl text-center shadow-soft transition-transform duration-300 ease-in-out border border-transparent;
+    @apply min-w-[280px] max-w-[280px] bg-white p-6 rounded-3xl text-center shadow-soft transition-transform duration-300 ease-in-out border border-transparent flex flex-col;
   }
   .profile-card:hover {
     @apply -translate-y-2 shadow-hover;
   }
   .avatar-wrapper {
     @apply relative w-24 h-24 mx-auto mb-4;
+  }
+  .avatar {
+    @apply w-full h-full rounded-full object-cover border-4 border-blue-50;
   }
   .verified-badge {
     @apply absolute bottom-1 right-0 text-brand-blue bg-white rounded-full p-0.5 text-2xl;
@@ -162,7 +176,7 @@
     @apply text-xs text-text-muted leading-normal mb-5 line-clamp-3;
   }
   .btn-view {
-    @apply block w-full bg-brand-blue text-white py-3 rounded-xl border-none font-semibold cursor-pointer transition-opacity duration-200;
+    @apply block w-full bg-brand-blue text-white py-3 rounded-xl border-none font-semibold cursor-pointer transition-opacity duration-200 mt-auto;
   }
   .btn-view:hover {
     @apply opacity-90;

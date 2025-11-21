@@ -230,7 +230,7 @@ export function Header() {
             </nav>
         </div>
         <div className="hidden md:flex items-center gap-2">
-             <Button className="rounded-full-btn" asChild>
+             <Button className="rounded-full" asChild>
                 <Link href="/membership">
                     <UserPlus className="mr-2 h-4 w-4" />
                     Become a Member
