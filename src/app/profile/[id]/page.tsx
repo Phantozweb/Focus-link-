@@ -72,6 +72,19 @@ export async function generateMetadata(
     }
   }
 
+  if (user.id === 'marwankorath') {
+    return {
+      title: `${user.name} | DOH Qualified Clinical Optometrist | Focus Links`,
+      description: user.bio,
+      keywords: ['DOH Qualified Optometrist', 'Clinical Optometrist Kerala', 'MARWAN K', 'Retinal Imaging Specialist', 'Ocular Diagnostics', 'ABATE Eye Hospital'],
+      openGraph: {
+        title: `${user.name} | ${user.experience}`,
+        description: user.bio,
+        images: [user.avatarUrl],
+      },
+    }
+  }
+
 
   const title = `${user.name} - ${user.type} | Focus Links`;
   const description = user.bio.substring(0, 160);

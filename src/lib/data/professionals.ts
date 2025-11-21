@@ -869,6 +869,54 @@ export const professionals: UserProfile[] = [
     ],
     languages: ['English', 'Igbo'],
     verified: true
+  },
+  {
+    id: 'marwankorath',
+    name: 'MARWAN K',
+    type: 'Optometrist',
+    experience: 'DOH QUALIFIED Clinical Optometrist | Retinal Imaging & Ocular Diagnostics Specialist',
+    location: 'Mannarkkad, Kerala, India',
+    skills: [
+      'OPTICAL DISPENSING', 'FRAMES', 'IPD MARKING', 'Orthokeratology', 'Myopia management', 
+      'Scleral contact lenses', 'Marketing', 'Vision Care', 'Merchandising', 'Medicine', 
+      'Surgical Instruments', 'Medical Devices', 'Healthcare', 'Artificial Intelligence (AI)', 
+      'Consultations', 'Optics', 'Corneal Topography', 'anterior segment', 'Retail Sales', 'Customer Service'
+    ],
+    interests: ['Retinal Imaging', 'Ocular Diagnostics', 'Specialty Contact Lenses', 'AI in Optometry'],
+    bio: "Motivated and clinically skilled optometrist with expertise in refraction, ophthalmic diagnostics (FFA, ICGA, OCT, B-scan), and comprehensive eye care procedures. Seeking a challenging role in a reputed eye care institution to utilize my skills in providing accurate diagnoses, personalized treatment plans, and exceptional patient care while continuing to grow as a professional in the field of optometry.",
+    links: {
+      linkedin: 'https://in.linkedin.com/in/marwankorath'
+    },
+    avatarUrl: 'https://media.licdn.com/dms/image/v2/D5603AQF0AQOH2ZyMYQ/profile-displayphoto-crop_800_800/B56Zqh5eASJkAI-/0/1763652792023?e=1765411200&v=beta&t=UsPgd-7qPrylISireNbNa_7qGCtJ1yKAT5OlWRVGNs4',
+    workExperience: [
+      {
+        title: 'Clinical Optometrist',
+        company: 'ABATE AS',
+        startDate: 'Jun 2023',
+        endDate: 'Present',
+        description: 'Perform thorough eye examinations, diagnose and manage various eye conditions, prescribe corrective lenses, and conduct specialized testing (FFA, ICGA, OCT, B-scan). Expanded specialty contact lens services and maintained a 95%+ patient satisfaction rating.'
+      },
+      {
+        title: 'Optometrist',
+        company: 'ABATE AS',
+        startDate: 'Jun 2022',
+        endDate: 'May 2023',
+        description: 'Conducted preliminary eye examinations, assisted in diagnosing common visual disorders, fitted contact lenses, and educated patients on eye health.',
+        duration: 'Internship'
+      }
+    ],
+    education: [
+      {
+        school: 'Al Salama college of optometry and health science',
+        university: 'Alagappa University, Alagappa Nagar, Karaikudi',
+        degree: 'Bachelor of Science - BS',
+        fieldOfStudy: 'Optometry',
+        startYear: '2019',
+        endYear: '2023'
+      }
+    ],
+    languages: [],
+    verified: true,
   }
 ];
 
