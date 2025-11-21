@@ -44,7 +44,7 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="verified-badge">
-                          <CheckCircle2 className={cn("h-5 w-5", user.id === 'marwankorath' ? 'text-green-500' : 'text-primary')} />
+                          <CheckCircle2 className={cn("h-5 w-5", user.verifiedRole ? 'text-green-500' : 'text-primary')} />
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -65,3 +65,5 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
     </div>
   )
 }
+
+    
