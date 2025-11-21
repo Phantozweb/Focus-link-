@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect } from 'react';
@@ -171,6 +171,69 @@ export default function AcademyPage() {
             </Carousel>
         </section>
 
+        <section>
+            <div className="section-header">
+                <h2 className="section-title"><BookOpen className="text-amber-500" /> E-Books</h2>
+                <Link href="/academy" className="view-all">See All</Link>
+            </div>
+            <Carousel opts={{ align: "start", slidesToScroll: 'auto' }} className="w-full">
+              <CarouselContent>
+                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                    <div className="w-[140px]">
+                      <div className="relative aspect-[3/4] rounded-lg shadow-lg group overflow-hidden">
+                          <Image src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Glaucoma Guide" layout="fill" objectFit="cover" className="rounded-lg"/>
+                      </div>
+                      <h4 className="font-semibold text-sm mt-2 truncate">Glaucoma Guide</h4>
+                      <p className="text-xs text-muted-foreground">2nd Edition</p>
+                    </div>
+                </CarouselItem>
+                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                    <div className="w-[140px]">
+                      <div className="relative aspect-[3/4] rounded-lg shadow-lg group overflow-hidden">
+                          <Image src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Pediatric Vision" layout="fill" objectFit="cover" className="rounded-lg"/>
+                      </div>
+                      <h4 className="font-semibold text-sm mt-2 truncate">Pediatric Vision</h4>
+                      <p className="text-xs text-muted-foreground">Clinical Manual</p>
+                    </div>
+                </CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+        </section>
+
+        <section>
+            <div className="section-header">
+                <h2 className="section-title"><FolderOpen className="text-green-500" /> Resources & Notes</h2>
+            </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 flex items-center gap-4">
+                        <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
+                            <FileText className="h-6 w-6"/>
+                        </div>
+                        <div className="flex-grow">
+                            <h4 className="font-semibold text-slate-800">Retinoscopy Cheatsheet</h4>
+                            <p className="text-sm text-muted-foreground">PDF • 2.4 MB</p>
+                        </div>
+                        <Button variant="ghost" size="icon"><Download /></Button>
+                    </CardContent>
+                </Card>
+                 <Card className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 flex items-center gap-4">
+                        <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <FileText className="h-6 w-6"/>
+                        </div>
+                        <div className="flex-grow">
+                            <h4 className="font-semibold text-slate-800">Patient History Form</h4>
+                            <p className="text-sm text-muted-foreground">DOCX • 500 KB</p>
+                        </div>
+                        <Button variant="ghost" size="icon"><Download /></Button>
+                    </CardContent>
+                </Card>
+            </div>
+        </section>
+
          <section>
             <div className="section-header">
                 <h2 className="section-title"><Newspaper className="text-slate-600" /> Latest Insights</h2>
@@ -198,7 +261,7 @@ export default function AcademyPage() {
         {pastWebinars.length > 0 && (
           <section>
               <div className="section-header">
-                <h2 className="section-title"><Trophy className="text-amber-500" /> On-Demand & Past Events</h2>
+                <h2 className="section-title"><Trophy className="text-amber-500" /> On-Demand &amp; Past Events</h2>
                 <Link href="/academy" className="view-all">View All</Link>
               </div>
                <Carousel opts={{ align: "start" }} className="w-full">
