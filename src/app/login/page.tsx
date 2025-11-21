@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="bg-muted/40 min-h-[calc(100vh-140px)] flex items-center justify-center py-12 px-4">
-      <Card className="w-full max-w-md">
+    <div className="bg-brand-bg min-h-[calc(100vh-140px)] flex items-center justify-center py-12 px-4">
+      <Card className="w-full max-w-md rounded-3xl shadow-soft">
         <CardHeader className="text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-4">
                 <LogIn className="h-8 w-8 text-primary" />
@@ -29,7 +29,7 @@ export default function LoginPage() {
           <form className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" required disabled />
+              <Input id="email" type="email" placeholder="you@example.com" required disabled className="rounded-xl"/>
             </div>
             <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -38,9 +38,9 @@ export default function LoginPage() {
                         Forgot password?
                     </Link>
                 </div>
-              <Input id="password" type="password" required disabled />
+              <Input id="password" type="password" required disabled className="rounded-xl"/>
             </div>
-            <Button type="submit" className="w-full" size="lg" disabled>
+            <Button type="submit" className="w-full rounded-full-btn" size="lg" disabled>
               Login (Coming Soon)
             </Button>
           </form>
@@ -55,5 +55,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

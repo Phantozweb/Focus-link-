@@ -77,14 +77,14 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
   return (
     <div className="max-w-5xl mx-auto">
         {/* Filter Bar */}
-        <Card className="mb-8">
+        <Card className="mb-8 rounded-3xl shadow-soft">
             <CardContent className="p-4 flex flex-col md:flex-row gap-4 items-center">
                 <div className="w-full flex flex-col sm:flex-row gap-4">
                     <div className="relative flex-grow w-full">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <Input 
                             placeholder="Job title, keyword, or company" 
-                            className="pl-10 h-12"
+                            className="pl-10 h-12 rounded-xl"
                             value={keyword}
                             onChange={(e) => setKeyword(e.target.value)}
                         />
@@ -93,7 +93,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <Input 
                             placeholder="City or Country" 
-                            className="pl-10 h-12"
+                            className="pl-10 h-12 rounded-xl"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                         />
@@ -101,7 +101,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                 </div>
                  <div className="w-full flex-shrink-0 sm:w-auto flex flex-col md:flex-row gap-2">
                    {hasSearched && (
-                     <Button onClick={clearFilters} variant="ghost" className="w-full md:w-auto h-12">
+                     <Button onClick={clearFilters} variant="ghost" className="w-full md:w-auto h-12 rounded-full-btn">
                         <X className="h-5 w-5 mr-2" />
                         Clear
                     </Button>
@@ -109,7 +109,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="secondary" className="w-full md:w-auto h-12" disabled>
+                        <Button variant="secondary" className="w-full md:w-auto h-12 rounded-full-btn" disabled>
                           <Lock className="mr-2 h-4 w-4" />
                           Post a Job
                         </Button>
@@ -139,7 +139,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
 
         <div className="space-y-4">
             {filteredJobs.length > 0 ? filteredJobs.map(job => (
-                <Card key={job.id} className="hover:shadow-md transition-shadow">
+                <Card key={job.id} className="hover:shadow-md transition-shadow rounded-2xl">
                     <CardContent className="p-6">
                        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
                           <div className="flex-grow">
@@ -156,7 +156,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                               </div>
                           </div>
                           <div className="md:text-right flex-shrink-0">
-                              <Button asChild>
+                              <Button asChild className="rounded-full-btn">
                                   <Link href={`/jobs/${job.id}`}>View Details</Link>
                               </Button>
                           </div>
@@ -167,7 +167,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
                     </CardContent>
                 </Card>
             )) : (
-              <Card>
+              <Card className="rounded-3xl">
                 <CardContent className="p-8 text-center text-muted-foreground">
                   No job listings available matching your criteria.
                 </CardContent>

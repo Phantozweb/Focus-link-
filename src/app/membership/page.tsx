@@ -36,29 +36,25 @@ export default function MembershipPage() {
 
   return (
     <>
-     <div className="bg-muted/40">
-        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-            <div className="container mx-auto px-4 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Become an Official Member</h1>
-                <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-                   Submit your application to get verified, create your official directory profile, and unlock exclusive community perks.
-                </p>
-            </div>
-        </section>
+     <div className="bg-brand-bg">
+        <header className="hero">
+            <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Become an Official Member</h1>
+            <p className="text-base opacity-90 max-w-xl mx-auto">
+               Submit your application to get verified, create your official directory profile, and unlock exclusive community perks.
+            </p>
+        </header>
 
-        <div id="membership-join" className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
+        <main id="membership-join" className="container mx-auto max-w-2xl px-4 md:px-6 lg:px-8 pt-16 space-y-16">
             <MembershipForm />
-        </div>
         
-        <section className="py-16 bg-background border-t border-b">
-            <div className="container mx-auto px-4">
+            <section className="py-16">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-slate-800">Exclusive Membership Perks</h2>
                     <p className="mt-2 text-lg text-slate-600">Go beyond the directory. Unlock benefits available only to official members.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {membershipPerks.map((perk, index) => (
-                        <div key={index} className="text-center p-6 bg-card rounded-lg shadow-sm border">
+                        <div key={index} className="text-center p-6 bg-card rounded-3xl shadow-soft border">
                             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">
                                 {perk.icon}
                             </div>
@@ -67,30 +63,30 @@ export default function MembershipPage() {
                         </div>
                     ))}
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <div className="container mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:px-8">
-            <Card className='bg-slate-800 text-white'>
-                <CardHeader className="text-center">
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-500/20">
-                        <MessageCircle className="h-8 w-8 text-green-400" />
-                    </div>
-                    <CardTitle className="text-3xl font-headline mt-4">Join our WhatsApp Community</CardTitle>
-                    <CardDescription className="mt-1 text-base text-slate-300">
-                        While your official membership application is being reviewed, join our WhatsApp community for discussions, event updates, and networking. Note that this is separate from official membership.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <Button size="lg" variant="secondary" asChild>
-                    <a href={whatsAppCommunityLink} target="_blank" rel="noopener noreferrer">
-                      Join WhatsApp
-                    </a>
-                  </Button>
-                   <p className="text-xs text-slate-400 mt-2">You will be redirected to WhatsApp.</p>
-                </CardContent>
-            </Card>
-        </div>
+            <section className="pb-16">
+                <Card className='bg-slate-800 text-white rounded-3xl'>
+                    <CardHeader className="text-center">
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-500/20">
+                            <MessageCircle className="h-8 w-8 text-green-400" />
+                        </div>
+                        <CardTitle className="text-3xl font-headline mt-4">Join our WhatsApp Community</CardTitle>
+                        <CardDescription className="mt-1 text-base text-slate-300">
+                            While your official membership application is being reviewed, join our WhatsApp community for discussions, event updates, and networking. Note that this is separate from official membership.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                      <Button size="lg" variant="secondary" className="rounded-full-btn" asChild>
+                        <a href={whatsAppCommunityLink} target="_blank" rel="noopener noreferrer">
+                          Join WhatsApp
+                        </a>
+                      </Button>
+                       <p className="text-xs text-slate-400 mt-2">You will be redirected to WhatsApp.</p>
+                    </CardContent>
+                </Card>
+            </section>
+        </main>
     </div>
     </>
   );

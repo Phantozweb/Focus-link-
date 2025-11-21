@@ -18,7 +18,7 @@ function ForumSkeleton() {
   return (
     <div className="space-y-4">
       {[...Array(3)].map((_, i) => (
-        <Card key={i}>
+        <Card key={i} className="rounded-3xl">
           <CardContent className="p-6 flex gap-4">
             <Skeleton className="hidden sm:block h-12 w-12 rounded-full" />
             <div className="flex-grow space-y-3">
@@ -94,24 +94,22 @@ export default function ForumPage() {
   });
 
   return (
-    <div className="bg-muted/40">
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Case Forum</h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+    <div className="bg-brand-bg">
+      <header className="hero">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Case Forum</h1>
+        <p className="text-base opacity-90 max-w-xl mx-auto">
             A dedicated space for eye care professionals to share, discuss, and learn from real-world clinical cases.
-          </p>
-        </div>
-      </section>
+        </p>
+      </header>
 
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16">
         <div className="max-w-4xl mx-auto">
            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <div className="relative w-full md:w-auto md:flex-grow">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   placeholder="Search cases, tags, or categories..."
-                  className="pl-10 h-11"
+                  className="pl-10 h-11 rounded-full-btn"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -120,7 +118,7 @@ export default function ForumPage() {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button disabled className="w-full">
+                      <Button disabled className="w-full rounded-full-btn">
                         <Lock className="mr-2 h-4 w-4" />
                         Start a New Discussion
                       </Button>
@@ -138,7 +136,7 @@ export default function ForumPage() {
             ) : (
               <div className="space-y-4">
                   {filteredDiscussions.map((discussion) => (
-                      <Card key={discussion.id} className="hover:shadow-md transition-shadow">
+                      <Card key={discussion.id} className="hover:shadow-hover transition-shadow rounded-3xl shadow-soft">
                           <CardContent className="p-4 sm:p-6 flex gap-4">
                             <Avatar className="hidden sm:block h-12 w-12 border">
                                 <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
@@ -172,7 +170,7 @@ export default function ForumPage() {
               </div>
             )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -88,10 +88,18 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
   });
 
   return (
-    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <Suspense fallback={<DirectorySkeleton />}>
-        <DirectoryClient allUsers={initialFilteredUsers} title={getTitle(category)} category={category} />
-      </Suspense>
+    <div className="bg-brand-bg">
+        <header className="hero">
+            <h1 className="text-3xl md:text-4xl font-extrabold mb-3">{getTitle(category)} Directory</h1>
+            <p className="text-base opacity-90 max-w-xl mx-auto">
+                Browse, search, and connect with {category} in the global eye care community.
+            </p>
+        </header>
+        <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16">
+            <Suspense fallback={<DirectorySkeleton />}>
+                <DirectoryClient allUsers={initialFilteredUsers} title={getTitle(category)} category={category} />
+            </Suspense>
+        </main>
     </div>
   );
 }

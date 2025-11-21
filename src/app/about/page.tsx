@@ -62,18 +62,16 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
       />
-      <div className="bg-muted/40">
+      <div className="bg-brand-bg">
         {/* Hero Section */}
-        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Our Mission: To Unite the World of Eye Care</h1>
-            <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+        <header className="hero">
+            <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Our Mission: To Unite the World of Eye Care</h1>
+            <p className="text-base opacity-90 max-w-xl mx-auto">
               We are building a single, cohesive digital ecosystem where every student, professional, and organization in the eye care industry can connect, learn, and grow together.
             </p>
-          </div>
-        </section>
+        </header>
         
-        <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-20">
+        <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-20">
          
           <section>
             <div className="max-w-4xl mx-auto">
@@ -94,7 +92,7 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
-                <div key={index} className="text-center p-8 bg-card rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                <div key={index} className="text-center p-8 bg-card rounded-3xl shadow-soft hover:shadow-hover transition-shadow">
                   <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 mx-auto mb-4">
                     {feature.icon}
                   </div>
@@ -122,15 +120,15 @@ export default function AboutPage() {
                     "I started Focus Links because I believe connection is the catalyst for innovation. My goal is to build the tools and the community that I wished I had as a student—a space where anyone in the eye care field can find their place, share their knowledge, and shape the future of vision."
                 </p>
                  <div className="flex items-center justify-center gap-2 mt-6">
-                    <Button asChild variant="outline">
+                    <Button asChild className="rounded-full-btn">
                         <Link href="/profile/1">View Profile</Link>
                     </Button>
-                    <Button asChild variant="ghost" size="icon">
+                    <Button asChild variant="ghost" size="icon" className="rounded-full">
                         <a href="https://www.linkedin.com/in/janarthan-v" target="_blank" rel="noopener noreferrer">
                             <Linkedin className="h-5 w-5" />
                         </a>
                     </Button>
-                    <Button asChild variant="ghost" size="icon">
+                    <Button asChild variant="ghost" size="icon" className="rounded-full">
                         <a href="mailto:janarthanv@outlook.com">
                             <Mail className="h-5 w-5" />
                         </a>
@@ -151,7 +149,7 @@ export default function AboutPage() {
                           "My vision for Focus Links extends beyond a simple directory. It is a heartfelt invitation to every eye care association, college, and community group across the globe. We offer you a dedicated hub—a place to host your events, share your knowledge, run competitions, and connect with a global audience, all free of charge. This is our commitment to fostering a truly unified community, where collaboration drives the future of vision care."
                       </p>
                       <p className="mt-2 font-semibold text-slate-800">– Janarthan Veeramani, Founder</p>
-                      <Button asChild className="mt-6" size="lg">
+                      <Button asChild className="mt-6 rounded-full-btn" size="lg">
                           <Link href="/contact">Collaborate With Us</Link>
                       </Button>
                   </CardContent>
@@ -159,7 +157,7 @@ export default function AboutPage() {
           </section>
 
           {/* Mission Section */}
-          <section className="py-16 bg-card border rounded-lg shadow-sm">
+          <section className="py-16 bg-card border rounded-3xl shadow-sm">
             <div className="container mx-auto px-4 text-center max-w-4xl">
                 <Eye className="h-12 w-12 text-primary mx-auto mb-4" />
                 <h2 className="text-3xl font-bold text-slate-800">Join Us in Building the Future of Connected Eye Care</h2>
@@ -167,16 +165,16 @@ export default function AboutPage() {
                   In an ever-evolving industry, staying connected is more important than ever. Focus Links provides a centralized platform for optometrists, students, researchers, academics, and industry organizations to create detailed profiles, showcase their expertise, and discover one another. Whether you're a student seeking mentorship, a practitioner looking to collaborate on a complex case, or an organization wanting to engage with the community, our platform is built for you.
                 </p>
                  <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button asChild size="lg">
+                  <Button asChild size="lg" className="rounded-full-btn">
                     <Link href="/membership">Become a Member</Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline">
+                  <Button asChild size="lg" variant="outline" className="rounded-full-btn">
                     <Link href="/directory">Explore the Directory</Link>
                   </Button>
                 </div>
             </div>
           </section>
-        </div>
+        </main>
 
       </div>
     </>

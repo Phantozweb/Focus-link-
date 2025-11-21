@@ -174,32 +174,30 @@ export default function TeamApplicationPage() {
 
   return (
     <>
-      <div className="bg-muted/40">
-        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Let's Build the Future of Eye Care, Together</h1>
-            <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+      <div className="bg-brand-bg">
+        <header className="hero">
+            <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Let's Build the Future of Eye Care, Together</h1>
+            <p className="text-base opacity-90 max-w-xl mx-auto">
               We are a passionate, non-commercial team building the world's largest digital community for eye care. This is a volunteer opportunity to make a global impact.
             </p>
-          </div>
-        </section>
+        </header>
 
-        <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
+        <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-16">
            <section className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-slate-800 text-center">Why Join Us?</h2>
             <p className="text-lg text-slate-600 mt-2 text-center">This is more than a volunteer role. It's a chance to lead, innovate, and grow.</p>
              <div className="grid md:grid-cols-3 gap-8 mt-8">
-                <Card className="p-6 text-center">
+                <Card className="p-6 text-center rounded-3xl shadow-soft">
                     <Award className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Gain Real Experience</h3>
                     <p className="text-muted-foreground mt-1">Lead projects, manage teams, and build a portfolio that showcases your skills to a global audience.</p>
                 </Card>
-                 <Card className="p-6 text-center">
+                 <Card className="p-6 text-center rounded-3xl shadow-soft">
                     <Handshake className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Expand Your Network</h3>
                     <p className="text-muted-foreground mt-1">Connect with industry leaders, educators, and peers from around the world. Build relationships that last a lifetime.</p>
                 </Card>
-                 <Card className="p-6 text-center">
+                 <Card className="p-6 text-center rounded-3xl shadow-soft">
                     <Globe className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Make a Global Impact</h3>
                     <p className="text-muted-foreground mt-1">Your contributions will directly help thousands of students and professionals connect, learn, and advance their careers.</p>
@@ -249,8 +247,8 @@ export default function TeamApplicationPage() {
               </Accordion>
           </section>
 
-          <section id="application-form" className="max-w-3xl mx-auto">
-            <Card>
+          <section id="application-form" className="max-w-3xl mx-auto pb-16">
+            <Card className="rounded-3xl shadow-soft">
               <CardHeader>
                 <CardTitle className="text-2xl font-headline">Volunteer Application</CardTitle>
                 <CardDescription>
@@ -262,18 +260,18 @@ export default function TeamApplicationPage() {
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name</Label>
-                      <Input id="name" {...register('name')} />
+                      <Input id="name" {...register('name')} className="rounded-xl"/>
                       {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address</Label>
-                      <Input id="email" type="email" {...register('email')} />
+                      <Input id="email" type="email" {...register('email')} className="rounded-xl"/>
                       {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
-                    <Input id="linkedin" {...register('linkedin')} />
+                    <Input id="linkedin" {...register('linkedin')} className="rounded-xl"/>
                     {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
                   </div>
                    <div className="space-y-2">
@@ -283,7 +281,7 @@ export default function TeamApplicationPage() {
                       control={control}
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <SelectTrigger id="role">
+                          <SelectTrigger id="role" className="rounded-xl">
                             <SelectValue placeholder="Select a role you're interested in..." />
                           </SelectTrigger>
                           <SelectContent>
@@ -296,15 +294,15 @@ export default function TeamApplicationPage() {
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="skills">Your Skills & Experience</Label>
-                    <Textarea id="skills" {...register('skills')} placeholder="Tell us what you're great at (e.g., content writing, social media, React, clinical research)." />
+                    <Textarea id="skills" {...register('skills')} placeholder="Tell us what you're great at (e.g., content writing, social media, React, clinical research)." className="rounded-2xl"/>
                     {errors.skills && <p className="text-sm text-destructive">{errors.skills.message}</p>}
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="contribution">How would you like to contribute?</Label>
-                    <Textarea id="contribution" {...register('contribution')} placeholder="Share your ideas and how you envision yourself helping our mission." />
+                    <Textarea id="contribution" {...register('contribution')} placeholder="Share your ideas and how you envision yourself helping our mission." className="rounded-2xl"/>
                     {errors.contribution && <p className="text-sm text-destructive">{errors.contribution.message}</p>}
                   </div>
-                  <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                  <Button type="submit" className="w-full rounded-full-btn" size="lg" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
                     Submit Application
                   </Button>
@@ -312,7 +310,7 @@ export default function TeamApplicationPage() {
               </CardContent>
             </Card>
           </section>
-        </div>
+        </main>
       </div>
     </>
   );

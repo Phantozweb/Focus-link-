@@ -110,9 +110,9 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
 
 
   return (
-    <div className="bg-background">
+    <div className="bg-brand-bg">
         <div className="mb-8">
-            <Button variant="outline" onClick={() => router.push('/directory')}>
+            <Button variant="outline" onClick={() => router.push('/directory')} className="rounded-full-btn">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Directory Hub
             </Button>
@@ -120,7 +120,7 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <aside className="lg:col-span-1">
             <div className="sticky top-24">
-              <div className="space-y-6 p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+              <div className="space-y-6 p-6 rounded-3xl border bg-card text-card-foreground shadow-soft">
                 <h3 className="text-xl font-semibold flex items-center gap-2">
                   <SlidersHorizontal className="h-5 w-5" />
                   Filters
@@ -139,7 +139,7 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
                               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                              className="pl-10"
+                              className="pl-10 rounded-xl"
                               disabled={isPending}
                           />
                       </div>
@@ -148,7 +148,7 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
                   <div>
                     <label htmlFor="country" className="sr-only">Country</label>
                     <Select onValueChange={(v) => setSelectedCountry(v)} value={selectedCountry} disabled={isPending}>
-                      <SelectTrigger id="country">
+                      <SelectTrigger id="country" className="rounded-xl">
                         <SelectValue placeholder="Select a country" />
                       </SelectTrigger>
                       <SelectContent>
@@ -164,14 +164,14 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
                 </div>
                 
                 <div className="space-y-2">
-                    <Button onClick={sortByLocation} variant="secondary" className="w-full">
+                    <Button onClick={sortByLocation} variant="secondary" className="w-full rounded-full-btn">
                         <Map className="mr-2 h-4 w-4" /> Sort by Location
                     </Button>
                 </div>
 
                 <div className="space-y-2">
-                  <Button onClick={handleSearch} className="w-full" disabled={isPending}>Apply Filters</Button>
-                  <Button onClick={clearFilters} variant="outline" className="w-full" disabled={isPending}>
+                  <Button onClick={handleSearch} className="w-full rounded-full-btn" disabled={isPending}>Apply Filters</Button>
+                  <Button onClick={clearFilters} variant="outline" className="w-full rounded-full-btn" disabled={isPending}>
                     Clear Filters
                   </Button>
                 </div>

@@ -30,19 +30,17 @@ export default async function JobsPage() {
   const jobs = await getJobs();
 
   return (
-    <div className="bg-muted/40">
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Job Board</h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-            Discover your next career move. Connect with leading employers in the eye care industry.
-          </p>
-        </div>
-      </section>
+    <div className="bg-brand-bg">
+      <header className="hero">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Job Board</h1>
+        <p className="text-base opacity-90 max-w-xl mx-auto">
+          Discover your next career move. Connect with leading employers in the eye care industry.
+        </p>
+      </header>
 
-       <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+       <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16">
         <JobBoardClient allJobs={jobs} />
-      </div>
+      </main>
     </div>
   );
 }

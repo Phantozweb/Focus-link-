@@ -30,31 +30,29 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
       />
-      <div className="bg-muted/40">
-        <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Contact Us</h1>
-            <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-              We&apos;d love to hear from you! Whether you have a question about features, partnerships, or anything else, our team is ready to answer all your questions.
-            </p>
-          </div>
-        </section>
+      <div className="bg-brand-bg">
+        <header className="hero">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Contact Us</h1>
+          <p className="text-base opacity-90 max-w-xl mx-auto">
+            We&apos;d love to hear from you! Whether you have a question about features, partnerships, or anything else, our team is ready to answer all your questions.
+          </p>
+        </header>
 
-        <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16">
           <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-slate-800">Get in Touch</h2>
               <p className="text-slate-600 mt-2 text-lg">
                   The best way to reach us is by email. Our team will get back to you within 24 hours.
               </p>
               <div className="mt-8">
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="rounded-full-btn">
                     <a href="mailto:team.focuslinks@outlook.com">
                         <Mail className="mr-2 h-5 w-5" />
                         Contact us via Email
                     </a>
                 </Button>
               </div>
-              <Card className="mt-12 text-left bg-primary/10 border-primary/20">
+              <Card className="mt-12 text-left bg-primary/10 border-primary/20 rounded-3xl">
                   <CardHeader className="flex-row items-center gap-4">
                       <div className="flex-shrink-0">
                         <Handshake className="h-8 w-8 text-primary" />
@@ -68,7 +66,7 @@ export default function ContactPage() {
                   </CardHeader>
               </Card>
           </div>
-        </div>
+        </main>
       </div>
     </>
   );

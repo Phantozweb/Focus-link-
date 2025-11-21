@@ -45,23 +45,21 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
     setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
   }, []);
 
   return (
-    <div className="bg-muted/40">
+    <div className="bg-brand-bg">
       {/* Hero Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Academy & Events</h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+      <header className="hero">
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Academy & Events</h1>
+          <p className="text-base opacity-90 max-w-xl mx-auto">
             Stay at the forefront of vision care with expert-led sessions on the latest research, clinical techniques, and industry innovations.
           </p>
-        </div>
-      </section>
+      </header>
 
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-16">
         {/* Live Webinars */}
         {liveWebinars.length > 0 && (
           <section>
@@ -71,7 +69,7 @@ export default function AcademyPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {liveWebinars.map(webinar => (
-                <Card key={webinar.id} className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <Card key={webinar.id} className="group overflow-hidden rounded-3xl shadow-soft hover:shadow-hover transition-shadow duration-300 h-full flex flex-col">
                   <Link href={`/academy/${webinar.id}`} className="block">
                     <div className="relative w-full aspect-video">
                       <WebinarBanner webinar={webinar} variant="card" />
@@ -85,7 +83,7 @@ export default function AcademyPage() {
                         <WebinarTime dateTime={webinar.dateTime} />
                     </div>
                     
-                    <Button asChild className="w-full mt-4" variant="destructive">
+                    <Button asChild className="w-full mt-4 rounded-full-btn" variant="destructive">
                       <Link href={`/academy/${webinar.id}`}>
                         {webinar.id === 'eye-q-arena-2025' ? (
                           <><Trophy className="mr-2 h-4 w-4" /> Enter The Quiz</>
@@ -105,7 +103,7 @@ export default function AcademyPage() {
             <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">Upcoming Live Events</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {upcomingWebinars.map(webinar => (
-                <Card key={webinar.id} className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                <Card key={webinar.id} className="group overflow-hidden rounded-3xl shadow-soft hover:shadow-hover transition-shadow duration-300 h-full flex flex-col">
                   <Link href={`/academy/${webinar.id}`} className="block">
                     <div className="relative w-full aspect-video">
                       <WebinarBanner webinar={webinar} variant="card" />
@@ -118,7 +116,7 @@ export default function AcademyPage() {
                     <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                       <WebinarTime dateTime={webinar.dateTime} />
                     </div>
-                    <Button asChild className="w-full mt-4">
+                    <Button asChild className="w-full mt-4 rounded-full-btn">
                       <Link href={`/academy/${webinar.id}`}>View Details</Link>
                     </Button>
                   </div>
@@ -135,7 +133,7 @@ export default function AcademyPage() {
               <h2 className="text-3xl font-bold font-headline mb-8 text-slate-800">On-Demand & Past Events</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {pastWebinars.map(webinar => (
-                   <Card key={webinar.id} className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                   <Card key={webinar.id} className="group overflow-hidden rounded-3xl shadow-soft hover:shadow-hover transition-shadow duration-300 h-full flex flex-col">
                     <Link href={`/academy/${webinar.id}`} className="block">
                        <div className="relative w-full aspect-video">
                           <WebinarBanner webinar={webinar} variant="card" />
@@ -167,7 +165,7 @@ export default function AcademyPage() {
                         <p className="text-muted-foreground text-sm mt-auto border-t pt-4">Originally aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></p>
                       )}
                       
-                      <Button asChild variant="secondary" className="w-full mt-4">
+                      <Button asChild variant="secondary" className="w-full mt-4 rounded-full-btn">
                         <Link href={`/academy/${webinar.id}`}>
                            <Info className="mr-2 h-4 w-4" />
                            View Details
@@ -180,7 +178,7 @@ export default function AcademyPage() {
             </section>
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 }

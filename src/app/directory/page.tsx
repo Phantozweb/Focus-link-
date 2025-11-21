@@ -12,11 +12,11 @@ import type { UserProfile } from '@/types';
 import { Card } from '@/components/ui/card';
 
 const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaText: string, ctaLink: string, icon: React.ReactNode }) => (
-    <div className="text-center p-8 bg-card rounded-lg shadow-sm border-2 border-dashed flex flex-col items-center justify-center h-full min-h-[250px]">
-        <div className="mb-4 text-muted-foreground">{icon}</div>
-        <h3 className="font-semibold text-xl text-card-foreground mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm mb-4">Be the first to represent your category.</p>
-        <Button asChild>
+    <div className="empty-state">
+        <div className="empty-icon">{icon}</div>
+        <h3 className='text-xl font-bold mb-2'>{title}</h3>
+        <p className="text-sm text-text-muted mb-5">Be the first to represent your category.</p>
+        <Button asChild className="search-btn">
             <Link href={ctaLink}>{ctaText}</Link>
         </Button>
     </div>
@@ -67,29 +67,27 @@ export default function DirectoryPage() {
   const displayClinics = shuffledClinics.length > 0 ? shuffledClinics : clinicsAndOpticals;
 
   return (
-    <div className="bg-muted/40">
-       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-700 to-blue-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-headline">Focus Links Directory</h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
-            Explore the global eye care community. Find colleagues, mentors, and partners across every specialty.
-          </p>
-        </div>
-      </section>
+    <div className="bg-brand-bg">
+       <header className="hero">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Focus Links Directory</h1>
+        <p className="text-base opacity-90 max-w-xl mx-auto">
+          Explore the global eye care community. Find colleagues, mentors, and partners across every specialty.
+        </p>
+      </header>
 
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-16">
         
          {students.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Students</h2>
+            <div className="section-header">
+              <h2 className="section-title">Featured Students</h2>
               <Button asChild variant="link" className="text-primary pr-0">
                 <Link href="/directory/students">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
              <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
+              <CarouselContent>
                 {displayStudents.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
                     <ProfileCard user={user} />
                   </CarouselItem>
                 ))}
@@ -100,16 +98,16 @@ export default function DirectoryPage() {
           </section>}
           
           {professionals.length > 0 && <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Professionals</h2>
+            <div className="section-header">
+              <h2 className="section-title">Featured Professionals</h2>
               <Button asChild variant="link" className="text-primary pr-0">
                 <Link href="/directory/professionals">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
              <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-4">
+              <CarouselContent>
                 {displayProfessionals.map((user) => (
-                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
+                  <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
                     <ProfileCard user={user} />
                   </CarouselItem>
                 ))}
@@ -120,17 +118,17 @@ export default function DirectoryPage() {
           </section>}
           
           <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Colleges & Schools</h2>
+            <div className="section-header">
+              <h2 className="section-title">Featured Colleges & Schools</h2>
               {colleges.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
                 <Link href="/directory/colleges">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>}
             </div>
             {colleges.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
+                <CarouselContent>
                     {displayColleges.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
                         <ProfileCard user={user} />
                     </CarouselItem>
                     ))}
@@ -149,17 +147,17 @@ export default function DirectoryPage() {
           </section>
 
           <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Associations</h2>
+            <div className="section-header">
+              <h2 className="section-title">Featured Associations</h2>
               {associations.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
                 <Link href="/directory/associations">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>}
             </div>
             {associations.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
-                    <CarouselContent className="-ml-4">
+                    <CarouselContent>
                         {displayAssociations.map((user) => (
-                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
+                        <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
                             <ProfileCard user={user} />
                         </CarouselItem>
                         ))}
@@ -178,17 +176,17 @@ export default function DirectoryPage() {
           </section>
 
           <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Industry Partners</h2>
+            <div className="section-header">
+              <h2 className="section-title">Featured Industry Partners</h2>
               {industry.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
                 <Link href="/directory/industry">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>}
             </div>
             {industry.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
+                <CarouselContent>
                     {displayIndustry.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
                         <ProfileCard user={user} />
                     </CarouselItem>
                     ))}
@@ -207,17 +205,17 @@ export default function DirectoryPage() {
           </section>
 
           <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-slate-800 text-3xl font-bold font-headline">Featured Clinics & Opticals</h2>
+            <div className="section-header">
+              <h2 className="section-title">Featured Clinics & Opticals</h2>
               {clinicsAndOpticals.length > 0 && <Button asChild variant="link" className="text-primary pr-0">
                 <Link href="/directory/clinics">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>}
             </div>
             {clinicsAndOpticals.length > 0 ? (
                 <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
+                <CarouselContent>
                     {displayClinics.map((user) => (
-                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3 pl-4 flex flex-col">
+                    <CarouselItem key={user.id} className="md:basis-1/2 lg:basis-1/3">
                         <ProfileCard user={user} />
                     </CarouselItem>
                     ))}
@@ -234,7 +232,7 @@ export default function DirectoryPage() {
                 />
             )}
           </section>
-      </div>
+      </main>
     </div>
   );
 }
