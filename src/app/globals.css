@@ -126,7 +126,7 @@
   }
 
   .wa-card {
-    @apply bg-brand-dark text-white mx-5 my-10 p-8 rounded-3xl relative overflow-hidden shadow-wa-card;
+    @apply bg-brand-dark text-white my-10 p-8 rounded-3xl relative overflow-hidden shadow-wa-card;
   }
   .wa-stats {
     @apply text-2xl font-extrabold mb-1;
@@ -139,7 +139,7 @@
   }
 
   .section-header {
-    @apply flex justify-between items-baseline px-6 mb-5 mt-10;
+    @apply flex justify-between items-baseline mb-5 mt-10;
   }
   .section-title {
     @apply text-xl font-bold text-brand-dark;
@@ -149,7 +149,7 @@
   }
 
   .scroll-container {
-    @apply flex gap-5 overflow-x-auto pb-10 px-6;
+    @apply flex gap-5 overflow-x-auto pb-10 -mx-6 px-6;
     scroll-behavior: smooth;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
@@ -193,7 +193,7 @@
   }
 
   .forum-card {
-    @apply mx-6 bg-white rounded-3xl p-6 shadow-soft border-l-[6px] border-brand-blue;
+    @apply bg-white rounded-3xl p-6 shadow-soft border-l-[6px] border-brand-blue;
   }
   .tag {
     @apply bg-sky-100 text-brand-blue px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase inline-block mb-3;
@@ -206,7 +206,7 @@
   }
 
   .job-list {
-    @apply flex flex-col gap-4 px-6;
+    @apply flex flex-col gap-4;
   }
   .job-item {
     @apply bg-white p-5 rounded-2xl flex justify-between items-center shadow-sm transition-transform duration-200 cursor-pointer;
@@ -235,7 +235,7 @@
   }
 
   .empty-state {
-    @apply mx-6 p-12 text-center border-2 border-dashed border-slate-300 rounded-3xl bg-slate-50;
+    @apply p-12 text-center border-2 border-dashed border-slate-300 rounded-3xl bg-slate-50;
   }
   .empty-icon {
     @apply text-5xl text-slate-300 mb-4;

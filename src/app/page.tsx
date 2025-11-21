@@ -90,7 +90,7 @@ export default async function Home() {
               <HomepageSearch />
           </header>
 
-          <main className="container mx-auto px-0 md:px-6 lg:px-8 pt-16 space-y-12">
+          <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-12">
             
             <section className="wa-card">
               <div className="wa-stats">350+</div>
@@ -196,12 +196,14 @@ export default async function Home() {
                         ))}
                     </div>
                 ) : (
-                    <EmptyStateCTA
-                        title="No Clinics Found"
-                        ctaText="Add Your Practice"
-                        ctaLink="/membership"
-                        icon={<Hospital className="h-12 w-12" />}
-                    />
+                    <div className="empty-state">
+                        <div className="empty-icon"><Hospital className="h-12 w-12" /></div>
+                        <h3 className='text-xl font-bold mb-2'>No Clinics Found</h3>
+                        <p className="text-sm text-text-muted mb-5">Be the first to represent your category.</p>
+                        <Button asChild className="search-btn">
+                            <Link href="/membership">Add Your Practice</Link>
+                        </Button>
+                    </div>
                 )}
               </section>
           </main>
