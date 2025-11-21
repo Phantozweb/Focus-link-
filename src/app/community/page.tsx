@@ -123,21 +123,21 @@ function EventsList() {
             <div className="grid grid-cols-1 gap-6">
               {liveWebinars.map(webinar => (
                 <Card key={webinar.id} className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <Link href={`/events/${webinar.id}`} className="block">
+                  <Link href={`/academy/${webinar.id}`} className="block">
                     <div className="relative w-full aspect-video">
                       <WebinarBanner webinar={webinar} variant="card" />
                     </div>
                   </Link>
                   <div className="p-6 flex flex-col flex-grow">
                     <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                      <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                      <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                     </h3>
                     <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                         <WebinarTime dateTime={webinar.dateTime} />
                     </div>
                     
                     <Button asChild className="w-full mt-4" variant="destructive">
-                      <Link href={`/events/${webinar.id}`}>Join Live</Link>
+                      <Link href={`/academy/${webinar.id}`}>Join Live</Link>
                     </Button>
                   </div>
                 </Card>
@@ -146,56 +146,53 @@ function EventsList() {
           </section>
         )}
 
-        {/* Upcoming Webinars */}
-        <section>
+        {upcomingWebinars.length > 0 && (
+          <section>
           <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">Upcoming Live Events</h2>
           <div className="grid grid-cols-1 gap-6">
-            {upcomingWebinars.length > 0 ? upcomingWebinars.map(webinar => (
+            {upcomingWebinars.map(webinar => (
               <Card key={webinar.id} className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                <Link href={`/events/${webinar.id}`} className="block">
+                <Link href={`/academy/${webinar.id}`} className="block">
                   <div className="relative w-full aspect-video">
                     <WebinarBanner webinar={webinar} variant="card" />
                   </div>
                 </Link>
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                    <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                    <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                   </h3>
-                  <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
+                   <div className="space-y-3 text-sm text-muted-foreground border-t pt-4 mt-auto">
                       <WebinarTime dateTime={webinar.dateTime} />
                   </div>
-                  
                   <Button asChild className="w-full mt-4">
-                    <Link href={`/events/${webinar.id}`}>View Details</Link>
+                    <Link href={`/academy/${webinar.id}`}>View Details</Link>
                   </Button>
                 </div>
               </Card>
-            )) : (
-              <p className="text-muted-foreground col-span-full text-center">No upcoming events scheduled. Please check back soon!</p>
-            )}
+            ))}
           </div>
         </section>
+        )}
 
-        {/* Past Webinars */}
         {pastWebinars.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-6 text-slate-800">On-Demand & Past Events</h2>
               <div className="grid grid-cols-1 gap-6">
                 {pastWebinars.map(webinar => (
                    <Card key={webinar.id} className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                    <Link href={`/events/${webinar.id}`} className="block">
+                    <Link href={`/academy/${webinar.id}`} className="block">
                        <div className="relative w-full aspect-video">
                           <WebinarBanner webinar={webinar} variant="card" />
                        </div>
                     </Link>
                     <div className="p-6 flex flex-col flex-grow">
                       <h3 className="text-lg font-bold font-headline text-slate-800 mb-2 flex-grow">
-                        <Link href={`/events/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
+                        <Link href={`/academy/${webinar.id}`} className="hover:text-primary transition-colors">{webinar.title}</Link>
                       </h3>
                       <p className="text-muted-foreground text-sm mt-auto border-t pt-4">Originally aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} /></p>
                       
                       <Button asChild variant="secondary" className="w-full mt-4">
-                        <Link href={`/events/${webinar.id}`}>
+                        <Link href={`/academy/${webinar.id}`}>
                            <Info className="mr-2 h-4 w-4" />
                            View Details
                         </Link>

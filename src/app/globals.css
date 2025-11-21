@@ -82,7 +82,7 @@
   }
   
   .navbar {
-    @apply bg-white/90 py-4 px-6 flex justify-between items-center sticky top-0 z-50 shadow-sm backdrop-blur-md border-b;
+    @apply bg-white/90 py-3 px-4 sm:px-6 flex justify-between items-center sticky top-0 z-50 shadow-sm backdrop-blur-md border-b;
   }
   
   .brand {
@@ -99,7 +99,7 @@
   }
 
   .hero {
-    @apply bg-hero-gradient text-white text-center rounded-b-[40px] mb-8;
+    @apply bg-hero-gradient text-white text-center rounded-b-[40px];
     padding: 60px 20px 80px;
   }
 
@@ -114,7 +114,7 @@
     @apply border-none cursor-pointer font-semibold transition-colors duration-200;
   }
   .filter-btn {
-    @apply bg-slate-100 text-text-main w-10 h-10 rounded-full mr-2 flex items-center justify-center;
+    @apply bg-slate-100 text-text-main w-10 h-10 rounded-full flex items-center justify-center;
   }
   .search-btn {
     @apply bg-brand-blue text-white py-2.5 px-6 rounded-full;
@@ -134,10 +134,10 @@
   }
 
   .section-header {
-    @apply flex justify-between items-baseline;
+    @apply flex justify-between items-baseline mb-5;
   }
   .section-title {
-    @apply text-xl font-bold text-brand-dark flex items-center gap-3;
+    @apply text-xl font-bold text-brand-dark flex items-center gap-2;
   }
   .view-all {
     @apply text-brand-blue text-sm font-semibold no-underline;
@@ -228,5 +228,11 @@
   .dock-item.active::after {
     content: '';
     @apply absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-blue rounded-full;
+  }
+  .filter-scroll-container {
+    @apply w-full overflow-x-auto;
+  }
+  .filter-scroll-container::-webkit-scrollbar {
+    display: none;
   }
 }

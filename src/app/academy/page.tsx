@@ -78,11 +78,11 @@ export default function AcademyPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-16 mt-16">
+      <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 space-y-16">
         
         {liveWebinars.length > 0 && (
           <section>
-            <div className="section-header mb-4">
+            <div className="section-header">
                 <h2 className="section-title"><Radio className="text-red-500" /> Live Now</h2>
             </div>
              <Card className="overflow-hidden shadow-soft border-l-4 border-destructive">
@@ -103,14 +103,14 @@ export default function AcademyPage() {
         )}
 
         <section>
-            <div className="section-header mb-4">
+            <div className="section-header">
                 <h2 className="section-title"><Video className="text-primary" /> Video Courses</h2>
                 <Link href="/academy" className="view-all">View All</Link>
             </div>
             <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-2 md:-ml-4">
+              <CarouselContent>
                  {webinars.filter(w => w.type === 'Course').map(course => (
-                  <CarouselItem key={course.id} className="basis-3/4 md:basis-1/2 lg:basis-1/3 pl-2 md:pl-4">
+                  <CarouselItem key={course.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
                       <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
                         <div className="relative aspect-video">
                           <Image src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt={course.title} layout="fill" objectFit="cover" />
@@ -134,14 +134,14 @@ export default function AcademyPage() {
         </section>
 
         <section>
-            <div className="section-header mb-4">
+            <div className="section-header">
                 <h2 className="section-title"><Headphones className="text-purple-500" /> Audio Learning</h2>
                  <Link href="/academy" className="view-all">Library</Link>
             </div>
             <Carousel opts={{ align: "start", slidesToScroll: 'auto' }} className="w-full">
-              <CarouselContent className="-ml-2 md:-ml-4">
+              <CarouselContent>
                 {/* Placeholder Audio Cards */}
-                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 pl-2 md:pl-4">
+                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
                     <div className="w-[160px]">
                       <div className="relative aspect-square rounded-lg shadow-lg bg-gradient-to-br from-purple-500 to-indigo-600 group">
                           <Image src="https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Myopia Control" layout="fill" objectFit="cover" className="rounded-lg"/>
@@ -153,7 +153,7 @@ export default function AcademyPage() {
                       <p className="text-xs text-muted-foreground">Podcast Ep. 42</p>
                     </div>
                 </CarouselItem>
-                <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 pl-2 md:pl-4">
+                <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
                     <div className="w-[160px]">
                       <div className="relative aspect-square rounded-lg shadow-lg bg-gradient-to-br from-amber-500 to-orange-600 group">
                           <BookOpen className="absolute h-12 w-12 text-white/50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
@@ -172,12 +172,12 @@ export default function AcademyPage() {
         </section>
 
          <section>
-            <div className="section-header mb-4">
+            <div className="section-header">
                 <h2 className="section-title"><Newspaper className="text-slate-600" /> Latest Insights</h2>
             </div>
             <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent className="-ml-2 md:-ml-4">
-                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3 pl-2 md:pl-4">
+              <CarouselContent>
+                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
                     <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
                         <div className="relative aspect-video">
                             <Image src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Blog post" layout="fill" objectFit="cover" />
@@ -197,14 +197,14 @@ export default function AcademyPage() {
         
         {pastWebinars.length > 0 && (
           <section>
-              <div className="section-header mb-4">
+              <div className="section-header">
                 <h2 className="section-title"><Trophy className="text-amber-500" /> On-Demand & Past Events</h2>
                 <Link href="/academy" className="view-all">View All</Link>
               </div>
                <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-2 md:-ml-4">
+                <CarouselContent>
                   {pastWebinars.map(webinar => (
-                    <CarouselItem key={webinar.id} className="basis-full sm:basis-1/2 lg:basis-1/3 pl-2 md:pl-4">
+                    <CarouselItem key={webinar.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
                       <Card className="group overflow-hidden shadow-soft bg-slate-50 h-full flex flex-col">
                         <div className="p-6 flex-grow">
                             <Badge variant="secondary" className="mb-2">{webinar.id === 'eye-q-arena-2025' ? 'Event Concluded' : 'On-Demand'}</Badge>
