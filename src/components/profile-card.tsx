@@ -65,5 +65,3 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
     </div>
   )
 }
-
-    
