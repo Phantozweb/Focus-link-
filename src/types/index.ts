@@ -43,6 +43,7 @@ export type UserProfile = {
   education: Education[];
   languages: string[];
   verified?: boolean;
+  verifiedRole?: string;
   gallery?: string[];
   isFounder?: boolean;
   achievements?: Achievement[];

@@ -621,7 +621,8 @@ export const professionals: UserProfile[] = [
       }
     ],
     languages: ['Tamil', 'English'],
-    verified: false,
+    verified: true,
+    verifiedRole: 'Head of Tech Team at Focus Links',
   },
   {
     id: '17',
@@ -872,7 +873,7 @@ export const professionals: UserProfile[] = [
   },
   {
     id: 'marwankorath',
-    name: 'MARWAN K',
+    name: 'Marwan K',
     type: 'Optometrist',
     experience: 'DOH QUALIFIED Clinical Optometrist | Retinal Imaging & Ocular Diagnostics Specialist',
     location: 'Mannarkkad, Kerala, India',
@@ -917,6 +918,7 @@ export const professionals: UserProfile[] = [
     ],
     languages: [],
     verified: true,
+    verifiedRole: 'Verified Case Submitable person position',
   }
 ];
 

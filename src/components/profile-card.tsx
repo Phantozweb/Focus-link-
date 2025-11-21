@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle2, User, Building } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ProfileCardProps {
   user: UserProfile;
@@ -39,9 +40,18 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
               )}
             </Avatar>
             {user.verified && (
-                <div className="verified-badge">
-                    <CheckCircle2 className="h-5 w-5" />
-                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="verified-badge">
+                          <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{user.verifiedRole || 'Verified Member'}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
             )}
         </div>
         <h3 className="p-name">{user.name}</h3>

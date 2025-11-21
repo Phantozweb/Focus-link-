@@ -86,6 +86,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     ],
     languages: ['English (Professional working proficiency)', 'German (Elementary proficiency)', 'Tamil (Native or bilingual proficiency)'],
     verified: true,
+    verifiedRole: 'Founder of Focus links',
   },
   {
     id: '2',
@@ -214,6 +215,7 @@ My goal is to build a career that combines clinical leadership with education an
     ],
     languages: ['English (Full Professional)', 'Hindi (Native or Bilingual)'],
     verified: true,
+    verifiedRole: 'Region Head of Students Lead in India',
   },
   {
     id: '7',
@@ -391,5 +393,6 @@ My goal is to bridge the gap between practice and education. I am currently purs
     ],
     languages: ['English', 'Hindi', 'Odia'],
     verified: true,
+    verifiedRole: 'Head of Outreach',
   }
 ];
