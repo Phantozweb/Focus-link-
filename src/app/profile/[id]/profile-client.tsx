@@ -22,6 +22,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Textarea } from '@/components/ui/textarea';
 import Autoplay from "embla-carousel-autoplay";
 import { ShareButton } from '@/components/share-button';
+import { cn } from '@/lib/utils';
 
 
 function ExperienceItem({ experience }: { experience: WorkExperience }) {
@@ -121,7 +122,7 @@ function StudentProfile({ user }: { user: UserProfile }) {
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 mb-1">
                       <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
                         {user.name}
-                        {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                        {user.verified && <CheckCircle2 className={cn("h-7 w-7 text-primary", user.id === 'marwankorath' && 'text-green-500')} />}
                       </h1>
                       <div className="flex items-center gap-2">
                         {user.isFounder && (
@@ -286,7 +287,7 @@ function AssociationProfile({ user }: { user: UserProfile }) {
                         <div className="flex-grow pt-2">
                             <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
                                 {user.name}
-                                {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                                {user.verified && <CheckCircle2 className={cn("h-7 w-7 text-primary", user.id === 'marwankorath' && 'text-green-500')} />}
                             </h1>
                             <p className="text-muted-foreground mt-1 text-base">{user.experience}</p>
                             <p className="text-muted-foreground text-sm">{user.skills.length * 1000 + 2345} members</p>
@@ -418,7 +419,7 @@ Thank you.
                         <div className="flex-grow pt-2">
                             <h1 className="text-slate-800 text-2xl sm:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
                                 {user.name}
-                                {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                                {user.verified && <CheckCircle2 className={cn("h-7 w-7 text-primary", user.id === 'marwankorath' && 'text-green-500')} />}
                             </h1>
                             <p className="text-muted-foreground mt-1 text-base">{user.experience}</p>
                         </div>
@@ -1100,7 +1101,7 @@ export function ProfileClient({ user }: { user: UserProfile }) {
                 <div className="text-center sm:text-left pt-4 sm:pt-0 flex-1">
                   <h1 className="text-3xl font-bold font-headline flex items-center justify-center sm:justify-start gap-2">
                     {user.name}
-                    {user.verified && <CheckCircle2 className="h-7 w-7 text-primary" />}
+                    {user.verified && <CheckCircle2 className={cn("h-7 w-7 text-primary", user.id === 'marwankorath' && 'text-green-500')} />}
                   </h1>
                   <p className="text-lg text-muted-foreground">{user.experience}</p>
                   <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
