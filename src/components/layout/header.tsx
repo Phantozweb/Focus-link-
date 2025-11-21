@@ -67,7 +67,7 @@ export function Header() {
       const startTime = new Date(w.dateTime).getTime();
       const durationParts = w.duration.split(' ');
       const durationValue = parseInt(durationParts[0], 10);
-      const endTime = startTime + (durationValue * 60 * 1000);
+      const endTime = startTime + (durationValue * 60 * 60 * 1000);
       return Date.now() >= startTime && Date.now() < endTime;
     });
 
@@ -88,7 +88,7 @@ export function Header() {
 
   return (
     <header className="navbar">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
@@ -100,7 +100,8 @@ export function Header() {
                 <div className="p-4 border-b">
                      <Link href="/" className="brand">
                         <Eye />
-                        <span>Focus Links</span>
+                        <span className="brand-focus">Focus</span>
+                        <span className="brand-links">Links</span>
                     </Link>
                   </div>
                 <nav className="flex-grow overflow-y-auto p-4 space-y-4">
@@ -165,8 +166,11 @@ export function Header() {
             </Sheet>
             <Link href="/" className="brand">
                 <Eye/>
-                <span className="hidden sm:block">Focus Links</span>
+                <div className="hidden sm:block">
+                  <span className="brand-focus">Focus</span><span className="brand-links">Links</span>
+                </div>
             </Link>
+            </div>
             <nav className="hidden md:flex items-center gap-1">
                 <Button variant="ghost" asChild><Link href="/">Home</Link></Button>
                 <DropdownMenu>
@@ -228,7 +232,6 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
             </nav>
-        </div>
         <div className="hidden md:flex items-center gap-2">
              <Button className="rounded-full" asChild>
                 <Link href="/membership">

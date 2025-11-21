@@ -86,11 +86,18 @@
   }
   
   .brand {
-    @apply text-lg font-extrabold text-brand-dark flex items-center gap-2;
+    @apply text-xl font-extrabold text-brand-dark flex items-center gap-2;
   }
   .brand .lucide {
     @apply text-brand-blue;
   }
+  .brand-focus {
+    @apply font-bold text-primary;
+  }
+  .brand-links {
+    @apply font-semibold text-brand-dark;
+  }
+
 
   .hero {
     background: var(--hero-gradient);
