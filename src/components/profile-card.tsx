@@ -48,9 +48,9 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
         <span className="p-role">{user.experience}</span>
         <p className="p-desc">{user.bio}</p>
         {!hideButton && (
-          <Button asChild className="btn-view">
+          <button className="btn-view asChild">
             <Link href={`/profile/${user.id}`}>View Profile</Link>
-          </Button>
+          </button>
         )}
     </div>
   )

@@ -61,10 +61,13 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--card-radius)",
-        md: "calc(var(--card-radius) - 8px)",
-        sm: "calc(var(--card-radius) - 16px)",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 8px)",
+        sm: "calc(var(--radius) - 16px)",
         'full-btn': 'var(--btn-radius)',
+        '3xl': 'var(--card-radius)',
+        '2xl': 'calc(var(--card-radius) - 8px)',
+        xl: 'calc(var(--card-radius) - 16px)',
       },
       boxShadow: {
         'soft': 'var(--shadow-soft)',
