@@ -119,7 +119,7 @@
     @apply border-none cursor-pointer font-semibold transition-colors duration-200;
   }
   .filter-btn {
-    @apply bg-slate-100 text-text-main w-10 h-10 rounded-full mr-2;
+    @apply bg-slate-100 text-text-main w-10 h-10 rounded-full mr-2 flex items-center justify-center;
   }
   .search-btn {
     @apply bg-brand-blue text-white py-2.5 px-6 rounded-full;
