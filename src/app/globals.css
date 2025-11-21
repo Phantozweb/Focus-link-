@@ -1,47 +1,47 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 220 20% 97%; /* slate-100 */
+    --brand-blue: #0ea5e9;
+    --brand-dark: #0f172a;
+    --brand-bg: #f8fafc;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --card-radius: 24px;
+    --btn-radius: 50px;
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 20px 40px -10px rgba(14, 165, 233, 0.15);
+    --hero-gradient: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+
+    --background: 210 40% 98%;
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 195 78% 46%; /* cyan-600 */
+    --primary: 199 89% 48%; /* brand-blue */
     --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 215 14% 47%;
+    --muted-foreground: 220 9% 46%;
     --accent: 174 45% 51%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 13% 91%; /* slate-200 */
-    --input: 220 13% 91%; /* slate-200 */
-    --ring: 195 78% 46%; /* cyan-600 */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 199 89% 48%;
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
-    /* Modern Profile Variables */
-    --profile-primary: #0891b2; /* Vibrant Teal */
-    --profile-primary-dark: #164e63;
-    --profile-accent: #22d3ee;
-    --profile-text-main: #334155;
-    --profile-text-light: #64748b;
-    --profile-bg-gradient: linear-gradient(135deg, #cffafe 0%, #e0f2fe 100%);
-    --profile-glass-bg: rgba(255, 255, 255, 0.85);
-    --profile-glass-border: 1px solid rgba(255, 255, 255, 0.6);
-    --profile-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
+
   .dark {
     --background: 222 47% 11%;
     --foreground: 210 40% 98%;
@@ -49,7 +49,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
-    --primary: 195 78% 46%;
+    --primary: 199 89% 48%;
     --primary-foreground: 0 0% 100%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
@@ -61,7 +61,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 195 78% 46%;
+    --ring: 199 89% 48%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -75,70 +75,36 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-     font-family: "Public Sans", "Noto Sans", "Poppins", sans-serif;
+    background-color: var(--brand-bg);
+    color: var(--text-main);
+    padding-bottom: 100px;
+    font-family: 'Manrope', sans-serif;
   }
   .embla__dots {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem; /* 8px */
+    gap: 0.5rem;
   }
   .embla__dot {
-    width: 0.75rem; /* 12px */
-    height: 0.75rem; /* 12px */
-    border-radius: 9999px; /* full */
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 9999px;
     background-color: hsla(0, 0%, 100%, 0.3);
     transition: background-color 0.2s ease-in-out, width 0.2s ease-in-out;
   }
   .embla__dot--selected {
     background-color: white;
-    width: 2rem; /* 32px */
+    width: 2rem;
   }
-}
 
-@layer components {
-  .shining-button {
-    position: relative;
-    overflow: hidden;
+  .hero {
+    background: var(--hero-gradient);
+    color: white;
+    padding: 60px 20px 80px;
+    text-align: center;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    margin-bottom: 30px;
   }
-  .shining-button::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(255, 255, 255, 0.4),
-      transparent
-    );
-    transform: rotate(30deg);
-    animation: shine 3s infinite linear;
-  }
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-@keyframes community-graph {
-  0%, 100% { height: 25%; }
-  50% { height: 100%; }
-}
-
-@keyframes fade-in-out {
-  0%, 100% { opacity: 0; transform: translateY(10px); }
-  20%, 80% { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in-out {
-  animation: fade-in-out 4s ease-in-out infinite;
 }

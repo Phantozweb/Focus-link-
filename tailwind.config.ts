@@ -1,5 +1,4 @@
 import type {Config} from 'tailwindcss';
-const colors = require('tailwindcss/colors')
 
 export default {
   darkMode: ['class'],
@@ -17,32 +16,21 @@ export default {
       },
     },
     extend: {
-      backgroundImage: {
-        'grid-white': "linear-gradient(to right, theme('colors.white / 0.1') 1px, transparent 1px), linear-gradient(to bottom, theme('colors.white / 0.1') 1px, transparent 1px)",
-        'grid-slate-800': "linear-gradient(to right, theme('colors.slate.800') 1px, transparent 1px), linear-gradient(to bottom, theme('colors.slate.800') 1px, transparent 1px)",
-      },
-      backgroundSize: {
-        'grid-white': '40px 40px',
-        'grid-slate-800': '30px 30px',
-      },
       fontFamily: {
-        sans: ['Public Sans', 'Noto Sans', 'sans-serif'],
-        headline: ['Public Sans', 'Noto Sans', 'sans-serif'],
-        serif: ['"Ms Madi"', 'cursive'],
+        sans: ['Manrope', 'sans-serif'],
+        headline: ['Manrope', 'sans-serif'],
       },
       colors: {
-        slate: colors.slate,
-        cyan: colors.cyan,
+        'brand-blue': 'var(--brand-blue)',
+        'brand-dark': 'var(--brand-dark)',
+        'brand-bg': 'var(--brand-bg)',
+        'text-main': 'var(--text-main)',
+        'text-muted': 'var(--text-muted)',
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -50,6 +38,10 @@ export default {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -59,25 +51,29 @@ export default {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
         },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        lg: "var(--card-radius)",
+        md: "calc(var(--card-radius) - 8px)",
+        sm: "calc(var(--card-radius) - 16px)",
+        'full-btn': 'var(--btn-radius)',
+      },
+      boxShadow: {
+        'soft': 'var(--shadow-soft)',
+        'hover': 'var(--shadow-hover)',
+        'search': '0 15px 30px rgba(0,0,0,0.15)',
+        'wa-card': '0 20px 40px -10px rgba(30, 41, 59, 0.3)',
+      },
+      backgroundImage: {
+        'hero-gradient': 'var(--hero-gradient)',
       },
       keyframes: {
         'accordion-down': {
@@ -96,15 +92,10 @@ export default {
             height: '0',
           },
         },
-        'marquee-fast': {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'marquee-fast': 'marquee-fast 20s linear infinite',
       },
     },
   },

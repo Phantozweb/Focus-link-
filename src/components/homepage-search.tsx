@@ -69,25 +69,21 @@ export function HomepageSearch() {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-lg shadow-lg border border-white/30 mx-auto">
-      <div className="flex gap-2">
-        <div className="relative flex-grow">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
-          <Input
-            className="w-full pl-10 pr-4 py-3 rounded-md bg-white text-gray-800 border-gray-300 focus:ring-primary focus:border-primary placeholder-gray-500 h-12 text-base"
+    <div className="search-box">
+        <Input
+            className="search-input"
             placeholder="Search by name, skill, job title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-        </div>
+        />
 
         <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="secondary" size="icon" className="h-12 w-12 flex-shrink-0 bg-white text-gray-800 hover:bg-gray-200">
+             <button className="filter-btn">
               <SlidersHorizontal className="h-5 w-5" />
               <span className="sr-only">Advanced Filters</span>
-            </Button>
+            </button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -145,10 +141,9 @@ export function HomepageSearch() {
           </DialogContent>
         </Dialog>
 
-        <Button className="h-12 w-auto px-6 bg-white text-primary hover:bg-gray-200" onClick={handleSearch}>
-          Search
-        </Button>
+        <button className="search-btn" onClick={handleSearch}>
+            Search
+        </button>
       </div>
-    </div>
   );
 }
