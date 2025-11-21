@@ -30,6 +30,17 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    /* Modern Profile Variables */
+    --profile-primary: #0891b2; /* Vibrant Teal */
+    --profile-primary-dark: #164e63;
+    --profile-accent: #22d3ee;
+    --profile-text-main: #334155;
+    --profile-text-light: #64748b;
+    --profile-bg-gradient: linear-gradient(135deg, #cffafe 0%, #e0f2fe 100%);
+    --profile-glass-bg: rgba(255, 255, 255, 0.85);
+    --profile-glass-border: 1px solid rgba(255, 255, 255, 0.6);
+    --profile-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
   .dark {
     --background: 222 47% 11%;
@@ -65,7 +76,7 @@
   }
   body {
     @apply bg-background text-foreground;
-     font-family: "Public Sans", "Noto Sans", sans-serif;
+     font-family: "Public Sans", "Noto Sans", "Poppins", sans-serif;
   }
   .embla__dots {
     display: flex;
