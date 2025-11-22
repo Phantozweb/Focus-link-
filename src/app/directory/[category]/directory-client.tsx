@@ -61,7 +61,10 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   }, [allUsers, searchTerm, selectedCountry]);
   
   const recommendedUsers = useMemo(() => {
-    return allUsers.filter(u => u.verified).slice(0, 5);
+    const featuredIds = ['marwankorath', '10', '13', 'DrishtiKit'];
+    return featuredIds
+      .map(id => allUsers.find(user => user.id === id))
+      .filter((user): user is UserProfile => user !== undefined);
   }, [allUsers]);
 
   const usersToShow = filteredUsers.slice(0, visibleCount);
