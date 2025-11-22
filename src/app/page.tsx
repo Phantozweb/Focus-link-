@@ -104,9 +104,11 @@ export default async function Home() {
                             <div className="relative z-10">
                                 <div className="wa-stats">350+</div>
                                 <p className="wa-text">Members in our WhatsApp Community active right now.</p>
-                                <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" className="btn-wa" target="_blank" rel="noopener noreferrer">
-                                    <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
-                                </a>
+                                <Button asChild className="btn-wa">
+                                    <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" target="_blank" rel="noopener noreferrer">
+                                        <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
+                                    </a>
+                                </Button>
                             </div>
                             <div className="absolute inset-0 bg-grid-slate-800 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]"></div>
                         </div>
