@@ -88,7 +88,7 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                         </div>
                         
                         {user.links.linkedin && (
-                             <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3.5 px-4 rounded-xl font-semibold bg-[--profile-primary-dark] text-white shadow-lg shadow-cyan-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+                             <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3.5 px-4 rounded-xl font-semibold bg-blue-600 text-white shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-blue-700">
                                 <div className="flex items-center justify-center gap-2">
                                   {isOrg ? <Globe className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
                                   <span>{isOrg ? 'Website' : 'LinkedIn'}</span>
