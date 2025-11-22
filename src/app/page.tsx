@@ -97,7 +97,7 @@ export default async function Home() {
             <Carousel opts={{ loop: true }} className="w-full">
                 <CarouselContent>
                     <CarouselItem>
-                        <div className="wa-card grid grid-cols-2 items-center">
+                        <div className="wa-card grid grid-cols-2 items-center px-8 pt-12 pb-8">
                             <div className="relative z-10">
                                 <div className="text-5xl font-extrabold text-green-400">350+</div>
                                 <p className="text-slate-300 mt-1 mb-4">Active community members</p>
