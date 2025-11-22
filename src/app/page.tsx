@@ -97,20 +97,20 @@ export default async function Home() {
             <Carousel opts={{ loop: true }} className="w-full">
                 <CarouselContent>
                     <CarouselItem>
-                        <div className="wa-card">
-                            <div className="absolute top-6 right-6">
-                                <AnimatedCommunityGraph />
-                            </div>
+                        <div className="wa-card grid grid-cols-2 items-center">
                             <div className="relative z-10">
-                                <div className="wa-stats">350+</div>
-                                <p className="wa-text">Members in our WhatsApp Community active right now.</p>
-                                <Button asChild className="btn-wa">
+                                <div className="text-5xl font-extrabold text-green-400">350+</div>
+                                <p className="text-slate-300 mt-1 mb-4">Active community members</p>
+                                <Button asChild className="btn-wa bg-green-500/20 border-green-400/50 text-white hover:bg-green-500/30">
                                     <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" target="_blank" rel="noopener noreferrer">
-                                        <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
+                                        <MessageSquare className="w-4 h-4"/> Join Now
                                     </a>
                                 </Button>
                             </div>
-                            <div className="absolute inset-0 bg-grid-slate-800 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]"></div>
+                            <div className="relative h-full flex items-center justify-center">
+                                <div className="absolute inset-0 bg-grid-white/10 rounded-full" style={{ aspectRatio: '1/1' }}></div>
+                                <AnimatedCommunityGraph />
+                            </div>
                         </div>
                     </CarouselItem>
                      <CarouselItem>
