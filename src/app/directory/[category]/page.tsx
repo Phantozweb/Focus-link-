@@ -78,10 +78,8 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
   return (
     <div className="bg-brand-bg">
         <header className="hero">
-            <h1 className="text-3xl md:text-4xl font-extrabold mb-3">{getTitle(category)} Directory</h1>
-            <p className="text-base opacity-90 max-w-xl mx-auto">
-                Browse, search, and connect with peers in the global eye care community.
-            </p>
+            <h1>Directory</h1>
+            <p>Connect with peers in the global eye care community.</p>
         </header>
         <main>
             <Suspense fallback={<DirectorySkeleton />}>

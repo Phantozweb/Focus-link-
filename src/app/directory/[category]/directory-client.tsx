@@ -6,26 +6,19 @@ import type { UserProfile } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { countries } from '@/lib/countries';
-import { Search, ChevronDown, Users, GraduationCap, Building, Hospital, Factory, Handshake, Stethoscope } from 'lucide-react';
+import { Search, Users, GraduationCap, Building, Hospital, Factory, Handshake, Stethoscope, Star } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ProfileCard } from '@/components/profile-card';
 import { cn } from '@/lib/utils';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Link from 'next/link';
 
 const categories = [
-    { name: 'All Profiles', filter: 'all', icon: <Users className="h-5 w-5"/> },
-    { name: 'Professionals', filter: 'professionals', icon: <Stethoscope className="h-5 w-5"/> },
-    { name: 'Students', filter: 'students', icon: <GraduationCap className="h-5 w-5"/> },
-    { name: 'Clinics & Opticals', filter: 'clinics', icon: <Hospital className="h-5 w-5"/> },
-    { name: 'Colleges', filter: 'colleges', icon: <Building className="h-5 w-5"/> },
-    { name: 'Associations', filter: 'associations', icon: <Handshake className="h-5 w-5"/> },
-    { name: 'Industry Partners', filter: 'industry', icon: <Factory className="h-5 w-5"/> },
+    { name: 'All', filter: 'all' },
+    { name: 'Professionals', filter: 'professionals' },
+    { name: 'Students', filter: 'students' },
+    { name: 'Clinics', filter: 'clinics' },
+    { name: 'Partners', filter: 'industry' },
 ];
 
 export function DirectoryClient({ allUsers, title, category }: { allUsers: UserProfile[], title: string, category: string }) {
@@ -66,6 +59,10 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
       return matchesSearch && matchesCountry;
     });
   }, [allUsers, searchTerm, selectedCountry]);
+  
+  const recommendedUsers = useMemo(() => {
+    return allUsers.filter(u => u.verified).slice(0, 5);
+  }, [allUsers]);
 
   const usersToShow = filteredUsers.slice(0, visibleCount);
 
@@ -75,56 +72,77 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
 
   return (
     <div>
-        <div className="filter-container">
-            <div className="search-box">
-                <input 
-                    type="text" 
-                    className="search-input" 
-                    placeholder={`Search in ${title}...`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            handleFilterChange('q', searchTerm);
-                        }
-                    }}
-                />
-                <button className="search-btn" onClick={() => handleFilterChange('q', searchTerm)}><Search /></button>
-            </div>
-            
-            <div className="chip-scroll">
-                {categories.map(cat => (
-                    <Link href={`/directory/${cat.filter}`} key={cat.filter} className={cn("chip", category === cat.filter && "active")}>
-                        {cat.icon}
-                        <span>{cat.name}</span>
-                    </Link>
-                ))}
-            </div>
-             <div className="advanced-filters">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <div className="dropdown">
-                            {selectedCountry === 'all' ? 'Country' : countries.find(c => c.name.toLowerCase() === selectedCountry)?.name || 'Country'}
-                            <ChevronDown className="h-4 w-4" />
-                        </div>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="max-h-60 overflow-y-auto">
-                        <DropdownMenuItem onSelect={() => setSelectedCountry('all')}>All Countries</DropdownMenuItem>
+        <div className="toolbar-wrapper">
+            <div className="toolbar">
+                 <div className="search-group">
+                    <Search className="h-5 w-5" />
+                    <Input 
+                        type="text" 
+                        className="search-input" 
+                        placeholder={`Search name, clinic, or keyword...`}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleFilterChange('q', searchTerm)}
+                    />
+                </div>
+                <div className="filter-group">
+                    <Select onValueChange={(value) => setSelectedCountry(value)} defaultValue={selectedCountry}>
+                      <SelectTrigger className="custom-select">
+                        <SelectValue placeholder="All Countries" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Countries</SelectItem>
                         {countries.map(country => (
-                            <DropdownMenuItem key={country.code} onSelect={() => setSelectedCountry(country.name.toLowerCase())}>
+                            <SelectItem key={country.code} value={country.name.toLowerCase()}>
                                 {country.name}
-                            </DropdownMenuItem>
+                            </SelectItem>
                         ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                      </SelectContent>
+                    </Select>
+                     <Select>
+                      <SelectTrigger className="custom-select">
+                        <SelectValue placeholder="All Roles" />
+                      </SelectTrigger>
+                      <SelectContent>
+                         <SelectItem value="all">All Roles</SelectItem>
+                         <SelectItem value="optometrist">Optometrist</SelectItem>
+                         <SelectItem value="student">Student</SelectItem>
+                      </SelectContent>
+                    </Select>
+                </div>
+            </div>
+        </div>
+        
+        <div className="tabs-container">
+            <div className="glass-tab-bar">
+              {categories.map(cat => (
+                <Link href={`/directory/${cat.filter}`} key={cat.filter} className={cn("tab-pill", category === cat.filter && "active")}>
+                    {cat.name}
+                </Link>
+              ))}
+            </div>
+        </div>
+        
+        <div className="section-wrap">
+            <div className="section-header">
+                <div className="sec-title"><Star className="h-5 w-5 text-amber-400" /> Top Recommended</div>
+            </div>
+            <div className="rec-scroll">
+                {recommendedUsers.map(user => <ProfileCard key={user.id} user={user} isFeatured />)}
+            </div>
+        </div>
+        
+        <div className="section-wrap">
+            <div className="section-header">
+                <div className="sec-title">All Profiles</div>
+            </div>
+            <div className="grid-container">
+                {usersToShow.map(user => (
+                    <ProfileCard key={user.id} user={user} />
+                ))}
             </div>
         </div>
 
-        <div className="grid-container">
-            {usersToShow.map(user => (
-                <ProfileCard key={user.id} user={user} />
-            ))}
-        </div>
 
          {usersToShow.length === 0 && (
              <div className="text-center py-16 text-muted-foreground">

@@ -3,16 +3,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { UserProfile } from '@/types';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, User, Building, Mail, UserPlus, MapPin } from 'lucide-react';
+import { CheckCircle2, User, Building, Mail, UserPlus, MapPin, Star } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
 interface ProfileCardProps {
   user: UserProfile;
   hideButton?: boolean;
+  isFeatured?: boolean;
 }
 
-export function ProfileCard({ user, hideButton }: ProfileCardProps) {
+export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
   const isPro = ['Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(user.type);
   const isStudent = user.type === 'Student';
@@ -22,16 +23,9 @@ export function ProfileCard({ user, hideButton }: ProfileCardProps) {
     return "portrait person";
   }
 
-  const getBadge = () => {
-    if (isPro) return <span className="role-badge badge-pro">Pro</span>;
-    if (isStudent) return <span className="role-badge badge-student">Student</span>;
-    if (isOrg) return <span className="role-badge badge-org">Org</span>;
-    return null;
-  }
-
   return (
-    <div className="profile-card">
-      {getBadge()}
+    <div className={cn("profile-card", isFeatured && "featured")}>
+      {isFeatured && <div className="feat-badge">Featured</div>}
       <div className="avatar-wrap">
         <img 
           src={user.avatarUrl || `https://i.pravatar.cc/300?u=${user.id}`} 
