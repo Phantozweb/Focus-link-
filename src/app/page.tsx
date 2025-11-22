@@ -91,7 +91,7 @@ export default async function Home() {
               <HomepageSearch />
           </header>
 
-          <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-12">
+          <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-12">
             
             <Carousel opts={{ loop: true, align: 'start' }} className="w-full">
                 <CarouselContent className="-ml-4">
