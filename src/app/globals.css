@@ -223,7 +223,7 @@
   }
 
   /* Ad Card Styles */
-    .ad-card { @apply w-full h-[300px] rounded-3xl relative overflow-hidden flex items-center justify-between p-10 shadow-lg transition-transform duration-300 mb-8 md:p-12; }
+    .ad-card { @apply w-full h-[300px] rounded-3xl relative overflow-hidden flex items-center justify-between p-8 md:p-12 shadow-lg transition-transform duration-300 mb-8; }
     .ad-content { @apply z-10 max-w-full md:max-w-[50%]; }
     .ad-visual { @apply absolute right-0 top-0 bottom-0 w-2/5 items-center justify-center z-0 hidden md:flex; }
     .ad-title { @apply text-3xl font-extrabold mb-3 leading-tight; }
