@@ -6,7 +6,7 @@ import type { Job } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Briefcase, MapPin, Search, Building, Lock, X, ArrowRight, Heart, Microscope, UserMd, Store, University, Globe } from 'lucide-react';
+import { Briefcase, MapPin, Search, Building, Lock, X, ArrowRight, Heart, Microscope, Stethoscope, Store, University, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { TimeAgo } from '@/components/time-ago';
@@ -25,7 +25,7 @@ function debounce(func: Function, delay: number) {
 
 const categories = [
     { name: 'All Jobs', filter: 'all', icon: <Briefcase /> },
-    { name: 'Clinical', filter: 'clinical', icon: <UserMd /> },
+    { name: 'Clinical', filter: 'clinical', icon: <Stethoscope /> },
     { name: 'Retail', filter: 'retail', icon: <Store /> },
     { name: 'Academic', filter: 'academic', icon: <University /> },
     { name: 'Sales', filter: 'sales', icon: <Briefcase /> },
