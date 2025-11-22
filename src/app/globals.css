@@ -155,7 +155,9 @@
   .rec-scroll { @apply flex gap-5 overflow-x-auto pb-6 -mx-5 px-5; scrollbar-width: none; }
   .rec-scroll::-webkit-scrollbar { display: none; }
   
-  .grid-container { @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6; }
+  .grid-container { 
+    @apply grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6;
+  }
   
   .load-more { @apply text-center my-8; }
   .btn-load { @apply bg-white border border-border py-3 px-8 rounded-full font-semibold text-text-main shadow-md transition-transform hover:-translate-y-0.5; }
