@@ -16,6 +16,7 @@ import { AnimatedSearchCard } from '@/components/animated-search-card';
 import { AnimatedTeamApplicationCard } from '@/components/animated-team-application-card';
 import { AnimatedCommunityUpdateCard } from '@/components/animated-community-update-card';
 import { ProfileCard } from '@/components/profile-card';
+import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -91,17 +92,23 @@ export default async function Home() {
               <HomepageSearch />
           </header>
 
-          <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-16 pt-16">
+          <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-12">
             
             <Carousel opts={{ loop: true }} className="w-full">
                 <CarouselContent>
                     <CarouselItem>
                          <div className="wa-card">
-                            <div className="wa-stats">350+</div>
-                            <p className="wa-text">Members in our WhatsApp Community active right now.</p>
-                            <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" className="btn-wa" target="_blank" rel="noopener noreferrer">
-                                <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
-                            </a>
+                            <div className="absolute top-6 right-6">
+                                <AnimatedCommunityGraph />
+                            </div>
+                            <div className="relative z-10">
+                                <div className="wa-stats">350+</div>
+                                <p className="wa-text">Members in our WhatsApp Community active right now.</p>
+                                <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" className="btn-wa" target="_blank" rel="noopener noreferrer">
+                                    <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
+                                </a>
+                            </div>
+                            <div className="absolute inset-0 bg-grid-slate-700 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]"></div>
                         </div>
                     </CarouselItem>
                      <CarouselItem>
@@ -166,18 +173,36 @@ export default async function Home() {
                   </div>
                   <div className="space-y-4">
                   {demoDiscussions.slice(0, 1).map((discussion) => (
-                      <div key={discussion.id} className="forum-card">
-                          <span className="tag">{discussion.category}</span>
-                          <h3 className="forum-title">
+                      <Card key={discussion.id} className="hover:shadow-hover transition-shadow rounded-3xl shadow-soft">
+                        <CardContent className="p-4 sm:p-6 flex gap-4">
+                          <Avatar className="hidden sm:block h-12 w-12 border">
+                            <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
+                            <AvatarFallback>{discussion.author?.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-grow">
+                            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-y-2">
+                              <Badge variant="secondary">{discussion.category}</Badge>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground flex-shrink-0">
+                                <div className="flex items-center gap-1.5" title="Upvotes"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
+                                <div className="flex items-center gap-1.5" title="Views"><Eye className="h-4 w-4" /> {discussion.views}</div>
+                              </div>
+                            </div>
+                            <h3 className="text-lg font-bold text-slate-800 hover:text-primary mt-2">
                               <Link href={`/forum/${discussion.id}`}>{discussion.title}</Link>
-                          </h3>
-                          <p className="text-sm text-text-muted mt-1 line-clamp-2">{discussion.description}</p>
-                          <div className="forum-stats">
-                              <span className='flex items-center gap-1.5'><User className="h-4 w-4" /> {discussion.author}</span>
-                              <span className='flex items-center gap-1.5'><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</span>
-                              <span className='flex items-center gap-1.5'><Eye className="h-4 w-4" /> {discussion.views}</span>
+                            </h3>
+                            <p className="text-sm text-slate-600 mt-1 line-clamp-2">{discussion.description}</p>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-3">
+                              <Avatar className="sm:hidden h-6 w-6">
+                                <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
+                                <AvatarFallback>{discussion.author?.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              <Link href={`/profile/${discussion.authorId}`} className="font-semibold text-slate-700 hover:underline">{discussion.author}</Link>
+                              <span>&middot;</span>
+                              <span>Posted <TimeAgo dateString={discussion.postedDate} /></span>
+                            </div>
                           </div>
-                      </div>
+                        </CardContent>
+                      </Card>
                   ))}
                   </div>
                 </section>}

@@ -177,19 +177,6 @@
     @apply w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-3xl font-bold text-text-muted;
   }
 
-  .forum-card {
-    @apply bg-white rounded-3xl p-6 shadow-soft border-l-[6px] border-brand-blue;
-  }
-  .tag {
-    @apply bg-sky-100 text-brand-blue px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase inline-block mb-3;
-  }
-  .forum-title {
-    @apply text-lg font-bold text-brand-dark;
-  }
-  .forum-stats {
-    @apply flex gap-5 mt-4 text-text-muted text-xs border-t border-slate-100 pt-4;
-  }
-
   .job-list {
     @apply flex flex-col gap-4;
   }
