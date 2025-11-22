@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -78,6 +79,14 @@ export default {
       backgroundImage: {
         'hero-gradient': 'var(--hero-gradient)',
       },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        'community-graph': 'community-graph 1.5s ease-in-out infinite',
+        'spin-slow': 'spin 10s linear infinite',
+        'rank-up': 'rankUp 3s infinite ease-in-out',
+        'float': 'float 4s ease-in-out infinite',
+      },
       keyframes: {
         'accordion-down': {
           from: {
@@ -99,11 +108,20 @@ export default {
             '0%, 100%': { height: '20%' },
             '50%': { height: '100%' },
         },
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        'community-graph': 'community-graph 1.5s ease-in-out infinite',
+        spin: {
+            '100%': { transform: 'rotate(360deg)' },
+        },
+        rankUp: {
+            '0%': { transform: 'translateY(40px) scale(0.9)', opacity: '0' },
+            '20%': { transform: 'translateY(40px) scale(0.9)', opacity: '1' },
+            '50%': { transform: 'translateY(0) scale(1)', borderColor: '#2563eb', boxShadow: '0 10px 20px rgba(37,99,235,0.15)' },
+            '90%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+            '100%': { transform: 'translateY(-5px)', opacity: '0' },
+        },
+        float: {
+            '0%, 100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(-10px)' },
+        },
       },
     },
   },

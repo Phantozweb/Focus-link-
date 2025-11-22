@@ -16,7 +16,6 @@ import { AnimatedSearchCard } from '@/components/animated-search-card';
 import { AnimatedTeamApplicationCard } from '@/components/animated-team-application-card';
 import { AnimatedCommunityUpdateCard } from '@/components/animated-community-update-card';
 import { ProfileCard } from '@/components/profile-card';
-import { AnimatedCommunityGraph } from '@/components/animated-community-graph';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -94,37 +93,20 @@ export default async function Home() {
 
           <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-12">
             
-            <Carousel opts={{ loop: true }} className="w-full">
-                <CarouselContent>
-                    <CarouselItem>
-                        <div className="wa-card grid grid-cols-2 items-center px-8 pt-12 pb-8">
-                            <div className="relative z-10">
-                                <div className="text-5xl font-extrabold text-green-400">350+</div>
-                                <p className="text-slate-300 mt-1 mb-4">Active community members</p>
-                                <Button asChild className="btn-wa bg-green-500/20 border-green-400/50 text-white hover:bg-green-500/30">
-                                    <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" target="_blank" rel="noopener noreferrer">
-                                        <MessageSquare className="w-4 h-4"/> Join Now
-                                    </a>
-                                </Button>
-                            </div>
-                            <div className="relative h-full flex items-center justify-center">
-                                <div className="absolute inset-0 bg-grid-white/10 rounded-full" style={{ aspectRatio: '1/1' }}></div>
-                                <AnimatedCommunityGraph />
-                            </div>
-                        </div>
-                    </CarouselItem>
-                     <CarouselItem>
-                        <AnimatedSearchCard />
-                    </CarouselItem>
-                    <CarouselItem>
+            <Carousel opts={{ loop: true, align: 'start' }} className="w-full">
+                <CarouselContent className="-ml-4">
+                    <CarouselItem className="pl-4">
                         <AnimatedTeamApplicationCard />
                     </CarouselItem>
-                    <CarouselItem>
+                     <CarouselItem className="pl-4">
+                        <AnimatedSearchCard />
+                    </CarouselItem>
+                    <CarouselItem className="pl-4">
                         <AnimatedCommunityUpdateCard />
                     </CarouselItem>
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="hidden sm:flex" />
+                <CarouselNext className="hidden sm:flex" />
             </Carousel>
 
             {professionals.length > 0 && (
