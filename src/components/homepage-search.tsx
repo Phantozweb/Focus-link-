@@ -140,10 +140,10 @@ export function HomepageSearch() {
             <Button onClick={handleSearch} className="w-full">Apply Filters & Search</Button>
           </DialogContent>
         </Dialog>
-
-        <button className="search-btn" onClick={handleSearch}>
-            Search
-        </button>
+        
+         <Button className="search-btn" onClick={handleSearch} aria-label="Search">
+            <Search className="h-5 w-5" />
+        </Button>
       </div>
   );
 }
