@@ -6,13 +6,15 @@ import type { Job } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Briefcase, MapPin, Search, Building, Lock, X } from 'lucide-react';
+import { Briefcase, MapPin, Search, Building, Lock, X, ArrowRight, Heart, Microscope, UserMd, Store, University, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { TimeAgo } from '@/components/time-ago';
 import { logSearch } from '@/lib/activity-logger';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
+import { Badge } from './ui/badge';
+import { cn } from '@/lib/utils';
 
-// Debounce function
 function debounce(func: Function, delay: number) {
   let timeout: NodeJS.Timeout;
   return function(this: any, ...args: any[]) {
@@ -21,37 +23,38 @@ function debounce(func: Function, delay: number) {
   };
 }
 
+const categories = [
+    { name: 'All Jobs', filter: 'all', icon: <Briefcase /> },
+    { name: 'Clinical', filter: 'clinical', icon: <UserMd /> },
+    { name: 'Retail', filter: 'retail', icon: <Store /> },
+    { name: 'Academic', filter: 'academic', icon: <University /> },
+    { name: 'Sales', filter: 'sales', icon: <Briefcase /> },
+    { name: 'Remote', filter: 'remote', icon: <Globe /> },
+];
+
 export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
   const [keyword, setKeyword] = useState('');
   const [location, setLocation] = useState('');
-  const [hasSearched, setHasSearched] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('all');
 
   const debouncedLogSearch = useMemo(
     () =>
-      debounce((kw: string, loc: string) => {
-        if (kw || loc) {
+      debounce((kw: string, loc: string, cat: string) => {
+        if (kw || loc || cat !== 'all') {
           logSearch(`**Job Board Search:**
 *   **Keyword:** \`${kw || 'none'}\`
-*   **Location:** \`${loc || 'none'}\``);
+*   **Location:** \`${loc || 'none'}\`
+*   **Category:** \`${cat}\``);
         }
       }, 500),
     []
   );
   
   useEffect(() => {
-    if (keyword || location) {
-      setHasSearched(true);
-      debouncedLogSearch(keyword, location);
-    } else {
-      setHasSearched(false);
-    }
-  }, [keyword, location, debouncedLogSearch]);
+    debouncedLogSearch(keyword, location, activeCategory);
+  }, [keyword, location, activeCategory, debouncedLogSearch]);
 
   const filteredJobs = useMemo(() => {
-    if (!keyword && !location) {
-      return allJobs;
-    }
-    
     return allJobs.filter(job => {
       const keywordLower = keyword.toLowerCase();
       const locationLower = location.toLowerCase();
@@ -64,116 +67,133 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
 
       const matchesLocation = !location ||
         job.location.toLowerCase().includes(locationLower);
+      
+      const matchesCategory = activeCategory === 'all' || job.type.toLowerCase().includes(activeCategory);
 
-      return matchesKeyword && matchesLocation;
+      return matchesKeyword && matchesLocation && matchesCategory;
     });
-  }, [allJobs, keyword, location]);
-
-  const clearFilters = () => {
-    setKeyword('');
-    setLocation('');
-  };
+  }, [allJobs, keyword, location, activeCategory]);
 
   return (
-    <div className="max-w-5xl mx-auto">
-        {/* Filter Bar */}
-        <Card className="mb-8 rounded-3xl shadow-soft">
-            <CardContent className="p-4 flex flex-col md:flex-row gap-4 items-center">
-                <div className="w-full flex flex-col sm:flex-row gap-4">
-                    <div className="relative flex-grow w-full">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input 
-                            placeholder="Job title, keyword, or company" 
-                            className="pl-10 h-12 rounded-xl"
-                            value={keyword}
-                            onChange={(e) => setKeyword(e.target.value)}
-                        />
-                    </div>
-                    <div className="relative flex-grow w-full">
-                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input 
-                            placeholder="City or Country" 
-                            className="pl-10 h-12 rounded-xl"
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                        />
-                    </div>
+    <div>
+        <div className="relative transform -translate-y-12">
+            <div className="max-w-3xl mx-auto bg-white p-2.5 rounded-full-btn shadow-search flex flex-col md:flex-row gap-2.5 items-center">
+                <div className="relative flex-grow w-full flex items-center gap-2 px-5 md:border-r">
+                    <Search className="h-5 w-5 text-muted-foreground" />
+                    <Input 
+                        placeholder="Job title, keywords..." 
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto py-3"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
                 </div>
-                 <div className="w-full flex-shrink-0 sm:w-auto flex flex-col md:flex-row gap-2">
-                   {hasSearched && (
-                     <Button onClick={clearFilters} variant="ghost" className="w-full md:w-auto h-12 rounded-full-btn">
-                        <X className="h-5 w-5 mr-2" />
-                        Clear
-                    </Button>
-                   )}
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="secondary" className="w-full md:w-auto h-12 rounded-full-btn" disabled>
-                          <Lock className="mr-2 h-4 w-4" />
-                          Post a Job
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Login with your member account to post jobs.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                <div className="relative flex-grow w-full flex items-center gap-2 px-5">
+                    <MapPin className="h-5 w-5 text-muted-foreground" />
+                    <Input 
+                        placeholder="City or Country" 
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto py-3"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                    />
                 </div>
-            </CardContent>
-        </Card>
-
-        {/* Job Listings */}
-        {hasSearched && (
-          <div className="mb-4">
-            <h2 className="text-xl font-bold">Search Results</h2>
-            <p className="text-muted-foreground">{filteredJobs.length} jobs found.</p>
-          </div>
-        )}
+                 <Button className="w-full md:w-auto h-12 rounded-full-btn text-base flex-shrink-0 bg-brand-dark hover:bg-brand-blue">
+                    Search Jobs
+                </Button>
+            </div>
+        </div>
         
-        {!hasSearched && (
-          <div className="mb-4">
-            <h2 className="text-xl font-bold">Latest Jobs</h2>
-          </div>
-        )}
+        <div className="category-scroll -mt-4">
+          {categories.map(cat => (
+            <button key={cat.name} onClick={() => setActiveCategory(cat.filter)} className={cn("cat-pill", activeCategory === cat.filter && "active")}>
+                {cat.icon}
+                {cat.name}
+            </button>
+          ))}
+        </div>
 
-        <div className="space-y-4">
-            {filteredJobs.length > 0 ? filteredJobs.map(job => (
-                <Card key={job.id} className="hover:shadow-md transition-shadow rounded-2xl">
-                    <CardContent className="p-6">
-                       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
-                          <div className="flex-grow">
-                              <h3 className="text-xl font-bold text-slate-800 hover:text-primary">
-                                  <Link href={`/jobs/${job.id}`}>{job.title}</Link>
-                              </h3>
-                              <div className="flex items-center gap-2 text-muted-foreground font-semibold">
-                                <Building className="h-4 w-4" />
-                                <span>{job.company}</span>
-                              </div>
-                              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
-                                  <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{job.location}</div>
-                                  <div className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" />{job.type}</div>
-                              </div>
-                          </div>
-                          <div className="md:text-right flex-shrink-0">
-                              <Button asChild className="rounded-full-btn">
-                                  <Link href={`/jobs/${job.id}`}>View Details</Link>
-                              </Button>
-                          </div>
-                       </div>
-                       <div className="border-t mt-4 pt-3 text-xs text-muted-foreground text-right">
-                            Posted <TimeAgo dateString={job.posted} /> by <span className="font-semibold text-slate-600">{job.postedBy}</span>
+        <div className="main-container">
+            <section>
+                <div className="section-header">
+                    <div className="section-title">Recommended for You</div>
+                </div>
+                 <Carousel opts={{ align: "start" }} className="w-full">
+                    <CarouselContent className="-ml-5">
+                        {allJobs.slice(0, 5).map((job) => (
+                           <CarouselItem key={job.id} className="md:basis-1/2 lg:basis-1/3 pl-5">
+                             <div className={cn("rec-card", job.id === '1' && 'urgent')}>
+                                <div className="rec-logo"><Briefcase /></div>
+                                <h3 className="rec-title">{job.title}</h3>
+                                <p className="rec-company">{job.company}</p>
+                                <div className="tags">
+                                    <span className="tag">{job.type}</span>
+                                    <span className="tag salary">Competitive</span>
+                                </div>
+                                <div className="rec-footer">
+                                    <Link href={`/jobs/${job.id}`} className="btn-apply-sm">View Details</Link>
+                                    <button className="btn-save"><Heart className="h-5 w-5" /></button>
+                                </div>
+                            </div>
+                           </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                 </Carousel>
+            </section>
+
+            <section>
+                 <div className="cta-card">
+                    <Briefcase className="h-12 w-12 text-amber-400 mx-auto" />
+                    <h2 className="text-2xl font-bold mt-4">Hiring? Post a Job Today.</h2>
+                    <p className="opacity-80 mt-1">Reach over 350+ qualified vision professionals in our community.</p>
+                     <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="secondary" className="mt-4 rounded-full-btn" disabled>
+                              <Lock className="mr-2 h-4 w-4" />
+                              Post a Job for Free
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Login with your member account to post jobs.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                </div>
+            </section>
+
+            <section>
+                <div className="section-header">
+                    <div className="section-title">Latest Jobs</div>
+                </div>
+                <div className="space-y-4">
+                {filteredJobs.length > 0 ? filteredJobs.map(job => (
+                    <Link href={`/jobs/${job.id}`} key={job.id} className="block">
+                         <div className="job-card">
+                            <div className="job-logo"><Building /></div>
+                            <div className="job-info">
+                                <h3 className="job-title">{job.title}</h3>
+                                <div className="job-meta">
+                                    <span><Building className="inline mr-1.5 h-4 w-4" />{job.company}</span>
+                                    <span><MapPin className="inline mr-1.5 h-4 w-4" />{job.location}</span>
+                                    <Badge variant="outline">{job.type}</Badge>
+                                </div>
+                            </div>
+                            <div className="job-action">
+                                <span className="post-time"><TimeAgo dateString={job.posted} /></span>
+                                <Button variant="secondary" className="btn-view rounded-full-btn h-auto py-2 px-5">Apply</Button>
+                            </div>
                         </div>
+                    </Link>
+                )) : (
+                <Card>
+                    <CardContent className="p-8 text-center text-muted-foreground">
+                    No job listings available matching your criteria.
                     </CardContent>
                 </Card>
-            )) : (
-              <Card className="rounded-3xl">
-                <CardContent className="p-8 text-center text-muted-foreground">
-                  No job listings available matching your criteria.
-                </CardContent>
-              </Card>
-            )}
+                )}
+            </div>
+            </section>
         </div>
+
     </div>
   );
 }
