@@ -121,7 +121,7 @@
   }
 
   .wa-card {
-    @apply bg-brand-dark text-white p-8 rounded-3xl relative overflow-hidden shadow-wa-card;
+    @apply bg-brand-dark text-white p-8 rounded-3xl relative overflow-hidden shadow-wa-card h-full;
   }
   .wa-stats {
     @apply text-2xl font-extrabold mb-1;

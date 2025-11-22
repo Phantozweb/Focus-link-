@@ -91,15 +91,32 @@ export default async function Home() {
               <HomepageSearch />
           </header>
 
-          <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-12">
+          <main className="container mx-auto px-4 md:px-6 lg:px-8 space-y-16 pt-16">
             
-            <section className="wa-card">
-              <div className="wa-stats">350+</div>
-              <p className="wa-text">Members in our WhatsApp Community active right now.</p>
-              <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" className="btn-wa" target="_blank" rel="noopener noreferrer">
-                  <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
-              </a>
-            </section>
+            <Carousel opts={{ loop: true }} className="w-full">
+                <CarouselContent>
+                    <CarouselItem>
+                         <div className="wa-card">
+                            <div className="wa-stats">350+</div>
+                            <p className="wa-text">Members in our WhatsApp Community active right now.</p>
+                            <a href="https://chat.whatsapp.com/GX69BheyhuuDYVCbFuETsS" className="btn-wa" target="_blank" rel="noopener noreferrer">
+                                <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
+                            </a>
+                        </div>
+                    </CarouselItem>
+                     <CarouselItem>
+                        <AnimatedSearchCard />
+                    </CarouselItem>
+                    <CarouselItem>
+                        <AnimatedTeamApplicationCard />
+                    </CarouselItem>
+                    <CarouselItem>
+                        <AnimatedCommunityUpdateCard />
+                    </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious className="hidden sm:flex" />
+                <CarouselNext className="hidden sm:flex" />
+            </Carousel>
 
             {professionals.length > 0 && (
             <section>
