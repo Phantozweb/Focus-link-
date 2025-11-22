@@ -132,6 +132,15 @@
   .btn-wa {
     @apply border border-white/30 bg-white/10 text-white py-3 px-6 rounded-full text-sm inline-flex items-center gap-2 backdrop-blur-sm;
   }
+  .bg-grid-slate-800 {
+    background-image: linear-gradient(theme(colors.slate.800) 1px, transparent 1px), linear-gradient(to right, theme(colors.slate.800) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .bg-grid-white\/10 {
+    background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
 
   .section-header {
     @apply flex justify-between items-baseline mb-5;

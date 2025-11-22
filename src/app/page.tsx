@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Globe, ArrowRight, UserPlus, Building, Hospital, Factory, MapPin, Briefcase, ThumbsUp, Eye, Building2 as CommunityIcon, MessageSquare, BookOpen, Users, Handshake, University, User } from 'lucide-react';
+import { Globe, ArrowRight, UserPlus, Building, Hospital, Factory, MapPin, Briefcase, ThumbsUp, Eye, Building2 as CommunityIcon, MessageSquare, BookOpen, Users, Handshake, University, User, Stethoscope } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { UserProfile, Job } from '@/types';
@@ -97,7 +97,7 @@ export default async function Home() {
             <Carousel opts={{ loop: true }} className="w-full">
                 <CarouselContent>
                     <CarouselItem>
-                         <div className="wa-card">
+                        <div className="wa-card">
                             <div className="absolute top-6 right-6">
                                 <AnimatedCommunityGraph />
                             </div>
@@ -108,7 +108,7 @@ export default async function Home() {
                                     <MessageSquare className="w-4 h-4"/> Join WhatsApp Community
                                 </a>
                             </div>
-                            <div className="absolute inset-0 bg-grid-slate-700 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]"></div>
+                            <div className="absolute inset-0 bg-grid-slate-800 [mask-image:linear-gradient(to_bottom,white_20%,transparent_90%)]"></div>
                         </div>
                     </CarouselItem>
                      <CarouselItem>
@@ -121,8 +121,8 @@ export default async function Home() {
                         <AnimatedCommunityUpdateCard />
                     </CarouselItem>
                 </CarouselContent>
-                <CarouselPrevious className="hidden sm:flex" />
-                <CarouselNext className="hidden sm:flex" />
+                <CarouselPrevious />
+                <CarouselNext />
             </Carousel>
 
             {professionals.length > 0 && (
