@@ -24,18 +24,11 @@ import { Separator } from '@/components/ui/separator';
 
 const directoryLinks = [
     { name: 'All Profiles', href: '/directory/all', icon: <Users className="h-5 w-5"/> },
+    { name: 'Professionals', href: '/directory/professionals', icon: <Stethoscope className="h-5 w-5"/> },
     { name: 'Students', href: '/directory/students', icon: <GraduationCap className="h-5 w-5"/> },
     { name: 'Institutions', href: '/directory/institutions', icon: <Building className="h-5 w-5"/> },
     { name: 'Clinics & Opticals', href: '/directory/clinics', icon: <Hospital className="h-5 w-5"/> },
     { name: 'Industry Partners', href: '/directory/industry', icon: <Factory className="h-5 w-5"/> },
-];
-
-const professionalLinks = [
-    { name: 'All Professionals', href: '/directory/professionals' },
-    { name: 'Optometrists', href: '/directory/professionals/optometrists' },
-    { name: 'Ophthalmologists', href: '/directory/professionals/ophthalmologists' },
-    { name: 'Opticians', href: '/directory/professionals/opticians' },
-    { name: 'Academics', href: '/directory/professionals/academics' },
 ];
 
 const communityLinks = [
@@ -117,22 +110,6 @@ export function Header() {
                          {directoryLinks.map(link => (
                             <MobileNavLink key={link.name} href={link.href}>{link.icon}<span>{link.name}</span></MobileNavLink>
                         ))}
-                        <Collapsible className="px-3">
-                          <CollapsibleTrigger className="flex w-full items-center justify-between py-3 text-lg font-medium text-text-main hover:bg-slate-100 rounded-md">
-                            <div className="flex items-center gap-3">
-                              <Stethoscope className="h-5 w-5" />
-                              <span>Professionals</span>
-                            </div>
-                            <ChevronDown className="h-5 w-5 transition-transform data-[state=open]:rotate-180" />
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="pl-8 space-y-1 mt-1">
-                             {professionalLinks.map(link => (
-                              <SheetClose asChild key={link.name}>
-                                  <Link href={link.href} className="block rounded-md px-3 py-2 text-lg font-medium text-slate-600 hover:bg-slate-100">{link.name}</Link>
-                              </SheetClose>
-                             ))}
-                          </CollapsibleContent>
-                        </Collapsible>
                     </div>
                     <Separator />
                     <div className="space-y-1">
@@ -181,17 +158,6 @@ export function Header() {
                     {directoryLinks.map(link => (
                         <DropdownMenuItem key={link.name} asChild><Link href={link.href}>{link.icon} <span className="ml-2">{link.name}</span></Link></DropdownMenuItem>
                     ))}
-                    <DropdownMenuSeparator />
-                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger><Stethoscope className="mr-2 h-5 w-5" /> Professionals</DropdownMenuSubTrigger>
-                        <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                                {professionalLinks.map(link => (
-                                    <DropdownMenuItem key={link.name} asChild><Link href={link.href}>{link.name}</Link></DropdownMenuItem>
-                                ))}
-                            </DropdownMenuSubContent>
-                        </DropdownMenuPortal>
-                    </DropdownMenuSub>
                   </DropdownMenuContent>
                 </DropdownMenu>
 
