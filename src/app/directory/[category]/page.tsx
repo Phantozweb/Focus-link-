@@ -36,22 +36,10 @@ export function generateMetadata({ params }: DirectoryCategoryPageProps): Metada
 
 function DirectorySkeleton() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-      <aside className="lg:col-span-1">
-         <Skeleton className="h-64 w-full" />
-      </aside>
-      <main className="lg:col-span-3">
-        <div className="mb-6">
-          <Skeleton className="h-8 w-1/2 mb-2" />
-          <Skeleton className="h-4 w-1/4" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-48 w-full" />
-        </div>
-      </main>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+      {[...Array(8)].map((_, i) => (
+        <Skeleton key={i} className="h-80 w-full" />
+      ))}
     </div>
   )
 }
@@ -92,10 +80,10 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
         <header className="hero">
             <h1 className="text-3xl md:text-4xl font-extrabold mb-3">{getTitle(category)} Directory</h1>
             <p className="text-base opacity-90 max-w-xl mx-auto">
-                Browse, search, and connect with {category} in the global eye care community.
+                Browse, search, and connect with peers in the global eye care community.
             </p>
         </header>
-        <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16">
+        <main>
             <Suspense fallback={<DirectorySkeleton />}>
                 <DirectoryClient allUsers={initialFilteredUsers} title={getTitle(category)} category={category} />
             </Suspense>

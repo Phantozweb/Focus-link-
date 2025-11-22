@@ -6,10 +6,17 @@ import { allUsers } from '@/lib/data/index';
 import { ProfileCard } from '@/components/profile-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Briefcase, GraduationCap, Building, Hospital, Users, Factory, Microscope, BookOpen, Stethoscope, Handshake, UserPlus, Search, MapPin, ListFilter, ChevronDown } from 'lucide-react';
+import { Briefcase, GraduationCap, Building, Hospital, Users, Factory, Handshake, Stethoscope, MapPin, ListFilter, ChevronDown, Search } from 'lucide-react';
 import type { UserProfile } from '@/types';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { countries } from '@/lib/countries';
 
 const categories = [
     { name: 'All Profiles', filter: 'all', icon: <Users className="h-5 w-5"/> },
@@ -24,21 +31,25 @@ const categories = [
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedCountry, setSelectedCountry] = useState('all');
   const [visibleCount, setVisibleCount] = useState(12);
 
   const filteredUsers = useMemo(() => {
     return allUsers.filter(user => {
         const term = searchTerm.toLowerCase();
+        const country = selectedCountry.toLowerCase();
+
         const matchesSearch = !term ||
             user.name.toLowerCase().includes(term) ||
             user.experience.toLowerCase().includes(term) ||
-            user.location.toLowerCase().includes(term) ||
             user.bio.toLowerCase().includes(term) ||
             user.type.toLowerCase().includes(term) ||
             (user.skills && user.skills.some(skill => skill.toLowerCase().includes(term))) ||
             (user.interests && user.interests.some(interest => interest.toLowerCase().includes(term)));
+        
+        const matchesCountry = country === 'all' || user.location.toLowerCase().includes(country);
 
-        if (!matchesSearch) return false;
+        if (!matchesSearch || !matchesCountry) return false;
 
         if (activeCategory === 'all') return true;
 
@@ -62,7 +73,7 @@ export default function DirectoryPage() {
                 return true;
         }
     });
-  }, [searchTerm, activeCategory]);
+  }, [searchTerm, activeCategory, selectedCountry]);
 
   const usersToShow = filteredUsers.slice(0, visibleCount);
 
@@ -77,7 +88,7 @@ export default function DirectoryPage() {
         <p>Connect with the world's leading vision care professionals.</p>
       </header>
 
-      <div className="filter-container">
+       <div className="filter-container">
         <div className="search-box">
           <input 
             type="text" 
@@ -91,20 +102,30 @@ export default function DirectoryPage() {
 
         <div className="chip-scroll">
           {categories.map(cat => (
-            <button 
-              key={cat.filter} 
-              className={cn("chip", activeCategory === cat.filter && "active")}
-              onClick={() => setActiveCategory(cat.filter)}
-            >
-              {cat.icon}
-              <span>{cat.name}</span>
-            </button>
+             <Link href={`/directory/${cat.filter}`} key={cat.filter} className={cn("chip", activeCategory === cat.filter && "active")}>
+                {cat.icon}
+                <span>{cat.name}</span>
+            </Link>
           ))}
         </div>
         
         <div className="advanced-filters">
-            <div className="dropdown">Country <ChevronDown className="h-4 w-4" /></div>
-            <div className="dropdown">Specialty <ChevronDown className="h-4 w-4" /></div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <div className="dropdown">
+                        {selectedCountry === 'all' ? 'Country' : countries.find(c => c.name.toLowerCase() === selectedCountry)?.name || 'Country'}
+                        <ChevronDown className="h-4 w-4" />
+                    </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="max-h-60 overflow-y-auto">
+                    <DropdownMenuItem onSelect={() => setSelectedCountry('all')}>All Countries</DropdownMenuItem>
+                    {countries.map(country => (
+                        <DropdownMenuItem key={country.code} onSelect={() => setSelectedCountry(country.name.toLowerCase())}>
+                            {country.name}
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
       </div>
       
@@ -113,6 +134,12 @@ export default function DirectoryPage() {
             <ProfileCard key={user.id} user={user} />
         ))}
       </div>
+
+       {usersToShow.length === 0 && (
+          <div className="text-center py-16 text-muted-foreground">
+              <p>No profiles found matching your criteria.</p>
+          </div>
+      )}
 
       {visibleCount < filteredUsers.length && (
         <div className="load-more">

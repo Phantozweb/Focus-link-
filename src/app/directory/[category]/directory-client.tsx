@@ -1,13 +1,12 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import type { UserProfile } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countries } from '@/lib/countries';
-import { Search, SlidersHorizontal, MapPin, ChevronDown, ListFilter, Users, GraduationCap, Building, Hospital, Factory, Handshake, Stethoscope } from 'lucide-react';
+import { Search, ChevronDown, Users, GraduationCap, Building, Hospital, Factory, Handshake, Stethoscope } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ProfileCard } from '@/components/profile-card';
 import { cn } from '@/lib/utils';
@@ -38,6 +37,18 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   const [selectedCountry, setSelectedCountry] = useState(searchParams.get('country') || 'all');
   const [visibleCount, setVisibleCount] = useState(12);
 
+  const handleFilterChange = (key: 'q' | 'country', value: string) => {
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
+    if (!value || value === 'all') {
+      current.delete(key);
+    } else {
+      current.set(key, value);
+    }
+    const search = current.toString();
+    const query = search ? `?${search}` : '';
+    router.push(`${pathname}${query}`);
+  };
+
   const filteredUsers = useMemo(() => {
     return allUsers.filter(user => {
       const term = searchTerm.toLowerCase();
@@ -61,19 +72,6 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   const loadMore = () => {
     setVisibleCount(prevCount => prevCount + 12);
   };
-  
-  const handleFilterChange = (key: 'q' | 'country', value: string) => {
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-    if (!value || value === 'all') {
-      current.delete(key);
-    } else {
-      current.set(key, value);
-    }
-    const search = current.toString();
-    const query = search ? `?${search}` : '';
-    router.push(`${pathname}${query}`);
-  };
-
 
   return (
     <div>
