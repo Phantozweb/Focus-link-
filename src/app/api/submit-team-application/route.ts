@@ -3,10 +3,10 @@ import { NextResponse } from 'next/server';
 
 // IMPORTANT: Create a new Google Apps Script and paste the script from the comment below.
 // Deploy it as a web app, and replace this URL with your script URL.
-const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_1JGp_L7WJtL2gGfT43-tC3A-qBwR9G1B-Y2C3lR-sD1tXzJ_VwX_Y/exec";
 
 export async function POST(request: Request) {
-  if (SCRIPT_URL === "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec") {
+  if (SCRIPT_URL.includes("YOUR_SCRIPT_ID_HERE")) {
     return NextResponse.json(
       { error: "Google Apps Script URL is not configured." },
       { status: 500 }
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
  *
  * 1. Create a new Google Sheet. Name the first tab "TeamApplications".
  * 2. Set the following headers in the first row:
- *    Timestamp, Name, Email, LinkedIn, Role, Skills, Contribution
+ *    Timestamp, Name, Email, LinkedIn, ResumeURL, Role, Skills, Contribution
  * 3. In the Google Sheet, go to Extensions > Apps Script.
  * 4. Paste this entire script and save.
  * 5. Click "Deploy" > "New deployment".
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
  *     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("TeamApplications");
  *     if (!sheet) {
  *       sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("TeamApplications");
- *       sheet.appendRow(["Timestamp", "Name", "Email", "LinkedIn", "Role", "Skills", "Contribution"]);
+ *       sheet.appendRow(["Timestamp", "Name", "Email", "LinkedIn", "ResumeURL", "Role", "Skills", "Contribution"]);
  *     }
  * 
  *     var data = JSON.parse(e.postData.contents);
@@ -70,6 +70,7 @@ export async function POST(request: Request) {
  *       data.name,
  *       data.email,
  *       data.linkedin,
+ *       data.resumeUrl,
  *       data.role,
  *       data.skills,
  *       data.contribution

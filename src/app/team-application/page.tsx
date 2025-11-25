@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase, BadgeCheck } from 'lucide-react';
+import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase, BadgeCheck, FileText } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -113,6 +113,7 @@ const formSchema = z.object({
   name: z.string().min(2, 'Name is required.'),
   email: z.string().email('Invalid email address.'),
   linkedin: z.string().url('Please enter a valid LinkedIn profile URL.'),
+  resumeUrl: z.string().url('Please enter a valid URL.').optional().or(z.literal('')),
   role: z.string().min(1, 'Please select a role.'),
   skills: z.string().min(10, 'Please tell us about your skills.'),
   contribution: z.string().min(20, 'Please tell us how you want to contribute.'),
@@ -290,6 +291,11 @@ export default function TeamApplicationPage() {
                     <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
                     <Input id="linkedin" {...register('linkedin')} className="rounded-xl"/>
                     {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="resumeUrl">Resume/CV URL (Optional)</Label>
+                    <Input id="resumeUrl" {...register('resumeUrl')} placeholder="e.g., link to your Google Doc or online portfolio" className="rounded-xl"/>
+                    {errors.resumeUrl && <p className="text-sm text-destructive">{errors.resumeUrl.message}</p>}
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="role">Preferred Role</Label>
