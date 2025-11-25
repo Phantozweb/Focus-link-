@@ -37,18 +37,21 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentEpisode = series.episodes[currentEpisodeIndex];
   
-  const audioUrl = currentEpisode.audioUrl || `https://focuscast.netlify.app/audio${currentEpisode.url}.mp3`;
+  const audioUrl = currentEpisode.audioUrl || `https://raw.githubusercontent.com/Phantozweb/focuscastaudios/main/OPTICS%20UNVEILED/S2-E1%20(The%20Magic%20of%20Lens%20Types).mp3`;
 
 
   useEffect(() => {
     if (audioRef.current) {
-        audioRef.current.src = audioUrl;
-        audioRef.current.load();
-        if (isPlaying) {
-            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        const episodeAudioUrl = currentEpisode.audioUrl;
+        if (episodeAudioUrl) {
+            audioRef.current.src = episodeAudioUrl;
+            audioRef.current.load();
+            if (isPlaying) {
+                audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+            }
         }
     }
-  }, [currentEpisodeIndex, audioUrl, isPlaying]);
+  }, [currentEpisodeIndex, currentEpisode, isPlaying]);
 
   const togglePlayPause = () => {
     if (audioRef.current) {
@@ -112,7 +115,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={playNext}
-        src={audioUrl}
+        src={currentEpisode.audioUrl}
       />
       <div className="flex flex-col md:flex-row h-full">
         {/* Left Side: Player */}
