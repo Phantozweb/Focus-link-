@@ -96,7 +96,7 @@ export default function AcademyPage() {
 
         <section>
             <div className="section-header">
-                <h2 className="section-title"><Video className="text-primary" /> Video Courses</h2>
+                <h2 className="section-title"><BookOpen className="text-primary" /> Courses</h2>
                 <Link href="/academy" className="view-all">View All</Link>
             </div>
             <Carousel opts={{ align: "start" }} className="w-full">
@@ -273,7 +273,7 @@ export default function AcademyPage() {
                   ))}
                  </CarouselContent>
                 <CarouselPrevious className="hidden sm:flex" />
-                <CarouselNext className="hidden sm:flex" />
+                <CarouselNext className="hidden smflex" />
               </Carousel>
             </section>
         )}
