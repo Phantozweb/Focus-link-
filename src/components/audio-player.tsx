@@ -16,7 +16,7 @@ type Episode = {
   episodeNumber: number;
   duration: string;
   url: string;
-  audioUrl?: string; // Make this optional to handle both data structures
+  audioUrl?: string;
 };
 
 type AudioSeries = {
@@ -37,25 +37,22 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentEpisode = series.episodes[currentEpisodeIndex];
   
-  const audioUrl = currentEpisode.audioUrl;
-
+  const audioUrl = currentEpisode?.audioUrl;
 
   useEffect(() => {
-    if (audioRef.current) {
-        const episodeAudioUrl = currentEpisode.audioUrl;
-        if (episodeAudioUrl) {
-            if (audioRef.current.src !== episodeAudioUrl) {
-                audioRef.current.src = episodeAudioUrl;
-                audioRef.current.load();
-            }
-            if (isPlaying) {
-                audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-            } else {
-                audioRef.current.pause();
-            }
-        }
+    if (audioRef.current && audioUrl) {
+      if (audioRef.current.src !== audioUrl) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.load();
+      }
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+      } else {
+        audioRef.current.pause();
+      }
     }
-  }, [currentEpisodeIndex, currentEpisode, isPlaying]);
+  }, [currentEpisodeIndex, currentEpisode, isPlaying, audioUrl]);
+
 
   const selectEpisode = (index: number) => {
     setCurrentEpisodeIndex(index);
@@ -63,6 +60,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   };
 
   const togglePlayPause = () => {
+    if (!audioUrl) return;
     setIsPlaying(!isPlaying);
   };
 
@@ -119,14 +117,14 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={playNext}
-        src={currentEpisode.audioUrl}
+        src={audioUrl}
       />
       <div className="flex flex-col md:flex-row h-full">
         {/* Left Side: Player */}
         <div className="w-full md:w-2/3 bg-slate-800 text-white flex flex-col justify-between p-8 rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
            <div className="text-center">
                 <DialogHeader className="text-center mb-6">
-                    <DialogTitle className="text-2xl font-bold text-white">{currentEpisode.title}</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold text-white">{currentEpisode?.title || series.title}</DialogTitle>
                     <DialogDescription className="text-slate-300">{series.title}</DialogDescription>
                 </DialogHeader>
                 <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden shadow-2xl mb-6">
@@ -151,7 +149,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
                         <Rewind className="h-6 w-6" />
                     </Button>
                     <Button variant="ghost" size="icon" className="w-20 h-20 bg-white/20 rounded-full text-white hover:bg-white/30" onClick={togglePlayPause}>
-                        {isPlaying ? <Pause className="h-10 w-10" /> : <Play className="h-10 w-10" />}
+                        {isPlaying ? <Pause className="h-10 w-10" /> : <Play className="h-10 w-10 ml-1" />}
                     </Button>
                      <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={playNext} disabled={currentEpisodeIndex === series.episodes.length - 1}>
                         <FastForward className="h-6 w-6" />

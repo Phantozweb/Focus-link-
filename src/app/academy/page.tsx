@@ -142,6 +142,7 @@ export default function AcademyPage() {
               <CarouselContent>
                  {webinars.filter(w => w.type === 'Course').map(course => (
                   <CarouselItem key={course.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
+                     <Link href={`/academy/${course.id}`}>
                       <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
                         <div className="relative aspect-video">
                           <Image src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt={course.title} layout="fill" objectFit="cover" />
@@ -152,6 +153,7 @@ export default function AcademyPage() {
                             <p className="text-sm text-muted-foreground mt-1">{course.speaker.name}</p>
                         </div>
                       </Card>
+                     </Link>
                   </CarouselItem>
                 ))}
               </CarouselContent>
