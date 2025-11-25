@@ -24,7 +24,7 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
   const FallbackIcon = isOrg ? Building : User;
 
   return (
-    <div className={cn("profile-card", isFeatured && "featured")}>
+    <div className={cn("profile-card h-full", isFeatured && "featured")}>
       {isFeatured && <div className="feat-badge">Featured</div>}
       <div className="avatar-wrap">
         <Avatar className="w-20 h-20 border-2 border-white shadow-md">
