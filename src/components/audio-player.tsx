@@ -44,24 +44,18 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
     if (audioRef.current) {
         const episodeAudioUrl = currentEpisode.audioUrl;
         if (episodeAudioUrl) {
-            audioRef.current.src = episodeAudioUrl;
-            audioRef.current.load();
+            if (audioRef.current.src !== episodeAudioUrl) {
+                audioRef.current.src = episodeAudioUrl;
+                audioRef.current.load();
+            }
             if (isPlaying) {
                 audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+            } else {
+                audioRef.current.pause();
             }
         }
     }
-  }, [currentEpisodeIndex, currentEpisode]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-        if (isPlaying) {
-            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-        } else {
-            audioRef.current.pause();
-        }
-    }
-  }, [isPlaying]);
+  }, [currentEpisodeIndex, currentEpisode, isPlaying]);
 
   const selectEpisode = (index: number) => {
     setCurrentEpisodeIndex(index);
