@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase } from 'lucide-react';
+import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase, BadgeCheck } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -183,10 +183,10 @@ export default function TeamApplicationPage() {
         </header>
 
         <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16 space-y-16">
-           <section className="max-w-4xl mx-auto">
+           <section className="max-w-5xl mx-auto">
             <h2 className="text-3xl font-bold text-slate-800 text-center">Why Join Us?</h2>
             <p className="text-lg text-slate-600 mt-2 text-center">This is more than a volunteer role. It's a chance to lead, innovate, and grow.</p>
-             <div className="grid md:grid-cols-3 gap-8 mt-8">
+             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
                 <Card className="p-6 text-center rounded-3xl shadow-soft">
                     <Award className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Gain Real Experience</h3>
@@ -195,12 +195,17 @@ export default function TeamApplicationPage() {
                  <Card className="p-6 text-center rounded-3xl shadow-soft">
                     <Handshake className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Expand Your Network</h3>
-                    <p className="text-muted-foreground mt-1">Connect with industry leaders, educators, and peers from around the world. Build relationships that last a lifetime.</p>
+                    <p className="text-muted-foreground mt-1">Connect with industry leaders, educators, and peers from around the world.</p>
                 </Card>
                  <Card className="p-6 text-center rounded-3xl shadow-soft">
                     <Globe className="h-10 w-10 text-primary mb-3 mx-auto" />
                     <h3 className="text-xl font-bold">Make a Global Impact</h3>
-                    <p className="text-muted-foreground mt-1">Your contributions will directly help thousands of students and professionals connect, learn, and advance their careers.</p>
+                    <p className="text-muted-foreground mt-1">Your contributions will directly help thousands of students and professionals advance their careers.</p>
+                </Card>
+                 <Card className="p-6 text-center rounded-3xl shadow-soft">
+                    <BadgeCheck className="h-10 w-10 text-primary mb-3 mx-auto" />
+                    <h3 className="text-xl font-bold">Official Recognition</h3>
+                    <p className="text-muted-foreground mt-1">Receive a verified badge on your profile and a virtual ID card to share your professional role.</p>
                 </Card>
             </div>
           </section>
