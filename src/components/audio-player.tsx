@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
+import { DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 type Episode = {
   id: string;
@@ -35,6 +35,8 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentEpisode = series.episodes[currentEpisodeIndex];
+  
+  // Construct the full audio URL from the relative path in the series data
   const audioUrl = `https://focuscast.netlify.app/audio${currentEpisode.url}.mp3`;
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        audio_ref.current.play().catch(e => console.error("Audio play failed:", e));
       }
       setIsPlaying(!isPlaying);
     }

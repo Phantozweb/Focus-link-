@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { AudioPlayer } from '@/components/audio-player';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 type AudioSeries = {
@@ -32,6 +33,7 @@ export default function AcademyPage() {
   const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
   const [pastWebinars, setPastWebinars] = useState<typeof webinars>([]);
   const [audioSeries, setAudioSeries] = useState<AudioSeries[]>([]);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
 
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function AcademyPage() {
     setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
     
     async function fetchAudioSeries() {
+      setIsLoadingAudio(true);
       try {
         const response = await fetch('/api/audio-series');
         if (response.ok) {
@@ -70,7 +73,7 @@ export default function AcademyPage() {
           // Fix for the broken image URL
           const correctedData = data.map((series: AudioSeries) => {
             if (series.id === 'series-ocular-pharmacology') {
-               series.thumbnailUrl = "https://i.ibb.co/v69jrMhB/b-Change-into-solid-ba.png";
+               series.thumbnailUrl = "https://i.ibb.co/v69jrMh/b-Change-into-solid-ba.png";
             }
             return series;
           });
@@ -78,6 +81,8 @@ export default function AcademyPage() {
         }
       } catch (error) {
         console.error("Failed to fetch audio series:", error);
+      } finally {
+        setIsLoadingAudio(false);
       }
     }
     fetchAudioSeries();
@@ -162,7 +167,17 @@ export default function AcademyPage() {
             </div>
             <Carousel opts={{ align: "start", slidesToScroll: 'auto' }} className="w-full">
               <CarouselContent>
-                {audioSeries.length > 0 ? audioSeries.map(series => (
+                {isLoadingAudio ? (
+                  [...Array(6)].map((_, i) => (
+                     <CarouselItem key={i} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                        <div className="w-[160px]">
+                           <Skeleton className="aspect-square rounded-lg w-full" />
+                           <Skeleton className="h-4 w-3/4 mt-2" />
+                           <Skeleton className="h-3 w-1/2 mt-1" />
+                        </div>
+                     </CarouselItem>
+                  ))
+                ) : audioSeries.length > 0 ? audioSeries.map(series => (
                   <CarouselItem key={series.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
                      <Dialog>
                         <DialogTrigger asChild>
@@ -183,7 +198,7 @@ export default function AcademyPage() {
                     </Dialog>
                 </CarouselItem>
                 )) : (
-                  <p className="text-muted-foreground">Loading audio series...</p>
+                  <p className="text-muted-foreground">No audio series available at this time.</p>
                 )}
               </CarouselContent>
               <CarouselPrevious className="hidden sm:flex" />
@@ -309,5 +324,3 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
