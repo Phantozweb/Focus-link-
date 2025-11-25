@@ -15,6 +15,7 @@ interface ProfileCardProps {
 
 export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
+  const isTeamMember = user.isFounder || user.verifiedRole;
   
   const getAvatarHint = () => {
     if (isOrg) return "logo building";
@@ -34,7 +35,12 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
             </AvatarFallback>
         </Avatar>
         {user.verified && (
-          <CheckCircle2 className="verified" />
+          <div className={cn(
+            "absolute bottom-0 right-0 w-6 h-6 rounded-full flex items-center justify-center bg-white shadow-md",
+            isTeamMember ? "text-green-500" : "text-blue-500"
+          )}>
+            <CheckCircle2 className="w-5 w-5" />
+          </div>
         )}
       </div>
       <div className="p-name">{user.name}</div>
@@ -55,3 +61,5 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
     </div>
   );
 }
+
+    

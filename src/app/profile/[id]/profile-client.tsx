@@ -37,6 +37,7 @@ const SkillChip = ({ skill }: { skill: string }) => (
 
 const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
     const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
+    const isTeamMember = user.isFounder || user.verifiedRole;
     
     const getOrgIcon = (type: UserProfile['type']) => {
         switch (type) {
@@ -65,7 +66,10 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                                 </AvatarFallback>
                             </Avatar>
                              {user.verified && (
-                                <div className={cn("absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-md", user.id === 'marwankorath' ? 'text-green-500' : 'text-green-500')}>
+                                <div className={cn(
+                                    "absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-md",
+                                    isTeamMember ? "text-green-500" : "text-blue-500"
+                                )}>
                                     <CheckCircle2 className="w-6 h-6" />
                                 </div>
                             )}
@@ -174,3 +178,5 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
 export function ProfileClient({ user }: { user: UserProfile }) {
   return <ModernProfileLayout user={user} />;
 }
+
+    
