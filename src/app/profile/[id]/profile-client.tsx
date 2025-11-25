@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 const SectionTitle = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -46,6 +47,8 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
             default: return <Briefcase className="w-4 h-4" />;
         }
     };
+
+    const FallbackIcon = isOrg ? Building : User;
     
     return (
         <div style={{ background: 'var(--profile-bg-gradient)', fontFamily: "'Poppins', sans-serif" }} className="min-h-screen p-5 md:p-10">
@@ -55,7 +58,12 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                 <aside className="lg:col-span-1 lg:sticky top-10">
                     <div className="glass-panel text-center p-8">
                         <div className="relative w-36 h-36 mx-auto mb-4">
-                            <Image src={user.avatarUrl || `https://i.pravatar.cc/300?u=${user.id}`} alt={user.name} width={144} height={144} className="rounded-full object-cover w-full h-full border-4 border-white shadow-lg" />
+                            <Avatar className="w-36 h-36 border-4 border-white shadow-lg">
+                                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                                <AvatarFallback className="bg-slate-200">
+                                    <FallbackIcon className="h-20 w-20 text-slate-400" />
+                                </AvatarFallback>
+                            </Avatar>
                              {user.verified && (
                                 <div className={cn("absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-md", user.id === 'marwankorath' ? 'text-green-500' : 'text-green-500')}>
                                     <CheckCircle2 className="w-6 h-6" />
