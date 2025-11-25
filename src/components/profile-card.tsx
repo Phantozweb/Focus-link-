@@ -15,23 +15,26 @@ interface ProfileCardProps {
 
 export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
-  const isPro = ['Optometrist', 'Ophthalmologist', 'Optician', 'Academic', 'Researcher'].includes(user.type);
-  const isStudent = user.type === 'Student';
   
   const getAvatarHint = () => {
     if (isOrg) return "logo building";
     return "portrait person";
   }
 
+  const FallbackIcon = isOrg ? Building : User;
+
   return (
     <div className={cn("profile-card", isFeatured && "featured")}>
       {isFeatured && <div className="feat-badge">Featured</div>}
       <div className="avatar-wrap">
-        <img 
-          src={user.avatarUrl || `https://i.pravatar.cc/300?u=${user.id}`} 
-          alt={user.name}
-          className="avatar"
-        />
+        <Avatar className="w-20 h-20 border-2 border-white shadow-md">
+            {user.avatarUrl ? (
+                <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={getAvatarHint()} />
+            ) : null}
+            <AvatarFallback className="bg-slate-200">
+                <FallbackIcon className="h-10 w-10 text-slate-400" />
+            </AvatarFallback>
+        </Avatar>
         {user.verified && (
           <CheckCircle2 className="verified" />
         )}
