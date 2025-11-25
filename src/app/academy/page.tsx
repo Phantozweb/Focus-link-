@@ -6,12 +6,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
 
 
 export default function AcademyPage() {
@@ -58,22 +59,13 @@ export default function AcademyPage() {
         <p className="text-base opacity-90 max-w-xl mx-auto mb-8">
             Your all-in-one destination for webinars, courses, ebooks, and clinical resources.
         </p>
-         <div className="filter-scroll-container">
-            <div className="flex justify-center gap-2 overflow-x-auto pb-2">
-              {filters.map(filter => (
-                <button 
-                  key={filter} 
-                  onClick={() => setActiveFilter(filter)}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors",
-                    activeFilter === filter 
-                      ? 'bg-white text-primary' 
-                      : 'bg-white/20 text-white hover:bg-white/30'
-                  )}
-                >
-                  {filter}
-                </button>
-              ))}
+         <div className="max-w-md mx-auto">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Search courses, topics, or resources..."
+                className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
+              />
             </div>
         </div>
       </header>
