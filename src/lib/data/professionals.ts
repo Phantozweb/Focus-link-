@@ -592,7 +592,7 @@ export const professionals: UserProfile[] = [
       email: 'shivashangarimoptom@gmail.com',
       linkedin: 'https://www.linkedin.com/in/shivashangari-m-optom'
     },
-    avatarUrl: 'https://i.ibb.co/yQWzVvj/female-avatar-placeholder.png',
+    avatarUrl: '',
     workExperience: [
       {
         title: 'Dispensing Optometrist',

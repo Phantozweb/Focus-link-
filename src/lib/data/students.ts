@@ -118,7 +118,7 @@ I’m currently exploring research methodology and the psychological aspects of 
       linkedin: 'https://linkedin.com/in/braseetha-a-260b60323',
       email: 'brasee66@gmail.com',
     },
-    avatarUrl: 'https://i.ibb.co/yQWzVvj/female-avatar-placeholder.png',
+    avatarUrl: '',
     workExperience: [
         {
           title: 'First Prize – Science Exhibition',
@@ -235,7 +235,7 @@ My goal is to build a career that combines clinical leadership with education an
     links: {
       email: 'megadharshini999@gmail.com'
     },
-    avatarUrl: 'https://i.ibb.co/yQWzVvj/female-avatar-placeholder.png',
+    avatarUrl: '',
     workExperience: [
       {
         title: 'State Head - Tamil Nadu',
