@@ -9,8 +9,8 @@ const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/directory', label: 'Directory', icon: Users },
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
-  { href: '/community', label: 'Community', icon: BookOpen },
-  { href: '/profile', label: 'Profile', icon: User },
+  { href: '/academy', label: 'Academy', icon: BookOpen },
+  { href: '/forum', label: 'Case Forum', icon: MessageSquare },
 ];
 
 export function BottomNav() {
@@ -31,8 +31,7 @@ export function BottomNav() {
     <div className="dock">
       {navItems.map((item) => {
         const isActive = (pathname === '/' && item.href === '/') || 
-                         (item.href !== '/' && pathname.startsWith(item.href)) ||
-                         (item.href === '/community' && (pathname.startsWith('/forum') || pathname.startsWith('/academy')));
+                         (item.href !== '/' && pathname.startsWith(item.href));
 
         return (
           <Link href={item.href} key={item.label} className={cn("dock-item", isActive && "active")}>
