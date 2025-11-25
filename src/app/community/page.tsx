@@ -107,9 +107,9 @@ function ForumList({ discussions }: { discussions: ForumPost[] }) {
 
 
 function EventsList() {
-    const liveWebinars = webinars.filter(w => new Date(w.dateTime).getTime() < Date.now() && new Date(w.dateTime).getTime() + (parseInt(w.duration.split(' ')[0], 10) * 60 * 1000) > Date.now());
+    const liveWebinars = webinars.filter(w => new Date(w.dateTime).getTime() < Date.now() && new Date(w.dateTime).getTime() + (parseInt(w.duration.split(' ')[0], 10) * 60 * 60 * 1000) > Date.now());
     const upcomingWebinars = webinars.filter(w => new Date(w.dateTime).getTime() > Date.now());
-    const pastWebinars = webinars.filter(w => new Date(w.dateTime).getTime() + (parseInt(w.duration.split(' ')[0], 10) * 60 * 1000) < Date.now());
+    const pastWebinars = webinars.filter(w => new Date(w.dateTime).getTime() + (parseInt(w.duration.split(' ')[0], 10) * 60 * 60 * 1000) < Date.now());
   
     return (
       <div className="space-y-16">

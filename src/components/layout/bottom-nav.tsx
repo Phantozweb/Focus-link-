@@ -2,15 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, MessageSquare, Briefcase, User } from 'lucide-react';
+import { Home, Users, MessageSquare, Briefcase, User, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/directory', label: 'Directory', icon: Users },
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
-  { href: '/forum', label: 'Forum', icon: MessageSquare },
+  { href: '/community', label: 'Community', icon: BookOpen },
   { href: '/profile', label: 'Profile', icon: User },
 ];
 
@@ -29,12 +28,16 @@ export function BottomNav() {
   }
 
   return (
-    <div className="dock md:hidden">
+    <div className="dock">
       {navItems.map((item) => {
-        const isActive = (pathname === '/' && item.href === '/') || (item.href !== '/' && pathname.startsWith(item.href));
+        const isActive = (pathname === '/' && item.href === '/') || 
+                         (item.href !== '/' && pathname.startsWith(item.href)) ||
+                         (item.href === '/community' && (pathname.startsWith('/forum') || pathname.startsWith('/academy')));
+
         return (
           <Link href={item.href} key={item.label} className={cn("dock-item", isActive && "active")}>
-            <item.icon />
+            <item.icon className="dock-icon" />
+            <span className="dock-label">{item.label}</span>
           </Link>
         )
       })}
