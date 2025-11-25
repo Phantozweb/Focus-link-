@@ -54,7 +54,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audio_ref.current.play().catch(e => console.error("Audio play failed:", e));
+        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
       }
       setIsPlaying(!isPlaying);
     }
