@@ -16,6 +16,7 @@ import { AnimatedSearchCard } from '@/components/animated-search-card';
 import { AnimatedTeamApplicationCard } from '@/components/animated-team-application-card';
 import { AnimatedCommunityUpdateCard } from '@/components/animated-community-update-card';
 import { ProfileCard } from '@/components/profile-card';
+import { HomeForumPost } from '@/components/home-forum-post';
 
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
@@ -65,7 +66,7 @@ const EmptyStateCTA = ({ title, ctaText, ctaLink, icon }: { title: string, ctaTe
         <div className="empty-icon">{icon}</div>
         <h3 className='text-xl font-bold mb-2'>{title}</h3>
         <p className="text-sm text-text-muted mb-5">Be the first to represent your category.</p>
-        <Button asChild className="search-btn">
+        <Button asChild>
             <Link href={ctaLink}>{ctaText}</Link>
         </Button>
     </div>
@@ -149,47 +150,19 @@ export default async function Home() {
             </section>
             )}
               
-              {demoDiscussions.length > 0 &&
-              <section>
-                  <div className="section-header">
-                    <h2 className="section-title">From the Forum</h2>
-                    <Link href="/forum" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
-                  </div>
-                  <div className="space-y-4">
-                  {demoDiscussions.slice(0, 1).map((discussion) => (
-                      <Card key={discussion.id} className="hover:shadow-hover transition-shadow rounded-3xl shadow-soft">
-                        <CardContent className="p-4 sm:p-6 flex gap-4">
-                          <Avatar className="hidden sm:block h-12 w-12 border">
-                            <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
-                            <AvatarFallback>{discussion.author?.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-grow">
-                            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-y-2">
-                              <Badge variant="secondary">{discussion.category}</Badge>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground flex-shrink-0">
-                                <div className="flex items-center gap-1.5" title="Upvotes"><ThumbsUp className="h-4 w-4" /> {discussion.upvotes}</div>
-                                <div className="flex items-center gap-1.5" title="Views"><Eye className="h-4 w-4" /> {discussion.views}</div>
-                              </div>
-                            </div>
-                            <h3 className="text-lg font-bold text-slate-800 hover:text-primary mt-2">
-                              <Link href={`/forum/${discussion.id}`}>{discussion.title}</Link>
-                            </h3>
-                            <p className="text-sm text-slate-600 mt-1 line-clamp-2">{discussion.description}</p>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-3">
-                              <Avatar className="sm:hidden h-6 w-6">
-                                <AvatarImage src={discussion.avatar} alt={discussion.author} data-ai-hint="portrait person" />
-                                <AvatarFallback>{discussion.author?.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <Link href={`/profile/${discussion.authorId}`} className="font-semibold text-slate-700 hover:underline">{discussion.author}</Link>
-                              <span>&middot;</span>
-                              <span>Posted <TimeAgo dateString={discussion.postedDate} /></span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                  ))}
-                  </div>
-                </section>}
+              {demoDiscussions.length > 0 && (
+                <section>
+                    <div className="section-header">
+                        <h2 className="section-title">From the Forum</h2>
+                        <Link href="/forum" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
+                    </div>
+                    <div className="space-y-4">
+                        {demoDiscussions.slice(0, 1).map((discussion) => (
+                            <HomeForumPost key={discussion.id} discussion={discussion} />
+                        ))}
+                    </div>
+                </section>
+              )}
 
                 {demoJobs && demoJobs.length > 0 && 
                 <section>
