@@ -146,6 +146,9 @@ export default function AcademyPage() {
                       <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
                         <div className="relative aspect-video">
                           <Image src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt={course.title} layout="fill" objectFit="cover" />
+                           <div className="absolute top-2 right-2">
+                                <Badge>Coming Soon</Badge>
+                            </div>
                         </div>
                         <div className="p-4 flex-grow flex flex-col">
                             <h4 className="font-bold text-slate-800 flex-grow">{course.title}</h4>
