@@ -13,6 +13,9 @@ import { useState, useEffect } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { AudioPlayer } from '@/components/audio-player';
+
 
 type AudioSeries = {
   id: string;
@@ -20,6 +23,8 @@ type AudioSeries = {
   thumbnailUrl: string;
   episodeCount: number;
   url: string;
+  episodes: any[];
+  description: string;
 };
 
 export default function AcademyPage() {
@@ -62,7 +67,14 @@ export default function AcademyPage() {
         const response = await fetch('/api/audio-series');
         if (response.ok) {
           const data = await response.json();
-          setAudioSeries(data);
+          // Fix for the broken image URL
+          const correctedData = data.map((series: AudioSeries) => {
+            if (series.id === 'series-ocular-pharmacology') {
+               series.thumbnailUrl = "https://i.ibb.co/v69jrMhB/b-Change-into-solid-ba.png";
+            }
+            return series;
+          });
+          setAudioSeries(correctedData);
         }
       } catch (error) {
         console.error("Failed to fetch audio series:", error);
@@ -152,16 +164,23 @@ export default function AcademyPage() {
               <CarouselContent>
                 {audioSeries.length > 0 ? audioSeries.map(series => (
                   <CarouselItem key={series.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
-                    <Link href={`https://focuscast.netlify.app${series.url}`} target="_blank" className="block w-[160px] group">
-                      <div className="relative aspect-square rounded-lg shadow-lg bg-slate-100 overflow-hidden">
-                          <Image src={series.thumbnailUrl} alt={series.title} layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300"/>
-                           <div className="absolute bottom-2 right-2 h-9 w-9 bg-white rounded-full flex items-center justify-center shadow-md text-purple-600">
-                            <PlayCircle className="h-6 w-6"/>
-                           </div>
-                      </div>
-                      <h4 className="font-semibold text-sm mt-2 truncate">{series.title}</h4>
-                      <p className="text-xs text-muted-foreground">{series.episodeCount} Episodes</p>
-                    </Link>
+                     <Dialog>
+                        <DialogTrigger asChild>
+                           <div className="block w-[160px] group cursor-pointer">
+                            <div className="relative aspect-square rounded-lg shadow-lg bg-slate-100 overflow-hidden">
+                                <Image src={series.thumbnailUrl} alt={series.title} layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300"/>
+                                <div className="absolute bottom-2 right-2 h-9 w-9 bg-white rounded-full flex items-center justify-center shadow-md text-purple-600">
+                                    <PlayCircle className="h-6 w-6"/>
+                                </div>
+                            </div>
+                            <h4 className="font-semibold text-sm mt-2 truncate">{series.title}</h4>
+                            <p className="text-xs text-muted-foreground">{series.episodeCount} Episodes</p>
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col p-0">
+                           <AudioPlayer series={series} />
+                        </DialogContent>
+                    </Dialog>
                 </CarouselItem>
                 )) : (
                   <p className="text-muted-foreground">Loading audio series...</p>
@@ -290,3 +309,5 @@ export default function AcademyPage() {
     </div>
   );
 }
+
+    
