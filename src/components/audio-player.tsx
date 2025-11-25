@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 
 type Episode = {
   id: string;
@@ -114,11 +115,13 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
         {/* Left Side: Player */}
         <div className="w-full md:w-2/3 bg-slate-800 text-white flex flex-col justify-between p-8 rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
            <div className="text-center">
+                <DialogHeader className="text-center mb-6">
+                    <DialogTitle className="text-2xl font-bold text-white">{currentEpisode.title}</DialogTitle>
+                    <DialogDescription className="text-slate-300">{series.title}</DialogDescription>
+                </DialogHeader>
                 <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden shadow-2xl mb-6">
                     <Image src={series.thumbnailUrl} alt={series.title} layout="fill" objectFit="cover" />
                 </div>
-                <h2 className="text-2xl font-bold">{currentEpisode.title}</h2>
-                <p className="text-slate-300">{series.title}</p>
            </div>
            
            <div className="space-y-4">
@@ -190,5 +193,3 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
     </>
   );
 }
-
-    
