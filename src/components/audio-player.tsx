@@ -44,11 +44,9 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
       if (audioRef.current.src !== audioUrl) {
         audioRef.current.src = audioUrl;
         audioRef.current.load();
-      }
-      if (isPlaying) {
-        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-      } else {
-        audioRef.current.pause();
+        if (isPlaying) {
+          audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        }
       }
     }
   }, [currentEpisodeIndex, currentEpisode, isPlaying, audioUrl]);
@@ -61,6 +59,13 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
 
   const togglePlayPause = () => {
     if (!audioUrl) return;
+    if(audioRef.current){
+        if(isPlaying){
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        }
+    }
     setIsPlaying(!isPlaying);
   };
 
@@ -169,7 +174,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
           <div className="p-6 border-b">
             <h3 className="text-lg font-bold flex items-center gap-2"><ListMusic className="h-5 w-5"/> Up Next</h3>
           </div>
-          <ScrollArea className="h-full max-h-[300px] md:max-h-full md:h-[calc(100%-65px)]">
+          <ScrollArea className="h-[250px] md:h-[calc(100%-65px)]">
             <div className="p-4 space-y-2">
                 {series.episodes.map((episode, index) => (
                     <button 
