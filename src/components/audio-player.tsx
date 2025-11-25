@@ -45,19 +45,36 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
       if (audioRef.current.src !== audioUrl) {
         audioRef.current.src = audioUrl;
         audioRef.current.load();
-      }
-      if (isPlaying) {
-        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-      } else {
-        audioRef.current.pause();
+        // Delay playing until the media can be played
+        audioRef.current.oncanplay = () => {
+          if (isPlaying) {
+             audioRef.current?.play().catch(e => console.error("Audio play failed on load:", e));
+          }
+        };
       }
     }
-  }, [currentEpisodeIndex, currentEpisode, isPlaying, audioUrl]);
+  }, [currentEpisodeIndex, audioUrl]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+        if (isPlaying) {
+            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        } else {
+            audioRef.current.pause();
+        }
+    }
+  }, [isPlaying]);
 
 
   const selectEpisode = (index: number) => {
-    setCurrentEpisodeIndex(index);
-    setIsPlaying(true);
+    if (index !== currentEpisodeIndex) {
+      setProgress(0);
+      setDuration(0);
+      setCurrentEpisodeIndex(index);
+      setIsPlaying(true);
+    } else {
+       togglePlayPause();
+    }
   };
 
   const togglePlayPause = () => {
@@ -85,6 +102,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   };
 
   const formatTime = (timeInSeconds: number) => {
+    if (isNaN(timeInSeconds) || timeInSeconds === 0) return '00:00';
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
@@ -95,6 +113,8 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
           selectEpisode(currentEpisodeIndex + 1);
       } else {
           setIsPlaying(false);
+          setCurrentEpisodeIndex(0);
+          setProgress(0);
       }
   };
 
@@ -120,20 +140,20 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
         onEnded={playNext}
         src={audioUrl}
       />
-      <div className="flex flex-col md:flex-row h-full">
-        {/* Left Side: Player */}
-        <div className="w-full md:w-2/3 bg-slate-800 text-white flex flex-col justify-between p-8 rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
+      <div className="flex flex-col md:flex-row h-full w-full">
+        {/* Left/Top Side: Player */}
+        <div className="w-full md:w-2/3 bg-slate-800 text-white flex flex-col justify-between p-4 sm:p-8 rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
            <div className="text-center">
-                <DialogHeader className="text-center mb-6">
-                    <DialogTitle className="text-2xl font-bold text-white">{currentEpisode?.title || series.title}</DialogTitle>
+                <DialogHeader className="text-center mb-4 sm:mb-6">
+                    <DialogTitle className="text-xl sm:text-2xl font-bold text-white leading-tight">{currentEpisode?.title || series.title}</DialogTitle>
                     <DialogDescription className="text-slate-300">{series.title}</DialogDescription>
                 </DialogHeader>
-                <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden shadow-2xl mb-6">
+                <div className="relative w-32 h-32 sm:w-48 sm:h-48 mx-auto rounded-lg overflow-hidden shadow-2xl mb-4 sm:mb-6">
                     <Image src={series.thumbnailUrl} alt={series.title} layout="fill" objectFit="cover" />
                 </div>
            </div>
            
-           <div className="space-y-4">
+           <div className="space-y-2 sm:space-y-4">
                 <Slider
                     value={[progress]}
                     max={duration || 1}
@@ -145,33 +165,33 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
                     <span>{formatTime(duration)}</span>
                 </div>
 
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center justify-center gap-2 sm:gap-4">
                      <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={playPrev} disabled={currentEpisodeIndex === 0}>
-                        <Rewind className="h-6 w-6" />
+                        <Rewind className="h-5 w-5 sm:h-6 sm:w-6" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="w-20 h-20 bg-white/20 rounded-full text-white hover:bg-white/30" onClick={togglePlayPause}>
-                        {isPlaying ? <Pause className="h-10 w-10" /> : <Play className="h-10 w-10 ml-1" />}
+                    <Button variant="ghost" size="icon" className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full text-white hover:bg-white/30" onClick={togglePlayPause}>
+                        {isPlaying ? <Pause className="h-8 w-8 sm:h-10 sm:w-10" /> : <Play className="h-8 w-8 sm:h-10 sm:w-10 ml-1" />}
                     </Button>
                      <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={playNext} disabled={currentEpisodeIndex === series.episodes.length - 1}>
-                        <FastForward className="h-6 w-6" />
+                        <FastForward className="h-5 w-5 sm:h-6 sm:w-6" />
                     </Button>
                 </div>
                 
                 <div className="flex justify-center items-center gap-4">
                     <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={toggleMute}>
-                        {isMuted ? <VolumeX className="h-5 w-5"/> : <Volume2 className="h-5 w-5"/>}
+                        {isMuted ? <VolumeX className="h-4 w-4 sm:h-5 sm:w-5"/> : <Volume2 className="h-4 w-4 sm:h-5 sm:w-5"/>}
                     </Button>
                 </div>
            </div>
         </div>
 
-        {/* Right Side: Playlist */}
-        <div className="w-full md:w-1/3 bg-white flex flex-col">
-          <div className="p-6 border-b">
+        {/* Right/Bottom Side: Playlist */}
+        <div className="w-full md:w-1/3 bg-white flex flex-col flex-grow md:h-full">
+          <div className="p-4 sm:p-6 border-b">
             <h3 className="text-lg font-bold flex items-center gap-2"><ListMusic className="h-5 w-5"/> Up Next</h3>
           </div>
           <ScrollArea className="flex-grow">
-            <div className="p-4 space-y-2">
+            <div className="p-2 sm:p-4 space-y-1">
                 {series.episodes.map((episode, index) => (
                     <div 
                         key={episode.id} 

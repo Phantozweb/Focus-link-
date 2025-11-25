@@ -193,7 +193,7 @@ export default function AcademyPage() {
                             <p className="text-xs text-muted-foreground">{series.episodeCount} Episodes</p>
                           </div>
                         </DialogTrigger>
-                        <DialogContent className="max-w-md md:max-w-4xl h-full md:h-auto max-h-[95vh] flex flex-col p-0">
+                        <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col p-0">
                            <AudioPlayer series={series} />
                         </DialogContent>
                     </Dialog>
