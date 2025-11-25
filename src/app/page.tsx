@@ -116,7 +116,7 @@ export default async function Home() {
                 <Link href="/directory/professionals" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
               </div>
               <Carousel className="w-full">
-                <CarouselContent className="-ml-4">
+                <CarouselContent className="-ml-4 basis-full md:basis-auto">
                   {professionals.map((user) => (
                     <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
                       <ProfileCard user={user} />
@@ -136,7 +136,7 @@ export default async function Home() {
                 <Link href="/directory/students" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
               </div>
               <Carousel className="w-full">
-                  <CarouselContent className="-ml-4">
+                  <CarouselContent className="-ml-4 basis-full md:basis-auto">
                     {students.map((student) => (
                       <CarouselItem key={student.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
                         <ProfileCard user={student} />
@@ -197,17 +197,24 @@ export default async function Home() {
                     <h2 className="section-title">Latest Job Postings</h2>
                     <Link href="/jobs" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
                   </div>
-                  <div className="job-list">
+                  <div className="space-y-4">
                       {demoJobs.slice(0,3).map((job) => (
-                        <Link href={`/jobs/${job.id}`} key={job.id} className="job-item">
-                           <div className="job-main">
-                                <h4>{job.title}</h4>
-                                <div className="job-meta">
-                                  <span className='flex items-center gap-1.5'><Building className="h-4 w-4" />{job.company}</span>
-                                  <span className='flex items-center gap-1.5'><MapPin className="h-4 w-4" />{job.location}</span>
-                                </div>
-                            </div>
-                            <div className="job-icon"><ArrowRight /></div>
+                        <Link href={`/jobs/${job.id}`} key={job.id} className="block">
+                           <div className="job-card">
+                              <div className="job-logo"><Building /></div>
+                              <div className="job-info">
+                                  <h3 className="job-title">{job.title}</h3>
+                                  <div className="job-meta">
+                                      <span><Building className="inline mr-1.5 h-4 w-4" />{job.company}</span>
+                                      <span><MapPin className="inline mr-1.5 h-4 w-4" />{job.location}</span>
+                                      <Badge variant="outline">{job.type}</Badge>
+                                  </div>
+                              </div>
+                              <div className="job-action">
+                                  <span className="post-time"><TimeAgo dateString={job.posted} /></span>
+                                  <Button variant="secondary" className="btn-view rounded-full-btn h-auto py-2 px-5">Apply</Button>
+                              </div>
+                          </div>
                         </Link>
                       ))}
                   </div>
@@ -219,7 +226,7 @@ export default async function Home() {
                   <Link href="/directory/institutions" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
                 </div>
                  <Carousel className="w-full">
-                    <CarouselContent className="-ml-4">
+                    <CarouselContent className="-ml-4 basis-full md:basis-auto">
                       {institutions.map((user) => (
                         <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
                           <ProfileCard user={user} />
@@ -238,7 +245,7 @@ export default async function Home() {
                 </div>
                 {clinicsAndOpticals.length > 0 ? (
                     <Carousel className="w-full">
-                      <CarouselContent className="-ml-4">
+                      <CarouselContent className="-ml-4 basis-full md:basis-auto">
                           {clinicsAndOpticals.map((user) => (
                             <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
                               <ProfileCard user={user} />
