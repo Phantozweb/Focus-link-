@@ -59,7 +59,7 @@ export default function AcademyPage() {
     
     async function fetchAudioSeries() {
       try {
-        const response = await fetch('https://focuscast.netlify.app/data/series.json');
+        const response = await fetch('/api/audio-series');
         if (response.ok) {
           const data = await response.json();
           setAudioSeries(data);
