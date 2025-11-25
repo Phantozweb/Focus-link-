@@ -99,14 +99,21 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                             )}
                         </div>
                         
-                        {user.links.linkedin && (
-                             <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3.5 px-4 rounded-xl font-semibold bg-blue-600 text-white shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-blue-700">
-                                <div className="flex items-center justify-center gap-2">
-                                  {isOrg ? <Globe className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
-                                  <span>{isOrg ? 'Website' : 'LinkedIn'}</span>
-                                </div>
-                            </a>
-                        )}
+                        <div className="flex items-center gap-2">
+                            {user.links.linkedin && (
+                                <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block flex-grow text-center py-3.5 px-4 rounded-xl font-semibold bg-blue-600 text-white shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-blue-700">
+                                    <div className="flex items-center justify-center gap-2">
+                                    {isOrg ? <Globe className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
+                                    <span>{isOrg ? 'Website' : 'LinkedIn'}</span>
+                                    </div>
+                                </a>
+                            )}
+                             {user.links.email && (
+                                <a href={`mailto:${user.links.email}`} className="block flex-shrink-0 w-14 h-14 text-center p-4 rounded-xl font-semibold bg-slate-200 text-slate-600 shadow-lg shadow-slate-900/10 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-slate-300">
+                                    <Mail className="w-full h-full" />
+                                </a>
+                            )}
+                        </div>
                     </div>
                 </aside>
 
@@ -178,5 +185,3 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
 export function ProfileClient({ user }: { user: UserProfile }) {
   return <ModernProfileLayout user={user} />;
 }
-
-    
