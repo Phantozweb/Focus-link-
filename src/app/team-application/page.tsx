@@ -19,6 +19,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 const roles = [
   "Regional Leader / Ambassador",
   "National Head",
+  "College Ambassador",
   "Event Coordinator",
   "Job Board Curator",
   "Clinical Content Creator",
@@ -50,6 +51,17 @@ const roleDetails = [
       "Act as the main point of contact for all members and partners within the country."
     ],
     benefits: "Develop strong leadership and project management skills, become a recognized leader in your country's eye care community, and make a tangible national impact."
+  },
+  {
+    role: "College Ambassador",
+    mission: "Be the face and voice of Focus Links at your university or college.",
+    responsibilities: [
+        "Organize local workshops, study groups, and informational sessions about Focus Links.",
+        "Onboard new students to the platform and help them build their profiles.",
+        "Act as a liaison between your college's student body/faculty and the Focus Links national team.",
+        "Promote global events like the Eye Q Arena on campus."
+    ],
+    benefits: "Develop leadership and public speaking skills, build a strong network within your own college, and be recognized as a student leader on a global platform."
   },
   {
     role: "Event Coordinator",
@@ -257,7 +269,7 @@ export default function TeamApplicationPage() {
               <CardHeader>
                 <CardTitle className="text-2xl font-headline">Volunteer Application</CardTitle>
                 <CardDescription>
-                  This is a volunteer, non-commercial team. We are driven by passion, not profit. Fill out the form below to join us.
+                  This is a volunteer, non-commercial team. We are driven by passion, not profit. Fill out the form below to join us. Limited seats are available.
                 </CardDescription>
               </CardHeader>
               <CardContent>
