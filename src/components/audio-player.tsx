@@ -16,6 +16,7 @@ type Episode = {
   episodeNumber: number;
   duration: string;
   url: string;
+  audioUrl?: string; // Make this optional to handle both data structures
 };
 
 type AudioSeries = {
@@ -36,8 +37,8 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentEpisode = series.episodes[currentEpisodeIndex];
   
-  // Construct the full audio URL from the relative path in the series data
-  const audioUrl = `https://focuscast.netlify.app/audio${currentEpisode.url}.mp3`;
+  const audioUrl = currentEpisode.audioUrl || `https://focuscast.netlify.app/audio${currentEpisode.url}.mp3`;
+
 
   useEffect(() => {
     if (audioRef.current) {
