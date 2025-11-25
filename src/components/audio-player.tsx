@@ -37,7 +37,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentEpisode = series.episodes[currentEpisodeIndex];
   
-  const audioUrl = currentEpisode.audioUrl || `https://raw.githubusercontent.com/Phantozweb/focuscastaudios/main/OPTICS%20UNVEILED/S2-E1%20(The%20Magic%20of%20Lens%20Types).mp3`;
+  const audioUrl = currentEpisode.audioUrl;
 
 
   useEffect(() => {
@@ -51,17 +51,25 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
             }
         }
     }
-  }, [currentEpisodeIndex, currentEpisode, isPlaying]);
+  }, [currentEpisodeIndex, currentEpisode]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+        if (isPlaying) {
+            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        } else {
+            audioRef.current.pause();
+        }
+    }
+  }, [isPlaying]);
+
+  const selectEpisode = (index: number) => {
+    setCurrentEpisodeIndex(index);
+    setIsPlaying(true);
+  };
 
   const togglePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-      }
-      setIsPlaying(!isPlaying);
-    }
+    setIsPlaying(!isPlaying);
   };
 
   const handleTimeUpdate = () => {
@@ -91,13 +99,15 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
 
   const playNext = () => {
       if (currentEpisodeIndex < series.episodes.length - 1) {
-          setCurrentEpisodeIndex(currentEpisodeIndex + 1);
+          selectEpisode(currentEpisodeIndex + 1);
+      } else {
+          setIsPlaying(false);
       }
   };
 
   const playPrev = () => {
       if (currentEpisodeIndex > 0) {
-          setCurrentEpisodeIndex(currentEpisodeIndex - 1);
+          selectEpisode(currentEpisodeIndex - 1);
       }
   };
   
@@ -172,7 +182,7 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
                 {series.episodes.map((episode, index) => (
                     <button 
                         key={episode.id} 
-                        onClick={() => setCurrentEpisodeIndex(index)}
+                        onClick={() => selectEpisode(index)}
                         className={cn(
                             "w-full text-left p-3 rounded-lg flex items-start gap-3 transition-colors",
                             index === currentEpisodeIndex ? "bg-purple-100 text-purple-800" : "hover:bg-slate-50"
