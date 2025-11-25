@@ -95,13 +95,13 @@ export default async function Home() {
             
             <Carousel opts={{ loop: true, align: 'start' }} className="w-full">
                 <CarouselContent className="-ml-4">
-                    <CarouselItem className="pl-4">
+                    <CarouselItem className="pl-4 basis-full">
                         <AnimatedTeamApplicationCard />
                     </CarouselItem>
-                     <CarouselItem className="pl-4">
+                     <CarouselItem className="pl-4 basis-full">
                         <AnimatedSearchCard />
                     </CarouselItem>
-                    <CarouselItem className="pl-4">
+                    <CarouselItem className="pl-4 basis-full">
                         <AnimatedCommunityUpdateCard />
                     </CarouselItem>
                 </CarouselContent>

@@ -28,9 +28,7 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
       {isFeatured && <div className="feat-badge">Featured</div>}
       <div className="avatar-wrap">
         <Avatar className="w-20 h-20 border-2 border-white shadow-md">
-            {user.avatarUrl ? (
-                <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={getAvatarHint()} />
-            ) : null}
+            <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={getAvatarHint()} />
             <AvatarFallback className="bg-slate-200">
                 <FallbackIcon className="h-10 w-10 text-slate-400" />
             </AvatarFallback>
