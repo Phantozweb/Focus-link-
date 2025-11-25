@@ -3,12 +3,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Rewind, FastForward, ListMusic, Volume2, VolumeX } from 'lucide-react';
+import { Play, Pause, Rewind, FastForward, ListMusic, Volume2, VolumeX, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import Link from 'next/link';
 
 type Episode = {
   id: string;
@@ -44,9 +45,11 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
       if (audioRef.current.src !== audioUrl) {
         audioRef.current.src = audioUrl;
         audioRef.current.load();
-        if (isPlaying) {
-          audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-        }
+      }
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+      } else {
+        audioRef.current.pause();
       }
     }
   }, [currentEpisodeIndex, currentEpisode, isPlaying, audioUrl]);
@@ -59,13 +62,6 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
 
   const togglePlayPause = () => {
     if (!audioUrl) return;
-    if(audioRef.current){
-        if(isPlaying){
-            audioRef.current.pause();
-        } else {
-            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-        }
-    }
     setIsPlaying(!isPlaying);
   };
 
@@ -170,18 +166,18 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
         </div>
 
         {/* Right Side: Playlist */}
-        <div className="w-full md:w-1/3 bg-white">
+        <div className="w-full md:w-1/3 bg-white flex flex-col">
           <div className="p-6 border-b">
             <h3 className="text-lg font-bold flex items-center gap-2"><ListMusic className="h-5 w-5"/> Up Next</h3>
           </div>
-          <ScrollArea className="h-[250px] md:h-[calc(100%-65px)]">
+          <ScrollArea className="flex-grow">
             <div className="p-4 space-y-2">
                 {series.episodes.map((episode, index) => (
-                    <button 
+                    <div 
                         key={episode.id} 
                         onClick={() => selectEpisode(index)}
                         className={cn(
-                            "w-full text-left p-3 rounded-lg flex items-start gap-3 transition-colors",
+                            "w-full text-left p-3 rounded-lg flex items-start gap-3 transition-colors cursor-pointer",
                             index === currentEpisodeIndex ? "bg-purple-100 text-purple-800" : "hover:bg-slate-50"
                         )}
                     >
@@ -197,7 +193,11 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
                                 <span className="w-1 h-3 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></span>
                             </div>
                         )}
-                    </button>
+                        <Link href={`https://focuscast.netlify.app${episode.url}`} target="_blank" rel="noopener noreferrer" className="ml-auto flex-shrink-0 text-slate-400 hover:text-primary" onClick={(e) => e.stopPropagation()}>
+                           <ExternalLink className="h-4 w-4" />
+                           <span className="sr-only">View on Focus Cast</span>
+                        </Link>
+                    </div>
                 ))}
             </div>
           </ScrollArea>
