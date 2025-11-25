@@ -118,7 +118,7 @@ export default async function Home() {
               <Carousel className="w-full">
                 <CarouselContent className="-ml-4 basis-full md:basis-auto">
                   {professionals.map((user) => (
-                    <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
+                    <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
                       <ProfileCard user={user} />
                     </CarouselItem>
                   ))}
@@ -138,7 +138,7 @@ export default async function Home() {
               <Carousel className="w-full">
                   <CarouselContent className="-ml-4 basis-full md:basis-auto">
                     {students.map((student) => (
-                      <CarouselItem key={student.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
+                      <CarouselItem key={student.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
                         <ProfileCard user={student} />
                       </CarouselItem>
                     ))}
@@ -228,7 +228,7 @@ export default async function Home() {
                  <Carousel className="w-full">
                     <CarouselContent className="-ml-4 basis-full md:basis-auto">
                       {institutions.map((user) => (
-                        <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
+                        <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
                           <ProfileCard user={user} />
                         </CarouselItem>
                       ))}
@@ -247,7 +247,7 @@ export default async function Home() {
                     <Carousel className="w-full">
                       <CarouselContent className="-ml-4 basis-full md:basis-auto">
                           {clinicsAndOpticals.map((user) => (
-                            <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 pl-4">
+                            <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
                               <ProfileCard user={user} />
                             </CarouselItem>
                           ))}
@@ -259,8 +259,8 @@ export default async function Home() {
                     <div className="empty-state">
                         <div className="empty-icon"><Hospital className="h-12 w-12" /></div>
                         <h3 className='text-xl font-bold mb-2'>No Clinics Found</h3>
-                        <p className="text-sm text-text-muted mb-5">Be the first to represent your category.</p>
-                        <Button asChild className="search-btn">
+                        <p className="text-sm text-text-muted mb-5">Be the first clinic in your area to be featured.</p>
+                        <Button asChild>
                             <Link href="/membership">Add Your Practice</Link>
                         </Button>
                     </div>

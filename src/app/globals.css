@@ -220,7 +220,7 @@
 
   /* Ad Card Styles */
     .ad-card { @apply w-full h-auto min-h-[300px] md:h-[300px] rounded-3xl relative overflow-hidden flex items-center p-6 shadow-lg transition-transform duration-300 mb-8; }
-    .ad-content { @apply z-10 w-3/5 md:w-1/2 flex-shrink-0; }
+    .ad-content { @apply z-10 w-full md:w-1/2 flex-shrink-0; }
     .ad-visual { @apply absolute right-0 top-0 bottom-0 w-2/5 flex items-center justify-center z-0; }
     .ad-title { @apply text-xl md:text-3xl font-extrabold mb-2 leading-tight; }
     .ad-desc { @apply text-sm md:text-base mb-4 opacity-90; }
@@ -333,6 +333,13 @@
     }
     .dock-item.active {
       @apply text-primary font-bold;
+    }
+
+    .empty-state {
+        @apply bg-card border rounded-3xl p-8 text-center flex flex-col items-center justify-center;
+    }
+    .empty-icon {
+        @apply h-16 w-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4;
     }
 
     @keyframes community-graph-anim {
