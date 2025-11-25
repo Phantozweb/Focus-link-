@@ -14,11 +14,19 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 
+type AudioSeries = {
+  id: string;
+  title: string;
+  thumbnailUrl: string;
+  episodeCount: number;
+  url: string;
+};
 
 export default function AcademyPage() {
   const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
   const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
   const [pastWebinars, setPastWebinars] = useState<typeof webinars>([]);
+  const [audioSeries, setAudioSeries] = useState<AudioSeries[]>([]);
   const [activeFilter, setActiveFilter] = useState('All');
 
   useEffect(() => {
@@ -48,6 +56,20 @@ export default function AcademyPage() {
     setLiveWebinars(live);
     setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
     setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
+    
+    async function fetchAudioSeries() {
+      try {
+        const response = await fetch('https://focuscast.netlify.app/data/series.json');
+        if (response.ok) {
+          const data = await response.json();
+          setAudioSeries(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch audio series:", error);
+      }
+    }
+    fetchAudioSeries();
+    
   }, []);
   
   const filters = ['All', 'Webinars', 'Courses', 'Audio', 'E-Books', 'Resources'];
@@ -124,35 +146,26 @@ export default function AcademyPage() {
         <section>
             <div className="section-header">
                 <h2 className="section-title"><Headphones className="text-purple-500" /> Audio Learning</h2>
-                 <Link href="/academy" className="view-all">Library</Link>
+                 <Link href="https://focuscast.netlify.app" target="_blank" className="view-all">Powered by Focus Cast</Link>
             </div>
             <Carousel opts={{ align: "start", slidesToScroll: 'auto' }} className="w-full">
               <CarouselContent>
-                {/* Placeholder Audio Cards */}
-                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
-                    <div className="w-[160px]">
-                      <div className="relative aspect-square rounded-lg shadow-lg bg-gradient-to-br from-purple-500 to-indigo-600 group">
-                          <Image src="https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Myopia Control" layout="fill" objectFit="cover" className="rounded-lg"/>
+                {audioSeries.length > 0 ? audioSeries.map(series => (
+                  <CarouselItem key={series.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                    <Link href={`https://focuscast.netlify.app${series.url}`} target="_blank" className="block w-[160px] group">
+                      <div className="relative aspect-square rounded-lg shadow-lg bg-slate-100 overflow-hidden">
+                          <Image src={series.thumbnailUrl} alt={series.title} layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300"/>
                            <div className="absolute bottom-2 right-2 h-9 w-9 bg-white rounded-full flex items-center justify-center shadow-md text-purple-600">
                             <PlayCircle className="h-6 w-6"/>
                            </div>
                       </div>
-                      <h4 className="font-semibold text-sm mt-2 truncate">Myopia Control</h4>
-                      <p className="text-xs text-muted-foreground">Podcast Ep. 42</p>
-                    </div>
+                      <h4 className="font-semibold text-sm mt-2 truncate">{series.title}</h4>
+                      <p className="text-xs text-muted-foreground">{series.episodeCount} Episodes</p>
+                    </Link>
                 </CarouselItem>
-                <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
-                    <div className="w-[160px]">
-                      <div className="relative aspect-square rounded-lg shadow-lg bg-gradient-to-br from-amber-500 to-orange-600 group">
-                          <BookOpen className="absolute h-12 w-12 text-white/50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
-                           <div className="absolute bottom-2 right-2 h-9 w-9 bg-white rounded-full flex items-center justify-center shadow-md text-amber-600">
-                            <PlayCircle className="h-6 w-6"/>
-                           </div>
-                      </div>
-                      <h4 className="font-semibold text-sm mt-2 truncate">Clinical Guides</h4>
-                      <p className="text-xs text-muted-foreground">Audiobook Ch. 1</p>
-                    </div>
-                </CarouselItem>
+                )) : (
+                  <p className="text-muted-foreground">Loading audio series...</p>
+                )}
               </CarouselContent>
               <CarouselPrevious className="hidden sm:flex" />
               <CarouselNext className="hidden sm:flex" />
@@ -277,5 +290,3 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
