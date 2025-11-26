@@ -130,3 +130,29 @@ export function logSearch(message: string) {
         console.error("Failed to log search:", error);
     });
 }
+
+export function logAudioPlay(seriesTitle: string, episodeTitle: string) {
+    if (typeof window === 'undefined' || !WEBHOOK_URL) return;
+    
+    const trackingId = getTrackingId();
+    const message = `🎧 **Playing Audio:**
+*   **Series:** ${seriesTitle}
+*   **Episode:** ${episodeTitle}`;
+
+    const embed = {
+        description: message,
+        author: {
+            name: trackingId,
+        },
+        color: 10181046, // Purple color
+        timestamp: new Date().toISOString(),
+    };
+
+     fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] }),
+    }).catch(error => {
+        console.error("Failed to log audio play:", error);
+    });
+}

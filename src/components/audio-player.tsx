@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import Link from 'next/link';
+import { logAudioPlay } from '@/lib/activity-logger';
 
 type Episode = {
   id: string;
@@ -59,11 +60,12 @@ export function AudioPlayer({ series }: { series: AudioSeries }) {
     if (audioRef.current) {
         if (isPlaying) {
             audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+            logAudioPlay(series.title, currentEpisode.title);
         } else {
             audioRef.current.pause();
         }
     }
-  }, [isPlaying]);
+  }, [isPlaying, series.title, currentEpisode.title]);
 
 
   const selectEpisode = (index: number) => {

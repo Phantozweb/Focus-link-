@@ -26,6 +26,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { toPng } from 'html-to-image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CaseSheet } from '@/components/case-sheet';
+import { logSearch } from '@/lib/activity-logger';
 
 
 type AudioSeries = {
@@ -182,6 +183,8 @@ export default function AcademyPage() {
     setIsLoadingAI(true);
     setAnswer('');
     incrementAttemptCount();
+    logSearch(`❓ **Focus.AI Chat:**\n*   **Question:** "${question}"`);
+
 
     try {
       const result = await askOptometryAI({ question });
@@ -211,6 +214,7 @@ export default function AcademyPage() {
     setIsGeneratingCase(true);
     setGeneratedCase(null);
     incrementAttemptCount();
+    logSearch(`📝 **Focus.AI Case Gen:**\n*   **Topic:** "${caseTopic}"`);
 
     try {
       const result = await generateCaseStudy({ topic: caseTopic });
@@ -536,5 +540,3 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
