@@ -1,41 +1,21 @@
 
-import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+
+import { useRef } from "react";
 import {
-  Sparkles,
-  User,
-  FileText,
-  MessageCircle,
-  Send,
   Download,
-  Image as ImageIcon,
-  ArrowLeft,
-  RefreshCw,
+  Eye,
   Brain,
-  HelpCircle,
   Stethoscope,
   GraduationCap,
   Target,
-  CheckCircle,
-  XCircle,
-  Eye,
+  User,
 } from "lucide-react";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Label } from "./ui/label";
 import { type GenerateCaseStudyOutput } from "@/ai/flows/generate-case-study";
 import { toPng } from 'html-to-image';
 import { useToast } from "@/hooks/use-toast";
 import { DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 
 
 function formatCaseStudyContent(markdown: string) {
@@ -43,7 +23,7 @@ function formatCaseStudyContent(markdown: string) {
   
   let html = markdown
     .replace(/^#### (.*?$)/gm, '<h4 class="text-md font-semibold text-slate-700 mt-3 mb-1">$1</h4>')
-    .replace(/^### (.*?$)/gm, '<h3 class="text-lg font-semibold text-slate-800 mt-4 mb-2">$1</h3>')
+    .replace(/^### (.*?$)/gm, '<h3 class="text-lg font-bold text-slate-800 mt-6 mb-2 flex items-center gap-2"><span class="w-6 h-6 flex items-center justify-center rounded-full bg-primary/10 text-primary"><Stethoscope size={16}/></span>$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
   // Handle unordered lists (lines starting with - or *)
@@ -84,15 +64,15 @@ function formatCaseStudyContent(markdown: string) {
     return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full text-sm">${header}${body}</table></div>`;
   });
 
-  // Handle paragraphs - this logic can be tricky and may need refinement
-  // A simple approach is to wrap non-list, non-table, non-heading blocks in <p> tags
+  // Handle paragraphs by splitting by double newlines, then wrapping non-special lines in <p>
   html = html.split(/\r?\n\r?\n/).map(paragraph => {
       const trimmed = paragraph.trim();
       if (!trimmed) return '';
-      if (trimmed.startsWith('<h3') || trimmed.startsWith('<h4') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol') || trimmed.startsWith('<div')) {
-          return trimmed; // Don't wrap elements that are already block-level
+      // A simple check to avoid re-wrapping block-level elements. This could be improved.
+      if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol') || trimmed.startsWith('<div')) {
+          return trimmed.replace(/\r?\n/g, '<br/>'); // Preserve line breaks within already-formatted blocks
       }
-      return `<p>${trimmed}</p>`;
+      return `<p>${trimmed.replace(/\r?\n/g, '<br/>')}</p>`;
   }).join('');
 
 
@@ -125,6 +105,19 @@ export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutp
       });
   };
 
+  const fullMarkdownContent = `### Patient Presentation
+${caseData.patientPresentation}
+
+### Examination Findings
+${caseData.examinationFindings}
+
+### Diagnosis
+> ${caseData.diagnosis}
+
+### Clinical Discussion
+${caseData.clinicalDiscussion}
+`;
+
   return (
     <div>
         <div className="p-6 bg-slate-50 border-b">
@@ -145,7 +138,7 @@ export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutp
         </div>
         <div className="max-h-[70vh] overflow-y-auto">
             <div ref={caseSheetRef} className="p-8 bg-white">
-                 <div className="flex justify-between items-center mb-8 pb-4 border-b">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b">
                     <div className="flex items-center gap-2">
                         <Eye className="h-8 w-8 text-primary" />
                         <div>
@@ -159,24 +152,8 @@ export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutp
                     </div>
                 </div>
 
-                <section className="mb-6">
-                    <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><User className="h-5 w-5 text-primary"/> Patient Presentation</h3>
-                    <p className="text-slate-600 leading-relaxed">{caseData.patientPresentation}</p>
-                </section>
-                <section className="mb-6">
-                    <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><Stethoscope className="h-5 w-5 text-primary"/> Examination Findings</h3>
-                    <div className="prose prose-slate max-w-none text-base" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(caseData.examinationFindings) }} />
-                </section>
-                <section className="mb-6">
-                    <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary"/> Diagnosis</h3>
-                    <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
-                        <p className="font-semibold text-amber-800">{caseData.diagnosis}</p>
-                    </div>
-                </section>
-                <section>
-                    <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><Brain className="h-5 w-5 text-primary"/> Clinical Discussion</h3>
-                    <div className="prose prose-slate max-w-none text-base" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(caseData.clinicalDiscussion) }} />
-                </section>
+                <div className="prose prose-slate max-w-none text-base" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(fullMarkdownContent) }} />
+                
                 <div className="mt-8 pt-4 border-t text-center text-xs text-slate-500">
                   <p><strong>Disclaimer:</strong> This case sheet was generated by an AI for educational purposes only. It is not a substitute for professional clinical judgment and may not always be accurate. Always verify information with trusted clinical sources.</p>
                 </div>
