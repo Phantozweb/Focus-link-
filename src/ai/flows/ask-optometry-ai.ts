@@ -25,9 +25,57 @@ const AskOptometryAIOutputSchema = z.object({
 export type AskOptometryAIOutput = z.infer<typeof AskOptometryAIOutputSchema>;
 
 export async function askOptometryAI(input: AskOptometryAIInput): Promise<AskOptometryAIOutput> {
-  return askOptometryAIFlow(input);
+  const systemPrompt = `You are an expert AI assistant for optometrists and optometry students. Your name is Focus.ai.
+
+You are being asked a question from a user on the Focus Links platform.
+
+Answer the following question accurately and concisely, as if you were a knowledgeable colleague. Use markdown for formatting, such as headings (###), bold text (**text**), and bulleted lists (-) to make the answer easy to read and well-structured. If the question is outside the scope of optometry, eye care, or vision science, politely decline to answer.`;
+
+  const userPrompt = `User's Question: "${input.question}"\n\nProvide a helpful and informative answer.`;
+  
+  try {
+    const response = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'openai',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API call failed with status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    const content = result.choices[0]?.message?.content;
+
+    if (!content) {
+      throw new Error("The AI returned an empty or invalid response structure.");
+    }
+
+    return { answer: content };
+    
+  } catch (error) {
+    console.error("Error fetching or parsing from custom AI endpoint:", error);
+    let errorMessage = "Failed to get an answer from the AI.";
+    if (error instanceof Error) {
+        errorMessage = error.message;
+    }
+    return {
+        answer: `### Error\n\nThere was an issue communicating with the AI service. Details: ${errorMessage}`,
+    };
+  }
 }
 
+// The original Genkit flow is preserved below but is no longer used by the exported function.
 const prompt = ai.definePrompt({
   name: 'askOptometryAIPrompt',
   input: {schema: AskOptometryAIInputSchema},
@@ -56,4 +104,3 @@ const askOptometryAIFlow = ai.defineFlow(
     return output!;
   }
 );
-    

@@ -27,8 +27,8 @@ export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<
 The entire case study should be a single, cohesive markdown document.
 It must include the following sections, formatted with markdown headings (###):
 - ### Patient Presentation
-- ### Examination Findings (use a markdown table)
-- ### Diagnosis (use a blockquote)
+- ### Examination Findings
+- ### Diagnosis
 - ### Clinical Discussion
 `;
 
@@ -62,8 +62,6 @@ It must include the following sections, formatted with markdown headings (###):
         throw new Error("The AI returned an empty or invalid response structure.");
     }
     
-    // The content is now expected to be a raw markdown string.
-    // We wrap it in the required output schema.
     const output: GenerateCaseStudyOutput = {
       caseMarkdown: content,
     };
@@ -77,7 +75,6 @@ It must include the following sections, formatted with markdown headings (###):
         errorMessage = error.message;
     }
     
-    // Provide a fallback error object to the UI
     return {
         caseMarkdown: `### Error Generating Case on: ${input.topic}\n\nThe AI failed to generate the case study content. There was an issue communicating with the AI service. Details: ${errorMessage}`,
     };
