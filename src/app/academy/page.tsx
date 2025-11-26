@@ -2,11 +2,11 @@
 'use client';
 
 import { webinars } from '@/lib/academy';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect } from 'react';
@@ -16,6 +16,10 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { AudioPlayer } from '@/components/audio-player';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Textarea } from '@/components/ui/textarea';
+import { askOptometryAI } from '@/ai/flows/ask-optometry-ai';
+import { useToast } from '@/hooks/use-toast';
+import { marked } from 'marked';
 
 
 type AudioSeries = {
@@ -35,6 +39,12 @@ export default function AcademyPage() {
   const [audioSeries, setAudioSeries] = useState<AudioSeries[]>([]);
   const [isLoadingAudio, setIsLoadingAudio] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
+
+  // AI Chat state
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const now = new Date().getTime();
@@ -94,6 +104,28 @@ export default function AcademyPage() {
     fetchAudioSeries();
     
   }, []);
+
+  const handleAISubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!question.trim()) return;
+
+    setIsLoadingAI(true);
+    setAnswer('');
+
+    try {
+      const result = await askOptometryAI({ question });
+      setAnswer(result.answer);
+    } catch (error) {
+      console.error('AI question failed:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Could not get an answer from the AI. Please try again.',
+      });
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
   
   const comingSoonFeatures = [
     { title: 'Interactive Courses', icon: <BookOpen className="h-8 w-8" />, description: 'Simulator and Valuable courses instead of videos Pure virtual engagement' },
@@ -128,15 +160,50 @@ export default function AcademyPage() {
                 <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus AI</span>
             </div>
              <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
-                <CardContent className="p-8 text-center">
-                  <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <Bot className="h-9 w-9" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</h3>
-                  <p className="text-slate-600 mt-2 max-w-lg mx-auto">Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.</p>
-                  <Button asChild className="mt-6 rounded-full-btn" size="lg">
-                    <Link href="/ask-ai">Ask a Question</Link>
-                  </Button>
+                <CardHeader>
+                    <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <Bot className="h-9 w-9" />
+                    </div>
+                    <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
+                    <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
+                      Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="p-8 pt-2">
+                    <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto">
+                    <Textarea
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        placeholder="e.g., 'What are the key differences between scleritis and episcleritis?'"
+                        rows={3}
+                        className="text-base bg-white/80"
+                        disabled={isLoadingAI}
+                    />
+                    <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
+                        {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
+                        Ask Focus AI
+                    </Button>
+                    </form>
+
+                    {isLoadingAI && (
+                    <div className="mt-8 p-4 text-center text-muted-foreground">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
+                        Focus AI is thinking...
+                    </div>
+                    )}
+
+                    {answer && (
+                    <div className="mt-8 border-t pt-6 max-w-xl mx-auto">
+                        <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
+                        <Sparkles className="h-5 w-5 text-purple-500" />
+                        Focus AI's Answer
+                        </h3>
+                        <div 
+                        className="prose prose-slate max-w-none"
+                        dangerouslySetInnerHTML={{ __html: marked(answer) }}
+                        />
+                    </div>
+                    )}
                 </CardContent>
             </Card>
         </section>
