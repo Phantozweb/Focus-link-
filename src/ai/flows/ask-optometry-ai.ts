@@ -25,6 +25,13 @@ const AskOptometryAIOutputSchema = z.object({
 export type AskOptometryAIOutput = z.infer<typeof AskOptometryAIOutputSchema>;
 
 export async function askOptometryAI(input: AskOptometryAIInput): Promise<AskOptometryAIOutput> {
+  const question = input.question.trim().toLowerCase();
+  const simpleGreetings = ['hi', 'hello', 'hey', 'yo', 'sup'];
+
+  if (simpleGreetings.includes(question)) {
+    return { answer: "Hello! I'm Focus.ai, your assistant for optometry questions. How can I help you today?" };
+  }
+
   const systemPrompt = `You are Focus.AI, a specialized AI assistant created by Focus.in exclusively for optometry and ophthalmology professionals.
 
 STRICT DOMAIN RULES:
