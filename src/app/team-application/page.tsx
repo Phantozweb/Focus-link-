@@ -184,29 +184,27 @@ export default function TeamApplicationPage() {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    // Use a service that can handle various file types or a dedicated service for PDFs.
-    // For this example, we'll use a service that gives back a URL.
-    // NOTE: This is a placeholder service. In a real app, use a secure, managed file storage solution.
+    
+    // Using imgbb.com API key
+    const apiKey = '58bcdc0482981150fadb03eb2d91b2dc';
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('image', file);
     setUploadStatus('Uploading...');
 
     try {
-      // Using a generic file upload service. Replace with your actual service.
-      const response = await fetch('https://file.io', {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
         method: 'POST',
         body: formData,
       });
       const data = await response.json();
 
       if (data.success) {
-        const fileUrl = data.link;
+        const fileUrl = data.data.url;
         setUploadStatus('Upload successful!');
         setValue('resumeUrl', fileUrl, { shouldValidate: true });
         toast({ title: 'Resume Uploaded', description: 'Your file has been successfully uploaded and linked.' });
       } else {
-        throw new Error(data.message || 'Unknown upload error');
+        throw new Error(data.error?.message || 'Unknown upload error from imgbb');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
