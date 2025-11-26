@@ -47,7 +47,7 @@ This isn't a passive lecture series. We use cutting-edge technology to create a 
 | 4 | **Working Distance Mastery** | Simulation for adjusting and calculating working distance. |
 | 5 | **Decoding the Reflex** | Video demos & reflex identification exercises. |
 | 6 | **Core Retinoscopy Techniques** | In-depth tutorials on spot, streak, and cylinder. |
-| 7 | **The Optical Cross** | Animated explanations and a tool for plotting findings. |
+| 7 | **Understanding the Optical Cross** | Animated explanations and a tool for plotting findings. |
 | 8 | **Calculating the Final Rx** | Step-by-step guides and an interactive calculator. |
 | 9 | **Cross Retinoscopy in 3 Steps** | Quick-reference video tutorials. |
 | 10 | **Practice Makes Perfect** | Advanced simulator with diverse patient cases. |
@@ -87,7 +87,7 @@ This course is invaluable for optometry students, interns, and early-career opto
       title: 'Managing Director of Academic, Focus Links'
     },
     platform: 'Google Meet',
-    dateTime: '2024-10-05T04:30:00Z',
+    dateTime: '2023-10-05T04:30:00Z',
     duration: '60 minutes',
     tags: ['Keratitis', 'Contact Lenses', 'Cornea', 'Clinical', 'Past Event'],
     registrationLink: 'https://forms.gle/G9nhxqgi1LDTWupz5',
@@ -125,7 +125,7 @@ Participants competed on their knowledge from the anterior to the posterior segm
 | 7 | **Vitreous Body** | 10 | 15 | 1 |
 | 8 | **Retina** | 10 | 24 | 2 |
 | 9 | **Optic Nerve & Pathways** | 10 | 24 | 2 |
-| 10 | **Extraocular Muscles & Ocular Motility** | 10 | 16 | 1 |
+| 10 | **Extraocular Muscles & Ocular Motility** | 10 | 16 | 2 |
 `,
     speaker: {
       name: 'V.M. Ram Kumar',
@@ -137,7 +137,7 @@ Participants competed on their knowledge from the anterior to the posterior segm
       title: 'Official Organizer'
     },
     platform: 'Online Platform',
-    dateTime: '2025-11-02T00:00:00Z',
+    dateTime: '2023-11-02T00:00:00Z',
     duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
