@@ -224,7 +224,7 @@ export default function AcademyPage() {
                       <Link href={`/academy/${webinar.id}`} className="block h-full">
                       <Card className="group overflow-hidden shadow-soft bg-slate-50 h-full flex flex-col">
                         <div className="p-6 flex-grow">
-                            <Badge variant="secondary" className="mb-2">{webinar.id === 'eye-q-arena-2025' ? 'Event Concluded' : 'On-Demand'}</Badge>
+                            <Badge variant="secondary" className="mb-2">{webinar.id === 'eye-q-arena-2025' ? 'Event Concluded' : 'Webinar Ended'}</Badge>
                             <h4 className="font-bold text-slate-800 text-base">{webinar.title}</h4>
                         </div>
                         <div className="px-6 pb-4 text-sm text-muted-foreground border-t mt-auto pt-4">
