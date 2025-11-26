@@ -219,7 +219,7 @@ export default function AcademyPage() {
               <div className="p-4 border-b border-purple-200/50">
                   <TabsList className="grid w-full grid-cols-3 bg-purple-100/50 text-purple-800">
                     <TabsTrigger value="chat"><MessageCircle className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Chat</span></TabsTrigger>
-                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm_inline">Case Gen</span></TabsTrigger>
+                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Case Gen</span></TabsTrigger>
                     <TabsTrigger value="quiz"><PencilRuler className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Quiz</span></TabsTrigger>
                   </TabsList>
               </div>
