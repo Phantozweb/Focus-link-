@@ -18,26 +18,22 @@ const GenerateCaseStudyInputSchema = z.object({
 export type GenerateCaseStudyInput = z.infer<typeof GenerateCaseStudyInputSchema>;
 
 const GenerateCaseStudyOutputSchema = z.object({
-  title: z.string().describe("A concise and descriptive title for the case study."),
-  patientPresentation: z.string().describe("A paragraph detailing the patient's presentation, including age, gender, chief complaint, and history."),
-  examinationFindings: z.string().describe("A markdown table of key examination findings with columns for Test, OD (Right Eye), and OS (Left Eye)."),
-  diagnosis: z.string().describe("The final diagnosis for the case."),
-  clinicalDiscussion: z.string().describe("A detailed discussion of the case, including differential diagnoses, management plan, and key learning points. Use markdown for formatting."),
+  caseMarkdown: z.string().describe("A complete clinical case study formatted as a single markdown document."),
 });
 export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSchema>;
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
   const systemPrompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
-The case study should be structured for learning, with clear sections.
-You MUST return the output as a valid JSON object with the following keys: "title", "patientPresentation", "examinationFindings", "diagnosis", "clinicalDiscussion".
-- "title": "A clear, engaging title."
-- "patientPresentation": "Describe the patient, their complaint, and relevant history in a paragraph."
-- "examinationFindings": "Provide key findings from the clinical examination. Format this as a markdown table with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'."
-- "diagnosis": "State the definitive diagnosis."
-- "clinicalDiscussion": "Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure like bold text and bullet points."
+The entire case study should be a single, cohesive markdown document.
+You MUST return the output as a valid JSON object with a single key: "caseMarkdown".
+The value of "caseMarkdown" should be a markdown string containing the following sections:
+- "### Patient Presentation": Describe the patient, their complaint, and relevant history.
+- "### Examination Findings": Provide key findings from the clinical examination. Format this as a markdown table.
+- "### Diagnosis": State the definitive diagnosis, perhaps in a blockquote.
+- "### Clinical Discussion": Elaborate on the decision-making process, management plan, and educational takeaways. Use markdown for structure like bold text and bullet points.
 `;
 
-  const userPrompt = `Generate a case study on the topic: ${input.topic}`;
+  const userPrompt = `Generate a complete case study on the topic: ${input.topic}`;
 
   try {
     const response = await fetch('https://text.pollinations.ai/openai', {
@@ -62,7 +58,6 @@ You MUST return the output as a valid JSON object with the following keys: "titl
 
     const result = await response.json();
     
-    // The response is expected to be a JSON object with a 'choices' array
     const content = result.choices[0]?.message?.content;
     if (!content) {
         throw new Error("The AI returned an empty or invalid response structure.");
@@ -91,35 +86,27 @@ You MUST return the output as a valid JSON object with the following keys: "titl
     
     // Provide a fallback error object to the UI
     return {
-        title: `Error Generating Case on: ${input.topic}`,
-        patientPresentation: "The AI failed to generate the case study content.",
-        examinationFindings: "",
-        diagnosis: "Error",
-        clinicalDiscussion: `There was an issue communicating with the AI service. Details: ${errorMessage}`,
+        caseMarkdown: `### Error Generating Case on: ${input.topic}\n\nThe AI failed to generate the case study content. There was an issue communicating with the AI service. Details: ${errorMessage}`,
     };
   }
 }
 
 // The original Genkit flow is preserved below but is no longer used by the exported function.
-
 const promptTemplate = ai.definePrompt({
   name: 'generateCaseStudyPrompt',
-  input: {schema: GenerateCaseStudyInputSchema},
+  input: {schema: z.object({ topic: z.string() })},
   output: {schema: GenerateCaseStudyOutputSchema},
   prompt: `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
-
-The case study should be structured for learning, with clear sections, and formatted as a professional-looking HTML document.
-
+The entire case study should be a single, cohesive markdown document.
+It must include the following sections, formatted with markdown headings (###):
+- ### Patient Presentation
+- ### Examination Findings (use a markdown table)
+- ### Diagnosis
+- ### Clinical Discussion
 Topic: {{{topic}}}
-
-Generate the case study with the following structure:
-1.  **Title:** A clear, engaging title.
-2.  **Patient Presentation:** Describe the patient, their complaint, and relevant history in a paragraph.
-3.  **Examination Findings:** Provide key findings from the clinical examination. **Format this as a markdown table** with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'. Include results for Visual Acuity, Refraction, Slit Lamp, etc.
-4.  **Diagnosis:** State the definitive diagnosis.
-5.  **Clinical Discussion:** Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure like bold text and bullet points.
 `,
 });
+
 
 const generateCaseStudyFlow = ai.defineFlow(
   {
