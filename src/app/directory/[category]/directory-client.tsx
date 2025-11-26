@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -75,47 +76,6 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
 
   return (
     <div>
-        <div className="toolbar-wrapper">
-            <div className="toolbar">
-                 <div className="search-group">
-                    <Search className="h-5 w-5" />
-                    <Input 
-                        type="text" 
-                        className="search-input" 
-                        placeholder={`Search name, clinic, or keyword...`}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleFilterChange('q', searchTerm)}
-                    />
-                </div>
-                <div className="filter-group">
-                    <Select onValueChange={(value) => setSelectedCountry(value)} defaultValue={selectedCountry}>
-                      <SelectTrigger className="custom-select">
-                        <SelectValue placeholder="All Countries" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Countries</SelectItem>
-                        {countries.map(country => (
-                            <SelectItem key={country.code} value={country.name.toLowerCase()}>
-                                {country.name}
-                            </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                     <Select>
-                      <SelectTrigger className="custom-select">
-                        <SelectValue placeholder="All Roles" />
-                      </SelectTrigger>
-                      <SelectContent>
-                         <SelectItem value="all">All Roles</SelectItem>
-                         <SelectItem value="optometrist">Optometrist</SelectItem>
-                         <SelectItem value="student">Student</SelectItem>
-                      </SelectContent>
-                    </Select>
-                </div>
-            </div>
-        </div>
-        
         <div className="tabs-container">
             <div className="glass-tab-bar">
               {categories.map(cat => (

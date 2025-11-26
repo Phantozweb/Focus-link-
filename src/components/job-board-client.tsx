@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -76,32 +77,6 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
 
   return (
     <div>
-        <div className="relative transform -translate-y-12">
-            <div className="max-w-3xl mx-auto bg-white p-2.5 rounded-full-btn shadow-search flex flex-col md:flex-row gap-2.5 items-center">
-                <div className="relative flex-grow w-full flex items-center gap-2 px-5 md:border-r">
-                    <Search className="h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        placeholder="Job title, keywords..." 
-                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto py-3"
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                    />
-                </div>
-                <div className="relative flex-grow w-full flex items-center gap-2 px-5">
-                    <MapPin className="h-5 w-5 text-muted-foreground" />
-                    <Input 
-                        placeholder="City or Country" 
-                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto py-3"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                    />
-                </div>
-                 <Button className="w-full md:w-auto h-12 rounded-full-btn text-base flex-shrink-0 bg-brand-dark hover:bg-brand-blue">
-                    Search Jobs
-                </Button>
-            </div>
-        </div>
-        
         <div className="category-scroll -mt-4">
           {categories.map(cat => (
             <button key={cat.name} onClick={() => setActiveCategory(cat.filter)} className={cn("cat-pill", activeCategory === cat.filter && "active")}>
@@ -111,7 +86,7 @@ export function JobBoardClient({ allJobs }: { allJobs: Job[] }) {
           ))}
         </div>
 
-        <div className="main-container">
+        <div className="main-container mt-8">
             <section>
                 <div className="section-header">
                     <div className="section-title">Recommended for You</div>

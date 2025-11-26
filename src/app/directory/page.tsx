@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -83,48 +84,20 @@ export default function DirectoryPage() {
     <div className="bg-brand-bg">
       <header className="hero">
         <h1>Directory</h1>
-        <p>Connect with peers in the global eye care community.</p>
-      </header>
-        <div className="toolbar-wrapper">
-            <div className="toolbar">
-                 <div className="search-group">
-                    <Search className="h-5 w-5" />
-                    <Input 
-                        type="text" 
-                        className="search-input" 
-                        placeholder={`Search name, clinic, or keyword...`}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleFilterChange('q', searchTerm)}
-                    />
-                </div>
-                <div className="filter-group">
-                    <Select onValueChange={(value) => setSelectedCountry(value)} defaultValue={selectedCountry}>
-                      <SelectTrigger className="custom-select">
-                        <SelectValue placeholder="All Countries" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Countries</SelectItem>
-                        {countries.map(country => (
-                            <SelectItem key={country.code} value={country.name.toLowerCase()}>
-                                {country.name}
-                            </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                     <Select>
-                      <SelectTrigger className="custom-select">
-                        <SelectValue placeholder="All Roles" />
-                      </SelectTrigger>
-                      <SelectContent>
-                         <SelectItem value="all">All Roles</SelectItem>
-                         <SelectItem value="optometrist">Optometrist</SelectItem>
-                         <SelectItem value="student">Student</SelectItem>
-                      </SelectContent>
-                    </Select>
-                </div>
+        <p className="mb-8">Connect with peers in the global eye care community.</p>
+        <div className="max-w-md mx-auto">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Search name, clinic, or keyword..."
+                className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleFilterChange('q', searchTerm)}
+              />
             </div>
         </div>
+      </header>
         
         <div className="tabs-container">
             <div className="glass-tab-bar">

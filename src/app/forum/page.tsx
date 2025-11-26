@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -9,7 +10,7 @@ import { ThumbsUp, Eye, Lock, Search, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { TimeAgo } from '@/components/time-ago';
 import type { ForumPost } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -97,23 +98,26 @@ export default function ForumPage() {
     <div className="bg-brand-bg">
       <header className="hero">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Case Forum</h1>
-        <p className="text-base opacity-90 max-w-xl mx-auto">
+        <p className="text-base opacity-90 max-w-xl mx-auto mb-8">
             A dedicated space for eye care professionals to share, discuss, and learn from real-world clinical cases.
         </p>
+         <div className="max-w-md mx-auto">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Search cases, tags, or categories..."
+                className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+        </div>
       </header>
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-16">
         <div className="max-w-4xl mx-auto">
            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-              <div className="relative w-full md:w-auto md:flex-grow">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search cases, tags, or categories..."
-                  className="pl-10 h-11 rounded-full-btn"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+              <h2 className="text-2xl font-bold text-slate-800">All Discussions</h2>
               <div className="text-right flex-shrink-0 w-full md:w-auto">
                 <TooltipProvider>
                   <Tooltip>

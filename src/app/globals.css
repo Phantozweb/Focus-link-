@@ -106,9 +106,8 @@
 
     .hero {
         @apply bg-hero-gradient text-white text-center rounded-b-[30px] lg:rounded-b-[40px];
-        padding: 40px 20px 90px;
-        position: relative;
-        z-index: 1;
+        padding: 40px 20px;
+        padding-bottom: 60px;
     }
     .hero h1 { @apply text-3xl md:text-4xl font-extrabold mb-2; }
     .hero p { @apply opacity-90 text-base max-w-xl mx-auto; }

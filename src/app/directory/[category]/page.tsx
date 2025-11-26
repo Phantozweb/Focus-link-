@@ -1,4 +1,5 @@
 
+
 import { allUsers } from '@/lib/data/index';
 import type { UserProfile } from '@/types';
 import { DirectoryClient } from './directory-client';
@@ -6,6 +7,8 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Metadata } from 'next';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 type DirectoryCategoryPageProps = {
   params: { category: string }
@@ -79,7 +82,16 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
     <div className="bg-brand-bg">
         <header className="hero">
             <h1>Directory</h1>
-            <p>Connect with peers in the global eye care community.</p>
+            <p className="mb-8">Connect with peers in the global eye care community.</p>
+            <div className="max-w-md mx-auto">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  placeholder="Search name, clinic, or keyword..."
+                  className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
+                />
+              </div>
+            </div>
         </header>
         <main>
             <Suspense fallback={<DirectorySkeleton />}>

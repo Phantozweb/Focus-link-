@@ -48,6 +48,7 @@ export default function AcademyPage() {
   const [audioSeries, setAudioSeries] = useState<AudioSeries[]>([]);
   const [isLoadingAudio, setIsLoadingAudio] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // AI Chat state
   const [question, setQuestion] = useState('');
@@ -251,6 +252,8 @@ export default function AcademyPage() {
               <Input
                 placeholder="Search courses, topics, or resources..."
                 className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
         </div>
