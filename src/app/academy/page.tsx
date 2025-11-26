@@ -20,6 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { askOptometryAI } from '@/ai/flows/ask-optometry-ai';
 import { useToast } from '@/hooks/use-toast';
 import { marked } from 'marked';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 
 type AudioSeries = {
@@ -203,10 +204,17 @@ export default function AcademyPage() {
                           <Sparkles className="h-5 w-5 text-purple-500" />
                           Focus.ai's Answer
                         </h3>
-                        <div 
-                          className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg"
-                          dangerouslySetInnerHTML={{ __html: marked(answer) }}
-                        />
+                        <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
+                          <AccordionItem value="item-1">
+                            <AccordionTrigger>Tap to view the answer</AccordionTrigger>
+                            <AccordionContent>
+                                <div 
+                                  className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg"
+                                  dangerouslySetInnerHTML={{ __html: marked(answer) }}
+                                />
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
                          <Button variant="link" onClick={() => { setAnswer(''); setQuestion(''); }} className="mt-4">Ask another question</Button>
                       </div>
                     )}
