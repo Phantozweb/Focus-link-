@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AudioPlayer } from '@/components/audio-player';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
@@ -199,22 +199,25 @@ export default function AcademyPage() {
                     )}
 
                     {answer && (
-                      <div>
-                        <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
+                      <div className="text-center">
+                        <h3 className="text-xl font-bold mb-4 flex items-center justify-center gap-2 text-slate-800">
                           <Sparkles className="h-5 w-5 text-purple-500" />
-                          Focus.ai's Answer
+                          Focus.ai has generated an answer!
                         </h3>
-                        <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
-                          <AccordionItem value="item-1">
-                            <AccordionTrigger>Tap to view the answer</AccordionTrigger>
-                            <AccordionContent>
-                                <div 
-                                  className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg"
-                                  dangerouslySetInnerHTML={{ __html: marked(answer) }}
-                                />
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
+                         <Dialog>
+                          <DialogTrigger asChild>
+                            <Button>See Answer</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[625px]">
+                            <DialogHeader>
+                              <DialogTitle>Focus.ai's Answer</DialogTitle>
+                            </DialogHeader>
+                            <div 
+                              className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg max-h-[60vh] overflow-y-auto"
+                              dangerouslySetInnerHTML={{ __html: marked(answer) }}
+                            />
+                          </DialogContent>
+                        </Dialog>
                          <Button variant="link" onClick={() => { setAnswer(''); setQuestion(''); }} className="mt-4">Ask another question</Button>
                       </div>
                     )}
