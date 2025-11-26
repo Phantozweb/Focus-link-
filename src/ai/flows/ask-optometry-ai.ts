@@ -36,7 +36,7 @@ const prompt = ai.definePrompt({
 
 You are being asked a question from a user on the Focus Links platform.
 
-Answer the following question accurately and concisely, as if you were a knowledgeable colleague. If the question is outside the scope of optometry, eye care, or vision science, politely decline to answer.
+Answer the following question accurately and concisely, as if you were a knowledgeable colleague. Use markdown for formatting, such as headings (###), bold text (**text**), and bulleted lists (-) to make the answer easy to read and well-structured. If the question is outside the scope of optometry, eye care, or vision science, politely decline to answer.
 
 User's Question:
 "{{{question}}}"
@@ -56,5 +56,4 @@ const askOptometryAIFlow = ai.defineFlow(
     return output!;
   }
 );
-
     

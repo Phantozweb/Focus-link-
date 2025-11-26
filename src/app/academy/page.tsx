@@ -53,7 +53,7 @@ export default function AcademyPage() {
     if (answerCardRef.current === null) {
       return;
     }
-    toPng(answerCardRef.current, { cacheBust: true })
+    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 2 })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "focus-ai-answer.png";
@@ -185,33 +185,31 @@ export default function AcademyPage() {
                 <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.ai</span>
             </div>
              <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
-                {(!answer && !isLoadingAI) && (
-                  <CardHeader>
-                      <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-                          <Bot className="h-9 w-9" />
-                      </div>
-                      <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
-                      <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
-                        This AI is meant to help you get ideas. Always cross-check the information provided.
-                      </CardDescription>
-                  </CardHeader>
-                )}
-                <CardContent className="p-8 pt-2 min-h-[240px] flex flex-col justify-center">
-                    {!answer && !isLoadingAI && (
-                      <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full">
-                        <Textarea
-                          value={question}
-                          onChange={(e) => setQuestion(e.target.value)}
-                          placeholder="e.g., 'What are the key differences between scleritis and episcleritis?'"
-                          rows={3}
-                          className="text-base bg-white/80"
-                          disabled={isLoadingAI}
-                        />
-                        <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
-                          {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
-                          Ask Focus.ai
-                        </Button>
-                      </form>
+                <CardContent className="p-8 pt-8 min-h-[240px] flex flex-col justify-center">
+                    {(!answer && !isLoadingAI) && (
+                        <div className="text-center">
+                             <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <Bot className="h-9 w-9" />
+                            </div>
+                            <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
+                            <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
+                                This AI is meant to help you get ideas. Always cross-check the information provided.
+                            </CardDescription>
+                            <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full mt-6">
+                                <Textarea
+                                value={question}
+                                onChange={(e) => setQuestion(e.target.value)}
+                                placeholder="e.g., 'What are the key differences between scleritis and episcleritis?'"
+                                rows={3}
+                                className="text-base bg-white/80"
+                                disabled={isLoadingAI}
+                                />
+                                <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
+                                {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
+                                Ask Focus.ai
+                                </Button>
+                            </form>
+                        </div>
                     )}
 
                     {isLoadingAI && (
@@ -242,9 +240,9 @@ export default function AcademyPage() {
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="px-6 pb-6">
-                                <div ref={answerCardRef} className="p-6 bg-white rounded-lg">
-                                    <div className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg max-h-[50vh] overflow-y-auto"
-                                        dangerouslySetInnerHTML={{ __html: `<h3>Your Question:</h3><p>${question}</p><hr><h3>Focus.ai Answer:</h3>${answer}` }}
+                                <div ref={answerCardRef} className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm">
+                                    <div className="prose prose-slate max-w-none prose-headings:text-slate-800 prose-h3:text-lg prose-h3:font-semibold prose-h3:mb-2 prose-p:text-slate-600 prose-p:leading-relaxed prose-hr:my-4 prose-ul:list-disc prose-ul:pl-5 prose-li:my-1"
+                                        dangerouslySetInnerHTML={{ __html: `<h3>Your Question:</h3><p class='text-slate-800 font-semibold'>${question}</p><hr/><h3>Focus.ai Answer:</h3>${answer}` }}
                                     />
                                     <div className="mt-4 text-xs text-slate-500 flex items-center justify-end gap-2">
                                         <Eye className="h-4 w-4" />
