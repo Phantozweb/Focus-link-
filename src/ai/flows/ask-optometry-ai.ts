@@ -83,7 +83,8 @@ You are a professional reference tool for optometrists and ophthalmologists, not
             "messages": [
                 { "role": "system", "content": systemPrompt },
                 { "role": "user", "content": userMessage }
-            ]
+            ],
+            "max_tokens": 2048
         })
     });
 

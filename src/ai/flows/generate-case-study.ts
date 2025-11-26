@@ -44,7 +44,8 @@ It must include the following sections, formatted with markdown headings (###):
             "messages": [
                 { "role": "system", "content": systemPrompt },
                 { "role": "user", "content": userMessage }
-            ]
+            ],
+            "max_tokens": 2048
         })
     });
 
