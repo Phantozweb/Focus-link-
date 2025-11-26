@@ -116,16 +116,16 @@ Participants competed on their knowledge from the anterior to the posterior segm
 ---QUIZ_MODULES_TABLE---
 | Module | Topic | Questions | Max Question Points | Max Time Bonus |
 |---|---|---|---|---|
-| 1 | Eyelids & Adnexa | 10 | 18 | 2 |
-| 2 | Conjunctiva & Sclera | 10 | 17 | 1 |
-| 3 | Cornea | 10 | 20 | 2 |
-| 4 | Anterior Chamber & Aqueous Humor| 10 | 16 | 1 |
-| 5 | Iris & Pupil | 10 | 15 | 1 |
-| 6 | Crystalline Lens & Accommodation| 10 | 19 | 2 |
-| 7 | Vitreous Body | 10 | 15 | 1 |
-| 8 | Retina | 10 | 24 | 2 |
-| 9 | Optic Nerve & Pathways | 10 | 24 | 2 |
-| 10 | Extraocular Muscles & Ocular Motility | 10 | 16 | 1 |
+| 1 | **Eyelids & Adnexa** | 10 | 18 | 2 |
+| 2 | **Conjunctiva & Sclera** | 10 | 17 | 1 |
+| 3 | **Cornea** | 10 | 20 | 2 |
+| 4 | **Anterior Chamber & Aqueous Humor**| 10 | 16 | 1 |
+| 5 | **Iris & Pupil** | 10 | 15 | 1 |
+| 6 | **Crystalline Lens & Accommodation**| 10 | 19 | 2 |
+| 7 | **Vitreous Body** | 10 | 15 | 1 |
+| 8 | **Retina** | 10 | 24 | 2 |
+| 9 | **Optic Nerve & Pathways** | 10 | 24 | 2 |
+| 10 | **Extraocular Muscles & Ocular Motility** | 10 | 16 | 1 |
 `,
     speaker: {
       name: 'V.M. Ram Kumar',
@@ -137,7 +137,7 @@ Participants competed on their knowledge from the anterior to the posterior segm
       title: 'Official Organizer'
     },
     platform: 'Online Platform',
-    dateTime: '2024-11-02T00:00:00Z',
+    dateTime: '2025-11-02T00:00:00Z',
     duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
