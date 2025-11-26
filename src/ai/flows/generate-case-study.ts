@@ -27,31 +27,52 @@ const GenerateCaseStudyOutputSchema = z.object({
 export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSchema>;
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
-  const prompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
+  const systemPrompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
 The case study should be structured for learning, with clear sections.
-Topic: ${input.topic}
-Generate the case study with the following JSON structure and keys:
+You MUST return the output as a valid JSON object with the following keys: "title", "patientPresentation", "examinationFindings", "diagnosis", "clinicalDiscussion".
 - "title": "A clear, engaging title."
 - "patientPresentation": "Describe the patient, their complaint, and relevant history in a paragraph."
 - "examinationFindings": "Provide key findings from the clinical examination. Format this as a markdown table with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'."
 - "diagnosis": "State the definitive diagnosis."
 - "clinicalDiscussion": "Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure like bold text and bullet points."
 `;
-  
+
+  const userPrompt = `Generate a case study on the topic: ${input.topic}`;
+
   try {
-    const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?json=true`);
+    const response = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'openai',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 1500,
+      }),
+    });
+    
     if (!response.ok) {
-        throw new Error(`API call failed with status: ${response.status}`);
+      throw new Error(`API call failed with status: ${response.status}`);
     }
+
     const result = await response.json();
     
-    // The endpoint returns data in a nested 'output' object.
-    const output = result.output;
+    // The response is expected to be a JSON object with a 'choices' array
+    const content = result.choices[0]?.message?.content;
+    if (!content) {
+        throw new Error("The AI returned an empty or invalid response structure.");
+    }
+    
+    // The content itself is a stringified JSON, so we need to parse it.
+    const parsedOutput = GenerateCaseStudyOutputSchema.safeParse(JSON.parse(content));
 
-    // Validate that the output matches the expected schema.
-    const parsedOutput = GenerateCaseStudyOutputSchema.safeParse(output);
     if (!parsedOutput.success) {
-      console.error("AI response did not match expected schema:", parsedOutput.error);
+      console.error("AI response content did not match expected schema:", parsedOutput.error);
       throw new Error("The AI returned data in an unexpected format.");
     }
 
@@ -59,17 +80,23 @@ Generate the case study with the following JSON structure and keys:
 
   } catch (error) {
     console.error("Error fetching or parsing from custom AI endpoint:", error);
-    // Fallback for when the structured output fails.
-    if (error instanceof Error && error.message.includes("unexpected format")) {
-        return {
-            title: `AI-Generated Case on: ${input.topic}`,
-            patientPresentation: "The AI response was not structured as expected. All content is in the clinical discussion.",
-            examinationFindings: "",
-            diagnosis: "",
-            clinicalDiscussion: "The AI model did not return a valid JSON object. Please try again later or check the endpoint documentation.",
-        };
+    let errorMessage = "Failed to generate case study from the new endpoint.";
+    if (error instanceof Error) {
+        if (error.message.includes("unexpected format") || error instanceof SyntaxError) {
+            errorMessage = "The AI model did not return a valid JSON object. Please try again later or check the endpoint documentation.";
+        } else {
+            errorMessage = error.message;
+        }
     }
-    throw new Error("Failed to generate case study from the new endpoint.");
+    
+    // Provide a fallback error object to the UI
+    return {
+        title: `Error Generating Case on: ${input.topic}`,
+        patientPresentation: "The AI failed to generate the case study content.",
+        examinationFindings: "",
+        diagnosis: "Error",
+        clinicalDiscussion: `There was an issue communicating with the AI service. Details: ${errorMessage}`,
+    };
   }
 }
 
