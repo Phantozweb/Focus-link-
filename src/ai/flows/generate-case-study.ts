@@ -23,9 +23,57 @@ const GenerateCaseStudyOutputSchema = z.object({
 export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSchema>;
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
-  return generateCaseStudyFlow(input);
+  const systemPrompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
+The entire case study should be a single, cohesive markdown document.
+It must include the following sections, formatted with markdown headings (###):
+- ### Patient Presentation
+- ### Examination Findings (use a markdown table for clarity)
+- ### Diagnosis
+- ### Clinical Discussion (use a blockquote for emphasis)`;
+
+  const userMessage = `Topic: ${input.topic}`;
+
+  try {
+    const response = await fetch('https://text.pollinations.ai/openai', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "model": "openai",
+            "messages": [
+                { "role": "system", "content": systemPrompt },
+                { "role": "user", "content": userMessage }
+            ]
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`API call failed with status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const content = data.choices[0]?.message?.content;
+
+    if (!content) {
+        throw new Error("The AI returned an empty or invalid response structure.");
+    }
+    
+    return { caseMarkdown: content };
+
+  } catch (error) {
+    console.error("Error fetching or parsing from custom AI endpoint:", error);
+    let errorMessage = "Failed to get a case study from the AI.";
+    if (error instanceof Error) {
+        errorMessage = error.message;
+    }
+    return {
+        caseMarkdown: `### Error\n\nThere was an issue communicating with the AI service. Details: ${errorMessage}`,
+    };
+  }
 }
 
+// The original Genkit flow is preserved below but is no longer used by the exported function.
 const promptTemplate = ai.definePrompt({
   name: 'generateCaseStudyPrompt',
   input: {schema: z.object({ topic: z.string() })},
@@ -40,7 +88,6 @@ It must include the following sections, formatted with markdown headings (###):
 Topic: {{{topic}}}
 `,
 });
-
 
 const generateCaseStudyFlow = ai.defineFlow(
   {

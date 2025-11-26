@@ -71,26 +71,35 @@ RESPONSE GUIDELINES:
 You are a professional reference tool for optometrists and ophthalmologists, not for general public use.`;
 
   const userMessage = `User Question: ${input.question}\n\nProvide a professional, accurate response:`;
-  const fullPrompt = `${systemPrompt}\n\n${userMessage}`;
   
   try {
-    const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}?model=openai`);
+    const response = await fetch('https://text.pollinations.ai/openai', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "model": "openai",
+            "messages": [
+                { "role": "system", "content": systemPrompt },
+                { "role": "user", "content": userMessage }
+            ]
+        })
+    });
 
     if (!response.ok) {
-      throw new Error(`API call failed with status: ${response.status}`);
+        throw new Error(`API call failed with status: ${response.status}`);
     }
 
-    const content = await response.text();
+    const data = await response.json();
+    const content = data.choices[0]?.message?.content;
 
     if (!content) {
-      throw new Error("The AI returned an empty or invalid response structure.");
+        throw new Error("The AI returned an empty or invalid response structure.");
     }
-
-    // The API returns the text directly, so we remove any surrounding quotes if they exist
-    const cleanedContent = content.startsWith('"') && content.endsWith('"') ? content.slice(1, -1) : content;
-
-    return { answer: cleanedContent };
     
+    return { answer: content };
+
   } catch (error) {
     console.error("Error fetching or parsing from custom AI endpoint:", error);
     let errorMessage = "Failed to get an answer from the AI.";
