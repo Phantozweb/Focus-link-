@@ -19,7 +19,7 @@ export type GenerateCaseStudyInput = z.infer<typeof GenerateCaseStudyInputSchema
 const GenerateCaseStudyOutputSchema = z.object({
   title: z.string().describe("A concise and descriptive title for the case study."),
   patientPresentation: z.string().describe("A paragraph detailing the patient's presentation, including age, gender, chief complaint, and history."),
-  examinationFindings: z.string().describe("A markdown list of key examination findings (e.g., Visual Acuity, Slit Lamp findings, special test results)."),
+  examinationFindings: z.string().describe("A markdown table of key examination findings with columns for Test, OD (Right Eye), and OS (Left Eye)."),
   diagnosis: z.string().describe("The final diagnosis for the case."),
   clinicalDiscussion: z.string().describe("A detailed discussion of the case, including differential diagnoses, management plan, and key learning points. Use markdown for formatting."),
 });
@@ -35,14 +35,14 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateCaseStudyOutputSchema},
   prompt: `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
 
-The case study should be structured for learning, with clear sections. Use markdown formatting for lists.
+The case study should be structured for learning, with clear sections.
 
 Topic: {{{topic}}}
 
 Generate the case study with the following structure:
 1.  **Title:** A clear, engaging title.
 2.  **Patient Presentation:** Describe the patient, their complaint, and relevant history.
-3.  **Examination Findings:** Provide key findings from the clinical examination. Format this as a markdown list.
+3.  **Examination Findings:** Provide key findings from the clinical examination. **Format this as a markdown table** with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'. Include results for Visual Acuity, Refraction, Slit Lamp, etc.
 4.  **Diagnosis:** State the definitive diagnosis.
 5.  **Clinical Discussion:** Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Format this using markdown for structure.
 `,

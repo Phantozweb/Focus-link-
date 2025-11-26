@@ -40,8 +40,26 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
     }, [topic, toast]);
 
     const renderMarkdown = (text: string) => {
-        const html = marked(text, { breaks: true });
-        return { __html: html };
+        // First, replace markdown tables with HTML tables for better styling control
+        const tableRegex = /(\|.*\|(?:\r?\n|\r))+/g;
+        let html = text.replace(tableRegex, (match) => {
+          const rows = match.trim().split(/\r?\n|\r/);
+          const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
+          const separator = rows[1];
+          
+          if (!separator || !separator.includes('|--')) return match; // Not a valid markdown table
+
+          const bodyRows = rows.slice(2);
+          
+          const tableHead = `<thead><tr class="m-0 border-t p-0 even:bg-muted">${headers.map(cell => `<th class="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">${cell}</th>`).join('')}</tr></thead>`;
+          const tableBody = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-muted">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+          return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${tableHead}${tableBody}</table></div>`;
+        });
+
+        // Then process the rest of the markdown
+        const finalHtml = marked(html, { breaks: true });
+        return { __html: finalHtml };
     };
 
     return (
@@ -64,7 +82,7 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
                     <div className="space-y-6">
                         <section>
                             <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><User /> Patient Presentation</h3>
-                            <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={renderMarkdown(caseData.patientPresentation)} />
+                            <div className="prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.patientPresentation)} />
                         </section>
 
                         <section>
@@ -79,7 +97,7 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
                         
                          <section>
                             <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Lightbulb /> Clinical Discussion</h3>
-                            <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={renderMarkdown(caseData.clinicalDiscussion)} />
+                            <div className="prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.clinicalDiscussion)} />
                         </section>
                     </div>
 
