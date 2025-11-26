@@ -96,7 +96,7 @@ export default function AcademyPage() {
   }, []);
   
   const comingSoonFeatures = [
-    { title: 'Interactive Courses', icon: <BookOpen className="h-8 w-8" />, description: 'Engage with AI-powered simulations and hands-on exercises.' },
+    { title: 'Interactive Courses', icon: <BookOpen className="h-8 w-8" />, description: 'Simulator and Valuable courses instead of videos Pure virtual engagement' },
     { title: 'E-Books & Guides', icon: <FileText className="h-8 w-8" />, description: 'Access a curated library of clinical guides and textbooks.' },
     { title: 'Clinical Resources', icon: <FolderOpen className="h-8 w-8" />, description: 'Download cheatsheets, patient forms, and research summaries.' },
     { title: 'Latest Insights Blog', icon: <Newspaper className="h-8 w-8" />, description: 'Read articles on AI, case studies, and career advice.' },
