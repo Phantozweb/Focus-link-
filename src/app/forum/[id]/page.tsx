@@ -1,3 +1,4 @@
+
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { ForumPostClient } from './forum-post-client';
@@ -10,7 +11,7 @@ type ForumPostPageProps = {
 async function getDiscussion(id: string): Promise<ForumPost | undefined> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Case1.json";
   try {
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, { next: { revalidate: 3600 } });
     if (!response.ok) {
       console.error('Failed to fetch discussions.json');
       return undefined;
@@ -26,7 +27,7 @@ async function getDiscussion(id: string): Promise<ForumPost | undefined> {
 export async function generateStaticParams() {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Case1.json";
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { next: { revalidate: 3600 } });
     if (!response.ok) return [];
     const discussions: ForumPost[] = await response.json();
     return Array.isArray(discussions) ? discussions.map((discussion) => ({

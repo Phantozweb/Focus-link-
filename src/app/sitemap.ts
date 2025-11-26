@@ -1,4 +1,5 @@
 
+
 import { MetadataRoute } from 'next'
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
@@ -49,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let jobPages: MetadataRoute.Sitemap = [];
   try {
     const jobsUrl = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
-    const response = await fetch(jobsUrl, { cache: 'no-store' });
+    const response = await fetch(jobsUrl, { next: { revalidate: 3600 } });
     if (response.ok) {
         const jobs: Job[] = await response.json();
         jobPages = Array.isArray(jobs) ? jobs.map(job => ({

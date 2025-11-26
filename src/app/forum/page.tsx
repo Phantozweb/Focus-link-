@@ -49,7 +49,7 @@ export default function ForumPage() {
         const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Case1.json";
         try {
             setIsLoading(true);
-            const response = await fetch(url, { cache: 'no-store' });
+            const response = await fetch(url, { next: { revalidate: 3600 } });
             if (!response.ok) {
                 throw new Error('Failed to fetch discussions');
             }

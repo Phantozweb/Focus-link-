@@ -1,9 +1,10 @@
+
 import type { ForumPost } from '@/types';
 
 async function getDiscussions(): Promise<ForumPost[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Case1.json";
   try {
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url, { next: { revalidate: 3600 } });
       if (!response.ok) {
           console.error('Failed to fetch discussions, returning empty array.');
           return [];

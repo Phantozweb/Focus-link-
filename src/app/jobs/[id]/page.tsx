@@ -1,4 +1,5 @@
 
+
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +19,7 @@ type JobDetailPageProps = {
 async function getJob(id: string): Promise<Job | undefined> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
   try {
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, { next: { revalidate: 3600 } });
     if (!response.ok) {
       console.error('Failed to fetch jobs.json');
       return undefined;

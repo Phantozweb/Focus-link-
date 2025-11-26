@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 async function getJobs(): Promise<Job[]> {
   const url = "https://raw.githubusercontent.com/Phantozweb/Jobslistingsopto/refs/heads/main/Jobs1.json";
   try {
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, { next: { revalidate: 3600 } });
     if (!response.ok) {
       console.error('Failed to fetch jobs.json, returning empty array.');
       return [];

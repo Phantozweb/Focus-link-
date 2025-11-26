@@ -98,15 +98,17 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
         <header className="hero">
             <h1>Directory</h1>
             <p className="mb-8">Connect with peers in the global eye care community.</p>
-            <div className="max-w-md mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search name, clinic, or keyword..."
-                  className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
-                />
-              </div>
-            </div>
+             <Suspense fallback={<Skeleton className="h-12 w-full max-w-md mx-auto rounded-full" />}>
+                <div className="max-w-md mx-auto">
+                    <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input
+                        placeholder="Search name, clinic, or keyword..."
+                        className="w-full pl-12 h-12 rounded-full bg-white/90 text-slate-800 placeholder:text-slate-500"
+                        />
+                    </div>
+                </div>
+            </Suspense>
         </header>
         <main>
             <Suspense fallback={<DirectorySkeleton />}>
