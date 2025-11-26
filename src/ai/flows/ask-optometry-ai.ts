@@ -31,8 +31,15 @@ export async function askOptometryAI(input: AskOptometryAIInput): Promise<AskOpt
   if (simpleGreetings.includes(question)) {
     return { answer: "Hello! I'm Focus.ai, your assistant for optometry questions. How can I help you today?" };
   }
+  
+  return askOptometryAIFlow(input);
+}
 
-  const systemPrompt = `You are Focus.AI, a specialized AI assistant created by Focus.in exclusively for optometry and ophthalmology professionals.
+const prompt = ai.definePrompt({
+  name: 'askOptometryAIPrompt',
+  input: {schema: AskOptometryAIInputSchema},
+  output: {schema: AskOptometryAIOutputSchema},
+  prompt: `You are Focus.AI, a specialized AI assistant created by Focus.in exclusively for optometry and ophthalmology professionals.
 
 STRICT DOMAIN RULES:
 1. ONLY answer questions related to optometry, ophthalmology, and eye care.
@@ -68,66 +75,7 @@ RESPONSE GUIDELINES:
 7. Include relevant ICD codes or clinical classifications when appropriate.
 8. Be concise but thorough.
 
-You are a professional reference tool for optometrists and ophthalmologists, not for general public use.`;
-
-  const userMessage = `User Question: ${input.question}\n\nProvide a professional, accurate response:`;
-  
-  try {
-    const response = await fetch('https://text.pollinations.ai/openai', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "model": "gemini",
-            "messages": [
-                { "role": "system", "content": systemPrompt },
-                { "role": "user", "content": userMessage }
-            ],
-            "max_tokens": 128000
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error(`API call failed with status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    let content = data.choices[0]?.message?.content;
-
-    if (!content) {
-        throw new Error("The AI returned an empty or invalid response structure.");
-    }
-    
-    // Remove the promotional footer
-    if (content.includes('---')) {
-      content = content.split('---')[0].trim();
-    }
-
-    return { answer: content };
-
-  } catch (error) {
-    console.error("Error fetching or parsing from custom AI endpoint:", error);
-    let errorMessage = "Failed to get an answer from the AI.";
-    if (error instanceof Error) {
-        errorMessage = error.message;
-    }
-    return {
-        answer: `### Error\n\nThere was an issue communicating with the AI service. Details: ${errorMessage}`,
-    };
-  }
-}
-
-// The original Genkit flow is preserved below but is no longer used by the exported function.
-const prompt = ai.definePrompt({
-  name: 'askOptometryAIPrompt',
-  input: {schema: AskOptometryAIInputSchema},
-  output: {schema: AskOptometryAIOutputSchema},
-  prompt: `You are an expert AI assistant for optometrists and optometry students. Your name is Focus.ai.
-
-You are being asked a question from a user on the Focus Links platform.
-
-Answer the following question accurately and concisely, as if you were a knowledgeable colleague. Use markdown for formatting, such as headings (###), bold text (**text**), and bulleted lists (-) to make the answer easy to read and well-structured. If the question is outside the scope of optometry, eye care, or vision science, politely decline to answer.
+You are a professional reference tool for optometrists and ophthalmologists, not for general public use.
 
 User's Question:
 "{{{question}}}"
