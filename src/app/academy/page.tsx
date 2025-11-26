@@ -44,6 +44,12 @@ export default function AcademyPage() {
     const past: typeof webinars = [];
 
     webinars.forEach(w => {
+      // Special handling for Eye Q Arena to always be considered a past event
+      if (w.id === 'eye-q-arena-2025') {
+        past.push(w);
+        return;
+      }
+      
       const startTime = new Date(w.dateTime).getTime();
       const durationParts = w.duration.split(' ');
       const durationValue = parseInt(durationParts[0], 10);
