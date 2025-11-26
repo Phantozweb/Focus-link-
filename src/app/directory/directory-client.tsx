@@ -1,6 +1,4 @@
 
-
-
 'use client';
 
 import { useState, useMemo, Suspense } from 'react';
@@ -23,7 +21,7 @@ const categories = [
     { name: 'Partners', filter: 'industry' },
 ];
 
-export function DirectoryClient({ allUsers, title, category }: { allUsers: UserProfile[], title: string, category: string }) {
+function DirectoryComponent({ allUsers, title, category }: { allUsers: UserProfile[], title: string, category: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -85,7 +83,6 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   };
 
   return (
-    <Suspense>
     <div>
         <div className="tabs-container">
             <div className="glass-tab-bar">
@@ -132,6 +129,13 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
             </div>
         )}
     </div>
-    </Suspense>
   );
+}
+
+export default function DirectoryPageClient() {
+    return (
+        <Suspense>
+            <DirectoryComponent allUsers={[]} title="All Profiles" category="all" />
+        </Suspense>
+    );
 }

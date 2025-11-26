@@ -1,5 +1,6 @@
 
 
+
 import { allUsers } from '@/lib/data/index';
 import type { UserProfile } from '@/types';
 import { DirectoryClient } from './directory-client';
@@ -96,7 +97,7 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
   return (
     <div className="bg-brand-bg">
         <header className="hero">
-            <h1>Directory</h1>
+            <h1>{getTitle(category)}</h1>
             <p className="mb-8">Connect with peers in the global eye care community.</p>
              <Suspense fallback={<Skeleton className="h-12 w-full max-w-md mx-auto rounded-full" />}>
                 <div className="max-w-md mx-auto">
