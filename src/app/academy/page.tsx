@@ -90,8 +90,6 @@ export default function AcademyPage() {
   };
   
   const imageFilter = (node: HTMLElement) => {
-    // This function tells html-to-image to exclude external Google Fonts stylesheets.
-    // This prevents a CORS error when the library tries to read the CSS rules.
     const exclusion = (node.tagName === 'LINK') && (node as HTMLLinkElement).href.includes('fonts.googleapis');
     return !exclusion;
   };
@@ -279,8 +277,8 @@ export default function AcademyPage() {
                             <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
                             <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
                                This AI is meant to help you get ideas. Always cross-check the information provided.
-                               <div className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</div>
                             </CardDescription>
+                            <div className="font-semibold mt-2 text-sm text-center text-slate-600">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</div>
                             <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                                 <Textarea
                                 value={question}
@@ -382,8 +380,8 @@ export default function AcademyPage() {
                         <CardTitle className="text-center text-2xl font-bold text-slate-800">AI Case Study Generator</CardTitle>
                         <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
                           Enter a clinical topic to generate a realistic patient case for learning and discussion.
-                           <div className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</div>
                         </CardDescription>
+                        <div className="font-semibold mt-2 text-sm text-center text-slate-600">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</div>
                         <form onSubmit={handleCaseGenerate} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                           <Input
                             value={caseTopic}
