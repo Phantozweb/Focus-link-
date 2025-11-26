@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send, Eye } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send, Eye, FileQuestion, MessageCircle, PencilRuler } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -22,6 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { marked } from 'marked';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { toPng } from 'html-to-image';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 
 type AudioSeries = {
@@ -180,12 +181,22 @@ export default function AcademyPage() {
       <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 space-y-16">
         
         <section>
-            <div className="section-header">
-                <h2 className="section-title"><Sparkles className="text-purple-500" /> Ask Optometry AI</h2>
-                <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.ai</span>
-            </div>
-             <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
-                <CardContent className="p-8 min-h-[240px] flex flex-col justify-center">
+          <div className="section-header">
+              <h2 className="section-title"><Sparkles className="text-purple-500" /> Ask Optometry AI</h2>
+              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.ai</span>
+          </div>
+          <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
+            <Tabs defaultValue="chat" className="w-full">
+              <div className="p-4 border-b border-purple-200/50">
+                  <TabsList className="grid w-full grid-cols-3 bg-purple-100/50 text-purple-800">
+                    <TabsTrigger value="chat"><MessageCircle className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Chat</span></TabsTrigger>
+                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Case Gen</span></TabsTrigger>
+                    <TabsTrigger value="quiz"><PencilRuler className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Quiz</span></TabsTrigger>
+                  </TabsList>
+              </div>
+
+              <TabsContent value="chat">
+                 <CardContent className="p-4 sm:p-8 min-h-[300px] flex flex-col justify-center">
                     {(!answer && !isLoadingAI) && (
                         <div className="text-center">
                              <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -193,7 +204,7 @@ export default function AcademyPage() {
                             </div>
                             <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
                             <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
-                                This AI is meant to help you get ideas. Always cross-check the information provided.
+                               This AI is meant to help you get ideas. Always cross-check the information provided.
                             </CardDescription>
                             <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                                 <Textarea
@@ -271,8 +282,24 @@ export default function AcademyPage() {
                          <Button variant="link" onClick={() => { setAnswer(''); setQuestion(''); }} className="mt-4">Ask another question</Button>
                       </div>
                     )}
-                </CardContent>
-            </Card>
+                  </CardContent>
+              </TabsContent>
+              <TabsContent value="case-generator">
+                 <div className="p-8 min-h-[300px] flex flex-col justify-center items-center text-center">
+                    <FileQuestion className="h-12 w-12 text-purple-400 mb-4"/>
+                    <h3 className="text-xl font-bold text-slate-700">Case Study Generator</h3>
+                    <p className="text-muted-foreground mt-2">Coming soon! Generate realistic patient cases to test your diagnostic skills.</p>
+                 </div>
+              </TabsContent>
+              <TabsContent value="quiz">
+                 <div className="p-8 min-h-[300px] flex flex-col justify-center items-center text-center">
+                    <PencilRuler className="h-12 w-12 text-purple-400 mb-4"/>
+                    <h3 className="text-xl font-bold text-slate-700">Quick Quiz</h3>
+                    <p className="text-muted-foreground mt-2">Coming soon! Challenge yourself with quick-fire questions on various optometry topics.</p>
+                 </div>
+              </TabsContent>
+            </Tabs>
+          </Card>
         </section>
         
          <section>
@@ -377,6 +404,8 @@ export default function AcademyPage() {
     </div>
   );
 }
+
+    
 
     
 
