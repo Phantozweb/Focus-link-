@@ -81,7 +81,7 @@ export default async function Home() {
   const clinicsAndOpticals = shuffleArray([...allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type))]);
   
   const allStudents = allUsers.filter(u => u.type === 'Student');
-  const featuredStudentIds = ['3', '11', '21'];
+  const featuredStudentIds = ['3', '11', '21']; // Anshi Jha, Rudra Kumar, Esakkiammal Iyyappan
   const featuredStudents = featuredStudentIds.map(id => allStudents.find(s => s.id === id)).filter((s): s is UserProfile => !!s);
   const otherStudents = allStudents.filter(s => !featuredStudentIds.includes(s.id));
   const students = [...featuredStudents, ...shuffleArray(otherStudents)];

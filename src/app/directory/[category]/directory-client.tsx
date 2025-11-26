@@ -62,11 +62,20 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
   }, [allUsers, searchTerm, selectedCountry]);
   
   const recommendedUsers = useMemo(() => {
-    const featuredIds = ['marwankorath', '10', '13', 'DrishtiKit'];
+    let featuredIds: string[];
+
+    if (category === 'students') {
+        featuredIds = ['3', '11', '21']; // Anshi Jha, Rudra Kumar, Esakkiammal Iyyappan
+    } else if (category === 'clinics' || category === 'industry') {
+        return []; // No recommended section for these categories
+    } else {
+        featuredIds = ['marwankorath', '10', '13', 'DrishtiKit'];
+    }
+
     return featuredIds
       .map(id => allUsers.find(user => user.id === id))
       .filter((user): user is UserProfile => user !== undefined);
-  }, [allUsers]);
+  }, [allUsers, category]);
 
   const usersToShow = filteredUsers.slice(0, visibleCount);
 
@@ -86,14 +95,16 @@ export function DirectoryClient({ allUsers, title, category }: { allUsers: UserP
             </div>
         </div>
         
-        <div className="section-wrap">
-            <div className="section-header">
-                <div className="sec-title"><Star className="h-5 w-5 text-amber-400" /> Top Recommended</div>
+        {recommendedUsers.length > 0 && (
+            <div className="section-wrap">
+                <div className="section-header">
+                    <div className="sec-title"><Star className="h-5 w-5 text-amber-400" /> Top Recommended</div>
+                </div>
+                <div className="rec-scroll">
+                    {recommendedUsers.map(user => <ProfileCard key={user.id} user={user} isFeatured />)}
+                </div>
             </div>
-            <div className="rec-scroll">
-                {recommendedUsers.map(user => <ProfileCard key={user.id} user={user} isFeatured />)}
-            </div>
-        </div>
+        )}
         
         <div className="section-wrap">
             <div className="section-header">
