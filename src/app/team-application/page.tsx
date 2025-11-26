@@ -365,7 +365,13 @@ export default function TeamApplicationPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="resumeFile">Resume/CV</Label>
-                    <Input id="resumeFile" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" onChange={handleFileChange} className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                    <Input 
+                        id="resumeFile" 
+                        type="file" 
+                        accept=".pdf,.doc,.docx" 
+                        onChange={handleFileChange} 
+                        className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                    />
                      {fileName && (
                         <div className="text-sm text-muted-foreground flex items-center gap-2 pt-1">
                             <FileCheck className="h-4 w-4 text-green-600" />
@@ -415,5 +421,3 @@ export default function TeamApplicationPage() {
     </>
   );
 }
-
-    
