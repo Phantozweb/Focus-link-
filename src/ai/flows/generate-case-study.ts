@@ -45,7 +45,7 @@ It must include the following sections, formatted with markdown headings (###):
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "model": "deepseek",
+            "model": "gemini",
             "messages": [
                 { "role": "system", "content": systemPrompt },
                 { "role": "user", "content": userMessage }
