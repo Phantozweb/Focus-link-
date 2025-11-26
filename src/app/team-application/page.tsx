@@ -127,8 +127,8 @@ async function sendDetailedApplicationWebhook(data: FormData, applicationId: str
     const details = `
 **Name:**         ${data.name}
 **Email:**        ${data.email}
-**LinkedIn:**     ${data.linkedin}
-**Resume:**       ${data.resumeUrl || 'Not Provided'}
+**LinkedIn:**     <${data.linkedin}>
+**Resume:**       ${data.resumeUrl ? `<${data.resumeUrl}>` : 'Not Provided'}
 **Applied Role:** ${data.role}
 
 ---
@@ -185,31 +185,33 @@ export default function TeamApplicationPage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const apiKey = '58bcdc0482981150fadb03eb2d91b2dc'; // This is a public key for imgbb
-    
+    // Use a service that can handle various file types or a dedicated service for PDFs.
+    // For this example, we'll use a service that gives back a URL.
+    // NOTE: This is a placeholder service. In a real app, use a secure, managed file storage solution.
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
     setUploadStatus('Uploading...');
 
     try {
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+      // Using a generic file upload service. Replace with your actual service.
+      const response = await fetch('https://file.io', {
         method: 'POST',
         body: formData,
       });
       const data = await response.json();
 
       if (data.success) {
-        const fileUrl = data.data.url;
+        const fileUrl = data.link;
         setUploadStatus('Upload successful!');
         setValue('resumeUrl', fileUrl, { shouldValidate: true });
-        toast({ title: 'Resume Uploaded', description: 'Your file has been successfully uploaded.' });
+        toast({ title: 'Resume Uploaded', description: 'Your file has been successfully uploaded and linked.' });
       } else {
-        throw new Error(data.error?.message || 'Unknown upload error');
+        throw new Error(data.message || 'Unknown upload error');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
       setUploadStatus(`Error: ${errorMessage}`);
-      toast({ variant: 'destructive', title: 'Upload Failed', description: errorMessage });
+      toast({ variant: 'destructive', title: 'Upload Failed', description: 'Could not upload file. Please try providing a URL instead.' });
     }
   };
 
@@ -387,7 +389,7 @@ export default function TeamApplicationPage() {
                          </div>
                     ) : (
                          <div className="space-y-2">
-                            <Input id="resumeUpload" type="file" onChange={handleFileUpload} className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                            <Input id="resumeUpload" type="file" onChange={handleFileUpload} accept=".pdf,.doc,.docx,image/*" className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
                             {uploadStatus && (
                                 <p className="text-sm text-muted-foreground flex items-center gap-2">
                                     {uploadStatus.startsWith('Error') ? <Loader2 className="h-4 w-4 text-destructive" /> : uploadStatus.includes('successful') ? <FileCheck className="h-4 w-4 text-green-600" /> : <Loader2 className="h-4 w-4 animate-spin" />}
