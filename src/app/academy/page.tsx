@@ -171,7 +171,7 @@ export default function AcademyPage() {
                       </CardDescription>
                   </CardHeader>
                 )}
-                <CardContent className="p-8 pt-2">
+                <CardContent className="p-8 pt-2 min-h-[240px] flex flex-col justify-center">
                     {!answer && !isLoadingAI && (
                       <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto">
                         <Textarea
@@ -190,9 +190,10 @@ export default function AcademyPage() {
                     )}
 
                     {isLoadingAI && (
-                      <div className="p-4 text-center text-muted-foreground">
-                        <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
-                        Focus.ai is scanning clinical data to find the best answer for you...
+                      <div className="flex flex-col items-center justify-center p-4 text-center text-muted-foreground">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <p className="mt-4 font-semibold text-lg text-slate-700">Focus.ai is thinking...</p>
+                        <p className="mt-1 text-sm">Scanning clinical guidelines to find the best answer for you.</p>
                       </div>
                     )}
 
