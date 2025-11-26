@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase, BadgeCheck, FileText } from 'lucide-react';
+import { Loader2, UserPlus, Zap, Linkedin, CheckCircle, Award, Handshake, Globe, Briefcase, BadgeCheck, FileText, Upload, Link as LinkIcon, FileCheck } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -173,10 +173,46 @@ ${details}
 export default function TeamApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [useUrl, setUseUrl] = useState(false);
+
   const { toast } = useToast();
-  const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const apiKey = '58bcdc0482981150fadb03eb2d91b2dc'; // This is a public key for imgbb
+    
+    const formData = new FormData();
+    formData.append('image', file);
+    setUploadStatus('Uploading...');
+
+    try {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        const fileUrl = data.data.url;
+        setUploadStatus('Upload successful!');
+        setValue('resumeUrl', fileUrl, { shouldValidate: true });
+        toast({ title: 'Resume Uploaded', description: 'Your file has been successfully uploaded.' });
+      } else {
+        throw new Error(data.error?.message || 'Unknown upload error');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+      setUploadStatus(`Error: ${errorMessage}`);
+      toast({ variant: 'destructive', title: 'Upload Failed', description: errorMessage });
+    }
+  };
+
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -341,9 +377,30 @@ export default function TeamApplicationPage() {
                     {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="resumeUrl">Resume/CV URL (Optional)</Label>
-                    <Input id="resumeUrl" {...register('resumeUrl')} placeholder="e.g., link to your Google Doc or online portfolio" className="rounded-xl"/>
+                    <Label>Resume/CV (Optional)</Label>
+                    {useUrl ? (
+                         <div className="space-y-2">
+                             <Input id="resumeUrl" {...register('resumeUrl')} placeholder="e.g., link to your Google Doc or online portfolio" className="rounded-xl"/>
+                             <Button variant="link" size="sm" onClick={() => setUseUrl(false)} className="text-xs">
+                                <Upload className="mr-2 h-3 w-3" /> Use file upload instead
+                            </Button>
+                         </div>
+                    ) : (
+                         <div className="space-y-2">
+                            <Input id="resumeUpload" type="file" onChange={handleFileUpload} className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                            {uploadStatus && (
+                                <p className="text-sm text-muted-foreground flex items-center gap-2">
+                                    {uploadStatus.startsWith('Error') ? <Loader2 className="h-4 w-4 text-destructive" /> : uploadStatus.includes('successful') ? <FileCheck className="h-4 w-4 text-green-600" /> : <Loader2 className="h-4 w-4 animate-spin" />}
+                                    {uploadStatus}
+                                </p>
+                            )}
+                             <Button variant="link" size="sm" onClick={() => setUseUrl(true)} className="text-xs">
+                                <LinkIcon className="mr-2 h-3 w-3" /> Provide a link instead
+                            </Button>
+                        </div>
+                    )}
                     {errors.resumeUrl && <p className="text-sm text-destructive">{errors.resumeUrl.message}</p>}
+                     <input type="hidden" {...register('resumeUrl')} />
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="role">Preferred Role</Label>
