@@ -112,7 +112,7 @@ const roleDetails = [
 const formSchema = z.object({
   name: z.string().min(2, 'Name is required.'),
   email: z.string().email('Invalid email address.'),
-  linkedin: z.string().url('Please enter a valid LinkedIn profile URL.').optional().or(z.literal('')),
+  linkedin: z.string().optional(),
   currentPosition: z.string().min(2, 'Current position is required.'),
   resumeFile: z.instanceof(File).refine(file => file.size > 0, 'A resume file is required.'),
   role: z.string().min(1, 'Please select a role.'),
@@ -125,10 +125,15 @@ type FormData = z.infer<typeof formSchema>;
 const TEAM_APPLICATION_WEBHOOK_URL = 'https://discord.com/api/webhooks/1443283507702006023/cRopi1d4IJfxAIBK33sD0FcGEyfbq3zT01amkdPCB0mjmaIsAxjIkzbf_pPKYdJprvTv';
 
 async function sendDetailedApplicationWebhook(data: FormData, applicationId: string) {
+    let linkedinUrl = data.linkedin;
+    if (linkedinUrl && !linkedinUrl.startsWith('http')) {
+        linkedinUrl = `https://` + linkedinUrl;
+    }
+
     const details = `
 **Name:**            ${data.name}
 **Email:**           ${data.email}
-**LinkedIn:**        ${data.linkedin ? `<${data.linkedin}>` : 'Not Provided'}
+**LinkedIn:**        ${linkedinUrl ? `<${linkedinUrl}>` : 'Not Provided'}
 **Current Position:** ${data.currentPosition}
 **Applied Role:**    ${data.role}
 
@@ -170,7 +175,6 @@ ${details}
         });
     } catch (error) {
         console.error("Failed to send detailed application webhook:", error);
-        // Re-throw the error to be caught by the onSubmit handler
         throw new Error('Could not send application to Discord.');
     }
 }
@@ -192,7 +196,6 @@ export default function TeamApplicationPage() {
       setValue('resumeFile', file, { shouldValidate: true });
       setFileName(file.name);
     } else {
-        // Clear value if no file is selected
         setValue('resumeFile', new File([], ""), { shouldValidate: true });
         setFileName('');
     }
@@ -358,19 +361,31 @@ export default function TeamApplicationPage() {
                         {errors.currentPosition && <p className="text-sm text-destructive">{errors.currentPosition.message}</p>}
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="linkedin">LinkedIn Profile URL (Optional)</Label>
-                        <Input id="linkedin" {...register('linkedin')} className="rounded-xl"/>
+                        <Label htmlFor="linkedin">LinkedIn Profile (Optional)</Label>
+                        <Input id="linkedin" {...register('linkedin')} placeholder="e.g., linkedin.com/in/your-profile" className="rounded-xl"/>
                         {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="resumeFile">Resume/CV</Label>
-                    <Input 
-                        id="resumeFile" 
-                        type="file" 
-                        accept=".pdf,.doc,.docx" 
-                        onChange={handleFileChange} 
-                        className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                    <Controller
+                        name="resumeFile"
+                        control={control}
+                        render={({ field }) => (
+                            <Input 
+                                id="resumeFile" 
+                                type="file" 
+                                accept=".pdf,.doc,.docx" 
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if(file) {
+                                        field.onChange(file);
+                                        setFileName(file.name);
+                                    }
+                                }}
+                                className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                            />
+                        )}
                     />
                      {fileName && (
                         <div className="text-sm text-muted-foreground flex items-center gap-2 pt-1">
