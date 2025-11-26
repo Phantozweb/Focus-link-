@@ -217,10 +217,9 @@ export default function AcademyPage() {
           <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
             <Tabs defaultValue="chat" className="w-full">
               <div className="p-4 border-b border-purple-200/50">
-                  <TabsList className="grid w-full grid-cols-3 bg-purple-100/50 text-purple-800">
+                  <TabsList className="grid w-full grid-cols-2 bg-purple-100/50 text-purple-800">
                     <TabsTrigger value="chat"><MessageCircle className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Chat</span></TabsTrigger>
                     <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Case Gen</span></TabsTrigger>
-                    <TabsTrigger value="quiz"><PencilRuler className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Quiz</span></TabsTrigger>
                   </TabsList>
               </div>
 
@@ -374,13 +373,6 @@ export default function AcademyPage() {
                       </div>
                     )}
                  </CardContent>
-              </TabsContent>
-              <TabsContent value="quiz">
-                 <div className="p-8 min-h-[300px] flex flex-col justify-center items-center text-center">
-                    <PencilRuler className="h-12 w-12 text-purple-400 mb-4"/>
-                    <h3 className="text-xl font-bold text-slate-700">Quick Quiz</h3>
-                    <p className="text-muted-foreground mt-2">Coming soon! Challenge yourself with quick-fire questions on various optometry topics.</p>
-                 </div>
               </TabsContent>
             </Tabs>
           </Card>
