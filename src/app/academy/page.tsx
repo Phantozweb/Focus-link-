@@ -62,7 +62,7 @@ export default function AcademyPage() {
 
     setLiveWebinars(live);
     setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
-    setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
+    setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
     
     async function fetchAudioSeries() {
       setIsLoadingAudio(true);
@@ -237,6 +237,7 @@ export default function AcademyPage() {
                 <CarouselContent>
                   {pastWebinars.map(webinar => (
                     <CarouselItem key={webinar.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
+                      <Link href={`/academy/${webinar.id}`} className="block h-full">
                       <Card className="group overflow-hidden shadow-soft bg-slate-50 h-full flex flex-col">
                         <div className="p-6 flex-grow">
                             <Badge variant="secondary" className="mb-2">{webinar.id === 'eye-q-arena-2025' ? 'Event Concluded' : 'On-Demand'}</Badge>
@@ -246,6 +247,7 @@ export default function AcademyPage() {
                            Originally Aired: <WebinarTime dateTime={webinar.dateTime} format={{ dateOnly: true }} />
                         </div>
                       </Card>
+                      </Link>
                     </CarouselItem>
                   ))}
                  </CarouselContent>
