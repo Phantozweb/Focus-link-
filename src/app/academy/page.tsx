@@ -160,15 +160,17 @@ export default function AcademyPage() {
                 <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus AI</span>
             </div>
              <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
-                <CardHeader>
-                    <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-                        <Bot className="h-9 w-9" />
-                    </div>
-                    <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
-                    <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
-                      Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.
-                    </CardDescription>
-                </CardHeader>
+                {(!answer && !isLoadingAI) && (
+                  <CardHeader>
+                      <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                          <Bot className="h-9 w-9" />
+                      </div>
+                      <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
+                      <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
+                        Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.
+                      </CardDescription>
+                  </CardHeader>
+                )}
                 <CardContent className="p-8 pt-2">
                     {!answer && !isLoadingAI && (
                       <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto">
@@ -188,14 +190,14 @@ export default function AcademyPage() {
                     )}
 
                     {isLoadingAI && (
-                      <div className="mt-8 p-4 text-center text-muted-foreground">
+                      <div className="p-4 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
                         Focus AI is thinking...
                       </div>
                     )}
 
                     {answer && (
-                      <div className="mt-8 border-t pt-6 max-w-xl mx-auto">
+                      <div>
                         <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                           <Sparkles className="h-5 w-5 text-purple-500" />
                           Focus AI's Answer
