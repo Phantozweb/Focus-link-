@@ -112,8 +112,9 @@ const roleDetails = [
 const formSchema = z.object({
   name: z.string().min(2, 'Name is required.'),
   email: z.string().email('Invalid email address.'),
-  linkedin: z.string().url('Please enter a valid LinkedIn profile URL.'),
-  resumeUrl: z.string().url('Please enter a valid URL.').optional().or(z.literal('')),
+  linkedin: z.string().url('Please enter a valid LinkedIn profile URL.').optional().or(z.literal('')),
+  currentPosition: z.string().min(2, 'Current position is required.'),
+  resumeUrl: z.string().min(1, 'A resume is required. Please upload or provide a link.'),
   role: z.string().min(1, 'Please select a role.'),
   skills: z.string().min(10, 'Please tell us about your skills.'),
   contribution: z.string().min(20, 'Please tell us how you want to contribute.'),
@@ -125,11 +126,12 @@ const TEAM_APPLICATION_WEBHOOK_URL = 'https://discord.com/api/webhooks/144328350
 
 async function sendDetailedApplicationWebhook(data: FormData, applicationId: string) {
     const details = `
-**Name:**         ${data.name}
-**Email:**        ${data.email}
-**LinkedIn:**     <${data.linkedin}>
-**Resume:**       ${data.resumeUrl ? `<${data.resumeUrl}>` : 'Not Provided'}
-**Applied Role:** ${data.role}
+**Name:**            ${data.name}
+**Email:**           ${data.email}
+**LinkedIn:**        ${data.linkedin ? `<${data.linkedin}>` : 'Not Provided'}
+**Current Position:** ${data.currentPosition}
+**Resume:**          <${data.resumeUrl}>
+**Applied Role:**    ${data.role}
 
 ---
 **Skills & Experience:**
@@ -371,13 +373,20 @@ export default function TeamApplicationPage() {
                       {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
-                    <Input id="linkedin" {...register('linkedin')} className="rounded-xl"/>
-                    {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="currentPosition">Current Position</Label>
+                        <Input id="currentPosition" {...register('currentPosition')} placeholder="e.g., Optometry Student, Optometrist" className="rounded-xl"/>
+                        {errors.currentPosition && <p className="text-sm text-destructive">{errors.currentPosition.message}</p>}
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="linkedin">LinkedIn Profile URL (Optional)</Label>
+                        <Input id="linkedin" {...register('linkedin')} className="rounded-xl"/>
+                        {errors.linkedin && <p className="text-sm text-destructive">{errors.linkedin.message}</p>}
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Resume/CV (Optional)</Label>
+                    <Label htmlFor="resumeUrl">Resume/CV</Label>
                     {useUrl ? (
                          <div className="space-y-2">
                              <Input id="resumeUrl" {...register('resumeUrl')} placeholder="e.g., link to your Google Doc or online portfolio" className="rounded-xl"/>
@@ -443,3 +452,5 @@ export default function TeamApplicationPage() {
     </>
   );
 }
+
+    
