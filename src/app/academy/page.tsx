@@ -192,7 +192,7 @@ export default function AcademyPage() {
                     {isLoadingAI && (
                       <div className="p-4 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
-                        Focus.ai is thinking...
+                        Focus.ai is scanning clinical data to find the best answer for you...
                       </div>
                     )}
 
