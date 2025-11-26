@@ -167,7 +167,7 @@ export default function AcademyPage() {
                       </div>
                       <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
                       <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
-                        Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.
+                        This AI is meant to help you get ideas. Always cross-check the information provided.
                       </CardDescription>
                   </CardHeader>
                 )}
