@@ -53,12 +53,17 @@ It must include the following sections, formatted with markdown headings (###):
     }
 
     const data = await response.json();
-    const content = data.choices[0]?.message?.content;
+    let content = data.choices[0]?.message?.content;
 
     if (!content) {
         throw new Error("The AI returned an empty or invalid response structure.");
     }
     
+    // Remove the promotional footer
+    if (content.includes('---')) {
+      content = content.split('---')[0].trim();
+    }
+
     return { caseMarkdown: content };
 
   } catch (error) {
