@@ -111,47 +111,35 @@ export default async function Home() {
             </Carousel>
 
             {professionals.length > 0 && (
-            <section>
+            <section className="section-wrap">
               <div className="section-header">
                 <h2 className="section-title">Featured Professionals</h2>
                 <Link href="/directory/professionals" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
               </div>
-              <Carousel className="w-full">
-                <CarouselContent className="-ml-4 basis-full md:basis-auto">
-                  {professionals.map((user) => (
-                    <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
-                      <ProfileCard user={user} />
-                    </CarouselItem>
+              <div className="rec-scroll">
+                  {professionals.slice(0, 8).map((user) => (
+                      <ProfileCard key={user.id} user={user} />
                   ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
+              </div>
             </section>
             )}
             
             {students.length > 0 && (
-            <section>
+            <section className="section-wrap">
                <div className="section-header">
                 <h2 className="section-title">Student Directory</h2>
                 <Link href="/directory/students" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
               </div>
-              <Carousel className="w-full">
-                  <CarouselContent className="-ml-4 basis-full md:basis-auto">
-                    {students.map((student) => (
-                      <CarouselItem key={student.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
-                        <ProfileCard user={student} />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-              </Carousel>
+              <div className="rec-scroll">
+                  {students.slice(0, 8).map((student) => (
+                      <ProfileCard key={student.id} user={student} />
+                  ))}
+              </div>
             </section>
             )}
               
               {demoDiscussions.length > 0 && (
-                <section>
+                <section className="section-wrap">
                     <div className="section-header">
                         <h2 className="section-title">From the Forum</h2>
                         <Link href="/forum" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
@@ -165,7 +153,7 @@ export default async function Home() {
               )}
 
                 {demoJobs && demoJobs.length > 0 && 
-                <section>
+                <section className="section-wrap">
                   <div className="section-header">
                     <h2 className="section-title">Latest Job Postings</h2>
                     <Link href="/jobs" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
@@ -193,41 +181,29 @@ export default async function Home() {
                   </div>
                 </section>}
              
-               <section>
+               <section className="section-wrap">
                 <div className="section-header">
                   <h2 className="section-title">Associations & Colleges</h2>
                   <Link href="/directory/institutions" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>
                 </div>
-                 <Carousel className="w-full">
-                    <CarouselContent className="-ml-4 basis-full md:basis-auto">
-                      {institutions.map((user) => (
-                        <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
-                          <ProfileCard user={user} />
-                        </CarouselItem>
+                 <div className="rec-scroll">
+                      {institutions.slice(0, 8).map((user) => (
+                          <ProfileCard key={user.id} user={user} />
                       ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                 </Carousel>
+                 </div>
               </section>
 
-              <section>
+              <section className="section-wrap">
                 <div className="section-header">
                   <h2 className="section-title">Featured Clinics</h2>
                    {clinicsAndOpticals.length > 0 && <Link href="/directory/clinics" className="view-all">View All <ArrowRight className="inline h-4 w-4" /></Link>}
                 </div>
                 {clinicsAndOpticals.length > 0 ? (
-                    <Carousel className="w-full">
-                      <CarouselContent className="-ml-4 basis-full md:basis-auto">
-                          {clinicsAndOpticals.map((user) => (
-                            <CarouselItem key={user.id} className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
-                              <ProfileCard user={user} />
-                            </CarouselItem>
-                          ))}
-                      </CarouselContent>
-                      <CarouselPrevious />
-                      <CarouselNext />
-                    </Carousel>
+                    <div className="rec-scroll">
+                        {clinicsAndOpticals.slice(0, 8).map((user) => (
+                            <ProfileCard key={user.id} user={user} />
+                        ))}
+                    </div>
                 ) : (
                     <div className="empty-state">
                         <div className="empty-icon"><Hospital className="h-12 w-12" /></div>

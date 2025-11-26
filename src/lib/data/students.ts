@@ -367,7 +367,7 @@ My goal is to bridge the gap between practice and education. I am currently purs
     verified: true,
   },
   {
-    id: 'IN20251102095356',
+    id: 'monalisa-behera',
     name: 'Monalisa Behera',
     type: 'Student',
     experience: 'First-Year Optometry Student',
@@ -396,7 +396,3 @@ My goal is to bridge the gap between practice and education. I am currently purs
     verifiedRole: 'Head of Outreach',
   }
 ];
-
-    
-
-    
