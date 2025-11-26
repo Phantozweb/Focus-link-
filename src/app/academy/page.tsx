@@ -170,39 +170,42 @@ export default function AcademyPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="p-8 pt-2">
-                    <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto">
-                    <Textarea
-                        value={question}
-                        onChange={(e) => setQuestion(e.target.value)}
-                        placeholder="e.g., 'What are the key differences between scleritis and episcleritis?'"
-                        rows={3}
-                        className="text-base bg-white/80"
-                        disabled={isLoadingAI}
-                    />
-                    <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
-                        {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
-                        Ask Focus AI
-                    </Button>
-                    </form>
+                    {!answer && !isLoadingAI && (
+                      <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto">
+                        <Textarea
+                          value={question}
+                          onChange={(e) => setQuestion(e.target.value)}
+                          placeholder="e.g., 'What are the key differences between scleritis and episcleritis?'"
+                          rows={3}
+                          className="text-base bg-white/80"
+                          disabled={isLoadingAI}
+                        />
+                        <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
+                          {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
+                          Ask Focus AI
+                        </Button>
+                      </form>
+                    )}
 
                     {isLoadingAI && (
-                    <div className="mt-8 p-4 text-center text-muted-foreground">
+                      <div className="mt-8 p-4 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
                         Focus AI is thinking...
-                    </div>
+                      </div>
                     )}
 
                     {answer && (
-                    <div className="mt-8 border-t pt-6 max-w-xl mx-auto">
+                      <div className="mt-8 border-t pt-6 max-w-xl mx-auto">
                         <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
-                        <Sparkles className="h-5 w-5 text-purple-500" />
-                        Focus AI's Answer
+                          <Sparkles className="h-5 w-5 text-purple-500" />
+                          Focus AI's Answer
                         </h3>
                         <div 
-                        className="prose prose-slate max-w-none"
-                        dangerouslySetInnerHTML={{ __html: marked(answer) }}
+                          className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg"
+                          dangerouslySetInnerHTML={{ __html: marked(answer) }}
                         />
-                    </div>
+                         <Button variant="link" onClick={() => { setAnswer(''); setQuestion(''); }} className="mt-4">Ask another question</Button>
+                      </div>
                     )}
                 </CardContent>
             </Card>
