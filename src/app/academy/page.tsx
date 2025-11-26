@@ -61,7 +61,7 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
     setPastWebinars(past.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
     
     async function fetchAudioSeries() {
