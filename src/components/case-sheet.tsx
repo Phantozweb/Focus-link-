@@ -1,16 +1,17 @@
-
 'use client';
 
 import { useRef, useCallback } from 'react';
 import type { GenerateCaseStudyOutput } from '@/ai/flows/generate-case-study';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Sparkles, User, Microscope, HelpCircle, Lightbulb } from 'lucide-react';
-import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Download, FileText, Sparkles, User, Microscope, HelpCircle, Lightbulb, ChevronLeft } from 'lucide-react';
+import { DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { marked } from 'marked';
 import { toPng } from 'html-to-image';
 import { Badge } from './ui/badge';
-import { Card, CardContent } from './ui/card';
+import { Card, CardContent, CardHeader } from './ui/card';
+import { Table, TableBody, TableCell, TableRow } from './ui/table';
+
 
 interface CaseSheetProps {
     caseData: GenerateCaseStudyOutput;
@@ -74,36 +75,36 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
                 </DialogDescription>
             </DialogHeader>
 
-            <div className="px-6 pb-6 max-h-[60vh] overflow-y-auto bg-slate-50">
-                <div ref={caseSheetRef} className="p-6 bg-white rounded-lg">
-                    <div className="text-center mb-6 border-b pb-4">
+            <div className="max-h-[60vh] overflow-y-auto bg-slate-50" id="case-sheet-content">
+                <div ref={caseSheetRef} className="p-4 sm:p-6 bg-white">
+                     <div className="text-center mb-6 border-b pb-4">
                         <Badge variant="secondary" className="mb-2">Clinical Case</Badge>
-                        <h2 className="text-2xl font-bold text-slate-800">{caseData.title}</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800">{caseData.title}</h2>
                     </div>
                     
                     <div className="space-y-6">
                         <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><User className="text-primary"/> Patient Presentation</h3>
-                            <Card className="bg-slate-50/50"><CardContent className="p-4 prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.patientPresentation)} /></Card>
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><User className="text-primary h-5 w-5"/> Patient Presentation</h3>
+                            <Card className="bg-slate-50/50 shadow-none"><CardContent className="p-4 prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.patientPresentation)} /></Card>
                         </section>
 
                         <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Microscope className="text-primary"/> Examination Findings</h3>
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Microscope className="text-primary h-5 w-5"/> Examination Findings</h3>
                             <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={renderMarkdown(caseData.examinationFindings)} />
                         </section>
                         
                         <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><HelpCircle className="text-primary"/> Diagnosis</h3>
-                            <Card className="bg-blue-50 border-blue-200"><CardContent className="p-4 prose prose-slate max-w-none font-bold" dangerouslySetInnerHTML={renderMarkdown(caseData.diagnosis)} /></Card>
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><HelpCircle className="text-primary h-5 w-5"/> Diagnosis</h3>
+                            <Card className="bg-blue-50 border-blue-200 shadow-none"><CardContent className="p-4 prose prose-slate max-w-none font-bold" dangerouslySetInnerHTML={renderMarkdown(caseData.diagnosis)} /></Card>
                         </section>
                         
                          <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Lightbulb className="text-primary"/> Clinical Discussion</h3>
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Lightbulb className="text-primary h-5 w-5"/> Clinical Discussion</h3>
                             <div className="prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.clinicalDiscussion)} />
                         </section>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t text-xs text-slate-500 flex items-center justify-between">
+                    <div className="mt-8 pt-4 border-t text-xs text-slate-500 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                            <Sparkles className="h-4 w-4 text-purple-500" />
                            <span>Generated by Focus.ai</span>
@@ -113,8 +114,14 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
                 </div>
             </div>
 
-             <DialogFooter className="px-6 pb-4 bg-slate-100 border-t rounded-b-lg">
-                <Button onClick={handleDownload} variant="secondary">
+             <DialogFooter className="px-6 pb-4 bg-slate-100 border-t rounded-b-lg flex-col sm:flex-row gap-2">
+                <DialogClose asChild>
+                    <Button variant="outline" className="w-full sm:w-auto">
+                        <ChevronLeft className="mr-2 h-4 w-4" /> Back to Generator
+                    </Button>
+                </DialogClose>
+                <div className="flex-grow"></div>
+                <Button onClick={handleDownload} variant="secondary" className="w-full sm:w-auto">
                     <Download className="mr-2 h-4 w-4" />
                     Download as Image
                 </Button>
