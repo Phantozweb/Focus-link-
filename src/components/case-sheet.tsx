@@ -37,14 +37,39 @@ function formatCaseStudyContent(markdown: string) {
     if (!markdown) return '';
     let html = markdown
         .replace(/^### (.*?$)/gm, '<h3 class="text-lg font-semibold text-slate-800 mt-4 mb-2">$1</h3>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/^- (.*?$)/gm, '<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 rounded-full bg-slate-400"></span><span>$1</span></li>')
-        .replace(/(<li.*<\/li>)/gs, '<ul class="list-none space-y-1 pl-2">$1</ul>')
-        .replace(/\n/g, '<br />');
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    const tableRegex = /(\|.*\|(?:\n\|.*\|)+)/g;
+    // Handle unordered lists
+    html = html.replace(/^- (.*?$)/gm, (match, content) => {
+        return `<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 rounded-full bg-slate-400"></span><span>${content.trim()}</span></li>`;
+    });
+    html = html.replace(/(<li.*<\/li>)/gs, (match) => {
+        if (!match.startsWith('<ul')) {
+            return `<ul class="list-none space-y-1 pl-2 my-4">${match}</ul>`;
+        }
+        return match;
+    });
+
+    // Handle ordered lists
+     html = html.replace(/^\d+\.\s(.*?$)/gm, (match, content) => {
+        return `<li class="flex items-start gap-2"><span class="font-semibold text-slate-500">${match.match(/^\d+/)[0]}.</span><span>${content.trim()}</span></li>`;
+    });
+     html = html.replace(/(<li class="flex items-start gap-2"><span class="font-semibold.*<\/li>)/gs, (match) => {
+        if (!match.startsWith('<ol')) {
+            return `<ol class="list-none space-y-1 pl-2 my-4">${match}</ol>`;
+        }
+        return match;
+    });
+
+    // Handle blockquotes/callouts
+    html = html.replace(/^> (.*?$)/gm, (match, content) => {
+        return `<div class="my-4 border-l-4 border-blue-500 bg-blue-50 text-blue-800 p-4 rounded-r-lg">${content.trim()}</div>`;
+    });
+    
+    // Handle tables
+    const tableRegex = /(\|.*\|(?:\r\n|\n|\r)?)+/g;
     html = html.replace(tableRegex, (match) => {
-        const rows = match.trim().split('<br />');
+        const rows = match.trim().split(/\r\n|\n|\r/).filter(row => row.trim());
         const headerSeparator = rows[1];
         if (!headerSeparator || !headerSeparator.includes('|')) return match; 
 
@@ -53,9 +78,17 @@ function formatCaseStudyContent(markdown: string) {
         const bodyRows = rows.slice(2);
         const body = `<tbody>${bodyRows.map(row => `<tr class="m-0 border-t p-0 even:bg-slate-50/50">${row.split('|').slice(1, -1).map(cell => `<td class="border px-4 py-2 text-left text-slate-600">${cell.trim()}</td>`).join('')}</tr>`).join('')}</tbody>`;
 
-        return `<div class="my-4 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full text-sm">${header}${body}</table></div>`;
+        return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full text-sm">${header}${body}</table></div>`;
     });
-    
+
+    // Handle paragraphs and line breaks
+    html = html.split(/\r\n|\n|\r/).map(p => p.trim() ? `<p class="my-4">${p}</p>` : '').join('')
+      .replace(/<p><h3>/g, '<h3>').replace(/<\/h3><\/p>/g, '</h3>')
+      .replace(/<p><(ul|ol|div class="my-6|div class="my-4)>/g, '<$1>')
+      .replace(/<\/(ul|ol|table)><\/p>/g, '</$1></div></p>') // This is tricky, table is wrapped in div
+      .replace(/<p><\/p>/g, '');
+
+
     return html;
 }
 
