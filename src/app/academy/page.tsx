@@ -264,7 +264,7 @@ export default function AcademyPage() {
         <section>
           <div className="section-header">
               <h2 className="section-title"><Sparkles className="text-purple-500" /> Focus.AI</h2>
-              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.in</span>
+              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.Ai</span>
           </div>
           <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
             <Tabs defaultValue="chat" className="w-full">
