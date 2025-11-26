@@ -32,6 +32,7 @@ import { Label } from "./ui/label";
 import { type GenerateCaseStudyOutput } from "@/ai/flows/generate-case-study";
 import { toPng } from 'html-to-image';
 import { useToast } from "@/hooks/use-toast";
+import { DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 
 function formatCaseStudyContent(markdown: string) {
@@ -53,9 +54,9 @@ function formatCaseStudyContent(markdown: string) {
   });
   
   // Wrap list items in <ul> or <ol>
-  html = html.replace(/<li class="flex items-start gap-2"><span class="mt-1\.5.*<\/li>/gs, (match) => {
+  html = html.replace(/(<li class="flex items-start gap-2"><span class="mt-1\.5.*<\/li>)/gs, (match) => {
     return `<ul class="list-none space-y-1 pl-2 my-4">${match}</ul>`;
-  }).replace(/<li class="flex items-start gap-2"><span class="font-semibold.*<\/li>/gs, (match) => {
+  }).replace(/(<li class="flex items-start gap-2"><span class="font-semibold.*<\/li>)/gs, (match) => {
     return `<ol class="list-none space-y-1 pl-2 my-4">${match}</ol>`;
   });
   
