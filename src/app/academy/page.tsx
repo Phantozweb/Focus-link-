@@ -173,7 +173,7 @@ export default function AcademyPage() {
                 )}
                 <CardContent className="p-8 pt-2 min-h-[240px] flex flex-col justify-center">
                     {!answer && !isLoadingAI && (
-                      <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto">
+                      <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full">
                         <Textarea
                           value={question}
                           onChange={(e) => setQuestion(e.target.value)}
