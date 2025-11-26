@@ -35,16 +35,16 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateCaseStudyOutputSchema},
   prompt: `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
 
-The case study should be structured for learning, with clear sections.
+The case study should be structured for learning, with clear sections, and formatted as a professional-looking HTML document.
 
 Topic: {{{topic}}}
 
 Generate the case study with the following structure:
 1.  **Title:** A clear, engaging title.
-2.  **Patient Presentation:** Describe the patient, their complaint, and relevant history.
+2.  **Patient Presentation:** Describe the patient, their complaint, and relevant history in a paragraph.
 3.  **Examination Findings:** Provide key findings from the clinical examination. **Format this as a markdown table** with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'. Include results for Visual Acuity, Refraction, Slit Lamp, etc.
 4.  **Diagnosis:** State the definitive diagnosis.
-5.  **Clinical Discussion:** Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Format this using markdown for structure.
+5.  **Clinical Discussion:** Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure like bold text and bullet points.
 `,
 });
 
