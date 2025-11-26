@@ -114,7 +114,7 @@ const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
   linkedin: z.string().url('Please enter a valid LinkedIn profile URL.').optional().or(z.literal('')),
   currentPosition: z.string().min(2, 'Current position is required.'),
-  resumeUrl: z.string().min(1, 'A resume is required. Please upload or provide a link.'),
+  resumeFile: z.instanceof(File).refine(file => file.size > 0, 'A resume file is required.'),
   role: z.string().min(1, 'Please select a role.'),
   skills: z.string().min(10, 'Please tell us about your skills.'),
   contribution: z.string().min(20, 'Please tell us how you want to contribute.'),
@@ -130,7 +130,6 @@ async function sendDetailedApplicationWebhook(data: FormData, applicationId: str
 **Email:**           ${data.email}
 **LinkedIn:**        ${data.linkedin ? `<${data.linkedin}>` : 'Not Provided'}
 **Current Position:** ${data.currentPosition}
-**Resume:**          <${data.resumeUrl}>
 **Applied Role:**    ${data.role}
 
 ---
@@ -160,14 +159,19 @@ ${details}
         }
     };
 
+    const formData = new FormData();
+    formData.append('payload_json', JSON.stringify({ embeds: [embed] }));
+    formData.append('file1', data.resumeFile, data.resumeFile.name);
+
     try {
         await fetch(TEAM_APPLICATION_WEBHOOK_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ embeds: [embed] })
+            body: formData,
         });
     } catch (error) {
         console.error("Failed to send detailed application webhook:", error);
+        // Re-throw the error to be caught by the onSubmit handler
+        throw new Error('Could not send application to Discord.');
     }
 }
 
@@ -175,43 +179,22 @@ ${details}
 export default function TeamApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState('');
-  const [useUrl, setUseUrl] = useState(false);
+  const [fileName, setFileName] = useState('');
 
   const { toast } = useToast();
   const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
-    
-    // Using imgbb.com API key
-    const apiKey = '58bcdc0482981150fadb03eb2d91b2dc';
-    const formData = new FormData();
-    formData.append('image', file);
-    setUploadStatus('Uploading...');
-
-    try {
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        const fileUrl = data.data.url;
-        setUploadStatus('Upload successful!');
-        setValue('resumeUrl', fileUrl, { shouldValidate: true });
-        toast({ title: 'Resume Uploaded', description: 'Your file has been successfully uploaded and linked.' });
-      } else {
-        throw new Error(data.error?.message || 'Unknown upload error from imgbb');
-      }
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-      setUploadStatus(`Error: ${errorMessage}`);
-      toast({ variant: 'destructive', title: 'Upload Failed', description: 'Could not upload file. Please try providing a URL instead.' });
+    if (file) {
+      setValue('resumeFile', file, { shouldValidate: true });
+      setFileName(file.name);
+    } else {
+        // Clear value if no file is selected
+        setValue('resumeFile', new File([], ""), { shouldValidate: true });
+        setFileName('');
     }
   };
 
@@ -381,30 +364,15 @@ export default function TeamApplicationPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="resumeUrl">Resume/CV</Label>
-                    {useUrl ? (
-                         <div className="space-y-2">
-                             <Input id="resumeUrl" {...register('resumeUrl')} placeholder="e.g., link to your Google Doc or online portfolio" className="rounded-xl"/>
-                             <Button variant="link" size="sm" onClick={() => setUseUrl(false)} className="text-xs">
-                                <Upload className="mr-2 h-3 w-3" /> Use file upload instead
-                            </Button>
-                         </div>
-                    ) : (
-                         <div className="space-y-2">
-                            <Input id="resumeUpload" type="file" onChange={handleFileUpload} accept=".pdf,.doc,.docx,image/*" className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
-                            {uploadStatus && (
-                                <p className="text-sm text-muted-foreground flex items-center gap-2">
-                                    {uploadStatus.startsWith('Error') ? <Loader2 className="h-4 w-4 text-destructive" /> : uploadStatus.includes('successful') ? <FileCheck className="h-4 w-4 text-green-600" /> : <Loader2 className="h-4 w-4 animate-spin" />}
-                                    {uploadStatus}
-                                </p>
-                            )}
-                             <Button variant="link" size="sm" onClick={() => setUseUrl(true)} className="text-xs">
-                                <LinkIcon className="mr-2 h-3 w-3" /> Provide a link instead
-                            </Button>
+                    <Label htmlFor="resumeFile">Resume/CV</Label>
+                    <Input id="resumeFile" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" onChange={handleFileChange} className="rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"/>
+                     {fileName && (
+                        <div className="text-sm text-muted-foreground flex items-center gap-2 pt-1">
+                            <FileCheck className="h-4 w-4 text-green-600" />
+                            <span>{fileName}</span>
                         </div>
                     )}
-                    {errors.resumeUrl && <p className="text-sm text-destructive">{errors.resumeUrl.message}</p>}
-                     <input type="hidden" {...register('resumeUrl')} />
+                    {errors.resumeFile && <p className="text-sm text-destructive">{errors.resumeFile.message}</p>}
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="role">Preferred Role</Label>
@@ -447,3 +415,5 @@ export default function TeamApplicationPage() {
     </>
   );
 }
+
+    
