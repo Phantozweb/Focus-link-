@@ -29,7 +29,7 @@ export async function askOptometryAI(input: AskOptometryAIInput): Promise<AskOpt
   const simpleGreetings = ['hi', 'hello', 'hey', 'yo', 'sup'];
 
   if (simpleGreetings.includes(question)) {
-    return { answer: "Hello! I'm Focus.ai, your assistant for optometry questions. How can I help you today?" };
+    return { answer: "Hello! I'm Focus.AI, your assistant for optometry questions. How can I help you today?" };
   }
   
   return askOptometryAIFlow(input);
@@ -95,3 +95,5 @@ const askOptometryAIFlow = ai.defineFlow(
     return output!;
   }
 );
+
+    

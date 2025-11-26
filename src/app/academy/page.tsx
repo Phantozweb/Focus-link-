@@ -37,6 +37,8 @@ type AudioSeries = {
   description: string;
 };
 
+const MAX_AI_ATTEMPTS = 5;
+
 export default function AcademyPage() {
   const [liveWebinars, setLiveWebinars] = useState<typeof webinars>([]);
   const [upcomingWebinars, setUpcomingWebinars] = useState<typeof webinars>([]);
@@ -56,12 +58,49 @@ export default function AcademyPage() {
   const [caseTopic, setCaseTopic] = useState('');
   const [generatedCase, setGeneratedCase] = useState<GenerateCaseStudyOutput | null>(null);
   const [isGeneratingCase, setIsGeneratingCase] = useState(false);
+
+  // AI Usage Limit State
+  const [attemptsLeft, setAttemptsLeft] = useState(MAX_AI_ATTEMPTS);
+  
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const usageData = JSON.parse(localStorage.getItem('focusAiUsage') || '{}');
+
+    if (usageData.date === today) {
+      setAttemptsLeft(Math.max(0, MAX_AI_ATTEMPTS - usageData.count));
+    } else {
+      localStorage.setItem('focusAiUsage', JSON.stringify({ date: today, count: 0 }));
+      setAttemptsLeft(MAX_AI_ATTEMPTS);
+    }
+  }, []);
+
+  const incrementAttemptCount = () => {
+    const today = new Date().toISOString().split('T')[0];
+    const usageData = JSON.parse(localStorage.getItem('focusAiUsage') || '{"date": "","count":0}');
+    
+    if (usageData.date === today) {
+      const newCount = usageData.count + 1;
+      localStorage.setItem('focusAiUsage', JSON.stringify({ date: today, count: newCount }));
+      setAttemptsLeft(MAX_AI_ATTEMPTS - newCount);
+    } else {
+      // If date is old, reset it. This is a fallback.
+      localStorage.setItem('focusAiUsage', JSON.stringify({ date: today, count: 1 }));
+      setAttemptsLeft(MAX_AI_ATTEMPTS - 1);
+    }
+  };
+  
+  const imageFilter = (node: HTMLElement) => {
+    // This function tells html-to-image to exclude external Google Fonts stylesheets.
+    // This prevents a CORS error when the library tries to read the CSS rules.
+    const exclusion = (node.tagName === 'LINK') && (node as HTMLLinkElement).href.includes('fonts.googleapis');
+    return !exclusion;
+  };
   
   const handleDownloadImage = useCallback(() => {
     if (answerCardRef.current === null) {
       return;
     }
-    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 2 })
+    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 2, filter: imageFilter })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "focus-ai-answer.png";
@@ -139,10 +178,11 @@ export default function AcademyPage() {
 
   const handleAISubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!question.trim()) return;
+    if (!question.trim() || attemptsLeft <= 0) return;
 
     setIsLoadingAI(true);
     setAnswer('');
+    incrementAttemptCount();
 
     try {
       const result = await askOptometryAI({ question });
@@ -162,10 +202,11 @@ export default function AcademyPage() {
   
   const handleCaseGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!caseTopic.trim()) return;
+    if (!caseTopic.trim() || attemptsLeft <= 0) return;
 
     setIsGeneratingCase(true);
     setGeneratedCase(null);
+    incrementAttemptCount();
 
     try {
       const result = await generateCaseStudy({ topic: caseTopic });
@@ -211,8 +252,8 @@ export default function AcademyPage() {
         
         <section>
           <div className="section-header">
-              <h2 className="section-title"><Sparkles className="text-purple-500" /> Ask Optometry AI</h2>
-              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.ai</span>
+              <h2 className="section-title"><Sparkles className="text-purple-500" /> Focus.AI</h2>
+              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.in</span>
           </div>
           <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
             <Tabs defaultValue="chat" className="w-full">
@@ -233,6 +274,7 @@ export default function AcademyPage() {
                             <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
                             <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
                                This AI is meant to help you get ideas. Always cross-check the information provided.
+                               <p className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</p>
                             </CardDescription>
                             <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                                 <Textarea
@@ -241,11 +283,11 @@ export default function AcademyPage() {
                                 placeholder="e.g., 'What are the key differences between scleritis and episcleritis?'"
                                 rows={3}
                                 className="text-base bg-white/80"
-                                disabled={isLoadingAI}
+                                disabled={isLoadingAI || attemptsLeft <= 0}
                                 />
-                                <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
+                                <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim() || attemptsLeft <= 0}>
                                 {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
-                                Ask Focus.ai
+                                {attemptsLeft > 0 ? 'Ask Focus.AI' : 'Daily Limit Reached'}
                                 </Button>
                             </form>
                         </div>
@@ -254,7 +296,7 @@ export default function AcademyPage() {
                     {isLoadingAI && (
                       <div className="flex flex-col items-center justify-center p-4 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                        <p className="mt-4 font-semibold text-lg text-slate-700">Focus.ai is thinking...</p>
+                        <p className="mt-4 font-semibold text-lg text-slate-700">Focus.AI is thinking...</p>
                         <p className="mt-1 text-sm">Scanning clinical guidelines to find the best answer for you.</p>
                       </div>
                     )}
@@ -263,7 +305,7 @@ export default function AcademyPage() {
                       <div className="text-center">
                         <h3 className="text-xl font-bold mb-4 flex items-center justify-center gap-2 text-slate-800">
                           <Sparkles className="h-5 w-5 text-purple-500" />
-                          Focus.ai has generated an answer!
+                          Focus.AI has generated an answer!
                         </h3>
                          <Dialog defaultOpen>
                           <DialogTrigger asChild>
@@ -298,7 +340,7 @@ export default function AcademyPage() {
                                     <div>
                                         <h3 className="text-sm font-semibold text-slate-500 mb-2 flex items-center gap-2">
                                             <Sparkles className="h-4 w-4 text-purple-500" />
-                                            Focus.ai Answer:
+                                            Focus.AI Answer:
                                         </h3>
                                         <div className="prose prose-slate max-w-none prose-p:my-3 prose-headings:my-4 prose-ul:my-3"
                                             dangerouslySetInnerHTML={{ __html: answer }}
@@ -335,6 +377,7 @@ export default function AcademyPage() {
                         <CardTitle className="text-center text-2xl font-bold text-slate-800">AI Case Study Generator</CardTitle>
                         <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
                           Enter a clinical topic to generate a realistic patient case for learning and discussion.
+                           <p className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</p>
                         </CardDescription>
                         <form onSubmit={handleCaseGenerate} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                           <Input
@@ -342,11 +385,11 @@ export default function AcademyPage() {
                             onChange={(e) => setCaseTopic(e.target.value)}
                             placeholder="e.g., 'Angle Closure Glaucoma' or 'Accommodative Esotropia'"
                             className="text-base bg-white/80 text-center"
-                            disabled={isGeneratingCase}
+                            disabled={isGeneratingCase || attemptsLeft <= 0}
                           />
-                          <Button type="submit" className="w-full" size="lg" disabled={isGeneratingCase || !caseTopic.trim()}>
+                          <Button type="submit" className="w-full" size="lg" disabled={isGeneratingCase || !caseTopic.trim() || attemptsLeft <= 0}>
                             {isGeneratingCase ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
-                            Generate Case
+                            {attemptsLeft > 0 ? 'Generate Case' : 'Daily Limit Reached'}
                           </Button>
                         </form>
                       </div>
@@ -356,7 +399,7 @@ export default function AcademyPage() {
                       <div className="flex flex-col items-center justify-center p-4 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         <p className="mt-4 font-semibold text-lg text-slate-700">Generating Case Study...</p>
-                        <p className="mt-1 text-sm">Focus.ai is crafting a detailed clinical scenario for you.</p>
+                        <p className="mt-1 text-sm">Focus.AI is crafting a detailed clinical scenario for you.</p>
                       </div>
                     )}
 
@@ -489,7 +532,5 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
 
     
