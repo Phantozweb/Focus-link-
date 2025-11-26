@@ -23,65 +23,9 @@ const GenerateCaseStudyOutputSchema = z.object({
 export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSchema>;
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
-  const systemPrompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
-The entire case study should be a single, cohesive markdown document.
-It must include the following sections, formatted with markdown headings (###):
-- ### Patient Presentation
-- ### Examination Findings (use a markdown table for clarity)
-- ### Diagnosis
-- ### Clinical Discussion (use a blockquote for emphasis)
-`;
-
-  const userPrompt = `Generate a complete case study on the topic: ${input.topic}`;
-
-  try {
-    const response = await fetch('https://text.pollinations.ai/openai', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 1500,
-      }),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`API call failed with status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    
-    const content = result.choices[0]?.message?.content;
-    if (!content) {
-        throw new Error("The AI returned an empty or invalid response structure.");
-    }
-    
-    const output: GenerateCaseStudyOutput = {
-      caseMarkdown: content,
-    };
-
-    return output;
-
-  } catch (error) {
-    console.error("Error fetching or parsing from custom AI endpoint:", error);
-    let errorMessage = "Failed to generate case study from the new endpoint.";
-    if (error instanceof Error) {
-        errorMessage = error.message;
-    }
-    
-    return {
-        caseMarkdown: `### Error Generating Case on: ${input.topic}\n\nThe AI failed to generate the case study content. There was an issue communicating with the AI service. Details: ${errorMessage}`,
-    };
-  }
+  return generateCaseStudyFlow(input);
 }
 
-// The original Genkit flow is preserved below but is no longer used by the exported function.
 const promptTemplate = ai.definePrompt({
   name: 'generateCaseStudyPrompt',
   input: {schema: z.object({ topic: z.string() })},
@@ -90,9 +34,9 @@ const promptTemplate = ai.definePrompt({
 The entire case study should be a single, cohesive markdown document.
 It must include the following sections, formatted with markdown headings (###):
 - ### Patient Presentation
-- ### Examination Findings (use a markdown table)
+- ### Examination Findings (use a markdown table for clarity)
 - ### Diagnosis
-- ### Clinical Discussion
+- ### Clinical Discussion (use a blockquote for emphasis)
 Topic: {{{topic}}}
 `,
 });
