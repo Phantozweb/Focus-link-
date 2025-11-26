@@ -43,7 +43,7 @@ export async function POST(request: Request) {
  *
  * 1. Create a new Google Sheet. Name the first tab "TeamApplications".
  * 2. Set the following headers in the first row:
- *    Timestamp, Name, Email, LinkedIn, ResumeURL, Role, Skills, Contribution
+ *    Timestamp, Name, Email, LinkedIn, CurrentPosition, ResumeURL, Role, Skills, Contribution
  * 3. In the Google Sheet, go to Extensions > Apps Script.
  * 4. Paste this entire script and save.
  * 5. Click "Deploy" > "New deployment".
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
  *     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("TeamApplications");
  *     if (!sheet) {
  *       sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("TeamApplications");
- *       sheet.appendRow(["Timestamp", "Name", "Email", "LinkedIn", "ResumeURL", "Role", "Skills", "Contribution"]);
+ *       sheet.appendRow(["Timestamp", "Name", "Email", "LinkedIn", "CurrentPosition", "ResumeURL", "Role", "Skills", "Contribution"]);
  *     }
  * 
  *     var data = JSON.parse(e.postData.contents);
@@ -70,6 +70,7 @@ export async function POST(request: Request) {
  *       data.name,
  *       data.email,
  *       data.linkedin,
+ *       data.currentPosition,
  *       data.resumeUrl,
  *       data.role,
  *       data.skills,
@@ -85,3 +86,5 @@ export async function POST(request: Request) {
  *   }
  * }
  */
+
+    
