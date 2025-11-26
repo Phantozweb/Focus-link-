@@ -61,7 +61,7 @@ export default function AcademyPage() {
     if (answerCardRef.current === null) {
       return;
     }
-    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 3 })
+    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 2 })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "focus-ai-answer.png";
@@ -282,6 +282,15 @@ export default function AcademyPage() {
                             </div>
                             <div className="max-h-[60vh] overflow-y-auto">
                                 <div ref={answerCardRef} className="p-8 bg-white">
+                                    <div className="flex justify-between items-center mb-8 pb-4 border-b">
+                                        <div className="flex items-center gap-2">
+                                            <Eye className="h-8 w-8 text-primary" />
+                                            <div>
+                                                <p className="font-bold text-xl text-primary">Focus<span className="text-slate-800">Links</span></p>
+                                                <p className="text-xs text-slate-500">AI Generated Response</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="border-b pb-4 mb-6">
                                         <h3 className="text-sm font-semibold text-slate-500 mb-2">Your Question:</h3>
                                         <p className='text-slate-800 font-semibold text-lg'>{question}</p>
@@ -306,7 +315,7 @@ export default function AcademyPage() {
                                 </Button>
                                 <Button onClick={handleDownloadImage}>
                                     <Download className="mr-2 h-4 w-4" />
-                                    Download as Image
+                                    Download
                                 </Button>
                             </DialogFooter>
                           </DialogContent>
@@ -480,5 +489,7 @@ export default function AcademyPage() {
     </div>
   );
 }
+
+    
 
     
