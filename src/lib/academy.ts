@@ -137,7 +137,7 @@ Participants competed on their knowledge from the anterior to the posterior segm
       title: 'Official Organizer'
     },
     platform: 'Online Platform',
-    dateTime: '2025-11-02T00:00:00Z',
+    dateTime: '2024-11-02T00:00:00Z',
     duration: '11 days',
     tags: ['Quiz', 'International', 'Competition', 'Students', 'Professionals', 'Anterior Segment', 'Posterior Segment', 'Optometry Certification', 'Clinical Knowledge'],
     registrationLink: '#',
