@@ -239,7 +239,7 @@ export default function AcademyPage() {
                                   The following information is AI-generated. Always verify with clinical sources.
                                 </DialogDescription>
                             </DialogHeader>
-                            <div className="px-6 pb-6">
+                            <div className="px-6 pb-6 max-h-[60vh] overflow-y-auto">
                                 <div ref={answerCardRef} className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm">
                                     <div className="prose prose-slate max-w-none prose-headings:text-slate-800 prose-h3:text-lg prose-h3:font-semibold prose-h3:mb-2 prose-p:text-slate-600 prose-p:leading-relaxed prose-hr:my-4 prose-ul:list-disc prose-ul:pl-5 prose-li:my-1"
                                         dangerouslySetInnerHTML={{ __html: `<h3>Your Question:</h3><p class='text-slate-800 font-semibold'>${question}</p><hr/><h3>Focus.ai Answer:</h3>${answer}` }}
