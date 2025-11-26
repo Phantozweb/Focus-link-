@@ -50,7 +50,7 @@ It must include the following sections, formatted with markdown headings (###):
                 { "role": "system", "content": systemPrompt },
                 { "role": "user", "content": userMessage }
             ],
-            "max_tokens": 4096
+            "max_tokens": 128000
         })
     });
 
