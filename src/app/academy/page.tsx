@@ -134,7 +134,9 @@ export default function AcademyPage() {
                   </div>
                   <h3 className="text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</h3>
                   <p className="text-slate-600 mt-2 max-w-lg mx-auto">Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.</p>
-                  <Button disabled className="mt-6 rounded-full-btn" size="lg">Ask a Question (Coming Soon)</Button>
+                  <Button asChild className="mt-6 rounded-full-btn" size="lg">
+                    <Link href="/ask-ai">Ask a Question</Link>
+                  </Button>
                 </CardContent>
             </Card>
         </section>
