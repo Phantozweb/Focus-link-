@@ -47,6 +47,17 @@ function DirectorySkeleton() {
   )
 }
 
+const shuffleArray = (array: any[]) => {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+  return array;
+};
+
+
 export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageProps) {
   const category = params.category || 'all';
   
@@ -58,7 +69,7 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
   const clinicTypes: UserProfile['type'][] = ['Hospital', 'Optical'];
   const professionalTypes: UserProfile['type'][] = ['Optometrist', 'Academic', 'Researcher', 'Ophthalmologist', 'Optician'];
 
-  const initialFilteredUsers = allUsers.filter(user => {
+  let filteredUsers = allUsers.filter(user => {
       switch (category) {
         case 'students':
           return user.type === 'Student';
@@ -78,6 +89,10 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
       }
   });
 
+  if (category === 'all') {
+    filteredUsers = shuffleArray(filteredUsers);
+  }
+
   return (
     <div className="bg-brand-bg">
         <header className="hero">
@@ -95,7 +110,7 @@ export default function DirectoryCategoryPage({ params }: DirectoryCategoryPageP
         </header>
         <main>
             <Suspense fallback={<DirectorySkeleton />}>
-                <DirectoryClient allUsers={initialFilteredUsers} title={getTitle(category)} category={category} />
+                <DirectoryClient allUsers={filteredUsers} title={getTitle(category)} category={category} />
             </Suspense>
         </main>
     </div>

@@ -79,7 +79,13 @@ export default async function Home() {
   const colleges = shuffleArray([...allUsers.filter(u => u.type === 'College')]);
   const institutions = shuffleArray([...associations, ...colleges]);
   const clinicsAndOpticals = shuffleArray([...allUsers.filter(u => ['Hospital', 'Optical'].includes(u.type))]);
-  const students = shuffleArray([...allUsers.filter(u => u.type === 'Student')]);
+  
+  const allStudents = allUsers.filter(u => u.type === 'Student');
+  const featuredStudentIds = ['3', '11', '21'];
+  const featuredStudents = featuredStudentIds.map(id => allStudents.find(s => s.id === id)).filter((s): s is UserProfile => !!s);
+  const otherStudents = allStudents.filter(s => !featuredStudentIds.includes(s.id));
+  const students = [...featuredStudents, ...shuffleArray(otherStudents)];
+
   const industry = shuffleArray([...allUsers.filter(u => u.type === 'Industry')]);
   const demoJobs = await getJobs();
   const demoDiscussions = await getDiscussions();

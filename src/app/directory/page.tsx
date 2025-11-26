@@ -6,7 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { allUsers } from '@/lib/data/index';
 import { ProfileCard } from '@/components/profile-card';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Briefcase, GraduationCap, Building, Hospital, Users, Factory, Handshake, Stethoscope, MapPin, ListFilter, ChevronDown, Search } from 'lucide-react';
+import { Briefcase, GraduationCap, Building, Hospital, Users, Factory, Handshake, Stethoscope, MapPin, ListFilter, ChevronDown, Search, Star } from 'lucide-react';
 import type { UserProfile } from '@/types';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -29,6 +29,16 @@ const categories = [
     { name: 'Partners', filter: 'industry' },
 ];
 
+const shuffleArray = (array: any[]) => {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+  return array;
+};
+
 export default function DirectoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,7 +60,8 @@ export default function DirectoryPage() {
   };
 
   const filteredUsers = useMemo(() => {
-    return allUsers.filter(user => {
+    const shuffledUsers = shuffleArray([...allUsers]);
+    return shuffledUsers.filter(user => {
       const term = searchTerm.toLowerCase();
       const country = selectedCountry.toLowerCase();
 
