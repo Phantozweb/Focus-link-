@@ -136,32 +136,13 @@ export default function AcademyPage() {
         <section>
             <div className="section-header">
                 <h2 className="section-title"><BookOpen className="text-primary" /> Courses</h2>
-                <Link href="/academy" className="view-all">View All</Link>
+                <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">Coming Soon</span>
             </div>
-            <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent>
-                 {webinars.filter(w => w.type === 'Course').map(course => (
-                  <CarouselItem key={course.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
-                     <Link href={`/academy/${course.id}`}>
-                      <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
-                        <div className="relative aspect-video">
-                          <Image src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt={course.title} layout="fill" objectFit="cover" />
-                           <div className="absolute top-2 right-2">
-                                <Badge>Coming Soon</Badge>
-                            </div>
-                        </div>
-                        <div className="p-4 flex-grow flex flex-col">
-                            <h4 className="font-bold text-slate-800 flex-grow">{course.title}</h4>
-                            <p className="text-sm text-muted-foreground mt-1">{course.speaker.name}</p>
-                        </div>
-                      </Card>
-                     </Link>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex" />
-              <CarouselNext className="hidden sm:flex" />
-            </Carousel>
+            <Card className="bg-slate-50 border-dashed">
+                <CardContent className="p-8 text-center text-muted-foreground">
+                    <p>Our library of interactive courses with AI-powered simulations is launching soon. Stay tuned!</p>
+                </CardContent>
+            </Card>
         </section>
 
         <section>
@@ -225,57 +206,25 @@ export default function AcademyPage() {
         <section>
             <div className="section-header">
                 <h2 className="section-title"><FolderOpen className="text-green-500" /> Resources & Notes</h2>
+                <span className="text-sm font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full">Coming Soon</span>
             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-4 flex items-center gap-4">
-                        <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
-                            <FileText className="h-6 w-6"/>
-                        </div>
-                        <div className="flex-grow">
-                            <h4 className="font-semibold text-slate-800">Retinoscopy Cheatsheet</h4>
-                            <p className="text-sm text-muted-foreground">PDF • 2.4 MB</p>
-                        </div>
-                        <Button variant="ghost" size="icon"><Download /></Button>
-                    </CardContent>
-                </Card>
-                 <Card className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-4 flex items-center gap-4">
-                        <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                            <FileText className="h-6 w-6"/>
-                        </div>
-                        <div className="flex-grow">
-                            <h4 className="font-semibold text-slate-800">Patient History Form</h4>
-                            <p className="text-sm text-muted-foreground">DOCX • 500 KB</p>
-                        </div>
-                        <Button variant="ghost" size="icon"><Download /></Button>
-                    </CardContent>
-                </Card>
-            </div>
+             <Card className="bg-slate-50 border-dashed">
+                <CardContent className="p-8 text-center text-muted-foreground">
+                    <p>A collection of clinical cheatsheets, patient forms, and research summaries is on its way.</p>
+                </CardContent>
+            </Card>
         </section>
 
          <section>
             <div className="section-header">
                 <h2 className="section-title"><Newspaper className="text-slate-600" /> Latest Insights</h2>
+                <span className="text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">Coming Soon</span>
             </div>
-            <Carousel opts={{ align: "start" }} className="w-full">
-              <CarouselContent>
-                 <CarouselItem className="basis-full sm:basis-1/2 lg:basis-1/3">
-                    <Card className="group overflow-hidden shadow-soft h-full flex flex-col">
-                        <div className="relative aspect-video">
-                            <Image src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Blog post" layout="fill" objectFit="cover" />
-                        </div>
-                        <div className="p-4">
-                            <h4 className="font-bold text-base text-slate-800 mb-2">AI in Optometry: The Next Step</h4>
-                            <p className="text-sm text-muted-foreground mb-3">How artificial intelligence is changing diagnostics...</p>
-                            <Button variant="link" className="p-0 h-auto">Read Article</Button>
-                        </div>
-                    </Card>
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex" />
-              <CarouselNext className="hidden sm:flex" />
-            </Carousel>
+            <Card className="bg-slate-50 border-dashed">
+                <CardContent className="p-8 text-center text-muted-foreground">
+                    <p>Our blog featuring articles on AI in optometry, clinical case studies, and career advice is coming soon.</p>
+                </CardContent>
+            </Card>
         </section>
         
         {pastWebinars.length > 0 && (
