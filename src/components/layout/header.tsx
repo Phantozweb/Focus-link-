@@ -143,7 +143,7 @@ export function Header() {
             </Sheet>
             <Link href="/" className="brand">
                 <Eye/>
-                <div className="hidden sm:block">
+                <div>
                   <span className="brand-focus">Focus</span><span className="brand-links">Links</span>
                 </div>
             </Link>
