@@ -18,11 +18,13 @@ import { AudioPlayer } from '@/components/audio-player';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { askOptometryAI } from '@/ai/flows/ask-optometry-ai';
+import { generateCaseStudy, type GenerateCaseStudyOutput } from '@/ai/flows/generate-case-study';
 import { useToast } from '@/hooks/use-toast';
 import { marked } from 'marked';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { toPng } from 'html-to-image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CaseSheet } from '@/components/case-sheet';
 
 
 type AudioSeries = {
@@ -49,6 +51,11 @@ export default function AcademyPage() {
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const { toast } = useToast();
   const answerCardRef = useRef<HTMLDivElement>(null);
+  
+  // AI Case Gen state
+  const [caseTopic, setCaseTopic] = useState('');
+  const [generatedCase, setGeneratedCase] = useState<GenerateCaseStudyOutput | null>(null);
+  const [isGeneratingCase, setIsGeneratingCase] = useState(false);
   
   const handleDownloadImage = useCallback(() => {
     if (answerCardRef.current === null) {
@@ -153,6 +160,28 @@ export default function AcademyPage() {
     }
   };
   
+  const handleCaseGenerate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!caseTopic.trim()) return;
+
+    setIsGeneratingCase(true);
+    setGeneratedCase(null);
+
+    try {
+      const result = await generateCaseStudy({ topic: caseTopic });
+      setGeneratedCase(result);
+    } catch (error) {
+      console.error('Case generation failed:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Could not generate a case study. Please try again.',
+      });
+    } finally {
+      setIsGeneratingCase(false);
+    }
+  };
+  
   const comingSoonFeatures = [
     { title: 'Interactive Courses', icon: <BookOpen className="h-8 w-8" />, description: 'Simulator and Valuable courses instead of videos Pure virtual engagement' },
     { title: 'E-Books & Guides', icon: <FileText className="h-8 w-8" />, description: 'Access a curated library of clinical guides and textbooks.' },
@@ -190,7 +219,7 @@ export default function AcademyPage() {
               <div className="p-4 border-b border-purple-200/50">
                   <TabsList className="grid w-full grid-cols-3 bg-purple-100/50 text-purple-800">
                     <TabsTrigger value="chat"><MessageCircle className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Chat</span></TabsTrigger>
-                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Case Gen</span></TabsTrigger>
+                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm_inline">Case Gen</span></TabsTrigger>
                     <TabsTrigger value="quiz"><PencilRuler className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Quiz</span></TabsTrigger>
                   </TabsList>
               </div>
@@ -285,11 +314,58 @@ export default function AcademyPage() {
                   </CardContent>
               </TabsContent>
               <TabsContent value="case-generator">
-                 <div className="p-8 min-h-[300px] flex flex-col justify-center items-center text-center">
-                    <FileQuestion className="h-12 w-12 text-purple-400 mb-4"/>
-                    <h3 className="text-xl font-bold text-slate-700">Case Study Generator</h3>
-                    <p className="text-muted-foreground mt-2">Coming soon! Generate realistic patient cases to test your diagnostic skills.</p>
-                 </div>
+                 <CardContent className="p-4 sm:p-8 min-h-[300px] flex flex-col justify-center">
+                    {(!generatedCase && !isGeneratingCase) && (
+                      <div className="text-center">
+                        <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                          <FileQuestion className="h-9 w-9" />
+                        </div>
+                        <CardTitle className="text-center text-2xl font-bold text-slate-800">AI Case Study Generator</CardTitle>
+                        <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
+                          Enter a clinical topic to generate a realistic patient case for learning and discussion.
+                        </CardDescription>
+                        <form onSubmit={handleCaseGenerate} className="space-y-4 max-w-xl mx-auto w-full mt-6">
+                          <Input
+                            value={caseTopic}
+                            onChange={(e) => setCaseTopic(e.target.value)}
+                            placeholder="e.g., 'Angle Closure Glaucoma' or 'Accommodative Esotropia'"
+                            className="text-base bg-white/80 text-center"
+                            disabled={isGeneratingCase}
+                          />
+                          <Button type="submit" className="w-full" size="lg" disabled={isGeneratingCase || !caseTopic.trim()}>
+                            {isGeneratingCase ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
+                            Generate Case
+                          </Button>
+                        </form>
+                      </div>
+                    )}
+
+                    {isGeneratingCase && (
+                      <div className="flex flex-col items-center justify-center p-4 text-center text-muted-foreground">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <p className="mt-4 font-semibold text-lg text-slate-700">Generating Case Study...</p>
+                        <p className="mt-1 text-sm">Focus.ai is crafting a detailed clinical scenario for you.</p>
+                      </div>
+                    )}
+
+                    {generatedCase && (
+                       <div className="text-center">
+                         <h3 className="text-xl font-bold mb-4 flex items-center justify-center gap-2 text-slate-800">
+                          <Sparkles className="h-5 w-5 text-purple-500" />
+                           Case Study Generated!
+                        </h3>
+                         <Dialog defaultOpen>
+                          <DialogTrigger asChild>
+                            <Button>View Case Study</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-3xl p-0">
+                             <CaseSheet caseData={generatedCase} topic={caseTopic} />
+                          </DialogContent>
+                        </Dialog>
+                         <Button variant="link" onClick={() => { setGeneratedCase(null); setCaseTopic(''); }} className="mt-4">Generate another case</Button>
+                      </div>
+                    )}
+                 </CardContent>
               </TabsContent>
               <TabsContent value="quiz">
                  <div className="p-8 min-h-[300px] flex flex-col justify-center items-center text-center">
@@ -404,9 +480,3 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
-
-    
-
-    
