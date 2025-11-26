@@ -9,11 +9,11 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { AudioPlayer } from '@/components/audio-player';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,6 +21,7 @@ import { askOptometryAI } from '@/ai/flows/ask-optometry-ai';
 import { useToast } from '@/hooks/use-toast';
 import { marked } from 'marked';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { toPng } from 'html-to-image';
 
 
 type AudioSeries = {
@@ -46,6 +47,28 @@ export default function AcademyPage() {
   const [answer, setAnswer] = useState('');
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const { toast } = useToast();
+  const answerCardRef = useRef<HTMLDivElement>(null);
+  
+  const handleDownloadImage = useCallback(() => {
+    if (answerCardRef.current === null) {
+      return;
+    }
+    toPng(answerCardRef.current, { cacheBust: true })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "focus-ai-answer.png";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error(err);
+        toast({
+            variant: "destructive",
+            title: "Download Failed",
+            description: "Could not generate an image of the answer."
+        });
+      });
+  }, [toast]);
 
   useEffect(() => {
     const now = new Date().getTime();
@@ -212,10 +235,17 @@ export default function AcademyPage() {
                             <DialogHeader>
                               <DialogTitle>Focus.ai's Answer</DialogTitle>
                             </DialogHeader>
-                            <div 
-                              className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg max-h-[60vh] overflow-y-auto"
-                              dangerouslySetInnerHTML={{ __html: marked(answer) }}
-                            />
+                            <div ref={answerCardRef} className="p-4 bg-white">
+                                <div className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg max-h-[60vh] overflow-y-auto"
+                                    dangerouslySetInnerHTML={{ __html: `<h3>Question:</h3><p>${question}</p><h3>Answer:</h3>${marked(answer)}` }}
+                                />
+                            </div>
+                            <DialogFooter>
+                                <Button onClick={handleDownloadImage} variant="secondary">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download as Image
+                                </Button>
+                            </DialogFooter>
                           </DialogContent>
                         </Dialog>
                          <Button variant="link" onClick={() => { setAnswer(''); setQuestion(''); }} className="mt-4">Ask another question</Button>
