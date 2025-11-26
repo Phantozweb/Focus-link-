@@ -148,7 +148,7 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
     setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
     
     async function fetchAudioSeries() {
@@ -186,7 +186,12 @@ export default function AcademyPage() {
 
     try {
       const result = await askOptometryAI({ question });
-      const htmlAnswer = await marked(result.answer);
+      const htmlAnswer = await marked(result.answer, { 
+          gfm: true,
+          breaks: true,
+          mangle: false,
+          headerIds: false,
+      });
       setAnswer(htmlAnswer);
     } catch (error) {
       console.error('AI question failed:', error);
@@ -274,7 +279,7 @@ export default function AcademyPage() {
                             <CardTitle className="text-center text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</CardTitle>
                             <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
                                This AI is meant to help you get ideas. Always cross-check the information provided.
-                               <p className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</p>
+                               <div className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</div>
                             </CardDescription>
                             <form onSubmit={handleAISubmit} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                                 <Textarea
@@ -377,7 +382,7 @@ export default function AcademyPage() {
                         <CardTitle className="text-center text-2xl font-bold text-slate-800">AI Case Study Generator</CardTitle>
                         <CardDescription className="text-center text-slate-600 mt-2 max-w-lg mx-auto">
                           Enter a clinical topic to generate a realistic patient case for learning and discussion.
-                           <p className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</p>
+                           <div className="font-semibold mt-2">{attemptsLeft} of {MAX_AI_ATTEMPTS} daily attempts remaining.</div>
                         </CardDescription>
                         <form onSubmit={handleCaseGenerate} className="space-y-4 max-w-xl mx-auto w-full mt-6">
                           <Input
