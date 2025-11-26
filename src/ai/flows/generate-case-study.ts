@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -26,8 +27,40 @@ const GenerateCaseStudyOutputSchema = z.object({
 export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSchema>;
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
-  return generateCaseStudyFlow(input);
+  // The user has requested to use a different endpoint.
+  // This will likely break the structured output and UI rendering.
+  const prompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
+The case study should be structured for learning, with clear sections.
+Topic: ${input.topic}
+Generate the case study with the following structure:
+1.  **Title:** A clear, engaging title.
+2.  **Patient Presentation:** Describe the patient, their complaint, and relevant history in a paragraph.
+3.  **Examination Findings:** Provide key findings from the clinical examination. Format this as a markdown table with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'.
+4.  **Diagnosis:** State the definitive diagnosis.
+5.  **Clinical Discussion:** Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure.`;
+  
+  try {
+    const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+    if (!response.ok) {
+        throw new Error(`API call failed with status: ${response.status}`);
+    }
+    const fullText = await response.text();
+    // Since this endpoint returns a single block of text, we will put it all in the discussion.
+    // The UI will likely not render this correctly in separate sections anymore.
+    return {
+      title: `AI-Generated Case on: ${input.topic}`,
+      patientPresentation: "The AI response is not structured. All content is in the clinical discussion.",
+      examinationFindings: "",
+      diagnosis: "",
+      clinicalDiscussion: fullText,
+    };
+  } catch (error) {
+    console.error("Error fetching from custom AI endpoint:", error);
+    throw new Error("Failed to generate case study from the new endpoint.");
+  }
 }
+
+// The original Genkit flow is preserved below but is no longer used by the exported function.
 
 const prompt = ai.definePrompt({
   name: 'generateCaseStudyPrompt',
