@@ -73,6 +73,12 @@ function formatCaseStudyContent(markdown: string) {
   return html;
 }
 
+const imageFilter = (node: HTMLElement) => {
+    // This function tells html-to-image to exclude external Google Fonts stylesheets.
+    // This prevents a CORS error when the library tries to read the CSS rules.
+    const exclusion = (node.tagName === 'LINK') && (node as HTMLLinkElement).href.includes('fonts.googleapis');
+    return !exclusion;
+};
 
 export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutput, topic: string }) {
   const caseSheetRef = useRef<HTMLDivElement>(null);
@@ -82,7 +88,7 @@ export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutp
     if (caseSheetRef.current === null) {
       return;
     }
-    toPng(caseSheetRef.current, { cacheBust: true, pixelRatio: 2 })
+    toPng(caseSheetRef.current, { cacheBust: true, pixelRatio: 2, filter: imageFilter })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = `case-study-${topic.replace(/\s+/g, '-')}.png`;

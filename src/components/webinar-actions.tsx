@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -98,10 +99,10 @@ export function CertificateClaimDialog() {
   };
 
   const imageFilter = (node: HTMLElement) => {
-    if (node.tagName === 'LINK' && (node as HTMLLinkElement).rel === 'stylesheet' && (node as HTMLLinkElement).href.includes('fonts.googleapis.com')) {
-      return false;
-    }
-    return true;
+    // This function tells html-to-image to exclude external Google Fonts stylesheets.
+    // This prevents a CORS error when the library tries to read the CSS rules.
+    const exclusion = (node.tagName === 'LINK') && (node as HTMLLinkElement).href.includes('fonts.googleapis');
+    return !exclusion;
   };
 
   const handleDownload = useCallback(() => {
