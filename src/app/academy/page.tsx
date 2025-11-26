@@ -122,6 +122,23 @@ export default function AcademyPage() {
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 space-y-16">
         
+        <section>
+            <div className="section-header">
+                <h2 className="section-title"><Sparkles className="text-purple-500" /> Ask Optometry AI</h2>
+                <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus AI</span>
+            </div>
+             <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
+                <CardContent className="p-8 text-center">
+                  <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <Bot className="h-9 w-9" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</h3>
+                  <p className="text-slate-600 mt-2 max-w-lg mx-auto">Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.</p>
+                  <Button disabled className="mt-6 rounded-full-btn" size="lg">Ask a Question (Coming Soon)</Button>
+                </CardContent>
+            </Card>
+        </section>
+        
          <section>
             <div className="section-header">
                 <h2 className="section-title"><Headphones className="text-purple-500" /> Audio Learning</h2>
@@ -197,23 +214,6 @@ export default function AcademyPage() {
               </Carousel>
             </section>
         )}
-
-        <section>
-            <div className="section-header">
-                <h2 className="section-title"><Sparkles className="text-purple-500" /> Ask Optometry AI</h2>
-                <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus AI</span>
-            </div>
-             <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
-                <CardContent className="p-8 text-center">
-                  <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <Bot className="h-9 w-9" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-slate-800">Have a Question? Get an Instant Answer.</h3>
-                  <p className="text-slate-600 mt-2 max-w-lg mx-auto">Our AI, trained on clinical guidelines and best practices, can help you with quick questions about diagnoses, treatments, and more.</p>
-                  <Button disabled className="mt-6 rounded-full-btn" size="lg">Ask a Question (Coming Soon)</Button>
-                </CardContent>
-            </Card>
-        </section>
         
         <section>
             <div className="section-header">
