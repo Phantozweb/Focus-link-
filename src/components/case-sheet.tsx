@@ -1,7 +1,6 @@
 
-
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Sparkles,
   User,
@@ -19,6 +18,7 @@ import {
   Target,
   CheckCircle,
   XCircle,
+  Eye,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -47,7 +47,7 @@ function formatCaseStudyContent(markdown: string) {
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
   // Handle unordered lists (lines starting with - or *)
-  html = html.replace(/^[-*] (.*?$)/gm, (match, content) => {
+  html = html.replace(/^[*-] (.*?$)/gm, (match, content) => {
     return `<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 rounded-full bg-slate-400"></span><span>${content.trim()}</span></li>`;
   });
 
@@ -145,13 +145,27 @@ export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutp
         </div>
         <div className="max-h-[70vh] overflow-y-auto">
             <div ref={caseSheetRef} className="p-8 bg-white">
+                 <div className="flex justify-between items-center mb-8 pb-4 border-b">
+                    <div className="flex items-center gap-2">
+                        <Eye className="h-8 w-8 text-primary" />
+                        <div>
+                            <p className="font-bold text-xl text-primary">Focus<span className="text-slate-800">Links</span></p>
+                            <p className="text-xs text-slate-500">AI Clinical Case Sheet</p>
+                        </div>
+                    </div>
+                    <div className="text-right">
+                        <p className="font-semibold text-slate-700">Case Topic: {topic}</p>
+                        <p className="text-xs text-slate-500">Generated: {new Date().toLocaleDateString()}</p>
+                    </div>
+                </div>
+
                 <section className="mb-6">
                     <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><User className="h-5 w-5 text-primary"/> Patient Presentation</h3>
                     <p className="text-slate-600 leading-relaxed">{caseData.patientPresentation}</p>
                 </section>
                 <section className="mb-6">
                     <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><Stethoscope className="h-5 w-5 text-primary"/> Examination Findings</h3>
-                    <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(caseData.examinationFindings) }} />
+                    <div className="prose prose-slate max-w-none text-base" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(caseData.examinationFindings) }} />
                 </section>
                 <section className="mb-6">
                     <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary"/> Diagnosis</h3>
@@ -161,7 +175,7 @@ export function CaseSheet({ caseData, topic }: { caseData: GenerateCaseStudyOutp
                 </section>
                 <section>
                     <h3 className="text-xl font-bold text-slate-800 border-b-2 border-primary pb-2 mb-4 flex items-center gap-2"><Brain className="h-5 w-5 text-primary"/> Clinical Discussion</h3>
-                    <div className="prose max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(caseData.clinicalDiscussion) }} />
+                    <div className="prose prose-slate max-w-none text-base" dangerouslySetInnerHTML={{ __html: formatCaseStudyContent(caseData.clinicalDiscussion) }} />
                 </section>
             </div>
         </div>
