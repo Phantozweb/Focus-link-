@@ -53,7 +53,7 @@ export default function AcademyPage() {
     if (answerCardRef.current === null) {
       return;
     }
-    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 2 })
+    toPng(answerCardRef.current, { cacheBust: true, pixelRatio: 3 })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "focus-ai-answer.png";
@@ -101,7 +101,7 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
     setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
     
     async function fetchAudioSeries() {
@@ -185,7 +185,7 @@ export default function AcademyPage() {
                 <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.ai</span>
             </div>
              <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
-                <CardContent className="p-8 pt-2 min-h-[240px] flex flex-col justify-center">
+                <CardContent className="p-8 min-h-[240px] flex flex-col justify-center">
                     {(!answer && !isLoadingAI) && (
                         <div className="text-center">
                              <div className="h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
@@ -377,5 +377,7 @@ export default function AcademyPage() {
     </div>
   );
 }
+
+    
 
     
