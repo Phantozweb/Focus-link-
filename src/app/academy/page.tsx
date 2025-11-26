@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { webinars } from '@/lib/academy';
@@ -262,8 +263,8 @@ export default function AcademyPage() {
             <Tabs defaultValue="chat" className="w-full">
               <div className="p-4 border-b border-purple-200/50">
                   <TabsList className="grid w-full grid-cols-2 bg-purple-100/50 text-purple-800">
-                    <TabsTrigger value="chat"><MessageCircle className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Chat</span></TabsTrigger>
-                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 sm:mr-2"/> <span className="hidden sm:inline">Case Gen</span></TabsTrigger>
+                    <TabsTrigger value="chat"><MessageCircle className="h-4 w-4 mr-2"/> <span>Chat</span></TabsTrigger>
+                    <TabsTrigger value="case-generator"><FileQuestion className="h-4 w-4 mr-2"/> <span>Case Gen</span></TabsTrigger>
                   </TabsList>
               </div>
 
