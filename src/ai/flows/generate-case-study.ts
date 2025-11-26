@@ -27,9 +27,9 @@ export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<
 The entire case study should be a single, cohesive markdown document.
 It must include the following sections, formatted with markdown headings (###):
 - ### Patient Presentation
-- ### Examination Findings
+- ### Examination Findings (use a markdown table for clarity)
 - ### Diagnosis
-- ### Clinical Discussion
+- ### Clinical Discussion (use a blockquote for emphasis)
 `;
 
   const userPrompt = `Generate a complete case study on the topic: ${input.topic}`;
