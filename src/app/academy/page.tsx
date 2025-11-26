@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect } from 'react';
@@ -95,7 +95,12 @@ export default function AcademyPage() {
     
   }, []);
   
-  const filters = ['All', 'Webinars', 'Courses', 'Audio', 'E-Books', 'Resources'];
+  const comingSoonFeatures = [
+    { title: 'Interactive Courses', icon: <BookOpen className="h-8 w-8" />, description: 'Engage with AI-powered simulations and hands-on exercises.' },
+    { title: 'E-Books & Guides', icon: <FileText className="h-8 w-8" />, description: 'Access a curated library of clinical guides and textbooks.' },
+    { title: 'Clinical Resources', icon: <FolderOpen className="h-8 w-8" />, description: 'Download cheatsheets, patient forms, and research summaries.' },
+    { title: 'Latest Insights Blog', icon: <Newspaper className="h-8 w-8" />, description: 'Read articles on AI, case studies, and career advice.' },
+  ];
 
   return (
     <div className="bg-brand-bg">
@@ -117,19 +122,7 @@ export default function AcademyPage() {
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 space-y-16">
         
-        <section>
-            <div className="section-header">
-                <h2 className="section-title"><BookOpen className="text-primary" /> Courses</h2>
-                <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">Coming Soon</span>
-            </div>
-            <Card className="bg-slate-50 border-dashed">
-                <CardContent className="p-8 text-center text-muted-foreground">
-                    <p>Our library of interactive courses with AI-powered simulations is launching soon. Stay tuned!</p>
-                </CardContent>
-            </Card>
-        </section>
-
-        <section>
+         <section>
             <div className="section-header">
                 <h2 className="section-title"><Headphones className="text-purple-500" /> Audio Learning</h2>
                  <Link href="https://focuscast.netlify.app" target="_blank" className="view-all">Powered by Focus Cast</Link>
@@ -175,42 +168,6 @@ export default function AcademyPage() {
             </Carousel>
         </section>
 
-        <section>
-            <div className="section-header">
-                <h2 className="section-title"><BookOpen className="text-amber-500" /> E-Books</h2>
-                 <span className="text-sm font-semibold text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Coming Soon</span>
-            </div>
-            <Card className="bg-slate-50 border-dashed">
-                <CardContent className="p-8 text-center text-muted-foreground">
-                    <p>Our curated library of E-books and clinical guides is launching soon. Stay tuned!</p>
-                </CardContent>
-            </Card>
-        </section>
-
-        <section>
-            <div className="section-header">
-                <h2 className="section-title"><FolderOpen className="text-green-500" /> Resources & Notes</h2>
-                <span className="text-sm font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full">Coming Soon</span>
-            </div>
-             <Card className="bg-slate-50 border-dashed">
-                <CardContent className="p-8 text-center text-muted-foreground">
-                    <p>A collection of clinical cheatsheets, patient forms, and research summaries is on its way.</p>
-                </CardContent>
-            </Card>
-        </section>
-
-         <section>
-            <div className="section-header">
-                <h2 className="section-title"><Newspaper className="text-slate-600" /> Latest Insights</h2>
-                <span className="text-sm font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">Coming Soon</span>
-            </div>
-            <Card className="bg-slate-50 border-dashed">
-                <CardContent className="p-8 text-center text-muted-foreground">
-                    <p>Our blog featuring articles on AI in optometry, clinical case studies, and career advice is coming soon.</p>
-                </CardContent>
-            </Card>
-        </section>
-        
         {pastWebinars.length > 0 && (
           <section>
               <div className="section-header">
@@ -240,6 +197,29 @@ export default function AcademyPage() {
               </Carousel>
             </section>
         )}
+        
+        <section>
+            <div className="section-header">
+                <h2 className="section-title"><Sparkles className="text-blue-500" /> What's Next?</h2>
+                <span className="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">Coming Soon</span>
+            </div>
+             <Card className="bg-slate-50 border-dashed">
+                <CardContent className="p-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center text-muted-foreground">
+                    {comingSoonFeatures.map(feature => (
+                      <div key={feature.title} className="flex flex-col items-center">
+                        <div className="h-16 w-16 bg-slate-200 text-slate-500 rounded-full flex items-center justify-center mb-3">
+                          {feature.icon}
+                        </div>
+                        <h4 className="font-semibold text-slate-600">{feature.title}</h4>
+                        <p className="text-xs mt-1">{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+            </Card>
+        </section>
+
       </main>
     </div>
   );
