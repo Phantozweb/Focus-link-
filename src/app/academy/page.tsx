@@ -117,28 +117,6 @@ export default function AcademyPage() {
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 space-y-16">
         
-        {liveWebinars.length > 0 && (
-          <section>
-            <div className="section-header">
-                <h2 className="section-title"><Radio className="text-red-500" /> Live Now</h2>
-            </div>
-             <Card className="overflow-hidden shadow-soft border-l-4 border-destructive">
-                <div className="md:flex">
-                    <div className="p-4 bg-red-50 text-center flex md:flex-col items-center justify-center min-w-[120px]">
-                        <span className="text-4xl font-bold text-destructive">24</span>
-                        <span className="font-semibold text-muted-foreground ml-2 md:ml-0">NOV</span>
-                    </div>
-                    <div className="p-6 flex-grow">
-                        <Badge variant="destructive" className="animate-pulse mb-2"><Radio className="h-3 w-3 mr-1.5" /> Live Webinar</Badge>
-                        <h3 className="text-xl font-bold font-headline text-slate-800">Advanced Scleral Lens Fitting</h3>
-                        <p className="text-muted-foreground mt-1 mb-4 text-sm">Join Dr. Sarah Miller as she demonstrates live fitting techniques on complex cornea cases.</p>
-                        <Button>Join Room</Button>
-                    </div>
-                </div>
-            </Card>
-          </section>
-        )}
-
         <section>
             <div className="section-header">
                 <h2 className="section-title"><BookOpen className="text-primary" /> Courses</h2>
@@ -236,7 +214,7 @@ export default function AcademyPage() {
         {pastWebinars.length > 0 && (
           <section>
               <div className="section-header">
-                <h2 className="section-title"><Trophy className="text-amber-500" /> On-Demand &amp; Past Events</h2>
+                <h2 className="section-title"><Trophy className="text-amber-500" /> Past Events</h2>
                 <Link href="/academy" className="view-all">View All</Link>
               </div>
                <Carousel opts={{ align: "start" }} className="w-full">
@@ -258,7 +236,7 @@ export default function AcademyPage() {
                   ))}
                  </CarouselContent>
                 <CarouselPrevious className="hidden sm:flex" />
-                <CarouselNext className="hidden smflex" />
+                <CarouselNext className="hidden sm:flex" />
               </Carousel>
             </section>
         )}
