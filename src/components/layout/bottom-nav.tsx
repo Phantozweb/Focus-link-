@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/directory', label: 'Directory', icon: Users },
+  { href: '/directory/all', label: 'Directory', icon: Users },
   { href: '/jobs', label: 'Jobs', icon: Briefcase },
   { href: '/academy', label: 'Academy', icon: BookOpen },
   { href: '/forum', label: 'Case Forum', icon: MessageSquare },
