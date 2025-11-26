@@ -1,4 +1,5 @@
 
+
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -16,6 +17,8 @@ import {
   Stethoscope,
   GraduationCap,
   Target,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -39,6 +42,7 @@ function formatCaseStudyContent(markdown: string) {
   if (!markdown) return '';
   
   let html = markdown
+    .replace(/^#### (.*?$)/gm, '<h4 class="text-md font-semibold text-slate-700 mt-3 mb-1">$1</h4>')
     .replace(/^### (.*?$)/gm, '<h3 class="text-lg font-semibold text-slate-800 mt-4 mb-2">$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
@@ -85,7 +89,7 @@ function formatCaseStudyContent(markdown: string) {
   html = html.split(/\r?\n\r?\n/).map(paragraph => {
       const trimmed = paragraph.trim();
       if (!trimmed) return '';
-      if (trimmed.startsWith('<h3') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol') || trimmed.startsWith('<div')) {
+      if (trimmed.startsWith('<h3') || trimmed.startsWith('<h4') || trimmed.startsWith('<ul') || trimmed.startsWith('<ol') || trimmed.startsWith('<div')) {
           return trimmed; // Don't wrap elements that are already block-level
       }
       return `<p>${trimmed}</p>`;
