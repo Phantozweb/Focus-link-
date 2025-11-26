@@ -120,6 +120,9 @@
     .search-input {
         @apply flex-1 border-none outline-none py-3 pl-5 pr-3 bg-transparent text-base;
     }
+    .search-input {
+        color: #1e293b; /* Ensure text is black */
+    }
     .filter-btn {
         @apply h-11 w-11 rounded-full bg-slate-100 text-brand-dark flex items-center justify-center shrink-0 hover:bg-slate-200 transition-colors;
     }
