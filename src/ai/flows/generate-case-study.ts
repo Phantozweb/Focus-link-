@@ -24,13 +24,17 @@ export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSche
 
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
-  const systemPrompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
+  const systemPrompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic, detailed, and educational clinical case study based on the provided topic.
 The entire case study should be a single, cohesive markdown document.
+
 It must include the following sections, formatted with markdown headings (###):
-- ### Patient Presentation
-- ### Examination Findings (use a markdown table for clarity)
-- ### Diagnosis
-- ### Clinical Discussion (use a blockquote for emphasis)
+- ### Patient Presentation: Include chief complaint, HPI, past ocular/medical/family history.
+- ### Examination Findings: Use a markdown table for clarity. Include VA, refraction, slit lamp, IOP, and fundus findings.
+- ### Ancillary Testing (if applicable): Describe results from tests like OCT, Visual Fields, Topography, etc.
+- ### Diagnosis: Provide a primary diagnosis and at least two differential diagnoses.
+- ### Clinical Discussion: Use a blockquote for emphasis. Discuss the diagnosis, treatment options, and management plan.
+- ### Clinical Pearls: Provide a few key takeaway points.
+- ### Question for the Community: End with an engaging question to spark discussion.
 `;
   const userMessage = `Topic: ${input.topic}`;
 
