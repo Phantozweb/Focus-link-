@@ -27,42 +27,55 @@ const GenerateCaseStudyOutputSchema = z.object({
 export type GenerateCaseStudyOutput = z.infer<typeof GenerateCaseStudyOutputSchema>;
 
 export async function generateCaseStudy(input: GenerateCaseStudyInput): Promise<GenerateCaseStudyOutput> {
-  // The user has requested to use a different endpoint.
-  // This will likely break the structured output and UI rendering.
   const prompt = `You are an expert clinical educator in optometry. Your task is to generate a realistic and educational clinical case study based on the provided topic.
 The case study should be structured for learning, with clear sections.
 Topic: ${input.topic}
-Generate the case study with the following structure:
-1.  **Title:** A clear, engaging title.
-2.  **Patient Presentation:** Describe the patient, their complaint, and relevant history in a paragraph.
-3.  **Examination Findings:** Provide key findings from the clinical examination. Format this as a markdown table with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'.
-4.  **Diagnosis:** State the definitive diagnosis.
-5.  **Clinical Discussion:** Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure.`;
+Generate the case study with the following JSON structure and keys:
+- "title": "A clear, engaging title."
+- "patientPresentation": "Describe the patient, their complaint, and relevant history in a paragraph."
+- "examinationFindings": "Provide key findings from the clinical examination. Format this as a markdown table with three columns: 'Test', 'OD (Right Eye)', and 'OS (Left Eye)'."
+- "diagnosis": "State the definitive diagnosis."
+- "clinicalDiscussion": "Elaborate on the decision-making process, differential diagnoses, proposed management plan, and educational takeaways. Use markdown for structure like bold text and bullet points."
+`;
   
   try {
-    const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+    const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?json=true`);
     if (!response.ok) {
         throw new Error(`API call failed with status: ${response.status}`);
     }
-    const fullText = await response.text();
-    // Since this endpoint returns a single block of text, we will put it all in the discussion.
-    // The UI will likely not render this correctly in separate sections anymore.
-    return {
-      title: `AI-Generated Case on: ${input.topic}`,
-      patientPresentation: "The AI response is not structured. All content is in the clinical discussion.",
-      examinationFindings: "",
-      diagnosis: "",
-      clinicalDiscussion: fullText,
-    };
+    const result = await response.json();
+    
+    // The endpoint returns data in a nested 'output' object.
+    const output = result.output;
+
+    // Validate that the output matches the expected schema.
+    const parsedOutput = GenerateCaseStudyOutputSchema.safeParse(output);
+    if (!parsedOutput.success) {
+      console.error("AI response did not match expected schema:", parsedOutput.error);
+      throw new Error("The AI returned data in an unexpected format.");
+    }
+
+    return parsedOutput.data;
+
   } catch (error) {
-    console.error("Error fetching from custom AI endpoint:", error);
+    console.error("Error fetching or parsing from custom AI endpoint:", error);
+    // Fallback for when the structured output fails.
+    if (error instanceof Error && error.message.includes("unexpected format")) {
+        return {
+            title: `AI-Generated Case on: ${input.topic}`,
+            patientPresentation: "The AI response was not structured as expected. All content is in the clinical discussion.",
+            examinationFindings: "",
+            diagnosis: "",
+            clinicalDiscussion: "The AI model did not return a valid JSON object. Please try again later or check the endpoint documentation.",
+        };
+    }
     throw new Error("Failed to generate case study from the new endpoint.");
   }
 }
 
 // The original Genkit flow is preserved below but is no longer used by the exported function.
 
-const prompt = ai.definePrompt({
+const promptTemplate = ai.definePrompt({
   name: 'generateCaseStudyPrompt',
   input: {schema: GenerateCaseStudyInputSchema},
   output: {schema: GenerateCaseStudyOutputSchema},
@@ -88,7 +101,7 @@ const generateCaseStudyFlow = ai.defineFlow(
     outputSchema: GenerateCaseStudyOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const {output} = await promptTemplate(input);
     return output!;
   }
 );
