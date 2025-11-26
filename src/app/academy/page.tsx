@@ -138,7 +138,8 @@ export default function AcademyPage() {
 
     try {
       const result = await askOptometryAI({ question });
-      setAnswer(result.answer);
+      const htmlAnswer = await marked(result.answer);
+      setAnswer(htmlAnswer);
     } catch (error) {
       console.error('AI question failed:', error);
       toast({
@@ -237,7 +238,7 @@ export default function AcademyPage() {
                             </DialogHeader>
                             <div ref={answerCardRef} className="p-6 bg-white rounded-lg">
                                 <div className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg max-h-[60vh] overflow-y-auto"
-                                    dangerouslySetInnerHTML={{ __html: `<h3>Question:</h3><p>${question}</p><h3>Answer:</h3>${marked(answer)}` }}
+                                    dangerouslySetInnerHTML={{ __html: `<h3>Question:</h3><p>${question}</p><h3>Answer:</h3>${answer}` }}
                                 />
                                 <div className="mt-4 text-xs text-slate-500 flex items-center justify-end gap-2">
                                     <Eye className="h-4 w-4" />
