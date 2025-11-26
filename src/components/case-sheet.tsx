@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRef, useCallback } from 'react';
@@ -8,6 +9,8 @@ import { DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/co
 import { useToast } from '@/hooks/use-toast';
 import { marked } from 'marked';
 import { toPng } from 'html-to-image';
+import { Badge } from './ui/badge';
+import { Card, CardContent } from './ui/card';
 
 interface CaseSheetProps {
     caseData: GenerateCaseStudyOutput;
@@ -22,7 +25,7 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
         if (caseSheetRef.current === null) {
           return;
         }
-        toPng(caseSheetRef.current, { cacheBust: true, pixelRatio: 2 })
+        toPng(caseSheetRef.current, { cacheBust: true, pixelRatio: 2.5 })
           .then((dataUrl) => {
             const link = document.createElement("a");
             link.download = `case-study-${topic.replace(/\s+/g, '-')}.png`;
@@ -40,14 +43,13 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
     }, [topic, toast]);
 
     const renderMarkdown = (text: string) => {
-        // First, replace markdown tables with HTML tables for better styling control
         const tableRegex = /(\|.*\|(?:\r?\n|\r))+/g;
         let html = text.replace(tableRegex, (match) => {
           const rows = match.trim().split(/\r?\n|\r/);
           const headers = rows[0].split('|').slice(1, -1).map(h => h.trim());
           const separator = rows[1];
           
-          if (!separator || !separator.includes('|--')) return match; // Not a valid markdown table
+          if (!separator || !separator.includes('|--')) return match;
 
           const bodyRows = rows.slice(2);
           
@@ -57,7 +59,6 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
           return `<div class="my-6 overflow-x-auto rounded-lg border shadow-sm"><table class="w-full">${tableHead}${tableBody}</table></div>`;
         });
 
-        // Then process the rest of the markdown
         const finalHtml = marked(html, { breaks: true });
         return { __html: finalHtml };
     };
@@ -73,42 +74,46 @@ export function CaseSheet({ caseData, topic }: CaseSheetProps) {
                 </DialogDescription>
             </DialogHeader>
 
-            <div className="px-6 pb-6 max-h-[60vh] overflow-y-auto">
-                <div ref={caseSheetRef} className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm">
+            <div className="px-6 pb-6 max-h-[60vh] overflow-y-auto bg-slate-50">
+                <div ref={caseSheetRef} className="p-6 bg-white rounded-lg">
                     <div className="text-center mb-6 border-b pb-4">
+                        <Badge variant="secondary" className="mb-2">Clinical Case</Badge>
                         <h2 className="text-2xl font-bold text-slate-800">{caseData.title}</h2>
                     </div>
                     
                     <div className="space-y-6">
                         <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><User /> Patient Presentation</h3>
-                            <div className="prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.patientPresentation)} />
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><User className="text-primary"/> Patient Presentation</h3>
+                            <Card className="bg-slate-50/50"><CardContent className="p-4 prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.patientPresentation)} /></Card>
                         </section>
 
                         <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Microscope /> Examination Findings</h3>
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Microscope className="text-primary"/> Examination Findings</h3>
                             <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={renderMarkdown(caseData.examinationFindings)} />
                         </section>
                         
                         <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><HelpCircle /> Diagnosis</h3>
-                            <div className="prose prose-slate max-w-none font-bold" dangerouslySetInnerHTML={renderMarkdown(caseData.diagnosis)} />
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><HelpCircle className="text-primary"/> Diagnosis</h3>
+                            <Card className="bg-blue-50 border-blue-200"><CardContent className="p-4 prose prose-slate max-w-none font-bold" dangerouslySetInnerHTML={renderMarkdown(caseData.diagnosis)} /></Card>
                         </section>
                         
                          <section>
-                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Lightbulb /> Clinical Discussion</h3>
+                            <h3 className="text-lg font-semibold flex items-center gap-2 mb-2 text-slate-700"><Lightbulb className="text-primary"/> Clinical Discussion</h3>
                             <div className="prose prose-slate max-w-none prose-p:my-2" dangerouslySetInnerHTML={renderMarkdown(caseData.clinicalDiscussion)} />
                         </section>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t text-xs text-slate-500 flex items-center justify-end gap-2">
-                        <Sparkles className="h-4 w-4 text-purple-500" />
-                        Generated by Focus.ai
+                    <div className="mt-6 pt-4 border-t text-xs text-slate-500 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                           <Sparkles className="h-4 w-4 text-purple-500" />
+                           <span>Generated by Focus.ai</span>
+                        </div>
+                        <span className="font-semibold text-primary">Focus Links</span>
                     </div>
                 </div>
             </div>
 
-             <DialogFooter className="px-6 pb-4 bg-slate-50 border-t rounded-b-lg">
+             <DialogFooter className="px-6 pb-4 bg-slate-100 border-t rounded-b-lg">
                 <Button onClick={handleDownload} variant="secondary">
                     <Download className="mr-2 h-4 w-4" />
                     Download as Image
