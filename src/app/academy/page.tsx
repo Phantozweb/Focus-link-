@@ -213,32 +213,13 @@ export default function AcademyPage() {
         <section>
             <div className="section-header">
                 <h2 className="section-title"><BookOpen className="text-amber-500" /> E-Books</h2>
-                <Link href="/academy" className="view-all">See All</Link>
+                 <span className="text-sm font-semibold text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Coming Soon</span>
             </div>
-            <Carousel opts={{ align: "start", slidesToScroll: 'auto' }} className="w-full">
-              <CarouselContent>
-                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
-                    <div className="w-[140px]">
-                      <div className="relative aspect-[3/4] rounded-lg shadow-lg group overflow-hidden">
-                          <Image src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Glaucoma Guide" layout="fill" objectFit="cover" className="rounded-lg"/>
-                      </div>
-                      <h4 className="font-semibold text-sm mt-2 truncate">Glaucoma Guide</h4>
-                      <p className="text-xs text-muted-foreground">2nd Edition</p>
-                    </div>
-                </CarouselItem>
-                 <CarouselItem className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
-                    <div className="w-[140px]">
-                      <div className="relative aspect-[3/4] rounded-lg shadow-lg group overflow-hidden">
-                          <Image src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="Pediatric Vision" layout="fill" objectFit="cover" className="rounded-lg"/>
-                      </div>
-                      <h4 className="font-semibold text-sm mt-2 truncate">Pediatric Vision</h4>
-                      <p className="text-xs text-muted-foreground">Clinical Manual</p>
-                    </div>
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex" />
-              <CarouselNext className="hidden sm:flex" />
-            </Carousel>
+            <Card className="bg-slate-50 border-dashed">
+                <CardContent className="p-8 text-center text-muted-foreground">
+                    <p>Our curated library of E-books and clinical guides is launching soon. Stay tuned!</p>
+                </CardContent>
+            </Card>
         </section>
 
         <section>
