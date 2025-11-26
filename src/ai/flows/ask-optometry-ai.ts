@@ -79,7 +79,7 @@ You are a professional reference tool for optometrists and ophthalmologists, not
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "model": "openai",
+            "model": "deepseek",
             "messages": [
                 { "role": "system", "content": systemPrompt },
                 { "role": "user", "content": userMessage }
