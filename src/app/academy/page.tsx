@@ -157,7 +157,7 @@ export default function AcademyPage() {
         <section>
             <div className="section-header">
                 <h2 className="section-title"><Sparkles className="text-purple-500" /> Ask Optometry AI</h2>
-                <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus AI</span>
+                <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Powered by Focus.ai</span>
             </div>
              <Card className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200/50">
                 {(!answer && !isLoadingAI) && (
@@ -184,7 +184,7 @@ export default function AcademyPage() {
                         />
                         <Button type="submit" className="w-full" size="lg" disabled={isLoadingAI || !question.trim()}>
                           {isLoadingAI ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Send className="mr-2 h-5 w-5" />}
-                          Ask Focus AI
+                          Ask Focus.ai
                         </Button>
                       </form>
                     )}
@@ -192,7 +192,7 @@ export default function AcademyPage() {
                     {isLoadingAI && (
                       <div className="p-4 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
-                        Focus AI is thinking...
+                        Focus.ai is thinking...
                       </div>
                     )}
 
@@ -200,7 +200,7 @@ export default function AcademyPage() {
                       <div>
                         <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800">
                           <Sparkles className="h-5 w-5 text-purple-500" />
-                          Focus AI's Answer
+                          Focus.ai's Answer
                         </h3>
                         <div 
                           className="prose prose-slate max-w-none bg-white/50 p-4 rounded-lg"

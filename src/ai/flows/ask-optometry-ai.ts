@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -31,7 +32,7 @@ const prompt = ai.definePrompt({
   name: 'askOptometryAIPrompt',
   input: {schema: AskOptometryAIInputSchema},
   output: {schema: AskOptometryAIOutputSchema},
-  prompt: `You are an expert AI assistant for optometrists and optometry students. Your name is Focus AI.
+  prompt: `You are an expert AI assistant for optometrists and optometry students. Your name is Focus.ai.
 
 You are being asked a question from a user on the Focus Links platform.
 
