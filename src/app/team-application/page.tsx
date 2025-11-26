@@ -219,19 +219,14 @@ export default function TeamApplicationPage() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/submit-team-application', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, timestamp: new Date().toISOString() }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Something went wrong. Please try again.');
-      }
-      
       const applicationId = `APP-${Date.now()}`;
       await sendDetailedApplicationWebhook(data, applicationId);
       
+      logFormSubmission(`💼 **Team Application Submitted**
+*   **Name:** ${data.name}
+*   **Role:** ${data.role}
+*   **ID:** \`${applicationId}\``);
+
       setIsSubmitted(true);
       toast({
         title: 'Application Sent!',
@@ -239,7 +234,7 @@ export default function TeamApplicationPage() {
       });
 
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+      const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
       toast({
         variant: 'destructive',
         title: 'Submission Failed',
