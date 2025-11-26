@@ -121,6 +121,55 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+const TEAM_APPLICATION_WEBHOOK_URL = 'https://discord.com/api/webhooks/1443283507702006023/cRopi1d4IJfxAIBK33sD0FcGEyfbq3zT01amkdPCB0mjmaIsAxjIkzbf_pPKYdJprvTv';
+
+async function sendDetailedApplicationWebhook(data: FormData, applicationId: string) {
+    const details = `
+**Name:**         ${data.name}
+**Email:**        ${data.email}
+**LinkedIn:**     ${data.linkedin}
+**Resume:**       ${data.resumeUrl || 'Not Provided'}
+**Applied Role:** ${data.role}
+
+---
+**Skills & Experience:**
+${data.skills}
+
+---
+**Contribution Idea:**
+${data.contribution}
+    `;
+
+    const embed = {
+        title: `📄 New Team Application Received!`,
+        description: `**Application ID:** \`${applicationId}\``,
+        color: 16776960, // Yellow color
+        fields: [
+            {
+                name: 'Applicant Details',
+                value: `\`\`\`
+${details}
+\`\`\``
+            }
+        ],
+        timestamp: new Date().toISOString(),
+        footer: {
+            text: 'Focus Links Team Applications'
+        }
+    };
+
+    try {
+        await fetch(TEAM_APPLICATION_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [embed] })
+        });
+    } catch (error) {
+        console.error("Failed to send detailed application webhook:", error);
+    }
+}
+
+
 export default function TeamApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -142,9 +191,8 @@ export default function TeamApplicationPage() {
         throw new Error('Something went wrong. Please try again.');
       }
       
-      logFormSubmission(`🤝 **New Team Application Submitted**
-*   **Name:** ${data.name}
-*   **Role:** ${data.role}`);
+      const applicationId = `APP-${Date.now()}`;
+      await sendDetailedApplicationWebhook(data, applicationId);
       
       setIsSubmitted(true);
       toast({

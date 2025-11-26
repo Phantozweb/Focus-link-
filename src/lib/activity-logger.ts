@@ -1,7 +1,7 @@
 
 'use client';
 
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/1433518247705186415/HU3nmKoZYX17z3S0bPwoEJ_QAglEvuOngD3jVrfQ4fvpUIy67BwNwp7Rgu4oRYkf9Ach';
+const WEBHOOK_URL = 'https://discord.com/api/webhooks/1443283270765641812/33KsSWnUfoBRTNgCogRCCao4VU-dSkUgSBYlGnIkIfRHnMWQUpTDEa-Szh0eUdi6InLy';
 
 const TRACKING_ID_KEY = 'focuslinks_tracking_id';
 const QUIZ_SESSION_KEY_PREFIX = 'quizSession-';
