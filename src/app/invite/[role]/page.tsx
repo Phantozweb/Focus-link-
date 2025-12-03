@@ -9,6 +9,7 @@ import { MembershipForm } from '@/components/membership-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Check, Handshake, Linkedin, Mail } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 function InviteClient() {
   const searchParams = useSearchParams();
@@ -30,24 +31,30 @@ function InviteClient() {
 
   return (
     <div className="bg-muted/40">
-        <div className="container mx-auto max-w-4xl px-4 md:px-6 lg:px-8 py-16 space-y-8">
-            <Card className="overflow-hidden">
-                <CardHeader className="p-8 bg-card flex flex-col md:flex-row items-center text-center md:text-left gap-6">
-                    <Avatar className="h-24 w-24 border-4 border-primary/20">
-                        <AvatarImage src={head.avatarUrl} alt={head.name} />
-                        <AvatarFallback>{head.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-grow">
-                        <p className="text-primary font-semibold">An invitation from your Regional Head</p>
-                        <CardTitle className="text-3xl font-headline mt-1">{head.name}</CardTitle>
-                        <CardDescription className="text-base mt-2">{info.welcomeMessage}</CardDescription>
-                    </div>
-                </CardHeader>
-                <CardContent className="p-8 grid md:grid-cols-2 gap-8 items-start">
-                    <div className="space-y-6">
-                        <div>
-                            <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Handshake className="h-5 w-5 text-primary" /> Benefits for You</h3>
-                            <ul className="mt-4 space-y-3">
+        <div className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+                {/* Left Column: Invitation Details */}
+                <div className="space-y-8">
+                    <Card className="overflow-hidden shadow-lg">
+                        <CardHeader className="p-8 bg-card flex flex-col md:flex-row items-center text-center md:text-left gap-6">
+                            <Avatar className="h-24 w-24 border-4 border-primary/20">
+                                <AvatarImage src={head.avatarUrl} alt={head.name} />
+                                <AvatarFallback>{head.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-grow">
+                                <p className="text-primary font-semibold">An invitation from your Regional Head</p>
+                                <CardTitle className="text-3xl font-headline mt-1">{head.name}</CardTitle>
+                                <CardDescription className="text-base mt-2">{info.welcomeMessage}</CardDescription>
+                            </div>
+                        </CardHeader>
+                    </Card>
+
+                    <Card className="shadow-lg">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Handshake className="h-5 w-5 text-primary" /> Benefits for You</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ul className="space-y-3">
                                 {info.regionBenefits.map((benefit, i) => (
                                     <li key={i} className="flex items-start gap-3">
                                         <Check className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
@@ -55,31 +62,33 @@ function InviteClient() {
                                     </li>
                                 ))}
                             </ul>
-                        </div>
-                         <div>
-                            <h3 className="text-xl font-bold text-slate-800">Contact</h3>
-                            <p className="mt-2 text-slate-600">{info.contactInfo}</p>
-                            <div className="flex items-center gap-2 mt-3">
-                                {head.links.email && (
-                                    <a href={`mailto:${head.links.email}`} className="flex items-center gap-1.5 text-sm text-primary hover:underline">
-                                        <Mail className="h-4 w-4" /> Email
-                                    </a>
-                                )}
-                                 {head.links.email && head.links.linkedin && <span>&middot;</span>}
-                                {head.links.linkedin && (
-                                    <a href={head.links.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
-                                        <Linkedin className="h-4 w-4" /> LinkedIn
-                                    </a>
-                                )}
+                            <Separator className="my-6" />
+                            <div>
+                                <h3 className="text-lg font-semibold text-slate-800">Contact</h3>
+                                <p className="mt-1 text-slate-600">{info.contactInfo}</p>
+                                <div className="flex items-center gap-2 mt-3">
+                                    {head.links.email && (
+                                        <a href={`mailto:${head.links.email}`} className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+                                            <Mail className="h-4 w-4" /> Email
+                                        </a>
+                                    )}
+                                    {head.links.email && head.links.linkedin && <span>&middot;</span>}
+                                    {head.links.linkedin && (
+                                        <a href={head.links.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
+                                            <Linkedin className="h-4 w-4" /> LinkedIn
+                                        </a>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
+                </div>
 
-                    <div>
-                        <MembershipForm />
-                    </div>
-                </CardContent>
-            </Card>
+                {/* Right Column: Membership Form */}
+                <div className="lg:sticky top-8">
+                    <MembershipForm />
+                </div>
+            </div>
         </div>
     </div>
   );
