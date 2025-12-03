@@ -105,6 +105,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     workExperience: [
       { title: 'Elementary Teacher', company: 'REM High School, Nairobi South B', startDate: '', endDate: '8 months', description: 'Taught at REM High School – Ngong’ for eight months.' },
       { title: 'Community Service Organizer', company: 'Self-Initiated, Koromatangi, Kisumu', startDate: '', endDate: '', description: '' },
+      { title: 'Event Organizer', company: 'Self-Initiated, Koromatangi, Kisumu', startDate: '', endDate: '', description: '' },
       { title: 'Youth Leader', company: 'Kasipul Constituency, Kodera, Kisumu', startDate: '', endDate: '', description: '' }
     ],
     education: [
@@ -141,7 +142,8 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
         }
     ],
     languages: ['English', 'Kiswahili', 'Luo'],
-    verified: false,
+    verified: true,
+    verifiedRole: "Regional Head of Kenya",
   },
   {
     id: '2',
