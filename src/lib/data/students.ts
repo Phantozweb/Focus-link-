@@ -89,6 +89,61 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     verifiedRole: 'Founder of Focus links',
   },
   {
+    id: 'silvester-ogweno',
+    name: "Silvester Ogweno Mang'ong'o",
+    type: 'Student',
+    experience: 'B.Sc. Optometry & Vision Science Student',
+    location: 'Kakamega, Kenya',
+    skills: ['Public Speaking', 'Writing', 'Problem-solving', 'Organizational Skills', 'Communication'],
+    interests: ['Pediatric Optometry', 'Community Service', 'Content Creation', 'Debating'],
+    bio: 'Dynamic professional with strong adaptability, fast learning ability, and consistent delivery of high-quality work. Recognized for problem-solving skills, reliability & positive attitude, great communication, and strong organizational ability. Demonstrates commitment to continuous improvement and works effectively independently or collaboratively.',
+    links: {
+      email: 'sildamba20@gmail.com',
+      linkedin: 'https://silvestermangongo.com.free'
+    },
+    avatarUrl: '',
+    workExperience: [
+      { title: 'Elementary Teacher', company: 'REM High School, Nairobi South B', startDate: '', endDate: '8 months', description: 'Taught at REM High School – Ngong’ for eight months.' },
+      { title: 'Community Service Organizer', company: 'Self-Initiated, Koromatangi, Kisumu', startDate: '', endDate: '', description: '' },
+      { title: 'Youth Leader', company: 'Kasipul Constituency, Kodera, Kisumu', startDate: '', endDate: '', description: '' }
+    ],
+    education: [
+      {
+        school: 'Masinde Muliro University of Science and Technology (MMUST)',
+        university: 'Masinde Muliro University of Science and Technology',
+        degree: 'Bachelor of Science in Optometry & Vision Science',
+        fieldOfStudy: 'Pediatric Optometry',
+        startYear: '2024',
+        endYear: 'Present'
+      },
+      {
+        school: 'Maranda High School',
+        university: 'Maranda High School',
+        degree: 'Kenya Certificate of Secondary Education (KCSE)',
+        fieldOfStudy: '',
+        startYear: '',
+        endYear: ''
+      },
+      {
+        school: 'Pine Lake Academy',
+        university: 'Pine Lake Academy',
+        degree: 'Kenya Certificate of Primary Education (KCPE)',
+        fieldOfStudy: '',
+        startYear: '',
+        endYear: ''
+      }
+    ],
+    achievements: [
+        {
+            event: 'Pine Lake Academy',
+            place: 'School President',
+            description: 'Successfully served as School President in 2020.'
+        }
+    ],
+    languages: ['English', 'Kiswahili', 'Luo'],
+    verified: false,
+  },
+  {
     id: '2',
     name: 'Braseetha A',
     type: 'Student',
