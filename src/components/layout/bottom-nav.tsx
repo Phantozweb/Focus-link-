@@ -16,7 +16,7 @@ const navItems = [
 export function BottomNav() {
   const pathname = usePathname();
   
-  const hiddenPaths = ['/login', '/membership', '/profile/create', '/ask-ai'];
+  const hiddenPaths = ['/login', '/membership', '/profile/create', '/ask-ai', '/invite'];
   if (hiddenPaths.some(p => pathname.startsWith(p))) {
     return null;
   }
