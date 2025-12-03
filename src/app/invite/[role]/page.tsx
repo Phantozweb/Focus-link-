@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Check, Handshake, Linkedin, Mail } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
 function InviteClient() {
   const searchParams = useSearchParams();
@@ -71,17 +72,20 @@ function InviteClient() {
                             <div>
                                 <h3 className="text-lg font-semibold text-slate-800">Contact</h3>
                                 <p className="mt-1 text-slate-600">{info.contactInfo}</p>
-                                <div className="flex items-center gap-2 mt-3">
+                                <div className="flex flex-col gap-2 mt-3">
                                     {head.links.email && (
-                                        <a href={`mailto:${head.links.email}`} className="flex items-center gap-1.5 text-sm text-primary hover:underline">
-                                            <Mail className="h-4 w-4" /> Email
-                                        </a>
+                                        <Button asChild>
+                                            <a href={`mailto:${head.links.email}`} className="w-full">
+                                                <Mail className="h-4 w-4 mr-2" /> Email {head.name.split(' ')[0]}
+                                            </a>
+                                        </Button>
                                     )}
-                                    {head.links.email && head.links.linkedin && <span>&middot;</span>}
                                     {head.links.linkedin && (
-                                        <a href={head.links.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-primary hover:underline">
-                                            <Linkedin className="h-4 w-4" /> LinkedIn
-                                        </a>
+                                        <Button asChild variant="secondary">
+                                            <a href={head.links.linkedin} target="_blank" rel="noopener noreferrer" className="w-full">
+                                                <Linkedin className="h-4 w-4 mr-2" /> Connect on LinkedIn
+                                            </a>
+                                        </Button>
                                     )}
                                 </div>
                             </div>
