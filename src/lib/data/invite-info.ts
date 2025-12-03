@@ -1,3 +1,4 @@
+
 export type RegionInviteInfo = {
     welcomeMessage: string;
     contactInfo: string;
@@ -9,9 +10,10 @@ export const inviteInfo: { [key: string]: RegionInviteInfo } = {
     welcomeMessage: "Karibu! I am excited to welcome you to the Focus Links community in Kenya. Our goal is to build a strong, collaborative network of eye care students and professionals right here. By joining, you'll connect with local peers, access tailored events, and help shape the future of eye care in our nation.",
     contactInfo: "If you have any questions, feel free to reach out to me directly. Let's grow together!",
     regionBenefits: [
-        "Connect with top professionals and students in Kenya.",
-        "Get notified about local meetups and study groups.",
-        "Find job and internship opportunities in the region."
+        "Build Your Network: Connect with leading optometrists, educators, and students across Kenya.",
+        "Local Opportunities: Get priority access to job listings, internships, and clinical workshops in your region.",
+        "Exclusive Events: Be the first to know about local study groups, webinars, and meetups tailored for the Kenyan eye care community.",
+        "Shape the Future: Play a role in building a stronger, more connected professional community in Kenya."
     ]
   },
   'default': {
