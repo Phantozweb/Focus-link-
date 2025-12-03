@@ -13,7 +13,7 @@ export const regionalHeads: RegionalHead[] = [
     avatarUrl: 'https://i.ibb.co/PZmfcWqH/IMG-20251203-110801.jpg',
     links: {
       email: 'sildamba20@gmail.com',
-      linkedin: 'https://silvestermangongo.com.free'
+      linkedin: ''
     }
   }
 ];

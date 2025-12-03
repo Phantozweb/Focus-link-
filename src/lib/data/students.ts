@@ -99,7 +99,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
     bio: 'Dynamic professional with strong adaptability, fast learning ability, and consistent delivery of high-quality work. Recognized for problem-solving skills, reliability & positive attitude, great communication, and strong organizational ability. Demonstrates commitment to continuous improvement and works effectively independently or collaboratively.',
     links: {
       email: 'sildamba20@gmail.com',
-      linkedin: 'https://silvestermangongo.com.free'
+      linkedin: ''
     },
     avatarUrl: 'https://i.ibb.co/PZmfcWqH/IMG-20251203-110801.jpg',
     workExperience: [
