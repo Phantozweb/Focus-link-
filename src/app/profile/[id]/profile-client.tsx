@@ -82,9 +82,9 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                         <h1 className="text-2xl font-bold text-[--profile-primary-dark]">{user.name}</h1>
                         <p className="text-sm font-medium text-[--profile-primary] leading-snug">{user.experience}</p>
                         {user.verifiedRole && (
-                            <div className="mt-3">
-                                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
-                                    <Award className="h-3 w-3" />
+                            <div className="mt-4">
+                                <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 text-sm font-bold px-4 py-2 rounded-full">
+                                    <Star className="h-4 w-4" />
                                     {user.verifiedRole}
                                 </span>
                             </div>
