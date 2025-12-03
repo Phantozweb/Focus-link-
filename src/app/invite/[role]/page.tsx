@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense } from 'react';
@@ -28,6 +29,10 @@ function InviteClient() {
         </div>
     );
   }
+  
+  const renderBenefit = (text: string) => {
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-800">$1</strong>');
+  };
 
   return (
     <div className="bg-muted/40">
@@ -54,11 +59,11 @@ function InviteClient() {
                             <CardTitle className="flex items-center gap-2"><Handshake className="h-5 w-5 text-primary" /> Benefits for You</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ul className="space-y-3">
+                             <ul className="space-y-3">
                                 {info.regionBenefits.map((benefit, i) => (
                                     <li key={i} className="flex items-start gap-3">
                                         <Check className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                                        <span className="text-slate-700">{benefit}</span>
+                                        <div className="text-slate-700" dangerouslySetInnerHTML={{ __html: renderBenefit(benefit) }} />
                                     </li>
                                 ))}
                             </ul>
