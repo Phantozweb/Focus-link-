@@ -10,10 +10,10 @@ export const inviteInfo: { [key: string]: RegionInviteInfo } = {
     welcomeMessage: "Karibu! I am excited to welcome you to the Focus Links community in Kenya. Our goal is to build a strong, collaborative network of eye care students and professionals right here. By joining, you'll connect with local peers, access tailored events, and help shape the future of eye care in our nation.",
     contactInfo: "If you have any questions, feel free to reach out to me directly. Let's grow together!",
     regionBenefits: [
-        "Build Your Network: Connect with leading optometrists, educators, and students across Kenya.",
-        "Local Opportunities: Get priority access to job listings, internships, and clinical workshops in your region.",
-        "Exclusive Events: Be the first to know about local study groups, webinars, and meetups tailored for the Kenyan eye care community.",
-        "Shape the Future: Play a role in building a stronger, more connected professional community in Kenya."
+        "**Build Your Professional Identity:** Create a verified profile in our global directory to showcase your skills and get discovered.",
+        "**Find Local Opportunities:** Access a job board tailored for the Kenyan eye care market, from internships to full-time clinical roles.",
+        "**Join Clinical Discussions:** Participate in our Case Forum to discuss complex cases and learn from senior practitioners.",
+        "**Connect with Your Community:** Network with peers, mentors, and institutions right here in Kenya through our dedicated directory."
     ]
   },
   'default': {
