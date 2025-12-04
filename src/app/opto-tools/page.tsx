@@ -236,7 +236,6 @@ function LarsRuleCalculator() {
         }
     };
 
-
     return (
         <Card className="border-none shadow-none">
             <CardHeader>
@@ -266,7 +265,7 @@ function LarsRuleCalculator() {
                         <canvas ref={initialCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
                     </div>
                     <div className="text-center">
-                        <Label>Rotated Axis: {rotatedAxis}°</Label>
+                        <Label>Axis After Blink: {rotatedAxis}°</Label>
                         <canvas ref={rotatedCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
                     </div>
                 </div>
@@ -698,11 +697,11 @@ export default function OptoToolsPage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Tabs defaultValue="working-lens" className="w-full">
-                        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none p-1 bg-green-100/30">
-                            <TabsTrigger value="working-lens" className="flex-1 py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Working Lens</TabsTrigger>
-                            <TabsTrigger value="transposition" className="flex-1 py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Transposition</TabsTrigger>
-                            <TabsTrigger value="sph-equivalent" className="flex-1 py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Sph. Equivalent</TabsTrigger>
+                     <Tabs defaultValue="working-lens" className="w-full">
+                        <TabsList className="w-full flex-wrap justify-start h-auto p-1 bg-green-100/30">
+                            <TabsTrigger value="working-lens" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md flex-1">Working Lens</TabsTrigger>
+                            <TabsTrigger value="transposition" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md flex-1">Transposition</TabsTrigger>
+                            <TabsTrigger value="sph-equivalent" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md flex-1">Sph. Equivalent</TabsTrigger>
                         </TabsList>
                          <div className="p-2 sm:p-6">
                             <TabsContent value="working-lens" className="mt-0"><RetinoscopyWorkingLensCalculator /></TabsContent>
@@ -717,5 +716,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-```
