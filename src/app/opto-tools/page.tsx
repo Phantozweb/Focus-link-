@@ -20,6 +20,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 // --- Vertex Distance Calculator ---
 function VertexDistanceCalculator() {
@@ -374,7 +376,6 @@ function SimpleTranspositionCalculator() {
             <Button onClick={transpose}>Transpose</Button>
             {result && (
                 <Alert>
-                    <Replace className="h-4 w-4" />
                     <AlertTitle>Results</AlertTitle>
                     <AlertDescription>
                         <p><strong>Transposed:</strong> {result.transposed}</p>
@@ -420,7 +421,6 @@ function SphericalEquivalentCalculator() {
             <Button onClick={calculateSE}>Calculate</Button>
             {result && (
                  <Alert>
-                    <Sigma className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
@@ -639,9 +639,9 @@ const tools = [
 ];
 
 const categories = [
-    { id: 'contact-lens', name: 'Contact Lens', icon: <Contact className="h-6 w-6" /> },
-    { id: 'low-vision', name: 'Low Vision', icon: <Eye className="h-6 w-6" /> },
-    { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-6 w-6" /> },
+    { id: 'contact-lens', name: 'Contact Lens', icon: <Contact className="h-5 w-5" /> },
+    { id: 'low-vision', name: 'Low Vision', icon: <Eye className="h-5 w-5" /> },
+    { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-5 w-5" /> },
 ];
 
 export default function OptoToolsPage() {
@@ -655,20 +655,27 @@ export default function OptoToolsPage() {
       </header>
 
       <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16">
-        <div className="space-y-12">
+        <Tabs defaultValue="contact-lens" className="w-full">
+          <div className="flex justify-center mb-8">
+            <TabsList className="grid w-full max-w-lg grid-cols-1 sm:grid-cols-3 h-auto sm:h-12">
+                {categories.map((category) => (
+                    <TabsTrigger key={category.id} value={category.id} className="py-3 text-base sm:text-sm flex items-center gap-2">
+                        {category.icon}
+                        {category.name}
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+          </div>
+
           {categories.map((category) => (
-            <section key={category.id}>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-card rounded-xl shadow-sm">{category.icon}</div>
-                <h2 className="text-2xl font-bold text-slate-800">{category.name}</h2>
-              </div>
+            <TabsContent key={category.id} value={category.id}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tools.filter(tool => tool.category === category.id).map(tool => (
                   <Dialog key={tool.id}>
                     <DialogTrigger asChild>
-                      <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group">
+                      <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group h-full flex flex-col">
                         <CardHeader>
-                          <CardTitle className="text-lg">{tool.title}</CardTitle>
+                          <CardTitle>{tool.title}</CardTitle>
                           <CardDescription>{tool.description}</CardDescription>
                         </CardHeader>
                       </Card>
@@ -685,9 +692,9 @@ export default function OptoToolsPage() {
                   </Dialog>
                 ))}
               </div>
-            </section>
+            </TabsContent>
           ))}
-        </div>
+        </Tabs>
       </main>
     </div>
   );
