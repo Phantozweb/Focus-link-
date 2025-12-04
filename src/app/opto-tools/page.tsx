@@ -23,7 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { allUsers } from '@/lib/data/index';
+import { allUsers } from '@/lib/data';
 
 
 // --- Vertex Distance Calculator ---
@@ -303,7 +303,19 @@ function RetinoscopyWorkingLensCalculator() {
 
     return (
         <div className="space-y-4">
-            <div className="space-y-2 max-w-xs">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">
+                    Provide your working distance (cm) from the patient's eye to the retinoscope while performing retinoscopy to calculate the compensating working lens.
+                </p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">
+                    Simply enter the working distance (cm), then click 'Calculate'.
+                </p>
+            </div>
+            <div className="space-y-2 max-w-xs pt-2">
                 <Label htmlFor="workingDistance">Working Distance (cm)</Label>
                 <Input id="workingDistance" type="number" placeholder="67" value={distance} onChange={(e) => setDistance(e.target.value)} />
             </div>
@@ -314,6 +326,11 @@ function RetinoscopyWorkingLensCalculator() {
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
             )}
+            <div className="text-sm text-slate-500 pt-4">
+                <h4 className="font-semibold text-slate-700">Formula:</h4>
+                <p className="font-mono">Compensating lens = 1 / D</p>
+                <p className="text-xs mt-1">Where D = Distance from patient's eye to retinoscope (in meters)</p>
+            </div>
         </div>
     );
 }
@@ -789,7 +806,7 @@ export default function OptoToolsPage() {
                             <Link href={`/profile/${creator.id}`}>View Profile</Link>
                         </Button>
                     </div>
-                    <div className="p-8 md:w-2/3">
+                    <div className="p-8 md:w-2/3 flex flex-col justify-center">
                         <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
                          <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
                             "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
