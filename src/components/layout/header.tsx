@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
-import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, User, BookOpen, Users, Tv, Calendar, LogIn, Home, HelpCircle, Info, Mail, Search, GraduationCap, Building, Hospital, Factory, Handshake, Stethoscope, Bell, Eye } from 'lucide-react';
+import { UserPlus, ChevronDown, Menu, Sparkles, MessageSquare, Briefcase, User, BookOpen, Users, Tv, Calendar, LogIn, Home, HelpCircle, Info, Mail, Search, GraduationCap, Building, Hospital, Factory, Handshake, Stethoscope, Bell, Eye, PencilRuler } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +35,7 @@ const communityLinks = [
     { name: 'Academy', href: '/academy', icon: <BookOpen className="h-5 w-5" />, hasLiveIndicator: true },
     { name: 'Case Forum', href: '/forum', icon: <MessageSquare className="h-5 w-5" /> },
     { name: 'Job Board', href: '/jobs', icon: <Briefcase className="h-5 w-5" /> },
+    { name: 'Opto Tools', href: '/opto-tools', icon: <PencilRuler className="h-5 w-5" /> },
 ]
 
 const aboutLinks = [
