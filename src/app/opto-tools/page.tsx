@@ -23,7 +23,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { allUsers } from '@/lib/data';
 
 
 // --- Vertex Distance Calculator ---
@@ -823,7 +822,6 @@ const AnimatedTabs = ({ onTabChange }: { onTabChange: (value: string) => void })
 
 export default function OptoToolsPage() {
   const [activeTab, setActiveTab] = useState(categories[0].id);
-  const creator = allUsers.find(user => user.id === '16');
   
   return (
     <div className="bg-brand-bg">
@@ -895,22 +893,21 @@ export default function OptoToolsPage() {
           ))}
         </Tabs>
         
-        {creator && (
-          <section className="max-w-4xl mx-auto mt-20">
+        <section className="max-w-4xl mx-auto mt-20">
               <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
               <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                   <div className="md:flex">
                       <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
                           <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
-                              <AvatarImage src={creator.avatarUrl} alt={creator.name} />
+                              <AvatarImage src="" alt="Shivashangari M" />
                               <AvatarFallback className="bg-slate-200">
                                   <UserRound className="h-12 w-12 text-slate-400" />
                               </AvatarFallback>
                           </Avatar>
-                          <h3 className="text-xl font-bold text-slate-800 mt-4">{creator.name}</h3>
-                          <p className="text-sm text-primary font-semibold">{creator.experience}</p>
+                          <h3 className="text-xl font-bold text-slate-800 mt-4">Shivashangari M</h3>
+                          <p className="text-sm text-primary font-semibold">Masters in Optometry | Contact Lens Specialist</p>
                           <Button asChild variant="secondary" size="sm" className="mt-4">
-                              <Link href={`/profile/${creator.id}`}>View Profile</Link>
+                              <Link href="/profile/16">View Profile</Link>
                           </Button>
                       </div>
                       <div className="p-8 md:w-2/3 flex flex-col justify-center">
@@ -922,8 +919,9 @@ export default function OptoToolsPage() {
                   </div>
               </Card>
           </section>
-        )}
       </main>
     </div>
   );
 }
+
+    
