@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { UserProfile } from '@/types';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, User, Building, Mail, UserPlus, MapPin, Star } from 'lucide-react';
+import { CheckCircle2, User, Building, Mail, UserPlus, MapPin, Star, UserRound } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
@@ -22,7 +22,15 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
     return "portrait person";
   }
 
-  const FallbackIcon = isOrg ? Building : User;
+  const getFallbackIcon = () => {
+    if (user.id === '16') { // Specific check for Shivashangari M
+      return <UserRound className="h-10 w-10 text-slate-400" />;
+    }
+    if (isOrg) {
+      return <Building className="h-10 w-10 text-slate-400" />;
+    }
+    return <User className="h-10 w-10 text-slate-400" />;
+  };
 
   return (
     <div className={cn("profile-card h-full", isFeatured && "featured")}>
@@ -31,7 +39,7 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
         <Avatar className="w-20 h-20 border-2 border-white shadow-md">
             <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={getAvatarHint()} />
             <AvatarFallback className="bg-slate-200">
-                <FallbackIcon className="h-10 w-10 text-slate-400" />
+                {getFallbackIcon()}
             </AvatarFallback>
         </Avatar>
         {user.verified && (

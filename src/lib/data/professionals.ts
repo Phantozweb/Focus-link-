@@ -296,7 +296,7 @@ export const professionals: UserProfile[] = [
     id: '12',
     name: 'Sajjad Iqbal',
     type: 'Optometrist',
-    experience: 'Clinical Optometrist with 18+ years of experience across three countries.',
+    experience: 'Clinical optometrist with 18+ years of experience across three countries.',
     location: 'Kuwait',
     skills: [
       'All types of Refraction',
@@ -596,7 +596,7 @@ export const professionals: UserProfile[] = [
       email: 'shivashangarimoptom@gmail.com',
       linkedin: 'https://www.linkedin.com/in/shivashangari-m-optom'
     },
-    avatarUrl: 'https://i.ibb.co/v69jrMh/b-Change-into-solid-ba.png',
+    avatarUrl: '',
     workExperience: [
       {
         title: 'Head of Tech Team',
