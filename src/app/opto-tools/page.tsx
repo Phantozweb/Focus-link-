@@ -12,7 +12,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription
+  DialogDescription,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -762,3 +763,4 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
