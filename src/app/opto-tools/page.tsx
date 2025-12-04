@@ -42,17 +42,21 @@ function VertexDistanceCalculator() {
             if (DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
                 effectiveCylinder = effectiveTotal - effectiveSphere;
+            } else {
+                effectiveCylinder = 0;
             }
         } else { // clToSpecs
             effectiveSphere = DL_sphere / (1 + d * DL_sphere);
             if (DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 + d * (DL_sphere + DL_cylinder));
                 effectiveCylinder = effectiveTotal - effectiveSphere;
+            } else {
+                 effectiveCylinder = 0;
             }
         }
         
         let resultText = `Sphere: ${effectiveSphere.toFixed(2)} D`;
-        if (effectiveCylinder !== undefined && !isNaN(effectiveCylinder)) {
+        if (effectiveCylinder !== undefined && !isNaN(effectiveCylinder) && effectiveCylinder !== 0) {
              resultText += `, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`;
         }
         setResult(resultText);
@@ -222,15 +226,16 @@ function LarsRuleCalculator() {
         setCorrectedAxisValue(correctedAxis);
         setResult(`Suggested Trial Axis: ${correctedAxis.toFixed(0)}°`);
     };
-
+    
     const handleAxisChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
         const numValue = parseInt(value, 10);
         if (!isNaN(numValue) && numValue >= 1 && numValue <= 180) {
             setter(numValue);
         } else if (value === '') {
-            setter(0);
+            setter(0); // or some other default
         }
     };
+
 
     return (
         <Card className="border-none shadow-none">
@@ -335,7 +340,7 @@ function SimpleTranspositionCalculator() {
         const cyl = parseFloat(cylinder);
         const ax = parseInt(axis, 10);
 
-        if (isNaN(sph) || isNaN(cyl) || isNaN(ax)) {
+        if (isNaN(sph) || isNaN(cyl) || isNaN(ax) || ax < 1 || ax > 180) {
             setResult(null);
             return;
         }
@@ -346,24 +351,23 @@ function SimpleTranspositionCalculator() {
 
         const transposed = `${newSphere > 0 ? '+' : ''}${newSphere.toFixed(2)} / ${newCylinder > 0 ? '+' : ''}${newCylinder.toFixed(2)} x ${newAxis}`;
         
-        let astigmatismType = '';
+        const power1 = sph;
+        const power2 = sph + cyl;
+
+        let astigmatismType = 'No Astigmatism';
+
         if (cyl !== 0) {
-            const power1 = sph;
-            const power2 = sph + cyl;
-
-            if (power1 === 0 || power2 === 0) {
-                 astigmatismType = 'Simple Astigmatism';
-            } else if (power1 > 0 && power2 > 0) {
-                 astigmatismType = 'Compound Hyperopic Astigmatism';
-            } else if (power1 < 0 && power2 < 0) {
-                 astigmatismType = 'Compound Myopic Astigmatism';
-            } else {
-                 astigmatismType = 'Mixed Astigmatism';
+            if ((power1 > 0 && power2 > 0) || (power1 === 0 && power2 > 0) || (power1 > 0 && power2 === 0)) {
+                astigmatismType = 'Compound Hyperopic Astigmatism';
+                if(power1 === 0 || power2 === 0) astigmatismType = 'Simple Hyperopic Astigmatism';
+            } else if ((power1 < 0 && power2 < 0) || (power1 === 0 && power2 < 0) || (power1 < 0 && power2 === 0)) {
+                astigmatismType = 'Compound Myopic Astigmatism';
+                if(power1 === 0 || power2 === 0) astigmatismType = 'Simple Myopic Astigmatism';
+            } else if ((power1 > 0 && power2 < 0) || (power1 < 0 && power2 > 0)) {
+                astigmatismType = 'Mixed Astigmatism';
             }
-        } else {
-            astigmatismType = 'No Astigmatism';
         }
-
+        
         setResult({ transposed, astigmatismType });
     };
 
@@ -420,7 +424,7 @@ function SphericalEquivalentCalculator() {
         }
 
         const se = sph + (cyl / 2 || 0);
-        setResult(`Spherical Equivalent: ${se.toFixed(2)} D`);
+        setResult(`Spherical Equivalent: ${se > 0 ? '+' : ''}${se.toFixed(2)} D`);
     };
 
     return (
@@ -466,7 +470,7 @@ function MagnificationDistanceCalculator() {
     const calculateMagnification = () => {
         const present = presentAcuity.split('/').map(Number);
         const required = requiredAcuity.split('/').map(Number);
-        if (present.length !== 2 || required.length !== 2 || present[1] === 0 || required[1] === 0) {
+        if (present.length !== 2 || required.length !== 2 || isNaN(present[0]) || isNaN(present[1]) || isNaN(required[0]) || isNaN(required[1]) || present[1] === 0 || required[1] === 0 || present[0] === 0) {
             setResult('Invalid acuity values.');
             return;
         };
@@ -577,7 +581,7 @@ function KestenbaumRuleCalculator() {
 
     const calculateAdd = () => {
         const values = bcva.split('/').map(Number);
-        if (values.length !== 2 || values[0] === 0) {
+        if (values.length !== 2 || isNaN(values[0]) || isNaN(values[1]) || values[0] === 0) {
             setResult('Invalid BCVA value.');
             return;
         };
@@ -624,7 +628,7 @@ export default function OptoToolsPage() {
         </p>
       </header>
 
-      <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
+      <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card className="shadow-lg overflow-hidden">
                 <CardHeader className="bg-slate-50 border-b">
@@ -634,11 +638,11 @@ export default function OptoToolsPage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                   <Tabs defaultValue="vertex" className="w-full">
-                        <TabsList className="grid w-full grid-cols-3 h-auto rounded-none p-1 bg-primary/10">
-                            <TabsTrigger value="vertex" className="py-2 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm">Vertex</TabsTrigger>
-                            <TabsTrigger value="base-curve" className="py-2 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm">Base Curve</TabsTrigger>
-                            <TabsTrigger value="lars" className="py-2 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm">LARS</TabsTrigger>
+                    <Tabs defaultValue="vertex" className="w-full">
+                        <TabsList className="grid w-full grid-cols-3 h-auto rounded-none p-1 bg-primary/5">
+                            <TabsTrigger value="vertex" className="flex-1 py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm rounded-md">Vertex</TabsTrigger>
+                            <TabsTrigger value="base-curve" className="flex-1 py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm rounded-md">Base Curve</TabsTrigger>
+                            <TabsTrigger value="lars" className="flex-1 py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm rounded-md">LARS Rule</TabsTrigger>
                         </TabsList>
                         <div className="p-2 sm:p-6">
                             <TabsContent value="vertex" className="mt-0">
@@ -664,10 +668,10 @@ export default function OptoToolsPage() {
                 </CardHeader>
                 <CardContent className="p-0">
                     <Tabs defaultValue="magnification-distance" className="w-full">
-                        <TabsList className="grid w-full grid-cols-3 h-auto rounded-none p-1 bg-purple-100/50">
-                            <TabsTrigger value="magnification-distance" className="py-2 data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm">Magnification (Distance)</TabsTrigger>
-                            <TabsTrigger value="magnification-near" className="py-2 data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm">Magnification (Near)</TabsTrigger>
-                            <TabsTrigger value="kestenbaum" className="py-2 data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:shadow-sm">Kestenbaum's</TabsTrigger>
+                         <TabsList className="grid w-full grid-cols-3 h-auto rounded-none p-1 bg-purple-100/30">
+                            <TabsTrigger value="magnification-distance" className="flex-1 py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800 data-[state=active]:shadow-sm rounded-md text-center">Magnification (Distance)</TabsTrigger>
+                            <TabsTrigger value="magnification-near" className="flex-1 py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800 data-[state=active]:shadow-sm rounded-md text-center">Magnification (Near)</TabsTrigger>
+                            <TabsTrigger value="kestenbaum" className="flex-1 py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800 data-[state=active]:shadow-sm rounded-md text-center">Kestenbaum's</TabsTrigger>
                         </TabsList>
                          <div className="p-2 sm:p-6">
                             <TabsContent value="magnification-distance" className="mt-0">
@@ -693,10 +697,10 @@ export default function OptoToolsPage() {
                 </CardHeader>
                 <CardContent className="p-0">
                     <Tabs defaultValue="working-lens" className="w-full">
-                        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none p-1 bg-green-100/50">
-                            <TabsTrigger value="working-lens" className="py-2 data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow-sm">Working Lens</TabsTrigger>
-                            <TabsTrigger value="transposition" className="py-2 data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow-sm">Transposition</TabsTrigger>
-                            <TabsTrigger value="sph-equivalent" className="py-2 data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:shadow-sm">Sph. Equivalent</TabsTrigger>
+                        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none p-1 bg-green-100/30">
+                            <TabsTrigger value="working-lens" className="flex-1 py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Working Lens</TabsTrigger>
+                            <TabsTrigger value="transposition" className="flex-1 py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Transposition</TabsTrigger>
+                            <TabsTrigger value="sph-equivalent" className="flex-1 py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Sph. Equivalent</TabsTrigger>
                         </TabsList>
                          <div className="p-2 sm:p-6">
                             <TabsContent value="working-lens" className="mt-0"><RetinoscopyWorkingLensCalculator /></TabsContent>
@@ -711,5 +715,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-```
