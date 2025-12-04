@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calculator, Orbit, RotateCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
 
 // --- Vertex Distance Calculator ---
 function VertexDistanceCalculator() {
@@ -263,11 +264,13 @@ export default function OptoToolsPage() {
       <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
         <div className="max-w-4xl mx-auto">
             <Tabs defaultValue="vertex" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="vertex">Vertex Distance</TabsTrigger>
-                    <TabsTrigger value="base-curve">Base Curve</TabsTrigger>
-                    <TabsTrigger value="lars">LARS Rule</TabsTrigger>
-                </TabsList>
+                <div className="flex justify-center mb-6">
+                    <TabsList className="h-auto p-1.5 bg-blue-100/60 rounded-full">
+                        <TabsTrigger value="vertex" className="px-6 py-2 text-sm">Vertex Distance</TabsTrigger>
+                        <TabsTrigger value="base-curve" className="px-6 py-2 text-sm">Base Curve</TabsTrigger>
+                        <TabsTrigger value="lars" className="px-6 py-2 text-sm">LARS Rule</TabsTrigger>
+                    </TabsList>
+                </div>
                 <TabsContent value="vertex" className="mt-6">
                     <VertexDistanceCalculator />
                 </TabsContent>
