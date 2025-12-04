@@ -12,15 +12,15 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogDescription
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Replace, Sigma, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 
 // --- Vertex Distance Calculator ---
@@ -240,14 +240,14 @@ function LarsRuleCalculator() {
                     <Label htmlFor="initialAxis">Initial Axis</Label>
                     <div className="flex items-center gap-2">
                         <Slider id="initialAxis" min={0} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
-                        <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
+                        <Input type="number" value={initialAxis === 180 ? 0 : initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
                 <div className="space-y-4">
                     <Label htmlFor="rotatedAxis">Axis After Blink</Label>
                     <div className="flex items-center gap-2">
                         <Slider id="rotatedAxis" min={0} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
-                        <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
+                        <Input type="number" value={rotatedAxis === 180 ? 0 : rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
             </div>
@@ -739,6 +739,25 @@ export default function OptoToolsPage() {
             </TabsContent>
           ))}
         </Tabs>
+        <section className="max-w-3xl mx-auto mt-16">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="credits">
+              <AccordionTrigger className="text-xl font-bold text-slate-700">Credits & Acknowledgements</AccordionTrigger>
+              <AccordionContent>
+                <div className="prose prose-slate max-w-none pt-2">
+                    <h4>About the Creator</h4>
+                    <p>
+                        These calculation tools were created and conceptualized by <strong>Shivashangari M.</strong>, a passionate professional with a Master’s degree in Optometry. Her goal is to enhance efficiency and accuracy in optometry practices through user-friendly digital solutions.
+                    </p>
+                    <h4>Acknowledgements</h4>
+                    <p>
+                        We extend our sincere thanks to <strong>Mr. Ramprasat Kanagaraj</strong>, Dean of Optometry Education, and <strong>Ms. Preetha Ramprasat</strong>, Associate Professor at VIOR, for their invaluable guidance and support in the development of these tools.
+                    </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </section>
       </main>
     </div>
   );
