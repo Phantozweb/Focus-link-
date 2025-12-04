@@ -15,5 +15,16 @@ export const regionalHeads: RegionalHead[] = [
       email: 'sildamba20@gmail.com',
       linkedin: ''
     }
+  },
+  {
+    id: '3',
+    name: 'Anshi Jha',
+    region: 'India',
+    experience: 'Regional Head of India | B.Optom Student',
+    avatarUrl: 'https://i.ibb.co/twWf1ngC/IMG-20251025-172851.jpg',
+    links: {
+      email: '12anshijha@gmail.com',
+      linkedin: 'https://linkedin.com/in/anshi-jha-6a98b0310'
+    }
   }
 ];

@@ -272,7 +272,7 @@ My goal is to build a career that combines clinical leadership with education an
     ],
     languages: ['English (Full Professional)', 'Hindi (Native or Bilingual)'],
     verified: true,
-    verifiedRole: 'Region Head of Students Lead in India',
+    verifiedRole: 'Regional Head of India',
   },
   {
     id: '7',
