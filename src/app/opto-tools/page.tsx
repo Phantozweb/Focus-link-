@@ -577,7 +577,6 @@ const tools = [
     id: 'vertex',
     title: 'Vertex Distance',
     description: 'Calculate effective power at a different vertex distance.',
-    icon: <Replace className="h-6 w-6 text-primary" />,
     component: <VertexDistanceCalculator />,
     category: 'contact-lens'
   },
@@ -585,7 +584,6 @@ const tools = [
     id: 'base-curve',
     title: 'Keratometry to Base Curve',
     description: 'Convert keratometry (D) to a base curve (mm).',
-    icon: <Orbit className="h-6 w-6 text-primary" />,
     component: <BaseCurveCalculator />,
     category: 'contact-lens'
   },
@@ -593,7 +591,6 @@ const tools = [
     id: 'lars',
     title: 'LARS Rule',
     description: 'Adjust axis for a rotated toric contact lens.',
-    icon: <RotateCw className="h-6 w-6 text-primary" />,
     component: <LarsRuleCalculator />,
     category: 'contact-lens'
   },
@@ -601,7 +598,6 @@ const tools = [
     id: 'mag-distance',
     title: 'Magnification (Distance)',
     description: 'Calculate required distance magnification.',
-    icon: <ZoomIn className="h-6 w-6 text-purple-600" />,
     component: <MagnificationDistanceCalculator />,
     category: 'low-vision'
   },
@@ -609,7 +605,6 @@ const tools = [
     id: 'mag-near',
     title: 'Magnification (Near)',
     description: 'Calculate required near magnification from N-notation.',
-    icon: <ZoomIn className="h-6 w-6 text-purple-600" />,
     component: <MagnificationNearCalculator />,
     category: 'low-vision'
   },
@@ -617,7 +612,6 @@ const tools = [
     id: 'kestenbaum',
     title: 'Kestenbaum\'s Rule',
     description: 'Estimate the required near add for low vision patients.',
-    icon: <ZoomIn className="h-6 w-6 text-purple-600" />,
     component: <KestenbaumRuleCalculator />,
     category: 'low-vision'
   },
@@ -625,7 +619,6 @@ const tools = [
     id: 'working-lens',
     title: 'Retinoscopy Working Lens',
     description: 'Calculate the required compensating lens power.',
-    icon: <Ruler className="h-6 w-6 text-green-600" />,
     component: <RetinoscopyWorkingLensCalculator />,
     category: 'refraction'
   },
@@ -633,7 +626,6 @@ const tools = [
     id: 'transposition',
     title: 'Simple Transposition',
     description: 'Transpose a prescription and determine astigmatism type.',
-    icon: <Replace className="h-6 w-6 text-green-600" />,
     component: <SimpleTranspositionCalculator />,
     category: 'refraction'
   },
@@ -641,7 +633,6 @@ const tools = [
     id: 'sph-equivalent',
     title: 'Spherical Equivalent',
     description: 'Calculate the spherical equivalent of a prescription.',
-    icon: <Sigma className="h-6 w-6 text-green-600" />,
     component: <SphericalEquivalentCalculator />,
     category: 'refraction'
   }
@@ -677,13 +668,8 @@ export default function OptoToolsPage() {
                     <DialogTrigger asChild>
                       <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group">
                         <CardHeader>
-                          <div className="flex items-start justify-between gap-4">
-                            <CardTitle className="text-lg">{tool.title}</CardTitle>
-                            <div className="p-3 bg-muted rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                              {tool.icon}
-                            </div>
-                          </div>
-                           <CardDescription>{tool.description}</CardDescription>
+                          <CardTitle className="text-lg">{tool.title}</CardTitle>
+                          <CardDescription>{tool.description}</CardDescription>
                         </CardHeader>
                       </Card>
                     </DialogTrigger>
