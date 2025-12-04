@@ -820,5 +820,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-    
