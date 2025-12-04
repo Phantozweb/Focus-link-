@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -607,7 +606,7 @@ export default function OptoToolsPage() {
       </header>
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
-        <div className="max-w-5xl mx-auto space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card className="shadow-lg overflow-hidden">
                 <CardHeader className="bg-slate-50 border-b">
                     <CardTitle className="flex items-center gap-3 text-2xl">
@@ -617,13 +616,11 @@ export default function OptoToolsPage() {
                 </CardHeader>
                 <CardContent className="p-0">
                    <Tabs defaultValue="vertex" className="w-full">
-                        <div className="border-b">
-                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
-                                <TabsTrigger value="vertex" className="py-3 rounded-none">Vertex Distance</TabsTrigger>
-                                <TabsTrigger value="base-curve" className="py-3 rounded-none">Base Curve</TabsTrigger>
-                                <TabsTrigger value="lars" className="py-3 rounded-none">LARS Rule</TabsTrigger>
-                            </TabsList>
-                        </div>
+                        <TabsList className="grid w-full grid-cols-3 h-auto rounded-none">
+                            <TabsTrigger value="vertex" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-primary/10 rounded-none">Vertex Distance</TabsTrigger>
+                            <TabsTrigger value="base-curve" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-primary/10 rounded-none">Base Curve</TabsTrigger>
+                            <TabsTrigger value="lars" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-primary/10 rounded-none">LARS Rule</TabsTrigger>
+                        </TabsList>
                         <div className="p-2 sm:p-6">
                             <TabsContent value="vertex" className="mt-0">
                                 <VertexDistanceCalculator />
@@ -648,13 +645,11 @@ export default function OptoToolsPage() {
                 </CardHeader>
                 <CardContent className="p-0">
                     <Tabs defaultValue="magnification-distance" className="w-full">
-                         <div className="border-b">
-                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
-                                <TabsTrigger value="magnification-distance" className="py-3 rounded-none">Magnification (Distance)</TabsTrigger>
-                                <TabsTrigger value="magnification-near" className="py-3 rounded-none">Magnification (Near)</TabsTrigger>
-                                <TabsTrigger value="kestenbaum" className="py-3 rounded-none">Kestenbaum's Rule</TabsTrigger>
-                            </TabsList>
-                        </div>
+                        <TabsList className="grid w-full grid-cols-3 h-auto rounded-none">
+                            <TabsTrigger value="magnification-distance" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-purple-500 data-[state=active]:bg-purple-500/10 rounded-none">Magnification (Distance)</TabsTrigger>
+                            <TabsTrigger value="magnification-near" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-purple-500 data-[state=active]:bg-purple-500/10 rounded-none">Magnification (Near)</TabsTrigger>
+                            <TabsTrigger value="kestenbaum" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-purple-500 data-[state=active]:bg-purple-500/10 rounded-none">Kestenbaum's Rule</TabsTrigger>
+                        </TabsList>
                          <div className="p-2 sm:p-6">
                             <TabsContent value="magnification-distance" className="mt-0">
                                 <MagnificationDistanceCalculator />
@@ -670,7 +665,7 @@ export default function OptoToolsPage() {
                 </CardContent>
             </Card>
             
-            <Card className="shadow-lg overflow-hidden">
+            <Card className="shadow-lg overflow-hidden lg:col-span-2">
                 <CardHeader className="bg-slate-50 border-b">
                     <CardTitle className="flex items-center gap-3 text-2xl">
                         <Ruler className="h-6 w-6 text-green-600" />
@@ -679,13 +674,11 @@ export default function OptoToolsPage() {
                 </CardHeader>
                 <CardContent className="p-0">
                     <Tabs defaultValue="working-lens" className="w-full">
-                         <div className="border-b">
-                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
-                                <TabsTrigger value="working-lens" className="py-3 rounded-none">Working Lens</TabsTrigger>
-                                <TabsTrigger value="transposition" className="py-3 rounded-none">Transposition</TabsTrigger>
-                                <TabsTrigger value="sph-equivalent" className="py-3 rounded-none">Sph. Equivalent</TabsTrigger>
-                            </TabsList>
-                        </div>
+                        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                            <TabsTrigger value="working-lens" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:bg-green-500/10 rounded-none">Working Lens</TabsTrigger>
+                            <TabsTrigger value="transposition" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:bg-green-500/10 rounded-none">Transposition</TabsTrigger>
+                            <TabsTrigger value="sph-equivalent" className="py-3 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:bg-green-500/10 rounded-none">Sph. Equivalent</TabsTrigger>
+                        </TabsList>
                          <div className="p-2 sm:p-6">
                             <TabsContent value="working-lens" className="mt-0"><RetinoscopyWorkingLensCalculator /></TabsContent>
                             <TabsContent value="transposition" className="mt-0"><SimpleTranspositionCalculator /></TabsContent>
@@ -700,4 +693,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
