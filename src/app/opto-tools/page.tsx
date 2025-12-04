@@ -263,14 +263,14 @@ export default function OptoToolsPage() {
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
         <div className="max-w-5xl mx-auto">
-            <Tabs defaultValue="contact-lens" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 mb-6">
-                    <TabsTrigger value="contact-lens" className="py-3">
-                      <Contact className="h-5 w-5 mr-2" />
-                      Contact Lens
-                    </TabsTrigger>
-                </TabsList>
-                <TabsContent value="contact-lens">
+            <Card className="shadow-lg">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                        <Contact className="h-6 w-6 text-primary" />
+                        Contact Lens Calculators
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
                     <Tabs defaultValue="vertex" className="w-full">
                         <div className="flex justify-center mb-6">
                             <TabsList className="h-auto p-1.5 bg-blue-100/60 rounded-full">
@@ -289,8 +289,8 @@ export default function OptoToolsPage() {
                             <LarsRuleCalculator />
                         </TabsContent>
                     </Tabs>
-                </TabsContent>
-            </Tabs>
+                </CardContent>
+            </Card>
         </div>
       </main>
     </div>
