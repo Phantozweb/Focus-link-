@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -1383,6 +1383,139 @@ function AmplitudeOfAccommodationCalculator() {
     );
 }
 
+function HoffstettersAmplitudeCalculator() {
+    const [age, setAge] = useState('');
+    const [result, setResult] = useState<{ min: string, avg: string, max: string } | null>(null);
+
+    const calculate = () => {
+        const ageValue = parseInt(age, 10);
+        if (isNaN(ageValue) || ageValue <= 0) {
+            setResult(null);
+            return;
+        }
+
+        const min = (15 - (0.25 * ageValue)).toFixed(2);
+        const avg = (18.5 - (0.30 * ageValue)).toFixed(2);
+        const max = (25 - (0.40 * ageValue)).toFixed(2);
+
+        setResult({ min, avg, max });
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Provide the age to calculate the Amplitude of accommodation and Near point of accommodation.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Enter the age and click 'Calculate'.</p>
+            </div>
+            <div className="space-y-2 max-w-xs">
+                <Label htmlFor="age-ha">Age</Label>
+                <Input id="age-ha" type="number" placeholder="e.g., 45" value={age} onChange={e => setAge(e.target.value)} />
+            </div>
+            <Button onClick={calculate}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <AlertTitle>Calculated Amplitude of Accommodation</AlertTitle>
+                    <AlertDescription>
+                        <ul className="list-disc pl-5 mt-2 space-y-1">
+                            <li><strong>Minimum:</strong> {result.min} D</li>
+                            <li><strong>Average:</strong> {result.avg} D</li>
+                            <li><strong>Maximum:</strong> {result.max} D</li>
+                        </ul>
+                    </AlertDescription>
+                </Alert>
+            )}
+             <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">Hoffstetter's Formula:</h4>
+                <ul className='list-none pl-2 space-y-1 font-mono'>
+                    <li>Minimum: 15 - (0.25 x Age)</li>
+                    <li>Average: 18.5 - (0.30 x Age)</li>
+                    <li>Maximum: 25 - (0.40 x Age)</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
+function PresbyopiaAdditionCalculator() {
+    const [readingDist, setReadingDist] = useState('');
+    const [npa, setNpa] = useState('');
+    const [result, setResult] = useState<{ half: string, twoThirds: string } | null>(null);
+
+    const calculate = () => {
+        const rdCm = parseFloat(readingDist);
+        const npaCm = parseFloat(npa);
+
+        if (isNaN(rdCm) || rdCm <= 0 || isNaN(npaCm) || npaCm <= 0) {
+            setResult(null);
+            return;
+        }
+
+        const workingDistDiopters = 100 / rdCm;
+        const amplitude = 100 / npaCm;
+
+        const addHalf = workingDistDiopters - (amplitude / 2);
+        const addTwoThirds = workingDistDiopters - (amplitude * (2/3));
+        
+        setResult({
+            half: `+${addHalf > 0 ? addHalf.toFixed(2) : '0.00'} D`,
+            twoThirds: `+${addTwoThirds > 0 ? addTwoThirds.toFixed(2) : '0.00'} D`,
+        });
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Provide the Reading Distance and Near Point of Accommodation to calculate the Near ADD.</p>
+            </div>
+             <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Enter the Reading Distance and Near Point of Accommodation, then click 'Calculate'.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="reading-dist">Reading Distance (cm)</Label>
+                    <Input id="reading-dist" type="number" placeholder="e.g., 40" value={readingDist} onChange={e => setReadingDist(e.target.value)} />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="npa-pres">Near Point of Accommodation (cm)</Label>
+                    <Input id="npa-pres" type="number" placeholder="e.g., 50" value={npa} onChange={e => setNpa(e.target.value)} />
+                </div>
+            </div>
+            <Button onClick={calculate}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <AlertTitle>Calculated Near ADD</AlertTitle>
+                    <AlertDescription className="space-y-2 mt-2">
+                        <div>
+                            <p className="font-semibold">If 1/2 Amplitude is reserved:</p>
+                            <p className="font-mono text-lg">{result.half}</p>
+                            <p className="text-xs text-muted-foreground">Try Nearest Power as you required.</p>
+                        </div>
+                         <div>
+                            <p className="font-semibold">If 2/3 Amplitude is reserved:</p>
+                            <p className="font-mono text-lg">{result.twoThirds}</p>
+                             <p className="text-xs text-muted-foreground">Try Nearest Power as you required.</p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
+            <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">How to calculate?</h4>
+                <ul className="list-disc pl-5 font-mono text-xs">
+                   <li>Near Add = Working Distance (D) - 1/2 Amplitude of Accommodation(D).</li>
+                   <li>Near Add = Working Distance (D) - 2/3 Amplitude of Accommodation(D).</li>
+                </ul>
+                <p className="text-xs text-muted-foreground pt-2"><strong>Tip:</strong> If there's a Distance correction, simply add the Near ADD with the Sphere power to get the Near Prescription.</p>
+            </div>
+        </div>
+    );
+}
+
 
 const tools = [
   {
@@ -1474,6 +1607,20 @@ const tools = [
     title: 'Amplitude of Accommodation',
     description: 'Calculate amplitude from NPA or vice-versa.',
     component: <AmplitudeOfAccommodationCalculator />,
+    category: 'refraction',
+  },
+  {
+    id: 'hoffstetter-amplitude',
+    title: 'Hoffstetter\'s Amplitude',
+    description: 'Calculate expected amplitude of accommodation based on age.',
+    component: <HoffstettersAmplitudeCalculator />,
+    category: 'refraction',
+  },
+   {
+    id: 'presbyopia-addition',
+    title: 'Presbyopia Addition',
+    description: 'Calculate near add based on working distance and NPA.',
+    component: <PresbyopiaAdditionCalculator />,
     category: 'refraction',
   },
   {
@@ -1673,3 +1820,4 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
