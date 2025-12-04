@@ -61,7 +61,7 @@ function VertexDistanceCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Vertex Distance Effective Power</CardTitle>
                 <CardDescription>Calculate the effective power of a prescription at a different vertex distance.</CardDescription>
@@ -127,7 +127,7 @@ function BaseCurveCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Keratometry to Base Curve</CardTitle>
                 <CardDescription>Convert the average keratometry reading (in Diopters) to a base curve (in mm).</CardDescription>
@@ -224,7 +224,7 @@ function LarsRuleCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>LARS Rule Calculator</CardTitle>
                 <CardDescription>Calculate the compensatory axis adjustment for a rotated toric contact lens.</CardDescription>
@@ -284,7 +284,7 @@ function RetinoscopyWorkingLensCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Retinoscopy Working Lens</CardTitle>
                 <CardDescription>Calculate the required compensating lens for your retinoscopy working distance.</CardDescription>
@@ -349,7 +349,7 @@ function SimpleTranspositionCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Simple Transposition</CardTitle>
                 <CardDescription>Transpose a prescription and determine the type of astigmatism.</CardDescription>
@@ -405,7 +405,7 @@ function SphericalEquivalentCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Spherical Equivalent</CardTitle>
                 <CardDescription>Calculate the spherical equivalent of a prescription.</CardDescription>
@@ -457,7 +457,7 @@ function MagnificationDistanceCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Magnification Calculator (Distance)</CardTitle>
                 <CardDescription>Calculate the required magnification to achieve a target visual acuity.</CardDescription>
@@ -513,7 +513,7 @@ function MagnificationNearCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Magnification Calculator (Near)</CardTitle>
                 <CardDescription>Calculate required near magnification based on N-notation.</CardDescription>
@@ -567,7 +567,7 @@ function KestenbaumRuleCalculator() {
     };
 
     return (
-        <Card>
+        <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Kestenbaum's Rule</CardTitle>
                 <CardDescription>Estimate the required near add based on distance Best Corrected Visual Acuity (BCVA).</CardDescription>
@@ -616,15 +616,15 @@ export default function OptoToolsPage() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Tabs defaultValue="vertex" className="w-full">
+                   <Tabs defaultValue="vertex" className="w-full">
                         <div className="border-b">
-                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
                                 <TabsTrigger value="vertex" className="py-3 rounded-none">Vertex Distance</TabsTrigger>
                                 <TabsTrigger value="base-curve" className="py-3 rounded-none">Base Curve</TabsTrigger>
                                 <TabsTrigger value="lars" className="py-3 rounded-none">LARS Rule</TabsTrigger>
                             </TabsList>
                         </div>
-                        <div className="p-6">
+                        <div className="p-2 sm:p-6">
                             <TabsContent value="vertex" className="mt-0">
                                 <VertexDistanceCalculator />
                             </TabsContent>
@@ -649,13 +649,13 @@ export default function OptoToolsPage() {
                 <CardContent className="p-0">
                     <Tabs defaultValue="magnification-distance" className="w-full">
                          <div className="border-b">
-                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
                                 <TabsTrigger value="magnification-distance" className="py-3 rounded-none">Magnification (Distance)</TabsTrigger>
                                 <TabsTrigger value="magnification-near" className="py-3 rounded-none">Magnification (Near)</TabsTrigger>
                                 <TabsTrigger value="kestenbaum" className="py-3 rounded-none">Kestenbaum's Rule</TabsTrigger>
                             </TabsList>
                         </div>
-                         <div className="p-6">
+                         <div className="p-2 sm:p-6">
                             <TabsContent value="magnification-distance" className="mt-0">
                                 <MagnificationDistanceCalculator />
                             </TabsContent>
@@ -680,13 +680,13 @@ export default function OptoToolsPage() {
                 <CardContent className="p-0">
                     <Tabs defaultValue="working-lens" className="w-full">
                          <div className="border-b">
-                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
                                 <TabsTrigger value="working-lens" className="py-3 rounded-none">Working Lens</TabsTrigger>
                                 <TabsTrigger value="transposition" className="py-3 rounded-none">Transposition</TabsTrigger>
                                 <TabsTrigger value="sph-equivalent" className="py-3 rounded-none">Sph. Equivalent</TabsTrigger>
                             </TabsList>
                         </div>
-                         <div className="p-6">
+                         <div className="p-2 sm:p-6">
                             <TabsContent value="working-lens" className="mt-0"><RetinoscopyWorkingLensCalculator /></TabsContent>
                             <TabsContent value="transposition" className="mt-0"><SimpleTranspositionCalculator /></TabsContent>
                             <TabsContent value="sph-equivalent" className="mt-0"><SphericalEquivalentCalculator /></TabsContent>
@@ -700,3 +700,4 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
