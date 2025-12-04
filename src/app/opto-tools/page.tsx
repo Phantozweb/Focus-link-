@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
-import { allUsers } from '@/lib/data';
+import { allUsers } from '@/lib/data/index';
 import { ProfileCard } from '@/components/profile-card';
 
 
