@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -22,7 +23,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { allUsers } from '@/lib/data';
-import { ProfileCard } from '@/components/profile-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
