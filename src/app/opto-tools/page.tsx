@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -14,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -1315,6 +1316,74 @@ function BielschowskyHeadTiltTest() {
     );
 }
 
+function AmplitudeOfAccommodationCalculator() {
+    const [npa, setNpa] = useState('');
+    const [aoa, setAoa] = useState('');
+    const [result, setResult] = useState('');
+
+    const calculate = () => {
+        const npaValue = parseFloat(npa);
+        const aoaValue = parseFloat(aoa);
+
+        if (!isNaN(npaValue) && npaValue > 0) {
+            const calculatedAoa = 100 / npaValue;
+            setAoa(calculatedAoa.toFixed(2));
+            setResult(`Amplitude of Accommodation: ${calculatedAoa.toFixed(2)} D`);
+        } else if (!isNaN(aoaValue) && aoaValue > 0) {
+            const calculatedNpa = 100 / aoaValue;
+            setNpa(calculatedNpa.toFixed(2));
+            setResult(`Near Point of Accommodation: ${calculatedNpa.toFixed(2)} cm`);
+        } else {
+            setResult('Please enter a valid value in one of the fields.');
+        }
+    };
+
+    const handleReset = () => {
+        setNpa('');
+        setAoa('');
+        setResult('');
+    }
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">You can get Near Point of Accommodation ↔ Amplitude of Accommodation.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Provide either the Near Point of Accommodation or the Amplitude of Accommodation, then click the 'Calculate' button. Make sure to erase the two inputs before the next calculation.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="npa">Near Point of Accommodation (cm)</Label>
+                    <Input id="npa" type="number" placeholder="e.g., 10" value={npa} onChange={e => setNpa(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="aoa">Amplitude of Accommodation (D)</Label>
+                    <Input id="aoa" type="number" placeholder="e.g., 10" value={aoa} onChange={e => setAoa(e.target.value)} />
+                </div>
+            </div>
+            <div className="flex gap-2">
+                <Button onClick={calculate}>Calculate</Button>
+                <Button onClick={handleReset} variant="outline"><RefreshCw className="h-4 w-4 mr-2" /> Reset</Button>
+            </div>
+            {result && (
+                <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+            <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">How to calculate?</h4>
+                <p className="font-mono">Amplitude of Accommodation(D): 100 / Near Point of Accommodation (cm)</p>
+                <p className="font-mono">Near Point of Accommodation(cm): 100 / Amplitude of Accommodation (D)</p>
+            </div>
+        </div>
+    );
+}
+
+
 const tools = [
   {
     id: 'vertex',
@@ -1398,6 +1467,13 @@ const tools = [
     title: 'Snellen Letter Size',
     description: 'Calculate the size of Snellen letters based on chart distance.',
     component: <SnellenLetterSizeCalculator />,
+    category: 'refraction',
+  },
+  {
+    id: 'accommodation-amplitude',
+    title: 'Amplitude of Accommodation',
+    description: 'Calculate amplitude from NPA or vice-versa.',
+    component: <AmplitudeOfAccommodationCalculator />,
     category: 'refraction',
   },
   {
@@ -1569,11 +1645,11 @@ export default function OptoToolsPage() {
         
         <section className="max-w-4xl mx-auto mt-20">
              <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-             <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+              <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                 <div className="md:flex">
                     <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
                         <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
-                            <AvatarImage src="" alt="Shivashangari M" />
+                            <AvatarImage src="https://i.ibb.co/Vvz8r7Y/oct-keratoconus.jpg" alt="Shivashangari M" />
                             <AvatarFallback className="bg-slate-200">
                                 <UserRound className="h-12 w-12 text-slate-400" />
                             </AvatarFallback>
