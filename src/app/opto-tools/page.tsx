@@ -223,6 +223,15 @@ function LarsRuleCalculator() {
         setResult(`Suggested Trial Axis: ${correctedAxis.toFixed(0)}°`);
     };
 
+    const handleAxisChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
+        const numValue = parseInt(value, 10);
+        if (!isNaN(numValue) && numValue >= 1 && numValue <= 180) {
+            setter(numValue);
+        } else if (value === '') {
+            setter(0);
+        }
+    };
+
     return (
         <Card className="border-none shadow-none">
             <CardHeader>
@@ -232,12 +241,18 @@ function LarsRuleCalculator() {
             <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
                     <div className="space-y-4">
-                        <Label htmlFor="initialAxis">Initial Axis: {initialAxis}°</Label>
-                        <Slider id="initialAxis" min={1} max={180} step={1} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
+                        <Label htmlFor="initialAxis">Initial Axis</Label>
+                        <div className="flex items-center gap-2">
+                          <Slider id="initialAxis" min={1} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
+                          <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
+                        </div>
                     </div>
                      <div className="space-y-4">
-                        <Label htmlFor="rotatedAxis">Axis After Blink: {rotatedAxis}°</Label>
-                        <Slider id="rotatedAxis" min={1} max={180} step={1} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
+                        <Label htmlFor="rotatedAxis">Axis After Blink</Label>
+                         <div className="flex items-center gap-2">
+                          <Slider id="rotatedAxis" min={1} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
+                          <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
+                        </div>
                     </div>
                 </div>
                 <div className="flex justify-center flex-wrap gap-8">
@@ -267,6 +282,7 @@ function LarsRuleCalculator() {
         </Card>
     );
 }
+
 
 // --- Retinoscopy Working Lens Calculator ---
 function RetinoscopyWorkingLensCalculator() {
@@ -695,3 +711,5 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
+```
