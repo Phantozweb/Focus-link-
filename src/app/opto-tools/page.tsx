@@ -37,11 +37,7 @@ function VertexDistanceCalculator() {
 
         let effectiveSphere, effectiveTotal, effectiveCylinder;
         
-        // This is a client component, so document is available
-        // but it is better to use state.
-        const selection = conversion;
-
-        if (selection === 'specsToCL') {
+        if (conversion === 'specsToCL') {
             effectiveSphere = DL_sphere / (1 - d * DL_sphere);
             if (DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
@@ -71,7 +67,7 @@ function VertexDistanceCalculator() {
                 <CardDescription>Calculate the effective power of a prescription at a different vertex distance.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <RadioGroup value={conversion} onValueChange={setConversion} className="flex gap-4">
+                <RadioGroup value={conversion} onValueChange={setConversion} className="flex flex-col sm:flex-row gap-4">
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="specsToCL" id="specsToCL" />
                         <Label htmlFor="specsToCL">Spectacles to Contact Lens</Label>
@@ -612,86 +608,93 @@ export default function OptoToolsPage() {
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
         <div className="max-w-5xl mx-auto space-y-8">
-            <Card className="shadow-lg">
-                <CardHeader>
+            <Card className="shadow-lg overflow-hidden">
+                <CardHeader className="bg-slate-50 border-b">
                     <CardTitle className="flex items-center gap-3 text-2xl">
                         <Contact className="h-6 w-6 text-primary" />
-                        Contact Lens Calculators
+                        Contact Lens
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                     <Tabs defaultValue="vertex" className="w-full">
-                        <div className="flex justify-center mb-6">
-                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-1.5 bg-blue-100/60 rounded-full">
-                                <TabsTrigger value="vertex" className="px-6 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Vertex Distance</TabsTrigger>
-                                <TabsTrigger value="base-curve" className="px-6 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Base Curve</TabsTrigger>
-                                <TabsTrigger value="lars" className="px-6 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">LARS Rule</TabsTrigger>
+                        <div className="border-b">
+                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                                <TabsTrigger value="vertex" className="py-3 rounded-none">Vertex Distance</TabsTrigger>
+                                <TabsTrigger value="base-curve" className="py-3 rounded-none">Base Curve</TabsTrigger>
+                                <TabsTrigger value="lars" className="py-3 rounded-none">LARS Rule</TabsTrigger>
                             </TabsList>
                         </div>
-                        <TabsContent value="vertex" className="mt-6">
-                            <VertexDistanceCalculator />
-                        </TabsContent>
-                        <TabsContent value="base-curve" className="mt-6">
-                            <BaseCurveCalculator />
-                        </TabsContent>
-                        <TabsContent value="lars" className="mt-6">
-                            <LarsRuleCalculator />
-                        </TabsContent>
+                        <div className="p-6">
+                            <TabsContent value="vertex" className="mt-0">
+                                <VertexDistanceCalculator />
+                            </TabsContent>
+                            <TabsContent value="base-curve" className="mt-0">
+                                <BaseCurveCalculator />
+                            </TabsContent>
+                            <TabsContent value="lars" className="mt-0">
+                                <LarsRuleCalculator />
+                            </TabsContent>
+                        </div>
                     </Tabs>
                 </CardContent>
             </Card>
 
-            <Card className="shadow-lg">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                        <Ruler className="h-6 w-6 text-green-600" />
-                        Optics & Refraction Calculators
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <Tabs defaultValue="working-lens" className="w-full">
-                         <div className="flex justify-center mb-6">
-                           <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 h-auto p-1.5 bg-green-100/60 rounded-full">
-                                <TabsTrigger value="working-lens" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Working Lens</TabsTrigger>
-                                <TabsTrigger value="transposition" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Transposition</TabsTrigger>
-                                <TabsTrigger value="sph-equivalent" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Sph. Equivalent</TabsTrigger>
-                            </TabsList>
-                        </div>
-                        <TabsContent value="working-lens" className="mt-6"><RetinoscopyWorkingLensCalculator /></TabsContent>
-                        <TabsContent value="transposition" className="mt-6"><SimpleTranspositionCalculator /></TabsContent>
-                        <TabsContent value="sph-equivalent" className="mt-6"><SphericalEquivalentCalculator /></TabsContent>
-                    </Tabs>
-                </CardContent>
-            </Card>
-
-            <Card className="shadow-lg">
-                <CardHeader>
+            <Card className="shadow-lg overflow-hidden">
+                <CardHeader className="bg-slate-50 border-b">
                     <CardTitle className="flex items-center gap-3 text-2xl">
                         <Eye className="h-6 w-6 text-purple-600" />
-                        Low Vision Calculators
+                        Low Vision
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                     <Tabs defaultValue="magnification-distance" className="w-full">
-                        <div className="flex justify-center mb-6">
-                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-1.5 bg-purple-100/60 rounded-full">
-                                <TabsTrigger value="magnification-distance" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Magnification (Distance)</TabsTrigger>
-                                <TabsTrigger value="magnification-near" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Magnification (Near)</TabsTrigger>
-                                <TabsTrigger value="kestenbaum" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Kestenbaum's Rule</TabsTrigger>
+                         <div className="border-b">
+                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                                <TabsTrigger value="magnification-distance" className="py-3 rounded-none">Magnification (Distance)</TabsTrigger>
+                                <TabsTrigger value="magnification-near" className="py-3 rounded-none">Magnification (Near)</TabsTrigger>
+                                <TabsTrigger value="kestenbaum" className="py-3 rounded-none">Kestenbaum's Rule</TabsTrigger>
                             </TabsList>
                         </div>
-                         <TabsContent value="magnification-distance" className="mt-6">
-                            <MagnificationDistanceCalculator />
-                        </TabsContent>
-                         <TabsContent value="magnification-near" className="mt-6">
-                            <MagnificationNearCalculator />
-                        </TabsContent>
-                         <TabsContent value="kestenbaum" className="mt-6">
-                            <KestenbaumRuleCalculator />
-                        </TabsContent>
+                         <div className="p-6">
+                            <TabsContent value="magnification-distance" className="mt-0">
+                                <MagnificationDistanceCalculator />
+                            </TabsContent>
+                            <TabsContent value="magnification-near" className="mt-0">
+                                <MagnificationNearCalculator />
+                            </TabsContent>
+                            <TabsContent value="kestenbaum" className="mt-0">
+                                <KestenbaumRuleCalculator />
+                            </TabsContent>
+                        </div>
                     </Tabs>
                 </CardContent>
             </Card>
+            
+            <Card className="shadow-lg overflow-hidden">
+                <CardHeader className="bg-slate-50 border-b">
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                        <Ruler className="h-6 w-6 text-green-600" />
+                        Optics & Refraction
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <Tabs defaultValue="working-lens" className="w-full">
+                         <div className="border-b">
+                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none">
+                                <TabsTrigger value="working-lens" className="py-3 rounded-none">Working Lens</TabsTrigger>
+                                <TabsTrigger value="transposition" className="py-3 rounded-none">Transposition</TabsTrigger>
+                                <TabsTrigger value="sph-equivalent" className="py-3 rounded-none">Sph. Equivalent</TabsTrigger>
+                            </TabsList>
+                        </div>
+                         <div className="p-6">
+                            <TabsContent value="working-lens" className="mt-0"><RetinoscopyWorkingLensCalculator /></TabsContent>
+                            <TabsContent value="transposition" className="mt-0"><SimpleTranspositionCalculator /></TabsContent>
+                            <TabsContent value="sph-equivalent" className="mt-0"><SphericalEquivalentCalculator /></TabsContent>
+                        </div>
+                    </Tabs>
+                </CardContent>
+            </Card>
+
         </div>
       </main>
     </div>
