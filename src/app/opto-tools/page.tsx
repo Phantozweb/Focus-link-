@@ -37,7 +37,7 @@ function VertexDistanceCalculator() {
 
         let effectiveSphere, effectiveTotal, effectiveCylinder;
 
-        if (selection === 'specsToCL') {
+        if (conversion === 'specsToCL') {
             effectiveSphere = DL_sphere / (1 - d * DL_sphere);
             if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
@@ -59,8 +59,6 @@ function VertexDistanceCalculator() {
 
         setMessage(Math.abs(DL_sphere) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
     };
-    
-     const selection = document.querySelector('input[name="conversion"]:checked')?.value;
 
     return (
         <Card>
@@ -637,7 +635,7 @@ export default function OptoToolsPage() {
                     </Tabs>
                 </CardContent>
             </Card>
-            
+
             <Card className="shadow-lg">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
@@ -648,19 +646,15 @@ export default function OptoToolsPage() {
                 <CardContent>
                     <Tabs defaultValue="working-lens" className="w-full">
                         <div className="flex justify-center mb-6">
-                           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-1.5 bg-green-100/60 rounded-full">
+                           <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 h-auto p-1.5 bg-green-100/60 rounded-full">
                                 <TabsTrigger value="working-lens" className="px-4 py-2 text-sm">Working Lens</TabsTrigger>
                                 <TabsTrigger value="transposition" className="px-4 py-2 text-sm">Transposition</TabsTrigger>
                                 <TabsTrigger value="sph-equivalent" className="px-4 py-2 text-sm">Sph. Equivalent</TabsTrigger>
-                                <TabsTrigger value="snellen-size" className="px-4 py-2 text-sm">Snellen Size</TabsTrigger>
                             </TabsList>
                         </div>
                         <TabsContent value="working-lens" className="mt-6"><RetinoscopyWorkingLensCalculator /></TabsContent>
                         <TabsContent value="transposition" className="mt-6"><SimpleTranspositionCalculator /></TabsContent>
                         <TabsContent value="sph-equivalent" className="mt-6"><SphericalEquivalentCalculator /></TabsContent>
-                        <TabsContent value="snellen-size" className="mt-6">
-                             <Card><CardContent className="p-6 text-center text-muted-foreground">Coming Soon</CardContent></Card>
-                        </TabsContent>
                     </Tabs>
                 </CardContent>
             </Card>
@@ -698,5 +692,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-    
