@@ -15,14 +15,15 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Link from 'next/link';
+import { allUsers } from '@/lib/data';
+import { ProfileCard } from '@/components/profile-card';
 
 
 // --- Vertex Distance Calculator ---
@@ -225,11 +226,17 @@ function LarsRuleCalculator() {
     };
     
     const handleAxisChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
-        const numValue = parseInt(value, 10);
+        let numValue = parseInt(value, 10);
         if (value === '' || isNaN(numValue)) {
-             setter(0); // or some default, maybe keep previous state
-        } else if (numValue >= 0 && numValue <= 180) {
+            numValue = 0;
+        }
+        
+        if (numValue === 0) numValue = 180;
+        
+        if (numValue >= 1 && numValue <= 180) {
             setter(numValue);
+        } else if (value === '') {
+             setter(0);
         }
     };
     
@@ -692,6 +699,8 @@ const AnimatedTabs = ({ onTabChange }: { onTabChange: (value: string) => void })
 
 export default function OptoToolsPage() {
   const [activeTab, setActiveTab] = useState(categories[0].id);
+  const creator = allUsers.find(user => user.id === '16');
+  
   return (
     <div className="bg-brand-bg">
       <header className="hero">
@@ -735,29 +744,15 @@ export default function OptoToolsPage() {
             </TabsContent>
           ))}
         </Tabs>
-        <section className="max-w-3xl mx-auto mt-16">
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="credits">
-              <AccordionTrigger className="text-xl font-bold text-slate-700">Credits & Acknowledgements</AccordionTrigger>
-              <AccordionContent>
-                <div className="prose prose-slate max-w-none pt-2">
-                    <h4>About the Creator</h4>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <p className="flex-grow">
-                            These calculation tools were created and conceptualized by <strong>Shivashangari M.</strong>, a passionate professional with a Master’s degree in Optometry. Her goal is to enhance efficiency and accuracy in optometry practices through user-friendly digital solutions.
-                        </p>
-                        <Button asChild>
-                            <Link href="/profile/16">View Profile</Link>
-                        </Button>
-                    </div>
-                    <h4 className='mt-6'>Acknowledgements</h4>
-                    <p>
-                        We extend our sincere thanks to <strong>Mr. Ramprasat Kanagaraj</strong>, Dean of Optometry Education, and <strong>Ms. Preetha Ramprasat</strong>, Associate Professor at VIOR, for their invaluable guidance and support in the development of these tools.
-                    </p>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+         <section className="max-w-3xl mx-auto mt-16">
+          <h2 className="text-2xl font-bold text-slate-800 text-center mb-6">About the Creator</h2>
+          <div className="flex justify-center">
+            {creator && (
+              <div className="w-full max-w-sm">
+                <ProfileCard user={creator} isFeatured />
+              </div>
+            )}
+          </div>
         </section>
       </main>
     </div>
