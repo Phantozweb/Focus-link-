@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -14,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -943,7 +944,77 @@ function SnellenLetterSizeCalculator() {
     );
 }
 
+// --- AC/A Ratio Calculator ---
+function AcaRatioCalculator() {
+    const [ipd, setIpd] = useState('');
+    const [nfd, setNfd] = useState('');
+    const [nearPhoria, setNearPhoria] = useState('');
+    const [distancePhoria, setDistancePhoria] = useState('');
+    const [result, setResult] = useState('');
 
+    const calculateAca = () => {
+        const ipdCm = parseFloat(ipd) / 10;
+        const nfdM = parseFloat(nfd) / 100;
+        const Hn = parseFloat(nearPhoria);
+        const Hd = parseFloat(distancePhoria);
+
+        if (isNaN(ipdCm) || isNaN(nfdM) || isNaN(Hn) || isNaN(Hd)) {
+            setResult('Please enter valid numeric values for all fields.');
+            return;
+        }
+
+        const acaRatio = ipdCm + nfdM * (Hn - Hd);
+        setResult(`AC/A Ratio: ${acaRatio.toFixed(2)} PD/D`);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Provide the IPD, NFD, and phoria at near and distance to get the AC/A ratio.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Enter the IPD, NFD, and phoria at near and distance, then click 'Calculate'.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="ipd">Inter Pupillary Distance (mm)</Label>
+                    <Input id="ipd" type="number" placeholder="60" value={ipd} onChange={e => setIpd(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="nfd">Near Fixation Distance (cm)</Label>
+                    <Input id="nfd" type="number" placeholder="40" value={nfd} onChange={e => setNfd(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="near-phoria">Heterophoria at Near (PD)</Label>
+                    <Input id="near-phoria" type="number" placeholder="e.g., -4 for Exo" value={nearPhoria} onChange={e => setNearPhoria(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="distance-phoria">Heterophoria at Distance (PD)</Label>
+                    <Input id="distance-phoria" type="number" placeholder="e.g., +2 for Eso" value={distancePhoria} onChange={e => setDistancePhoria(e.target.value)} />
+                </div>
+            </div>
+            <Button onClick={calculateAca}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+             <div className="text-sm text-slate-500 pt-4">
+                <h4 className="font-semibold text-slate-700">Formula:</h4>
+                <p className="font-mono">AC/A Ratio = IPD + (Hn - Hd) x NFD</p>
+                <ul className="text-xs mt-1 list-disc list-inside">
+                    <li>IPD - Inter Pupillary Distance (cm)</li>
+                    <li>Hn - Heterophoria at Near (PD)</li>
+                    <li>Hd - Heterophoria at Distance (PD)</li>
+                    <li>NFD - Near Fixation Distance (m)</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
 
 const tools = [
   {
@@ -1030,12 +1101,20 @@ const tools = [
     component: <SnellenLetterSizeCalculator />,
     category: 'refraction',
   },
+  {
+    id: 'aca-ratio',
+    title: 'AC/A Ratio (Heterophoria)',
+    description: 'Calculate the AC/A ratio using the heterophoria method.',
+    component: <AcaRatioCalculator />,
+    category: 'binocular-vision'
+  },
 ];
 
 const categories = [
     { id: 'contact-lens', name: 'Contact Lens', icon: <Contact className="h-5 w-5" /> },
     { id: 'low-vision', name: 'Low Vision', icon: <Eye className="h-5 w-5" /> },
     { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-5 w-5" /> },
+    { id: 'binocular-vision', name: 'Binocular Vision', icon: <Hand className="h-5 w-5" /> },
 ];
 
 const AnimatedTabs = ({ onTabChange }: { onTabChange: (value: string) => void }) => {
@@ -1191,3 +1270,4 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
