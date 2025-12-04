@@ -41,7 +41,12 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function MembershipForm() {
+interface MembershipFormProps {
+    inviterName?: string;
+    region?: string;
+}
+
+export function MembershipForm({ inviterName, region }: MembershipFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionData, setSubmissionData] = useState<FormData | null>(null);
   const [membershipId, setMembershipId] = useState<string | null>(null);
@@ -115,11 +120,18 @@ export function MembershipForm() {
       } else if (result.result === 'success') {
         setMembershipId(newId);
         setSubmissionData(data);
-        logFormSubmission(`✅ **New Membership Application Submitted**
+        
+        let logMessage = `✅ **New Membership Application Submitted**
 *   **Name:** ${data.name}
 *   **Role:** ${data.role}
-*   **ID:** \`${newId}\``
-        );
+*   **ID:** \`${newId}\``;
+        
+        if (inviterName && region) {
+          logMessage += `\n*   **Referred by:** ${inviterName} (${region})`;
+        }
+        
+        logFormSubmission(logMessage);
+
         toast({
           title: 'Application Submitted!',
           description: "Your details have been recorded. Welcome to Focus Links!",

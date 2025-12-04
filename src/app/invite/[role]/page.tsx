@@ -95,7 +95,7 @@ function InviteClient() {
 
                 {/* Right Column: Membership Form */}
                 <div className="lg:sticky top-8">
-                    <MembershipForm />
+                    <MembershipForm inviterName={head.name} region={head.region} />
                 </div>
             </div>
         </div>
