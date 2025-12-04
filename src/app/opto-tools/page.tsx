@@ -689,6 +689,175 @@ function KestenbaumRuleCalculator() {
     );
 }
 
+function RetinoscopyPrescriptionConverter() {
+    const [method, setMethod] = useState('oneSphereOneCylinder');
+    const [sphere, setSphere] = useState('');
+    const [cylinder, setCylinder] = useState('');
+    const [axis, setAxis] = useState('');
+    const [sphere1, setSphere1] = useState('');
+    const [axis1, setAxis1] = useState('');
+    const [sphere2, setSphere2] = useState('');
+    const [axis2, setAxis2] = useState('');
+    const [compensatingLens, setCompensatingLens] = useState('no');
+    const [result, setResult] = useState('');
+
+    const handleConvert = () => {
+        let finalPrescription = '';
+        const wd = compensatingLens === 'yes' ? 1.50 : 0; // Example working distance compensation
+
+        if (method === 'oneSphereOneCylinder') {
+            const sph = parseFloat(sphere) || 0;
+            const cyl = parseFloat(cylinder) || 0;
+            const ax = parseInt(axis, 10) || 0;
+            const netSph = sph - wd;
+            finalPrescription = `${netSph.toFixed(2)} DS / ${cyl.toFixed(2)} DC @ ${ax}°`;
+        } else if (method === 'twoSphere') {
+             const sph1 = parseFloat(sphere1) || 0;
+             const ax1 = parseInt(axis1, 10) || 0;
+             const sph2 = parseFloat(sphere2) || 0;
+             
+             const netSph1 = sph1 - wd;
+             const netSph2 = sph2 - wd;
+
+             finalPrescription = `${netSph1.toFixed(2)} DS @ ${ax1}° / ${netSph2.toFixed(2)} DS @ ${ax1 + 90}°`;
+        } else if (method === 'twoCylinder') {
+             const cyl1 = parseFloat(sphere1) || 0;
+             const ax1 = parseInt(axis1, 10) || 0;
+             const cyl2 = parseFloat(sphere2) || 0;
+
+            finalPrescription = `This method is complex and results may vary. A common approach is to find the spherocylindrical equivalent.`;
+        }
+
+        setResult(finalPrescription);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">
+                    Provide the retinoscopy value (Gross/Net) to obtain the retinoscopy prescription here.
+                    Provide '0' if there is no neutral power for any of the meridians.
+                </p>
+            </div>
+             <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">
+                    Select the method of retinoscopy, enter the neutral powers, choose 'Yes/No' for the working lens, then click 'Convert'.
+                </p>
+            </div>
+            
+            <div className='space-y-2'>
+                <Label>Select Method:</Label>
+                <RadioGroup value={method} onValueChange={setMethod} className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="oneSphereOneCylinder" id="r1" />
+                        <Label htmlFor="r1">One Sphere & One Cylinder</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="twoSphere" id="r2" />
+                        <Label htmlFor="r2">Two Sphere Method</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="twoCylinder" id="r3" />
+                        <Label htmlFor="r3">Two Cylinder Method</Label>
+                    </div>
+                </RadioGroup>
+            </div>
+
+            {method === 'oneSphereOneCylinder' && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="sph-rpc">Sphere (DS)</Label>
+                        <Input id="sph-rpc" type="number" step="0.25" placeholder="e.g. -2.00" value={sphere} onChange={e => setSphere(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="cyl-rpc">Cylinder (DC)</Label>
+                        <Input id="cyl-rpc" type="number" step="0.25" placeholder="e.g. -1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="axis-rpc">Cylinder Axis</Label>
+                        <Input id="axis-rpc" type="number" placeholder="1-180" value={axis} onChange={e => setAxis(e.target.value)} />
+                    </div>
+                </div>
+            )}
+            
+            {method === 'twoSphere' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="sph1-rpc">Sphere 1 (DS)</Label>
+                        <Input id="sph1-rpc" type="number" step="0.25" placeholder="e.g. -2.00" value={sphere1} onChange={e => setSphere1(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="axis1-rpc">Axis 1</Label>
+                        <Input id="axis1-rpc" type="number" placeholder="e.g. 90" value={axis1} onChange={e => setAxis1(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="sph2-rpc">Sphere 2 (DS)</Label>
+                        <Input id="sph2-rpc" type="number" step="0.25" placeholder="e.g. -3.00" value={sphere2} onChange={e => setSphere2(e.target.value)} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="axis2-rpc">Axis 2</Label>
+                        <Input id="axis2-rpc" type="number" placeholder="e.g. 180" value={axis2} onChange={e => setAxis2(e.target.value)} disabled />
+                    </div>
+                </div>
+            )}
+
+            {method === 'twoCylinder' && (
+                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="cyl1-rpc">Cylinder 1 (DC)</Label>
+                        <Input id="cyl1-rpc" type="number" step="0.25" placeholder="e.g. -2.00" value={sphere1} onChange={e => setSphere1(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="axis1-rpc-cyl">Axis 1</Label>
+                        <Input id="axis1-rpc-cyl" type="number" placeholder="e.g. 90" value={axis1} onChange={e => setAxis1(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="cyl2-rpc">Cylinder 2 (DC)</Label>
+                        <Input id="cyl2-rpc" type="number" step="0.25" placeholder="e.g. -3.00" value={sphere2} onChange={e => setSphere2(e.target.value)} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="axis2-rpc-cyl">Axis 2</Label>
+                        <Input id="axis2-rpc-cyl" type="number" placeholder="e.g. 180" value={axis2} onChange={e => setAxis2(e.target.value)} />
+                    </div>
+                </div>
+            )}
+
+            <div className="space-y-3 pt-2">
+                 <Label>Are you using compensating(WD) lens, have removed it(Ex: +1.50DS) ?</Label>
+                 <RadioGroup value={compensatingLens} onValueChange={setCompensatingLens} className="flex gap-4">
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="wd-yes" />
+                        <Label htmlFor="wd-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="wd-no" />
+                        <Label htmlFor="wd-no">No</Label>
+                    </div>
+                </RadioGroup>
+            </div>
+            
+            <Button onClick={handleConvert}>Convert</Button>
+
+             {result && (
+                <Alert>
+                    <AlertTitle>Prescription</AlertTitle>
+                    <AlertDescription className="font-semibold text-lg">{result}</AlertDescription>
+                </Alert>
+            )}
+
+            <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">How it converts:</h4>
+                 <ul className='list-disc list-inside pl-2 space-y-1'>
+                    <li><strong>One Sphere and One Cylinder:</strong> The same will be a prescription.</li>
+                    <li>To convert the Gross retinoscopy to Net retinoscopy of Spherical & Spherocylinder prescription, simply minus the 'working distance compensation power' from the Sphere power.</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
 
 
 const tools = [
@@ -760,6 +929,13 @@ const tools = [
     title: 'Visual Acuity Converter',
     description: 'Convert between different visual acuity notations.',
     component: <VisualAcuityConverter />,
+    category: 'refraction',
+  },
+  {
+    id: 'retinoscopy-converter',
+    title: 'Retinoscopy Rx Converter',
+    description: 'Convert retinoscopy findings into a final prescription.',
+    component: <RetinoscopyPrescriptionConverter />,
     category: 'refraction',
   },
 ];
@@ -895,7 +1071,7 @@ export default function OptoToolsPage() {
         
         <section className="max-w-4xl mx-auto mt-20">
               <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-              <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+               <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                   <div className="md:flex">
                       <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
                           <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
@@ -923,5 +1099,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-    
