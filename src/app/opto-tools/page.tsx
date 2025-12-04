@@ -656,8 +656,8 @@ export default function OptoToolsPage() {
 
       <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16">
         <Tabs defaultValue="contact-lens" className="w-full">
-          <div className="mb-8">
-            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
+          <div className="flex justify-center mb-8">
+            <TabsList className="grid w-full max-w-lg grid-cols-1 sm:grid-cols-3 h-auto sm:h-12">
                 {categories.map((category) => (
                     <TabsTrigger key={category.id} value={category.id} className="py-3 text-base sm:text-sm flex items-center gap-2">
                         {category.icon}
