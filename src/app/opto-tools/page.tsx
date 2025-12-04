@@ -1092,6 +1092,77 @@ function AcaGradientCalculator() {
     );
 }
 
+function SheardsCriterionCalculator() {
+    const phoriaOptions = Array.from({length: 41}, (_, i) => String(i)); // 0 to 40
+    const cfvOptions = Array.from({length: 41}, (_, i) => String(i)); // 0 to 40
+    
+    const [phoria, setPhoria] = useState('0');
+    const [cfv, setCfv] = useState('1');
+    const [result, setResult] = useState('');
+
+    const calculatePrism = () => {
+        const p = parseFloat(phoria);
+        const compensatingVergence = parseFloat(cfv);
+        
+        if (isNaN(p) || isNaN(compensatingVergence)) {
+            setResult('Please enter valid numeric values.');
+            return;
+        }
+
+        const requiredPrism = (2/3 * p) - (1/3 * compensatingVergence);
+        setResult(`Required Prism: ${requiredPrism.toFixed(2)} PD`);
+    };
+    
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Provide the Phoria and Compensating Fusional Vergence to calculate the prism.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Select the phoria and Compensating Fusional Vergence from the dropdown menus, then click 'Calculate'.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="phoria-sc">Phoria (PD)</Label>
+                     <Select value={phoria} onValueChange={setPhoria}>
+                        <SelectTrigger id="phoria-sc"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {phoriaOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="cfv-sc">Compensating Fusional Vergence (PD)</Label>
+                    <Select value={cfv} onValueChange={setCfv}>
+                        <SelectTrigger id="cfv-sc"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {cfvOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <Button onClick={calculatePrism}>Calculate</Button>
+            {result && (
+                 <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+            <div className="text-sm text-slate-500 pt-4">
+                <h4 className="font-semibold text-slate-700">Formula:</h4>
+                <p className="font-mono">P = 2/3(p) - 1/3 (CFV)</p>
+                <ul className="text-xs mt-1 list-disc list-inside">
+                    <li>P - Prism (PD)</li>
+                    <li>p - Phoria (PD)</li>
+                    <li>CFV - Compensating Fusional Vergence (PD)</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
 const tools = [
   {
     id: 'vertex',
@@ -1189,6 +1260,13 @@ const tools = [
     title: 'AC/A Ratio (Gradient)',
     description: 'Calculate the AC/A ratio using the gradient method.',
     component: <AcaGradientCalculator />,
+    category: 'binocular-vision'
+  },
+  {
+    id: 'sheards-criterion',
+    title: 'Sheard\'s Criterion',
+    description: "Calculate the required prism using Sheard's criterion.",
+    component: <SheardsCriterionCalculator />,
     category: 'binocular-vision'
   },
 ];
@@ -1325,7 +1403,7 @@ export default function OptoToolsPage() {
         
         <section className="max-w-4xl mx-auto mt-20">
             <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-            <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+             <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                 <div className="md:flex">
                     <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
                         <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
