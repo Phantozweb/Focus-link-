@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -591,6 +591,85 @@ function KestenbaumRuleCalculator() {
     );
 }
 
+
+const acuityLevels = [
+  { meters: "6/6", feet: "20/20", mar: "1.0", logMAR: "0.0", decimal: "1.0", percentage: "100" },
+  { meters: "6/7.5", feet: "20/25", mar: "1.25", logMAR: "0.1", decimal: "0.8", percentage: "80" },
+  { meters: "6/9", feet: "20/30", mar: "1.5", logMAR: "0.2", decimal: "0.67", percentage: "67" },
+  { meters: "6/12", feet: "20/40", mar: "2.0", logMAR: "0.3", decimal: "0.5", percentage: "50" },
+  { meters: "6/15", feet: "20/50", mar: "2.5", logMAR: "0.4", decimal: "0.4", percentage: "40" },
+  { meters: "6/18", feet: "20/60", mar: "3.0", logMAR: "0.5", decimal: "0.33", percentage: "33" },
+  { meters: "6/24", feet: "20/80", mar: "4.0", logMAR: "0.6", decimal: "0.25", percentage: "25" },
+  { meters: "6/30", feet: "20/100", mar: "5.0", logMAR: "0.7", decimal: "0.2", percentage: "20" },
+  { meters: "6/48", feet: "20/160", mar: "8.0", logMAR: "0.9", decimal: "0.125", percentage: "12.5" },
+  { meters: "6/60", feet: "20/200", mar: "10.0", logMAR: "1.0", decimal: "0.1", percentage: "10" },
+  { meters: "6/120", feet: "20/400", mar: "20.0", logMAR: "1.3", decimal: "0.05", percentage: "5" },
+];
+
+function VisualAcuityConverter() {
+  const [selectedDecimal, setSelectedDecimal] = useState("1.0");
+
+  const handleSelectionChange = (decimalValue: string) => {
+    setSelectedDecimal(decimalValue);
+  };
+
+  const selectedLevel = acuityLevels.find(level => level.decimal === selectedDecimal) || acuityLevels[0];
+
+  return (
+    <div className="space-y-6">
+       <div>
+        <h4 className="font-semibold text-slate-700">Instructions:</h4>
+        <p className="text-sm text-slate-500">
+          Select any one line of visual acuity from any of the 6 dropdown menus; it will simultaneously display the corresponding visual acuity line for all other notations.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {[
+          { label: "Meters", key: "meters" },
+          { label: "Feet", key: "feet" },
+          { label: "MAR", key: "mar" },
+          { label: "Log MAR", key: "logMAR" },
+          { label: "Decimal", key: "decimal" },
+          { label: "Percentage", key: "percentage" },
+        ].map(({ label, key }) => (
+          <div key={key} className="space-y-2">
+            <Label htmlFor={key}>{label}</Label>
+            <Select
+              value={selectedLevel.decimal}
+              onValueChange={handleSelectionChange}
+            >
+              <SelectTrigger id={key}>
+                <SelectValue placeholder="Select...">{(selectedLevel as any)[key]}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {acuityLevels.map((level) => (
+                  <SelectItem key={level.decimal} value={level.decimal}>
+                    {(level as any)[key]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
+      </div>
+
+       <div>
+        <h4 className="font-semibold text-slate-700 mt-6 mb-2">How to convert?</h4>
+        <ol className="list-decimal list-inside text-sm text-slate-600 space-y-1">
+            <li>Snellen Meter to Feet = MAR x 20</li>
+            <li>Snellen Meter to MAR = Divide the Denominator by Numerator of Snellen Meter notation</li>
+            <li>LogMAR = log₁₀(MAR)</li>
+            <li>Snellen Meter to Decimal = Divide the Numerator by Denominator of Snellen Meter notation</li>
+            <li>Snellen Decimal to percentage = Decimal * 100</li>
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+
+
 const tools = [
   {
     id: 'vertex',
@@ -654,7 +733,14 @@ const tools = [
     description: 'Calculate the spherical equivalent of a prescription.',
     component: <SphericalEquivalentCalculator />,
     category: 'refraction'
-  }
+  },
+  {
+    id: 'va-converter',
+    title: 'Visual Acuity Converter',
+    description: 'Convert between different visual acuity notations.',
+    component: <VisualAcuityConverter />,
+    category: 'refraction',
+  },
 ];
 
 const categories = [
@@ -787,8 +873,8 @@ export default function OptoToolsPage() {
         </Tabs>
         
         <section className="max-w-4xl mx-auto mt-20">
-          <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-            <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+            <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
+             <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                 <div className="md:flex">
                     <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
                          <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
@@ -816,3 +902,6 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
+
+    
