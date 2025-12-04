@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Replace, Sigma } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -35,21 +35,32 @@ function VertexDistanceCalculator() {
             return;
         }
 
-        const effectiveSphere = DL_sphere / (1 - d * DL_sphere);
+        let effectiveSphere, effectiveTotal, effectiveCylinder;
 
-        if (isNaN(DL_cylinder) || DL_cylinder === 0) {
-            setResult(`Sphere: ${effectiveSphere.toFixed(2)} D`);
-            setMessage(Math.abs(DL_sphere) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
-            return;
+        if (selection === 'specsToCL') {
+            effectiveSphere = DL_sphere / (1 - d * DL_sphere);
+            if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
+                effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
+                effectiveCylinder = effectiveTotal - effectiveSphere;
+            }
+        } else { // clToSpecs
+            effectiveSphere = DL_sphere / (1 + d * DL_sphere);
+            if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
+                effectiveTotal = (DL_sphere + DL_cylinder) / (1 + d * (DL_sphere + DL_cylinder));
+                effectiveCylinder = effectiveTotal - effectiveSphere;
+            }
         }
+        
+        let resultText = `Sphere: ${effectiveSphere.toFixed(2)} D`;
+        if (effectiveCylinder !== undefined) {
+             resultText += `, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`;
+        }
+        setResult(resultText);
 
-        const DL_total = DL_sphere + DL_cylinder;
-        const effectiveTotal = DL_total / (1 - d * DL_total);
-        const effectiveCylinder = effectiveTotal - effectiveSphere;
-
-        setResult(`Sphere: ${effectiveSphere.toFixed(2)} D, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`);
         setMessage(Math.abs(DL_sphere) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
     };
+    
+     const selection = document.querySelector('input[name="conversion"]:checked')?.value;
 
     return (
         <Card>
@@ -102,7 +113,6 @@ function VertexDistanceCalculator() {
     );
 }
 
-
 // --- Base Curve Calculator ---
 function BaseCurveCalculator() {
     const [avgK, setAvgK] = useState('');
@@ -110,8 +120,8 @@ function BaseCurveCalculator() {
 
     const calculateBaseCurve = () => {
         const power = parseFloat(avgK);
-        if (isNaN(power) || power === 0) {
-            setResult('Please enter a valid dioptric power.');
+        if (isNaN(power) || power < 30 || power > 61) {
+            setResult('Please enter a valid K value between 30D and 61D.');
             return;
         }
         const baseCurve = 337.5 / power;
@@ -147,6 +157,7 @@ function LarsRuleCalculator() {
     const [initialAxis, setInitialAxis] = useState(90);
     const [rotatedAxis, setRotatedAxis] = useState(90);
     const [result, setResult] = useState('');
+    const [correctedAxisValue, setCorrectedAxisValue] = useState<number | null>(null);
 
     const drawAxis = useCallback((canvas: HTMLCanvasElement | null, angle: number) => {
         if (!canvas) return;
@@ -167,8 +178,8 @@ function LarsRuleCalculator() {
         if (!isNaN(angle)) {
             const rad = ((angle % 180)) * (Math.PI / 180);
             ctx.beginPath();
-            ctx.moveTo(centerX - radius * Math.sin(rad), centerY + radius * Math.cos(rad));
-            ctx.lineTo(centerX + radius * Math.sin(rad), centerY - radius * Math.cos(rad));
+            ctx.moveTo(centerX - radius * Math.cos(rad), centerY + radius * Math.sin(rad));
+            ctx.lineTo(centerX + radius * Math.cos(rad), centerY - radius * Math.sin(rad));
             ctx.strokeStyle = '#0ea5e9';
             ctx.lineWidth = 4;
             ctx.stroke();
@@ -186,25 +197,33 @@ function LarsRuleCalculator() {
     useEffect(() => {
         drawAxis(rotatedCanvasRef.current, rotatedAxis);
     }, [rotatedAxis, drawAxis]);
+    
+     useEffect(() => {
+        if (correctedAxisValue !== null) {
+            drawAxis(resultCanvasRef.current, correctedAxisValue);
+        }
+    }, [correctedAxisValue, drawAxis]);
 
     const applyLarsRule = () => {
-        const initial = initialAxis;
-        const rotated = rotatedAxis;
+        let diff = rotatedAxis - initialAxis;
+        // Handle wraparound from 180 to 1
+        if (Math.abs(diff) > 90) {
+            if (diff > 0) diff -= 180;
+            else diff += 180;
+        }
 
-        const diff = rotated - initial;
         let correctedAxis;
-
-        if (diff > 0) { // Clockwise rotation (Left)
-            correctedAxis = initial + diff;
-        } else { // Anti-clockwise rotation (Right)
-            correctedAxis = initial + diff; // diff is negative, so it's a subtraction
+        if (diff > 0) { // Clockwise rotation (Left) -> ADD
+            correctedAxis = initialAxis + Math.abs(diff);
+        } else { // Anti-clockwise rotation (Right) -> SUBTRACT
+            correctedAxis = initialAxis - Math.abs(diff);
         }
         
-        // Normalize to 1-180 range
-        correctedAxis = ((correctedAxis - 1 + 180) % 180) + 1;
-        
+        correctedAxis = (correctedAxis + 180) % 180;
+        if (correctedAxis === 0) correctedAxis = 180;
+
+        setCorrectedAxisValue(correctedAxis);
         setResult(`Suggested Trial Axis: ${correctedAxis.toFixed(0)}°`);
-        drawAxis(resultCanvasRef.current, correctedAxis);
     };
 
     return (
@@ -252,18 +271,171 @@ function LarsRuleCalculator() {
     );
 }
 
-const visualAcuityOptions = [
-    "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "6/60",
-    "5/6", "5/9", "5/12", "5/18", "5/24", "5/36", "5/60",
-    "4/6", "4/9", "4/12", "4/18", "4/24", "4/36", "4/60",
-    "3/6", "3/9", "3/12", "3/18", "3/24", "3/36", "3/60",
-    "2/6", "2/9", "2/12", "2/18", "2/24", "2/36", "2/60",
-    "1/6", "1/9", "1/12", "1/18", "1/24", "1/36", "1/60",
-];
+// --- Retinoscopy Working Lens Calculator ---
+function RetinoscopyWorkingLensCalculator() {
+    const [distance, setDistance] = useState('67');
+    const [result, setResult] = useState('');
 
+    const calculatePower = () => {
+        const d = parseFloat(distance);
+        if (isNaN(d) || d <= 0) {
+            setResult('Please enter a valid working distance.');
+            return;
+        }
+        const power = 100 / d;
+        setResult(`Compensating Lens: -${power.toFixed(2)} D`);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Retinoscopy Working Lens</CardTitle>
+                <CardDescription>Calculate the required compensating lens for your retinoscopy working distance.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2 max-w-xs">
+                    <Label htmlFor="workingDistance">Working Distance (cm)</Label>
+                    <Input id="workingDistance" type="number" placeholder="67" value={distance} onChange={(e) => setDistance(e.target.value)} />
+                </div>
+                <Button onClick={calculatePower}>Calculate</Button>
+                {result && (
+                    <Alert>
+                        <Calculator className="h-4 w-4" />
+                        <AlertTitle>Result</AlertTitle>
+                        <AlertDescription className="font-semibold">{result}</AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+// --- Simple Transposition Calculator ---
+function SimpleTranspositionCalculator() {
+    const [sphere, setSphere] = useState('');
+    const [cylinder, setCylinder] = useState('');
+    const [axis, setAxis] = useState('');
+    const [result, setResult] = useState<{transposed: string, astigmatismType: string} | null>(null);
+
+    const transpose = () => {
+        const sph = parseFloat(sphere);
+        const cyl = parseFloat(cylinder);
+        const ax = parseInt(axis, 10);
+
+        if (isNaN(sph) || isNaN(cyl) || isNaN(ax)) {
+            setResult(null);
+            return;
+        }
+
+        const newSphere = sph + cyl;
+        const newCylinder = -cyl;
+        const newAxis = ax <= 90 ? ax + 90 : ax - 90;
+
+        const transposed = `${newSphere > 0 ? '+' : ''}${newSphere.toFixed(2)} / ${newCylinder > 0 ? '+' : ''}${newCylinder.toFixed(2)} x ${newAxis}`;
+        
+        let astigmatismType = '';
+        if (cyl !== 0) {
+            if (sph === 0) astigmatismType = 'Simple Astigmatism';
+            else if (sph > 0 && newSphere > 0) astigmatismType = 'Compound Hyperopic Astigmatism';
+            else if (sph < 0 && newSphere < 0) astigmatismType = 'Compound Myopic Astigmatism';
+            else astigmatismType = 'Mixed Astigmatism';
+        } else {
+            astigmatismType = 'No Astigmatism';
+        }
+
+        setResult({ transposed, astigmatismType });
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Simple Transposition</CardTitle>
+                <CardDescription>Transpose a prescription and determine the type of astigmatism.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="sph-t">Sphere</Label>
+                        <Input id="sph-t" type="number" placeholder="+2.00" value={sphere} onChange={e => setSphere(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="cyl-t">Cylinder</Label>
+                        <Input id="cyl-t" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="axis-t">Axis</Label>
+                        <Input id="axis-t" type="number" placeholder="90" value={axis} onChange={e => setAxis(e.target.value)} />
+                    </div>
+                </div>
+                <Button onClick={transpose}>Transpose</Button>
+                {result && (
+                    <Alert>
+                        <Replace className="h-4 w-4" />
+                        <AlertTitle>Results</AlertTitle>
+                        <AlertDescription>
+                            <p><strong>Transposed:</strong> {result.transposed}</p>
+                            <p><strong>Astigmatism Type:</strong> {result.astigmatismType}</p>
+                        </AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+// --- Spherical Equivalent Calculator ---
+function SphericalEquivalentCalculator() {
+    const [sphere, setSphere] = useState('');
+    const [cylinder, setCylinder] = useState('');
+    const [result, setResult] = useState('');
+
+    const calculateSE = () => {
+        const sph = parseFloat(sphere);
+        const cyl = parseFloat(cylinder);
+
+        if (isNaN(sph)) {
+            setResult('Please enter a valid sphere value.');
+            return;
+        }
+
+        const se = sph + (cyl / 2 || 0);
+        setResult(`Spherical Equivalent: ${se.toFixed(2)} D`);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Spherical Equivalent</CardTitle>
+                <CardDescription>Calculate the spherical equivalent of a prescription.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="sph-se">Sphere (D)</Label>
+                        <Input id="sph-se" type="number" placeholder="-2.50" value={sphere} onChange={e => setSphere(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="cyl-se">Cylinder (D)</Label>
+                        <Input id="cyl-se" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
+                    </div>
+                </div>
+                <Button onClick={calculateSE}>Calculate</Button>
+                {result && (
+                     <Alert>
+                        <Sigma className="h-4 w-4" />
+                        <AlertTitle>Result</AlertTitle>
+                        <AlertDescription className="font-semibold">{result}</AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+
+const visualAcuityOptions = [ "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "6/60", "5/6", "5/9", "5/12", "5/18", "5/24", "5/36", "5/60", "4/6", "4/9", "4/12", "4/18", "4/24", "4/36", "4/60", "3/6", "3/9", "3/12", "3/18", "3/24", "3/36", "3/60", "2/6", "2/9", "2/12", "2/18", "2/24", "2/36", "2/60", "1/6", "1/9", "1/12", "1/18", "1/24", "1/36", "1/60" ];
 const nearAcuityOptions = ["N6", "N8", "N12", "N18", "N24", "N36"];
 const kestenbaumAcuityOptions = visualAcuityOptions.filter(val => parseFloat(val.split('/')[1]) >= 18);
-
 
 function MagnificationDistanceCalculator() {
     const [presentAcuity, setPresentAcuity] = useState('6/60');
@@ -447,7 +619,7 @@ export default function OptoToolsPage() {
                 <CardContent>
                     <Tabs defaultValue="vertex" className="w-full">
                         <div className="flex justify-center mb-6">
-                            <TabsList className="h-auto p-1.5 bg-blue-100/60 rounded-full">
+                           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-1.5 bg-blue-100/60 rounded-full">
                                 <TabsTrigger value="vertex" className="px-6 py-2 text-sm">Vertex Distance</TabsTrigger>
                                 <TabsTrigger value="base-curve" className="px-6 py-2 text-sm">Base Curve</TabsTrigger>
                                 <TabsTrigger value="lars" className="px-6 py-2 text-sm">LARS Rule</TabsTrigger>
@@ -465,8 +637,35 @@ export default function OptoToolsPage() {
                     </Tabs>
                 </CardContent>
             </Card>
+            
+            <Card className="shadow-lg">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                        <Ruler className="h-6 w-6 text-green-600" />
+                        Optics & Refraction Calculators
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Tabs defaultValue="working-lens" className="w-full">
+                        <div className="flex justify-center mb-6">
+                           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-1.5 bg-green-100/60 rounded-full">
+                                <TabsTrigger value="working-lens" className="px-4 py-2 text-sm">Working Lens</TabsTrigger>
+                                <TabsTrigger value="transposition" className="px-4 py-2 text-sm">Transposition</TabsTrigger>
+                                <TabsTrigger value="sph-equivalent" className="px-4 py-2 text-sm">Sph. Equivalent</TabsTrigger>
+                                <TabsTrigger value="snellen-size" className="px-4 py-2 text-sm">Snellen Size</TabsTrigger>
+                            </TabsList>
+                        </div>
+                        <TabsContent value="working-lens" className="mt-6"><RetinoscopyWorkingLensCalculator /></TabsContent>
+                        <TabsContent value="transposition" className="mt-6"><SimpleTranspositionCalculator /></TabsContent>
+                        <TabsContent value="sph-equivalent" className="mt-6"><SphericalEquivalentCalculator /></TabsContent>
+                        <TabsContent value="snellen-size" className="mt-6">
+                             <Card><CardContent className="p-6 text-center text-muted-foreground">Coming Soon</CardContent></Card>
+                        </TabsContent>
+                    </Tabs>
+                </CardContent>
+            </Card>
 
-             <Card className="shadow-lg">
+            <Card className="shadow-lg">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
                         <Eye className="h-6 w-6 text-purple-600" />
@@ -476,10 +675,10 @@ export default function OptoToolsPage() {
                 <CardContent>
                     <Tabs defaultValue="magnification-distance" className="w-full">
                         <div className="flex justify-center mb-6">
-                            <TabsList className="h-auto p-1.5 bg-purple-100/60 rounded-full">
-                                <TabsTrigger value="magnification-distance" className="px-6 py-2 text-sm">Magnification (Distance)</TabsTrigger>
-                                <TabsTrigger value="magnification-near" className="px-6 py-2 text-sm">Magnification (Near)</TabsTrigger>
-                                <TabsTrigger value="kestenbaum" className="px-6 py-2 text-sm">Kestenbaum's Rule</TabsTrigger>
+                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-1.5 bg-purple-100/60 rounded-full">
+                                <TabsTrigger value="magnification-distance" className="px-4 py-2 text-sm">Magnification (Distance)</TabsTrigger>
+                                <TabsTrigger value="magnification-near" className="px-4 py-2 text-sm">Magnification (Near)</TabsTrigger>
+                                <TabsTrigger value="kestenbaum" className="px-4 py-2 text-sm">Kestenbaum's Rule</TabsTrigger>
                             </TabsList>
                         </div>
                          <TabsContent value="magnification-distance" className="mt-6">
@@ -499,3 +698,5 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
+    
