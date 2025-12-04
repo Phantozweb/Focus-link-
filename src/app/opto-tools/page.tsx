@@ -23,6 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { allUsers } from '@/lib/data';
 
 
 // --- Vertex Distance Calculator ---
@@ -877,14 +878,6 @@ function SnellenLetterSizeCalculator() {
             setResult('Invalid line selected.');
             return;
         }
-
-        // θ = 5 minutes of arc. Convert to radians.
-        const thetaInRadians = (5 / 60) * (Math.PI / 180);
-        
-        // W = D * tan(θ) where D is the denominator. The question implies distance, but formula uses denominator.
-        // Standard formula: Letter height (mm) = 2 * Distance(m) * tan(MAR / 2)
-        // A 6/6 letter subtends 5 min arc at 6m. A 6/12 letter subtends 10 min arc. So MAR = Denom / Num
-        // Let's use the provided simplified formula: W = D * tan(5/60 degrees)
         
         const tan5arcmin = 0.00145444; // tan(5/60 degrees)
         const sizeInMeters = denominator * tan5arcmin;
@@ -1016,6 +1009,89 @@ function AcaRatioCalculator() {
     );
 }
 
+// --- AC/A Ratio Gradient Calculator ---
+function AcaGradientCalculator() {
+    const deviationOptions = Array.from({length: 41}, (_, i) => String(i - 20)); // -20 to 20
+    const lensOptions = ["-3.00", "-2.00", "-1.00", "+1.00", "+2.00", "+3.00"];
+
+    const [originalDeviation, setOriginalDeviation] = useState('0');
+    const [lensDeviation, setLensDeviation] = useState('0');
+    const [lensPower, setLensPower] = useState('+1.00');
+    const [result, setResult] = useState('');
+
+    const calculateAca = () => {
+        const DO = parseFloat(originalDeviation);
+        const DL = parseFloat(lensDeviation);
+        const p = parseFloat(lensPower);
+
+        if (isNaN(DO) || isNaN(DL) || isNaN(p) || p === 0) {
+            setResult('Please enter valid numeric values for all fields, and lens power cannot be zero.');
+            return;
+        }
+
+        const acaRatio = Math.abs((DL - DO) / p);
+        setResult(`AC/A Ratio: ${acaRatio.toFixed(2)} PD/D`);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Give the deviations with and without the lens, and get the AC/A ratio.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Select the deviations in prism diopters from the dropdown, choose the lens used, then click 'Calculate'.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="original-deviation">Original Deviation (PD)</Label>
+                    <Select value={originalDeviation} onValueChange={setOriginalDeviation}>
+                        <SelectTrigger id="original-deviation"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {deviationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="lens-deviation">Deviation with Lens (PD)</Label>
+                    <Select value={lensDeviation} onValueChange={setLensDeviation}>
+                        <SelectTrigger id="lens-deviation"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {deviationOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="lens-power">Lens Power (D)</Label>
+                    <Select value={lensPower} onValueChange={setLensPower}>
+                        <SelectTrigger id="lens-power"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {lensOptions.map(o => <SelectItem key={o} value={o}>{o} DS</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <Button onClick={calculateAca}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+             <div className="text-sm text-slate-500 pt-4">
+                <h4 className="font-semibold text-slate-700">Formula:</h4>
+                <p className="font-mono">AC/A Ratio = |DL - DO| / p</p>
+                <ul className="text-xs mt-1 list-disc list-inside">
+                    <li>DL - Deviation with lens (PD)</li>
+                    <li>DO - Original Deviation without lens (PD)</li>
+                    <li>p - Power of the lens used (D)</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
 const tools = [
   {
     id: 'vertex',
@@ -1102,10 +1178,17 @@ const tools = [
     category: 'refraction',
   },
   {
-    id: 'aca-ratio',
+    id: 'aca-ratio-heterophoria',
     title: 'AC/A Ratio (Heterophoria)',
     description: 'Calculate the AC/A ratio using the heterophoria method.',
     component: <AcaRatioCalculator />,
+    category: 'binocular-vision'
+  },
+  {
+    id: 'aca-ratio-gradient',
+    title: 'AC/A Ratio (Gradient)',
+    description: 'Calculate the AC/A ratio using the gradient method.',
+    component: <AcaGradientCalculator />,
     category: 'binocular-vision'
   },
 ];
@@ -1241,34 +1324,32 @@ export default function OptoToolsPage() {
         </Tabs>
         
         <section className="max-w-4xl mx-auto mt-20">
-              <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-               <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
-                  <div className="md:flex">
-                      <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
-                          <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
-                              <AvatarImage src="" alt="Shivashangari M" />
-                              <AvatarFallback className="bg-slate-200">
-                                  <UserRound className="h-12 w-12 text-slate-400" />
-                              </AvatarFallback>
-                          </Avatar>
-                          <h3 className="text-xl font-bold text-slate-800 mt-4">Shivashangari M</h3>
-                          <p className="text-sm text-primary font-semibold">Masters in Optometry | Contact Lens Specialist</p>
-                          <Button asChild variant="secondary" size="sm" className="mt-4">
-                              <Link href="/profile/16">View Profile</Link>
-                          </Button>
-                      </div>
-                      <div className="p-8 md:w-2/3 flex flex-col justify-center">
-                          <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
-                          <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
-                              "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
-                          </blockquote>
-                      </div>
-                  </div>
-              </Card>
-          </section>
+            <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
+            <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+                <div className="md:flex">
+                    <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
+                        <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
+                            <AvatarImage src="" alt="Shivashangari M" />
+                            <AvatarFallback className="bg-slate-200">
+                                <UserRound className="h-12 w-12 text-slate-400" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <h3 className="text-xl font-bold text-slate-800 mt-4">Shivashangari M</h3>
+                        <p className="text-sm text-primary font-semibold">Masters in Optometry | Contact Lens Specialist</p>
+                        <Button asChild variant="secondary" size="sm" className="mt-4">
+                            <Link href="/profile/16">View Profile</Link>
+                        </Button>
+                    </div>
+                    <div className="p-8 md:w-2/3 flex flex-col justify-center">
+                        <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
+                        <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
+                            "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
+                        </blockquote>
+                    </div>
+                </div>
+            </Card>
+        </section>
       </main>
     </div>
   );
 }
-
-    
