@@ -273,8 +273,15 @@ function MagnificationDistanceCalculator() {
     const calculateMagnification = () => {
         const present = presentAcuity.split('/').map(Number);
         const required = requiredAcuity.split('/').map(Number);
-        if (present.length !== 2 || required.length !== 2) return;
-        const magnification = (present[1] / present[0]) / (required[1] / required[0]);
+        if (present.length !== 2 || required.length !== 2 || present[0] === 0 || required[0] === 0) {
+            setResult('Invalid acuity values.');
+            return;
+        };
+
+        const presentDecimal = present[1] / present[0];
+        const requiredDecimal = required[1] / required[0];
+
+        const magnification = presentDecimal / requiredDecimal;
         setResult(`Required Magnification: ${magnification.toFixed(2)}x`);
     };
 
@@ -326,7 +333,10 @@ function MagnificationNearCalculator() {
     const calculateMagnification = () => {
         const presentN = parseInt(presentAcuity.substring(1));
         const requiredN = parseInt(requiredAcuity.substring(1));
-        if (isNaN(presentN) || isNaN(requiredN) || requiredN === 0) return;
+        if (isNaN(presentN) || isNaN(requiredN) || requiredN === 0) {
+            setResult('Invalid N-notation values.');
+            return;
+        }
         const magnification = presentN / requiredN;
         setResult(`Required Magnification: ${magnification.toFixed(2)}x`);
     };
@@ -377,7 +387,10 @@ function KestenbaumRuleCalculator() {
 
     const calculateAdd = () => {
         const values = bcva.split('/').map(Number);
-        if (values.length !== 2 || values[0] === 0) return;
+        if (values.length !== 2 || values[0] === 0) {
+            setResult('Invalid BCVA value.');
+            return;
+        };
         const add = values[1] / values[0];
         setResult(`Estimated Near Add: +${add.toFixed(2)} D`);
     };
