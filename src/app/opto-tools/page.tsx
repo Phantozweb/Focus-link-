@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -22,7 +21,7 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
-import { allUsers } from '@/lib/data/index';
+import { allUsers } from '@/lib/data';
 import { ProfileCard } from '@/components/profile-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -711,7 +710,33 @@ export default function OptoToolsPage() {
         </p>
       </header>
 
-      <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16">
+       <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16 space-y-16">
+        <section>
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-slate-800">Optometry Calculator Hub</h2>
+            <p className="mt-2 text-lg text-slate-600">
+              Your one-stop destination for precise and efficient clinical calculations. This hub provides a comprehensive suite of tools designed to streamline daily tasks for optometrists, students, and eye care professionals.
+            </p>
+            <div className="mt-4 text-sm text-slate-500">
+              <p><strong className="text-slate-600">Keywords:</strong> Optometry Calculator, Vertex Distance, LARS Rule, Keratometry, Low Vision Magnification, Kestenbaum's Rule, Transposition, Spherical Equivalent.</p>
+            </div>
+          </div>
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Available Modules</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {tools.map(tool => (
+                  <div key={tool.id} className="p-3 bg-slate-50 rounded-lg text-center">
+                    <p className="font-semibold text-sm text-slate-700">{tool.title}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="flex justify-center mb-8">
             <AnimatedTabs onTabChange={setActiveTab} />
@@ -745,7 +770,8 @@ export default function OptoToolsPage() {
             </TabsContent>
           ))}
         </Tabs>
-         <section className="max-w-4xl mx-auto mt-20">
+        
+        <section className="max-w-4xl mx-auto mt-20">
           <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
             {creator && (
               <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
