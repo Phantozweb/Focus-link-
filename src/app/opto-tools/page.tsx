@@ -26,8 +26,8 @@ function VertexDistanceCalculator() {
 
     const calculatePrescription = () => {
         const DL_sphere = parseFloat(sphere);
-        const DL_cylinder = parseFloat(cylinder);
-        const d = parseFloat(vertexDistance) / 1000;
+        const DL_cylinder = parseFloat(cylinder) || 0;
+        const d = parseFloat(vertexDistance) / 1000; // convert mm to meters
 
         if (isNaN(DL_sphere)) {
             setMessage('Please provide a valid sphere power.');
@@ -39,22 +39,20 @@ function VertexDistanceCalculator() {
 
         if (conversion === 'specsToCL') {
             effectiveSphere = DL_sphere / (1 - d * DL_sphere);
-            if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
+            if (DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
-                effectiveCylinder = effectiveTotal - correctedPower1;
+                effectiveCylinder = effectiveTotal - effectiveSphere;
             }
         } else { // clToSpecs
             effectiveSphere = DL_sphere / (1 + d * DL_sphere);
-            if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
+            if (DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 + d * (DL_sphere + DL_cylinder));
-                effectiveCylinder = effectiveTotal - correctedPower1;
+                effectiveCylinder = effectiveTotal - effectiveSphere;
             }
         }
-
-        let correctedPower1 = effectiveSphere;
         
         let resultText = `Sphere: ${effectiveSphere.toFixed(2)} D`;
-        if (effectiveCylinder !== undefined) {
+        if (effectiveCylinder !== undefined && !isNaN(effectiveCylinder)) {
              resultText += `, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`;
         }
         setResult(resultText);
@@ -454,15 +452,7 @@ function MagnificationDistanceCalculator() {
             return;
         };
 
-        const presentDecimal = present[0] / present[1];
-        const requiredDecimal = required[0] / required[1];
-
-        if (presentDecimal === 0) {
-            setResult('Cannot calculate magnification with a present acuity of zero.');
-            return;
-        }
-
-        const magnification = requiredDecimal / presentDecimal;
+        const magnification = (required[0] * present[1]) / (present[0] * required[1]);
         setResult(`Required Magnification: ${magnification.toFixed(2)}x`);
     };
 
@@ -704,5 +694,7 @@ export default function OptoToolsPage() {
   );
 }
 
+
+    
 
     
