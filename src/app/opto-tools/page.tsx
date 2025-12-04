@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -24,6 +24,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { allUsers } from '@/lib/data/index';
 import { ProfileCard } from '@/components/profile-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 // --- Vertex Distance Calculator ---
@@ -744,15 +745,33 @@ export default function OptoToolsPage() {
             </TabsContent>
           ))}
         </Tabs>
-         <section className="max-w-3xl mx-auto mt-16">
-          <h2 className="text-2xl font-bold text-slate-800 text-center mb-6">About the Creator</h2>
-          <div className="flex justify-center">
+         <section className="max-w-4xl mx-auto mt-20">
+          <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
             {creator && (
-              <div className="w-full max-w-sm">
-                <ProfileCard user={creator} isFeatured />
-              </div>
+              <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+                <div className="md:flex">
+                    <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
+                         <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
+                            <AvatarImage src={creator.avatarUrl} alt={creator.name} />
+                            <AvatarFallback className="bg-slate-200">
+                                <UserRound className="h-12 w-12 text-slate-400" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <h3 className="text-xl font-bold text-slate-800 mt-4">{creator.name}</h3>
+                        <p className="text-sm text-primary font-semibold">{creator.experience}</p>
+                        <Button asChild variant="secondary" size="sm" className="mt-4">
+                            <Link href={`/profile/${creator.id}`}>View Profile</Link>
+                        </Button>
+                    </div>
+                    <div className="p-8 md:w-2/3">
+                        <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
+                         <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
+                            "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
+                        </blockquote>
+                    </div>
+                </div>
+              </Card>
             )}
-          </div>
         </section>
       </main>
     </div>
