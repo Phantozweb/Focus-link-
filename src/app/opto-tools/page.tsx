@@ -1154,7 +1154,7 @@ function SheardsCriterionCalculator() {
                 <p className="font-mono">P = 2/3(p) - 1/3 (CFV)</p>
                 <ul className="text-xs mt-1 list-disc list-inside">
                     <li>P - Prism (PD)</li>
-                    <li>p - Phoria (PD)</li>
+                    <li>p - phoria (PD)</li>
                     <li>CFV - Compensating Fusional Vergence (PD)</li>
                 </ul>
             </div>
@@ -1774,7 +1774,7 @@ export default function OptoToolsPage() {
                         </CardHeader>
                       </Card>
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl">
+                    <DialogContent>
                       <DialogHeader>
                         <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
                         <DialogDescription>{tool.description}</DialogDescription>
@@ -1790,7 +1790,7 @@ export default function OptoToolsPage() {
           ))}
         </Tabs>
         
-        <section className="max-w-4xl mx-auto mt-20">
+         <section className="max-w-4xl mx-auto mt-20">
              <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
               <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                 <div className="md:flex">
@@ -1820,4 +1820,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
