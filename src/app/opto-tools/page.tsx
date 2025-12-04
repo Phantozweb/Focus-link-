@@ -20,7 +20,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 
 
 // --- Vertex Distance Calculator ---
@@ -644,7 +644,58 @@ const categories = [
     { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-5 w-5" /> },
 ];
 
+const AnimatedTabs = ({ onTabChange }: { onTabChange: (value: string) => void }) => {
+  const [activeTab, setActiveTab] = useState(categories[0].id);
+  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    const activeTabNode = tabsRef.current.find(
+      (tab) => tab?.dataset.id === activeTab
+    );
+    if (activeTabNode) {
+      setIndicatorStyle({
+        left: activeTabNode.offsetLeft,
+        width: activeTabNode.offsetWidth,
+      });
+    }
+  }, [activeTab]);
+
+  const handleTabClick = (id: string) => {
+    setActiveTab(id);
+    onTabChange(id);
+  };
+
+  return (
+    <div className="relative flex w-full max-w-lg mx-auto p-1 bg-slate-200/80 rounded-full">
+      <div
+        className="absolute h-[calc(100%-8px)] top-1 bg-white rounded-full shadow-md transition-all duration-300 ease-in-out"
+        style={indicatorStyle}
+      />
+      {categories.map((category, index) => (
+        <button
+          key={category.id}
+          ref={(el) => (tabsRef.current[index] = el)}
+          data-id={category.id}
+          onClick={() => handleTabClick(category.id)}
+          className={cn(
+            'relative z-10 flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-bold transition-colors duration-300 rounded-full',
+            activeTab === category.id
+              ? 'text-primary'
+              : 'text-muted-foreground hover:text-primary'
+          )}
+        >
+          {category.icon}
+          {category.name}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+
 export default function OptoToolsPage() {
+  const [activeTab, setActiveTab] = useState(categories[0].id);
   return (
     <div className="bg-brand-bg">
       <header className="hero">
@@ -655,16 +706,9 @@ export default function OptoToolsPage() {
       </header>
 
       <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16">
-        <Tabs defaultValue="contact-lens" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="flex justify-center mb-8">
-            <TabsList className="grid w-full max-w-lg grid-cols-1 sm:grid-cols-3 h-auto sm:h-12">
-                {categories.map((category) => (
-                    <TabsTrigger key={category.id} value={category.id} className="py-3 text-base sm:text-sm flex items-center gap-2">
-                        {category.icon}
-                        {category.name}
-                    </TabsTrigger>
-                ))}
-            </TabsList>
+            <AnimatedTabs onTabChange={setActiveTab} />
           </div>
 
           {categories.map((category) => (
