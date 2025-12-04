@@ -481,7 +481,8 @@ export const professionals: UserProfile[] = [
         degree: 'B.Sc optometry',
         fieldOfStudy: 'Allied Health Sciences',
         startYear: '2021',
-        endYear: '2025'
+        endYear: '2025',
+        university: 'Karunya institute of technology and science'
       }
     ],
     languages: ['English', 'Tamil', 'Telugu'],
@@ -554,21 +555,24 @@ export const professionals: UserProfile[] = [
         degree: 'MSc. Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2022',
-        endYear: '2024'
+        endYear: '2024',
+        university: 'Sikkim Skill University'
       },
       {
         school: 'Silver Line Laboratories Delhi',
         degree: 'Fellowship in Speciality Contact Lenses, Optometry',
         fieldOfStudy: 'Optometry',
         startYear: 'July 2023',
-        endYear: 'September 2023'
+        endYear: 'September 2023',
+        university: 'Silver Line Laboratories Delhi'
       },
        {
         school: 'SRMS Institutions',
         degree: 'Bachelor of Science (BS) in Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2017',
-        endYear: '2022'
+        endYear: '2022',
+        university: 'SRMS Institutions'
       }
     ],
     languages: ['Hindi (Full Professional)', 'English (Professional)', 'Urdu (Limited Working)'],
@@ -586,14 +590,21 @@ export const professionals: UserProfile[] = [
       'Patient counselling',
       'Teaching'
     ],
-    interests: ['Teaching', 'Dispensing'],
-    bio: `A highly dedicated optometrist with a strong academic background, holding a post-graduate degree from Vasan Institute of Ophthalmology and Research, Chennai. I have extensive experience in conducting over 30+ eye screening camps during my undergraduate internship, as well as private screening camps. My passion lies in developing web-based tools for optometry, advising on spectacle and contact lens care,, and ensuring patient comfort through clear vision.`,
+    interests: ['Teaching', 'Dispensing', 'Web Development'],
+    bio: `A highly dedicated optometrist with a strong academic background, holding a post-graduate degree from Vasan Institute of Ophthalmology and Research, Chennai. I have extensive experience in conducting over 30+ eye screening camps during my undergraduate internship, as well as private screening camps. My passion lies in developing web-based tools for optometry, advising on spectacle and contact lens care, and ensuring patient comfort through clear vision. As the Head of the Tech Team at Focus Links, I am committed to creating digital solutions that enhance efficiency and accuracy in optometry practices.`,
     links: {
       email: 'shivashangarimoptom@gmail.com',
       linkedin: 'https://www.linkedin.com/in/shivashangari-m-optom'
     },
-    avatarUrl: '',
+    avatarUrl: 'https://i.ibb.co/v69jrMh/b-Change-into-solid-ba.png',
     workExperience: [
+      {
+        title: 'Head of Tech Team',
+        company: 'Focus Links',
+        startDate: 'Oct 2025',
+        endDate: 'Present',
+        description: 'Leading the development and conceptualization of digital tools and calculators for the Focus Links platform to support eye care professionals worldwide.'
+      },
       {
         title: 'Dispensing Optometrist',
         company: 'Local Practice',
@@ -667,7 +678,8 @@ export const professionals: UserProfile[] = [
         degree: 'Bachelors in Clinical Optometry',
         fieldOfStudy: 'Optometry',
         startYear: '2016',
-        endYear: '2020'
+        endYear: '2020',
+        university: 'Amity University Gurugram'
       }
     ],
     languages: ['English', 'Hindi'],

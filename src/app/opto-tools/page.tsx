@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import Link from 'next/link';
 
 
 // --- Vertex Distance Calculator ---
@@ -107,7 +108,6 @@ function VertexDistanceCalculator() {
             <Button onClick={calculatePrescription}>Calculate</Button>
             {result && (
                 <Alert>
-                    <Calculator className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription>
                         <p className="font-semibold">{result}</p>
@@ -143,7 +143,6 @@ function BaseCurveCalculator() {
             <Button onClick={calculateBaseCurve}>Calculate</Button>
             {result && (
                 <Alert>
-                    <Orbit className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
@@ -228,11 +227,12 @@ function LarsRuleCalculator() {
     const handleAxisChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
         const numValue = parseInt(value, 10);
         if (value === '' || isNaN(numValue)) {
-            setter(0);
+             setter(0); // or some default, maybe keep previous state
         } else if (numValue >= 0 && numValue <= 180) {
-            setter(numValue === 0 ? 180 : numValue);
+            setter(numValue);
         }
     };
+    
 
     return (
         <div className="space-y-6">
@@ -241,14 +241,14 @@ function LarsRuleCalculator() {
                     <Label htmlFor="initialAxis">Initial Axis</Label>
                     <div className="flex items-center gap-2">
                         <Slider id="initialAxis" min={0} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
-                        <Input type="number" value={initialAxis === 180 ? 0 : initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
+                        <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
                 <div className="space-y-4">
                     <Label htmlFor="rotatedAxis">Axis After Blink</Label>
                     <div className="flex items-center gap-2">
                         <Slider id="rotatedAxis" min={0} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
-                        <Input type="number" value={rotatedAxis === 180 ? 0 : rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
+                        <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
             </div>
@@ -265,7 +265,6 @@ function LarsRuleCalculator() {
             <Button onClick={applyLarsRule}>Apply LARS Rule</Button>
             {result && (
                 <Alert>
-                    <RotateCw className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="flex flex-col sm:flex-row items-center gap-4">
                         <p className="font-semibold text-base">{result}</p>
@@ -304,7 +303,6 @@ function RetinoscopyWorkingLensCalculator() {
             <Button onClick={calculatePower}>Calculate</Button>
             {result && (
                 <Alert>
-                    <Calculator className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
@@ -477,7 +475,6 @@ function MagnificationDistanceCalculator() {
             <Button onClick={calculateMagnification}>Calculate</Button>
             {result && (
                 <Alert>
-                    <ZoomIn className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
@@ -527,7 +524,6 @@ function MagnificationNearCalculator() {
             <Button onClick={calculateMagnification}>Calculate</Button>
             {result && (
                 <Alert>
-                    <ZoomIn className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
@@ -564,7 +560,6 @@ function KestenbaumRuleCalculator() {
             <Button onClick={calculateAdd}>Calculate ADD</Button>
             {result && (
                 <Alert>
-                    <ZoomIn className="h-4 w-4" />
                     <AlertTitle>Result</AlertTitle>
                     <AlertDescription className="font-semibold">{result}</AlertDescription>
                 </Alert>
@@ -747,10 +742,15 @@ export default function OptoToolsPage() {
               <AccordionContent>
                 <div className="prose prose-slate max-w-none pt-2">
                     <h4>About the Creator</h4>
-                    <p>
-                        These calculation tools were created and conceptualized by <strong>Shivashangari M.</strong>, a passionate professional with a Master’s degree in Optometry. Her goal is to enhance efficiency and accuracy in optometry practices through user-friendly digital solutions.
-                    </p>
-                    <h4>Acknowledgements</h4>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <p className="flex-grow">
+                            These calculation tools were created and conceptualized by <strong>Shivashangari M.</strong>, a passionate professional with a Master’s degree in Optometry. Her goal is to enhance efficiency and accuracy in optometry practices through user-friendly digital solutions.
+                        </p>
+                        <Button asChild>
+                            <Link href="/profile/16">View Profile</Link>
+                        </Button>
+                    </div>
+                    <h4 className='mt-6'>Acknowledgements</h4>
                     <p>
                         We extend our sincere thanks to <strong>Mr. Ramprasat Kanagaraj</strong>, Dean of Optometry Education, and <strong>Ms. Preetha Ramprasat</strong>, Associate Professor at VIOR, for their invaluable guidance and support in the development of these tools.
                     </p>
@@ -763,4 +763,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
