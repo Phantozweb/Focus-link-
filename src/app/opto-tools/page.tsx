@@ -36,8 +36,12 @@ function VertexDistanceCalculator() {
         }
 
         let effectiveSphere, effectiveTotal, effectiveCylinder;
+        
+        // This is a client component, so document is available
+        // but it is better to use state.
+        const selection = conversion;
 
-        if (conversion === 'specsToCL') {
+        if (selection === 'specsToCL') {
             effectiveSphere = DL_sphere / (1 - d * DL_sphere);
             if (DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
@@ -280,7 +284,7 @@ function RetinoscopyWorkingLensCalculator() {
             return;
         }
         const power = 100 / d;
-        setResult(`Compensating Lens: -${power.toFixed(2)} D`);
+        setResult(`Compensating Lens: +${power.toFixed(2)} D`);
     };
 
     return (
@@ -619,9 +623,9 @@ export default function OptoToolsPage() {
                     <Tabs defaultValue="vertex" className="w-full">
                         <div className="flex justify-center mb-6">
                            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-1.5 bg-blue-100/60 rounded-full">
-                                <TabsTrigger value="vertex" className="px-6 py-2 text-sm">Vertex Distance</TabsTrigger>
-                                <TabsTrigger value="base-curve" className="px-6 py-2 text-sm">Base Curve</TabsTrigger>
-                                <TabsTrigger value="lars" className="px-6 py-2 text-sm">LARS Rule</TabsTrigger>
+                                <TabsTrigger value="vertex" className="px-6 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Vertex Distance</TabsTrigger>
+                                <TabsTrigger value="base-curve" className="px-6 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Base Curve</TabsTrigger>
+                                <TabsTrigger value="lars" className="px-6 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">LARS Rule</TabsTrigger>
                             </TabsList>
                         </div>
                         <TabsContent value="vertex" className="mt-6">
@@ -646,11 +650,11 @@ export default function OptoToolsPage() {
                 </CardHeader>
                 <CardContent>
                     <Tabs defaultValue="working-lens" className="w-full">
-                        <div className="flex justify-center mb-6">
+                         <div className="flex justify-center mb-6">
                            <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 h-auto p-1.5 bg-green-100/60 rounded-full">
-                                <TabsTrigger value="working-lens" className="px-4 py-2 text-sm">Working Lens</TabsTrigger>
-                                <TabsTrigger value="transposition" className="px-4 py-2 text-sm">Transposition</TabsTrigger>
-                                <TabsTrigger value="sph-equivalent" className="px-4 py-2 text-sm">Sph. Equivalent</TabsTrigger>
+                                <TabsTrigger value="working-lens" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Working Lens</TabsTrigger>
+                                <TabsTrigger value="transposition" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Transposition</TabsTrigger>
+                                <TabsTrigger value="sph-equivalent" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Sph. Equivalent</TabsTrigger>
                             </TabsList>
                         </div>
                         <TabsContent value="working-lens" className="mt-6"><RetinoscopyWorkingLensCalculator /></TabsContent>
@@ -671,9 +675,9 @@ export default function OptoToolsPage() {
                     <Tabs defaultValue="magnification-distance" className="w-full">
                         <div className="flex justify-center mb-6">
                             <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto p-1.5 bg-purple-100/60 rounded-full">
-                                <TabsTrigger value="magnification-distance" className="px-4 py-2 text-sm">Magnification (Distance)</TabsTrigger>
-                                <TabsTrigger value="magnification-near" className="px-4 py-2 text-sm">Magnification (Near)</TabsTrigger>
-                                <TabsTrigger value="kestenbaum" className="px-4 py-2 text-sm">Kestenbaum's Rule</TabsTrigger>
+                                <TabsTrigger value="magnification-distance" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Magnification (Distance)</TabsTrigger>
+                                <TabsTrigger value="magnification-near" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Magnification (Near)</TabsTrigger>
+                                <TabsTrigger value="kestenbaum" className="px-4 py-2 text-sm rounded-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">Kestenbaum's Rule</TabsTrigger>
                             </TabsList>
                         </div>
                          <TabsContent value="magnification-distance" className="mt-6">
@@ -693,8 +697,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-
-    
-
-    
