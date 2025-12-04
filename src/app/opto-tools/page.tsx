@@ -56,7 +56,7 @@ function VertexDistanceCalculator() {
         }
         
         let resultText = `Sphere: ${effectiveSphere.toFixed(2)} D`;
-        if (effectiveCylinder !== undefined && !isNaN(effectiveCylinder) && effectiveCylinder !== 0) {
+        if (effectiveCylinder !== undefined && !isNaN(effectiveCylinder) && effectiveCylinder.toFixed(2) !== '0.00' && effectiveCylinder.toFixed(2) !== '-0.00') {
              resultText += `, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`;
         }
         setResult(resultText);
@@ -229,10 +229,10 @@ function LarsRuleCalculator() {
     
     const handleAxisChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
         const numValue = parseInt(value, 10);
-        if (!isNaN(numValue) && numValue >= 1 && numValue <= 180) {
-            setter(numValue);
-        } else if (value === '') {
-            setter(0); // or some other default
+        if (value === '' || isNaN(numValue)) {
+            setter(0);
+        } else if (numValue >= 0 && numValue <= 180) {
+            setter(numValue === 0 ? 180 : numValue);
         }
     };
 
@@ -248,25 +248,25 @@ function LarsRuleCalculator() {
                     <div className="space-y-4">
                         <Label htmlFor="initialAxis">Initial Axis</Label>
                         <div className="flex items-center gap-2">
-                          <Slider id="initialAxis" min={1} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
+                          <Slider id="initialAxis" min={0} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
                           <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
                         </div>
                     </div>
                      <div className="space-y-4">
                         <Label htmlFor="rotatedAxis">Axis After Blink</Label>
                          <div className="flex items-center gap-2">
-                          <Slider id="rotatedAxis" min={1} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
+                          <Slider id="rotatedAxis" min={0} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
                           <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
                         </div>
                     </div>
                 </div>
                 <div className="flex justify-center flex-wrap gap-8">
                      <div className="text-center">
-                        <Label>Initial Axis</Label>
+                        <Label>Initial Axis: {initialAxis}°</Label>
                         <canvas ref={initialCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
                     </div>
                     <div className="text-center">
-                        <Label>Rotated Axis</Label>
+                        <Label>Rotated Axis: {rotatedAxis}°</Label>
                         <canvas ref={rotatedCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
                     </div>
                 </div>
@@ -338,12 +338,14 @@ function SimpleTranspositionCalculator() {
     const transpose = () => {
         const sph = parseFloat(sphere);
         const cyl = parseFloat(cylinder);
-        const ax = parseInt(axis, 10);
+        let ax = parseInt(axis, 10);
 
-        if (isNaN(sph) || isNaN(cyl) || isNaN(ax) || ax < 1 || ax > 180) {
+        if (isNaN(sph) || isNaN(cyl) || isNaN(ax) || ax < 0 || ax > 180) {
             setResult(null);
             return;
         }
+        
+        if (ax === 0) ax = 180;
 
         const newSphere = sph + cyl;
         const newCylinder = -cyl;
@@ -357,10 +359,10 @@ function SimpleTranspositionCalculator() {
         let astigmatismType = 'No Astigmatism';
 
         if (cyl !== 0) {
-            if ((power1 > 0 && power2 > 0) || (power1 === 0 && power2 > 0) || (power1 > 0 && power2 === 0)) {
+            if ((power1 >= 0 && power2 > 0) || (power1 > 0 && power2 >= 0)) {
                 astigmatismType = 'Compound Hyperopic Astigmatism';
                 if(power1 === 0 || power2 === 0) astigmatismType = 'Simple Hyperopic Astigmatism';
-            } else if ((power1 < 0 && power2 < 0) || (power1 === 0 && power2 < 0) || (power1 < 0 && power2 === 0)) {
+            } else if ((power1 <= 0 && power2 < 0) || (power1 < 0 && power2 <= 0)) {
                 astigmatismType = 'Compound Myopic Astigmatism';
                 if(power1 === 0 || power2 === 0) astigmatismType = 'Simple Myopic Astigmatism';
             } else if ((power1 > 0 && power2 < 0) || (power1 < 0 && power2 > 0)) {
@@ -470,7 +472,7 @@ function MagnificationDistanceCalculator() {
     const calculateMagnification = () => {
         const present = presentAcuity.split('/').map(Number);
         const required = requiredAcuity.split('/').map(Number);
-        if (present.length !== 2 || required.length !== 2 || isNaN(present[0]) || isNaN(present[1]) || isNaN(required[0]) || isNaN(required[1]) || present[1] === 0 || required[1] === 0 || present[0] === 0) {
+        if (present.length !== 2 || required.length !== 2 || isNaN(present[0]) || isNaN(present[1]) || isNaN(required[0]) || isNaN(required[1]) || present[1] === 0 || required[1] === 0 || present[0] === 0 || required[0] === 0) {
             setResult('Invalid acuity values.');
             return;
         };
@@ -715,3 +717,5 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
+```
