@@ -22,8 +22,8 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
-import { allUsers } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { allUsers } from '@/lib/data/index';
 
 
 // --- Vertex Distance Calculator ---
