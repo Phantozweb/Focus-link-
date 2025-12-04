@@ -23,6 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { allUsers } from '@/lib/data';
 
 
 // --- Vertex Distance Calculator ---
@@ -381,6 +382,18 @@ function SimpleTranspositionCalculator() {
 
     return (
         <div className="space-y-4">
+             <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">
+                    Provide a prescription to get the transposed format and determine the types of astigmatism.
+                </p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">
+                    Enter the sphere, cylinder, and axis, then click 'Transpose'.
+                </p>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="sph-t">Sphere</Label>
@@ -399,12 +412,20 @@ function SimpleTranspositionCalculator() {
             {result && (
                 <Alert>
                     <AlertTitle>Results</AlertTitle>
-                    <AlertDescription>
-                        <p><strong>Transposed:</strong> {result.transposed}</p>
-                        <p><strong>Astigmatism Type:</strong> {result.astigmatismType}</p>
+                    <AlertDescription className='space-y-2'>
+                        <p><strong>Transposed Prescription:</strong> {result.transposed}</p>
+                        <p><strong>Type of Astigmatism:</strong> {result.astigmatismType}</p>
                     </AlertDescription>
                 </Alert>
             )}
+             <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">Steps for Simple Transposition:</h4>
+                <ul className='list-decimal list-inside pl-2 space-y-1'>
+                    <li><b>Sum:</b> Add the sphere and cylinder powers of the prescription to determine the new sphere power.</li>
+                    <li><b>Sign:</b> Change the sign of the cylinder.</li>
+                    <li><b>Axis:</b> Change the axis by 90 degrees. If the original axis is less than or equal to 90°, add 90° to the axis; if more than 90°, subtract 90°.</li>
+                </ul>
+            </div>
         </div>
     );
 }
@@ -450,6 +471,84 @@ function SphericalEquivalentCalculator() {
         </div>
     );
 }
+
+
+const acuityLevels = [
+  { meters: "6/6", feet: "20/20", mar: "1.0", logMAR: "0.0", decimal: "1.0", percentage: "100" },
+  { meters: "6/7.5", feet: "20/25", mar: "1.25", logMAR: "0.1", decimal: "0.8", percentage: "80" },
+  { meters: "6/9", feet: "20/30", mar: "1.5", logMAR: "0.2", decimal: "0.67", percentage: "67" },
+  { meters: "6/12", feet: "20/40", mar: "2.0", logMAR: "0.3", decimal: "0.5", percentage: "50" },
+  { meters: "6/15", feet: "20/50", mar: "2.5", logMAR: "0.4", decimal: "0.4", percentage: "40" },
+  { meters: "6/18", feet: "20/60", mar: "3.0", logMAR: "0.5", decimal: "0.33", percentage: "33" },
+  { meters: "6/24", feet: "20/80", mar: "4.0", logMAR: "0.6", decimal: "0.25", percentage: "25" },
+  { meters: "6/30", feet: "20/100", mar: "5.0", logMAR: "0.7", decimal: "0.2", percentage: "20" },
+  { meters: "6/48", feet: "20/160", mar: "8.0", logMAR: "0.9", decimal: "0.125", percentage: "12.5" },
+  { meters: "6/60", feet: "20/200", mar: "10.0", logMAR: "1.0", decimal: "0.1", percentage: "10" },
+  { meters: "6/120", feet: "20/400", mar: "20.0", logMAR: "1.3", decimal: "0.05", percentage: "5" },
+];
+
+function VisualAcuityConverter() {
+  const [selectedDecimal, setSelectedDecimal] = useState("1.0");
+
+  const handleSelectionChange = (decimalValue: string) => {
+    setSelectedDecimal(decimalValue);
+  };
+
+  const selectedLevel = acuityLevels.find(level => level.decimal === selectedDecimal) || acuityLevels[0];
+
+  return (
+    <div className="space-y-6">
+       <div>
+        <h4 className="font-semibold text-slate-700">Instructions:</h4>
+        <p className="text-sm text-slate-500">
+          Select any one line of visual acuity from any of the 6 dropdown menus; it will simultaneously display the corresponding visual acuity line for all other notations.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {[
+          { label: "Meters", key: "meters" },
+          { label: "Feet", key: "feet" },
+          { label: "MAR", key: "mar" },
+          { label: "Log MAR", key: "logMAR" },
+          { label: "Decimal", key: "decimal" },
+          { label: "Percentage", key: "percentage" },
+        ].map(({ label, key }) => (
+          <div key={key} className="space-y-2">
+            <Label htmlFor={key}>{label}</Label>
+            <Select
+              value={selectedLevel.decimal}
+              onValueChange={handleSelectionChange}
+            >
+              <SelectTrigger id={key}>
+                <SelectValue placeholder="Select...">{(selectedLevel as any)[key]}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {acuityLevels.map((level) => (
+                  <SelectItem key={level.decimal} value={level.decimal}>
+                    {(level as any)[key]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
+      </div>
+
+       <div>
+        <h4 className="font-semibold text-slate-700 mt-6 mb-2">How to convert?</h4>
+        <ol className="list-decimal list-inside text-sm text-slate-600 space-y-1">
+            <li>Snellen Meter to Feet = MAR x 20</li>
+            <li>Snellen Meter to MAR = Divide the Denominator by Numerator of Snellen Meter notation</li>
+            <li>LogMAR = log₁₀(MAR)</li>
+            <li>Snellen Meter to Decimal = Divide the Numerator by Denominator of Snellen Meter notation</li>
+            <li>Snellen Decimal to percentage = Decimal * 100</li>
+        </ol>
+      </div>
+    </div>
+  );
+}
+
 
 
 const visualAcuityOptions = [ "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "6/60", "5/6", "5/9", "5/12", "5/18", "5/24", "5/36", "5/60", "4/6", "4/9", "4/12", "4/18", "4/24", "4/36", "4/60", "3/6", "3/9", "3/12", "3/18", "3/24", "3/36", "3/60", "2/6", "2/9", "2/12", "2/18", "2/24", "2/36", "2/60", "1/6", "1/9", "1/12", "1/18", "1/24", "1/36", "1/60" ];
@@ -592,83 +691,6 @@ function KestenbaumRuleCalculator() {
 }
 
 
-const acuityLevels = [
-  { meters: "6/6", feet: "20/20", mar: "1.0", logMAR: "0.0", decimal: "1.0", percentage: "100" },
-  { meters: "6/7.5", feet: "20/25", mar: "1.25", logMAR: "0.1", decimal: "0.8", percentage: "80" },
-  { meters: "6/9", feet: "20/30", mar: "1.5", logMAR: "0.2", decimal: "0.67", percentage: "67" },
-  { meters: "6/12", feet: "20/40", mar: "2.0", logMAR: "0.3", decimal: "0.5", percentage: "50" },
-  { meters: "6/15", feet: "20/50", mar: "2.5", logMAR: "0.4", decimal: "0.4", percentage: "40" },
-  { meters: "6/18", feet: "20/60", mar: "3.0", logMAR: "0.5", decimal: "0.33", percentage: "33" },
-  { meters: "6/24", feet: "20/80", mar: "4.0", logMAR: "0.6", decimal: "0.25", percentage: "25" },
-  { meters: "6/30", feet: "20/100", mar: "5.0", logMAR: "0.7", decimal: "0.2", percentage: "20" },
-  { meters: "6/48", feet: "20/160", mar: "8.0", logMAR: "0.9", decimal: "0.125", percentage: "12.5" },
-  { meters: "6/60", feet: "20/200", mar: "10.0", logMAR: "1.0", decimal: "0.1", percentage: "10" },
-  { meters: "6/120", feet: "20/400", mar: "20.0", logMAR: "1.3", decimal: "0.05", percentage: "5" },
-];
-
-function VisualAcuityConverter() {
-  const [selectedDecimal, setSelectedDecimal] = useState("1.0");
-
-  const handleSelectionChange = (decimalValue: string) => {
-    setSelectedDecimal(decimalValue);
-  };
-
-  const selectedLevel = acuityLevels.find(level => level.decimal === selectedDecimal) || acuityLevels[0];
-
-  return (
-    <div className="space-y-6">
-       <div>
-        <h4 className="font-semibold text-slate-700">Instructions:</h4>
-        <p className="text-sm text-slate-500">
-          Select any one line of visual acuity from any of the 6 dropdown menus; it will simultaneously display the corresponding visual acuity line for all other notations.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {[
-          { label: "Meters", key: "meters" },
-          { label: "Feet", key: "feet" },
-          { label: "MAR", key: "mar" },
-          { label: "Log MAR", key: "logMAR" },
-          { label: "Decimal", key: "decimal" },
-          { label: "Percentage", key: "percentage" },
-        ].map(({ label, key }) => (
-          <div key={key} className="space-y-2">
-            <Label htmlFor={key}>{label}</Label>
-            <Select
-              value={selectedLevel.decimal}
-              onValueChange={handleSelectionChange}
-            >
-              <SelectTrigger id={key}>
-                <SelectValue placeholder="Select...">{(selectedLevel as any)[key]}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {acuityLevels.map((level) => (
-                  <SelectItem key={level.decimal} value={level.decimal}>
-                    {(level as any)[key]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        ))}
-      </div>
-
-       <div>
-        <h4 className="font-semibold text-slate-700 mt-6 mb-2">How to convert?</h4>
-        <ol className="list-decimal list-inside text-sm text-slate-600 space-y-1">
-            <li>Snellen Meter to Feet = MAR x 20</li>
-            <li>Snellen Meter to MAR = Divide the Denominator by Numerator of Snellen Meter notation</li>
-            <li>LogMAR = log₁₀(MAR)</li>
-            <li>Snellen Meter to Decimal = Divide the Numerator by Denominator of Snellen Meter notation</li>
-            <li>Snellen Decimal to percentage = Decimal * 100</li>
-        </ol>
-      </div>
-    </div>
-  );
-}
-
-
 
 const tools = [
   {
@@ -801,6 +823,7 @@ const AnimatedTabs = ({ onTabChange }: { onTabChange: (value: string) => void })
 
 export default function OptoToolsPage() {
   const [activeTab, setActiveTab] = useState(categories[0].id);
+  const creator = allUsers.find(user => user.id === '16');
   
   return (
     <div className="bg-brand-bg">
@@ -872,36 +895,35 @@ export default function OptoToolsPage() {
           ))}
         </Tabs>
         
-        <section className="max-w-4xl mx-auto mt-20">
-            <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-             <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
-                <div className="md:flex">
-                    <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
-                         <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
-                            <AvatarImage src="" alt="Shivashangari M" />
-                            <AvatarFallback className="bg-slate-200">
-                                <UserRound className="h-12 w-12 text-slate-400" />
-                            </AvatarFallback>
-                        </Avatar>
-                        <h3 className="text-xl font-bold text-slate-800 mt-4">Shivashangari M</h3>
-                        <p className="text-sm text-primary font-semibold">Masters in Optometry | Contact Lens Specialist</p>
-                        <Button asChild variant="secondary" size="sm" className="mt-4">
-                            <Link href="/profile/16">View Profile</Link>
-                        </Button>
-                    </div>
-                    <div className="p-8 md:w-2/3 flex flex-col justify-center">
-                        <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
-                         <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
-                            "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
-                        </blockquote>
-                    </div>
-                </div>
-            </Card>
-        </section>
+        {creator && (
+          <section className="max-w-4xl mx-auto mt-20">
+              <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
+              <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
+                  <div className="md:flex">
+                      <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
+                          <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
+                              <AvatarImage src={creator.avatarUrl} alt={creator.name} />
+                              <AvatarFallback className="bg-slate-200">
+                                  <UserRound className="h-12 w-12 text-slate-400" />
+                              </AvatarFallback>
+                          </Avatar>
+                          <h3 className="text-xl font-bold text-slate-800 mt-4">{creator.name}</h3>
+                          <p className="text-sm text-primary font-semibold">{creator.experience}</p>
+                          <Button asChild variant="secondary" size="sm" className="mt-4">
+                              <Link href={`/profile/${creator.id}`}>View Profile</Link>
+                          </Button>
+                      </div>
+                      <div className="p-8 md:w-2/3 flex flex-col justify-center">
+                          <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
+                          <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
+                              "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
+                          </blockquote>
+                      </div>
+                  </div>
+              </Card>
+          </section>
+        )}
       </main>
     </div>
   );
 }
-
-
-    
