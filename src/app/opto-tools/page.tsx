@@ -8,10 +8,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calculator, Orbit, RotateCw, Contact } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // --- Vertex Distance Calculator ---
 function VertexDistanceCalculator() {
@@ -251,6 +252,166 @@ function LarsRuleCalculator() {
     );
 }
 
+const visualAcuityOptions = [
+    "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "6/60",
+    "5/6", "5/9", "5/12", "5/18", "5/24", "5/36", "5/60",
+    "4/6", "4/9", "4/12", "4/18", "4/24", "4/36", "4/60",
+    "3/6", "3/9", "3/12", "3/18", "3/24", "3/36", "3/60",
+    "2/6", "2/9", "2/12", "2/18", "2/24", "2/36", "2/60",
+    "1/6", "1/9", "1/12", "1/18", "1/24", "1/36", "1/60",
+];
+
+const nearAcuityOptions = ["N6", "N8", "N12", "N18", "N24", "N36"];
+const kestenbaumAcuityOptions = visualAcuityOptions.filter(val => parseFloat(val.split('/')[1]) >= 18);
+
+
+function MagnificationDistanceCalculator() {
+    const [presentAcuity, setPresentAcuity] = useState('6/60');
+    const [requiredAcuity, setRequiredAcuity] = useState('6/18');
+    const [result, setResult] = useState('');
+
+    const calculateMagnification = () => {
+        const present = presentAcuity.split('/').map(Number);
+        const required = requiredAcuity.split('/').map(Number);
+        if (present.length !== 2 || required.length !== 2) return;
+        const magnification = (present[1] / present[0]) / (required[1] / required[0]);
+        setResult(`Required Magnification: ${magnification.toFixed(2)}x`);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Magnification Calculator (Distance)</CardTitle>
+                <CardDescription>Calculate the required magnification to achieve a target visual acuity.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="present-acuity">Present Visual Acuity</Label>
+                        <Select value={presentAcuity} onValueChange={setPresentAcuity}>
+                            <SelectTrigger id="present-acuity"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {visualAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="required-acuity">Required Visual Acuity</Label>
+                        <Select value={requiredAcuity} onValueChange={setRequiredAcuity}>
+                            <SelectTrigger id="required-acuity"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {visualAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                <Button onClick={calculateMagnification}>Calculate</Button>
+                {result && (
+                    <Alert>
+                        <ZoomIn className="h-4 w-4" />
+                        <AlertTitle>Result</AlertTitle>
+                        <AlertDescription className="font-semibold">{result}</AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+function MagnificationNearCalculator() {
+    const [presentAcuity, setPresentAcuity] = useState('N36');
+    const [requiredAcuity, setRequiredAcuity] = useState('N6');
+    const [result, setResult] = useState('');
+
+    const calculateMagnification = () => {
+        const presentN = parseInt(presentAcuity.substring(1));
+        const requiredN = parseInt(requiredAcuity.substring(1));
+        if (isNaN(presentN) || isNaN(requiredN) || requiredN === 0) return;
+        const magnification = presentN / requiredN;
+        setResult(`Required Magnification: ${magnification.toFixed(2)}x`);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Magnification Calculator (Near)</CardTitle>
+                <CardDescription>Calculate required near magnification based on N-notation.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="present-near-acuity">Present Near Acuity</Label>
+                        <Select value={presentAcuity} onValueChange={setPresentAcuity}>
+                            <SelectTrigger id="present-near-acuity"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {nearAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="required-near-acuity">Required Near Acuity</Label>
+                        <Select value={requiredAcuity} onValueChange={setRequiredAcuity}>
+                            <SelectTrigger id="required-near-acuity"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {nearAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                <Button onClick={calculateMagnification}>Calculate</Button>
+                {result && (
+                    <Alert>
+                        <ZoomIn className="h-4 w-4" />
+                        <AlertTitle>Result</AlertTitle>
+                        <AlertDescription className="font-semibold">{result}</AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+function KestenbaumRuleCalculator() {
+    const [bcva, setBcva] = useState('6/60');
+    const [result, setResult] = useState('');
+
+    const calculateAdd = () => {
+        const values = bcva.split('/').map(Number);
+        if (values.length !== 2 || values[0] === 0) return;
+        const add = values[1] / values[0];
+        setResult(`Estimated Near Add: +${add.toFixed(2)} D`);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Kestenbaum's Rule</CardTitle>
+                <CardDescription>Estimate the required near add based on distance Best Corrected Visual Acuity (BCVA).</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2 max-w-xs">
+                    <Label htmlFor="bcva">BCVA for Distance</Label>
+                    <Select value={bcva} onValueChange={setBcva}>
+                        <SelectTrigger id="bcva"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {kestenbaumAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <Button onClick={calculateAdd}>Calculate ADD</Button>
+                {result && (
+                    <Alert>
+                        <ZoomIn className="h-4 w-4" />
+                        <AlertTitle>Result</AlertTitle>
+                        <AlertDescription className="font-semibold">{result}</AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+
 export default function OptoToolsPage() {
   return (
     <div className="bg-brand-bg">
@@ -262,7 +423,7 @@ export default function OptoToolsPage() {
       </header>
 
       <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto space-y-8">
             <Card className="shadow-lg">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
@@ -287,6 +448,35 @@ export default function OptoToolsPage() {
                         </TabsContent>
                         <TabsContent value="lars" className="mt-6">
                             <LarsRuleCalculator />
+                        </TabsContent>
+                    </Tabs>
+                </CardContent>
+            </Card>
+
+             <Card className="shadow-lg">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                        <Eye className="h-6 w-6 text-purple-600" />
+                        Low Vision Calculators
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Tabs defaultValue="magnification-distance" className="w-full">
+                        <div className="flex justify-center mb-6">
+                            <TabsList className="h-auto p-1.5 bg-purple-100/60 rounded-full">
+                                <TabsTrigger value="magnification-distance" className="px-6 py-2 text-sm">Magnification (Distance)</TabsTrigger>
+                                <TabsTrigger value="magnification-near" className="px-6 py-2 text-sm">Magnification (Near)</TabsTrigger>
+                                <TabsTrigger value="kestenbaum" className="px-6 py-2 text-sm">Kestenbaum's Rule</TabsTrigger>
+                            </TabsList>
+                        </div>
+                         <TabsContent value="magnification-distance" className="mt-6">
+                            <MagnificationDistanceCalculator />
+                        </TabsContent>
+                         <TabsContent value="magnification-near" className="mt-6">
+                            <MagnificationNearCalculator />
+                        </TabsContent>
+                         <TabsContent value="kestenbaum" className="mt-6">
+                            <KestenbaumRuleCalculator />
                         </TabsContent>
                     </Tabs>
                 </CardContent>
