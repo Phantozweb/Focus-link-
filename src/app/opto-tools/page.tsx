@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calculator, Orbit, RotateCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Slider } from '@/components/ui/slider';
 
 // --- Vertex Distance Calculator ---
 function VertexDistanceCalculator() {
@@ -36,7 +37,7 @@ function VertexDistanceCalculator() {
 
         if (isNaN(DL_cylinder) || DL_cylinder === 0) {
             setResult(`Sphere: ${effectiveSphere.toFixed(2)} D`);
-            setMessage(Math.abs(DL_sphere) < 4 ? 'No change in power for sphere value less than ±4.00D.' : '');
+            setMessage(Math.abs(DL_sphere) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
             return;
         }
 
@@ -45,7 +46,7 @@ function VertexDistanceCalculator() {
         const effectiveCylinder = effectiveTotal - effectiveSphere;
 
         setResult(`Sphere: ${effectiveSphere.toFixed(2)} D, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`);
-        setMessage(Math.abs(DL_sphere) < 4 ? 'No change in power for sphere value less than ±4.00D.' : '');
+        setMessage(Math.abs(DL_sphere) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
     };
 
     return (
@@ -75,7 +76,7 @@ function VertexDistanceCalculator() {
                         <Input id="cylinder" type="number" placeholder="-1.25" value={cylinder} onChange={(e) => setCylinder(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="axis">Axis</Label>
+                        <Label htmlFor="axis">Axis (°)</Label>
                         <Input id="axis" type="number" placeholder="180" value={axis} onChange={(e) => setAxis(e.target.value)} />
                     </div>
                     <div className="space-y-2">
@@ -141,13 +142,9 @@ function BaseCurveCalculator() {
 
 // --- LARS Rule Calculator ---
 function LarsRuleCalculator() {
-    const [initialAxis, setInitialAxis] = useState('');
-    const [rotatedAxis, setRotatedAxis] = useState('');
+    const [initialAxis, setInitialAxis] = useState(90);
+    const [rotatedAxis, setRotatedAxis] = useState(90);
     const [result, setResult] = useState('');
-
-    const initialCanvasRef = useRef<HTMLCanvasElement>(null);
-    const rotatedCanvasRef = useRef<HTMLCanvasElement>(null);
-    const resultCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const drawAxis = useCallback((canvas: HTMLCanvasElement | null, angle: number) => {
         if (!canvas) return;
@@ -159,60 +156,51 @@ function LarsRuleCalculator() {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw circle
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = '#e2e8f0';
         ctx.lineWidth = 2;
         ctx.stroke();
         
-        // Draw axis line
         if (!isNaN(angle)) {
-            const rad = ((angle % 180) - 90) * (Math.PI / 180);
+            const rad = ((angle % 180)) * (Math.PI / 180);
             ctx.beginPath();
-            ctx.moveTo(centerX - radius * Math.cos(rad), centerY - radius * Math.sin(rad));
-            ctx.lineTo(centerX + radius * Math.cos(rad), centerY + radius * Math.sin(rad));
+            ctx.moveTo(centerX - radius * Math.sin(rad), centerY + radius * Math.cos(rad));
+            ctx.lineTo(centerX + radius * Math.sin(rad), centerY - radius * Math.cos(rad));
             ctx.strokeStyle = '#0ea5e9';
             ctx.lineWidth = 4;
             ctx.stroke();
         }
     }, []);
-
+    
+    const initialCanvasRef = useRef<HTMLCanvasElement>(null);
+    const rotatedCanvasRef = useRef<HTMLCanvasElement>(null);
+    const resultCanvasRef = useRef<HTMLCanvasElement>(null);
+    
     useEffect(() => {
-        drawAxis(initialCanvasRef.current, parseInt(initialAxis));
+        drawAxis(initialCanvasRef.current, initialAxis);
     }, [initialAxis, drawAxis]);
 
     useEffect(() => {
-        drawAxis(rotatedCanvasRef.current, parseInt(rotatedAxis));
+        drawAxis(rotatedCanvasRef.current, rotatedAxis);
     }, [rotatedAxis, drawAxis]);
-    
-    const applyLarsRule = () => {
-        const initial = parseInt(initialAxis);
-        const rotated = parseInt(rotatedAxis);
 
-        if (isNaN(initial) || isNaN(rotated) || initial < 0 || initial > 180 || rotated < 0 || rotated > 180) {
-            setResult("Inputs must be between 0 and 180.");
-            drawAxis(resultCanvasRef.current, NaN);
-            return;
-        }
+    const applyLarsRule = () => {
+        const initial = initialAxis;
+        const rotated = rotatedAxis;
 
         const diff = rotated - initial;
         let correctedAxis;
 
-        if (diff > 90) {
-            correctedAxis = initial - (180 - diff);
-        } else if (diff < -90) {
-            correctedAxis = initial + (180 + diff);
-        } else {
-            correctedAxis = initial - diff;
+        if (diff > 0) { // Clockwise rotation (Left)
+            correctedAxis = initial + diff;
+        } else { // Anti-clockwise rotation (Right)
+            correctedAxis = initial + diff; // diff is negative, so it's a subtraction
         }
         
-        if (correctedAxis > 180) {
-            correctedAxis -= 180;
-        } else if (correctedAxis <= 0) {
-            correctedAxis += 180;
-        }
-
+        // Normalize to 1-180 range
+        correctedAxis = ((correctedAxis - 1 + 180) % 180) + 1;
+        
         setResult(`Suggested Trial Axis: ${correctedAxis.toFixed(0)}°`);
         drawAxis(resultCanvasRef.current, correctedAxis);
     };
@@ -225,13 +213,13 @@ function LarsRuleCalculator() {
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
-                    <div className="space-y-2">
-                        <Label htmlFor="initialAxis">Initial Axis</Label>
-                        <Input id="initialAxis" type="number" min="0" max="180" placeholder="e.g., 90" value={initialAxis} onChange={(e) => setInitialAxis(e.target.value)} />
+                    <div className="space-y-4">
+                        <Label htmlFor="initialAxis">Initial Axis: {initialAxis}°</Label>
+                        <Slider id="initialAxis" min={1} max={180} step={1} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
                     </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="rotatedAxis">Axis After Blink</Label>
-                        <Input id="rotatedAxis" type="number" min="0" max="180" placeholder="e.g., 110" value={rotatedAxis} onChange={(e) => setRotatedAxis(e.target.value)} />
+                     <div className="space-y-4">
+                        <Label htmlFor="rotatedAxis">Axis After Blink: {rotatedAxis}°</Label>
+                        <Slider id="rotatedAxis" min={1} max={180} step={1} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
                     </div>
                 </div>
                 <div className="flex justify-center flex-wrap gap-8">
@@ -295,5 +283,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
-    
