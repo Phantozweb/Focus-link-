@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -15,7 +14,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -858,6 +857,92 @@ function RetinoscopyPrescriptionConverter() {
     );
 }
 
+function SnellenLetterSizeCalculator() {
+    const chartDistances = [6, 5, 4, 3, 2, 1];
+    const [distance, setDistance] = useState('6');
+    const [line, setLine] = useState('6/6');
+    const [lines, setLines] = useState<string[]>(['6/6', '6/9', '6/12', '6/18', '6/24', '6/36', '6/60']);
+    const [result, setResult] = useState('');
+
+    useEffect(() => {
+        const d = parseInt(distance, 10);
+        setLines([`${d}/6`, `${d}/9`, `${d}/12`, `${d}/18`, `${d}/24`, `${d}/36`, `${d}/60`]);
+        setLine(`${d}/${d}`);
+    }, [distance]);
+    
+    const calculateSize = () => {
+        const denominator = parseFloat(line.split('/')[1]);
+        if (isNaN(denominator)) {
+            setResult('Invalid line selected.');
+            return;
+        }
+
+        // θ = 5 minutes of arc. Convert to radians.
+        const thetaInRadians = (5 / 60) * (Math.PI / 180);
+        
+        // W = D * tan(θ) where D is the denominator. The question implies distance, but formula uses denominator.
+        // Standard formula: Letter height (mm) = 2 * Distance(m) * tan(MAR / 2)
+        // A 6/6 letter subtends 5 min arc at 6m. A 6/12 letter subtends 10 min arc. So MAR = Denom / Num
+        // Let's use the provided simplified formula: W = D * tan(5/60 degrees)
+        
+        const tan5arcmin = 0.00145444; // tan(5/60 degrees)
+        const sizeInMeters = denominator * tan5arcmin;
+        const sizeInMm = sizeInMeters * 1000;
+        
+        setResult(`Letter Size: ${sizeInMm.toFixed(2)} mm`);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">The height and width of the individual Snellen letters remain the same.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Select the chart's distance and line of Snellen's chart from the dropdown menus, then click 'Calculate'.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="chart-distance">Chart's Distance (m)</Label>
+                    <Select value={distance} onValueChange={setDistance}>
+                        <SelectTrigger id="chart-distance"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {chartDistances.map(d => <SelectItem key={d} value={String(d)}>{d}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="snellen-line">Select Line</Label>
+                    <Select value={line} onValueChange={setLine}>
+                        <SelectTrigger id="snellen-line"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {lines.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <Button onClick={calculateSize}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+            <div className="text-sm text-slate-500 pt-4 space-y-1">
+                <h4 className="font-semibold text-slate-700">How to calculate?</h4>
+                <p className="font-mono">W = D x tan(θ)</p>
+                <ul className='list-disc list-inside pl-2 text-xs'>
+                    <li>W = Height or width</li>
+                    <li>D = Denominator of the line</li>
+                    <li>θ = 5 (min of arc)</li>
+                    <li>tan(5/60°) ≈ 0.00145</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
 
 
 const tools = [
@@ -936,6 +1021,13 @@ const tools = [
     title: 'Retinoscopy Rx Converter',
     description: 'Convert retinoscopy findings into a final prescription.',
     component: <RetinoscopyPrescriptionConverter />,
+    category: 'refraction',
+  },
+   {
+    id: 'snellen-size',
+    title: 'Snellen Letter Size',
+    description: 'Calculate the size of Snellen letters based on chart distance.',
+    component: <SnellenLetterSizeCalculator />,
     category: 'refraction',
   },
 ];
