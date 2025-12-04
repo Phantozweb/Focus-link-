@@ -1182,7 +1182,7 @@ export default function OptoToolsPage() {
        <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16 space-y-16">
         <section>
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-800">Optometry Calculator Hub</h2>
+            <h2 className="text-3xl font-bold text-slate-800">Optocal Hub</h2>
             <p className="mt-2 text-lg text-slate-600">
               Your one-stop destination for precise and efficient clinical calculations. This hub provides a comprehensive suite of tools designed to streamline daily tasks for optometrists, students, and eye care professionals.
             </p>
@@ -1271,3 +1271,4 @@ export default function OptoToolsPage() {
   );
 }
 
+    
