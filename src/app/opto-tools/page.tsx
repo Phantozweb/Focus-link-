@@ -7,7 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription
+} from '@/components/ui/dialog';
 import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Replace, Sigma, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
@@ -65,53 +72,47 @@ function VertexDistanceCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Vertex Distance Effective Power</CardTitle>
-                <CardDescription>Calculate the effective power of a prescription at a different vertex distance.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <RadioGroup value={conversion} onValueChange={setConversion} className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="specsToCL" id="specsToCL" />
-                        <Label htmlFor="specsToCL">Spectacles to Contact Lens</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="clToSpecs" id="clToSpecs" />
-                        <Label htmlFor="clToSpecs">Contact Lens to Spectacles</Label>
-                    </div>
-                </RadioGroup>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="sphere">Sphere (D)</Label>
-                        <Input id="sphere" type="number" placeholder="-5.00" value={sphere} onChange={(e) => setSphere(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="cylinder">Cylinder (D)</Label>
-                        <Input id="cylinder" type="number" placeholder="-1.25" value={cylinder} onChange={(e) => setCylinder(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="axis">Axis (°)</Label>
-                        <Input id="axis" type="number" placeholder="180" value={axis} onChange={(e) => setAxis(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="vertexDistance">Vertex Distance (mm)</Label>
-                        <Input id="vertexDistance" type="number" placeholder="12" value={vertexDistance} onChange={(e) => setVertexDistance(e.target.value)} />
-                    </div>
+        <div className="space-y-6">
+            <RadioGroup value={conversion} onValueChange={setConversion} className="flex flex-col sm:flex-row gap-4">
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="specsToCL" id="specsToCL" />
+                    <Label htmlFor="specsToCL">Spectacles to Contact Lens</Label>
                 </div>
-                <Button onClick={calculatePrescription}>Calculate</Button>
-                {result && (
-                    <Alert>
-                        <Calculator className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription>
-                            <p className="font-semibold">{result}</p>
-                            {message && <p className="text-sm text-muted-foreground mt-1">{message}</p>}
-                        </AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="clToSpecs" id="clToSpecs" />
+                    <Label htmlFor="clToSpecs">Contact Lens to Spectacles</Label>
+                </div>
+            </RadioGroup>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="sphere">Sphere (D)</Label>
+                    <Input id="sphere" type="number" placeholder="-5.00" value={sphere} onChange={(e) => setSphere(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="cylinder">Cylinder (D)</Label>
+                    <Input id="cylinder" type="number" placeholder="-1.25" value={cylinder} onChange={(e) => setCylinder(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="axis">Axis (°)</Label>
+                    <Input id="axis" type="number" placeholder="180" value={axis} onChange={(e) => setAxis(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="vertexDistance">Vertex Distance (mm)</Label>
+                    <Input id="vertexDistance" type="number" placeholder="12" value={vertexDistance} onChange={(e) => setVertexDistance(e.target.value)} />
+                </div>
+            </div>
+            <Button onClick={calculatePrescription}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <Calculator className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription>
+                        <p className="font-semibold">{result}</p>
+                        {message && <p className="text-sm text-muted-foreground mt-1">{message}</p>}
+                    </AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -131,26 +132,20 @@ function BaseCurveCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Keratometry to Base Curve</CardTitle>
-                <CardDescription>Convert the average keratometry reading (in Diopters) to a base curve (in mm).</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2 max-w-xs">
-                    <Label htmlFor="avgK">Average K (D)</Label>
-                    <Input id="avgK" type="number" placeholder="43.50" value={avgK} onChange={(e) => setAvgK(e.target.value)} />
-                </div>
-                <Button onClick={calculateBaseCurve}>Calculate</Button>
-                {result && (
-                    <Alert>
-                        <Orbit className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="font-semibold">{result}</AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+        <div className="space-y-4">
+            <div className="space-y-2 max-w-xs">
+                <Label htmlFor="avgK">Average K (D)</Label>
+                <Input id="avgK" type="number" placeholder="43.50" value={avgK} onChange={(e) => setAvgK(e.target.value)} />
+            </div>
+            <Button onClick={calculateBaseCurve}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <Orbit className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -237,53 +232,47 @@ function LarsRuleCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>LARS Rule Calculator</CardTitle>
-                <CardDescription>Calculate the compensatory axis adjustment for a rotated toric contact lens.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
-                    <div className="space-y-4">
-                        <Label htmlFor="initialAxis">Initial Axis</Label>
-                        <div className="flex items-center gap-2">
-                          <Slider id="initialAxis" min={0} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
-                          <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
-                        </div>
-                    </div>
-                     <div className="space-y-4">
-                        <Label htmlFor="rotatedAxis">Axis After Blink</Label>
-                         <div className="flex items-center gap-2">
-                          <Slider id="rotatedAxis" min={0} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
-                          <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
-                        </div>
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
+                <div className="space-y-4">
+                    <Label htmlFor="initialAxis">Initial Axis</Label>
+                    <div className="flex items-center gap-2">
+                        <Slider id="initialAxis" min={0} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
+                        <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
-                <div className="flex justify-center flex-wrap gap-8">
-                     <div className="text-center">
-                        <Label>Initial Axis: {initialAxis}°</Label>
-                        <canvas ref={initialCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
-                    </div>
-                    <div className="text-center">
-                        <Label>Axis After Blink: {rotatedAxis}°</Label>
-                        <canvas ref={rotatedCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
+                <div className="space-y-4">
+                    <Label htmlFor="rotatedAxis">Axis After Blink</Label>
+                    <div className="flex items-center gap-2">
+                        <Slider id="rotatedAxis" min={0} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
+                        <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
-                <Button onClick={applyLarsRule}>Apply LARS Rule</Button>
-                 {result && (
-                    <Alert>
-                        <RotateCw className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="flex flex-col sm:flex-row items-center gap-4">
-                            <p className="font-semibold text-base">{result}</p>
-                            <div className="text-center">
-                                <canvas ref={resultCanvasRef} width="100" height="100" className="mt-2 bg-slate-50 rounded-full border"></canvas>
-                            </div>
-                        </AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+            </div>
+            <div className="flex justify-center flex-wrap gap-8">
+                <div className="text-center">
+                    <Label>Initial Axis: {initialAxis}°</Label>
+                    <canvas ref={initialCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
+                </div>
+                <div className="text-center">
+                    <Label>Axis After Blink: {rotatedAxis}°</Label>
+                    <canvas ref={rotatedCanvasRef} width="150" height="150" className="mt-2 bg-slate-50 rounded-full border"></canvas>
+                </div>
+            </div>
+            <Button onClick={applyLarsRule}>Apply LARS Rule</Button>
+            {result && (
+                <Alert>
+                    <RotateCw className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="flex flex-col sm:flex-row items-center gap-4">
+                        <p className="font-semibold text-base">{result}</p>
+                        <div className="text-center">
+                            <canvas ref={resultCanvasRef} width="100" height="100" className="mt-2 bg-slate-50 rounded-full border"></canvas>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -304,26 +293,20 @@ function RetinoscopyWorkingLensCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Retinoscopy Working Lens</CardTitle>
-                <CardDescription>Calculate the required compensating lens for your retinoscopy working distance.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2 max-w-xs">
-                    <Label htmlFor="workingDistance">Working Distance (cm)</Label>
-                    <Input id="workingDistance" type="number" placeholder="67" value={distance} onChange={(e) => setDistance(e.target.value)} />
-                </div>
-                <Button onClick={calculatePower}>Calculate</Button>
-                {result && (
-                    <Alert>
-                        <Calculator className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="font-semibold">{result}</AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+        <div className="space-y-4">
+            <div className="space-y-2 max-w-xs">
+                <Label htmlFor="workingDistance">Working Distance (cm)</Label>
+                <Input id="workingDistance" type="number" placeholder="67" value={distance} onChange={(e) => setDistance(e.target.value)} />
+            </div>
+            <Button onClick={calculatePower}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <Calculator className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -373,39 +356,33 @@ function SimpleTranspositionCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Simple Transposition</CardTitle>
-                <CardDescription>Transpose a prescription and determine the type of astigmatism.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="sph-t">Sphere</Label>
-                        <Input id="sph-t" type="number" placeholder="+2.00" value={sphere} onChange={e => setSphere(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="cyl-t">Cylinder</Label>
-                        <Input id="cyl-t" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="axis-t">Axis</Label>
-                        <Input id="axis-t" type="number" placeholder="90" value={axis} onChange={e => setAxis(e.target.value)} />
-                    </div>
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="sph-t">Sphere</Label>
+                    <Input id="sph-t" type="number" placeholder="+2.00" value={sphere} onChange={e => setSphere(e.target.value)} />
                 </div>
-                <Button onClick={transpose}>Transpose</Button>
-                {result && (
-                    <Alert>
-                        <Replace className="h-4 w-4" />
-                        <AlertTitle>Results</AlertTitle>
-                        <AlertDescription>
-                            <p><strong>Transposed:</strong> {result.transposed}</p>
-                            <p><strong>Astigmatism Type:</strong> {result.astigmatismType}</p>
-                        </AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+                <div className="space-y-2">
+                    <Label htmlFor="cyl-t">Cylinder</Label>
+                    <Input id="cyl-t" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="axis-t">Axis</Label>
+                    <Input id="axis-t" type="number" placeholder="90" value={axis} onChange={e => setAxis(e.target.value)} />
+                </div>
+            </div>
+            <Button onClick={transpose}>Transpose</Button>
+            {result && (
+                <Alert>
+                    <Replace className="h-4 w-4" />
+                    <AlertTitle>Results</AlertTitle>
+                    <AlertDescription>
+                        <p><strong>Transposed:</strong> {result.transposed}</p>
+                        <p><strong>Astigmatism Type:</strong> {result.astigmatismType}</p>
+                    </AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -429,32 +406,26 @@ function SphericalEquivalentCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Spherical Equivalent</CardTitle>
-                <CardDescription>Calculate the spherical equivalent of a prescription.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="sph-se">Sphere (D)</Label>
-                        <Input id="sph-se" type="number" placeholder="-2.50" value={sphere} onChange={e => setSphere(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="cyl-se">Cylinder (D)</Label>
-                        <Input id="cyl-se" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
-                    </div>
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="sph-se">Sphere (D)</Label>
+                    <Input id="sph-se" type="number" placeholder="-2.50" value={sphere} onChange={e => setSphere(e.target.value)} />
                 </div>
-                <Button onClick={calculateSE}>Calculate</Button>
-                {result && (
-                     <Alert>
-                        <Sigma className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="font-semibold">{result}</AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+                <div className="space-y-2">
+                    <Label htmlFor="cyl-se">Cylinder (D)</Label>
+                    <Input id="cyl-se" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
+                </div>
+            </div>
+            <Button onClick={calculateSE}>Calculate</Button>
+            {result && (
+                 <Alert>
+                    <Sigma className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -481,42 +452,36 @@ function MagnificationDistanceCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Magnification Calculator (Distance)</CardTitle>
-                <CardDescription>Calculate the required magnification to achieve a target visual acuity.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="present-acuity">Present Visual Acuity</Label>
-                        <Select value={presentAcuity} onValueChange={setPresentAcuity}>
-                            <SelectTrigger id="present-acuity"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                {visualAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="required-acuity">Required Visual Acuity</Label>
-                        <Select value={requiredAcuity} onValueChange={setRequiredAcuity}>
-                            <SelectTrigger id="required-acuity"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                {visualAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="present-acuity">Present Visual Acuity</Label>
+                    <Select value={presentAcuity} onValueChange={setPresentAcuity}>
+                        <SelectTrigger id="present-acuity"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {visualAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
-                <Button onClick={calculateMagnification}>Calculate</Button>
-                {result && (
-                    <Alert>
-                        <ZoomIn className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="font-semibold">{result}</AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+                <div className="space-y-2">
+                    <Label htmlFor="required-acuity">Required Visual Acuity</Label>
+                    <Select value={requiredAcuity} onValueChange={setRequiredAcuity}>
+                        <SelectTrigger id="required-acuity"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {visualAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <Button onClick={calculateMagnification}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <ZoomIn className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -537,42 +502,36 @@ function MagnificationNearCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Magnification Calculator (Near)</CardTitle>
-                <CardDescription>Calculate required near magnification based on N-notation.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="present-near-acuity">Present Near Acuity</Label>
-                        <Select value={presentAcuity} onValueChange={setPresentAcuity}>
-                            <SelectTrigger id="present-near-acuity"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                {nearAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="required-near-acuity">Required Near Acuity</Label>
-                        <Select value={requiredAcuity} onValueChange={setRequiredAcuity}>
-                            <SelectTrigger id="required-near-acuity"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                {nearAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="present-near-acuity">Present Near Acuity</Label>
+                    <Select value={presentAcuity} onValueChange={setPresentAcuity}>
+                        <SelectTrigger id="present-near-acuity"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {nearAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
-                <Button onClick={calculateMagnification}>Calculate</Button>
-                {result && (
-                    <Alert>
-                        <ZoomIn className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="font-semibold">{result}</AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+                <div className="space-y-2">
+                    <Label htmlFor="required-near-acuity">Required Near Acuity</Label>
+                    <Select value={requiredAcuity} onValueChange={setRequiredAcuity}>
+                        <SelectTrigger id="required-near-acuity"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {nearAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <Button onClick={calculateMagnification}>Calculate</Button>
+            {result && (
+                <Alert>
+                    <ZoomIn className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
 
@@ -591,33 +550,108 @@ function KestenbaumRuleCalculator() {
     };
 
     return (
-        <Card className="border-none shadow-none">
-            <CardHeader>
-                <CardTitle>Kestenbaum's Rule</CardTitle>
-                <CardDescription>Estimate the required near add based on distance Best Corrected Visual Acuity (BCVA).</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2 max-w-xs">
-                    <Label htmlFor="bcva">BCVA for Distance</Label>
-                    <Select value={bcva} onValueChange={setBcva}>
-                        <SelectTrigger id="bcva"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                            {kestenbaumAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                </div>
-                <Button onClick={calculateAdd}>Calculate ADD</Button>
-                {result && (
-                    <Alert>
-                        <ZoomIn className="h-4 w-4" />
-                        <AlertTitle>Result</AlertTitle>
-                        <AlertDescription className="font-semibold">{result}</AlertDescription>
-                    </Alert>
-                )}
-            </CardContent>
-        </Card>
+        <div className="space-y-4">
+            <div className="space-y-2 max-w-xs">
+                <Label htmlFor="bcva">BCVA for Distance</Label>
+                <Select value={bcva} onValueChange={setBcva}>
+                    <SelectTrigger id="bcva"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {kestenbaumAcuityOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </div>
+            <Button onClick={calculateAdd}>Calculate ADD</Button>
+            {result && (
+                <Alert>
+                    <ZoomIn className="h-4 w-4" />
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+        </div>
     );
 }
+
+const tools = [
+  {
+    id: 'vertex',
+    title: 'Vertex Distance',
+    description: 'Calculate effective power at a different vertex distance.',
+    icon: <Replace className="h-6 w-6 text-primary" />,
+    component: <VertexDistanceCalculator />,
+    category: 'contact-lens'
+  },
+  {
+    id: 'base-curve',
+    title: 'Keratometry to Base Curve',
+    description: 'Convert keratometry (D) to a base curve (mm).',
+    icon: <Orbit className="h-6 w-6 text-primary" />,
+    component: <BaseCurveCalculator />,
+    category: 'contact-lens'
+  },
+  {
+    id: 'lars',
+    title: 'LARS Rule',
+    description: 'Adjust axis for a rotated toric contact lens.',
+    icon: <RotateCw className="h-6 w-6 text-primary" />,
+    component: <LarsRuleCalculator />,
+    category: 'contact-lens'
+  },
+  {
+    id: 'mag-distance',
+    title: 'Magnification (Distance)',
+    description: 'Calculate required distance magnification.',
+    icon: <ZoomIn className="h-6 w-6 text-purple-600" />,
+    component: <MagnificationDistanceCalculator />,
+    category: 'low-vision'
+  },
+  {
+    id: 'mag-near',
+    title: 'Magnification (Near)',
+    description: 'Calculate required near magnification from N-notation.',
+    icon: <ZoomIn className="h-6 w-6 text-purple-600" />,
+    component: <MagnificationNearCalculator />,
+    category: 'low-vision'
+  },
+  {
+    id: 'kestenbaum',
+    title: 'Kestenbaum\'s Rule',
+    description: 'Estimate the required near add for low vision patients.',
+    icon: <ZoomIn className="h-6 w-6 text-purple-600" />,
+    component: <KestenbaumRuleCalculator />,
+    category: 'low-vision'
+  },
+  {
+    id: 'working-lens',
+    title: 'Retinoscopy Working Lens',
+    description: 'Calculate the required compensating lens power.',
+    icon: <Ruler className="h-6 w-6 text-green-600" />,
+    component: <RetinoscopyWorkingLensCalculator />,
+    category: 'refraction'
+  },
+  {
+    id: 'transposition',
+    title: 'Simple Transposition',
+    description: 'Transpose a prescription and determine astigmatism type.',
+    icon: <Replace className="h-6 w-6 text-green-600" />,
+    component: <SimpleTranspositionCalculator />,
+    category: 'refraction'
+  },
+  {
+    id: 'sph-equivalent',
+    title: 'Spherical Equivalent',
+    description: 'Calculate the spherical equivalent of a prescription.',
+    icon: <Sigma className="h-6 w-6 text-green-600" />,
+    component: <SphericalEquivalentCalculator />,
+    category: 'refraction'
+  }
+];
+
+const categories = [
+    { id: 'contact-lens', name: 'Contact Lens', icon: <Contact className="h-6 w-6" /> },
+    { id: 'low-vision', name: 'Low Vision', icon: <Eye className="h-6 w-6" /> },
+    { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-6 w-6" /> },
+];
 
 export default function OptoToolsPage() {
   return (
@@ -630,87 +664,43 @@ export default function OptoToolsPage() {
       </header>
 
       <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="shadow-lg overflow-hidden">
-                <CardHeader className="bg-slate-50 border-b">
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                        <Contact className="h-6 w-6 text-primary" />
-                        Contact Lens
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                    <Tabs defaultValue="vertex" className="w-full">
-                        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none p-1 bg-primary/5">
-                            <TabsTrigger value="vertex" className="py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm rounded-md">Vertex</TabsTrigger>
-                            <TabsTrigger value="base-curve" className="py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm rounded-md">Base Curve</TabsTrigger>
-                            <TabsTrigger value="lars" className="py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm rounded-md">LARS Rule</TabsTrigger>
-                        </TabsList>
-                        <div className="p-2 sm:p-6">
-                            <TabsContent value="vertex" className="mt-0">
-                                <VertexDistanceCalculator />
-                            </TabsContent>
-                            <TabsContent value="base-curve" className="mt-0">
-                                <BaseCurveCalculator />
-                            </TabsContent>
-                            <TabsContent value="lars" className="mt-0">
-                                <LarsRuleCalculator />
-                            </TabsContent>
-                        </div>
-                    </Tabs>
-                </CardContent>
-            </Card>
-
-            <Card className="shadow-lg overflow-hidden">
-                <CardHeader className="bg-slate-50 border-b">
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                        <Eye className="h-6 w-6 text-purple-600" />
-                        Low Vision
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                    <Tabs defaultValue="magnification-distance" className="w-full">
-                         <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none p-1 bg-purple-100/30">
-                            <TabsTrigger value="magnification-distance" className="text-center py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800 data-[state=active]:shadow-sm rounded-md">Magnification (Distance)</TabsTrigger>
-                            <TabsTrigger value="magnification-near" className="text-center py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800 data-[state=active]:shadow-sm rounded-md">Magnification (Near)</TabsTrigger>
-                            <TabsTrigger value="kestenbaum" className="text-center py-3 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800 data-[state=active]:shadow-sm rounded-md">Kestenbaum's</TabsTrigger>
-                        </TabsList>
-                         <div className="p-2 sm:p-6">
-                            <TabsContent value="magnification-distance" className="mt-0">
-                                <MagnificationDistanceCalculator />
-                            </TabsContent>
-                            <TabsContent value="magnification-near" className="mt-0">
-                                <MagnificationNearCalculator />
-                            </TabsContent>
-                            <TabsContent value="kestenbaum" className="mt-0">
-                                <KestenbaumRuleCalculator />
-                            </TabsContent>
-                        </div>
-                    </Tabs>
-                </CardContent>
-            </Card>
-            
-            <Card className="shadow-lg overflow-hidden lg:col-span-2">
-                <CardHeader className="bg-slate-50 border-b">
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                        <Ruler className="h-6 w-6 text-green-600" />
-                        Optics & Refraction
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                     <Tabs defaultValue="working-lens" className="w-full">
-                        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto rounded-none p-1 bg-green-100/30">
-                            <TabsTrigger value="working-lens" className="py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Working Lens</TabsTrigger>
-                            <TabsTrigger value="transposition" className="py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Transposition</TabsTrigger>
-                            <TabsTrigger value="sph-equivalent" className="py-3 data-[state=active]:bg-green-100 data-[state=active]:text-green-800 data-[state=active]:shadow-sm rounded-md">Sph. Equivalent</TabsTrigger>
-                        </TabsList>
-                         <div className="p-2 sm:p-6">
-                            <TabsContent value="working-lens" className="mt-0"><RetinoscopyWorkingLensCalculator /></TabsContent>
-                            <TabsContent value="transposition" className="mt-0"><SimpleTranspositionCalculator /></TabsContent>
-                            <TabsContent value="sph-equivalent" className="mt-0"><SphericalEquivalentCalculator /></TabsContent>
-                        </div>
-                    </Tabs>
-                </CardContent>
-            </Card>
+        <div className="space-y-12">
+          {categories.map((category) => (
+            <section key={category.id}>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-card rounded-xl shadow-sm">{category.icon}</div>
+                <h2 className="text-2xl font-bold text-slate-800">{category.name}</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {tools.filter(tool => tool.category === category.id).map(tool => (
+                  <Dialog key={tool.id}>
+                    <DialogTrigger asChild>
+                      <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group">
+                        <CardHeader>
+                          <div className="flex items-start justify-between gap-4">
+                            <CardTitle className="text-lg">{tool.title}</CardTitle>
+                            <div className="p-3 bg-muted rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                              {tool.icon}
+                            </div>
+                          </div>
+                           <CardDescription>{tool.description}</CardDescription>
+                        </CardHeader>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
+                        <DialogDescription>{tool.description}</DialogDescription>
+                      </DialogHeader>
+                      <div className="py-4">
+                        {tool.component}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </main>
     </div>
