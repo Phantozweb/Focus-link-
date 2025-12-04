@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -15,7 +14,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -23,7 +22,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { allUsers } from '@/lib/data';
 
 
 // --- Vertex Distance Calculator ---
@@ -1163,6 +1161,160 @@ function SheardsCriterionCalculator() {
     );
 }
 
+function PercivalCriterionCalculator() {
+    const limitOptions = Array.from({length: 41}, (_, i) => String(i)); // 0 to 40
+    
+    const [greaterLimit, setGreaterLimit] = useState('1');
+    const [lesserLimit, setLesserLimit] = useState('1');
+    const [result, setResult] = useState('');
+
+    const calculatePrism = () => {
+        const G = parseFloat(greaterLimit);
+        const L = parseFloat(lesserLimit);
+        
+        if (isNaN(G) || isNaN(L)) {
+            setResult('Please enter valid numeric values.');
+            return;
+        }
+
+        const requiredPrism = (1/3 * G) - (2/3 * L);
+        setResult(`Required Prism: ${requiredPrism.toFixed(2)} PD`);
+    };
+    
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Provide the Greater lateral limit and Lesser lateral limit in prism diopters to calculate the prism.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Select the Greater lateral limit and Lesser lateral limit from the drop-down menus, then click 'Calculate'.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="greater-limit-pc">Greater Lateral Limit (PD)</Label>
+                     <Select value={greaterLimit} onValueChange={setGreaterLimit}>
+                        <SelectTrigger id="greater-limit-pc"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {limitOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="lesser-limit-pc">Lesser Lateral Limit (PD)</Label>
+                    <Select value={lesserLimit} onValueChange={setLesserLimit}>
+                        <SelectTrigger id="lesser-limit-pc"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {limitOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <Button onClick={calculatePrism}>Calculate</Button>
+            {result && (
+                 <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold">{result}</AlertDescription>
+                </Alert>
+            )}
+            <div className="text-sm text-slate-500 pt-4">
+                <h4 className="font-semibold text-slate-700">Formula:</h4>
+                <p className="font-mono">P = (1/3) * G - (2/3) * L</p>
+                <ul className="text-xs mt-1 list-disc list-inside">
+                    <li>P = Prism to be prescribed</li>
+                    <li>G = Greater of the two lateral limits (PD) (base-in or base-out)</li>
+                    <li>L = Lesser of the two lateral limits (PD) (base-in or base-out)</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
+function BielschowskyHeadTiltTest() {
+    const [step1, setStep1] = useState('');
+    const [step2, setStep2] = useState('');
+    const [step3, setStep3] = useState('');
+    const [result, setResult] = useState('');
+
+    const handleSubmit = () => {
+        if (!step1 || !step2 || !step3) {
+            setResult('Please complete all three steps.');
+            return;
+        }
+
+        if (step1 === 'right' && step2 === 'left' && step3 === 'right') setResult('Left Superior Oblique');
+        else if (step1 === 'left' && step2 === 'right' && step3 === 'left') setResult('Right Superior Oblique');
+        else if (step1 === 'right' && step2 === 'right' && step3 === 'left') setResult('Left Inferior Rectus');
+        else if (step1 === 'left' && step2 === 'left' && step3 === 'right') setResult('Right Inferior Rectus');
+        else if (step1 === 'right' && step2 === 'right' && step3 === 'right') setResult('Right Superior Rectus');
+        else if (step1 === 'left' && step2 === 'left' && step3 === 'left') setResult('Left Superior Rectus');
+        else if (step1 === 'right' && step2 === 'left' && step3 === 'left') setResult('Right Inferior Oblique');
+        else if (step1 === 'left' && step2 === 'right' && step3 === 'right') setResult('Left Inferior Oblique');
+        else setResult('No standard pattern identified. Please re-check inputs.');
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">Provide the hypertropia positions to identify the isolated muscle palsy.</p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">Simply select the hypertropia in primary position, gaze, and head tilt, then click 'Submit Test'.</p>
+            </div>
+
+            <div className="space-y-4">
+                <div className="space-y-2">
+                    <Label>Step 1: Which eye is hypertropic in primary position?</Label>
+                    <RadioGroup value={step1} onValueChange={setStep1} className="flex gap-4">
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="right" id="b-s1-r" /><Label htmlFor="b-s1-r">Right Eye Hypertropic</Label></div>
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="left" id="b-s1-l" /><Label htmlFor="b-s1-l">Left Eye Hypertropic</Label></div>
+                    </RadioGroup>
+                </div>
+                 <div className="space-y-2">
+                    <Label>Step 2: Determine whether the hypertropia increases on right or left gaze.</Label>
+                    <RadioGroup value={step2} onValueChange={setStep2} className="flex gap-4">
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="right" id="b-s2-r" /><Label htmlFor="b-s2-r">Increases on Right Gaze</Label></div>
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="left" id="b-s2-l" /><Label htmlFor="b-s2-l">Increases on Left Gaze</Label></div>
+                    </RadioGroup>
+                </div>
+                 <div className="space-y-2">
+                    <Label>Step 3: Determine whether the hypertropia increases on right or left head tilt.</Label>
+                    <RadioGroup value={step3} onValueChange={setStep3} className="flex gap-4">
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="right" id="b-s3-r" /><Label htmlFor="b-s3-r">Increases on Right Head Tilt</Label></div>
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="left" id="b-s3-l" /><Label htmlFor="b-s3-l">Increases on Left Head Tilt</Label></div>
+                    </RadioGroup>
+                </div>
+            </div>
+
+            <Button onClick={handleSubmit}>Submit Test</Button>
+
+             {result && (
+                 <Alert>
+                    <AlertTitle>Result</AlertTitle>
+                    <AlertDescription className="font-semibold text-lg">{result}</AlertDescription>
+                </Alert>
+            )}
+
+            <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">Park's 3 Steps Hints:</h4>
+                <ul className="list-disc list-inside pl-2 text-xs space-y-1">
+                    <li>If all 3 steps are right - Left Inferior oblique</li>
+                    <li>If all 3 steps are left - Right Inferior oblique</li>
+                    <li>If 1st step only is right - Left Superior Rectus</li>
+                    <li>If 1st step only is left - Right Superior Rectus</li>
+                    <li>If 2nd step only is right - Left Superior Oblique</li>
+                    <li>If 2nd step only is left - Right Superior Oblique</li>
+                    <li>If 3rd step only is right - Left Inferior Rectus</li>
+                    <li>If 3rd step only is left - Right Inferior Rectus</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
+
 const tools = [
   {
     id: 'vertex',
@@ -1267,6 +1419,20 @@ const tools = [
     title: 'Sheard\'s Criterion',
     description: "Calculate the required prism using Sheard's criterion.",
     component: <SheardsCriterionCalculator />,
+    category: 'binocular-vision'
+  },
+  {
+    id: 'percival-criterion',
+    title: 'Percival\'s Criterion',
+    description: "Calculate the required prism using Percival's criterion.",
+    component: <PercivalCriterionCalculator />,
+    category: 'binocular-vision'
+  },
+  {
+    id: 'bielschowsky-test',
+    title: 'Bielschowsky Head-Tilt Test',
+    description: 'Identify the paretic cyclovertical muscle.',
+    component: <BielschowskyHeadTiltTest />,
     category: 'binocular-vision'
   },
 ];
@@ -1402,7 +1568,7 @@ export default function OptoToolsPage() {
         </Tabs>
         
         <section className="max-w-4xl mx-auto mt-20">
-            <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
+             <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
              <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
                 <div className="md:flex">
                     <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
