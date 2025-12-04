@@ -41,15 +41,17 @@ function VertexDistanceCalculator() {
             effectiveSphere = DL_sphere / (1 - d * DL_sphere);
             if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
-                effectiveCylinder = effectiveTotal - effectiveSphere;
+                effectiveCylinder = effectiveTotal - correctedPower1;
             }
         } else { // clToSpecs
             effectiveSphere = DL_sphere / (1 + d * DL_sphere);
             if (!isNaN(DL_cylinder) && DL_cylinder !== 0) {
                 effectiveTotal = (DL_sphere + DL_cylinder) / (1 + d * (DL_sphere + DL_cylinder));
-                effectiveCylinder = effectiveTotal - effectiveSphere;
+                effectiveCylinder = effectiveTotal - correctedPower1;
             }
         }
+
+        let correctedPower1 = effectiveSphere;
         
         let resultText = `Sphere: ${effectiveSphere.toFixed(2)} D`;
         if (effectiveCylinder !== undefined) {
@@ -204,7 +206,6 @@ function LarsRuleCalculator() {
 
     const applyLarsRule = () => {
         let diff = rotatedAxis - initialAxis;
-        // Handle wraparound from 180 to 1
         if (Math.abs(diff) > 90) {
             if (diff > 0) diff -= 180;
             else diff += 180;
@@ -333,10 +334,15 @@ function SimpleTranspositionCalculator() {
         
         let astigmatismType = '';
         if (cyl !== 0) {
-            if (sph === 0) astigmatismType = 'Simple Astigmatism';
-            else if (sph > 0 && newSphere > 0) astigmatismType = 'Compound Hyperopic Astigmatism';
-            else if (sph < 0 && newSphere < 0) astigmatismType = 'Compound Myopic Astigmatism';
-            else astigmatismType = 'Mixed Astigmatism';
+            if (sph === 0 && newSphere !== 0) {
+                 astigmatismType = 'Simple Astigmatism';
+            } else if ((sph > 0 && newSphere > 0) || (sph > 0 && newSphere === 0) || (sph === 0 && newSphere > 0)) {
+                 astigmatismType = 'Compound Hyperopic Astigmatism';
+            } else if ((sph < 0 && newSphere < 0) || (sph < 0 && newSphere === 0) || (sph === 0 && newSphere < 0)) {
+                 astigmatismType = 'Compound Myopic Astigmatism';
+            } else {
+                 astigmatismType = 'Mixed Astigmatism';
+            }
         } else {
             astigmatismType = 'No Astigmatism';
         }
@@ -443,15 +449,20 @@ function MagnificationDistanceCalculator() {
     const calculateMagnification = () => {
         const present = presentAcuity.split('/').map(Number);
         const required = requiredAcuity.split('/').map(Number);
-        if (present.length !== 2 || required.length !== 2 || present[0] === 0 || required[0] === 0) {
+        if (present.length !== 2 || required.length !== 2 || present[1] === 0 || required[1] === 0) {
             setResult('Invalid acuity values.');
             return;
         };
 
-        const presentDecimal = present[1] / present[0];
-        const requiredDecimal = required[1] / required[0];
+        const presentDecimal = present[0] / present[1];
+        const requiredDecimal = required[0] / required[1];
 
-        const magnification = presentDecimal / requiredDecimal;
+        if (presentDecimal === 0) {
+            setResult('Cannot calculate magnification with a present acuity of zero.');
+            return;
+        }
+
+        const magnification = requiredDecimal / presentDecimal;
         setResult(`Required Magnification: ${magnification.toFixed(2)}x`);
     };
 
@@ -692,3 +703,6 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
+
+    
