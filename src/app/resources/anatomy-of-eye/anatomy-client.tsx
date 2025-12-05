@@ -70,7 +70,7 @@ export function AnatomyOfEyeClient() {
             }
             
             .anatomy-main {
-                padding: 40px;
+                padding-top: 40px;
                 max-width: 1400px;
                 margin: 0 auto;
             }
@@ -79,7 +79,7 @@ export function AnatomyOfEyeClient() {
                 background: white;
                 border-radius: 12px;
                 padding: 30px;
-                margin-bottom: 40px;
+                margin: 0 40px 40px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.05);
                 text-align: center;
             }
@@ -87,6 +87,13 @@ export function AnatomyOfEyeClient() {
             .anatomy-hero h1 { color: var(--primary-anatomy); font-size: 2.5rem; margin-bottom: 10px; }
             .hero-subtitle { color: var(--text-light-anatomy); font-size: 1.1rem; }
 
+            .full-width-visual-guide {
+                width: 100vw;
+                left: 50%;
+                transform: translateX(-50%);
+                position: relative;
+                margin-bottom: 40px;
+            }
             .img-container {
                 width: 100%;
                 background: #e1e8ed;
@@ -103,6 +110,14 @@ export function AnatomyOfEyeClient() {
                 overflow: hidden;
                 transition: all 0.3s ease;
             }
+            
+            .img-container-overview {
+                 width: 100%;
+                aspect-ratio: 16/7;
+                background: #e1e8ed;
+                position: relative;
+            }
+
 
             .img-container:hover { border-color: var(--primary-anatomy); background: #dceefb; }
             
@@ -120,6 +135,7 @@ export function AnatomyOfEyeClient() {
                 background: transparent;
                 margin-bottom: 60px;
                 scroll-margin-top: 8rem;
+                padding: 0 40px;
             }
 
             .section-header {
@@ -194,19 +210,23 @@ export function AnatomyOfEyeClient() {
             }
 
             @media (max-width: 768px) {
-                 .anatomy-main { padding: 20px; }
+                 .anatomy-main { padding-top: 20px; }
+                 .anatomy-section, .anatomy-hero { padding: 0 20px; margin-left: 0; margin-right: 0;}
                  .content-grid { grid-template-columns: 1fr; }
                 .anatomy-hero h1 { font-size: 2rem; }
             }
         `}</style>
         <div className="anatomy-body">
             <main className="anatomy-main">
+                <div className="full-width-visual-guide">
+                    <div className="img-container-overview">
+                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
+                    </div>
+                </div>
+
                 <div id="overview" className="anatomy-hero">
                     <h1>Anatomy of the Eye</h1>
                     <p className="hero-subtitle">Visual Guide & Mind Maps for Optometry Students</p>
-                    <div className="img-container">
-                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
-                    </div>
                 </div>
 
                 <section id="eyelid" className="anatomy-section">
@@ -254,7 +274,7 @@ export function AnatomyOfEyeClient() {
                         <h2>Lacrimal System</h2>
                     </div>
                     <div className="img-container">
-                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
+                       <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
