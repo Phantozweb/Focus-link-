@@ -1519,64 +1519,6 @@ function PresbyopiaAdditionCalculator() {
     );
 }
 
-function InvitationLinkGenerator() {
-    const { toast } = useToast();
-    const [region, setRegion] = useState(regionalHeads[0].region.toLowerCase());
-
-    const baseUrl = "https://focuslinks.in/invite/ambassador";
-    const invitationLink = `${baseUrl}?region=${region}`;
-
-    const handleCopy = () => {
-        navigator.clipboard.writeText(invitationLink);
-        toast({
-            title: "Link Copied!",
-            description: "The invitation link has been copied to your clipboard.",
-        });
-    };
-    
-    const handleShare = () => {
-         const whatsappMessage = `Hey! I'm inviting you to join Focus Links, a global community for eye care professionals and students. Use this link to get a personalized invitation from our regional head: ${invitationLink}`;
-         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
-         window.open(whatsappUrl, '_blank');
-    };
-
-    return (
-        <div className="space-y-4">
-             <div>
-                <Label htmlFor="region-select">Select Region to Generate Link</Label>
-                <Select value={region} onValueChange={setRegion}>
-                    <SelectTrigger id="region-select" className="mt-2">
-                        <SelectValue placeholder="Select a region" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {regionalHeads.map(head => (
-                            <SelectItem key={head.region} value={head.region.toLowerCase()}>
-                                {head.region}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <div className="space-y-2">
-                 <Label>Generated Link</Label>
-                 <div className="flex items-center gap-2">
-                     <Input readOnly value={invitationLink} className="bg-slate-100" />
-                 </div>
-            </div>
-            
-             <div className="flex flex-col sm:flex-row gap-2">
-                <Button onClick={handleCopy} className="w-full">
-                    <Copy className="mr-2 h-4 w-4" /> Copy Link
-                </Button>
-                <Button onClick={handleShare} className="w-full" variant="secondary">
-                     <Share2 className="mr-2 h-4 w-4" /> Share on WhatsApp
-                </Button>
-            </div>
-        </div>
-    )
-}
-
 
 
 const tools = [
@@ -1762,18 +1704,6 @@ export default function OptoToolsPage() {
         <section>
             <Card>
                 <CardHeader>
-                    <CardTitle>Share Invitations</CardTitle>
-                    <CardDescription>Generate a personalized link to invite colleagues to join Focus Links.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <InvitationLinkGenerator />
-                </CardContent>
-            </Card>
-        </section>
-
-        <section>
-            <Card>
-                <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pt-4">
@@ -1798,7 +1728,7 @@ export default function OptoToolsPage() {
                                     </CardHeader>
                                 </Card>
                                 </DialogTrigger>
-                                <DialogContent>
+                                <DialogContent className="sm:max-w-2xl">
                                     <DialogHeader>
                                         <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
                                         <DialogDescription>{tool.description}</DialogDescription>
