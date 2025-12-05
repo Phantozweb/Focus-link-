@@ -49,13 +49,13 @@ export function AnatomyOfEyeClient() {
             />
              <div className="bg-brand-bg">
                 <main className="container mx-auto px-4 py-12">
-                     <div className="relative w-full aspect-[16/7] bg-slate-100 rounded-lg overflow-hidden shadow-lg border mb-12" onContextMenu={(e) => e.preventDefault()}>
-                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
-                    </div>
-
-                    <div className="text-center max-w-3xl mx-auto mb-16">
+                    <div className="text-center max-w-3xl mx-auto mb-8">
                         <h1 className="text-4xl font-bold text-slate-800 mb-2">Anatomy of the Eye</h1>
                         <p className="text-lg text-slate-600">A Visual Guide with Mind Maps for Optometry Students</p>
+                    </div>
+
+                     <div className="relative w-full aspect-[16/7] bg-slate-100 rounded-lg overflow-hidden shadow-lg border mb-16" onContextMenu={(e) => e.preventDefault()}>
+                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                     </div>
 
                     <div className="space-y-16">
