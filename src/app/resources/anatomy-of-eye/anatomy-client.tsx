@@ -163,10 +163,23 @@ export function AnatomyOfEyeClient() {
                             </div>
                         </section>
 
+                        <section id="sclera" className="anatomy-section">
+                            <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">4</div>
+                                <h2 className="text-3xl font-bold text-slate-800">Sclera</h2>
+                            </div>
+                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965526361-019af023-f8c5-72a2-8c29-f5d6a0b1c7b0.png" alt="Sclera Mind Map" layout="fill" objectFit="contain" quality={100} />
+                            </div>
+                        </section>
+
                         <section id="cornea" className="anatomy-section">
                              <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
-                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">4</div>
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">5</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Cornea</h2>
+                            </div>
+                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/5232a93b4dac0721822dad65aad45e94cd2b8455/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a__Create_a_visually_a.png" alt="Cornea Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
@@ -192,7 +205,7 @@ export function AnatomyOfEyeClient() {
 
                         <section id="ant-chamber" className="anatomy-section">
                              <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
-                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">5</div>
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">6</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Anterior Chamber</h2>
                             </div>
                              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -226,8 +239,11 @@ export function AnatomyOfEyeClient() {
                         
                         <section id="iris" className="anatomy-section">
                              <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
-                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">6</div>
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">7</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Iris</h2>
+                            </div>
+                            <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965673884-019af026-53e0-74d6-879f-b6be2809f59c.png" alt="Iris Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
@@ -248,10 +264,30 @@ export function AnatomyOfEyeClient() {
                                 </div>
                             </div>
                         </section>
+                        
+                        <section id="pupil" className="anatomy-section">
+                             <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">8</div>
+                                <h2 className="text-3xl font-bold text-slate-800">Pupil</h2>
+                            </div>
+                            <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965970716-019af02a-d20f-70e2-baa5-7417b2ea57ba.png" alt="Pupil Mind Map" layout="fill" objectFit="contain" quality={100} />
+                            </div>
+                        </section>
+
+                        <section id="lens" className="anatomy-section">
+                             <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">9</div>
+                                <h2 className="text-3xl font-bold text-slate-800">Crystalline Lens</h2>
+                            </div>
+                            <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764966042495-019af02b-f0fb-7cf0-958c-cf01cf8288a6.png" alt="Crystalline Lens Mind Map" layout="fill" objectFit="contain" quality={100} />
+                            </div>
+                        </section>
 
                         <section id="vitreous" className="anatomy-section">
                              <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
-                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">7</div>
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">10</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Vitreous Body</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
@@ -261,7 +297,7 @@ export function AnatomyOfEyeClient() {
 
                          <section id="retina" className="anatomy-section">
                              <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
-                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">8</div>
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">11</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Retina</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
@@ -271,7 +307,7 @@ export function AnatomyOfEyeClient() {
 
                         <section id="choroid" className="anatomy-section">
                              <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
-                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">9</div>
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">12</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Choroid</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
@@ -284,3 +320,5 @@ export function AnatomyOfEyeClient() {
         </>
     );
 }
+
+    
