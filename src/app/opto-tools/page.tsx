@@ -14,9 +14,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger,
-  DialogFooter,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2 } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -27,6 +26,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { regionalHeads } from '@/lib/data/regional-heads';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 
 // --- Vertex Distance Calculator ---
@@ -319,7 +319,15 @@ function RetinoscopyWorkingLensCalculator() {
                 </p>
             </div>
             <div className="space-y-2 max-w-xs pt-2">
-                <Label htmlFor="workingDistance">Working Distance (cm)</Label>
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="workingDistance">Working Distance (cm)</Label>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
+                            <TooltipContent><p>Range: 5 cm - 100 cm</p></TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
                 <Input id="workingDistance" type="number" placeholder="67" value={distance} onChange={(e) => setDistance(e.target.value)} />
             </div>
             <Button onClick={calculatePower}>Calculate</Button>
@@ -351,21 +359,19 @@ function SimpleTranspositionCalculator() {
         let ax = parseInt(axis, 10);
 
         if (isNaN(sph) || sph < -30 || sph > 30) {
-            setResult(null);
             alert('Please enter a valid sphere value between -30.00 D and +30.00 D.');
             return;
         }
         if (isNaN(cyl) || cyl < -30 || cyl > 30) {
-            setResult(null);
             alert('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
             return;
         }
         if (isNaN(ax) || ax < 1 || ax > 180) {
-            setResult(null);
             alert('Please enter a valid axis value between 1° and 180°.');
             return;
         }
         
+        setResult(null);
         if (ax === 0) ax = 180;
 
         const newSphere = sph + cyl;
@@ -395,6 +401,7 @@ function SimpleTranspositionCalculator() {
     };
 
     return (
+        <TooltipProvider>
         <div className="space-y-4">
              <div className="space-y-2">
                 <h4 className="font-semibold text-slate-700">Note:</h4>
@@ -410,15 +417,24 @@ function SimpleTranspositionCalculator() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="sph-t">Sphere</Label>
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="sph-t">Sphere</Label>
+                        <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30.00 to +30.00 D</p></TooltipContent></Tooltip>
+                    </div>
                     <Input id="sph-t" type="number" placeholder="+2.00" value={sphere} onChange={e => setSphere(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="cyl-t">Cylinder</Label>
+                     <div className="flex items-center gap-2">
+                        <Label htmlFor="cyl-t">Cylinder</Label>
+                        <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30.00 to +30.00 D</p></TooltipContent></Tooltip>
+                    </div>
                     <Input id="cyl-t" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="axis-t">Axis</Label>
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="axis-t">Axis</Label>
+                        <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>1° to 180°</p></TooltipContent></Tooltip>
+                    </div>
                     <Input id="axis-t" type="number" placeholder="90" value={axis} onChange={e => setAxis(e.target.value)} />
                 </div>
             </div>
@@ -441,6 +457,7 @@ function SimpleTranspositionCalculator() {
                 </ul>
             </div>
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -468,14 +485,21 @@ function SphericalEquivalentCalculator() {
     };
 
     return (
+        <TooltipProvider>
         <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="sph-se">Sphere (D)</Label>
+                     <div className="flex items-center gap-2">
+                        <Label htmlFor="sph-se">Sphere (D)</Label>
+                        <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30.00 to +30.00 D</p></TooltipContent></Tooltip>
+                    </div>
                     <Input id="sph-se" type="number" placeholder="-2.50" value={sphere} onChange={e => setSphere(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="cyl-se">Cylinder (D)</Label>
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="cyl-se">Cylinder (D)</Label>
+                        <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30.00 to +30.00 D</p></TooltipContent></Tooltip>
+                    </div>
                     <Input id="cyl-se" type="number" placeholder="-1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
                 </div>
             </div>
@@ -487,6 +511,7 @@ function SphericalEquivalentCalculator() {
                 </Alert>
             )}
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -729,7 +754,7 @@ function RetinoscopyPrescriptionConverter() {
             const cyl = parseFloat(cylinder) || 0;
             const ax = parseInt(axis, 10) || 0;
              if (sph < -30 || sph > 30 || cyl < -30 || cyl > 30 || ax < 1 || ax > 180) {
-                alert('Please enter valid values: Sphere/Cylinder (-30 to +30), Axis (1 to 180).');
+                setResult('Error: Please enter valid values. Sphere/Cylinder (-30 to +30), Axis (1 to 180).');
                 return;
             }
             const netSph = sph - wd;
@@ -739,7 +764,7 @@ function RetinoscopyPrescriptionConverter() {
              const ax1 = parseInt(axis1, 10) || 0;
              const sph2 = parseFloat(sphere2) || 0;
               if (sph1 < -30 || sph1 > 30 || sph2 < -30 || sph2 > 30 || ax1 < 1 || ax1 > 180) {
-                alert('Please enter valid values: Sphere (-30 to +30), Axis (1 to 180).');
+                setResult('Error: Please enter valid values. Sphere (-30 to +30), Axis (1 to 180).');
                 return;
             }
              
@@ -752,7 +777,7 @@ function RetinoscopyPrescriptionConverter() {
              const ax1 = parseInt(axis1, 10) || 0;
              const cyl2 = parseFloat(sphere2) || 0;
              if (cyl1 < -30 || cyl1 > 30 || cyl2 < -30 || cyl2 > 30 || ax1 < 1 || ax1 > 180) {
-                alert('Please enter valid values: Cylinder (-30 to +30), Axis (1 to 180).');
+                setResult('Error: Please enter valid values. Cylinder (-30 to +30), Axis (1 to 180).');
                 return;
             }
 
@@ -763,6 +788,7 @@ function RetinoscopyPrescriptionConverter() {
     };
 
     return (
+        <TooltipProvider>
         <div className="space-y-6">
             <div className="space-y-2">
                 <h4 className="font-semibold text-slate-700">Note:</h4>
@@ -799,15 +825,15 @@ function RetinoscopyPrescriptionConverter() {
             {method === 'oneSphereOneCylinder' && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="sph-rpc">Sphere (DS)</Label>
+                         <div className="flex items-center gap-2"><Label htmlFor="sph-rpc">Sphere (DS)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                         <Input id="sph-rpc" type="number" step="0.25" placeholder="e.g. -2.00" value={sphere} onChange={e => setSphere(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="cyl-rpc">Cylinder (DC)</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="cyl-rpc">Cylinder (DC)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                         <Input id="cyl-rpc" type="number" step="0.25" placeholder="e.g. -1.00" value={cylinder} onChange={e => setCylinder(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="axis-rpc">Cylinder Axis</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="axis-rpc">Cylinder Axis</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>1° to 180°</p></TooltipContent></Tooltip></div>
                         <Input id="axis-rpc" type="number" placeholder="1-180" value={axis} onChange={e => setAxis(e.target.value)} />
                     </div>
                 </div>
@@ -816,15 +842,15 @@ function RetinoscopyPrescriptionConverter() {
             {method === 'twoSphere' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="sph1-rpc">Sphere 1 (DS)</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="sph1-rpc">Sphere 1 (DS)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                         <Input id="sph1-rpc" type="number" step="0.25" placeholder="e.g. -2.00" value={sphere1} onChange={e => setSphere1(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="axis1-rpc">Axis 1</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="axis1-rpc">Axis 1</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>1° to 180°</p></TooltipContent></Tooltip></div>
                         <Input id="axis1-rpc" type="number" placeholder="e.g. 90" value={axis1} onChange={e => setAxis1(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="sph2-rpc">Sphere 2 (DS)</Label>
+                         <div className="flex items-center gap-2"><Label htmlFor="sph2-rpc">Sphere 2 (DS)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                         <Input id="sph2-rpc" type="number" step="0.25" placeholder="e.g. -3.00" value={sphere2} onChange={e => setSphere2(e.target.value)} />
                     </div>
                      <div className="space-y-2">
@@ -837,19 +863,19 @@ function RetinoscopyPrescriptionConverter() {
             {method === 'twoCylinder' && (
                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="cyl1-rpc">Cylinder 1 (DC)</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="cyl1-rpc">Cylinder 1 (DC)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                         <Input id="cyl1-rpc" type="number" step="0.25" placeholder="e.g. -2.00" value={sphere1} onChange={e => setSphere1(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="axis1-rpc-cyl">Axis 1</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="axis1-rpc-cyl">Axis 1</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>1° to 180°</p></TooltipContent></Tooltip></div>
                         <Input id="axis1-rpc-cyl" type="number" placeholder="e.g. 90" value={axis1} onChange={e => setAxis1(e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="cyl2-rpc">Cylinder 2 (DC)</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="cyl2-rpc">Cylinder 2 (DC)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                         <Input id="cyl2-rpc" type="number" step="0.25" placeholder="e.g. -3.00" value={sphere2} onChange={e => setSphere2(e.target.value)} />
                     </div>
                      <div className="space-y-2">
-                        <Label htmlFor="axis2-rpc-cyl">Axis 2</Label>
+                        <div className="flex items-center gap-2"><Label htmlFor="axis2-rpc-cyl">Axis 2</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>1° to 180°</p></TooltipContent></Tooltip></div>
                         <Input id="axis2-rpc-cyl" type="number" placeholder="e.g. 180" value={axis2} onChange={e => setAxis2(e.target.value)} />
                     </div>
                 </div>
@@ -886,6 +912,7 @@ function RetinoscopyPrescriptionConverter() {
                 </ul>
             </div>
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -1734,24 +1761,22 @@ export default function OptoToolsPage() {
                 <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
-                    <div className="pt-4">
-                        <div className="tabs-container -mb-8 -mx-4">
-                          <div className="glass-tab-bar">
-                              {categories.map((category) => (
-                                  <button
-                                      key={category.id}
-                                      onClick={() => setActiveTab(category.id)}
-                                      className={cn(
-                                          "tab-pill flex items-center gap-2",
-                                          activeTab === category.id && "active"
-                                      )}
-                                  >
-                                      {category.icon}
-                                      {category.name}
-                                  </button>
-                              ))}
-                          </div>
-                        </div>
+                    <div className="tabs-container -mb-8 -mx-4">
+                      <div className="glass-tab-bar">
+                          {categories.map((category) => (
+                              <button
+                                  key={category.id}
+                                  onClick={() => setActiveTab(category.id)}
+                                  className={cn(
+                                      "tab-pill flex items-center gap-2",
+                                      activeTab === category.id && "active"
+                                  )}
+                              >
+                                  {category.icon}
+                                  {category.name}
+                              </button>
+                          ))}
+                      </div>
                     </div>
                 </CardHeader>
                 <CardContent>
