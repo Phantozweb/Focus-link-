@@ -38,32 +38,53 @@ function VertexDistanceCalculator() {
     const [vertexDistance, setVertexDistance] = useState('12');
     const [result, setResult] = useState('');
     const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
     const calculatePrescription = () => {
-        const DL_sphere = parseFloat(sphere);
-        const DL_cylinder = parseFloat(cylinder) || 0;
-        const d = parseFloat(vertexDistance) / 1000; // convert mm to meters
+        const s = parseFloat(sphere);
+        const c = parseFloat(cylinder);
+        const a = parseInt(axis, 10);
+        const vd = parseFloat(vertexDistance);
 
-        if (isNaN(DL_sphere)) {
-            setMessage('Please provide a valid sphere power.');
+        // Validation
+        if (isNaN(s) || s < -30 || s > 30) {
+            setError('Please enter a valid sphere value between -30.00 D and +30.00 D.');
             setResult('');
             return;
         }
+        if (!isNaN(c) && (c < -30 || c > 30)) {
+            setError('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+            setResult('');
+            return;
+        }
+        if (!isNaN(a) && (a < 1 || a > 180)) {
+            setError('Please enter a valid axis value between 1° and 180°.');
+            setResult('');
+            return;
+        }
+        if (isNaN(vd) || vd < 0 || vd > 20) {
+            setError('Please enter a valid vertex distance between 0 mm and 20 mm.');
+            setResult('');
+            return;
+        }
+        
+        setError('');
+        const d = vd / 1000; // convert mm to meters
 
         let effectiveSphere, effectiveTotal, effectiveCylinder;
         
         if (conversion === 'specsToCL') {
-            effectiveSphere = DL_sphere / (1 - d * DL_sphere);
-            if (DL_cylinder !== 0) {
-                effectiveTotal = (DL_sphere + DL_cylinder) / (1 - d * (DL_sphere + DL_cylinder));
+            effectiveSphere = s / (1 - d * s);
+            if (c !== 0 && !isNaN(c)) {
+                effectiveTotal = (s + c) / (1 - d * (s + c));
                 effectiveCylinder = effectiveTotal - effectiveSphere;
             } else {
                 effectiveCylinder = 0;
             }
         } else { // clToSpecs
-            effectiveSphere = DL_sphere / (1 + d * DL_sphere);
-            if (DL_cylinder !== 0) {
-                effectiveTotal = (DL_sphere + DL_cylinder) / (1 + d * (DL_sphere + DL_cylinder));
+            effectiveSphere = s / (1 + d * s);
+            if (c !== 0 && !isNaN(c)) {
+                effectiveTotal = (s + c) / (1 + d * (s + c));
                 effectiveCylinder = effectiveTotal - effectiveSphere;
             } else {
                  effectiveCylinder = 0;
@@ -72,14 +93,15 @@ function VertexDistanceCalculator() {
         
         let resultText = `Sphere: ${effectiveSphere.toFixed(2)} D`;
         if (effectiveCylinder !== undefined && !isNaN(effectiveCylinder) && effectiveCylinder.toFixed(2) !== '0.00' && effectiveCylinder.toFixed(2) !== '-0.00') {
-             resultText += `, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${axis || 'N/A'}`;
+             resultText += `, Cylinder: ${effectiveCylinder.toFixed(2)} D, Axis: ${a || 'N/A'}`;
         }
         setResult(resultText);
 
-        setMessage(Math.abs(DL_sphere) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
+        setMessage(Math.abs(s) < 4 ? 'No significant change in power for sphere value less than ±4.00D.' : '');
     };
 
     return (
+        <TooltipProvider>
         <div className="space-y-6">
             <RadioGroup value={conversion} onValueChange={setConversion} className="flex flex-col sm:flex-row gap-4">
                 <div className="flex items-center space-x-2">
@@ -91,21 +113,22 @@ function VertexDistanceCalculator() {
                     <Label htmlFor="clToSpecs">Contact Lens to Spectacles</Label>
                 </div>
             </RadioGroup>
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="sphere">Sphere (D)</Label>
+                    <div className="flex items-center gap-2"><Label htmlFor="sphere">Sphere (D)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                     <Input id="sphere" type="number" placeholder="-5.00" value={sphere} onChange={(e) => setSphere(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="cylinder">Cylinder (D)</Label>
+                    <div className="flex items-center gap-2"><Label htmlFor="cylinder">Cylinder (D)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>-30 to +30 D</p></TooltipContent></Tooltip></div>
                     <Input id="cylinder" type="number" placeholder="-1.25" value={cylinder} onChange={(e) => setCylinder(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="axis">Axis (°)</Label>
+                    <div className="flex items-center gap-2"><Label htmlFor="axis">Axis (°)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>1° to 180°</p></TooltipContent></Tooltip></div>
                     <Input id="axis" type="number" placeholder="180" value={axis} onChange={(e) => setAxis(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="vertexDistance">Vertex Distance (mm)</Label>
+                    <div className="flex items-center gap-2"><Label htmlFor="vertexDistance">Vertex Distance (mm)</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>0 to 20 mm</p></TooltipContent></Tooltip></div>
                     <Input id="vertexDistance" type="number" placeholder="12" value={vertexDistance} onChange={(e) => setVertexDistance(e.target.value)} />
                 </div>
             </div>
@@ -120,6 +143,7 @@ function VertexDistanceCalculator() {
                 </Alert>
             )}
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -127,21 +151,29 @@ function VertexDistanceCalculator() {
 function BaseCurveCalculator() {
     const [avgK, setAvgK] = useState('');
     const [result, setResult] = useState('');
+    const [error, setError] = useState('');
 
     const calculateBaseCurve = () => {
         const power = parseFloat(avgK);
         if (isNaN(power) || power < 30 || power > 61) {
-            setResult('Please enter a valid K value between 30D and 61D.');
+            setError('Please enter a valid K value between 30.00 D and 61.00 D.');
+            setResult('');
             return;
         }
+        setError('');
         const baseCurve = 337.5 / power;
         setResult(`Base Curve: ${baseCurve.toFixed(2)} mm`);
     };
 
     return (
+        <TooltipProvider>
         <div className="space-y-4">
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="space-y-2 max-w-xs">
-                <Label htmlFor="avgK">Average K (D)</Label>
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="avgK">Average K (D)</Label>
+                    <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>30.00 to 61.00 D</p></TooltipContent></Tooltip>
+                </div>
                 <Input id="avgK" type="number" placeholder="43.50" value={avgK} onChange={(e) => setAvgK(e.target.value)} />
             </div>
             <Button onClick={calculateBaseCurve}>Calculate</Button>
@@ -152,6 +184,7 @@ function BaseCurveCalculator() {
                 </Alert>
             )}
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -234,9 +267,7 @@ function LarsRuleCalculator() {
             numValue = 0;
         }
         
-        if (numValue === 0) numValue = 180;
-        
-        if (numValue >= 1 && numValue <= 180) {
+        if (numValue >= 0 && numValue <= 180) {
             setter(numValue);
         } else if (value === '') {
              setter(0);
@@ -245,17 +276,18 @@ function LarsRuleCalculator() {
     
 
     return (
+        <TooltipProvider>
         <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
                 <div className="space-y-4">
-                    <Label htmlFor="initialAxis">Initial Axis</Label>
+                    <div className="flex items-center gap-2"><Label htmlFor="initialAxis">Initial Axis</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>0° to 180°</p></TooltipContent></Tooltip></div>
                     <div className="flex items-center gap-2">
                         <Slider id="initialAxis" min={0} max={180} step={5} value={[initialAxis]} onValueChange={(v) => setInitialAxis(v[0])} />
                         <Input type="number" value={initialAxis} onChange={(e) => handleAxisChange(setInitialAxis, e.target.value)} className="w-20 text-center"/>
                     </div>
                 </div>
                 <div className="space-y-4">
-                    <Label htmlFor="rotatedAxis">Axis After Blink</Label>
+                    <div className="flex items-center gap-2"><Label htmlFor="rotatedAxis">Axis After Blink</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>0° to 180°</p></TooltipContent></Tooltip></div>
                     <div className="flex items-center gap-2">
                         <Slider id="rotatedAxis" min={0} max={180} step={5} value={[rotatedAxis]} onValueChange={(v) => setRotatedAxis(v[0])} />
                         <Input type="number" value={rotatedAxis} onChange={(e) => handleAxisChange(setRotatedAxis, e.target.value)} className="w-20 text-center"/>
@@ -285,6 +317,7 @@ function LarsRuleCalculator() {
                 </Alert>
             )}
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -293,18 +326,22 @@ function LarsRuleCalculator() {
 function RetinoscopyWorkingLensCalculator() {
     const [distance, setDistance] = useState('67');
     const [result, setResult] = useState('');
+    const [error, setError] = useState('');
 
     const calculatePower = () => {
         const d = parseFloat(distance);
         if (isNaN(d) || d < 5 || d > 100) {
-            setResult('Please enter a valid working distance between 5 cm and 100 cm.');
+            setError('Please enter a valid working distance between 5 cm and 100 cm.');
+            setResult('');
             return;
         }
+        setError('');
         const power = 100 / d;
         setResult(`Compensating Lens: +${power.toFixed(2)} D`);
     };
 
     return (
+        <TooltipProvider>
         <div className="space-y-4">
             <div className="space-y-2">
                 <h4 className="font-semibold text-slate-700">Note:</h4>
@@ -318,15 +355,11 @@ function RetinoscopyWorkingLensCalculator() {
                     Simply enter the working distance (cm), then click 'Calculate'.
                 </p>
             </div>
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="space-y-2 max-w-xs pt-2">
                 <div className="flex items-center gap-2">
                     <Label htmlFor="workingDistance">Working Distance (cm)</Label>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger>
-                            <TooltipContent><p>Range: 5 cm - 100 cm</p></TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>Range: 5 cm - 100 cm</p></TooltipContent></Tooltip>
                 </div>
                 <Input id="workingDistance" type="number" placeholder="67" value={distance} onChange={(e) => setDistance(e.target.value)} />
             </div>
@@ -343,6 +376,7 @@ function RetinoscopyWorkingLensCalculator() {
                 <p className="text-xs mt-1">Where D = Distance from patient's eye to retinoscope (in meters)</p>
             </div>
         </div>
+        </TooltipProvider>
     );
 }
 
@@ -352,22 +386,24 @@ function SimpleTranspositionCalculator() {
     const [cylinder, setCylinder] = useState('');
     const [axis, setAxis] = useState('');
     const [result, setResult] = useState<{transposed: string, astigmatismType: string} | null>(null);
+    const [error, setError] = useState('');
 
     const transpose = () => {
         const sph = parseFloat(sphere);
         const cyl = parseFloat(cylinder);
         let ax = parseInt(axis, 10);
-
+        
+        setError('');
         if (isNaN(sph) || sph < -30 || sph > 30) {
-            alert('Please enter a valid sphere value between -30.00 D and +30.00 D.');
+            setError('Please enter a valid sphere value between -30.00 D and +30.00 D.');
             return;
         }
         if (isNaN(cyl) || cyl < -30 || cyl > 30) {
-            alert('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+            setError('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
             return;
         }
         if (isNaN(ax) || ax < 1 || ax > 180) {
-            alert('Please enter a valid axis value between 1° and 180°.');
+            setError('Please enter a valid axis value between 1° and 180°.');
             return;
         }
         
@@ -415,6 +451,7 @@ function SimpleTranspositionCalculator() {
                     Enter the sphere, cylinder, and axis, then click 'Transpose'.
                 </p>
             </div>
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
                     <div className="flex items-center gap-2">
@@ -466,19 +503,23 @@ function SphericalEquivalentCalculator() {
     const [sphere, setSphere] = useState('');
     const [cylinder, setCylinder] = useState('');
     const [result, setResult] = useState('');
+    const [error, setError] = useState('');
 
     const calculateSE = () => {
         const sph = parseFloat(sphere);
         const cyl = parseFloat(cylinder);
 
         if (isNaN(sph) || sph < -30 || sph > 30) {
-            setResult('Please enter a valid sphere value between -30.00 D and +30.00 D.');
+            setError('Please enter a valid sphere value between -30.00 D and +30.00 D.');
+            setResult('');
             return;
         }
         if (isNaN(cyl) || cyl < -30 || cyl > 30) {
-            setResult('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+            setError('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+            setResult('');
             return;
         }
+        setError('');
 
         const se = sph + (cyl / 2 || 0);
         setResult(`Spherical Equivalent: ${se > 0 ? '+' : ''}${se.toFixed(2)} D`);
@@ -487,6 +528,7 @@ function SphericalEquivalentCalculator() {
     return (
         <TooltipProvider>
         <div className="space-y-4">
+             {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                      <div className="flex items-center gap-2">
@@ -744,8 +786,10 @@ function RetinoscopyPrescriptionConverter() {
     const [axis2, setAxis2] = useState('');
     const [compensatingLens, setCompensatingLens] = useState('no');
     const [result, setResult] = useState('');
+    const [error, setError] = useState('');
 
     const handleConvert = () => {
+        setError('');
         let finalPrescription = '';
         const wd = compensatingLens === 'yes' ? 1.50 : 0; // Example working distance compensation
 
@@ -753,8 +797,19 @@ function RetinoscopyPrescriptionConverter() {
             const sph = parseFloat(sphere) || 0;
             const cyl = parseFloat(cylinder) || 0;
             const ax = parseInt(axis, 10) || 0;
-             if (sph < -30 || sph > 30 || cyl < -30 || cyl > 30 || ax < 1 || ax > 180) {
-                setResult('Error: Please enter valid values. Sphere/Cylinder (-30 to +30), Axis (1 to 180).');
+             if (isNaN(sph) || sph < -30 || sph > 30) {
+                setError('Error: Please enter a valid sphere value between -30.00 D and +30.00 D.');
+                setResult('');
+                return;
+            }
+             if (!isNaN(cyl) && (cyl < -30 || cyl > 30)) {
+                setError('Error: Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+                setResult('');
+                return;
+            }
+             if (!isNaN(ax) && (ax < 1 || ax > 180)) {
+                setError('Error: Please enter a valid axis value between 1° and 180°.');
+                setResult('');
                 return;
             }
             const netSph = sph - wd;
@@ -763,9 +818,15 @@ function RetinoscopyPrescriptionConverter() {
              const sph1 = parseFloat(sphere1) || 0;
              const ax1 = parseInt(axis1, 10) || 0;
              const sph2 = parseFloat(sphere2) || 0;
-              if (sph1 < -30 || sph1 > 30 || sph2 < -30 || sph2 > 30 || ax1 < 1 || ax1 > 180) {
-                setResult('Error: Please enter valid values. Sphere (-30 to +30), Axis (1 to 180).');
+              if (isNaN(sph1) || sph1 < -30 || sph1 > 30 || isNaN(sph2) || sph2 < -30 || sph2 > 30) {
+                setError('Error: Please enter valid sphere values between -30.00 D and +30.00 D.');
+                setResult('');
                 return;
+            }
+            if (isNaN(ax1) || ax1 < 1 || ax1 > 180) {
+                 setError('Error: Please enter a valid axis value between 1° and 180°.');
+                 setResult('');
+                 return;
             }
              
              const netSph1 = sph1 - wd;
@@ -776,9 +837,18 @@ function RetinoscopyPrescriptionConverter() {
              const cyl1 = parseFloat(sphere1) || 0;
              const ax1 = parseInt(axis1, 10) || 0;
              const cyl2 = parseFloat(sphere2) || 0;
-             if (cyl1 < -30 || cyl1 > 30 || cyl2 < -30 || cyl2 > 30 || ax1 < 1 || ax1 > 180) {
-                setResult('Error: Please enter valid values. Cylinder (-30 to +30), Axis (1 to 180).');
+             const ax2val = parseInt(axis2, 10) || 0;
+
+             if (isNaN(cyl1) || cyl1 < -30 || cyl1 > 30 || isNaN(cyl2) || cyl2 < -30 || cyl2 > 30) {
+                setError('Error: Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+                setResult('');
                 return;
+            }
+
+            if (isNaN(ax1) || ax1 < 1 || ax1 > 180 || isNaN(ax2val) || ax2val < 1 || ax2val > 180) {
+                 setError('Error: Please enter a valid axis value between 1° and 180°.');
+                 setResult('');
+                 return;
             }
 
             finalPrescription = `This method is complex and results may vary. A common approach is to find the spherocylindrical equivalent.`;
@@ -803,6 +873,7 @@ function RetinoscopyPrescriptionConverter() {
                     Select the method of retinoscopy, enter the neutral powers, choose 'Yes/No' for the working lens, then click 'Convert'.
                 </p>
             </div>
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             
             <div className='space-y-2'>
                 <Label>Select Method:</Label>
@@ -1761,7 +1832,7 @@ export default function OptoToolsPage() {
                 <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
-                    <div className="tabs-container -mb-8 -mx-4">
+                  <div className="tabs-container -mb-8 -mx-4">
                       <div className="glass-tab-bar">
                           {categories.map((category) => (
                               <button
@@ -1777,7 +1848,7 @@ export default function OptoToolsPage() {
                               </button>
                           ))}
                       </div>
-                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1848,3 +1919,4 @@ export default function OptoToolsPage() {
     </div>
   );
 }
+
