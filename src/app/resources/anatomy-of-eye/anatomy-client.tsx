@@ -26,6 +26,7 @@ export function AnatomyOfEyeClient() {
             },
             "about": [
                 {"@type": "Thing", "name": "Eyelid"},
+                {"@type": "Thing", "name": "Lacrimal System"},
                 {"@type": "Thing", "name": "Conjunctiva"},
                 {"@type": "Thing", "name": "Cornea"},
                 {"@type": "Thing", "name": "Anterior Chamber"},
@@ -694,4 +695,3 @@ export function AnatomyOfEyeClient() {
         </>
     );
 }
-
