@@ -447,7 +447,7 @@ export default function AcademyPage() {
             <h2 className="section-title"><Palette className="text-purple-500" /> Visual Learning</h2>
             <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">New!</span>
           </div>
-          <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden">
+          <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl">
             <CardContent className="p-0">
                 <div className="grid grid-cols-1 md:grid-cols-3">
                     <div className="md:col-span-2 p-6 md:p-8 flex flex-col justify-center">
