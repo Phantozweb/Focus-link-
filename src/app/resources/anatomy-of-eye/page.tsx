@@ -1,11 +1,6 @@
 
-'use client';
-
 import type { Metadata } from 'next';
-import { useEffect } from 'react';
 
-// Although metadata is here, Next.js will use the one exported from page.tsx in the same dir if it exists.
-// This is more for organizational purposes.
 export const metadata: Metadata = {
   title: 'Anatomy of the Eye: A Visual Guide for Optometry Students | Focus Links',
   description: 'Explore the complete anatomy of the human eye from anterior to posterior. This guide for optometry students covers the cornea, lens, retina, and all major structures with detailed descriptions and mind maps.',
@@ -50,54 +45,6 @@ const anatomyPageSchema = {
 
 
 export default function AnatomyOfEyePage() {
-    useEffect(() => {
-        const handleScroll = () => {
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('nav a');
-            let currentId = '';
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (window.scrollY >= sectionTop - 60) {
-                    currentId = section.getAttribute('id') || '';
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${currentId}`) {
-                    link.classList.add('active');
-                }
-            });
-        };
-
-        const smoothScrollHandler = (e: Event) => {
-            e.preventDefault();
-            const target = e.currentTarget as HTMLAnchorElement;
-            const targetId = target.getAttribute('href');
-            const targetSection = targetId ? document.querySelector(targetId) : null;
-            
-            if (targetSection) {
-                 targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                
-                document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
-                target.classList.add('active');
-            }
-        };
-
-        const navLinks = document.querySelectorAll('nav a');
-        navLinks.forEach(anchor => anchor.addEventListener('click', smoothScrollHandler));
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            navLinks.forEach(anchor => anchor.removeEventListener('click', smoothScrollHandler));
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
     return (
         <>
         <script
@@ -117,6 +64,10 @@ export default function AnatomyOfEyePage() {
             }
 
             * { margin: 0; padding: 0; box-sizing: border-box; }
+
+            html {
+                scroll-behavior: smooth;
+            }
 
             body.anatomy-page {
                 font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -783,6 +734,7 @@ export default function AnatomyOfEyePage() {
                         </div>
                     </div>
                 </section>
+
             </main>
         </div>
         </>
