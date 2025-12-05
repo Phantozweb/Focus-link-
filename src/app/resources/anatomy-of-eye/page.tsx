@@ -53,9 +53,9 @@ export default function AnatomyOfEyePage() {
         />
         <style jsx global>{`
             :root {
-                --primary: #0f4c75;      /* Deep Medical Blue */
-                --secondary: #3282b8;    /* Lighter Blue */
-                --accent: #bbe1fa;       /* Highlight Blue */
+                --primary: #0f4c75;
+                --secondary: #3282b8;
+                --accent: #bbe1fa;
                 --text-main: #1b262c;
                 --text-light: #52616b;
                 --bg-body: #f0f4f8;
@@ -115,7 +115,7 @@ export default function AnatomyOfEyePage() {
                 border-left: 4px solid transparent;
             }
 
-            .anatomy-nav a:hover, .anatomy-nav a.active {
+            .anatomy-nav a:hover {
                 background: rgba(255,255,255,0.1);
                 color: white;
                 border-left-color: var(--accent);
@@ -281,7 +281,7 @@ export default function AnatomyOfEyePage() {
                     font-size: 0.85rem;
                 }
 
-                .anatomy-nav a:hover, .anatomy-nav a.active {
+                .anatomy-nav a:hover {
                     background: transparent;
                     border-bottom-color: var(--accent);
                 }
