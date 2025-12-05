@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send, Eye, FileQuestion, MessageCircle, PencilRuler, Palette } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send, Eye, FileQuestion, MessageCircle, PencilRuler, Palette, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -27,6 +27,7 @@ import { toPng } from 'html-to-image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CaseSheet } from '@/components/case-sheet';
 import { logSearch } from '@/lib/activity-logger';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 type AudioSeries = {
@@ -443,20 +444,29 @@ export default function AcademyPage() {
 
         <section>
           <div className="section-header">
-              <h2 className="section-title"><Palette className="text-purple-500" /> Visual Learning</h2>
-              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Coming Soon</span>
+            <h2 className="section-title"><Palette className="text-purple-500" /> Visual Learning</h2>
+            <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">New!</span>
           </div>
-          <Card className="bg-slate-50 border-dashed">
-            <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-                <div className="flex-shrink-0 h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center">
-                    <Palette className="h-9 w-9" />
-                </div>
-                <div className="flex-grow text-center md:text-left">
-                    <h3 className="text-xl font-bold text-slate-800">Explore Clinical Concepts Through Art</h3>
-                    <p className="text-slate-600 mt-1">A new section featuring artistic renderings of ocular anatomy and disease processes is coming soon to make learning more engaging.</p>
-                </div>
-                <div className="flex-shrink-0 mt-4 md:mt-0">
-                    <Button disabled>View Details</Button>
+          <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden">
+            <CardContent className="p-0">
+                <div className="grid grid-cols-1 md:grid-cols-3">
+                    <div className="md:col-span-2 p-6 md:p-8 flex flex-col justify-center">
+                        <h3 className="text-xl font-bold text-slate-800 mb-2">A Visual Guide to Diabetic Retinopathy</h3>
+                        <p className="text-slate-600 mb-4">Explore the stages of DR through this artistic and educational visual guide.</p>
+                        <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
+                            <Avatar className="h-8 w-8">
+                                <AvatarImage src="https://i.ibb.co/LhnqwR5t/IMG-20251025-WA0020.jpg" alt="V.M. Ram Kumar" />
+                                <AvatarFallback>VM</AvatarFallback>
+                            </Avatar>
+                            <span>Authored by <strong>V.M. Ram Kumar</strong></span>
+                        </div>
+                        <div className="flex-shrink-0 mt-auto">
+                            <Button disabled>View Details</Button>
+                        </div>
+                    </div>
+                    <div className="relative aspect-video md:aspect-auto">
+                       <Image src="https://i.ibb.co/KssMB1g/1688f191-236b-48b4-a212-325785a0655c.webp" alt="Diabetic Retinopathy Art" layout="fill" objectFit="cover" className="md:rounded-l-none rounded-b-lg" />
+                    </div>
                 </div>
             </CardContent>
           </Card>
@@ -564,3 +574,5 @@ export default function AcademyPage() {
     </div>
   );
 }
+
+    
