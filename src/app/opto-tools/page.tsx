@@ -41,6 +41,12 @@ function VertexDistanceCalculator() {
     const [error, setError] = useState('');
 
     const calculatePrescription = () => {
+        if (!sphere || !vertexDistance) {
+            setError('Please fill in both Sphere and Vertex Distance fields.');
+            setResult('');
+            return;
+        }
+
         const s = parseFloat(sphere);
         const c = parseFloat(cylinder);
         const a = parseInt(axis, 10);
@@ -52,12 +58,12 @@ function VertexDistanceCalculator() {
             setResult('');
             return;
         }
-        if (!isNaN(c) && (c < -30 || c > 30)) {
+        if (cylinder && (isNaN(c) || c < -30 || c > 30)) {
             setError('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
             setResult('');
             return;
         }
-        if (!isNaN(a) && (a < 1 || a > 180)) {
+        if (cylinder && (isNaN(a) || a < 1 || a > 180)) {
             setError('Please enter a valid axis value between 1° and 180°.');
             setResult('');
             return;
@@ -154,6 +160,11 @@ function BaseCurveCalculator() {
     const [error, setError] = useState('');
 
     const calculateBaseCurve = () => {
+        if (!avgK) {
+            setError('Please enter the Average K value.');
+            setResult('');
+            return;
+        }
         const power = parseFloat(avgK);
         if (isNaN(power) || power < 30 || power > 61) {
             setError('Please enter a valid K value between 30.00 D and 61.00 D.');
@@ -329,6 +340,11 @@ function RetinoscopyWorkingLensCalculator() {
     const [error, setError] = useState('');
 
     const calculatePower = () => {
+        if (!distance) {
+            setError('Please enter the working distance.');
+            setResult('');
+            return;
+        }
         const d = parseFloat(distance);
         if (isNaN(d) || d < 5 || d > 100) {
             setError('Please enter a valid working distance between 5 cm and 100 cm.');
@@ -389,6 +405,12 @@ function SimpleTranspositionCalculator() {
     const [error, setError] = useState('');
 
     const transpose = () => {
+        if (!sphere || !cylinder || !axis) {
+            setError('Please fill in all prescription fields.');
+            setResult(null);
+            return;
+        }
+
         const sph = parseFloat(sphere);
         const cyl = parseFloat(cylinder);
         let ax = parseInt(axis, 10);
@@ -506,6 +528,12 @@ function SphericalEquivalentCalculator() {
     const [error, setError] = useState('');
 
     const calculateSE = () => {
+        if (!sphere || !cylinder) {
+            setError('Please fill in both Sphere and Cylinder fields.');
+            setResult('');
+            return;
+        }
+
         const sph = parseFloat(sphere);
         const cyl = parseFloat(cylinder);
 
@@ -794,9 +822,14 @@ function RetinoscopyPrescriptionConverter() {
     const handleConvert = () => {
         setError('');
         let finalPrescription = '';
-        const wd = compensatingLens === 'yes' ? 1.50 : 0; // Example working distance compensation
+        const wd = compensatingLens === 'yes' ? 1.50 : 0;
 
         if (method === 'oneSphereOneCylinder') {
+             if (!sphere || !cylinder || !axis) {
+                setError('Please fill in all prescription fields.');
+                setResult('');
+                return;
+            }
             const sph = parseFloat(sphere) || 0;
             const cyl = parseFloat(cylinder) || 0;
             const ax = parseInt(axis, 10) || 0;
@@ -805,12 +838,12 @@ function RetinoscopyPrescriptionConverter() {
                 setResult('');
                 return;
             }
-             if (!isNaN(cyl) && (cyl < -30 || cyl > 30)) {
+             if (isNaN(cyl) || cyl < -30 || cyl > 30) {
                 setError('Error: Please enter a valid cylinder value between -30.00 D and +30.00 D.');
                 setResult('');
                 return;
             }
-             if (!isNaN(ax) && (ax < 1 || ax > 180)) {
+             if (isNaN(ax) || ax < 1 || ax > 180) {
                 setError('Error: Please enter a valid axis value between 1° and 180°.');
                 setResult('');
                 return;
@@ -818,6 +851,11 @@ function RetinoscopyPrescriptionConverter() {
             const netSph = sph - wd;
             finalPrescription = `${netSph.toFixed(2)} DS / ${cyl.toFixed(2)} DC @ ${ax}°`;
         } else if (method === 'twoSphere') {
+            if (!sphere1 || !axis1 || !sphere2) {
+                setError('Please fill in both spheres and the first axis.');
+                setResult('');
+                return;
+            }
              const sph1 = parseFloat(sphere1) || 0;
              const ax1 = parseInt(axis1, 10) || 0;
              const sph2 = parseFloat(sphere2) || 0;
@@ -837,6 +875,11 @@ function RetinoscopyPrescriptionConverter() {
 
              finalPrescription = `${netSph1.toFixed(2)} DS @ ${ax1}° / ${netSph2.toFixed(2)} DS @ ${ax1 + 90}°`;
         } else if (method === 'twoCylinder') {
+             if (!sphere1 || !axis1 || !sphere2 || !axis2) {
+                setError('Please fill in all cylinder and axis fields.');
+                setResult('');
+                return;
+            }
              const cyl1 = parseFloat(sphere1) || 0;
              const ax1 = parseInt(axis1, 10) || 0;
              const cyl2 = parseFloat(sphere2) || 0;
@@ -1075,15 +1118,23 @@ function AcaRatioCalculator() {
     const [nearPhoria, setNearPhoria] = useState('');
     const [distancePhoria, setDistancePhoria] = useState('');
     const [result, setResult] = useState('');
+    const [error, setError] = useState('');
 
     const calculateAca = () => {
+        if (!ipd || !nfd || !nearPhoria || !distancePhoria) {
+            setError('Please fill in all fields.');
+            setResult('');
+            return;
+        }
+        setError('');
         const ipdCm = parseFloat(ipd) / 10;
         const nfdM = parseFloat(nfd) / 100;
         const Hn = parseFloat(nearPhoria);
         const Hd = parseFloat(distancePhoria);
 
         if (isNaN(ipdCm) || isNaN(nfdM) || isNaN(Hn) || isNaN(Hd)) {
-            setResult('Please enter valid numeric values for all fields.');
+            setError('Please enter valid numeric values for all fields.');
+            setResult('');
             return;
         }
 
@@ -1101,6 +1152,7 @@ function AcaRatioCalculator() {
                 <h4 className="font-semibold text-slate-700">Instructions:</h4>
                 <p className="text-sm text-slate-500">Enter the IPD, NFD, and phoria at near and distance, then click 'Calculate'.</p>
             </div>
+             {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="ipd">Inter Pupillary Distance (mm)</Label>
@@ -1518,13 +1570,21 @@ function AmplitudeOfAccommodationCalculator() {
 function HoffstettersAmplitudeCalculator() {
     const [age, setAge] = useState('');
     const [result, setResult] = useState<{ min: string, avg: string, max: string } | null>(null);
+    const [error, setError] = useState('');
 
     const calculate = () => {
-        const ageValue = parseInt(age, 10);
-        if (isNaN(ageValue) || ageValue <= 0) {
+        if (!age) {
+            setError('Please enter an age.');
             setResult(null);
             return;
         }
+        const ageValue = parseInt(age, 10);
+        if (isNaN(ageValue) || ageValue < 1 || ageValue > 100) {
+            setError('Please enter a valid age between 1 and 100.');
+            setResult(null);
+            return;
+        }
+        setError('');
 
         const min = (15 - (0.25 * ageValue)).toFixed(2);
         const avg = (18.5 - (0.30 * ageValue)).toFixed(2);
@@ -1543,6 +1603,7 @@ function HoffstettersAmplitudeCalculator() {
                 <h4 className="font-semibold text-slate-700">Instructions:</h4>
                 <p className="text-sm text-slate-500">Enter the age and click 'Calculate'.</p>
             </div>
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="space-y-2 max-w-xs">
                 <Label htmlFor="age-ha">Age</Label>
                 <Input id="age-ha" type="number" placeholder="e.g., 45" value={age} onChange={e => setAge(e.target.value)} />
@@ -1576,15 +1637,24 @@ function PresbyopiaAdditionCalculator() {
     const [readingDist, setReadingDist] = useState('');
     const [npa, setNpa] = useState('');
     const [result, setResult] = useState<{ half: string, twoThirds: string } | null>(null);
+    const [error, setError] = useState('');
 
     const calculate = () => {
+         if (!readingDist || !npa) {
+            setError('Please fill in both Reading Distance and NPA fields.');
+            setResult(null);
+            return;
+        }
+
         const rdCm = parseFloat(readingDist);
         const npaCm = parseFloat(npa);
 
         if (isNaN(rdCm) || rdCm <= 0 || isNaN(npaCm) || npaCm <= 0) {
+            setError('Please enter valid, positive numbers for both fields.');
             setResult(null);
             return;
         }
+        setError('');
 
         const workingDistDiopters = 100 / rdCm;
         const amplitude = 100 / npaCm;
@@ -1608,6 +1678,7 @@ function PresbyopiaAdditionCalculator() {
                 <h4 className="font-semibold text-slate-700">Instructions:</h4>
                 <p className="text-sm text-slate-500">Enter the Reading Distance and Near Point of Accommodation, then click 'Calculate'.</p>
             </div>
+            {error && <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="reading-dist">Reading Distance (cm)</Label>
@@ -1835,23 +1906,23 @@ export default function OptoToolsPage() {
                 <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
-                   <div className="tabs-container -mb-8 -mx-4">
-                      <div className="glass-tab-bar">
-                          {categories.map((category) => (
-                              <button
-                                  key={category.id}
-                                  onClick={() => setActiveTab(category.id)}
-                                  className={cn(
-                                      "tab-pill flex items-center gap-2",
-                                      activeTab === category.id && "active"
-                                  )}
-                              >
-                                  {category.icon}
-                                  {category.name}
-                              </button>
-                          ))}
-                      </div>
-                  </div>
+                  <div className="tabs-container -mb-8 -mx-4">
+                        <div className="glass-tab-bar">
+                            {categories.map((category) => (
+                                <button
+                                    key={category.id}
+                                    onClick={() => setActiveTab(category.id)}
+                                    className={cn(
+                                        "tab-pill flex items-center gap-2",
+                                        activeTab === category.id && "active"
+                                    )}
+                                >
+                                    {category.icon}
+                                    {category.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1922,4 +1993,3 @@ export default function OptoToolsPage() {
     </div>
   );
 }
-
