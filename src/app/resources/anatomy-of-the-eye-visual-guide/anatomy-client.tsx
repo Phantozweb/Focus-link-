@@ -7,7 +7,7 @@ export function AnatomyOfEyeClient() {
     const anatomyPageSchema = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Anatomy of the Eye: A Visual Guide for Optometry Students",
+        "name": "Anatomy of the Eye: Visual Guide for Optometry Students",
         "description": "An interactive study guide covering the complete anatomy of the human eye, from anterior to posterior, designed for students and professionals in eye care.",
         "mainEntity": {
             "@type": "Article",
@@ -54,10 +54,44 @@ export function AnatomyOfEyeClient() {
                 </div>
 
                 <div className="relative w-full aspect-[16/7] bg-slate-100 shadow-lg border-y rounded-lg overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
-                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
+                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                 </div>
                 
                 <div className="text-center max-w-4xl mx-auto py-8 px-4">
+                    <div className="prose prose-lg max-w-none text-slate-600 mb-8">
+                        <p>Enhance your medical studies with this comprehensive <strong>overview of the anatomy of the eye</strong>. Designed specifically for <strong>optometry students</strong>, <strong>ophthalmology residents</strong>, and healthcare professionals, this labeled diagram provides a clear, professional breakdown of the human eye's physiological structure. Whether you are looking for <strong>optometry revision notes</strong> or a quick reference for patient education, this visual guide covers the 12 essential components of ocular anatomy.</p>
+                        <p><strong>Detailed Breakdown of Ocular Structures:</strong> This medical illustration details the path of light and the protective layers of the globe:</p>
+                        <ul className="text-left">
+                          <li><strong>External Protection:</strong>
+                            <ul>
+                              <li><strong>1. Eyelid:</strong> The protective external fold that shields the eye.</li>
+                              <li><strong>2. Conjunctiva:</strong> The thin, clear membrane covering the <strong>sclera</strong> (12), which is the tough, white outer layer providing structural protection.</li>
+                            </ul>
+                          </li>
+                          <li><strong>The Anterior Segment (Light Entry):</strong>
+                            <ul>
+                              <li><strong>3. Cornea:</strong> The transparent outer layer responsible for the primary <strong>refraction of light</strong>.</li>
+                              <li><strong>6. Pupil:</strong> The central opening that admits light into the eye.</li>
+                              <li><strong>5. Iris:</strong> The colored part of the eye that functions as a diaphragm to <strong>control pupil size</strong>.</li>
+                            </ul>
+                          </li>
+                          <li><strong>Fluid Chambers & Focusing:</strong>
+                            <ul>
+                              <li><strong>4. Anterior Chamber:</strong> The fluid-filled space situated between the cornea and the iris.</li>
+                              <li><strong>7. Posterior Chamber:</strong> The narrow space between the iris and the lens.</li>
+                              <li><strong>8. Lens:</strong> The crystalline structure that fine-tunes focus to project light onto the retina.</li>
+                            </ul>
+                          </li>
+                          <li><strong>The Posterior Segment (Processing & Support):</strong>
+                            <ul>
+                              <li><strong>9. Vitreous:</strong> The clear, gel-like substance filling the main globe of the eye to maintain its shape.</li>
+                              <li><strong>10. Retina:</strong> The vital <strong>light-sensitive tissue</strong> that converts visual images into neural signals for the brain.</li>
+                              <li><strong>11. Choroid:</strong> The vascular layer located between the retina and sclera, providing oxygen and nutrients.</li>
+                            </ul>
+                          </li>
+                        </ul>
+                    </div>
+
                     <h3 className="font-bold text-slate-800 mb-4 text-lg">Key Structures Covered</h3>
                      <div className="flex flex-wrap items-center justify-center gap-2">
                         {["Eyelid", "Lacrimal System", "Conjunctiva", "Cornea", "Anterior Chamber", "Iris", "Pupil", "Posterior Chamber", "Crystalline Lens", "Vitreous", "Retina", "Choroid", "Sclera"].map(item => (
@@ -203,3 +237,5 @@ export function AnatomyOfEyeClient() {
         </>
     );
 }
+
+    
