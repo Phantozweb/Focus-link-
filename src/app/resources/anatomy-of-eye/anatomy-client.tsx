@@ -64,6 +64,9 @@ export function AnatomyOfEyeClient() {
                                 <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">1</div>
                                 <h2 className="text-3xl font-bold text-slate-800">Eyelid</h2>
                             </div>
+                            <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/162455f66faf7eee5cac7587cdfc4324c601f277/1764967080329-019af03b-ac50-7563-bc78-93fe003b9122.png" alt="Eyelid Mind Map" layout="fill" objectFit="contain" quality={100} />
+                            </div>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
                                     <h3 className="font-bold text-slate-800 mb-3">Layers (Anterior to Posterior)</h3>
@@ -243,6 +246,36 @@ export function AnatomyOfEyeClient() {
                                         <li><strong className="font-semibold text-slate-700">Pigmented Epithelium:</strong> Posterior layer, blocks light, absorbs stray light.</li>
                                     </ul>
                                 </div>
+                            </div>
+                        </section>
+
+                        <section id="vitreous" className="anatomy-section">
+                             <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">7</div>
+                                <h2 className="text-3xl font-bold text-slate-800">Vitreous Body</h2>
+                            </div>
+                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966489348-019af032-7eab-7268-bf36-ba41478c0ee2.png" alt="Vitreous Body Mind Map" layout="fill" objectFit="contain" quality={100} />
+                            </div>
+                        </section>
+
+                         <section id="retina" className="anatomy-section">
+                             <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">8</div>
+                                <h2 className="text-3xl font-bold text-slate-800">Retina</h2>
+                            </div>
+                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966585916-019af034-23d0-72e0-9847-a40c65c727cf.png" alt="Retina Mind Map" layout="fill" objectFit="contain" quality={100} />
+                            </div>
+                        </section>
+
+                        <section id="choroid" className="anatomy-section">
+                             <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
+                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary text-white font-bold text-lg flex-shrink-0">9</div>
+                                <h2 className="text-3xl font-bold text-slate-800">Choroid</h2>
+                            </div>
+                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966733079-019af036-507b-7e9e-9008-a69d298e1188.png" alt="Choroid Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                     </div>
