@@ -451,14 +451,10 @@ export default function AcademyPage() {
             <CardContent className="p-0">
                 <div className="grid grid-cols-1 md:grid-cols-3">
                     <div className="md:col-span-2 p-6 md:p-8 flex flex-col justify-center">
-                        <h3 className="text-xl font-bold text-slate-800 mb-2">A Visual Guide to Diabetic Retinopathy</h3>
-                        <p className="text-slate-600 mb-4">Explore the stages of DR through this artistic and educational visual guide.</p>
+                        <h3 className="text-xl font-bold text-slate-800 mb-2">Anatomy of Eye: A Visual Guide</h3>
+                        <p className="text-slate-600 mb-4">An anterior to posterior visual guide covering key structures from the cornea to the retina.</p>
                         <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
-                            <Avatar className="h-8 w-8">
-                                <AvatarImage src="https://i.ibb.co/LhnqwR5t/IMG-20251025-WA0020.jpg" alt="V.M. Ram Kumar" />
-                                <AvatarFallback>VM</AvatarFallback>
-                            </Avatar>
-                            <span>Authored by <strong>V.M. Ram Kumar</strong></span>
+                            <span>Posted on Sat Dec 6, 2025</span>
                         </div>
                         <div className="flex-shrink-0 mt-auto">
                             <Button disabled>View Details</Button>
@@ -574,5 +570,3 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
