@@ -636,8 +636,11 @@ function VisualAcuityConverter() {
 
 
 
-const visualAcuityOptions = [ "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "6/60", "5/6", "5/9", "5/12", "5/18", "5/24", "5/36", "5/60", "4/6", "4/9", "4/12", "4/18", "4/24", "4/36", "4/60", "3/6", "3/9", "3/12", "3/18", "3/24", "3/36", "3/60", "2/6", "2/9", "2/12", "2/18", "2/24", "2/36", "2/60", "1/6", "1/9", "1/12", "1/18", "1/24", "1/36", "1/60" ];
-const nearAcuityOptions = ["N6", "N8", "N12", "N18", "N24", "N36"];
+const visualAcuityOptions = [
+    "6/6", "6/9", "6/12", "6/18", "6/24", "6/36", "6/60",
+    "5/60", "4/60", "3/60", "2/60", "1/60"
+];
+const nearAcuityOptions = ["N6", "N8", "N10", "N12", "N18", "N24", "N36"];
 const kestenbaumAcuityOptions = visualAcuityOptions.filter(val => parseFloat(val.split('/')[1]) >= 18);
 
 function MagnificationDistanceCalculator() {
@@ -1832,7 +1835,7 @@ export default function OptoToolsPage() {
                 <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
-                  <div className="tabs-container -mb-8 -mx-4">
+                   <div className="tabs-container -mb-8 -mx-4">
                       <div className="glass-tab-bar">
                           {categories.map((category) => (
                               <button
@@ -1862,9 +1865,9 @@ export default function OptoToolsPage() {
                                     </CardHeader>
                                 </Card>
                                 </DialogTrigger>
-                                <DialogContent className="sm:max-w-2xl">
+                                <DialogContent className="sm:max-w-2xl p-0">
                                   <ScrollArea className="max-h-[85vh]">
-                                      <div className="pr-6">
+                                      <div className="p-6">
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
                                             <DialogDescription>{tool.description}</DialogDescription>
