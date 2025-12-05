@@ -14,15 +14,18 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger,
+  DialogFooter,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
+import { regionalHeads } from '@/lib/data/regional-heads';
 
 
 // --- Vertex Distance Calculator ---
@@ -1516,6 +1519,65 @@ function PresbyopiaAdditionCalculator() {
     );
 }
 
+function InvitationLinkGenerator() {
+    const { toast } = useToast();
+    const [region, setRegion] = useState(regionalHeads[0].region.toLowerCase());
+
+    const baseUrl = "https://focuslinks.in/invite/ambassador";
+    const invitationLink = `${baseUrl}?region=${region}`;
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(invitationLink);
+        toast({
+            title: "Link Copied!",
+            description: "The invitation link has been copied to your clipboard.",
+        });
+    };
+    
+    const handleShare = () => {
+         const whatsappMessage = `Hey! I'm inviting you to join Focus Links, a global community for eye care professionals and students. Use this link to get a personalized invitation from our regional head: ${invitationLink}`;
+         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+         window.open(whatsappUrl, '_blank');
+    };
+
+    return (
+        <div className="space-y-4">
+             <div>
+                <Label htmlFor="region-select">Select Region to Generate Link</Label>
+                <Select value={region} onValueChange={setRegion}>
+                    <SelectTrigger id="region-select" className="mt-2">
+                        <SelectValue placeholder="Select a region" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {regionalHeads.map(head => (
+                            <SelectItem key={head.region} value={head.region.toLowerCase()}>
+                                {head.region}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="space-y-2">
+                 <Label>Generated Link</Label>
+                 <div className="flex items-center gap-2">
+                     <Input readOnly value={invitationLink} className="bg-slate-100" />
+                 </div>
+            </div>
+            
+             <div className="flex flex-col sm:flex-row gap-2">
+                <Button onClick={handleCopy} className="w-full">
+                    <Copy className="mr-2 h-4 w-4" /> Copy Link
+                </Button>
+                <Button onClick={handleShare} className="w-full" variant="secondary">
+                     <Share2 className="mr-2 h-4 w-4" /> Share on WhatsApp
+                </Button>
+            </div>
+        </div>
+    )
+}
+
+
 
 const tools = [
   {
@@ -1607,21 +1669,21 @@ const tools = [
     title: 'Amplitude of Accommodation',
     description: 'Calculate amplitude from NPA or vice-versa.',
     component: <AmplitudeOfAccommodationCalculator />,
-    category: 'refraction',
+    category: 'refraction'
   },
   {
     id: 'hoffstetter-amplitude',
     title: 'Hoffstetter\'s Amplitude',
     description: 'Calculate expected amplitude of accommodation based on age.',
     component: <HoffstettersAmplitudeCalculator />,
-    category: 'refraction',
+    category: 'refraction'
   },
    {
     id: 'presbyopia-addition',
     title: 'Presbyopia Addition',
     description: 'Calculate near add based on working distance and NPA.',
     component: <PresbyopiaAdditionCalculator />,
-    category: 'refraction',
+    category: 'refraction'
   },
   {
     id: 'aca-ratio-heterophoria',
@@ -1661,64 +1723,19 @@ const tools = [
 ];
 
 const categories = [
+    { id: 'all', name: 'All', icon: <Calculator className="h-5 w-5" /> },
     { id: 'contact-lens', name: 'Contact Lens', icon: <Contact className="h-5 w-5" /> },
     { id: 'low-vision', name: 'Low Vision', icon: <Eye className="h-5 w-5" /> },
     { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-5 w-5" /> },
     { id: 'binocular-vision', name: 'Binocular Vision', icon: <Hand className="h-5 w-5" /> },
 ];
 
-const AnimatedTabs = ({ onTabChange }: { onTabChange: (value: string) => void }) => {
-  const [activeTab, setActiveTab] = useState(categories[0].id);
-  const [indicatorStyle, setIndicatorStyle] = useState({});
-  const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
-
-  useEffect(() => {
-    const activeTabNode = tabsRef.current.find(
-      (tab) => tab?.dataset.id === activeTab
-    );
-    if (activeTabNode) {
-      setIndicatorStyle({
-        left: activeTabNode.offsetLeft,
-        width: activeTabNode.offsetWidth,
-      });
-    }
-  }, [activeTab]);
-
-  const handleTabClick = (id: string) => {
-    setActiveTab(id);
-    onTabChange(id);
-  };
-
-  return (
-    <div className="relative flex w-full max-w-lg mx-auto p-1 bg-slate-200/80 rounded-full">
-      <div
-        className="absolute h-[calc(100%-8px)] top-1 bg-white rounded-full shadow-md transition-all duration-300 ease-in-out"
-        style={indicatorStyle}
-      />
-      {categories.map((category, index) => (
-        <button
-          key={category.id}
-          ref={(el) => (tabsRef.current[index] = el)}
-          data-id={category.id}
-          onClick={() => handleTabClick(category.id)}
-          className={cn(
-            'relative z-10 flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-bold transition-colors duration-300 rounded-full',
-            activeTab === category.id
-              ? 'text-primary'
-              : 'text-muted-foreground hover:text-primary'
-          )}
-        >
-          {category.icon}
-          {category.name}
-        </button>
-      ))}
-    </div>
-  );
-};
-
-
 export default function OptoToolsPage() {
   const [activeTab, setActiveTab] = useState(categories[0].id);
+  
+  const filteredTools = activeTab === 'all' 
+    ? tools 
+    : tools.filter(tool => tool.category === activeTab);
   
   return (
     <div className="bg-brand-bg">
@@ -1740,83 +1757,97 @@ export default function OptoToolsPage() {
               <p><strong className="text-slate-600">Keywords:</strong> Optometry Calculator, Vertex Distance, LARS Rule, Keratometry, Low Vision Magnification, Kestenbaum's Rule, Transposition, Spherical Equivalent.</p>
             </div>
           </div>
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Available Modules</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {tools.map(tool => (
-                  <div key={tool.id} className="p-3 bg-slate-50 rounded-lg text-center">
-                    <p className="font-semibold text-sm text-slate-700">{tool.title}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </section>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="flex justify-center mb-8">
-            <AnimatedTabs onTabChange={setActiveTab} />
-          </div>
+        <section>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Share Invitations</CardTitle>
+                    <CardDescription>Generate a personalized link to invite colleagues to join Focus Links.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <InvitationLinkGenerator />
+                </CardContent>
+            </Card>
+        </section>
 
-          {categories.map((category) => (
-            <TabsContent key={category.id} value={category.id}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tools.filter(tool => tool.category === category.id).map(tool => (
-                  <Dialog key={tool.id}>
-                    <DialogTrigger asChild>
-                      <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group h-full flex flex-col">
-                        <CardHeader>
-                          <CardTitle>{tool.title}</CardTitle>
-                          <CardDescription>{tool.description}</CardDescription>
-                        </CardHeader>
-                      </Card>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
-                        <DialogDescription>{tool.description}</DialogDescription>
-                      </DialogHeader>
-                      <div className="py-4">
-                        {tool.component}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                ))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+        <section>
+            <Card>
+                <CardHeader>
+                  <CardTitle>Available Modules</CardTitle>
+                  <CardDescription>Select a category to filter the tools below.</CardDescription>
+                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pt-4">
+                      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+                          {categories.map((category) => (
+                              <TabsTrigger key={category.id} value={category.id} className="gap-2">
+                                {category.icon} {category.name}
+                              </TabsTrigger>
+                          ))}
+                      </TabsList>
+                  </Tabs>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredTools.map(tool => (
+                            <Dialog key={tool.id}>
+                                <DialogTrigger asChild>
+                                <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group h-full flex flex-col">
+                                    <CardHeader>
+                                    <CardTitle>{tool.title}</CardTitle>
+                                    <CardDescription>{tool.description}</CardDescription>
+                                    </CardHeader>
+                                </Card>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
+                                        <DialogDescription>{tool.description}</DialogDescription>
+                                    </DialogHeader>
+                                    <div className="py-4">
+                                        {tool.component}
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+        </section>
         
          <section className="max-w-4xl mx-auto mt-20">
              <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
-              <Card className="overflow-hidden shadow-lg border-primary/20 bg-primary/5">
-                <div className="md:flex">
-                    <div className="md:w-1/3 bg-white p-8 flex flex-col items-center justify-center text-center">
-                        <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-md">
+                <div className="glass-panel text-center p-8 lg:flex lg:items-center lg:gap-8 lg:text-left">
+                    <div className="relative w-24 h-24 mx-auto lg:mx-0 mb-4 lg:mb-0 flex-shrink-0">
+                        <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
                             <AvatarImage src="https://i.ibb.co/Vvz8r7Y/oct-keratoconus.jpg" alt="Shivashangari M" />
                             <AvatarFallback className="bg-slate-200">
                                 <UserRound className="h-12 w-12 text-slate-400" />
                             </AvatarFallback>
                         </Avatar>
-                        <h3 className="text-xl font-bold text-slate-800 mt-4">Shivashangari M</h3>
-                        <p className="text-sm text-primary font-semibold">Masters in Optometry | Contact Lens Specialist</p>
+                    </div>
+                    <div className="flex-grow">
+                        <h3 className="text-2xl font-bold text-[--profile-primary-dark]">Shivashangari M</h3>
+                        <p className="text-base font-medium text-[--profile-primary] leading-snug">Masters in Optometry | Contact Lens Specialist</p>
+                        <blockquote className="mt-4 border-l-4 border-primary/30 pl-4 text-slate-600 italic text-left">
+                            "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
+                        </blockquote>
                         <Button asChild variant="secondary" size="sm" className="mt-4">
                             <Link href="/profile/16">View Profile</Link>
                         </Button>
                     </div>
-                    <div className="p-8 md:w-2/3 flex flex-col justify-center">
-                        <h4 className="text-lg font-semibold text-slate-800">A Message from the Creator</h4>
-                        <blockquote className="mt-2 border-l-4 border-primary/30 pl-4 text-slate-600 italic">
-                            "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
-                        </blockquote>
-                    </div>
                 </div>
-            </Card>
         </section>
       </main>
+       <style jsx global>{`
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+      `}</style>
     </div>
   );
 }
