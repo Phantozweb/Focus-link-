@@ -296,8 +296,8 @@ function RetinoscopyWorkingLensCalculator() {
 
     const calculatePower = () => {
         const d = parseFloat(distance);
-        if (isNaN(d) || d <= 0) {
-            setResult('Please enter a valid working distance.');
+        if (isNaN(d) || d < 5 || d > 100) {
+            setResult('Please enter a valid working distance between 5 cm and 100 cm.');
             return;
         }
         const power = 100 / d;
@@ -350,8 +350,19 @@ function SimpleTranspositionCalculator() {
         const cyl = parseFloat(cylinder);
         let ax = parseInt(axis, 10);
 
-        if (isNaN(sph) || isNaN(cyl) || isNaN(ax) || ax < 0 || ax > 180) {
+        if (isNaN(sph) || sph < -30 || sph > 30) {
             setResult(null);
+            alert('Please enter a valid sphere value between -30.00 D and +30.00 D.');
+            return;
+        }
+        if (isNaN(cyl) || cyl < -30 || cyl > 30) {
+            setResult(null);
+            alert('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
+            return;
+        }
+        if (isNaN(ax) || ax < 1 || ax > 180) {
+            setResult(null);
+            alert('Please enter a valid axis value between 1° and 180°.');
             return;
         }
         
@@ -443,8 +454,12 @@ function SphericalEquivalentCalculator() {
         const sph = parseFloat(sphere);
         const cyl = parseFloat(cylinder);
 
-        if (isNaN(sph)) {
-            setResult('Please enter a valid sphere value.');
+        if (isNaN(sph) || sph < -30 || sph > 30) {
+            setResult('Please enter a valid sphere value between -30.00 D and +30.00 D.');
+            return;
+        }
+        if (isNaN(cyl) || cyl < -30 || cyl > 30) {
+            setResult('Please enter a valid cylinder value between -30.00 D and +30.00 D.');
             return;
         }
 
@@ -713,12 +728,20 @@ function RetinoscopyPrescriptionConverter() {
             const sph = parseFloat(sphere) || 0;
             const cyl = parseFloat(cylinder) || 0;
             const ax = parseInt(axis, 10) || 0;
+             if (sph < -30 || sph > 30 || cyl < -30 || cyl > 30 || ax < 1 || ax > 180) {
+                alert('Please enter valid values: Sphere/Cylinder (-30 to +30), Axis (1 to 180).');
+                return;
+            }
             const netSph = sph - wd;
             finalPrescription = `${netSph.toFixed(2)} DS / ${cyl.toFixed(2)} DC @ ${ax}°`;
         } else if (method === 'twoSphere') {
              const sph1 = parseFloat(sphere1) || 0;
              const ax1 = parseInt(axis1, 10) || 0;
              const sph2 = parseFloat(sphere2) || 0;
+              if (sph1 < -30 || sph1 > 30 || sph2 < -30 || sph2 > 30 || ax1 < 1 || ax1 > 180) {
+                alert('Please enter valid values: Sphere (-30 to +30), Axis (1 to 180).');
+                return;
+            }
              
              const netSph1 = sph1 - wd;
              const netSph2 = sph2 - wd;
@@ -728,6 +751,10 @@ function RetinoscopyPrescriptionConverter() {
              const cyl1 = parseFloat(sphere1) || 0;
              const ax1 = parseInt(axis1, 10) || 0;
              const cyl2 = parseFloat(sphere2) || 0;
+             if (cyl1 < -30 || cyl1 > 30 || cyl2 < -30 || cyl2 > 30 || ax1 < 1 || ax1 > 180) {
+                alert('Please enter valid values: Cylinder (-30 to +30), Axis (1 to 180).');
+                return;
+            }
 
             finalPrescription = `This method is complex and results may vary. A common approach is to find the spherocylindrical equivalent.`;
         }
@@ -1708,20 +1735,22 @@ export default function OptoToolsPage() {
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
                     <div className="pt-4">
-                        <div className="glass-tab-bar">
-                            {categories.map((category) => (
-                                <button
-                                    key={category.id}
-                                    onClick={() => setActiveTab(category.id)}
-                                    className={cn(
-                                        "tab-pill flex items-center gap-2",
-                                        activeTab === category.id && "active"
-                                    )}
-                                >
-                                    {category.icon}
-                                    {category.name}
-                                </button>
-                            ))}
+                        <div className="tabs-container -mb-8 -mx-4">
+                          <div className="glass-tab-bar">
+                              {categories.map((category) => (
+                                  <button
+                                      key={category.id}
+                                      onClick={() => setActiveTab(category.id)}
+                                      className={cn(
+                                          "tab-pill flex items-center gap-2",
+                                          activeTab === category.id && "active"
+                                      )}
+                                  >
+                                      {category.icon}
+                                      {category.name}
+                                  </button>
+                              ))}
+                          </div>
                         </div>
                     </div>
                 </CardHeader>
