@@ -87,18 +87,18 @@ export function AnatomyOfEyeClient() {
             .anatomy-hero h1 { color: var(--primary-anatomy); font-size: 2.5rem; margin-bottom: 10px; }
             .hero-subtitle { color: var(--text-light-anatomy); font-size: 1.1rem; }
 
-            .full-width-visual-guide {
+            .full-width-visual {
                 width: 100vw;
                 left: 50%;
                 transform: translateX(-50%);
                 position: relative;
-                margin-bottom: 40px;
+                margin-bottom: 20px;
             }
             .img-container {
                 width: 100%;
                 background: #e1e8ed;
-                border: 2px dashed #aab8c2;
-                border-radius: 8px;
+                border-top: 2px dashed #aab8c2;
+                border-bottom: 2px dashed #aab8c2;
                 min-height: 300px;
                 margin: 20px 0 30px 0;
                 display: flex;
@@ -112,7 +112,7 @@ export function AnatomyOfEyeClient() {
             }
             
             .img-container-overview {
-                 width: 100%;
+                width: 100%;
                 aspect-ratio: 16/7;
                 background: #e1e8ed;
                 position: relative;
@@ -126,6 +126,7 @@ export function AnatomyOfEyeClient() {
                 height: auto;
                 display: block;
                 object-fit: contain;
+                pointer-events: none;
             }
             
             .img-label { font-weight: 600; margin-top: 10px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
@@ -218,8 +219,8 @@ export function AnatomyOfEyeClient() {
         `}</style>
         <div className="anatomy-body">
             <main className="anatomy-main">
-                <div className="full-width-visual-guide">
-                    <div className="img-container-overview">
+                <div className="full-width-visual">
+                    <div className="img-container-overview" onContextMenu={(e) => e.preventDefault()}>
                         <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                     </div>
                 </div>
@@ -234,9 +235,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">1</div>
                         <h2>Eyelid</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Eyelid Mind Map Here</div>
+                     <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Eyelid Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -273,8 +276,10 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">2</div>
                         <h2>Lacrimal System</h2>
                     </div>
-                    <div className="img-container">
-                       <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
+                     <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                           <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -301,8 +306,10 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">3</div>
                         <h2>Conjunctiva</h2>
                     </div>
-                    <div className="img-container">
-                         <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/74ae7175908f68e40807200ed10bfe6c09f7a026/1764967257365-019af03e-2c6d-7457-a939-a9bf417b7a6e.png" alt="Conjunctiva Mind Map" layout="fill" objectFit="contain" quality={100} />
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                             <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/74ae7175908f68e40807200ed10bfe6c09f7a026/1764967257365-019af03e-2c6d-7457-a939-a9bf417b7a6e.png" alt="Conjunctiva Mind Map" layout="fill" objectFit="contain" quality={100} />
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -339,9 +346,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">4</div>
                         <h2>Cornea</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Cornea Mind Map Here</div>
+                     <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Cornea Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -370,9 +379,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">5</div>
                         <h2>Anterior Chamber</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Anterior Chamber Mind Map Here</div>
+                     <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Anterior Chamber Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -408,9 +419,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">6</div>
                         <h2>Iris</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Iris Mind Map Here</div>
+                     <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Iris Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -437,9 +450,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">7</div>
                         <h2>Pupil</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Pupil Mind Map Here</div>
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Pupil Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -465,9 +480,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">8</div>
                         <h2>Posterior Chamber</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Posterior Chamber Mind Map Here</div>
+                     <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Posterior Chamber Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -493,9 +510,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">9</div>
                         <h2>Lens</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Lens Mind Map Here</div>
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Lens Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -523,9 +542,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">10</div>
                         <h2>Vitreous Body</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Vitreous Mind Map Here</div>
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Vitreous Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -562,9 +583,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">11</div>
                         <h2>Retina</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Retina Mind Map Here</div>
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Retina Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -600,9 +623,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">12</div>
                         <h2>Choroid</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Choroid Mind Map Here</div>
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Choroid Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
@@ -629,9 +654,11 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">13</div>
                         <h2>Sclera</h2>
                     </div>
-                    <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Sclera Mind Map Here</div>
+                    <div className="full-width-visual" onContextMenu={(e) => e.preventDefault()}>
+                        <div className="img-container">
+                            <div className="icon-camera">📷</div>
+                            <div className="img-label">Insert Sclera Mind Map Here</div>
+                        </div>
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
