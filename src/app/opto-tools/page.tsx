@@ -1157,9 +1157,9 @@ function SheardsCriterionCalculator() {
                 <h4 className="font-semibold text-slate-700">Formula:</h4>
                 <p className="font-mono">P = 2/3(p) - 1/3 (CFV)</p>
                 <ul className="text-xs mt-1 list-disc list-inside">
-                    <li>P - Prism (PD)</li>
-                    <li>p - phoria (PD)</li>
-                    <li>CFV - Compensating Fusional Vergence (PD)</li>
+                    <li>P - Prism(PD)</li>
+                    <li>p - phoria(PD)</li>
+                    <li>CFV - Compensating Fusional Vergence(PD)</li>
                 </ul>
             </div>
         </div>
@@ -1707,17 +1707,23 @@ export default function OptoToolsPage() {
                 <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
-                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pt-4">
-                        <div className="overflow-x-auto pb-2">
-                           <TabsList className="h-auto">
-                              {categories.map((category) => (
-                                  <TabsTrigger key={category.id} value={category.id} className="gap-2 shrink-0">
-                                    {category.icon} {category.name}
-                                  </TabsTrigger>
-                              ))}
-                          </TabsList>
+                    <div className="pt-4">
+                        <div className="glass-tab-bar">
+                            {categories.map((category) => (
+                                <button
+                                    key={category.id}
+                                    onClick={() => setActiveTab(category.id)}
+                                    className={cn(
+                                        "tab-pill flex items-center gap-2",
+                                        activeTab === category.id && "active"
+                                    )}
+                                >
+                                    {category.icon}
+                                    {category.name}
+                                </button>
+                            ))}
                         </div>
-                    </Tabs>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
