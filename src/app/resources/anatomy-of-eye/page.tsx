@@ -1,44 +1,45 @@
 
 'use client';
 
-const anatomyPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Anatomy of the Eye: Visual Guide for Optometry Students",
-    "description": "An interactive study guide covering the complete anatomy of the human eye, designed for students and professionals in eye care.",
-    "mainEntity": {
-        "@type": "Article",
-        "headline": "Anatomy of the Eye",
-        "author": {
-            "@type": "Organization",
-            "name": "Focus Links"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Focus Links",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg"
-            }
-        },
-        "about": [
-            {"@type": "Thing", "name": "Eyelid"},
-            {"@type": "Thing", "name": "Conjunctiva"},
-            {"@type": "Thing", "name": "Cornea"},
-            {"@type": "Thing", "name": "Anterior Chamber"},
-            {"@type": "Thing", "name": "Iris"},
-            {"@type": "Thing", "name": "Pupil"},
-            {"@type": "Thing", "name": "Posterior Chamber"},
-            {"@type": "Thing", "name": "Lens"},
-            {"@type": "Thing", "name": "Vitreous"},
-            {"@type": "Thing", "name": "Retina"},
-            {"@type": "Thing", "name": "Choroid"},
-            {"@type": "Thing", "name": "Sclera"}
-        ]
-    }
-};
+import type { Metadata } from 'next';
 
 export default function AnatomyOfEyePage() {
+    const anatomyPageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Anatomy of the Eye: Visual Guide for Optometry Students",
+        "description": "An interactive study guide covering the complete anatomy of the human eye, designed for students and professionals in eye care.",
+        "mainEntity": {
+            "@type": "Article",
+            "headline": "Anatomy of the Eye",
+            "author": {
+                "@type": "Organization",
+                "name": "Focus Links"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Focus Links",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://i.ibb.co/cKdXV9gV/IMG-20251025-WA0014.jpg"
+                }
+            },
+            "about": [
+                {"@type": "Thing", "name": "Eyelid"},
+                {"@type": "Thing", "name": "Conjunctiva"},
+                {"@type": "Thing", "name": "Cornea"},
+                {"@type": "Thing", "name": "Anterior Chamber"},
+                {"@type": "Thing", "name": "Iris"},
+                {"@type": "Thing", "name": "Pupil"},
+                {"@type": "Thing", "name": "Posterior Chamber"},
+                {"@type": "Thing", "name": "Lens"},
+                {"@type": "Thing", "name": "Vitreous"},
+                {"@type": "Thing", "name": "Retina"},
+                {"@type": "Thing", "name": "Choroid"},
+                {"@type": "Thing", "name": "Sclera"}
+            ]
+        }
+    };
     return (
         <>
         <script
@@ -273,8 +274,7 @@ export default function AnatomyOfEyePage() {
                     <h1>Anatomy of the Eye</h1>
                     <p className="hero-subtitle">Visual Guide & Mind Maps for Optometry Students</p>
                     <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Overview Image Here</div>
+                        <img src="https://i.ibb.co/gMd56WvD/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" />
                     </div>
                 </div>
 
