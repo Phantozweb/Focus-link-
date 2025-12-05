@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -53,45 +52,41 @@ export default function AnatomyOfEyePage() {
         />
         <style jsx global>{`
             :root {
-                --primary: #0f4c75;
-                --secondary: #3282b8;
-                --accent: #bbe1fa;
-                --text-main: #1b262c;
-                --text-light: #52616b;
-                --bg-body: #f0f4f8;
-                --bg-card: #ffffff;
-                --nav-width: 260px;
+                --primary-anatomy: #0f4c75;
+                --secondary-anatomy: #3282b8;
+                --accent-anatomy: #bbe1fa;
+                --text-main-anatomy: #1b262c;
+                --text-light-anatomy: #52616b;
+                --bg-body-anatomy: #f0f4f8;
+                --bg-card-anatomy: #ffffff;
+                --nav-width-anatomy: 260px;
             }
 
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-
+            .anatomy-body {
+                font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+                background-color: var(--bg-body-anatomy) !important;
+                color: var(--text-main-anatomy);
+                line-height: 1.6;
+                display: flex;
+            }
+            
             html {
                 scroll-behavior: smooth;
             }
 
-            body.anatomy-page {
-                font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-                background-color: var(--bg-body) !important;
-                color: var(--text-main);
-                line-height: 1.6;
-                display: flex;
-                min-height: 100vh;
-            }
-
-            /* --- Navigation --- */
             .anatomy-nav {
-                width: var(--nav-width);
-                background: var(--primary);
+                width: var(--nav-width-anatomy);
+                background: var(--primary-anatomy);
                 color: white;
                 height: 100vh;
                 position: fixed;
-                top: 0;
+                top: 8rem;
                 left: 0;
                 overflow-y: auto;
                 z-index: 1000;
                 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
                 scrollbar-width: thin;
-                scrollbar-color: var(--secondary) var(--primary);
+                scrollbar-color: var(--secondary-anatomy) var(--primary-anatomy);
             }
 
             .anatomy-nav .nav-header {
@@ -118,18 +113,16 @@ export default function AnatomyOfEyePage() {
             .anatomy-nav a:hover {
                 background: rgba(255,255,255,0.1);
                 color: white;
-                border-left-color: var(--accent);
+                border-left-color: var(--accent-anatomy);
             }
-
-            /* --- Main Content --- */
+            
             .anatomy-main {
-                margin-left: var(--nav-width);
-                width: calc(100% - var(--nav-width));
+                margin-left: var(--nav-width-anatomy);
+                width: calc(100% - var(--nav-width-anatomy));
                 padding: 40px;
                 max-width: 1400px;
             }
 
-            /* --- Overview Header --- */
             .anatomy-hero {
                 background: white;
                 border-radius: 12px;
@@ -139,16 +132,15 @@ export default function AnatomyOfEyePage() {
                 text-align: center;
             }
 
-            .anatomy-hero h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; }
-            .hero-subtitle { color: var(--text-light); font-size: 1.1rem; }
+            .anatomy-hero h1 { color: var(--primary-anatomy); font-size: 2.5rem; margin-bottom: 10px; }
+            .hero-subtitle { color: var(--text-light-anatomy); font-size: 1.1rem; }
 
-            /* --- Image Placeholders --- */
             .img-container {
                 width: 100%;
                 background: #e1e8ed;
                 border: 2px dashed #aab8c2;
                 border-radius: 8px;
-                min-height: 300px; /* Adjust height as needed */
+                min-height: 300px;
                 margin: 20px 0 30px 0;
                 display: flex;
                 align-items: center;
@@ -160,19 +152,18 @@ export default function AnatomyOfEyePage() {
                 transition: all 0.3s ease;
             }
 
-            .img-container:hover { border-color: var(--primary); background: #dceefb; }
+            .img-container:hover { border-color: var(--primary-anatomy); background: #dceefb; }
             
             .img-container img {
                 width: 100%;
                 height: auto;
-                display: block; /* Hidden until you add source */
+                display: block;
                 object-fit: contain;
             }
             
             .img-label { font-weight: 600; margin-top: 10px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
             .icon-camera { font-size: 40px; margin-bottom: 10px; opacity: 0.5; }
 
-            /* --- Section Styling --- */
             .anatomy-section {
                 background: transparent;
                 margin-bottom: 60px;
@@ -183,12 +174,12 @@ export default function AnatomyOfEyePage() {
                 display: flex;
                 align-items: center;
                 margin-bottom: 20px;
-                border-bottom: 2px solid var(--secondary);
+                border-bottom: 2px solid var(--secondary-anatomy);
                 padding-bottom: 10px;
             }
 
             .section-number {
-                background: var(--primary);
+                background: var(--primary-anatomy);
                 color: white;
                 width: 40px;
                 height: 40px;
@@ -201,9 +192,8 @@ export default function AnatomyOfEyePage() {
                 margin-right: 15px;
             }
 
-            .anatomy-section h2 { color: var(--primary); font-size: 1.8rem; }
+            .anatomy-section h2 { color: var(--primary-anatomy); font-size: 1.8rem; }
 
-            /* --- Grid Layout for Details --- */
             .content-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -211,18 +201,18 @@ export default function AnatomyOfEyePage() {
             }
 
             .anatomy-card {
-                background: var(--bg-card);
+                background: var(--bg-card-anatomy);
                 padding: 25px;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                border-top: 4px solid var(--secondary);
+                border-top: 4px solid var(--secondary-anatomy);
                 transition: transform 0.2s;
             }
 
             .anatomy-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
             .anatomy-card h3 {
-                color: var(--primary);
+                color: var(--primary-anatomy);
                 font-size: 1.1rem;
                 margin-bottom: 15px;
                 display: flex;
@@ -239,60 +229,24 @@ export default function AnatomyOfEyePage() {
             
             .anatomy-card li::before {
                 content: "•";
-                color: var(--secondary);
+                color: var(--secondary-anatomy);
                 font-weight: bold;
                 position: absolute;
                 left: 0;
             }
 
-            .highlight { font-weight: 600; color: var(--primary); }
+            .highlight { font-weight: 600; color: var(--primary-anatomy); }
 
-            /* --- Responsive Design --- */
             @media (max-width: 1024px) {
                 .content-grid { grid-template-columns: 1fr 1fr; }
+                 .anatomy-nav { display: none; }
+                 .anatomy-main { margin-left: 0; width: 100%; }
             }
 
             @media (max-width: 768px) {
-                body.anatomy-page { flex-direction: column; }
-                
-                .anatomy-nav {
-                    width: 100%;
-                    height: auto;
-                    position: sticky;
-                    top: 0;
-                    padding: 0;
-                    border-bottom: 1px solid rgba(0,0,0,0.1);
-                }
-
-                .anatomy-nav .nav-header { display: none; }
-                
-                .anatomy-nav ul {
-                    display: flex;
-                    overflow-x: auto;
-                    white-space: nowrap;
-                    padding: 10px;
-                    -webkit-overflow-scrolling: touch;
-                }
-
-                .anatomy-nav a {
-                    padding: 8px 15px;
-                    border-left: none;
-                    border-bottom: 3px solid transparent;
-                    font-size: 0.85rem;
-                }
-
-                .anatomy-nav a:hover {
-                    background: transparent;
-                    border-bottom-color: var(--accent);
-                }
-
-                .anatomy-main {
-                    margin-left: 0;
-                    width: 100%;
-                    padding: 20px;
-                }
-
-                .content-grid { grid-template-columns: 1fr; }
+                 .anatomy-body { flex-direction: column; }
+                 .anatomy-main { padding: 20px; }
+                 .content-grid { grid-template-columns: 1fr; }
                 .anatomy-hero h1 { font-size: 2rem; }
             }
         `}</style>
