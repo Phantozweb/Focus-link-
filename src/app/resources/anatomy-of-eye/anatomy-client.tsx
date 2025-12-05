@@ -325,7 +325,26 @@ export function AnatomyOfEyeClient() {
                         <h2>Lacrimal System</h2>
                     </div>
                     <div className="img-container">
-                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
+                        <div className="icon-camera">📷</div>
+                        <div className="img-label">Insert Lacrimal System Mind Map Here</div>
+                    </div>
+                    <div className="content-grid">
+                        <div className="anatomy-card">
+                            <h3>Secretory System (Tear Production)</h3>
+                            <ul>
+                                <li><span className="highlight">Main Lacrimal Gland:</span> Produces reflex tears. Located superotemporally in the orbit.</li>
+                                <li><span className="highlight">Accessory Glands (Krause & Wolfring):</span> Produce basal (maintenance) tears.</li>
+                            </ul>
+                        </div>
+                        <div className="anatomy-card">
+                            <h3>Excretory System (Tear Drainage)</h3>
+                            <ul>
+                                <li><span className="highlight">Puncta:</span> Openings on the eyelid margin.</li>
+                                <li><span className="highlight">Canaliculi:</span> Tiny channels leading from puncta.</li>
+                                <li><span className="highlight">Lacrimal Sac:</span> Collects tears.</li>
+                                <li><span className="highlight">Nasolacrimal Duct:</span> Drains tears into the nasal cavity.</li>
+                            </ul>
+                        </div>
                     </div>
                 </section>
 
