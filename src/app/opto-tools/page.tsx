@@ -1,7 +1,7 @@
-
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -28,6 +28,37 @@ import { regionalHeads } from '@/lib/data/regional-heads';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
+export const metadata: Metadata = {
+  title: 'Optometry Calculator Suite: 20+ Clinical Tools (Free) | Focus Links',
+  description: "Access the ultimate all-in-one Optometry Calculator. Includes 20+ modules for Transposition, Vertex Distance, LARS, Biometry, and Low Vision. Developed by Shivashangari M (M.Optom).",
+};
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Focus Links Optometry Calculator Suite",
+  "operatingSystem": "Web Browser",
+  "applicationCategory": "MedicalApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Shivashangari M",
+    "jobTitle": "Optometrist"
+  },
+  "featureList": [
+    "Vertex Distance Calculator",
+    "Spherocylindrical Transposition",
+    "LARS Rule for Toric Lenses",
+    "Kestenbaum's Rule",
+    "AC/A Ratio Calculator",
+    "Visual Acuity Converter"
+  ],
+  "description": "A complete suite of 20+ optometry calculators for clinical use, including refraction, contact lens, and low vision tools."
+};
 
 // --- Vertex Distance Calculator ---
 function VertexDistanceCalculator() {
@@ -48,7 +79,7 @@ function VertexDistanceCalculator() {
         }
 
         const s = parseFloat(sphere);
-        const c = parseFloat(cylinder);
+        const c = parseFloat(cylinder) || 0;
         const a = parseInt(axis, 10);
         const vd = parseFloat(vertexDistance);
 
@@ -1724,7 +1755,7 @@ function PresbyopiaAdditionCalculator() {
 const tools = [
   {
     id: 'vertex',
-    title: 'Vertex Distance',
+    title: 'Vertex Distance Calculator',
     description: 'Calculate effective power at a different vertex distance.',
     component: <VertexDistanceCalculator />,
     category: 'contact-lens'
@@ -1738,28 +1769,28 @@ const tools = [
   },
   {
     id: 'lars',
-    title: 'LARS Rule',
+    title: 'LARS Rule Calculator',
     description: 'Adjust axis for a rotated toric contact lens.',
     component: <LarsRuleCalculator />,
     category: 'contact-lens'
   },
   {
     id: 'mag-distance',
-    title: 'Magnification (Distance)',
+    title: 'Magnification (Distance) Calculator',
     description: 'Calculate required distance magnification.',
     component: <MagnificationDistanceCalculator />,
     category: 'low-vision'
   },
   {
     id: 'mag-near',
-    title: 'Magnification (Near)',
+    title: 'Magnification (Near) Calculator',
     description: 'Calculate required near magnification from N-notation.',
     component: <MagnificationNearCalculator />,
     category: 'low-vision'
   },
   {
     id: 'kestenbaum',
-    title: 'Kestenbaum\'s Rule',
+    title: "Kestenbaum's Rule",
     description: 'Estimate the required near add for low vision patients.',
     component: <KestenbaumRuleCalculator />,
     category: 'low-vision'
@@ -1773,56 +1804,56 @@ const tools = [
   },
   {
     id: 'transposition',
-    title: 'Simple Transposition',
+    title: 'Simple Transposition Tool',
     description: 'Transpose a prescription and determine astigmatism type.',
     component: <SimpleTranspositionCalculator />,
     category: 'refraction'
   },
   {
     id: 'sph-equivalent',
-    title: 'Spherical Equivalent',
-    description: 'Calculate the spherical equivalent of a prescription.',
+    title: 'Spherical Equivalent Calculator',
+    description: 'Calculate the best vision sphere (BVS).',
     component: <SphericalEquivalentCalculator />,
     category: 'refraction'
   },
   {
     id: 'va-converter',
     title: 'Visual Acuity Converter',
-    description: 'Convert between different visual acuity notations.',
+    description: 'Convert between different visual acuity notations (Snellen, LogMAR).',
     component: <VisualAcuityConverter />,
     category: 'refraction',
   },
   {
     id: 'retinoscopy-converter',
     title: 'Retinoscopy Rx Converter',
-    description: 'Convert retinoscopy findings into a final prescription.',
+    description: 'Finalize your working distance. Convert retinoscopy findings into a final prescription.',
     component: <RetinoscopyPrescriptionConverter />,
     category: 'refraction',
   },
    {
     id: 'snellen-size',
-    title: 'Snellen Letter Size',
+    title: 'Snellen Letter Size Calculator',
     description: 'Calculate the size of Snellen letters based on chart distance.',
     component: <SnellenLetterSizeCalculator />,
     category: 'refraction',
   },
   {
     id: 'accommodation-amplitude',
-    title: 'Amplitude of Accommodation',
+    title: 'Amplitude of Accommodation Calculator',
     description: 'Calculate amplitude from NPA or vice-versa.',
     component: <AmplitudeOfAccommodationCalculator />,
     category: 'refraction'
   },
   {
     id: 'hoffstetter-amplitude',
-    title: 'Hoffstetter\'s Amplitude',
+    title: "Hoffstetter's Amplitude",
     description: 'Calculate expected amplitude of accommodation based on age.',
     component: <HoffstettersAmplitudeCalculator />,
     category: 'refraction'
   },
    {
     id: 'presbyopia-addition',
-    title: 'Presbyopia Addition',
+    title: 'Presbyopia Addition Calculator',
     description: 'Calculate near add based on working distance and NPA.',
     component: <PresbyopiaAdditionCalculator />,
     category: 'refraction'
@@ -1836,21 +1867,21 @@ const tools = [
   },
   {
     id: 'aca-ratio-gradient',
-    title: 'AC/A Ratio (Gradient)',
+    title: 'AC/A Ratio (Gradient) Tool',
     description: 'Calculate the AC/A ratio using the gradient method.',
     component: <AcaGradientCalculator />,
     category: 'binocular-vision'
   },
   {
     id: 'sheards-criterion',
-    title: 'Sheard\'s Criterion',
+    title: "Sheard's Criterion Calculator",
     description: "Calculate the required prism using Sheard's criterion.",
     component: <SheardsCriterionCalculator />,
     category: 'binocular-vision'
   },
   {
     id: 'percival-criterion',
-    title: 'Percival\'s Criterion',
+    title: "Percival's Criterion Calculator",
     description: "Calculate the required prism using Percival's criterion.",
     component: <PercivalCriterionCalculator />,
     category: 'binocular-vision'
@@ -1865,99 +1896,70 @@ const tools = [
 ];
 
 const categories = [
-    { id: 'all', name: 'All', icon: <Calculator className="h-5 w-5" /> },
     { id: 'contact-lens', name: 'Contact Lens', icon: <Contact className="h-5 w-5" /> },
     { id: 'low-vision', name: 'Low Vision', icon: <Eye className="h-5 w-5" /> },
     { id: 'refraction', name: 'Optics & Refraction', icon: <Ruler className="h-5 w-5" /> },
     { id: 'binocular-vision', name: 'Binocular Vision', icon: <Hand className="h-5 w-5" /> },
 ];
 
+const ToolCard = ({ tool }: { tool: typeof tools[0] }) => (
+  <Dialog>
+    <DialogTrigger asChild>
+      <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group h-full flex flex-col">
+        <CardHeader>
+          <CardTitle>{tool.title}</CardTitle>
+          <CardDescription>{tool.description}</CardHeader>
+        </CardHeader>
+      </Card>
+    </DialogTrigger>
+    <DialogContent className="sm:max-w-2xl p-0">
+      <ScrollArea className="max-h-[85vh]">
+        <div className="p-6">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
+            <DialogDescription>{tool.description}</DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            {tool.component}
+          </div>
+        </div>
+      </ScrollArea>
+    </DialogContent>
+  </Dialog>
+);
+
 export default function OptoToolsPage() {
-  const [activeTab, setActiveTab] = useState(categories[0].id);
-  
-  const filteredTools = activeTab === 'all' 
-    ? tools 
-    : tools.filter(tool => tool.category === activeTab);
+  const toolsByCategory = categories.map(category => ({
+    ...category,
+    tools: tools.filter(tool => tool.category === category.id)
+  }));
   
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
     <div className="bg-brand-bg">
       <header className="hero">
-        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Optometry Tools</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Clinical Optometry Calculator Suite</h1>
         <p className="text-base opacity-90 max-w-xl mx-auto">
-          A suite of calculators and converters designed for eye care professionals.
+          A comprehensive dashboard of 20+ optical calculators and converters for optometrists, students, and eye care professionals.
         </p>
       </header>
 
        <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-16 space-y-16">
-        <section>
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-800">Optocal Hub</h2>
-            <p className="mt-2 text-lg text-slate-600">
-              Your one-stop destination for precise and efficient clinical calculations. This hub provides a comprehensive suite of tools designed to streamline daily tasks for optometrists, students, and eye care professionals.
-            </p>
-            <div className="mt-4 text-sm text-slate-500">
-              <p><strong className="text-slate-600">Keywords:</strong> Optometry Calculator, Vertex Distance, LARS Rule, Keratometry, Low Vision Magnification, Kestenbaum's Rule, Transposition, Spherical Equivalent.</p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-            <Card>
-                <CardHeader>
-                  <CardTitle>Available Modules</CardTitle>
-                  <CardDescription>Select a category to filter the tools below.</CardDescription>
-                  <div className="tabs-container -mb-8 -mx-4">
-                        <div className="glass-tab-bar">
-                            {categories.map((category) => (
-                                <button
-                                    key={category.id}
-                                    onClick={() => setActiveTab(category.id)}
-                                    className={cn(
-                                        "tab-pill flex items-center gap-2",
-                                        activeTab === category.id && "active"
-                                    )}
-                                >
-                                    {category.icon}
-                                    {category.name}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredTools.map(tool => (
-                            <Dialog key={tool.id}>
-                                <DialogTrigger asChild>
-                                <Card className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all group h-full flex flex-col">
-                                    <CardHeader>
-                                    <CardTitle>{tool.title}</CardTitle>
-                                    <CardDescription>{tool.description}</CardDescription>
-                                    </CardHeader>
-                                </Card>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-2xl p-0">
-                                  <ScrollArea className="max-h-[85vh]">
-                                      <div className="p-6">
-                                        <DialogHeader>
-                                            <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
-                                            <DialogDescription>{tool.description}</DialogDescription>
-                                        </DialogHeader>
-                                        <div className="py-4">
-                                          {tool.component}
-                                        </div>
-                                      </div>
-                                  </ScrollArea>
-                                </DialogContent>
-                            </Dialog>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
-        </section>
         
-         <section className="max-w-4xl mx-auto mt-20">
-             <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">About the Creator</h2>
+        {toolsByCategory.map(category => (
+          <section key={category.id}>
+             <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+              {category.icon} {category.name} Calculators
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {category.tools.map(tool => <ToolCard key={tool.id} tool={tool} />)}
+            </div>
+          </section>
+        ))}
+
+        <section className="max-w-4xl mx-auto mt-20">
+             <h2 className="text-2xl font-bold text-slate-800 text-center mb-8">Developed by a Contact Lens Specialist</h2>
                 <div className="glass-panel text-center p-8 lg:flex lg:items-center lg:gap-8 lg:text-left">
                     <div className="relative w-24 h-24 mx-auto lg:mx-0 mb-4 lg:mb-0 flex-shrink-0">
                         <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
@@ -1971,7 +1973,7 @@ export default function OptoToolsPage() {
                         <h3 className="text-2xl font-bold text-[--profile-primary-dark]">Shivashangari M</h3>
                         <p className="text-base font-medium text-[--profile-primary] leading-snug">Masters in Optometry | Contact Lens Specialist</p>
                         <blockquote className="mt-4 border-l-4 border-primary/30 pl-4 text-slate-600 italic text-left">
-                            "These calculation tools were created to enhance efficiency and accuracy in optometry practices. My goal is to provide user-friendly digital solutions that support fellow professionals and students in their daily clinical work. I hope you find them valuable."
+                           "Unlike generic online calculators, the Focus Links Optometry Calculator Suite is developed by Shivashangari M (Masters in Optometry). These tools are verified for clinical accuracy and designed to adhere to standard optometric formulas (ANSI)."
                         </blockquote>
                         <Button asChild variant="secondary" size="sm" className="mt-4">
                             <Link href="/profile/16">View Profile</Link>
@@ -1979,6 +1981,7 @@ export default function OptoToolsPage() {
                     </div>
                 </div>
         </section>
+
       </main>
        <style jsx global>{`
         .glass-panel {
@@ -1991,5 +1994,6 @@ export default function OptoToolsPage() {
         }
       `}</style>
     </div>
+    </>
   );
 }
