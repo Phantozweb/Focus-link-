@@ -26,6 +26,7 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { regionalHeads } from '@/lib/data/regional-heads';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 // --- Vertex Distance Calculator ---
@@ -1707,7 +1708,7 @@ export default function OptoToolsPage() {
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pt-4">
-                      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+                      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 bg-primary/10 text-primary">
                           {categories.map((category) => (
                               <TabsTrigger key={category.id} value={category.id} className="gap-2">
                                 {category.icon} {category.name}
@@ -1733,9 +1734,11 @@ export default function OptoToolsPage() {
                                         <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
                                         <DialogDescription>{tool.description}</DialogDescription>
                                     </DialogHeader>
-                                    <div className="py-4">
+                                    <ScrollArea className="max-h-[70vh]">
+                                      <div className="py-4 pr-6">
                                         {tool.component}
-                                    </div>
+                                      </div>
+                                    </ScrollArea>
                                 </DialogContent>
                             </Dialog>
                         ))}
