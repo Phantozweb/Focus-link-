@@ -150,7 +150,7 @@ export default function AcademyPage() {
 
     setLiveWebinars(live);
     setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
-    setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()));
+    setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.postedDate).getTime()));
     
     async function fetchAudioSeries() {
       setIsLoadingAudio(true);
@@ -438,6 +438,18 @@ export default function AcademyPage() {
                  </CardContent>
               </TabsContent>
             </Tabs>
+          </Card>
+        </section>
+
+        <section>
+          <div className="section-header">
+              <h2 className="section-title"><Video className="text-purple-500" /> Visual Learning</h2>
+              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Coming Soon</span>
+          </div>
+          <Card className="bg-slate-50 border-dashed">
+            <CardContent className="p-8 text-center text-muted-foreground">
+              <p>Engaging video tutorials and animated explainers are coming soon to this section.</p>
+            </CardContent>
           </Card>
         </section>
         
