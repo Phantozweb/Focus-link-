@@ -9,28 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import type { ForumPost } from '@/types';
 import { TimeAgo } from '@/components/time-ago';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export function HomeForumPost({ discussion }: { discussion: ForumPost }) {
-  const [stats, setStats] = useState<{ likes: number; views: number } | null>(null);
-
-  useEffect(() => {
-    async function fetchStats() {
-      try {
-        const response = await fetch(`/api/case-stats?id=${discussion.id}`);
-        const data = await response.json();
-        if (data.likes !== undefined && data.views !== undefined) {
-          setStats(data);
-        } else {
-          setStats({ likes: discussion.upvotes, views: discussion.views }); // Fallback
-        }
-      } catch (error) {
-        console.error("Failed to fetch case stats:", error);
-        setStats({ likes: discussion.upvotes, views: discussion.views }); // Fallback on error
-      }
-    }
-    fetchStats();
-  }, [discussion.id, discussion.upvotes, discussion.views]);
 
   return (
     <Card className="hover:shadow-hover transition-shadow rounded-3xl shadow-soft">
@@ -45,11 +25,11 @@ export function HomeForumPost({ discussion }: { discussion: ForumPost }) {
             <div className="flex items-center gap-4 text-sm text-muted-foreground flex-shrink-0">
               <div className="flex items-center gap-1.5" title="Upvotes">
                 <ThumbsUp className="h-4 w-4" />
-                {stats ? stats.likes : <Skeleton className="h-4 w-6" />}
+                {discussion.upvotes}
               </div>
               <div className="flex items-center gap-1.5" title="Views">
                 <Eye className="h-4 w-4" />
-                {stats ? stats.views : <Skeleton className="h-4 w-8" />}
+                {discussion.views}
               </div>
             </div>
           </div>
