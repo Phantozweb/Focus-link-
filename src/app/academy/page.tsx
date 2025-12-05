@@ -458,7 +458,7 @@ export default function AcademyPage() {
                         </div>
                         <div className="flex-shrink-0 mt-auto">
                             <Button asChild className="w-full">
-                                <Link href="/resources/anatomy-of-eye">View Details</Link>
+                                <Link href="/resources/anatomy-of-the-eye-visual-guide">View Details</Link>
                             </Button>
                         </div>
                     </div>

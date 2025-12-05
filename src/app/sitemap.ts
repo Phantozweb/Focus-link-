@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/profile/create',
     '/help-center',
     '/terms',
+    '/resources/anatomy-of-the-eye-visual-guide',
   ].map(route => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
