@@ -1707,15 +1707,17 @@ export default function OptoToolsPage() {
                 <CardHeader>
                   <CardTitle>Available Modules</CardTitle>
                   <CardDescription>Select a category to filter the tools below.</CardDescription>
-                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pt-4">
-                      <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 bg-primary/10 text-primary">
-                          {categories.map((category) => (
-                              <TabsTrigger key={category.id} value={category.id} className="gap-2">
-                                {category.icon} {category.name}
-                              </TabsTrigger>
-                          ))}
-                      </TabsList>
-                  </Tabs>
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full pt-4">
+                        <div className="overflow-x-auto pb-2">
+                           <TabsList className="h-auto">
+                              {categories.map((category) => (
+                                  <TabsTrigger key={category.id} value={category.id} className="gap-2 shrink-0">
+                                    {category.icon} {category.name}
+                                  </TabsTrigger>
+                              ))}
+                          </TabsList>
+                        </div>
+                    </Tabs>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1730,15 +1732,17 @@ export default function OptoToolsPage() {
                                 </Card>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-2xl">
-                                    <DialogHeader>
-                                        <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
-                                        <DialogDescription>{tool.description}</DialogDescription>
-                                    </DialogHeader>
-                                    <ScrollArea className="max-h-[70vh]">
-                                      <div className="py-4 pr-6">
-                                        {tool.component}
+                                  <ScrollArea className="max-h-[85vh]">
+                                      <div className="pr-6">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-2xl">{tool.title}</DialogTitle>
+                                            <DialogDescription>{tool.description}</DialogDescription>
+                                        </DialogHeader>
+                                        <div className="py-4">
+                                          {tool.component}
+                                        </div>
                                       </div>
-                                    </ScrollArea>
+                                  </ScrollArea>
                                 </DialogContent>
                             </Dialog>
                         ))}
