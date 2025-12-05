@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send, Eye, FileQuestion, MessageCircle, PencilRuler } from 'lucide-react';
+import { Calendar, Clock, Video, UserCircle, PlayCircle, Tv, Radio, Info, Users, Trophy, BookOpen, Headphones, FolderOpen, Newspaper, FileText, Download, Search, Sparkles, Bot, Loader2, Send, Eye, FileQuestion, MessageCircle, PencilRuler, Palette } from 'lucide-react';
 import Link from 'next/link';
 import { WebinarTime } from '@/components/webinar-time';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -149,7 +149,7 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
     setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.postedDate).getTime()));
     
     async function fetchAudioSeries() {
@@ -447,8 +447,17 @@ export default function AcademyPage() {
               <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Coming Soon</span>
           </div>
           <Card className="bg-slate-50 border-dashed">
-            <CardContent className="p-8 text-center text-muted-foreground">
-              <p>Engaging video tutorials and animated explainers are coming soon to this section.</p>
+            <CardContent className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-shrink-0 h-16 w-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center">
+                    <Palette className="h-9 w-9" />
+                </div>
+                <div className="flex-grow text-center md:text-left">
+                    <h3 className="text-xl font-bold text-slate-800">Explore Clinical Concepts Through Art</h3>
+                    <p className="text-slate-600 mt-1">A new section featuring artistic renderings of ocular anatomy and disease processes is coming soon to make learning more engaging.</p>
+                </div>
+                <div className="flex-shrink-0 mt-4 md:mt-0">
+                    <Button disabled>View Details</Button>
+                </div>
             </CardContent>
           </Card>
         </section>
