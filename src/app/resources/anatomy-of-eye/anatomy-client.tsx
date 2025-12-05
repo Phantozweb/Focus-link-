@@ -285,6 +285,10 @@ export function AnatomyOfEyeClient() {
                         <div className="section-number">1</div>
                         <h2>Eyelid</h2>
                     </div>
+                    <div className="img-container">
+                        <div className="icon-camera">📷</div>
+                        <div className="img-label">Insert Eyelid Mind Map Here</div>
+                    </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
                             <h3>Layers (Anterior to Posterior)</h3>
@@ -695,3 +699,5 @@ export function AnatomyOfEyeClient() {
         </>
     );
 }
+
+    
