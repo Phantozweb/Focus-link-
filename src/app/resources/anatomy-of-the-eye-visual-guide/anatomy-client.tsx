@@ -2,6 +2,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 export function AnatomyOfEyeClient() {
     const anatomyPageSchema = {
@@ -41,6 +42,23 @@ export function AnatomyOfEyeClient() {
             ]
         }
     };
+    
+    const structures = [
+        { name: "Eyelid", id: "eyelid" },
+        { name: "Lacrimal System", id: "lacrimal" },
+        { name: "Conjunctiva", id: "conjunctiva" },
+        { name: "Sclera", id: "sclera" },
+        { name: "Cornea", id: "cornea" },
+        { name: "Anterior Chamber", id: "ant-chamber" },
+        { name: "Iris", id: "iris" },
+        { name: "Pupil", id: "pupil" },
+        { name: "Posterior Chamber", id: "post-chamber" },
+        { name: "Crystalline Lens", id: "lens" },
+        { name: "Vitreous", id: "vitreous" },
+        { name: "Retina", id: "retina" },
+        { name: "Choroid", id: "choroid" },
+    ];
+    
     return (
         <>
             <script
@@ -94,8 +112,10 @@ export function AnatomyOfEyeClient() {
 
                     <h3 className="font-bold text-slate-800 mb-4 text-lg">Key Structures Covered</h3>
                      <div className="flex flex-wrap items-center justify-center gap-2">
-                        {["Eyelid", "Lacrimal System", "Conjunctiva", "Cornea", "Anterior Chamber", "Iris", "Pupil", "Posterior Chamber", "Crystalline Lens", "Vitreous", "Retina", "Choroid", "Sclera"].map(item => (
-                            <span key={item} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-medium">{item}</span>
+                        {structures.map(item => (
+                            <Link key={item.id} href={`#${item.id}`} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors">
+                                {item.name}
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -108,7 +128,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Eyelid</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/162455f66faf7eee5cac7587cdfc4324c601f277/1764967080329-019af03b-ac50-7563-bc78-93fe003b9122.png?raw=true" alt="Eyelid Mind Map" layout="fill" objectFit="contain" quality={100} />
+                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/162455f66faf7eee5cac7587cdfc4324c601f277/1764967080329-019af03b-ac50-7563-bc78-93fe003b9122.png" alt="Eyelid Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -118,7 +138,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Lacrimal System</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png?raw=true" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                         
@@ -128,7 +148,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Conjunctiva</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/74ae7175908f68e40807200ed10bfe6c09f7a026/1764967257365-019af03e-2c6d-7457-a939-a9bf417b7a6e.png?raw=true" alt="Conjunctiva Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/74ae7175908f68e40807200ed10bfe6c09f7a026/1764967257365-019af03e-2c6d-7457-a939-a9bf417b7a6e.png" alt="Conjunctiva Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -138,7 +158,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Sclera</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965526361-019af023-f8c5-72a2-8c29-f5d6a0b1c7b0.png?raw=true" alt="Sclera Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965526361-019af023-f8c5-72a2-8c29-f5d6a0b1c7b0.png" alt="Sclera Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -148,7 +168,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Cornea</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/5232a93b4dac0721822dad65aad45e94cd2b8455/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a__Create_a_visually_a.png?raw=true" alt="Cornea Mind Map" layout="fill" objectFit="contain" quality={100} />
+                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/5232a93b4dac0721822dad65aad45e94cd2b8455/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a__Create_a_visually_a.png" alt="Cornea Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -158,7 +178,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Anterior Chamber</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d558561d250032de5636e619d7111ab5b3b8286f/1764966193644-019af02d-e226-71ff-b256-8ae677ccd20f.png?raw=true" alt="Anterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d558561d250032de5636e619d7111ab5b3b8286f/1764966193644-019af02d-e226-71ff-b256-8ae677ccd20f.png" alt="Anterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                         
@@ -168,7 +188,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Iris</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965673884-019af026-53e0-74d6-879f-b6be2809f59c.png?raw=true" alt="Iris Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965673884-019af026-53e0-74d6-879f-b6be2809f59c.png" alt="Iris Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                         
@@ -178,7 +198,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Pupil</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965970716-019af02a-d20f-70e2-baa5-7417b2ea57ba.png?raw=true" alt="Pupil Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965970716-019af02a-d20f-70e2-baa5-7417b2ea57ba.png" alt="Pupil Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -188,7 +208,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Posterior Chamber</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d558561d250032de5636e619d7111ab5b3b8286f/1764966329381-019af030-42e4-7dbc-bf9d-9fbc5ce09e21.png?raw=true" alt="Posterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d558561d250032de5636e619d7111ab5b3b8286f/1764966329381-019af030-42e4-7dbc-bf9d-9fbc5ce09e21.png" alt="Posterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -198,7 +218,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Crystalline Lens</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764966042495-019af02b-f0fb-7cf0-958c-cf01cf8288a6.png?raw=true" alt="Crystalline Lens Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764966042495-019af02b-f0fb-7cf0-958c-cf01cf8288a6.png" alt="Crystalline Lens Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -208,7 +228,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Vitreous Body</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966489348-019af032-7eab-7268-bf36-ba41478c0ee2.png?raw=true" alt="Vitreous Body Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966489348-019af032-7eab-7268-bf36-ba41478c0ee2.png" alt="Vitreous Body Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -218,7 +238,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Retina</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966585916-019af034-23d0-72e0-9847-a40c65c727cf.png?raw=true" alt="Retina Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966585916-019af034-23d0-72e0-9847-a40c65c727cf.png" alt="Retina Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -228,7 +248,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Choroid</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966733079-019af036-507b-7e9e-9008-a69d298e1188.png?raw=true" alt="Choroid Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966733079-019af036-507b-7e9e-9008-a69d298e1188.png" alt="Choroid Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                     </div>
@@ -237,5 +257,3 @@ export function AnatomyOfEyeClient() {
         </>
     );
 }
-
-    
