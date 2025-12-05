@@ -443,7 +443,7 @@ export default function AcademyPage() {
 
         <section>
           <div className="section-header">
-              <h2 className="section-title"><Video className="text-purple-500" /> Visual Learning</h2>
+              <h2 className="section-title"><Palette className="text-purple-500" /> Visual Learning</h2>
               <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Coming Soon</span>
           </div>
           <Card className="bg-slate-50 border-dashed">
