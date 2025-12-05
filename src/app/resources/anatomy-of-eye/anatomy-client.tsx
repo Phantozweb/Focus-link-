@@ -56,7 +56,6 @@ export function AnatomyOfEyeClient() {
                 --text-light-anatomy: #52616b;
                 --bg-body-anatomy: #f0f4f8;
                 --bg-card-anatomy: #ffffff;
-                --nav-width-anatomy: 260px;
             }
 
             html {
@@ -68,56 +67,12 @@ export function AnatomyOfEyeClient() {
                 background-color: var(--bg-body-anatomy) !important;
                 color: var(--text-main-anatomy);
                 line-height: 1.6;
-                display: flex;
-            }
-            
-            .anatomy-nav {
-                width: var(--nav-width-anatomy);
-                background: var(--primary-anatomy);
-                color: white;
-                height: 100vh;
-                position: fixed;
-                top: 8rem;
-                left: 0;
-                overflow-y: auto;
-                z-index: 1000;
-                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-                scrollbar-width: thin;
-                scrollbar-color: var(--secondary-anatomy) var(--primary-anatomy);
-            }
-
-            .anatomy-nav .nav-header {
-                padding: 25px 20px;
-                background: rgba(0,0,0,0.1);
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-
-            .anatomy-nav h2 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; }
-            .anatomy-nav p { font-size: 0.8rem; opacity: 0.7; margin-top: 5px; }
-
-            .anatomy-nav ul { list-style: none; padding: 10px 0; }
-            
-            .anatomy-nav a {
-                display: block;
-                padding: 12px 25px;
-                color: rgba(255,255,255,0.8);
-                text-decoration: none;
-                transition: all 0.2s ease;
-                font-size: 0.95rem;
-                border-left: 4px solid transparent;
-            }
-
-            .anatomy-nav a:hover {
-                background: rgba(255,255,255,0.1);
-                color: white;
-                border-left-color: var(--accent-anatomy);
             }
             
             .anatomy-main {
-                margin-left: var(--nav-width-anatomy);
-                width: calc(100% - var(--nav-width-anatomy));
                 padding: 40px;
                 max-width: 1400px;
+                margin: 0 auto;
             }
 
             .anatomy-hero {
@@ -236,41 +191,15 @@ export function AnatomyOfEyeClient() {
 
             @media (max-width: 1024px) {
                 .content-grid { grid-template-columns: 1fr 1fr; }
-                 .anatomy-nav { display: none; }
-                 .anatomy-main { margin-left: 0; width: 100%; }
             }
 
             @media (max-width: 768px) {
-                 .anatomy-body { flex-direction: column; }
                  .anatomy-main { padding: 20px; }
                  .content-grid { grid-template-columns: 1fr; }
                 .anatomy-hero h1 { font-size: 2rem; }
             }
         `}</style>
         <div className="anatomy-body">
-            <nav className="anatomy-nav">
-                <div className="nav-header">
-                    <h2>Ocular Anatomy</h2>
-                    <p>Optometry Study Guide</p>
-                </div>
-                <ul>
-                    <li><a href="#overview">Overview</a></li>
-                    <li><a href="#eyelid">1. Eyelid</a></li>
-                    <li><a href="#lacrimal">2. Lacrimal System</a></li>
-                    <li><a href="#conjunctiva">3. Conjunctiva</a></li>
-                    <li><a href="#cornea">4. Cornea</a></li>
-                    <li><a href="#ant-chamber">5. Ant. Chamber</a></li>
-                    <li><a href="#iris">6. Iris</a></li>
-                    <li><a href="#pupil">7. Pupil</a></li>
-                    <li><a href="#post-chamber">8. Post. Chamber</a></li>
-                    <li><a href="#lens">9. Lens</a></li>
-                    <li><a href="#vitreous">10. Vitreous</a></li>
-                    <li><a href="#retina">11. Retina</a></li>
-                    <li><a href="#choroid">12. Choroid</a></li>
-                    <li><a href="#sclera">13. Sclera</a></li>
-                </ul>
-            </nav>
-
             <main className="anatomy-main">
                 <div id="overview" className="anatomy-hero">
                     <h1>Anatomy of the Eye</h1>
@@ -325,8 +254,7 @@ export function AnatomyOfEyeClient() {
                         <h2>Lacrimal System</h2>
                     </div>
                     <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Lacrimal System Mind Map Here</div>
+                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
