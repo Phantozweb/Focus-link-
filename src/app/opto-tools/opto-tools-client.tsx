@@ -288,6 +288,18 @@ function LarsRuleCalculator() {
     return (
         <TooltipProvider>
         <div className="space-y-6">
+             <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Note:</h4>
+                <p className="text-sm text-slate-500">
+                    Provide the initial axis and the axis after blinking to apply the LARS rule.
+                </p>
+            </div>
+            <div className="space-y-2">
+                <h4 className="font-semibold text-slate-700">Instructions:</h4>
+                <p className="text-sm text-slate-500">
+                    Enter the initial axis before blinking and the axis after blinking, then click 'Apply LARS'.
+                </p>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-end">
                 <div className="space-y-4">
                     <div className="flex items-center gap-2"><Label htmlFor="initialAxis">Initial Axis</Label><Tooltip><TooltipTrigger><Info className="h-4 w-4 text-muted-foreground" /></TooltipTrigger><TooltipContent><p>0° to 180°</p></TooltipContent></Tooltip></div>
@@ -326,6 +338,14 @@ function LarsRuleCalculator() {
                     </AlertDescription>
                 </Alert>
             )}
+             <div className="text-sm text-slate-500 pt-4 space-y-2">
+                <h4 className="font-semibold text-slate-700">Formula (LARS / CAAS):</h4>
+                 <ul className='list-none pl-2 space-y-1'>
+                    <li>L = Left (Clockwise rotation) → A = Add to the axis.</li>
+                    <li>R = Right (Anti-Clockwise rotation) → S = Subtract from the axis.</li>
+                    <li className="text-xs text-muted-foreground pt-1">(Also known as CAAS: Clockwise Add, Anti-clockwise Subtract)</li>
+                </ul>
+            </div>
         </div>
         </TooltipProvider>
     );
