@@ -284,8 +284,7 @@ export default function AnatomyOfEyePage() {
                         <h2>Eyelid</h2>
                     </div>
                     <div className="img-container">
-                        <div className="icon-camera">📷</div>
-                        <div className="img-label">Insert Eyelid Mind Map Here</div>
+                        <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
                     </div>
                     <div className="content-grid">
                         <div className="anatomy-card">
