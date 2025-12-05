@@ -1,7 +1,7 @@
 
 'use client';
 
-import type { Metadata } from 'next';
+import Image from 'next/image';
 
 export default function AnatomyOfEyePage() {
     const anatomyPageSchema = {
@@ -274,7 +274,7 @@ export default function AnatomyOfEyePage() {
                     <h1>Anatomy of the Eye</h1>
                     <p className="hero-subtitle">Visual Guide & Mind Maps for Optometry Students</p>
                     <div className="img-container">
-                        <img src="https://i.ibb.co/gMd56WvD/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" />
+                        <Image src="https://i.ibb.co/gMd56WvD/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" />
                     </div>
                 </div>
 
@@ -688,3 +688,5 @@ export default function AnatomyOfEyePage() {
         </>
     );
 }
+
+    
