@@ -1963,7 +1963,6 @@ export function OptoToolsClient() {
                 <div className="glass-panel text-center p-8 lg:flex lg:items-center lg:gap-8 lg:text-left">
                     <div className="relative w-24 h-24 mx-auto lg:mx-0 mb-4 lg:mb-0 flex-shrink-0">
                         <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
-                            
                             <AvatarFallback className="bg-slate-200">
                                 <UserRound className="h-12 w-12 text-slate-400" />
                             </AvatarFallback>
