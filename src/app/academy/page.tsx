@@ -150,7 +150,7 @@ export default function AcademyPage() {
     });
 
     setLiveWebinars(live);
-    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(a.dateTime).getTime()));
+    setUpcomingWebinars(upcoming.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()));
     setPastWebinars(past.filter(w => w.type !== 'Course').sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.postedDate).getTime()));
     
     async function fetchAudioSeries() {
@@ -463,7 +463,7 @@ export default function AcademyPage() {
                         </div>
                     </div>
                     <div className="relative aspect-video md:aspect-auto">
-                       <Image src="https://i.ibb.co/KssMB1g/1688f191-236b-48b4-a212-325785a0655c.webp" alt="Diabetic Retinopathy Art" layout="fill" objectFit="cover" className="md:rounded-l-none rounded-b-lg" />
+                       <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="md:rounded-l-none rounded-b-lg" />
                     </div>
                 </div>
             </CardContent>
