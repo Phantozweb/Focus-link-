@@ -457,7 +457,7 @@ export default function AcademyPage() {
                             <span>Posted on Sat Dec 6, 2025</span>
                         </div>
                         <div className="flex-shrink-0 mt-auto">
-                            <Button disabled>View Details</Button>
+                            <Button disabled className="w-full">View Details</Button>
                         </div>
                     </div>
                     <div className="relative aspect-video md:aspect-auto">
