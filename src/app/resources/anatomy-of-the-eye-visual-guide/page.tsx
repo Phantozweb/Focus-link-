@@ -73,13 +73,13 @@ export default function AnatomyOfEyePage() {
                 </div>
 
                 <div className="relative w-full aspect-[16/7] bg-slate-100 shadow-lg border-y mb-16 rounded-lg overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
-                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
+                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                 </div>
                 
                  <main className="container mx-auto px-4">
 
                     <section className="mb-16">
-                        <Card className="shadow-lg">
+                        <Card className="shadow-lg bg-slate-50 border-slate-200">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Eye className="h-6 w-6 text-primary" />
@@ -92,7 +92,7 @@ export default function AnatomyOfEyePage() {
                                         <Link
                                             key={structure.id}
                                             href={`#${structure.id}`}
-                                            className="block text-center p-3 bg-slate-100 rounded-md hover:bg-primary hover:text-white font-semibold text-slate-700 transition-colors"
+                                            className="block text-center p-3 bg-white rounded-lg border shadow-sm hover:bg-primary hover:text-white font-semibold text-slate-700 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                                         >
                                             {structure.name}
                                         </Link>
