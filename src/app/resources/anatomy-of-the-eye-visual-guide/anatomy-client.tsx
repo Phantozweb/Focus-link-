@@ -3,6 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { Eye, Shield, Layers, Camera, Droplet, Sun, Dot } from 'lucide-react';
 
 export function AnatomyOfEyeClient() {
     const anatomyPageSchema = {
@@ -59,6 +60,22 @@ export function AnatomyOfEyeClient() {
         { name: "Choroid", id: "choroid" },
     ];
     
+     const anatomyCards = [
+        { number: 1, title: 'Eyelid', description: 'Protective external fold that shields the eye.', icon: <Shield className="w-6 h-6"/> },
+        { number: 2, title: 'Conjunctiva', description: 'Thin, clear membrane covering the sclera.', icon: <Layers className="w-6 h-6"/> },
+        { number: 3, title: 'Cornea', description: 'Transparent outer layer that refracts light.', icon: <Sun className="w-6 h-6"/> },
+        { number: 4, title: 'Anterior Chamber', description: 'Fluid-filled space between the cornea and iris.', icon: <Droplet className="w-6 h-6"/> },
+        { number: 5, title: 'Iris', description: 'The colored part of the eye that controls pupil size.', icon: <Dot className="w-8 h-8"/> },
+        { number: 6, title: 'Pupil', description: 'Central opening that admits light into the eye.', icon: <Camera className="w-6 h-6"/> },
+        { number: 7, title: 'Posterior Chamber', description: 'Narrow space between the iris and the lens.', icon: <Droplet className="w-6 h-6"/> },
+        { number: 8, title: 'Lens', description: 'Crystalline structure that fine-tunes focus onto the retina.', icon: <Eye className="w-6 h-6"/> },
+        { number: 9, title: 'Vitreous', description: 'Clear, gel-like substance filling the main globe of the eye.', icon: <Droplet className="w-6 h-6"/> },
+        { number: 10, title: 'Retina', description: 'Light-sensitive tissue that converts visual images into neural signals.', icon: <Camera className="w-6 h-6"/> },
+        { number: 11, title: 'Choroid', description: 'Vascular layer between the retina and sclera, providing nutrients.', icon: <Layers className="w-6 h-6"/> },
+        { number: 12, title: 'Sclera', description: 'The tough, white outer layer providing structural protection.', icon: <Shield className="w-6 h-6"/> },
+    ];
+
+
     return (
         <>
             <script
@@ -75,50 +92,26 @@ export function AnatomyOfEyeClient() {
                     <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                 </div>
                 
-                <div className="text-center max-w-4xl mx-auto py-8 px-4">
-                    <div className="prose prose-lg max-w-none text-slate-600 mb-8">
-                        <p>Enhance your medical studies with this comprehensive <strong>overview of the anatomy of the eye</strong>. Designed specifically for <strong>optometry students</strong>, <strong>ophthalmology residents</strong>, and healthcare professionals, this labeled diagram provides a clear, professional breakdown of the human eye's physiological structure. Whether you are looking for <strong>optometry revision notes</strong> or a quick reference for patient education, this visual guide covers the 12 essential components of ocular anatomy.</p>
-                        <p><strong>Detailed Breakdown of Ocular Structures:</strong> This medical illustration details the path of light and the protective layers of the globe:</p>
-                        <ul className="text-left">
-                          <li><strong>External Protection:</strong>
-                            <ul>
-                              <li><strong>1. Eyelid:</strong> The protective external fold that shields the eye.</li>
-                              <li><strong>2. Conjunctiva:</strong> The thin, clear membrane covering the <strong>sclera</strong> (12), which is the tough, white outer layer providing structural protection.</li>
-                            </ul>
-                          </li>
-                          <li><strong>The Anterior Segment (Light Entry):</strong>
-                            <ul>
-                              <li><strong>3. Cornea:</strong> The transparent outer layer responsible for the primary <strong>refraction of light</strong>.</li>
-                              <li><strong>6. Pupil:</strong> The central opening that admits light into the eye.</li>
-                              <li><strong>5. Iris:</strong> The colored part of the eye that functions as a diaphragm to <strong>control pupil size</strong>.</li>
-                            </ul>
-                          </li>
-                          <li><strong>Fluid Chambers & Focusing:</strong>
-                            <ul>
-                              <li><strong>4. Anterior Chamber:</strong> The fluid-filled space situated between the cornea and the iris.</li>
-                              <li><strong>7. Posterior Chamber:</strong> The narrow space between the iris and the lens.</li>
-                              <li><strong>8. Lens:</strong> The crystalline structure that fine-tunes focus to project light onto the retina.</li>
-                            </ul>
-                          </li>
-                          <li><strong>The Posterior Segment (Processing & Support):</strong>
-                            <ul>
-                              <li><strong>9. Vitreous:</strong> The clear, gel-like substance filling the main globe of the eye to maintain its shape.</li>
-                              <li><strong>10. Retina:</strong> The vital <strong>light-sensitive tissue</strong> that converts visual images into neural signals for the brain.</li>
-                              <li><strong>11. Choroid:</strong> The vascular layer located between the retina and sclera, providing oxygen and nutrients.</li>
-                            </ul>
-                          </li>
-                        </ul>
+                 <section className="py-16">
+                    <div className="container mx-auto px-4">
+                        <h2 className="text-3xl font-bold text-center text-slate-800 mb-8">Key Structures at a Glance</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {anatomyCards.map(card => (
+                                <div key={card.number} className="bg-card p-6 rounded-2xl border shadow-soft flex items-start gap-4">
+                                    <div className="flex-shrink-0">
+                                        <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg">
+                                            {card.icon}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-lg text-slate-800">{card.number}. {card.title}</h3>
+                                        <p className="text-sm text-slate-600 mt-1">{card.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-
-                    <h3 className="font-bold text-slate-800 mb-4 text-lg">Key Structures Covered</h3>
-                     <div className="flex flex-wrap items-center justify-center gap-2">
-                        {structures.map(item => (
-                            <Link key={item.id} href={`#${item.id}`} className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors">
-                                {item.name}
-                            </Link>
-                        ))}
-                    </div>
-                </div>
+                </section>
                 
                 <main className="container mx-auto px-4">
                     <div className="space-y-16">
@@ -158,7 +151,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Sclera</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965526361-019af023-f8c5-72a2-8c29-f5d6a0b1c7b0.png" alt="Sclera Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764965526361-019af023-f8c5-72a2-8c29-f5d6a0b1c7b0.png?raw=true" alt="Sclera Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -168,7 +161,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Cornea</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/5232a93b4dac0721822dad65aad45e94cd2b8455/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a__Create_a_visually_a.png" alt="Cornea Mind Map" layout="fill" objectFit="contain" quality={100} />
+                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a__Create_a_visually_a.png?raw=true" alt="Cornea Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -178,7 +171,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Anterior Chamber</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d558561d250032de5636e619d7111ab5b3b8286f/1764966193644-019af02d-e226-71ff-b256-8ae677ccd20f.png" alt="Anterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966193644-019af02d-e226-71ff-b256-8ae677ccd20f.png?raw=true" alt="Anterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                         
@@ -188,7 +181,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Iris</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965673884-019af026-53e0-74d6-879f-b6be2809f59c.png" alt="Iris Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764965673884-019af026-53e0-74d6-879f-b6be2809f59c.png?raw=true" alt="Iris Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                         
@@ -198,7 +191,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Pupil</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764965970716-019af02a-d20f-70e2-baa5-7417b2ea57ba.png" alt="Pupil Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764965970716-019af02a-d20f-70e2-baa5-7417b2ea57ba.png?raw=true" alt="Pupil Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -208,7 +201,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Posterior Chamber</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d558561d250032de5636e619d7111ab5b3b8286f/1764966329381-019af030-42e4-7dbc-bf9d-9fbc5ce09e21.png" alt="Posterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966329381-019af030-42e4-7dbc-bf9d-9fbc5ce09e21.png?raw=true" alt="Posterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -218,7 +211,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Crystalline Lens</h2>
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/09126a742be13922e5183a6ef6867c69d994c01d/1764966042495-019af02b-f0fb-7cf0-958c-cf01cf8288a6.png" alt="Crystalline Lens Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966042495-019af02b-f0fb-7cf0-958c-cf01cf8288a6.png?raw=true" alt="Crystalline Lens Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -228,7 +221,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Vitreous Body</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966489348-019af032-7eab-7268-bf36-ba41478c0ee2.png" alt="Vitreous Body Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966489348-019af032-7eab-7268-bf36-ba41478c0ee2.png?raw=true" alt="Vitreous Body Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -238,7 +231,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Retina</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966585916-019af034-23d0-72e0-9847-a40c65c727cf.png" alt="Retina Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966585916-019af034-23d0-72e0-9847-a40c65c727cf.png?raw=true" alt="Retina Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
 
@@ -248,7 +241,7 @@ export function AnatomyOfEyeClient() {
                                 <h2 className="text-3xl font-bold text-slate-800">Choroid</h2>
                             </div>
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/a49f56aad81a083987d2eeec96ff7a29b814d05e/1764966733079-019af036-507b-7e9e-9008-a69d298e1188.png" alt="Choroid Mind Map" layout="fill" objectFit="contain" quality={100} />
+                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966733079-019af036-507b-7e9e-9008-a69d298e1188.png?raw=true" alt="Choroid Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
                         </section>
                     </div>
