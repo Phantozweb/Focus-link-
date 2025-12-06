@@ -60,22 +60,6 @@ export function AnatomyOfEyeClient() {
         { name: "Choroid", id: "choroid" },
     ];
     
-     const anatomyCards = [
-        { number: 1, title: 'Eyelid', description: 'Protective external fold that shields the eye.', icon: <Shield className="w-6 h-6"/> },
-        { number: 2, title: 'Conjunctiva', description: 'Thin, clear membrane covering the sclera.', icon: <Layers className="w-6 h-6"/> },
-        { number: 3, title: 'Cornea', description: 'Transparent outer layer that refracts light.', icon: <Sun className="w-6 h-6"/> },
-        { number: 4, title: 'Anterior Chamber', description: 'Fluid-filled space between the cornea and iris.', icon: <Droplet className="w-6 h-6"/> },
-        { number: 5, title: 'Iris', description: 'The colored part of the eye that controls pupil size.', icon: <Dot className="w-8 h-8"/> },
-        { number: 6, title: 'Pupil', description: 'Central opening that admits light into the eye.', icon: <Camera className="w-6 h-6"/> },
-        { number: 7, title: 'Posterior Chamber', description: 'Narrow space between the iris and the lens.', icon: <Droplet className="w-6 h-6"/> },
-        { number: 8, title: 'Lens', description: 'Crystalline structure that fine-tunes focus onto the retina.', icon: <Eye className="w-6 h-6"/> },
-        { number: 9, title: 'Vitreous', description: 'Clear, gel-like substance filling the main globe of the eye.', icon: <Droplet className="w-6 h-6"/> },
-        { number: 10, title: 'Retina', description: 'Light-sensitive tissue that converts visual images into neural signals.', icon: <Camera className="w-6 h-6"/> },
-        { number: 11, title: 'Choroid', description: 'Vascular layer between the retina and sclera, providing nutrients.', icon: <Layers className="w-6 h-6"/> },
-        { number: 12, title: 'Sclera', description: 'The tough, white outer layer providing structural protection.', icon: <Shield className="w-6 h-6"/> },
-    ];
-
-
     return (
         <>
             <script
@@ -92,28 +76,6 @@ export function AnatomyOfEyeClient() {
                     <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                 </div>
                 
-                 <section className="py-16 -mt-16">
-                    <div className="container mx-auto px-4">
-                        <div className="text-center">
-                            <h2 className="text-3xl font-bold text-slate-800 mb-2">Key Structures at a Glance</h2>
-                            <p className="text-lg text-slate-600 mb-8">Click on a structure to jump to its detailed mind map.</p>
-                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                                {anatomyCards.map(card => (
-                                    <Link href={`#${structures.find(s => s.name.includes(card.title))?.id || ''}`} key={card.title} className="block group">
-                                        <div className="bg-card p-4 rounded-xl shadow-soft border h-full flex flex-col items-center text-center transition-all hover:shadow-hover hover:-translate-y-1 hover:border-primary">
-                                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary mb-3 transition-colors group-hover:bg-primary group-hover:text-white">
-                                                {card.icon}
-                                            </div>
-                                            <h4 className="font-bold text-slate-800 text-base">{card.number}. {card.title}</h4>
-                                            <p className="text-xs text-slate-500 mt-1">{card.description}</p>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                
                 <main className="container mx-auto px-4">
                     <div className="space-y-16">
                         <section id="eyelid" className="anatomy-section">
@@ -123,34 +85,6 @@ export function AnatomyOfEyeClient() {
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
                                 <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/162455f66faf7eee5cac7587cdfc4324c601f277/1764967080329-019af03b-ac50-7563-bc78-93fe003b9122.png" alt="Eyelid Mind Map" layout="fill" objectFit="contain" quality={100} />
-                            </div>
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Layers (Anterior to Posterior)</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Skin (Epidermis/Dermis):</strong> Thin, elastic, minimal fat.</li>
-                                        <li><strong className="font-semibold text-slate-700">Subcutaneous Tissue:</strong> Loose connective tissue.</li>
-                                        <li><strong className="font-semibold text-slate-700">Muscles:</strong> Orbicularis Oculi.</li>
-                                        <li><strong className="font-semibold text-slate-700">Tarsal Plates:</strong> Dense connective tissue skeleton (Upper: 10-12mm, Lower: 4mm).</li>
-                                        <li><strong className="font-semibold text-slate-700">Conjunctiva:</strong> Palpebral layer.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Muscles & Nerves</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Orbicularis Oculi (CN VII):</strong> Closure & blinking.</li>
-                                        <li><strong className="font-semibold text-slate-700">Levator Palpebrae (CN III):</strong> Elevates upper lid.</li>
-                                        <li><strong className="font-semibold text-slate-700">Müller’s Muscle (Sympathetic):</strong> Maintains elevation (Superior tarsal).</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Glands</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Meibomian:</strong> Sebaceous, in tarsal plate (Lipid layer).</li>
-                                        <li><strong className="font-semibold text-slate-700">Zeis:</strong> Sebaceous, associated with cilia.</li>
-                                        <li><strong className="font-semibold text-slate-700">Moll:</strong> Apocrine sweat glands.</li>
-                                    </ul>
-                                </div>
                             </div>
                         </section>
 
@@ -162,24 +96,6 @@ export function AnatomyOfEyeClient() {
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/88ff63090e2abe518c532f7fb0d9c63ef618e97c/1764967421933-019af040-f9af-796c-a523-e988b9eedd82.png" alt="Lacrimal System" layout="fill" objectFit="contain" quality={100} />
                             </div>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Secretory System (Tear Production)</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Main Lacrimal Gland:</strong> Located superotemporally in the orbit. Produces reflex (aqueous) tears.</li>
-                                        <li><strong className="font-semibold text-slate-700">Accessory Glands (Krause & Wolfring):</strong> Located in conjunctival fornices. Produce basal (maintenance) tears.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Excretory System (Tear Drainage)</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Puncta:</strong> Superior & Inferior entry points on the eyelid margin.</li>
-                                        <li><strong className="font-semibold text-slate-700">Canaliculi:</strong> Tiny ducts leading from puncta, joining to form the common canaliculus.</li>
-                                        <li><strong className="font-semibold text-slate-700">Lacrimal Sac:</strong> Collects tears before they enter the duct.</li>
-                                        <li><strong className="font-semibold text-slate-700">Nasolacrimal Duct:</strong> Drains tears into the nasal cavity at the inferior meatus.</li>
-                                    </ul>
-                                </div>
-                            </div>
                         </section>
                         
                          <section id="conjunctiva" className="anatomy-section">
@@ -189,34 +105,6 @@ export function AnatomyOfEyeClient() {
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/74ae7175908f68e40807200ed10bfe6c09f7a026/1764967257365-019af03e-2c6d-7457-a939-a9bf417b7a6e.png" alt="Conjunctiva Mind Map" layout="fill" objectFit="contain" quality={100} />
-                            </div>
-                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Gross Anatomy</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Palpebral:</strong> Lines inner eyelid (Marginal, Tarsal, Orbital). Highly vascular.</li>
-                                        <li><strong className="font-semibold text-slate-700">Fornix:</strong> Reflection point/cul-de-sac. Allows movement.</li>
-                                        <li><strong className="font-semibold text-slate-700">Bulbar:</strong> Covers anterior sclera. Thin, mobile, ends at limbus.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Histology</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Epithelium:</strong> Non-keratinized stratified squamous. Contains Goblet Cells.</li>
-                                        <li><strong className="font-semibold text-slate-700">Stroma (Substantia Propria):</strong> 
-                                            <br />- Adenoid Layer (Lymphoid tissue)
-                                            <br />- Fibrous Layer (Vessels/Nerves)
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Functions</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Mucin Production:</strong> By Goblet cells for tear stability.</li>
-                                        <li><strong className="font-semibold text-slate-700">Immunological:</strong> Physical barrier & immune cells.</li>
-                                        <li><strong className="font-semibold text-slate-700">Lubrication:</strong> Prevents desiccation.</li>
-                                    </ul>
-                                </div>
                             </div>
                         </section>
 
@@ -238,26 +126,6 @@ export function AnatomyOfEyeClient() {
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
                                 <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a__Create_a_visually_a.png?raw=true" alt="Cornea Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">The 5 Layers</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Epithelium:</strong> Outer layer, interacts with tear film, regenerative.</li>
-                                        <li><strong className="font-semibold text-slate-700">Bowman’s Layer:</strong> Acellular collagen, protective barrier, scars if damaged.</li>
-                                        <li><strong className="font-semibold text-slate-700">Stroma (90%):</strong> Regular collagen arrangement (transparency), contains keratocytes.</li>
-                                        <li><strong className="font-semibold text-slate-700">Descemet’s Membrane:</strong> Elastic basement membrane of endothelium.</li>
-                                        <li><strong className="font-semibold text-slate-700">Endothelium:</strong> Inner monolayer, non-regenerative.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Physiology</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Pump Mechanism:</strong> Endothelium pumps ions/fluid out to maintain dehydration (deturgescence).</li>
-                                        <li><strong className="font-semibold text-slate-700">Transparency:</strong> Due to avascularity and regular fibril lattice in stroma.</li>
-                                        <li><strong className="font-semibold text-slate-700">Nutrition:</strong> Via Aqueous Humor (posteriorly) and Tear film/Limbal vessels (anteriorly).</li>
-                                    </ul>
-                                </div>
-                            </div>
                         </section>
 
                         <section id="ant-chamber" className="anatomy-section">
@@ -268,33 +136,6 @@ export function AnatomyOfEyeClient() {
                              <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966193644-019af02d-e226-71ff-b256-8ae677ccd20f.png?raw=true" alt="Anterior Chamber Mind Map" layout="fill" objectFit="contain" quality={100} />
                             </div>
-                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Boundaries</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Anterior:</strong> Corneal Endothelium.</li>
-                                        <li><strong className="font-semibold text-slate-700">Posterior:</strong> Iris surface & lens.</li>
-                                        <li><strong className="font-semibold text-slate-700">Peripheral:</strong> The Angle structures.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Angle Structures (Post to Ant)</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Ciliary Body Band:</strong> Uveoscleral outflow site.</li>
-                                        <li><strong className="font-semibold text-slate-700">Scleral Spur:</strong> Anchor for ciliary muscle.</li>
-                                        <li><strong className="font-semibold text-slate-700">Trabecular Meshwork:</strong> Main drainage filter.</li>
-                                        <li><strong className="font-semibold text-slate-700">Schwalbe’s Line:</strong> Termination of Descemet's.</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Aqueous Dynamics</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li>Produced in Posterior Chamber (Ciliary Processes).</li>
-                                        <li>Flows through pupil.</li>
-                                        <li>Drains via Canal of Schlemm (Conventional) or Uveoscleral route.</li>
-                                    </ul>
-                                </div>
-                            </div>
                         </section>
                         
                         <section id="iris" className="anatomy-section">
@@ -304,24 +145,6 @@ export function AnatomyOfEyeClient() {
                             </div>
                             <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764965673884-019af026-53e0-74d6-879f-b6be2809f59c.png?raw=true" alt="Iris Mind Map" layout="fill" objectFit="contain" quality={100} />
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Muscles & Function</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Sphincter Pupillae:</strong> Circular muscle, constricts pupil (Parasympathetic).</li>
-                                        <li><strong className="font-semibold text-slate-700">Dilator Pupillae:</strong> Radial fibers, dilates pupil (Sympathetic).</li>
-                                        <li><strong className="font-semibold text-slate-700">Function:</strong> Regulates light entry (aperture).</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-card p-6 rounded-lg shadow-soft border-t-4 border-primary">
-                                    <h3 className="font-bold text-slate-800 mb-3">Structure</h3>
-                                    <ul className="space-y-2 text-sm text-slate-600">
-                                        <li><strong className="font-semibold text-slate-700">Anterior Border Layer:</strong> Surface fibroblasts/melanocytes.</li>
-                                        <li><strong className="font-semibold text-slate-700">Stroma:</strong> Vascular connective tissue, determines eye color (melanin).</li>
-                                        <li><strong className="font-semibold text-slate-700">Pigmented Epithelium:</strong> Posterior layer, blocks light, absorbs stray light.</li>
-                                    </ul>
-                                </div>
                             </div>
                         </section>
                         
