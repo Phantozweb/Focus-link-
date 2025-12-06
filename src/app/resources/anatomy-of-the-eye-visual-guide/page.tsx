@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowRight, Eye } from 'lucide-react';
 
 export default function AnatomyOfEyePage() {
     const anatomyPageSchema = {
@@ -71,10 +73,35 @@ export default function AnatomyOfEyePage() {
                 </div>
 
                 <div className="relative w-full aspect-[16/7] bg-slate-100 shadow-lg border-y mb-16 rounded-lg overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
-                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/252f68a5286cefc974580f5f4d4d4c269fd2b5f6/1764967742990-019af045-72c7-7fff-a9bc-93b78684126b.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
+                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
                 </div>
                 
-                <main className="container mx-auto px-4">
+                 <main className="container mx-auto px-4">
+
+                    <section className="mb-16">
+                        <Card className="shadow-lg">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Eye className="h-6 w-6 text-primary" />
+                                    Key Structures at a Glance
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                    {structures.map((structure) => (
+                                        <Link
+                                            key={structure.id}
+                                            href={`#${structure.id}`}
+                                            className="block text-center p-3 bg-slate-100 rounded-md hover:bg-primary hover:text-white font-semibold text-slate-700 transition-colors"
+                                        >
+                                            {structure.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </section>
+
                     <div className="space-y-16">
                         <section id="eyelid" className="anatomy-section">
                             <div className="flex items-center gap-4 mb-6 pb-2 border-b-2 border-primary/20">
