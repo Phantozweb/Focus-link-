@@ -85,7 +85,7 @@ export function AnatomyOfEyeClient() {
              <div className="bg-brand-bg">
                 <div className="text-center max-w-3xl mx-auto py-12 px-4">
                     <h1 className="text-4xl font-bold text-slate-800 mb-2">Anatomy of the Eye: A Visual Guide</h1>
-                     <p className="text-lg text-slate-600">Enhance your medical studies with this comprehensive overview of the anatomy of the eye. Designed specifically for optometry students, ophthalmology residents, and healthcare professionals, this labeled diagram provides a clear, professional breakdown of the human eye's physiological structure. Whether you are looking for optometry revision notes or a quick reference for patient education, this visual guide covers the 12 essential components of ocular anatomy.</p>
+                     <p className="text-lg text-slate-600">A comprehensive study tool with mind maps covering the full anterior to posterior anatomy, designed for optometry students and professionals.</p>
                 </div>
 
                 <div className="relative w-full aspect-[16/7] bg-slate-100 shadow-lg border-y mb-16 rounded-lg overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
@@ -94,45 +94,19 @@ export function AnatomyOfEyeClient() {
                 
                  <section className="py-16 -mt-16">
                     <div className="container mx-auto px-4">
-                       <div className="prose prose-lg max-w-none mb-12 text-center mx-auto">
-                            <p>This medical illustration details the path of light and the protective layers of the globe:</p>
-                             <ul className="list-none p-0 text-left grid md:grid-cols-2 lg:grid-cols-3 gap-x-8">
-                                <li><strong>External Protection:</strong>
-                                    <ul className="list-disc pl-5 mt-1">
-                                        <li><strong>1. Eyelid:</strong> The protective external fold that shields the eye.</li>
-                                        <li><strong>2. Conjunctiva:</strong> The thin, clear membrane covering the <strong>sclera</strong> (12), which is the tough, white outer layer providing structural protection.</li>
-                                    </ul>
-                                </li>
-                                <li className="mt-4 md:mt-0"><strong>The Anterior Segment (Light Entry):</strong>
-                                    <ul className="list-disc pl-5 mt-1">
-                                        <li><strong>3. Cornea:</strong> The transparent outer layer responsible for the primary <strong>refraction of light</strong>.</li>
-                                        <li><strong>6. Pupil:</strong> The central opening that admits light into the eye.</li>
-                                        <li><strong>5. Iris:</strong> The colored part of the eye that functions as a diaphragm to <strong>control pupil size</strong>.</li>
-                                    </ul>
-                                </li>
-                                <li className="mt-4 lg:mt-0"><strong>Fluid Chambers & Focusing:</strong>
-                                    <ul className="list-disc pl-5 mt-1">
-                                        <li><strong>4. Anterior Chamber:</strong> The fluid-filled space situated between the cornea and the iris.</li>
-                                        <li><strong>7. Posterior Chamber:</strong> The narrow space between the iris and the lens.</li>
-                                        <li><strong>8. Lens:</strong> The crystalline structure that fine-tunes focus to project light onto the retina.</li>
-                                    </ul>
-                                </li>
-                                <li className="mt-4"><strong>The Posterior Segment (Processing & Support):</strong>
-                                    <ul className="list-disc pl-5 mt-1">
-                                        <li><strong>9. Vitreous:</strong> The clear, gel-like substance filling the main globe of the eye to maintain its shape.</li>
-                                        <li><strong>10. Retina:</strong> The vital <strong>light-sensitive tissue</strong> that converts visual images into neural signals for the brain.</li>
-                                        <li><strong>11. Choroid:</strong> The vascular layer located between the retina and sclera, providing oxygen and nutrients.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
                         <div className="text-center">
                             <h2 className="text-3xl font-bold text-slate-800 mb-2">Key Structures at a Glance</h2>
                             <p className="text-lg text-slate-600 mb-8">Click on a structure to jump to its detailed mind map.</p>
-                             <div className="flex flex-wrap items-center justify-center gap-2">
-                                {structures.map(structure => (
-                                    <Link key={structure.id} href={`#${structure.id}`} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors">
-                                        {structure.name}
+                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                                {anatomyCards.map(card => (
+                                    <Link href={`#${structures.find(s => s.name.includes(card.title))?.id || ''}`} key={card.title} className="block group">
+                                        <div className="bg-card p-4 rounded-xl shadow-soft border h-full flex flex-col items-center text-center transition-all hover:shadow-hover hover:-translate-y-1 hover:border-primary">
+                                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary mb-3 transition-colors group-hover:bg-primary group-hover:text-white">
+                                                {card.icon}
+                                            </div>
+                                            <h4 className="font-bold text-slate-800 text-base">{card.number}. {card.title}</h4>
+                                            <p className="text-xs text-slate-500 mt-1">{card.description}</p>
+                                        </div>
                                     </Link>
                                 ))}
                             </div>
