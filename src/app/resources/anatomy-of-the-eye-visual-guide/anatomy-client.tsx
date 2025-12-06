@@ -131,9 +131,9 @@ export function AnatomyOfEyeClient() {
                             <p className="text-lg text-slate-600 mb-8">Click on a structure to jump to its detailed mind map.</p>
                              <div className="flex flex-wrap items-center justify-center gap-2">
                                 {structures.map(structure => (
-                                    <a key={structure.id} href={`#${structure.id}`} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors">
+                                    <Link key={structure.id} href={`#${structure.id}`} className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors">
                                         {structure.name}
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
