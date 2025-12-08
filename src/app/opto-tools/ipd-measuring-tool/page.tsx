@@ -23,8 +23,7 @@ import {
   Timer,
   Shield,
 } from 'lucide-react';
-import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
-
+import type { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
 
 // Types
 interface Landmark {
@@ -682,7 +681,7 @@ const styles: { [key: string]: React.CSSProperties } = {
 // CSS Keyframes
 const injectStyles = () => {
   const styleSheet = document.createElement('style');
-  styleSheet.textContent = `
+  styleSheet.textContent = \`
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -718,7 +717,7 @@ const injectStyles = () => {
         font-size: 22px !important;
       }
     }
-  `;
+  \`;
   document.head.appendChild(styleSheet);
 };
 
@@ -1588,9 +1587,7 @@ const IPDMeasurement: React.FC = () => {
     setLoadingText('Loading AI Model...');
     setLoadingSubtext('Downloading face detection model');
 
-    const vision = await import(
-      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm'
-    );
+    const vision = await import('@mediapipe/tasks-vision');
 
     setLoadingSubtext('Initializing face landmarker...');
 
