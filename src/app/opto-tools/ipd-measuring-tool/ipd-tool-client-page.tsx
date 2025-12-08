@@ -1,13 +1,26 @@
 
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Download, MessageCircle, Twitter, Copy } from 'lucide-react';
-import Image from 'next/image';
+import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Download, MessageCircle, Twitter, Copy, Lock, Info, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { ShareButton } from '@/components/share-button';
 import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback, useEffect } from 'react';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
+
+// Debounce function
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
 
 const ipdToolSchema = {
     "@context": "https://schema.org",
@@ -40,6 +53,11 @@ const bestPractices = [
 
 export function IpdToolClientPage() {
   const { toast } = useToast();
+  const router = useRouter();
+  const [membershipId, setMembershipId] = useState('');
+  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   const shareText = "Check out this free AI tool from Focus Links to measure your pupillary distance (PD) instantly! Super useful for ordering glasses online. #IPD #EyeCare #FocusLinks";
 
   const handleCopy = () => {
@@ -49,6 +67,40 @@ export function IpdToolClientPage() {
       title: 'Link Copied',
       description: 'The link has been copied to your clipboard.',
     });
+  };
+
+  const checkIdValidity = useCallback(debounce(async (id: string) => {
+    if (!id || id.trim().length < 5) {
+      setIdStatus('idle');
+      return;
+    }
+    setIdStatus('loading');
+    try {
+      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
+      const data = await response.json();
+      if (data.isValid) {
+        setIdStatus('valid');
+      } else {
+        setIdStatus('invalid');
+      }
+    } catch (error) {
+      console.error('ID validation failed:', error);
+      setIdStatus('invalid');
+    }
+  }, 500), []);
+
+  useEffect(() => {
+    if (membershipId) {
+      checkIdValidity(membershipId);
+    } else {
+      setIdStatus('idle');
+    }
+  }, [membershipId, checkIdValidity]);
+
+  const handleLaunch = () => {
+    if (idStatus === 'valid') {
+      router.push('/opto-tools/ipd-measuring-tool/launch');
+    }
   };
 
   return (
@@ -67,13 +119,44 @@ export function IpdToolClientPage() {
             <CardContent className="p-8 md:p-12 text-center">
               <div className="flex-1">
                 <h2 className="text-3xl font-bold text-slate-800">Ready to Get Your Measurement?</h2>
-                <p className="mt-2 text-lg text-slate-600">Our real-time AI analyzes your camera feed to give you a highly accurate IPD measurement in seconds. Click below to start.</p>
-                <Button asChild size="lg" className="mt-6">
-                  <Link href="/opto-tools/ipd-measuring-tool/launch">
-                    <Rocket className="mr-2 h-5 w-5" />
-                    Launch IPD Tool
-                  </Link>
-                </Button>
+                <p className="mt-2 text-lg text-slate-600">Our tool uses advanced AI to analyze your camera feed in real-time and calculate your IPD with high accuracy. Click below to start.</p>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                     <Button size="lg" className="mt-6">
+                      <Rocket className="mr-2 h-5 w-5" />
+                      Launch IPD Tool
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                     <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2"><Lock className="h-5 w-5"/> Member Verification</DialogTitle>
+                        <DialogDescription>
+                            This tool is available for members. Please enter your Membership ID to proceed.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-2">
+                        <Label htmlFor="membershipId">Membership ID</Label>
+                        <div className="relative">
+                            <Input id="membershipId" value={membershipId} onChange={(e) => setMembershipId(e.target.value)} placeholder="Enter your ID" />
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                                {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+                                {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+                                {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                            </div>
+                        </div>
+                        {idStatus === 'invalid' && <p className="text-sm text-destructive">This Membership ID is not valid.</p>}
+                        <p className="text-xs text-muted-foreground">
+                            Don't have an ID? <Link href="/membership" className="underline text-primary">Get one for free.</Link>
+                        </p>
+                    </div>
+                    <DialogFooter>
+                        <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
+                            <Rocket className="mr-2 h-4 w-4" />
+                            Verify & Launch
+                        </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardContent>
           </Card>
