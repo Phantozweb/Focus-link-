@@ -26,6 +26,7 @@ import {
   FlaskConical,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Progress } from '@/components/ui/progress';
 
 // Types
 interface Landmark {
@@ -728,8 +729,9 @@ const IPDMeasurement: React.FC = () => {
   const { toast } = useToast();
   // State
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingText, setLoadingText] = useState('Initializing AI Model...');
-  const [loadingSubtext, setLoadingSubtext] = useState('This may take a few moments');
+  const [loadingText, setLoadingText] = useState('Initializing...');
+  const [loadingSubtext, setLoadingSubtext] = useState('');
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [statusText, setStatusText] = useState('Initializing...');
   const [statusType, setStatusType] = useState<'success' | 'warning' | 'danger'>('warning');
   const [faceDetected, setFaceDetected] = useState(false);
@@ -1602,57 +1604,62 @@ const IPDMeasurement: React.FC = () => {
 
   // Load model
   const loadModel = useCallback(async (hasWebGPU: boolean) => {
-      const originalConsoleError = console.error;
-      console.error = () => {};
+    const originalConsoleError = console.error;
+    console.error = () => {};
 
-      try {
-        setLoadingText('Loading AI Model...');
-        
-        const response = await fetch('https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task', { cache: 'force-cache' });
-        if (response.ok) {
-            setLoadingSubtext('Model found in cache. Loading quickly!');
-        } else {
-            setLoadingSubtext('Downloading face detection model (first-time load)...');
-        }
-
-        const vision = await import('@mediapipe/tasks-vision');
-
-        setLoadingSubtext('Initializing face landmarker...');
-
-        const filesetResolver = await vision.FilesetResolver.forVisionTasks(
-          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-        );
-
-        faceLandmarkerRef.current = await vision.FaceLandmarker.createFromOptions(
-          filesetResolver,
-          {
-            baseOptions: {
-              modelAssetPath:
-                'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-              delegate: hasWebGPU ? 'GPU' : 'CPU',
-            },
-            outputFaceBlendshapes: false,
-            outputFacialTransformationMatrixes: false,
-            runningMode: 'VIDEO',
-            numFaces: 1,
-          }
-        );
-        setLoadingText('Model Loaded!');
-      } finally {
-        console.error = originalConsoleError;
+    try {
+      setLoadingText('Loading AI Model...');
+      
+      const response = await fetch('https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task', { cache: 'force-cache' });
+      if (response.ok) {
+          setLoadingSubtext('Model found in cache. Loading quickly!');
+      } else {
+          setLoadingSubtext('Downloading model...');
       }
-    }, []);
+      setLoadingProgress(50);
+      
+      const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+
+      setLoadingSubtext('Initializing AI model...');
+      setLoadingProgress(75);
+      
+      const filesetResolver = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+      );
+
+      faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(
+        filesetResolver,
+        {
+          baseOptions: {
+            modelAssetPath:
+              'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+            delegate: hasWebGPU ? 'GPU' : 'CPU',
+          },
+          outputFaceBlendshapes: false,
+          outputFacialTransformationMatrixes: false,
+          runningMode: 'VIDEO',
+          numFaces: 1,
+        }
+      );
+      setLoadingText('Model Loaded!');
+    } finally {
+      console.error = originalConsoleError;
+    }
+  }, []);
 
   // Initialize
   useEffect(() => {
     let isCancelled = false;
 
     const init = async () => {
+      setLoadingText('Requesting camera permission...');
+      setLoadingProgress(10);
       if (!hasCameraPermission) {
-          setLoadingText('Waiting for Camera Permission...');
           setLoadingSubtext('Please grant access to your camera to use this tool.');
+          // The getCameraPermission effect will handle this, just wait here.
           return;
       }
+      setLoadingProgress(25);
       
       try {
         const hasWebGPU = await checkWebGPUSupport();
@@ -1664,14 +1671,18 @@ const IPDMeasurement: React.FC = () => {
         
         setLoadingText('Starting camera...');
         setLoadingSubtext('');
+        setLoadingProgress(90);
         await startCamera();
         if (isCancelled) return;
+        setLoadingProgress(100);
 
-        setIsLoading(false);
-        setCanCapture(true);
+        setTimeout(() => {
+          setIsLoading(false);
+          setCanCapture(true);
+          isDetectingRef.current = true;
+          detectFace();
+        }, 500);
 
-        isDetectingRef.current = true;
-        detectFace();
       } catch (error) {
         if (isCancelled) return;
         console.error('Initialization error:', error);
@@ -1685,8 +1696,11 @@ const IPDMeasurement: React.FC = () => {
     if (savedHistory) {
       setHistory(JSON.parse(savedHistory));
     }
+    
+    if (hasCameraPermission) {
+        init();
+    }
 
-    init();
 
     return () => {
       isCancelled = true;
@@ -1908,6 +1922,9 @@ const IPDMeasurement: React.FC = () => {
         <div style={styles.loader} />
         <div style={styles.loadingText}>{loadingText}</div>
         <div style={styles.loadingSubtext}>{loadingSubtext}</div>
+        <div className="w-full max-w-xs mt-4">
+            <Progress value={loadingProgress} />
+        </div>
       </div>
 
       {/* Header */}
@@ -2301,5 +2318,3 @@ const IPDMeasurement: React.FC = () => {
 };
 
 export default IPDMeasurement;
-
-    
