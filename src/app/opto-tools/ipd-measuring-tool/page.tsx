@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building, ScanFace, Move, Sun, Target, History, Trash2, Inbox, Save, Zap, Camera, Lightbulb, Check, X } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building, ScanFace, Move, Sun, Target, History, Trash2, Inbox, Save, Zap, Camera, Lightbulb, Check, X, Shield, EyeOff, AlertCircle, Timer } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -20,7 +20,7 @@ export default function IPDMeasuringToolPage() {
     const [loadingText, setLoadingText] = useState('Initializing AI Model...');
     const [loadingSubtext, setLoadingSubtext] = useState('This may take a few moments');
     const [statusText, setStatusText] = useState('Initializing...');
-    const [statusType, setStatusType] = useState('warning');
+    const [statusType, setStatusType] = useState<'success' | 'warning' | 'danger'>('warning');
     const [faceDetected, setFaceDetected] = useState(false);
     const [webGpuSupported, setWebGpuSupported] = useState(false);
     const [metrics, setMetrics] = useState({ ipd: 0, distance: 0, lighting: 0, accuracy: 0, leftPd: 0, rightPd: 0 });
@@ -67,7 +67,6 @@ export default function IPDMeasuringToolPage() {
             setWebGpuSupported(isSupported);
             await loadModel(isSupported);
             await startCamera();
-            // The detection loop is now started by the video's onplaying event
         } catch (error: any) {
             console.error('Initialization error:', error);
             setLoadingText('Error Initializing');
@@ -78,7 +77,7 @@ export default function IPDMeasuringToolPage() {
     const checkWebGPUSupport = async () => {
         if ('gpu' in navigator) {
             try {
-                const adapter = await navigator.gpu.requestAdapter();
+                const adapter = await (navigator as any).gpu.requestAdapter();
                 return adapter !== null;
             } catch (e) { return false; }
         }
@@ -334,7 +333,7 @@ export default function IPDMeasuringToolPage() {
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent>
                       <DialogHeader className="modal-header">
-                          <div className="modal-icon"><Check size={32}/></div>
+                          <div className="modal-icon"><CheckCircle size={32}/></div>
                           <DialogTitle className="modal-title">Measurement Complete</DialogTitle>
                       </DialogHeader>
                       <div className="modal-results">
