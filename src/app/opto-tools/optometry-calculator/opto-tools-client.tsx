@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building, ScanFace, Move, Sun, Target, History, Trash2, Inbox, Save } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building, ScanFace, Move, Sun, Target, History, Trash2, Inbox, Save, Zap } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
@@ -292,7 +292,7 @@ function IPDMeasuringTool() {
                 </MetricCard>
                 <MetricCard icon={<Target size={18} />} title="MEASUREMENT ACCURACY" value="">
                      <div className="accuracy-ring">
-                        <svg width="80" height="80"><circle className="bg" cx="40" cy="40" r="34"></circle><circle className="progress" cx="40" cy="40" r="34" strokeDasharray="213.6" strokeDashoffset={213.6 - (metrics.accuracy/100)*213.6}></circle></svg>
+                        <svg width="80" height="80"><circle className="bg" cx="40" cy="40" r="34"></circle><circle className="progress" id="accuracyProgress" cx="40" cy="40" r="34" strokeDasharray="213.6" strokeDashoffset={213.6 - (metrics.accuracy/100)*213.6} strokeLinecap="round"></circle></svg>
                         <div className="accuracy-value">{metrics.accuracy > 0 ? `${metrics.accuracy}%` : '--%'}</div>
                     </div>
                 </MetricCard>
