@@ -1,14 +1,14 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Download, MessageCircle, Twitter, Copy, Lock, Info, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { ShareButton } from '@/components/share-button';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useCallback, useEffect } from 'react';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription as DialogDescriptionComponent, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
@@ -130,9 +130,9 @@ export function IpdToolClientPage() {
                   <DialogContent className="sm:max-w-md">
                      <DialogHeader>
                         <DialogTitle className="flex items-center gap-2"><Lock className="h-5 w-5"/> Member Verification</DialogTitle>
-                        <DialogDescription>
+                        <DialogDescriptionComponent>
                             This tool is available for members. Please enter your Membership ID to proceed.
-                        </DialogDescription>
+                        </DialogDescriptionComponent>
                     </DialogHeader>
                     <div className="space-y-2">
                         <Label htmlFor="membershipId">Membership ID</Label>
@@ -196,7 +196,7 @@ export function IpdToolClientPage() {
                  <Card className="bg-slate-800 text-white">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Sparkles /> Share This Free Tool</CardTitle>
-                        <DialogDescription className="text-slate-300">Help others get accurate measurements for their eyewear. Share this tool with your friends, family, or patients!</DialogDescription>
+                        <CardDescription className="text-slate-300">Help others get accurate measurements for their eyewear. Share this tool with your friends, family, or patients!</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <Button asChild variant="secondary" className="w-full">
