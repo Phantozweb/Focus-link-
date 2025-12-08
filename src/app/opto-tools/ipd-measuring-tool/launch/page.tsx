@@ -1,5 +1,6 @@
+
 'use client';
-// IPDMeasurement.tsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ScanFace,
@@ -1479,15 +1480,14 @@ const IPDMeasurement: React.FC = () => {
       const midY = (leftIrisDisplay.y + rightIrisDisplay.y) * canvas.height / 2 - 25;
   
       ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-      ctx.beginPath();
-      const rect = new Path2D();
-      rect.roundRect(midX - 35, midY - 12, 70, 24, 12);
-      ctx.fill(rect);
+      const path = new Path2D();
+      path.roundRect(midX - 35, midY - 12, 70, 24, 12);
+      ctx.fill(path);
   
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 12px -apple-system, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`${metrics.ipd.toFixed(1)} mm`, midX, midY + 4);
+      ctx.fillText(`\${metrics.ipd.toFixed(1)} mm`, midX, midY + 4);
     }
   }, [isMirrored]);
 
@@ -1538,7 +1538,7 @@ const IPDMeasurement: React.FC = () => {
       setIsPerfectCondition(isPerfect);
 
       if (isPerfect) {
-        setStatusText(`Capturing ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}...`);
+        setStatusText(`Capturing \${autoCaptureCount + 1}/\${AUTO_CAPTURE_TOTAL}...`);
         setStatusType('success');
       
         if (!autoCaptureTimerRef.current && ipdBufferRef.current.length >= 15) {
@@ -1675,6 +1675,21 @@ const IPDMeasurement: React.FC = () => {
         if (videoRef.current) {
             videoRef.current.srcObject = stream;
         }
+        
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        if (!video || !canvas) return;
+
+        await new Promise<void>((resolve) => {
+          video.onloadedmetadata = () => {
+            if (canvasRef.current) {
+              canvasRef.current.width = video.videoWidth;
+              canvasRef.current.height = video.videoHeight;
+            }
+            resolve();
+          };
+        });
+        await video.play();
 
         setLoadingText('Loading AI Model...');
         setLoadingProgress(25);
@@ -1695,25 +1710,6 @@ const IPDMeasurement: React.FC = () => {
           runningMode: 'VIDEO',
           numFaces: 1,
         });
-
-        if (isCancelled) return;
-        setLoadingText('Starting camera...');
-        setLoadingProgress(85);
-
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        if (!video || !canvas) return;
-
-        await new Promise<void>((resolve) => {
-          video.onloadedmetadata = () => {
-            if (canvasRef.current) {
-              canvasRef.current.width = video.videoWidth;
-              canvasRef.current.height = video.videoHeight;
-            }
-            resolve();
-          };
-        });
-        await video.play();
 
         if (isCancelled) return;
         setLoadingProgress(100);
@@ -1764,8 +1760,7 @@ const IPDMeasurement: React.FC = () => {
       setCurrentMeasurement({
         ipd: metrics.ipd,
         leftPd: metrics.leftPd,
-        rightPd: metrics.rightPd,
-        accuracy: metrics.accuracy,
+        rightPd: metrics.accuracy,
         samples: 1,
         confidence: metrics.accuracy * 0.8
       });
@@ -1918,10 +1913,10 @@ const IPDMeasurement: React.FC = () => {
         ...styles.faceGuide,
         ...(isPerfectCondition ? styles.faceGuidePerfect : 
             faceDetected ? styles.faceGuideDetected : {}),
-        left: `${faceBounds.x * scaleX}px`,
-        top: `${faceBounds.y * scaleY}px`,
-        width: `${faceBounds.width * scaleX}px`,
-        height: `${faceBounds.height * scaleY}px`,
+        left: `\${faceBounds.x * scaleX}px`,
+        top: `\${faceBounds.y * scaleY}px`,
+        width: `\${faceBounds.width * scaleX}px`,
+        height: `\${faceBounds.height * scaleY}px`,
         transform: 'none',
         borderRadius: '50%',
       };
@@ -2114,8 +2109,8 @@ const IPDMeasurement: React.FC = () => {
                     <Timer size={18} />
                     <span>
                       {isAutoCapturing 
-                        ? `Capturing ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}...`
-                        : `Preparing capture ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}`
+                        ? `Capturing \${autoCaptureCount + 1}/\${AUTO_CAPTURE_TOTAL}...`
+                        : `Preparing capture \${autoCaptureCount + 1}/\${AUTO_CAPTURE_TOTAL}`
                       }
                     </span>
                   </div>
@@ -2142,7 +2137,7 @@ const IPDMeasurement: React.FC = () => {
                       >
                         {i === autoCaptureCount && isAutoCapturing && (
                           <div style={{
-                            width: `${autoCaptureProgress}%`,
+                            width: `\${autoCaptureProgress}%`,
                             height: '100%',
                             background: '#10b981',
                             transition: 'width 0.1s',
@@ -2246,7 +2241,7 @@ const IPDMeasurement: React.FC = () => {
               <div style={{
                 ...styles.progressFill,
                 width: metrics
-                  ? `${Math.min(100, Math.max(0, 100 - Math.abs(metrics.distance - IDEAL_DISTANCE_CM) * 3))}%`
+                  ? `\${Math.min(100, Math.max(0, 100 - Math.abs(metrics.distance - IDEAL_DISTANCE_CM) * 3))}%\`
                   : '0%',
                 background: metrics
                   ? getProgressColor(getMetricStatus(metrics.distance, 'distance').className)
@@ -2278,7 +2273,7 @@ const IPDMeasurement: React.FC = () => {
             <div style={styles.progressBar}>
               <div style={{
                 ...styles.progressFill,
-                width: metrics ? `${metrics.lighting}%` : '0%',
+                width: metrics ? `\${metrics.lighting}%\` : '0%',
                 background: metrics
                   ? getProgressColor(getMetricStatus(metrics.lighting, 'lighting').className)
                   : '#e5e7eb',
@@ -2317,7 +2312,7 @@ const IPDMeasurement: React.FC = () => {
                 />
               </svg>
               <div style={styles.accuracyValue}>
-                {metrics ? `${metrics.accuracy}%` : '--%'}
+                {metrics ? `\${metrics.accuracy}%\` : '--%'}
               </div>
             </div>
             {metrics && metrics.faceStability > 0 && (
@@ -2429,26 +2424,26 @@ const IPDMeasurement: React.FC = () => {
                 IPD (Interpupillary Distance)
               </span>
               <span style={{ ...styles.resultValue, fontSize: '20px', color: '#2563eb' }}>
-                {currentMeasurement ? `${currentMeasurement.ipd.toFixed(1)} mm` : '-- mm'}
+                {currentMeasurement ? `\${currentMeasurement.ipd.toFixed(1)} mm` : '-- mm'}
               </span>
             </div>
             <div style={styles.resultRow}>
               <span style={styles.resultLabel}>Left Pupil to Center</span>
               <span style={styles.resultValue}>
-                {currentMeasurement ? `${currentMeasurement.leftPd.toFixed(1)} mm` : '-- mm'}
+                {currentMeasurement ? `\${currentMeasurement.leftPd.toFixed(1)} mm` : '-- mm'}
               </span>
             </div>
             <div style={styles.resultRow}>
               <span style={styles.resultLabel}>Right Pupil to Center</span>
               <span style={styles.resultValue}>
-                {currentMeasurement ? `${currentMeasurement.rightPd.toFixed(1)} mm` : '-- mm'}
+                {currentMeasurement ? `\${currentMeasurement.rightPd.toFixed(1)} mm` : '-- mm'}
               </span>
             </div>
             <div style={styles.resultRow}>
               <span style={styles.resultLabel}>Measurement Confidence</span>
               <span style={getConfidenceBadgeStyle(currentMeasurement?.confidence || 0)}>
                 <Shield size={12} />
-                {currentMeasurement ? `${currentMeasurement.confidence.toFixed(0)}%` : '--%'}
+                {currentMeasurement ? `\${currentMeasurement.confidence.toFixed(0)}%\` : '--%'}
               </span>
             </div>
             {autoCaptureMeasurements.length === AUTO_CAPTURE_TOTAL && (
@@ -2493,3 +2488,5 @@ const IPDMeasurement: React.FC = () => {
 };
 
 export default IPDMeasurement;
+
+    
