@@ -24,7 +24,7 @@ export default function OptoToolsPage() {
       id: 'ipd-measuring-tool',
       title: 'IPD Measuring Tool',
       description: 'Use your camera to measure interpupillary distance with our AI-powered tool.',
-      href: '/opto-tools/optometry-calculator', // Links to the same calculator suite page
+      href: '/opto-tools/ipd-measuring-tool',
       icon: <ScanFace className="h-8 w-8 text-primary" />,
     },
     // Add other tools here in the future
