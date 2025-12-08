@@ -1591,26 +1591,36 @@ const IPDMeasurement: React.FC = () => {
 
     setLoadingSubtext('Initializing face landmarker...');
 
-    const filesetResolver = await FilesetResolver.forVisionTasks(
-      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-    );
+    // Temporarily override console.error
+    const originalConsoleError = console.error;
+    console.error = () => {};
 
-    const faceLandmarker = await FaceLandmarker.createFromOptions(
-      filesetResolver,
-      {
-        baseOptions: {
-          modelAssetPath:
-            'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-          delegate: hasWebGPU ? 'GPU' : 'CPU',
-        },
-        outputFaceBlendshapes: false,
-        outputFacialTransformationMatrixes: false,
-        runningMode: 'VIDEO',
-        numFaces: 1,
-      }
-    );
+    try {
+        const filesetResolver = await FilesetResolver.forVisionTasks(
+            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
 
-    faceLandmarkerRef.current = faceLandmarker;
+        const faceLandmarker = await FaceLandmarker.createFromOptions(
+            filesetResolver,
+            {
+                baseOptions: {
+                    modelAssetPath:
+                        'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+                    delegate: hasWebGPU ? 'GPU' : 'CPU',
+                },
+                outputFaceBlendshapes: false,
+                outputFacialTransformationMatrixes: false,
+                runningMode: 'VIDEO',
+                numFaces: 1,
+            }
+        );
+
+        faceLandmarkerRef.current = faceLandmarker;
+    } finally {
+        // Restore console.error
+        console.error = originalConsoleError;
+    }
+
     setLoadingText('Model Loaded!');
     setLoadingSubtext('Starting camera...');
   }, []);
