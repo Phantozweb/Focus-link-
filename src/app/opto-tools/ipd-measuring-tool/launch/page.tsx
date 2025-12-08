@@ -1,3 +1,4 @@
+
 'use client';
 // IPDMeasurement.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -1558,27 +1559,25 @@ const IPDMeasurement: React.FC = () => {
     let stream: MediaStream | null = null;
   
     const init = async () => {
+      injectStyles();
       // 1. Get Camera Permission
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (isCancelled) {
-          stream.getTracks().forEach(track => track.stop());
-          return;
-        }
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         setHasCameraPermission(true);
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        setIsLoading(false); // Stop loading screen to show error
+        setIsLoading(false);
         toast({
           variant: 'destructive',
           title: 'Camera Access Denied',
           description: 'Please enable camera permissions in your browser settings to use this app.',
         });
-        return; // Stop initialization
+        return;
       }
   
       setLoadingText('AI Model is loading...');
@@ -1587,24 +1586,18 @@ const IPDMeasurement: React.FC = () => {
       // 2. Load Model
       const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
       const hasWebGPU = await checkWebGPUSupport();
-      if (isCancelled) return;
       setWebgpuSupported(hasWebGPU);
-      
-      const response = await fetch('https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task');
-      if(response.ok) {
-        setLoadingSubtext('Model found in cache. Loading quickly!');
-      } else {
-        setLoadingSubtext('Downloading model for the first time...');
-      }
+      setLoadingSubtext('Downloading model...');
       setLoadingProgress(50);
   
       const originalConsoleError = console.error;
-      console.error = () => {}; // Suppress console errors from mediapipe
+      // Temporarily suppress console errors during model loading to avoid irrelevant warnings.
+      console.error = () => {}; 
       try {
         const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
         faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
           baseOptions: {
-            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
             delegate: hasWebGPU ? 'GPU' : 'CPU',
           },
           outputFaceBlendshapes: false,
@@ -1613,7 +1606,7 @@ const IPDMeasurement: React.FC = () => {
           numFaces: 1,
         });
       } finally {
-        console.error = originalConsoleError; // Restore console.error
+        console.error = originalConsoleError; // Restore original console.error
       }
       if (isCancelled) return;
       setLoadingProgress(75);
@@ -1646,7 +1639,6 @@ const IPDMeasurement: React.FC = () => {
       }, 500);
     };
   
-    // Initial call
     init();
   
     return () => {
