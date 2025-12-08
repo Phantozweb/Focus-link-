@@ -1562,7 +1562,13 @@ const IPDMeasurement: React.FC = () => {
       injectStyles();
       // 1. Get Camera Permission
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        setLoadingText('Requesting camera access...');
+        setLoadingProgress(10);
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (isCancelled) {
+            stream.getTracks().forEach(track => track.stop());
+            return;
+        }
         setHasCameraPermission(true);
 
         if (videoRef.current) {
@@ -1572,11 +1578,6 @@ const IPDMeasurement: React.FC = () => {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
         setIsLoading(false);
-        toast({
-          variant: 'destructive',
-          title: 'Camera Access Denied',
-          description: 'Please enable camera permissions in your browser settings to use this app.',
-        });
         return;
       }
   
@@ -1590,9 +1591,6 @@ const IPDMeasurement: React.FC = () => {
       setLoadingSubtext('Downloading model...');
       setLoadingProgress(50);
   
-      const originalConsoleError = console.error;
-      // Temporarily suppress console errors during model loading to avoid irrelevant warnings.
-      console.error = () => {}; 
       try {
         const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
         faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
@@ -1605,9 +1603,13 @@ const IPDMeasurement: React.FC = () => {
           runningMode: 'VIDEO',
           numFaces: 1,
         });
-      } finally {
-        console.error = originalConsoleError; // Restore original console.error
+      } catch (e) {
+          console.error("Failed to create FaceLandmarker", e);
+          setIsLoading(false);
+          // Show an error to the user
+          return;
       }
+
       if (isCancelled) return;
       setLoadingProgress(75);
   
