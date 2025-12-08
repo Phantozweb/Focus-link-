@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building, ArrowRight } from 'lucide-react';
+import { Calculator, Orbit, RotateCw, Contact, Eye, ZoomIn, Ruler, Sigma, CheckCircle, XCircle, Loader2, User, UserRound, View, Scale, Link as LinkIcon, Hand, BrainCircuit, RefreshCw, Minus, Plus, Copy, Share2, Info, Building, ArrowRight, ScanFace } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -19,6 +19,13 @@ export default function OptoToolsPage() {
       description: 'Access 20+ clinical calculators for refraction, contact lenses, and low vision.',
       href: '/opto-tools/optometry-calculator',
       icon: <Calculator className="h-8 w-8 text-primary" />,
+    },
+    {
+      id: 'ipd-measuring-tool',
+      title: 'IPD Measuring Tool',
+      description: 'Use your camera to measure interpupillary distance with our AI-powered tool.',
+      href: '/opto-tools/optometry-calculator', // Links to the same calculator suite page
+      icon: <ScanFace className="h-8 w-8 text-primary" />,
     },
     // Add other tools here in the future
   ];
