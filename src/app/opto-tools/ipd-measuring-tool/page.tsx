@@ -67,8 +67,7 @@ export default function IPDMeasuringToolPage() {
             setWebGpuSupported(isSupported);
             await loadModel(isSupported);
             await startCamera();
-            setLoading(false);
-            startDetection();
+            // The detection loop is now started by the video's onplaying event
         } catch (error: any) {
             console.error('Initialization error:', error);
             setLoadingText('Error Initializing');
@@ -108,29 +107,25 @@ export default function IPDMeasuringToolPage() {
         if (videoRef.current) {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } });
             videoRef.current.srcObject = stream;
-            await new Promise<void>((resolve) => {
-                if(videoRef.current) {
-                  videoRef.current.onloadedmetadata = () => {
-                      if (canvasRef.current && videoRef.current) {
-                          canvasRef.current.width = videoRef.current.videoWidth;
-                          canvasRef.current.height = videoRef.current.videoHeight;
-                      }
-                      resolve();
-                  };
+            videoRef.current.onloadedmetadata = () => {
+                if (canvasRef.current && videoRef.current) {
+                    canvasRef.current.width = videoRef.current.videoWidth;
+                    canvasRef.current.height = videoRef.current.videoHeight;
                 }
-            });
-            await videoRef.current.play();
+                videoRef.current?.play();
+            };
         }
     };
 
     const startDetection = () => {
+        setLoading(false);
         if (faceLandmarkerRef.current) {
             detectFace();
         }
     };
 
     const detectFace = async () => {
-        if (videoRef.current && faceLandmarkerRef.current) {
+        if (videoRef.current && faceLandmarkerRef.current && videoRef.current.readyState >= 3) {
             const startTime = performance.now();
             const results = faceLandmarkerRef.current.detectForVideo(videoRef.current, startTime);
             lastResultsRef.current = results;
@@ -280,7 +275,7 @@ export default function IPDMeasuringToolPage() {
       
             <div className="camera-section">
               <div className="camera-container">
-                <video ref={videoRef} playsInline autoPlay muted></video>
+                <video ref={videoRef} playsInline autoPlay muted onPlaying={startDetection}></video>
                 <canvas ref={canvasRef}></canvas>
                 <div className={cn("face-guide", faceDetected && "detected")}></div>
                 <div className="status-badge"><span className={cn("status-dot", statusType)}></span><span>{statusText}</span></div>
@@ -298,7 +293,7 @@ export default function IPDMeasuringToolPage() {
                   </MetricCard>
                   <MetricCard icon={<Target size={18} />} title="MEASUREMENT ACCURACY" value="">
                        <div className="accuracy-ring">
-                          <svg width="80" height="80"><circle className="bg" cx="40" cy="40" r="34"></circle><circle className="progress" id="accuracyProgress" cx="40" cy="40" r="34" strokeDasharray="213.6" strokeDashoffset={213.6 - (metrics.accuracy/100)*213.6}></circle></svg>
+                          <svg width="80" height="80"><circle className="bg" cx="40" cy="40" r="34"></circle><circle className="progress" id="accuracyProgress" cx="40" cy="40" r="34" strokeDasharray="213.6" strokeDashoffset={213.6 - (metrics.accuracy/100)*213.6} strokeLinecap="round"></circle></svg>
                           <div className="accuracy-value">{metrics.accuracy > 0 ? `${metrics.accuracy}%` : '--%'}</div>
                       </div>
                   </MetricCard>
@@ -354,5 +349,7 @@ export default function IPDMeasuringToolPage() {
             </Dialog>
           </div>
         </div>
-    );
+    ];
 }
+
+    
