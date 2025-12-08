@@ -3,10 +3,11 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Download, MessageCircle, Twitter } from 'lucide-react';
+import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Download, MessageCircle, Twitter, Copy } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShareButton } from '@/components/share-button';
+import { useToast } from '@/hooks/use-toast';
 
 const ipdToolSchema = {
     "@context": "https://schema.org",
@@ -38,7 +39,17 @@ const bestPractices = [
 ];
 
 export function IpdToolClientPage() {
+  const { toast } = useToast();
   const shareText = "Check out this free AI tool from Focus Links to measure your pupillary distance (PD) instantly! Super useful for ordering glasses online. #IPD #EyeCare #FocusLinks";
+
+  const handleCopy = () => {
+    const url = 'https://focuslinks.in/opto-tools/ipd-measuring-tool';
+    navigator.clipboard.writeText(url);
+    toast({
+      title: 'Link Copied',
+      description: 'The link has been copied to your clipboard.',
+    });
+  };
 
   return (
     <>
@@ -53,7 +64,7 @@ export function IpdToolClientPage() {
 
         <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
           <Card className="shadow-lg">
-            <CardContent className="p-8 md:p-12 flex flex-col lg:flex-row items-center gap-8 text-center">
+            <CardContent className="p-8 md:p-12 text-center">
               <div className="flex-1">
                 <h2 className="text-3xl font-bold text-slate-800">Ready to Get Your Measurement?</h2>
                 <p className="mt-2 text-lg text-slate-600">Our tool uses advanced AI to detect your facial landmarks and calculate your IPD with high accuracy. Click below to start.</p>
@@ -115,7 +126,10 @@ export function IpdToolClientPage() {
                                 <Twitter className="mr-2 h-4 w-4" /> Share on X (Twitter)
                             </a>
                         </Button>
-                        <ShareButton title="Free AI IPD Measuring Tool" text={shareText} className="w-full" />
+                        <Button variant="outline" size="icon" className="w-full" aria-label="Copy" onClick={handleCopy}>
+                          <Copy className="h-4 w-4 text-slate-800 mr-2" />
+                          <span className="text-slate-800">Copy</span>
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
