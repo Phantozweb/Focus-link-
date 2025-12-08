@@ -53,8 +53,8 @@ export function IpdToolClientPage() {
 
         <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
           <Card className="shadow-lg">
-            <CardContent className="p-8 md:p-12 flex flex-col lg:flex-row items-center gap-8">
-              <div className="flex-1 text-center lg:text-left">
+            <CardContent className="p-8 md:p-12 flex flex-col lg:flex-row items-center gap-8 text-center">
+              <div className="flex-1">
                 <h2 className="text-3xl font-bold text-slate-800">Ready to Get Your Measurement?</h2>
                 <p className="mt-2 text-lg text-slate-600">Our tool uses advanced AI to detect your facial landmarks and calculate your IPD with high accuracy. Click below to start.</p>
                 <Button asChild size="lg" className="mt-6">
@@ -63,9 +63,6 @@ export function IpdToolClientPage() {
                     Launch IPD Tool
                   </Link>
                 </Button>
-              </div>
-              <div className="relative w-full lg:w-1/3 aspect-square max-w-sm">
-                <Image src="https://i.ibb.co/2Z5d3K0/ipd-tool-og-image.png" alt="IPD Tool Demonstration" layout="fill" objectFit="contain" />
               </div>
             </CardContent>
           </Card>
