@@ -87,7 +87,7 @@ export default {
         'rank-up': 'rankUp 3s infinite ease-in-out',
         'float': 'float 4s ease-in-out infinite',
         'spin': 'spin 1s linear infinite',
-        'pulse': 'pulse 2s infinite',
+        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-green': 'pulseGreen 1.5s infinite'
       },
       keyframes: {
@@ -115,8 +115,9 @@ export default {
             '100%': { transform: 'rotate(360deg)' },
         },
         pulse: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.5' },
+          '50%': {
+            opacity: '.5',
+          },
         },
         pulseGreen: {
           '0%, 100%': { boxShadow: '0 0 0 0 rgba(16, 185, 129, 0.4)' },

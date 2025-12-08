@@ -392,7 +392,7 @@
     .ipd-tool-container .progress-fill.bad { @apply bg-red-500; }
     .ipd-tool-container .accuracy-ring { @apply relative w-20 h-20 mx-auto; }
     .ipd-tool-container .accuracy-ring svg { @apply -rotate-90; }
-    .ipd-tool-container .accuracy-ring circle { @apply fill-none; stroke-width: 6px; }
+    .ipd-tool-container .accuracy-ring circle { @apply fill-none; }
     .ipd-tool-container .accuracy-ring .bg { @apply stroke-slate-200; }
     .ipd-tool-container .accuracy-ring .progress { @apply stroke-green-500 transition-all; }
     .ipd-tool-container .accuracy-value { @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-slate-900; }
