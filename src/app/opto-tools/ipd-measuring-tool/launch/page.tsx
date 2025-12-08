@@ -25,6 +25,7 @@ import {
   Timer,
   Shield,
   FlaskConical,
+  Loader2,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
@@ -180,41 +181,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginTop: '8px',
     fontSize: '15px',
   },
-  loadingScreen: {
-    position: 'fixed' as const,
-    inset: 0,
-    background: 'white',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1000,
-    transition: 'opacity 0.3s, visibility 0.3s',
-  },
-  loadingScreenHidden: {
-    opacity: 0,
-    visibility: 'hidden' as const,
-    pointerEvents: 'none' as const,
-  },
-  loader: {
-    width: '56px',
-    height: '56px',
-    border: '3px solid #e5e7eb',
-    borderTopColor: '#2563eb',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
-  },
-  loadingText: {
-    marginTop: '20px',
-    fontSize: '16px',
-    color: '#4b5563',
-    fontWeight: 500,
-  },
-  loadingSubtext: {
-    marginTop: '8px',
-    fontSize: '13px',
-    color: '#9ca3af',
-  },
   cameraSection: {
     display: 'grid',
     gap: '24px',
@@ -226,6 +192,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     overflow: 'hidden',
     aspectRatio: '4/3',
     boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   video: {
     position: 'absolute' as const,
@@ -726,7 +695,6 @@ const IPDMeasurement: React.FC = () => {
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [loadingText, setLoadingText] = useState('Initializing...');
-  const [loadingSubtext, setLoadingSubtext] = useState('');
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [statusText, setStatusText] = useState('Initializing...');
   const [statusType, setStatusType] = useState<'success' | 'warning' | 'danger'>('warning');
@@ -1553,74 +1521,73 @@ const IPDMeasurement: React.FC = () => {
     checkPerfectConditions, calculateAveragedMeasurement, hasCameraPermission
   ]);
 
-  // Initialize
+   // Initialize
   useEffect(() => {
     let isCancelled = false;
     let stream: MediaStream | null = null;
-  
+
     const init = async () => {
       injectStyles();
-      // 1. Get Camera Permission
+      setLoadingText('Requesting camera access...');
+      setLoadingProgress(10);
+      
+      // 1. Get Camera Permission First
       try {
-        setLoadingText('Requesting camera access...');
-        setLoadingProgress(10);
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (isCancelled) {
-            stream.getTracks().forEach(track => track.stop());
-            return;
+          stream.getTracks().forEach(track => track.stop());
+          return;
         }
         setHasCameraPermission(true);
-
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
       } catch (error) {
-        console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        setIsLoading(false);
+        setIsLoading(false); // Stop loading to show error
         return;
       }
-  
-      setLoadingText('AI Model is loading...');
+      
+      // If permission is granted, proceed with model loading
+      setLoadingText('Loading AI Model...');
       setLoadingProgress(25);
-  
-      // 2. Load Model
+      
       const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
       const hasWebGPU = await checkWebGPUSupport();
       setWebgpuSupported(hasWebGPU);
-      setLoadingSubtext('Downloading model...');
+      
+      setLoadingText('Preparing Model...');
       setLoadingProgress(50);
-  
+
       try {
-        const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+        const filesetResolver = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
         faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
           baseOptions: {
             modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
             delegate: hasWebGPU ? 'GPU' : 'CPU',
           },
-          outputFaceBlendshapes: false,
-          outputFacialTransformationMatrixes: false,
           runningMode: 'VIDEO',
           numFaces: 1,
         });
       } catch (e) {
-          console.error("Failed to create FaceLandmarker", e);
-          setIsLoading(false);
-          // Show an error to the user
-          return;
+        setIsLoading(false); // Stop loading on error
+        toast({ variant: 'destructive', title: 'Model Error', description: 'Could not load the AI model.' });
+        return;
       }
 
       if (isCancelled) return;
-      setLoadingProgress(75);
-  
-      // 3. Start Camera and Detection
+      setLoadingText('Starting camera...');
+      setLoadingProgress(85);
+
       const video = videoRef.current;
       const canvas = canvasRef.current;
       if (!video || !canvas) return;
-  
+
       await new Promise<void>((resolve) => {
         video.onloadedmetadata = () => {
-          if(canvasRef.current) {
+          if (canvasRef.current) {
             canvasRef.current.width = video.videoWidth;
             canvasRef.current.height = video.videoHeight;
           }
@@ -1628,9 +1595,10 @@ const IPDMeasurement: React.FC = () => {
         };
       });
       await video.play();
-  
+
       if (isCancelled) return;
       setLoadingProgress(100);
+      setLoadingText('Ready!');
       
       setTimeout(() => {
         if (isCancelled) return;
@@ -1640,9 +1608,9 @@ const IPDMeasurement: React.FC = () => {
         detectFace();
       }, 500);
     };
-  
+
     init();
-  
+
     return () => {
       isCancelled = true;
       isDetectingRef.current = false;
@@ -1849,18 +1817,6 @@ const IPDMeasurement: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      {/* Loading Screen */}
-      <div style={{
-        ...styles.loadingScreen,
-        ...(isLoading ? {} : styles.loadingScreenHidden),
-      }}>
-        <div style={styles.loader} />
-        <div style={styles.loadingText}>{loadingText}</div>
-        <div style={styles.loadingSubtext}>{loadingSubtext}</div>
-        <div className="w-full max-w-xs mt-4">
-            <Progress value={loadingProgress} />
-        </div>
-      </div>
 
       {/* Header */}
       <header style={styles.header}>
@@ -1886,75 +1842,87 @@ const IPDMeasurement: React.FC = () => {
       <div style={styles.cameraSection} className="camera-section-responsive">
         {/* Camera View */}
         <div style={styles.cameraContainer} className="camera-container-responsive">
-          <video ref={videoRef} style={styles.video} playsInline autoPlay muted />
-          <canvas ref={canvasRef} style={styles.canvas} />
-
-          {/* Adaptive Face Guide */}
-          <div style={getFaceGuideStyle()} className="face-guide-responsive" />
-
-          {/* Status Badge */}
-          <div style={styles.statusBadge}>
-            <span style={{
-              ...styles.statusDot,
-              background: getStatusColor(statusType),
-            }} />
-            <span>{statusText}</span>
-          </div>
-
-          {/* Eye Status Badge */}
-          {faceDetected && (
-            <div style={styles.eyeStatusBadge}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                {leftEyeOpen ? <Eye size={14} color="#10b981" /> : <EyeOff size={14} color="#ef4444" />}
-                <span style={{ fontSize: '11px' }}>L</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                {rightEyeOpen ? <Eye size={14} color="#10b981" /> : <EyeOff size={14} color="#ef4444" />}
-                <span style={{ fontSize: '11px' }}>R</span>
-              </div>
+          {isLoading ? (
+            <div className="text-white text-center p-4">
+                <Loader2 className="h-10 w-10 animate-spin mx-auto text-slate-400" />
+                <p className="mt-4 font-semibold text-lg">{loadingText}</p>
+                <div className="w-full max-w-xs mx-auto mt-2">
+                    <Progress value={loadingProgress} className="h-2"/>
+                </div>
             </div>
+          ) : (
+            <>
+              <video ref={videoRef} style={styles.video} playsInline autoPlay muted className={hasCameraPermission ? '' : 'hidden'} />
+              <canvas ref={canvasRef} style={styles.canvas} />
+
+              {/* Adaptive Face Guide */}
+              <div style={getFaceGuideStyle()} className="face-guide-responsive" />
+
+              {/* Status Badge */}
+              <div style={styles.statusBadge}>
+                <span style={{
+                  ...styles.statusDot,
+                  background: getStatusColor(statusType),
+                }} />
+                <span>{statusText}</span>
+              </div>
+
+              {/* Eye Status Badge */}
+              {faceDetected && (
+                <div style={styles.eyeStatusBadge}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {leftEyeOpen ? <Eye size={14} color="#10b981" /> : <EyeOff size={14} color="#ef4444" />}
+                    <span style={{ fontSize: '11px' }}>L</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {rightEyeOpen ? <Eye size={14} color="#10b981" /> : <EyeOff size={14} color="#ef4444" />}
+                    <span style={{ fontSize: '11px' }}>R</span>
+                  </div>
+                </div>
+              )}
+
+              {/* WebGPU Badge */}
+              <div style={{...styles.webgpuBadge, background: '#10b981'}}>
+                <FlaskConical size={12} />
+                Beta Testing
+              </div>
+
+              {/* Auto-Capture Indicator */}
+              {isAutoCapturing && (
+                <div style={styles.autoCaptureIndicator}>
+                  <Timer size={18} />
+                  <span>Auto-capturing...</span>
+                  <svg width="24" height="24" style={{ transform: 'rotate(-90deg)' }}>
+                    <circle
+                      cx="12" cy="12" r="10"
+                      fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="3"
+                    />
+                    <circle
+                      cx="12" cy="12" r="10"
+                      fill="none" stroke="#ffffff" strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 10}
+                      strokeDashoffset={2 * Math.PI * 10 * (1 - autoCaptureProgress / 100)}
+                      style={{ transition: 'stroke-dashoffset 0.1s' }}
+                    />
+                  </svg>
+                </div>
+              )}
+
+              {/* Capture Button */}
+              <button
+                style={{
+                  ...styles.captureBtn,
+                  ...(canCapture && metrics && metrics.accuracy >= 70 ? styles.captureBtnReady : {}),
+                  ...(!canCapture || !metrics || !leftEyeOpen || !rightEyeOpen ? styles.captureBtnDisabled : {}),
+                }}
+                onClick={handleCapture}
+                disabled={!canCapture || !metrics || !leftEyeOpen || !rightEyeOpen}
+              >
+                <Camera size={28} color="#2563eb" />
+              </button>
+            </>
           )}
-
-          {/* WebGPU Badge */}
-          <div style={{...styles.webgpuBadge, background: '#10b981'}}>
-            <FlaskConical size={12} />
-            Beta Testing
-          </div>
-
-          {/* Auto-Capture Indicator */}
-          {isAutoCapturing && (
-            <div style={styles.autoCaptureIndicator}>
-              <Timer size={18} />
-              <span>Auto-capturing...</span>
-              <svg width="24" height="24" style={{ transform: 'rotate(-90deg)' }}>
-                <circle
-                  cx="12" cy="12" r="10"
-                  fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="3"
-                />
-                <circle
-                  cx="12" cy="12" r="10"
-                  fill="none" stroke="#ffffff" strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeDasharray={2 * Math.PI * 10}
-                  strokeDashoffset={2 * Math.PI * 10 * (1 - autoCaptureProgress / 100)}
-                  style={{ transition: 'stroke-dashoffset 0.1s' }}
-                />
-              </svg>
-            </div>
-          )}
-
-          {/* Capture Button */}
-          <button
-            style={{
-              ...styles.captureBtn,
-              ...(canCapture && metrics && metrics.accuracy >= 70 ? styles.captureBtnReady : {}),
-              ...(!canCapture || !metrics || !leftEyeOpen || !rightEyeOpen ? styles.captureBtnDisabled : {}),
-            }}
-            onClick={handleCapture}
-            disabled={!canCapture || !metrics || !leftEyeOpen || !rightEyeOpen}
-          >
-            <Camera size={28} color="#2563eb" />
-          </button>
         </div>
 
         {/* Metrics Panel */}
@@ -2262,3 +2230,4 @@ const IPDMeasurement: React.FC = () => {
 };
 
 export default IPDMeasurement;
+
