@@ -715,8 +715,21 @@ const IPDMeasurement: React.FC = () => {
   const [samplesCollected, setSamplesCollected] = useState(0);
   const [faceBounds, setFaceBounds] = useState<FaceBounds | null>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
+
+  // Add the new state variables
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [isMirrored, setIsMirrored] = useState(true);
+  
+  const [currentMeasurement, setCurrentMeasurement] = useState<{
+    ipd: number;
+    leftPd: number;
+    rightPd: number;
+    accuracy: number;
+    samples: number;
+    confidence: number;
+  } | null>(null);
 
   // Auto-capture 3x averaging
   const [autoCaptureCount, setAutoCaptureCount] = useState(0);
@@ -804,6 +817,7 @@ const IPDMeasurement: React.FC = () => {
   
       await video.play();
     } catch (error) {
+      console.error('Error switching camera:', error);
       // Fallback to original camera
       setFacingMode(facingMode);
       setIsMirrored(facingMode === 'user');
@@ -1645,82 +1659,99 @@ const IPDMeasurement: React.FC = () => {
    useEffect(() => {
     let isCancelled = false;
     injectStyles();
-    
+
     const init = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: {
-                    facingMode: facingMode,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                } 
-            });
-            if (isCancelled) return stream.getTracks().forEach(t => t.stop());
-            
-            setHasCameraPermission(true);
-            setLoadingText('Loading AI Model...');
-            setLoadingProgress(25);
-            
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                await new Promise<void>((resolve) => {
-                    videoRef.current!.onloadedmetadata = () => {
-                        if (canvasRef.current) {
-                            canvasRef.current.width = videoRef.current!.videoWidth;
-                            canvasRef.current.height = videoRef.current!.videoHeight;
-                        }
-                        resolve();
-                    };
-                });
-                await videoRef.current.play();
-            }
+      try {
+        setLoadingText('Requesting camera access...');
+        setLoadingProgress(10);
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+        });
 
-            const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
-            const hasWebGPU = await checkWebGPUSupport();
-            setWebgpuSupported(hasWebGPU);
-            
-            setLoadingText('Preparing Model...');
-            setLoadingProgress(50);
-            
-            const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
-            faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
-                baseOptions: {
-                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-                    delegate: hasWebGPU ? 'GPU' : 'CPU',
-                },
-                runningMode: 'VIDEO',
-                numFaces: 1,
-            });
-
-            if (isCancelled) return;
-            setLoadingProgress(100);
-            setLoadingText('Ready!');
-            
-            setTimeout(() => {
-              if (isCancelled) return;
-              setIsLoading(false);
-              setCanCapture(true);
-              isDetectingRef.current = true;
-              detectFace();
-            }, 500);
-
-        } catch (error) {
-            setHasCameraPermission(false);
-            setIsLoading(false);
-            return;
+        if (isCancelled) {
+          stream.getTracks().forEach((track) => track.stop());
+          return;
         }
-    };
 
+        setHasCameraPermission(true);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await new Promise<void>((resolve) => {
+            videoRef.current!.onloadedmetadata = () => {
+              if (canvasRef.current && videoRef.current) {
+                canvasRef.current.width = videoRef.current.videoWidth;
+                canvasRef.current.height = videoRef.current.videoHeight;
+              }
+              resolve();
+            };
+          });
+          await videoRef.current.play();
+        }
+        
+        setLoadingText('Loading AI Model...');
+        setLoadingProgress(25);
+        
+        const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+        const hasWebGPU = await checkWebGPUSupport();
+        setWebgpuSupported(hasWebGPU);
+
+        setLoadingText('Downloading model...');
+        setLoadingProgress(50);
+        
+        const filesetResolver = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
+
+        faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
+          baseOptions: {
+            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+            delegate: hasWebGPU ? 'GPU' : 'CPU',
+          },
+          runningMode: 'VIDEO',
+          numFaces: 1,
+        });
+
+        if (isCancelled) return;
+
+        setLoadingProgress(100);
+        setLoadingText('Ready!');
+
+        setTimeout(() => {
+          if (isCancelled) return;
+          setIsLoading(false);
+          setCanCapture(true);
+          isDetectingRef.current = true;
+          detectFace();
+        }, 500);
+
+      } catch (err) {
+        console.error("Initialization failed:", err);
+        setHasCameraPermission(false);
+        setIsLoading(false);
+      }
+    };
+    
+    // Load history from localStorage
+    const savedHistory = localStorage.getItem('ipdHistory');
+    if (savedHistory) {
+      setHistory(JSON.parse(savedHistory));
+    }
+    
     init();
 
     return () => {
-        isCancelled = true;
-        isDetectingRef.current = false;
-        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-        if (autoCaptureTimerRef.current) clearTimeout(autoCaptureTimerRef.current);
-        if (videoRef.current && videoRef.current.srcObject) {
-            (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
-        }
+      isCancelled = true;
+      isDetectingRef.current = false;
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      if (autoCaptureTimerRef.current) clearTimeout(autoCaptureTimerRef.current);
+      if (videoRef.current && videoRef.current.srcObject) {
+        (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+      }
     };
   }, [facingMode, checkWebGPUSupport, detectFace]);
 
@@ -1949,7 +1980,6 @@ const IPDMeasurement: React.FC = () => {
       </header>
         {hasCameraPermission === false && (
             <Alert variant="destructive" className="mb-4">
-              <AlertCircle className="h-4 w-4" />
               <AlertTitle>Camera Access Required</AlertTitle>
               <AlertDescription>
                 Please enable camera permissions in your browser settings and reload the page to use this tool.
