@@ -67,7 +67,7 @@ export function IpdToolClientPage() {
             <CardContent className="p-8 md:p-12 text-center">
               <div className="flex-1">
                 <h2 className="text-3xl font-bold text-slate-800">Ready to Get Your Measurement?</h2>
-                <p className="mt-2 text-lg text-slate-600">Our tool uses advanced AI to detect your facial landmarks and calculate your IPD with high accuracy. Click below to start.</p>
+                <p className="mt-2 text-lg text-slate-600">Our real-time AI analyzes your camera feed to give you a highly accurate IPD measurement in seconds. Click below to start.</p>
                 <Button asChild size="lg" className="mt-6">
                   <Link href="/opto-tools/ipd-measuring-tool/launch">
                     <Rocket className="mr-2 h-5 w-5" />
@@ -126,9 +126,9 @@ export function IpdToolClientPage() {
                                 <Twitter className="mr-2 h-4 w-4" /> Share on X (Twitter)
                             </a>
                         </Button>
-                        <Button variant="outline" size="icon" className="w-full" aria-label="Copy" onClick={handleCopy}>
+                        <Button variant="outline" className="w-full" aria-label="Copy" onClick={handleCopy}>
                           <Copy className="h-4 w-4 text-slate-800 mr-2" />
-                          <span className="text-slate-800">Copy</span>
+                          <span className="text-slate-800">Copy Link</span>
                         </Button>
                     </CardContent>
                 </Card>
