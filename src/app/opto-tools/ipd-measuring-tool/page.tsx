@@ -1554,6 +1554,9 @@ const IPDMeasurement: React.FC = () => {
 
   // Start camera
   const startCamera = useCallback(async () => {
+    setLoadingText('Starting Camera...');
+    setLoadingSubtext('Please allow camera permissions if prompted.');
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
@@ -1584,58 +1587,66 @@ const IPDMeasurement: React.FC = () => {
 
   // Load model
   const loadModel = useCallback(async (hasWebGPU: boolean) => {
-    setLoadingText('Loading AI Model...');
-    setLoadingSubtext('Downloading face detection model');
+      setLoadingText('Loading AI Model...');
+      setLoadingSubtext('This may take a moment on first load.');
+      
+      const modelUrl = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+      
+      // Check if the model is likely cached by the browser
+      try {
+          const response = await fetch(modelUrl, { method: 'HEAD', cache: 'force-cache' });
+          if (response.status === 200) {
+              setLoadingSubtext('Model found in cache. Loading quickly!');
+          }
+      } catch (e) {
+        // If HEAD request fails, just proceed normally
+      }
 
-    const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+      const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+      const filesetResolver = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+      );
+      
+      // Suppress console.error during model creation
+      const originalConsoleError = console.error;
+      console.error = () => {};
 
-    setLoadingSubtext('Initializing face landmarker...');
-
-    // Temporarily override console.error
-    const originalConsoleError = console.error;
-    console.error = () => {};
-
-    try {
-        const filesetResolver = await FilesetResolver.forVisionTasks(
-            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+      try {
+        faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(
+          filesetResolver,
+          {
+            baseOptions: {
+              modelAssetPath: modelUrl,
+              delegate: hasWebGPU ? 'GPU' : 'CPU',
+            },
+            outputFaceBlendshapes: false,
+            outputFacialTransformationMatrixes: false,
+            runningMode: 'VIDEO',
+            numFaces: 1,
+          }
         );
-
-        const faceLandmarker = await FaceLandmarker.createFromOptions(
-            filesetResolver,
-            {
-                baseOptions: {
-                    modelAssetPath:
-                        'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-                    delegate: hasWebGPU ? 'GPU' : 'CPU',
-                },
-                outputFaceBlendshapes: false,
-                outputFacialTransformationMatrixes: false,
-                runningMode: 'VIDEO',
-                numFaces: 1,
-            }
-        );
-
-        faceLandmarkerRef.current = faceLandmarker;
-    } finally {
-        // Restore console.error
+      } finally {
         console.error = originalConsoleError;
-    }
-
-    setLoadingText('Model Loaded!');
-    setLoadingSubtext('Starting camera...');
-  }, []);
+      }
+      setLoadingText('Model Loaded!');
+    }, []);
 
   // Initialize
   useEffect(() => {
     injectStyles();
+    let isCancelled = false;
 
     const init = async () => {
       try {
         const hasWebGPU = await checkWebGPUSupport();
+        if (isCancelled) return;
         setWebgpuSupported(hasWebGPU);
 
         await loadModel(hasWebGPU);
+        if (isCancelled) return;
+        
         await startCamera();
+        if (isCancelled) return;
 
         setIsLoading(false);
         setCanCapture(true);
@@ -1643,8 +1654,9 @@ const IPDMeasurement: React.FC = () => {
         isDetectingRef.current = true;
         detectFace();
       } catch (error) {
+        if (isCancelled) return;
         console.error('Initialization error:', error);
-        setLoadingText('Error loading model');
+        setLoadingText('Error loading tool');
         setLoadingSubtext(error instanceof Error ? error.message : 'Unknown error');
       }
     };
@@ -1658,12 +1670,18 @@ const IPDMeasurement: React.FC = () => {
     init();
 
     return () => {
+      isCancelled = true;
       isDetectingRef.current = false;
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
       if (autoCaptureTimerRef.current) {
         clearTimeout(autoCaptureTimerRef.current);
+      }
+       // Stop camera stream
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
       }
     };
   }, [checkWebGPUSupport, loadModel, startCamera, detectFace]);
