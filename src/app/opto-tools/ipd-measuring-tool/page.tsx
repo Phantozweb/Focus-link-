@@ -1,4 +1,3 @@
-
 'use client';
 // IPDMeasurement.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -28,6 +27,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 // Types
 interface Landmark {
@@ -94,12 +94,6 @@ const LEFT_IRIS_POINTS = [469, 470, 471, 472];
 const RIGHT_IRIS_POINTS = [474, 475, 476, 477];
 
 // Eye landmarks for blink detection
-const LEFT_EYE_UPPER = [159, 145, 158, 153];
-const LEFT_EYE_LOWER = [23, 25, 26, 110];
-const RIGHT_EYE_UPPER = [386, 374, 385, 380];
-const RIGHT_EYE_LOWER = [253, 255, 256, 339];
-
-// More precise eye landmarks
 const LEFT_EYE_VERTICAL = { top: 159, bottom: 145 };
 const LEFT_EYE_HORIZONTAL = { left: 33, right: 133 };
 const RIGHT_EYE_VERTICAL = { top: 386, bottom: 374 };
@@ -747,7 +741,7 @@ const IPDMeasurement: React.FC = () => {
   const [isAutoCapturing, setIsAutoCapturing] = useState(false);
   const [samplesCollected, setSamplesCollected] = useState(0);
   const [faceBounds, setFaceBounds] = useState<FaceBounds | null>(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState(false);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
 
 
   // Metrics state
@@ -1587,7 +1581,7 @@ const IPDMeasurement: React.FC = () => {
         return; // Stop initialization
       }
 
-      if (isCancelled) return;
+      if (isCancelled || !hasCameraPermission) return;
       setLoadingProgress(25);
       
       // 2. Load Model
@@ -1687,7 +1681,7 @@ const IPDMeasurement: React.FC = () => {
           videoRef.current.srcObject = null;
       }
     };
-  }, [checkWebGPUSupport, detectFace, toast]);
+  }, [checkWebGPUSupport, detectFace, toast, hasCameraPermission]);
 
 
   // Handle manual capture
@@ -1908,11 +1902,14 @@ const IPDMeasurement: React.FC = () => {
           High-precision interpupillary distance measurement with auto-capture
         </p>
       </header>
-        {!hasCameraPermission && !isLoading && (
-        <div style={styles.warningBanner}>
-            <AlertCircle size={18} />
-            <span>Camera permission is required to use this tool. Please enable it in your browser settings and reload the page.</span>
-        </div>
+        {hasCameraPermission === false && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Camera Access Required</AlertTitle>
+              <AlertDescription>
+                Please enable camera permissions in your browser settings and reload the page to use this tool.
+              </AlertDescription>
+            </Alert>
         )}
 
       {/* Camera Section */}
