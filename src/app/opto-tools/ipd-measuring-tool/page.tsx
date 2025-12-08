@@ -23,6 +23,7 @@ import {
   AlertCircle,
   Timer,
   Shield,
+  FlaskConical,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -293,7 +294,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     position: 'absolute' as const,
     top: '16px',
     right: '16px',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: '#10b981',
     padding: '6px 12px',
     borderRadius: '20px',
     fontSize: '11px',
@@ -1954,12 +1955,10 @@ const IPDMeasurement: React.FC = () => {
           )}
 
           {/* WebGPU Badge */}
-          {webgpuSupported && (
-            <div style={styles.webgpuBadge}>
-              <Zap size={12} />
-              WebGPU
-            </div>
-          )}
+          <div style={styles.webgpuBadge}>
+            <FlaskConical size={12} />
+            Beta Testing
+          </div>
 
           {/* Auto-Capture Indicator */}
           {isAutoCapturing && (
@@ -2302,3 +2301,5 @@ const IPDMeasurement: React.FC = () => {
 };
 
 export default IPDMeasurement;
+
+    
