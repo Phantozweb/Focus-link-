@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ScanFace,
@@ -24,6 +23,8 @@ import {
   Timer,
   Shield,
 } from 'lucide-react';
+import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
+
 
 // Types
 interface Landmark {
