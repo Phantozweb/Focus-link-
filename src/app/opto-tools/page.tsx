@@ -26,7 +26,7 @@ export default function OptoToolsPage() {
   return (
     <div className="bg-brand-bg">
       <header className="hero">
-        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Optometry Tools</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Opto Tools</h1>
         <p className="text-base opacity-90 max-w-xl mx-auto">
           A collection of essential digital tools and calculators designed for the modern eye care professional.
         </p>

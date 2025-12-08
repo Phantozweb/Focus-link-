@@ -35,7 +35,7 @@ const communityLinks = [
     { name: 'Academy', href: '/academy', icon: <BookOpen className="h-5 w-5" />, hasLiveIndicator: true },
     { name: 'Case Forum', href: '/forum', icon: <MessageSquare className="h-5 w-5" /> },
     { name: 'Job Board', href: '/jobs', icon: <Briefcase className="h-5 w-5" /> },
-    { name: 'Optometry Calculator', href: '/opto-tools/optometry-calculator', icon: <PencilRuler className="h-5 w-5" /> },
+    { name: 'Opto Tools', href: '/opto-tools', icon: <PencilRuler className="h-5 w-5" /> },
 ]
 
 const aboutLinks = [

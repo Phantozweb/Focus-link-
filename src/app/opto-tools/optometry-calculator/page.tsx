@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { OptoToolsClient } from './opto-tools-client';
 
 export const metadata: Metadata = {
-  title: 'Optometry Calculator Suite: 20+ Clinical Tools (Free) | Focus Links',
-  description: "Access the ultimate all-in-one Optometry Calculator. Includes 20+ modules for Transposition, Vertex Distance, LARS, Biometry, and Low Vision. Developed by Shivashangari M (M.Optom).",
+  title: 'Optometry Calculator Suite | Focus Links',
+  description: "Access a free, all-in-one suite of 20+ clinical optometry calculators. Includes tools for transposition, vertex distance, contact lenses, low vision, and more. Developed by an eye care professional for accurate results.",
 };
 
 const softwareSchema = {
@@ -24,6 +24,7 @@ const softwareSchema = {
     "jobTitle": "Optometrist"
   },
   "featureList": [
+    "IPD Measuring Tool",
     "Vertex Distance Calculator",
     "Spherocylindrical Transposition",
     "LARS Rule for Toric Lenses",
