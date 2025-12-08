@@ -698,8 +698,8 @@ const IPDMeasurement: React.FC = () => {
   const { toast } = useToast();
   // State
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingText, setLoadingText] = useState('Initializing...');
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingText, setLoadingText] = useState('Requesting camera access...');
+  const [loadingProgress, setLoadingProgress] = useState(10);
   const [statusText, setStatusText] = useState('Initializing...');
   const [statusType, setStatusType] = useState<'success' | 'warning' | 'danger'>('warning');
   const [faceDetected, setFaceDetected] = useState(false);
@@ -729,17 +729,6 @@ const IPDMeasurement: React.FC = () => {
     confidence: number;
   }[]>([]);
   const [isCollectingCaptures, setIsCollectingCaptures] = useState(false);
-
-  // Metrics state
-  const [metrics, setMetrics] = useState<Metrics | null>(null);
-  const [currentMeasurement, setCurrentMeasurement] = useState<{
-    ipd: number;
-    leftPd: number;
-    rightPd: number;
-    accuracy: number;
-    samples: number;
-    confidence: number;
-  } | null>(null);
 
   // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -1487,7 +1476,7 @@ const IPDMeasurement: React.FC = () => {
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 12px -apple-system, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`\${metrics.ipd.toFixed(1)} mm`, midX, midY + 4);
+      ctx.fillText(`${metrics.ipd.toFixed(1)} mm`, midX, midY + 4);
     }
   }, [isMirrored]);
 
@@ -1538,7 +1527,7 @@ const IPDMeasurement: React.FC = () => {
       setIsPerfectCondition(isPerfect);
 
       if (isPerfect) {
-        setStatusText(`Capturing \${autoCaptureCount + 1}/\${AUTO_CAPTURE_TOTAL}...`);
+        setStatusText(`Capturing ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}...`);
         setStatusType('success');
       
         if (!autoCaptureTimerRef.current && ipdBufferRef.current.length >= 15) {
@@ -1655,93 +1644,85 @@ const IPDMeasurement: React.FC = () => {
    // Initialize
    useEffect(() => {
     let isCancelled = false;
-
+    injectStyles();
+    
     const init = async () => {
-      injectStyles();
-      
-      try {
-        setLoadingText('Requesting camera access...');
-        setLoadingProgress(10);
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: {
-                facingMode: facingMode,
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            } 
-        });
-        if (isCancelled) return stream.getTracks().forEach(t => t.stop());
-        setHasCameraPermission(true);
-
-        if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-        }
-        
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        if (!video || !canvas) return;
-
-        await new Promise<void>((resolve) => {
-          video.onloadedmetadata = () => {
-            if (canvasRef.current) {
-              canvasRef.current.width = video.videoWidth;
-              canvasRef.current.height = video.videoHeight;
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: {
+                    facingMode: facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            });
+            if (isCancelled) return stream.getTracks().forEach(t => t.stop());
+            
+            setHasCameraPermission(true);
+            setLoadingText('Loading AI Model...');
+            setLoadingProgress(25);
+            
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+                await new Promise<void>((resolve) => {
+                    videoRef.current!.onloadedmetadata = () => {
+                        if (canvasRef.current) {
+                            canvasRef.current.width = videoRef.current!.videoWidth;
+                            canvasRef.current.height = videoRef.current!.videoHeight;
+                        }
+                        resolve();
+                    };
+                });
+                await videoRef.current.play();
             }
-            resolve();
-          };
-        });
-        await video.play();
 
-        setLoadingText('Loading AI Model...');
-        setLoadingProgress(25);
-        
-        const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
-        const hasWebGPU = await checkWebGPUSupport();
-        setWebgpuSupported(hasWebGPU);
-        
-        setLoadingText('Preparing Model...');
-        setLoadingProgress(50);
-        
-        const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
-        faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
-          baseOptions: {
-            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-            delegate: hasWebGPU ? 'GPU' : 'CPU',
-          },
-          runningMode: 'VIDEO',
-          numFaces: 1,
-        });
+            const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+            const hasWebGPU = await checkWebGPUSupport();
+            setWebgpuSupported(hasWebGPU);
+            
+            setLoadingText('Preparing Model...');
+            setLoadingProgress(50);
+            
+            const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+            faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
+                baseOptions: {
+                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                    delegate: hasWebGPU ? 'GPU' : 'CPU',
+                },
+                runningMode: 'VIDEO',
+                numFaces: 1,
+            });
 
-        if (isCancelled) return;
-        setLoadingProgress(100);
-        setLoadingText('Ready!');
-        
-        setTimeout(() => {
-          if (isCancelled) return;
-          setIsLoading(false);
-          setCanCapture(true);
-          isDetectingRef.current = true;
-          detectFace();
-        }, 500);
+            if (isCancelled) return;
+            setLoadingProgress(100);
+            setLoadingText('Ready!');
+            
+            setTimeout(() => {
+              if (isCancelled) return;
+              setIsLoading(false);
+              setCanCapture(true);
+              isDetectingRef.current = true;
+              detectFace();
+            }, 500);
 
-      } catch (error) {
-        setHasCameraPermission(false);
-        setIsLoading(false);
-        return;
-      }
+        } catch (error) {
+            setHasCameraPermission(false);
+            setIsLoading(false);
+            return;
+        }
     };
 
     init();
 
     return () => {
-      isCancelled = true;
-      isDetectingRef.current = false;
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-      if (autoCaptureTimerRef.current) clearTimeout(autoCaptureTimerRef.current);
-      if (videoRef.current && videoRef.current.srcObject) {
-        (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
-      }
+        isCancelled = true;
+        isDetectingRef.current = false;
+        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+        if (autoCaptureTimerRef.current) clearTimeout(autoCaptureTimerRef.current);
+        if (videoRef.current && videoRef.current.srcObject) {
+            (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+        }
     };
-  }, [facingMode, checkWebGPUSupport, detectFace, toast]);
+  }, [facingMode, checkWebGPUSupport, detectFace]);
 
 
   // Handle manual capture
@@ -1760,7 +1741,8 @@ const IPDMeasurement: React.FC = () => {
       setCurrentMeasurement({
         ipd: metrics.ipd,
         leftPd: metrics.leftPd,
-        rightPd: metrics.accuracy,
+        rightPd: metrics.rightPd,
+        accuracy: metrics.accuracy,
         samples: 1,
         confidence: metrics.accuracy * 0.8
       });
@@ -1913,10 +1895,10 @@ const IPDMeasurement: React.FC = () => {
         ...styles.faceGuide,
         ...(isPerfectCondition ? styles.faceGuidePerfect : 
             faceDetected ? styles.faceGuideDetected : {}),
-        left: `\${faceBounds.x * scaleX}px`,
-        top: `\${faceBounds.y * scaleY}px`,
-        width: `\${faceBounds.width * scaleX}px`,
-        height: `\${faceBounds.height * scaleY}px`,
+        left: `${faceBounds.x * scaleX}px`,
+        top: `${faceBounds.y * scaleY}px`,
+        width: `${faceBounds.width * scaleX}px`,
+        height: `${faceBounds.height * scaleY}px`,
         transform: 'none',
         borderRadius: '50%',
       };
@@ -2109,8 +2091,8 @@ const IPDMeasurement: React.FC = () => {
                     <Timer size={18} />
                     <span>
                       {isAutoCapturing 
-                        ? `Capturing \${autoCaptureCount + 1}/\${AUTO_CAPTURE_TOTAL}...`
-                        : `Preparing capture \${autoCaptureCount + 1}/\${AUTO_CAPTURE_TOTAL}`
+                        ? `Capturing ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}...`
+                        : `Preparing capture ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}`
                       }
                     </span>
                   </div>
@@ -2137,7 +2119,7 @@ const IPDMeasurement: React.FC = () => {
                       >
                         {i === autoCaptureCount && isAutoCapturing && (
                           <div style={{
-                            width: `\${autoCaptureProgress}%`,
+                            width: `${autoCaptureProgress}%`,
                             height: '100%',
                             background: '#10b981',
                             transition: 'width 0.1s',
@@ -2241,7 +2223,7 @@ const IPDMeasurement: React.FC = () => {
               <div style={{
                 ...styles.progressFill,
                 width: metrics
-                  ? `\${Math.min(100, Math.max(0, 100 - Math.abs(metrics.distance - IDEAL_DISTANCE_CM) * 3))}%\`
+                  ? `${Math.min(100, Math.max(0, 100 - Math.abs(metrics.distance - IDEAL_DISTANCE_CM) * 3))}%`
                   : '0%',
                 background: metrics
                   ? getProgressColor(getMetricStatus(metrics.distance, 'distance').className)
@@ -2273,7 +2255,7 @@ const IPDMeasurement: React.FC = () => {
             <div style={styles.progressBar}>
               <div style={{
                 ...styles.progressFill,
-                width: metrics ? `\${metrics.lighting}%\` : '0%',
+                width: metrics ? `${metrics.lighting}%` : '0%',
                 background: metrics
                   ? getProgressColor(getMetricStatus(metrics.lighting, 'lighting').className)
                   : '#e5e7eb',
@@ -2312,7 +2294,7 @@ const IPDMeasurement: React.FC = () => {
                 />
               </svg>
               <div style={styles.accuracyValue}>
-                {metrics ? `\${metrics.accuracy}%\` : '--%'}
+                {metrics ? `${metrics.accuracy}%` : '--%'}
               </div>
             </div>
             {metrics && metrics.faceStability > 0 && (
@@ -2424,26 +2406,26 @@ const IPDMeasurement: React.FC = () => {
                 IPD (Interpupillary Distance)
               </span>
               <span style={{ ...styles.resultValue, fontSize: '20px', color: '#2563eb' }}>
-                {currentMeasurement ? `\${currentMeasurement.ipd.toFixed(1)} mm` : '-- mm'}
+                {currentMeasurement ? `${currentMeasurement.ipd.toFixed(1)} mm` : '-- mm'}
               </span>
             </div>
             <div style={styles.resultRow}>
               <span style={styles.resultLabel}>Left Pupil to Center</span>
               <span style={styles.resultValue}>
-                {currentMeasurement ? `\${currentMeasurement.leftPd.toFixed(1)} mm` : '-- mm'}
+                {currentMeasurement ? `${currentMeasurement.leftPd.toFixed(1)} mm` : '-- mm'}
               </span>
             </div>
             <div style={styles.resultRow}>
               <span style={styles.resultLabel}>Right Pupil to Center</span>
               <span style={styles.resultValue}>
-                {currentMeasurement ? `\${currentMeasurement.rightPd.toFixed(1)} mm` : '-- mm'}
+                {currentMeasurement ? `${currentMeasurement.rightPd.toFixed(1)} mm` : '-- mm'}
               </span>
             </div>
             <div style={styles.resultRow}>
               <span style={styles.resultLabel}>Measurement Confidence</span>
               <span style={getConfidenceBadgeStyle(currentMeasurement?.confidence || 0)}>
                 <Shield size={12} />
-                {currentMeasurement ? `\${currentMeasurement.confidence.toFixed(0)}%\` : '--%'}
+                {currentMeasurement ? `${currentMeasurement.confidence.toFixed(0)}%` : '--%'}
               </span>
             </div>
             {autoCaptureMeasurements.length === AUTO_CAPTURE_TOTAL && (
@@ -2488,5 +2470,3 @@ const IPDMeasurement: React.FC = () => {
 };
 
 export default IPDMeasurement;
-
-    
