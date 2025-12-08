@@ -1,4 +1,3 @@
-
 'use client';
 // IPDMeasurement.tsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -815,7 +814,6 @@ const IPDMeasurement: React.FC = () => {
   
       await video.play();
     } catch (error) {
-      console.error('Error switching camera:', error);
       // Fallback to original camera
       setFacingMode(facingMode);
       setIsMirrored(facingMode === 'user');
@@ -1958,7 +1956,7 @@ const IPDMeasurement: React.FC = () => {
     ...styles.canvas,
     transform: isMirrored ? 'scaleX(-1)' : 'none',
   });
-
+  
   return (
     <div style={styles.container}>
 
@@ -2027,7 +2025,7 @@ const IPDMeasurement: React.FC = () => {
 
               {/* WebGPU Badge */}
               <div style={{...styles.webgpuBadge, background: '#10b981'}}>
-                <FlaskConical size={12} />
+                <Zap size={12} />
                 Beta Testing
               </div>
               
