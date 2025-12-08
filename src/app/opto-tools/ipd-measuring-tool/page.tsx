@@ -24,6 +24,7 @@ import {
   Timer,
   Shield,
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // Types
 interface Landmark {
@@ -723,6 +724,7 @@ const injectStyles = () => {
 
 // Main Component
 const IPDMeasurement: React.FC = () => {
+  const { toast } = useToast();
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [loadingText, setLoadingText] = useState('Initializing AI Model...');
@@ -741,6 +743,8 @@ const IPDMeasurement: React.FC = () => {
   const [isAutoCapturing, setIsAutoCapturing] = useState(false);
   const [samplesCollected, setSamplesCollected] = useState(0);
   const [faceBounds, setFaceBounds] = useState<FaceBounds | null>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false);
+
 
   // Metrics state
   const [metrics, setMetrics] = useState<Metrics | null>(null);
@@ -774,6 +778,29 @@ const IPDMeasurement: React.FC = () => {
   // Auto-capture timer
   const autoCaptureTimerRef = useRef<NodeJS.Timeout | null>(null);
   const autoCaptureStartRef = useRef<number>(0);
+
+  useEffect(() => {
+    const getCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        setHasCameraPermission(true);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this app.',
+        });
+      }
+    };
+
+    getCameraPermission();
+  }, [toast]);
 
   // Check WebGPU support
   const checkWebGPUSupport = useCallback(async (): Promise<boolean> => {
@@ -1404,7 +1431,7 @@ const IPDMeasurement: React.FC = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    if (!video || !canvas) {
+    if (!video || !canvas || !hasCameraPermission) {
       animationFrameRef.current = requestAnimationFrame(detectFace);
       return;
     }
@@ -1549,74 +1576,58 @@ const IPDMeasurement: React.FC = () => {
     animationFrameRef.current = requestAnimationFrame(detectFace);
   }, [
     calculateMetrics, drawLandmarks, addSample,
-    checkPerfectConditions, calculateAveragedMeasurement
+    checkPerfectConditions, calculateAveragedMeasurement, hasCameraPermission
   ]);
 
   // Start camera
   const startCamera = useCallback(async () => {
-    setLoadingText('Starting Camera...');
-    setLoadingSubtext('Please allow camera permissions if prompted.');
-
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    if (!video || !canvas) return;
-
-    const constraints = {
-      video: {
-        facingMode: 'user',
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-        frameRate: { ideal: 30 }
-      },
-    };
-
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    video.srcObject = stream;
+    if (!video || !canvas || !hasCameraPermission) return;
 
     await new Promise<void>((resolve) => {
       video.onloadedmetadata = () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        if(canvasRef.current) {
+            canvasRef.current.width = video.videoWidth;
+            canvasRef.current.height = video.videoHeight;
+        }
         resolve();
       };
     });
 
     await video.play();
-  }, []);
+  }, [hasCameraPermission]);
 
   // Load model
   const loadModel = useCallback(async (hasWebGPU: boolean) => {
-      setLoadingText('Loading AI Model...');
-      setLoadingSubtext('This may take a moment on first load.');
-      
-      const modelUrl = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
-      
-      // Check if the model is likely cached by the browser
-      try {
-          const response = await fetch(modelUrl, { method: 'HEAD', cache: 'force-cache' });
-          if (response.status === 200) {
-              setLoadingSubtext('Model found in cache. Loading quickly!');
-          }
-      } catch (e) {
-        // If HEAD request fails, just proceed normally
-      }
-
-      const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
-      const filesetResolver = await FilesetResolver.forVisionTasks(
-        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-      );
-      
-      // Suppress console.error during model creation
       const originalConsoleError = console.error;
       console.error = () => {};
 
       try {
-        faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(
+        setLoadingText('Loading AI Model...');
+        
+        const response = await fetch('https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task', { cache: 'force-cache' });
+        if (response.ok) {
+            setLoadingSubtext('Model found in cache. Loading quickly!');
+        } else {
+            setLoadingSubtext('Downloading face detection model (first-time load)...');
+        }
+
+        const vision = await import('@mediapipe/tasks-vision');
+
+        setLoadingSubtext('Initializing face landmarker...');
+
+        const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
+
+        faceLandmarkerRef.current = await vision.FaceLandmarker.createFromOptions(
           filesetResolver,
           {
             baseOptions: {
-              modelAssetPath: modelUrl,
+              modelAssetPath:
+                'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
               delegate: hasWebGPU ? 'GPU' : 'CPU',
             },
             outputFaceBlendshapes: false,
@@ -1625,18 +1636,23 @@ const IPDMeasurement: React.FC = () => {
             numFaces: 1,
           }
         );
+        setLoadingText('Model Loaded!');
       } finally {
         console.error = originalConsoleError;
       }
-      setLoadingText('Model Loaded!');
     }, []);
 
   // Initialize
   useEffect(() => {
-    injectStyles();
     let isCancelled = false;
 
     const init = async () => {
+      if (!hasCameraPermission) {
+          setLoadingText('Waiting for Camera Permission...');
+          setLoadingSubtext('Please grant access to your camera to use this tool.');
+          return;
+      }
+      
       try {
         const hasWebGPU = await checkWebGPUSupport();
         if (isCancelled) return;
@@ -1645,6 +1661,8 @@ const IPDMeasurement: React.FC = () => {
         await loadModel(hasWebGPU);
         if (isCancelled) return;
         
+        setLoadingText('Starting camera...');
+        setLoadingSubtext('');
         await startCamera();
         if (isCancelled) return;
 
@@ -1684,7 +1702,7 @@ const IPDMeasurement: React.FC = () => {
         stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, [checkWebGPUSupport, loadModel, startCamera, detectFace]);
+  }, [checkWebGPUSupport, loadModel, startCamera, detectFace, hasCameraPermission]);
 
   // Handle manual capture
   const handleCapture = () => {
