@@ -20,6 +20,13 @@ export default function OptoToolsPage() {
       href: '/opto-tools/optometry-calculator',
       icon: <Calculator className="h-8 w-8 text-primary" />,
     },
+    {
+      id: 'ipd-measuring-tool',
+      title: 'IPD Measuring Tool',
+      description: 'Measure interpupillary distance with high precision using our AI-powered tool.',
+      href: '/opto-tools/ipd-measuring-tool',
+      icon: <ScanFace className="h-8 w-8 text-primary" />,
+    },
     // Add other tools here in the future
   ];
 
