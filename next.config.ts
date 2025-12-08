@@ -91,7 +91,6 @@ const nextConfig: NextConfig = {
         ...config.externals,
         /@genkit-ai\/.*/,
         /genkit/,
-        '@mediapipe/tasks-vision',
       ];
     }
 
@@ -100,5 +99,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-    
