@@ -28,4 +28,9 @@ export default function IPDToolPage() {
                         <Button asChild>
                             <Link href="/opto-tools">Back to Opto Tools</Link>
                         </Button>
-                    </Card
+                    </CardContent>
+                </Card>
+            </main>
+        </div>
+    );
+}
