@@ -26,6 +26,8 @@ import {
   Shield,
   FlaskConical,
   Loader2,
+  SwitchCamera,
+  User
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
@@ -61,6 +63,7 @@ interface HistoryItem {
   accuracy: number;
   timestamp: string;
   samples: number;
+  captures?: number;
 }
 
 interface FaceLandmarkerType {
@@ -128,6 +131,8 @@ const SAMPLES_FOR_CAPTURE = 30;
 const EYE_ASPECT_RATIO_THRESHOLD = 0.2;
 const FACE_ANGLE_THRESHOLD = 8;
 const STABILITY_HISTORY_LENGTH = 20;
+
+const AUTO_CAPTURE_TOTAL = 3;
 
 // Kalman filter factory
 const createKalmanFilter = (initialValue: number = 0): KalmanFilter => {
@@ -711,7 +716,20 @@ const IPDMeasurement: React.FC = () => {
   const [samplesCollected, setSamplesCollected] = useState(0);
   const [faceBounds, setFaceBounds] = useState<FaceBounds | null>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [isMirrored, setIsMirrored] = useState(true);
 
+  // Auto-capture 3x averaging
+  const [autoCaptureCount, setAutoCaptureCount] = useState(0);
+  const [autoCaptureMeasurements, setAutoCaptureMeasurements] = useState<{
+    ipd: number;
+    leftPd: number;
+    rightPd: number;
+    accuracy: number;
+    samples: number;
+    confidence: number;
+  }[]>([]);
+  const [isCollectingCaptures, setIsCollectingCaptures] = useState(false);
 
   // Metrics state
   const [metrics, setMetrics] = useState<Metrics | null>(null);
@@ -746,6 +764,90 @@ const IPDMeasurement: React.FC = () => {
   const autoCaptureTimerRef = useRef<NodeJS.Timeout | null>(null);
   const autoCaptureStartRef = useRef<number>(0);
 
+  const switchCamera = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video) return;
+  
+    // Stop current stream
+    const currentStream = video.srcObject as MediaStream;
+    if (currentStream) {
+      currentStream.getTracks().forEach(track => track.stop());
+    }
+  
+    // Toggle facing mode
+    const newFacingMode = facingMode === 'user' ? 'environment' : 'user';
+    setFacingMode(newFacingMode);
+    setIsMirrored(newFacingMode === 'user');
+  
+    // Clear buffers
+    ipdBufferRef.current = [];
+    leftPdBufferRef.current = [];
+    rightPdBufferRef.current = [];
+    stabilityBufferRef.current = [];
+    setSamplesCollected(0);
+  
+    // Reset auto-capture state
+    setAutoCaptureCount(0);
+    setAutoCaptureMeasurements([]);
+    setIsCollectingCaptures(false);
+  
+    try {
+      const constraints = {
+        video: {
+          facingMode: newFacingMode,
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          frameRate: { ideal: 30 }
+        },
+      };
+  
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+  
+      await new Promise<void>((resolve) => {
+        video.onloadedmetadata = () => {
+          if (canvasRef.current) {
+            canvasRef.current.width = video.videoWidth;
+            canvasRef.current.height = video.videoHeight;
+          }
+          resolve();
+        };
+      });
+  
+      await video.play();
+    } catch (error) {
+      console.error('Error switching camera:', error);
+      // Fallback to original camera
+      setFacingMode(facingMode);
+      setIsMirrored(facingMode === 'user');
+    }
+  }, [facingMode]);
+
+  const calculateEARCorrected = useCallback((
+    landmarks: Landmark[],
+    vertical: { top: number; bottom: number },
+    horizontal: { left: number; right: number },
+    canvasWidth: number,
+    canvasHeight: number
+  ): number => {
+    const top = landmarks[vertical.top];
+    const bottom = landmarks[vertical.bottom];
+    const left = landmarks[horizontal.left];
+    const right = landmarks[horizontal.right];
+  
+    const verticalDist = Math.sqrt(
+      Math.pow((top.x - bottom.x) * canvasWidth, 2) +
+      Math.pow((top.y - bottom.y) * canvasHeight, 2)
+    );
+  
+    const horizontalDist = Math.sqrt(
+      Math.pow((left.x - right.x) * canvasWidth, 2) +
+      Math.pow((left.y - right.y) * canvasHeight, 2)
+    );
+  
+    return verticalDist / (horizontalDist + 0.0001);
+  }, []);
+
   // Check WebGPU support
   const checkWebGPUSupport = useCallback(async (): Promise<boolean> => {
     if ('gpu' in navigator) {
@@ -758,37 +860,6 @@ const IPDMeasurement: React.FC = () => {
       }
     }
     return false;
-  }, []);
-
-  // Calculate Eye Aspect Ratio for blink detection
-  const calculateEAR = useCallback((
-    landmarks: Landmark[],
-    eye: 'left' | 'right',
-    canvasWidth: number,
-    canvasHeight: number
-  ): number => {
-    const vertical = eye === 'left' ? LEFT_EYE_VERTICAL : RIGHT_EYE_VERTICAL;
-    const horizontal = eye === 'left' ? LEFT_EYE_HORIZONTAL : RIGHT_EYE_HORIZONTAL;
-
-    const top = landmarks[vertical.top];
-    const bottom = landmarks[vertical.bottom];
-    const left = landmarks[horizontal.left];
-    const right = landmarks[horizontal.right];
-
-    // Vertical distance
-    const verticalDist = Math.sqrt(
-      Math.pow((top.x - bottom.x) * canvasWidth, 2) +
-      Math.pow((top.y - bottom.y) * canvasHeight, 2)
-    );
-
-    // Horizontal distance
-    const horizontalDist = Math.sqrt(
-      Math.pow((left.x - right.x) * canvasWidth, 2) +
-      Math.pow((left.y - right.y) * canvasHeight, 2)
-    );
-
-    // EAR = vertical / horizontal
-    return verticalDist / (horizontalDist + 0.0001);
   }, []);
 
   // Calculate iris radius with sub-pixel accuracy
@@ -1078,37 +1149,62 @@ const IPDMeasurement: React.FC = () => {
         faceStability: 0, faceCentered: false
       };
     }
-
+  
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
-
-    // Calculate Eye Aspect Ratio for both eyes
-    const leftEAR = calculateEAR(landmarks, 'left', canvasWidth, canvasHeight);
-    const rightEAR = calculateEAR(landmarks, 'right', canvasWidth, canvasHeight);
-    
+  
+    // Helper to get corrected X coordinate based on mirror mode
+    const getCorrectedX = (x: number): number => {
+      return isMirrored ? (1 - x) : x;
+    };
+  
+    // For mirrored mode, swap left and right eye detection
+    // In selfie mode (mirrored), the camera sees your left eye on its right side
+    // So we need to swap which landmarks we use for "left" and "right"
+    const actualLeftEyeVertical = isMirrored ? RIGHT_EYE_VERTICAL : LEFT_EYE_VERTICAL;
+    const actualRightEyeVertical = isMirrored ? LEFT_EYE_VERTICAL : RIGHT_EYE_VERTICAL;
+    const actualLeftEyeHorizontal = isMirrored ? RIGHT_EYE_HORIZONTAL : LEFT_EYE_HORIZONTAL;
+    const actualRightEyeHorizontal = isMirrored ? LEFT_EYE_HORIZONTAL : RIGHT_EYE_HORIZONTAL;
+  
+    // Calculate Eye Aspect Ratio for both eyes (with corrected sides)
+    const leftEAR = calculateEARCorrected(
+      landmarks,
+      actualLeftEyeVertical,
+      actualLeftEyeHorizontal,
+      canvasWidth,
+      canvasHeight
+    );
+    const rightEAR = calculateEARCorrected(
+      landmarks,
+      actualRightEyeVertical,
+      actualRightEyeHorizontal,
+      canvasWidth,
+      canvasHeight
+    );
+  
     const isLeftEyeOpen = leftEAR > EYE_ASPECT_RATIO_THRESHOLD;
     const isRightEyeOpen = rightEAR > EYE_ASPECT_RATIO_THRESHOLD;
-
-    // Get iris positions
+  
+    // Get iris positions (use actual positions, IPD calculation is symmetric)
     const leftIris = landmarks[LEFT_IRIS_CENTER];
     const rightIris = landmarks[RIGHT_IRIS_CENTER];
-
-    // Calculate pixel distance between irises
+  
+    // Calculate pixel distance between irises (distance is same regardless of mirror)
     const dx = (rightIris.x - leftIris.x) * canvasWidth;
     const dy = (rightIris.y - leftIris.y) * canvasHeight;
     const pixelDistance = Math.sqrt(dx * dx + dy * dy);
-
+  
     // Calculate average iris radius with both eyes
     const leftRadius = calculateIrisRadius(landmarks, 'left', canvasWidth, canvasHeight);
     const rightRadius = calculateIrisRadius(landmarks, 'right', canvasWidth, canvasHeight);
     const avgIrisRadiusPx = (leftRadius + rightRadius) / 2;
     const irisDiameterPx = avgIrisRadiusPx * 2;
-
+  
     // Calculate face width for additional reference
     const faceLeftPx = landmarks[FACE_WIDTH_LEFT].x * canvasWidth;
     const faceRightPx = landmarks[FACE_WIDTH_RIGHT].x * canvasWidth;
     const faceWidthPx = Math.abs(faceRightPx - faceLeftPx);
-
+  
     // Use multiple references for better accuracy
     // Method 1: Iris-based
     const mmPerPixelIris = AVERAGE_IRIS_DIAMETER_MM / irisDiameterPx;
@@ -1118,63 +1214,59 @@ const IPDMeasurement: React.FC = () => {
     
     // Weighted average (favor iris as it's more consistent)
     const mmPerPixel = mmPerPixelIris * 0.7 + mmPerPixelFace * 0.3;
-
+  
     // Calculate raw IPD
     let rawIpd = pixelDistance * mmPerPixel;
     
     // Apply Kalman filter for smooth, stable readings
     const filteredIpd = ipdKalmanRef.current.update(rawIpd);
-
+  
     // Calculate distance from camera
     const focalLengthPx = canvasWidth * 0.85;
     let rawDistance = (AVERAGE_IRIS_DIAMETER_MM * focalLengthPx) / (irisDiameterPx * 10);
     const filteredDistance = distanceKalmanRef.current.update(rawDistance);
-
-    // Calculate monocular PD
+  
+    // Calculate monocular PD (adjusting for mirror)
     const noseBridge = landmarks[NOSE_BRIDGE];
-    const leftPd = Math.abs(leftIris.x - noseBridge.x) * canvasWidth * mmPerPixel;
-    const rightPd = Math.abs(rightIris.x - noseBridge.x) * canvasWidth * mmPerPixel;
-
+    const leftPd = Math.abs(getCorrectedX(leftIris.x) - getCorrectedX(noseBridge.x)) * canvasWidth * mmPerPixel;
+    const rightPd = Math.abs(getCorrectedX(rightIris.x) - getCorrectedX(noseBridge.x)) * canvasWidth * mmPerPixel;
+  
     // Calculate face angle
     const faceAngle = calculateFaceAngle(landmarks, canvasWidth, canvasHeight);
-
+  
     // Calculate stability
     const stability = calculateStability(landmarks, canvasWidth, canvasHeight);
-
+  
     // Check if face is centered
     const centered = isFaceCentered(landmarks, canvasWidth, canvasHeight);
-
+  
     // Analyze lighting
     const lighting = analyzeLighting();
-
+  
     // Calculate final accuracy
     const accuracy = calculateAccuracy(
       filteredDistance, lighting, landmarks, faceAngle,
       stability, isLeftEyeOpen, isRightEyeOpen
     );
-
+  
     // Update face bounds
     const bounds = calculateFaceBounds(landmarks, canvasWidth, canvasHeight);
     setFaceBounds(bounds);
-
+  
     return {
       ipd: filteredIpd,
-      leftPd,
-      rightPd,
+      leftPd,  // This is now the actual LEFT PD from user's perspective
+      rightPd, // This is now the actual RIGHT PD from user's perspective
       distance: filteredDistance,
       lighting,
       accuracy,
       faceAngle,
-      leftEyeOpen: isLeftEyeOpen,
-      rightEyeOpen: isRightEyeOpen,
+      leftEyeOpen: isLeftEyeOpen,  // Correctly reflects user's left eye
+      rightEyeOpen: isRightEyeOpen, // Correctly reflects user's right eye
       faceStability: stability,
       faceCentered: centered
     };
-  }, [
-    calculateEAR, calculateIrisRadius, calculateFaceAngle,
-    calculateStability, isFaceCentered, analyzeLighting,
-    calculateAccuracy, calculateFaceBounds
-  ]);
+  }, [isMirrored, calculateEARCorrected, calculateIrisRadius, calculateFaceAngle, calculateStability, isFaceCentered, analyzeLighting, calculateAccuracy, calculateFaceBounds]);
 
   // Add sample to buffer for averaging
   const addSample = useCallback((metrics: Metrics) => {
@@ -1242,6 +1334,72 @@ const IPDMeasurement: React.FC = () => {
     };
   }, []);
 
+  const calculateFinalAverage = useCallback((
+    measurements: {
+      ipd: number;
+      leftPd: number;
+      rightPd: number;
+      accuracy: number;
+      samples: number;
+      confidence: number;
+    }[]
+  ): {
+    ipd: number;
+    leftPd: number;
+    rightPd: number;
+    accuracy: number;
+    samples: number;
+    confidence: number;
+  } => {
+    if (measurements.length === 0) {
+      return { ipd: 0, leftPd: 0, rightPd: 0, accuracy: 0, samples: 0, confidence: 0 };
+    }
+  
+    // Sort IPD values to find median
+    const sortedByIpd = [...measurements].sort((a, b) => a.ipd - b.ipd);
+    
+    // Use median for IPD (most robust to outliers with 3 values)
+    const medianIndex = Math.floor(sortedByIpd.length / 2);
+    const medianIpd = sortedByIpd[medianIndex].ipd;
+  
+    // Calculate weighted average based on confidence
+    let totalWeight = 0;
+    let weightedIpd = 0;
+    let weightedLeftPd = 0;
+    let weightedRightPd = 0;
+    let totalSamples = 0;
+    let avgConfidence = 0;
+    let avgAccuracy = 0;
+  
+    measurements.forEach(m => {
+      const weight = m.confidence / 100;
+      totalWeight += weight;
+      weightedIpd += m.ipd * weight;
+      weightedLeftPd += m.leftPd * weight;
+      weightedRightPd += m.rightPd * weight;
+      totalSamples += m.samples;
+      avgConfidence += m.confidence;
+      avgAccuracy += m.accuracy;
+    });
+  
+    // Blend median and weighted average (median is more robust)
+    const blendedIpd = (medianIpd * 0.4) + ((weightedIpd / totalWeight) * 0.6);
+  
+    // Calculate consistency bonus
+    const ipdValues = measurements.map(m => m.ipd);
+    const ipdRange = Math.max(...ipdValues) - Math.min(...ipdValues);
+    const consistencyBonus = ipdRange < 1 ? 5 : (ipdRange < 2 ? 2 : 0);
+  
+    return {
+      ipd: blendedIpd,
+      leftPd: weightedLeftPd / totalWeight,
+      rightPd: weightedRightPd / totalWeight,
+      accuracy: Math.min(100, (avgAccuracy / measurements.length) + consistencyBonus),
+      samples: totalSamples,
+      confidence: Math.min(100, (avgConfidence / measurements.length) + consistencyBonus)
+    };
+  }, []);
+
   // Check if conditions are perfect for auto-capture
   const checkPerfectConditions = useCallback((metrics: Metrics): boolean => {
     return (
@@ -1262,111 +1420,78 @@ const IPDMeasurement: React.FC = () => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
-
+  
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw all landmarks as small dots
+  
+    const getDisplayX = (x: number): number => {
+      return x * canvas.width;
+    };
+  
     ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
     landmarks.forEach((point) => {
-      const x = point.x * canvas.width;
+      const x = getDisplayX(point.x);
       const y = point.y * canvas.height;
       ctx.beginPath();
       ctx.arc(x, y, 1, 0, Math.PI * 2);
       ctx.fill();
     });
-
-    // Highlight iris centers
-    const leftIris = landmarks[LEFT_IRIS_CENTER];
-    const rightIris = landmarks[RIGHT_IRIS_CENTER];
-
-    if (leftIris && rightIris) {
-      // Draw irises with different colors based on eye open status
-      const leftColor = metrics.leftEyeOpen ? '#3b82f6' : '#ef4444';
-      const rightColor = metrics.rightEyeOpen ? '#3b82f6' : '#ef4444';
-
-      // Left iris
-      ctx.fillStyle = leftColor;
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(leftIris.x * canvas.width, leftIris.y * canvas.height, 8, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      // Right iris
-      ctx.fillStyle = rightColor;
-      ctx.beginPath();
-      ctx.arc(rightIris.x * canvas.width, rightIris.y * canvas.height, 8, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      // Draw IPD line if both eyes are open
-      if (metrics.leftEyeOpen && metrics.rightEyeOpen) {
-        ctx.strokeStyle = '#3b82f6';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.moveTo(leftIris.x * canvas.width, leftIris.y * canvas.height);
-        ctx.lineTo(rightIris.x * canvas.width, rightIris.y * canvas.height);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Draw IPD value label
-        const midX = (leftIris.x + rightIris.x) * canvas.width / 2;
-        const midY = (leftIris.y + rightIris.y) * canvas.height / 2 - 20;
-        
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.roundRect(midX - 35, midY - 12, 70, 24, 12);
-        ctx.fill();
-        
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 12px -apple-system, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${metrics.ipd.toFixed(1)} mm`, midX, midY + 4);
-      }
-
-      // Draw iris circles
-      const leftIrisRadius = calculateIrisRadius(landmarks, 'left', canvas.width, canvas.height);
-      const rightIrisRadius = calculateIrisRadius(landmarks, 'right', canvas.width, canvas.height);
-
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.5)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(leftIris.x * canvas.width, leftIris.y * canvas.height, leftIrisRadius, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(rightIris.x * canvas.width, rightIris.y * canvas.height, rightIrisRadius, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    // Draw face contour
-    const contourColor = metrics.faceCentered ? 'rgba(16, 185, 129, 0.8)' : 'rgba(251, 146, 60, 0.6)';
-    ctx.strokeStyle = contourColor;
+  
+    const displayLeftIrisIndex = isMirrored ? RIGHT_IRIS_CENTER : LEFT_IRIS_CENTER;
+    const displayRightIrisIndex = isMirrored ? LEFT_IRIS_CENTER : RIGHT_IRIS_CENTER;
+  
+    const leftIrisDisplay = landmarks[displayLeftIrisIndex];
+    const rightIrisDisplay = landmarks[displayRightIrisIndex];
+  
+    const leftColor = metrics.leftEyeOpen ? '#3b82f6' : '#ef4444';
+    const rightColor = metrics.rightEyeOpen ? '#3b82f6' : '#ef4444';
+  
+    ctx.fillStyle = leftColor;
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2;
-
     ctx.beginPath();
-    FACE_CONTOUR.forEach((index, i) => {
-      const point = landmarks[index];
-      const x = point.x * canvas.width;
-      const y = point.y * canvas.height;
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    });
-    ctx.closePath();
-    ctx.stroke();
-
-    // Draw center reference point
-    const noseTip = landmarks[NOSE_TIP];
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.beginPath();
-    ctx.arc(noseTip.x * canvas.width, noseTip.y * canvas.height, 4, 0, Math.PI * 2);
+    ctx.arc(getDisplayX(leftIrisDisplay.x), leftIrisDisplay.y * canvas.height, 8, 0, Math.PI * 2);
     ctx.fill();
-
-  }, [calculateIrisRadius]);
+    ctx.stroke();
+  
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 10px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('L', getDisplayX(leftIrisDisplay.x), leftIrisDisplay.y * canvas.height - 15);
+  
+    ctx.fillStyle = rightColor;
+    ctx.strokeStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(getDisplayX(rightIrisDisplay.x), rightIrisDisplay.y * canvas.height, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('R', getDisplayX(rightIrisDisplay.x), rightIrisDisplay.y * canvas.height - 15);
+  
+    if (metrics.leftEyeOpen && metrics.rightEyeOpen) {
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(getDisplayX(leftIrisDisplay.x), leftIrisDisplay.y * canvas.height);
+      ctx.lineTo(getDisplayX(rightIrisDisplay.x), rightIrisDisplay.y * canvas.height);
+      ctx.stroke();
+      ctx.setLineDash([]);
+  
+      const midX = (getDisplayX(leftIrisDisplay.x) + getDisplayX(rightIrisDisplay.x)) / 2;
+      const midY = (leftIrisDisplay.y + rightIrisDisplay.y) * canvas.height / 2 - 25;
+  
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.beginPath();
+      ctx.roundRect(midX - 35, midY - 12, 70, 24, 12);
+      ctx.fill();
+  
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 12px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${metrics.ipd.toFixed(1)} mm`, midX, midY + 4);
+    }
+  }, [isMirrored]);
 
   // Detection loop
   const detectFace = useCallback(() => {
@@ -1387,18 +1512,15 @@ const IPDMeasurement: React.FC = () => {
 
       const calculatedMetrics = calculateMetrics(landmarks);
       
-      // Update eye status
       setLeftEyeOpen(calculatedMetrics.leftEyeOpen);
       setRightEyeOpen(calculatedMetrics.rightEyeOpen);
 
-      // Check if eyes are closed
       if (!calculatedMetrics.leftEyeOpen || !calculatedMetrics.rightEyeOpen) {
         setStatusText('Eyes Closed - Open Both Eyes');
         setStatusType('warning');
         setFaceDetected(true);
         setIsPerfectCondition(false);
         
-        // Cancel auto-capture if in progress
         if (autoCaptureTimerRef.current) {
           clearTimeout(autoCaptureTimerRef.current);
           autoCaptureTimerRef.current = null;
@@ -1412,42 +1534,55 @@ const IPDMeasurement: React.FC = () => {
         return;
       }
 
-      // Add sample for averaging
       addSample(calculatedMetrics);
 
-      // Check for perfect conditions
       const isPerfect = checkPerfectConditions(calculatedMetrics);
       setIsPerfectCondition(isPerfect);
 
       if (isPerfect) {
-        setStatusText('Perfect! Hold Still...');
+        setStatusText(`Capturing ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}...`);
         setStatusType('success');
-        
-        // Start auto-capture countdown if not already started
+      
         if (!autoCaptureTimerRef.current && ipdBufferRef.current.length >= 15) {
           autoCaptureStartRef.current = Date.now();
           setIsAutoCapturing(true);
-          
+          setIsCollectingCaptures(true);
+      
           autoCaptureTimerRef.current = setTimeout(() => {
-            // Perform auto-capture
             const measurement = calculateAveragedMeasurement();
+            
             if (measurement) {
-              setCurrentMeasurement(measurement);
-              setShowModal(true);
+              const newMeasurements = [...autoCaptureMeasurements, measurement];
+              setAutoCaptureMeasurements(newMeasurements);
+              setAutoCaptureCount(prev => prev + 1);
+      
+              if (newMeasurements.length >= AUTO_CAPTURE_TOTAL) {
+                const finalMeasurement = calculateFinalAverage(newMeasurements);
+                setCurrentMeasurement(finalMeasurement);
+                setShowModal(true);
+                
+                setAutoCaptureCount(0);
+                setAutoCaptureMeasurements([]);
+                setIsCollectingCaptures(false);
+              } else {
+                ipdBufferRef.current = [];
+                leftPdBufferRef.current = [];
+                rightPdBufferRef.current = [];
+                setSamplesCollected(0);
+              }
             }
+      
             setIsAutoCapturing(false);
             setAutoCaptureProgress(0);
             autoCaptureTimerRef.current = null;
           }, AUTO_CAPTURE_DELAY_MS);
         }
-        
-        // Update progress
+      
         if (isAutoCapturing) {
           const elapsed = Date.now() - autoCaptureStartRef.current;
           setAutoCaptureProgress(Math.min(100, (elapsed / AUTO_CAPTURE_DELAY_MS) * 100));
         }
       } else {
-        // Cancel auto-capture if conditions change
         if (autoCaptureTimerRef.current) {
           clearTimeout(autoCaptureTimerRef.current);
           autoCaptureTimerRef.current = null;
@@ -1455,7 +1590,6 @@ const IPDMeasurement: React.FC = () => {
           setAutoCaptureProgress(0);
         }
         
-        // Set appropriate status message
         if (!calculatedMetrics.faceCentered) {
           setStatusText('Center Your Face');
           setStatusType('warning');
@@ -1495,13 +1629,11 @@ const IPDMeasurement: React.FC = () => {
       setRightEyeOpen(true);
       setSamplesCollected(0);
       
-      // Clear buffers
       ipdBufferRef.current = [];
       leftPdBufferRef.current = [];
       rightPdBufferRef.current = [];
       stabilityBufferRef.current = [];
       
-      // Cancel auto-capture
       if (autoCaptureTimerRef.current) {
         clearTimeout(autoCaptureTimerRef.current);
         autoCaptureTimerRef.current = null;
@@ -1517,52 +1649,47 @@ const IPDMeasurement: React.FC = () => {
 
     animationFrameRef.current = requestAnimationFrame(detectFace);
   }, [
-    calculateMetrics, drawLandmarks, addSample,
-    checkPerfectConditions, calculateAveragedMeasurement, hasCameraPermission
+    calculateMetrics, drawLandmarks, addSample, hasCameraPermission,
+    checkPerfectConditions, calculateAveragedMeasurement, calculateFinalAverage,
+    isAutoCapturing, autoCaptureCount, autoCaptureMeasurements
   ]);
 
    // Initialize
-  useEffect(() => {
+   useEffect(() => {
     let isCancelled = false;
-    let stream: MediaStream | null = null;
 
     const init = async () => {
       injectStyles();
-      setLoadingText('Requesting camera access...');
+      setLoadingText('Initializing...');
       setLoadingProgress(10);
       
-      // 1. Get Camera Permission First
       try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (isCancelled) {
-          stream.getTracks().forEach(track => track.stop());
-          return;
-        }
+        setLoadingText('Requesting camera access...');
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: {
+                facingMode: facingMode,
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            } 
+        });
+        if (isCancelled) return stream.getTracks().forEach(t => t.stop());
         setHasCameraPermission(true);
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (error) {
-        setHasCameraPermission(false);
-        setIsLoading(false); // Stop loading to show error
-        return;
-      }
-      
-      // If permission is granted, proceed with model loading
-      setLoadingText('Loading AI Model...');
-      setLoadingProgress(25);
-      
-      const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
-      const hasWebGPU = await checkWebGPUSupport();
-      setWebgpuSupported(hasWebGPU);
-      
-      setLoadingText('Preparing Model...');
-      setLoadingProgress(50);
 
-      try {
-        const filesetResolver = await FilesetResolver.forVisionTasks(
-          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-        );
+        if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+        }
+
+        setLoadingText('Loading AI Model...');
+        setLoadingProgress(25);
+        
+        const { FaceLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision');
+        const hasWebGPU = await checkWebGPUSupport();
+        setWebgpuSupported(hasWebGPU);
+        
+        setLoadingText('Preparing Model...');
+        setLoadingProgress(50);
+        
+        const filesetResolver = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
         faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(filesetResolver, {
           baseOptions: {
             modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
@@ -1571,42 +1698,43 @@ const IPDMeasurement: React.FC = () => {
           runningMode: 'VIDEO',
           numFaces: 1,
         });
-      } catch (e) {
-        setIsLoading(false); // Stop loading on error
-        toast({ variant: 'destructive', title: 'Model Error', description: 'Could not load the AI model.' });
+
+        if (isCancelled) return;
+        setLoadingText('Starting camera...');
+        setLoadingProgress(85);
+
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        if (!video || !canvas) return;
+
+        await new Promise<void>((resolve) => {
+          video.onloadedmetadata = () => {
+            if (canvasRef.current) {
+              canvasRef.current.width = video.videoWidth;
+              canvasRef.current.height = video.videoHeight;
+            }
+            resolve();
+          };
+        });
+        await video.play();
+
+        if (isCancelled) return;
+        setLoadingProgress(100);
+        setLoadingText('Ready!');
+        
+        setTimeout(() => {
+          if (isCancelled) return;
+          setIsLoading(false);
+          setCanCapture(true);
+          isDetectingRef.current = true;
+          detectFace();
+        }, 500);
+
+      } catch (error) {
+        setHasCameraPermission(false);
+        setIsLoading(false);
         return;
       }
-
-      if (isCancelled) return;
-      setLoadingText('Starting camera...');
-      setLoadingProgress(85);
-
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-      if (!video || !canvas) return;
-
-      await new Promise<void>((resolve) => {
-        video.onloadedmetadata = () => {
-          if (canvasRef.current) {
-            canvasRef.current.width = video.videoWidth;
-            canvasRef.current.height = video.videoHeight;
-          }
-          resolve();
-        };
-      });
-      await video.play();
-
-      if (isCancelled) return;
-      setLoadingProgress(100);
-      setLoadingText('Ready!');
-      
-      setTimeout(() => {
-        if (isCancelled) return;
-        setIsLoading(false);
-        setCanCapture(true);
-        isDetectingRef.current = true;
-        detectFace();
-      }, 500);
     };
 
     init();
@@ -1616,10 +1744,11 @@ const IPDMeasurement: React.FC = () => {
       isDetectingRef.current = false;
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
       if (autoCaptureTimerRef.current) clearTimeout(autoCaptureTimerRef.current);
-      stream?.getTracks().forEach(track => track.stop());
-      if (videoRef.current) videoRef.current.srcObject = null;
+      if (videoRef.current && videoRef.current.srcObject) {
+        (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+      }
     };
-  }, [checkWebGPUSupport, detectFace, toast]);
+  }, [facingMode, checkWebGPUSupport, detectFace, toast]);
 
 
   // Handle manual capture
@@ -1649,6 +1778,17 @@ const IPDMeasurement: React.FC = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setAutoCaptureCount(0);
+    setAutoCaptureMeasurements([]);
+    setIsCollectingCaptures(false);
+    ipdBufferRef.current = [];
+    leftPdBufferRef.current = [];
+    rightPdBufferRef.current = [];
+    setSamplesCollected(0);
+  };
+
   // Handle save result
   const handleSaveResult = () => {
     if (currentMeasurement) {
@@ -1656,20 +1796,15 @@ const IPDMeasurement: React.FC = () => {
         ipd: currentMeasurement.ipd.toFixed(1),
         accuracy: currentMeasurement.accuracy,
         timestamp: new Date().toLocaleString(),
-        samples: currentMeasurement.samples
+        samples: currentMeasurement.samples,
+        captures: AUTO_CAPTURE_TOTAL
       };
 
       const newHistory = [historyItem, ...history].slice(0, 10);
       setHistory(newHistory);
       localStorage.setItem('ipdHistory', JSON.stringify(newHistory));
-      
-      // Clear buffers after saving
-      ipdBufferRef.current = [];
-      leftPdBufferRef.current = [];
-      rightPdBufferRef.current = [];
-      setSamplesCollected(0);
     }
-    setShowModal(false);
+    handleCloseModal();
   };
 
   // Handle clear history
@@ -1815,6 +1950,16 @@ const IPDMeasurement: React.FC = () => {
     return { ...styles.confidenceBadge, background: '#fee2e2', color: '#991b1b' };
   };
 
+  const getVideoStyle = (): React.CSSProperties => ({
+    ...styles.video,
+    transform: isMirrored ? 'scaleX(-1)' : 'none',
+  });
+  
+  const getCanvasStyle = (): React.CSSProperties => ({
+    ...styles.canvas,
+    transform: isMirrored ? 'scaleX(-1)' : 'none',
+  });
+
   return (
     <div style={styles.container}>
 
@@ -1852,8 +1997,8 @@ const IPDMeasurement: React.FC = () => {
             </div>
           ) : (
             <>
-              <video ref={videoRef} style={styles.video} playsInline autoPlay muted className={hasCameraPermission ? '' : 'hidden'} />
-              <canvas ref={canvasRef} style={styles.canvas} />
+              <video ref={videoRef} style={getVideoStyle()} playsInline autoPlay muted />
+              <canvas ref={canvasRef} style={getCanvasStyle()} />
 
               {/* Adaptive Face Guide */}
               <div style={getFaceGuideStyle()} className="face-guide-responsive" />
@@ -1886,26 +2031,145 @@ const IPDMeasurement: React.FC = () => {
                 <FlaskConical size={12} />
                 Beta Testing
               </div>
+              
+              <button
+                onClick={switchCamera}
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: webgpuSupported ? '100px' : '16px',
+                  background: 'rgba(0, 0, 0, 0.7)',
+                  backdropFilter: 'blur(8px)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '44px',
+                  height: '44px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 20,
+                  transition: 'transform 0.2s, background 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.85)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                <SwitchCamera size={20} color="#ffffff" />
+              </button>
 
-              {/* Auto-Capture Indicator */}
-              {isAutoCapturing && (
-                <div style={styles.autoCaptureIndicator}>
-                  <Timer size={18} />
-                  <span>Auto-capturing...</span>
-                  <svg width="24" height="24" style={{ transform: 'rotate(-90deg)' }}>
-                    <circle
-                      cx="12" cy="12" r="10"
-                      fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="3"
-                    />
-                    <circle
-                      cx="12" cy="12" r="10"
-                      fill="none" stroke="#ffffff" strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 10}
-                      strokeDashoffset={2 * Math.PI * 10 * (1 - autoCaptureProgress / 100)}
-                      style={{ transition: 'stroke-dashoffset 0.1s' }}
-                    />
-                  </svg>
+              <div style={{
+                position: 'absolute',
+                bottom: '100px',
+                right: '16px',
+                background: 'rgba(0, 0, 0, 0.7)',
+                backdropFilter: 'blur(8px)',
+                padding: '6px 12px',
+                borderRadius: '16px',
+                fontSize: '11px',
+                fontWeight: 500,
+                color: 'white',
+                zIndex: 20,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}>
+                {facingMode === 'user' ? (
+                  <>
+                    <User size={12} />
+                    Selfie
+                  </>
+                ) : (
+                  <>
+                    <Camera size={12} />
+                    Rear
+                  </>
+                )}
+              </div>
+
+              {(isAutoCapturing || isCollectingCaptures) && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: '100px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: 'rgba(59, 130, 246, 0.9)',
+                  backdropFilter: 'blur(8px)',
+                  padding: '12px 24px',
+                  borderRadius: '25px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: 'white',
+                  zIndex: 20,
+                  boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)',
+                  minWidth: '200px',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Timer size={18} />
+                    <span>
+                      {isAutoCapturing 
+                        ? `Capturing ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}...`
+                        : `Preparing capture ${autoCaptureCount + 1}/${AUTO_CAPTURE_TOTAL}`
+                      }
+                    </span>
+                  </div>
+                  
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {Array.from({ length: AUTO_CAPTURE_TOTAL }).map((_, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          width: i === autoCaptureCount && isAutoCapturing ? '24px' : '12px',
+                          height: '12px',
+                          borderRadius: '6px',
+                          background: i < autoCaptureCount 
+                            ? '#10b981' 
+                            : i === autoCaptureCount 
+                              ? 'white' 
+                              : 'rgba(255,255,255,0.3)',
+                          transition: 'all 0.3s',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {i === autoCaptureCount && isAutoCapturing && (
+                          <div style={{
+                            width: `${autoCaptureProgress}%`,
+                            height: '100%',
+                            background: '#10b981',
+                            transition: 'width 0.1s',
+                          }} />
+                        )}
+                        {i < autoCaptureCount && (
+                          <Check size={8} color="white" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {autoCaptureMeasurements.length > 0 && (
+                    <div style={{ 
+                      fontSize: '11px', 
+                      opacity: 0.9,
+                      display: 'flex',
+                      gap: '12px',
+                    }}>
+                      {autoCaptureMeasurements.map((m, i) => (
+                        <span key={i}>#{i + 1}: {m.ipd.toFixed(1)}mm</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1927,15 +2191,12 @@ const IPDMeasurement: React.FC = () => {
 
         {/* Metrics Panel */}
         <div style={styles.metricsPanel}>
-          {/* Warning if eyes closed */}
           {faceDetected && (!leftEyeOpen || !rightEyeOpen) && (
             <div style={styles.warningBanner}>
               <AlertCircle size={18} />
               <span>Please open both eyes for accurate measurement</span>
             </div>
           )}
-
-          {/* IPD Metric */}
           <div style={styles.metricCard}>
             <div style={styles.metricHeader}>
               <div style={{ ...styles.metricIcon, background: '#dbeafe' }}>
@@ -1957,7 +2218,6 @@ const IPDMeasurement: React.FC = () => {
                 <span>{getMetricStatus(metrics.ipd, 'ipd').text}</span>
               </div>
             )}
-            {/* Samples indicator */}
             <div style={styles.samplesIndicator}>
               <Shield size={12} />
               <span>Samples: {samplesCollected}/{SAMPLES_FOR_CAPTURE}</span>
@@ -1974,8 +2234,6 @@ const IPDMeasurement: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Distance Metric */}
           <div style={styles.metricCard}>
             <div style={styles.metricHeader}>
               <div style={{ ...styles.metricIcon, background: '#d1fae5' }}>
@@ -2009,8 +2267,6 @@ const IPDMeasurement: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* Lighting Metric */}
           <div style={styles.metricCard}>
             <div style={styles.metricHeader}>
               <div style={{ ...styles.metricIcon, background: '#fef3c7' }}>
@@ -2042,8 +2298,6 @@ const IPDMeasurement: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* Accuracy Metric */}
           <div style={styles.metricCard}>
             <div style={styles.metricHeader}>
               <div style={{ ...styles.metricIcon, background: '#ede9fe' }}>
@@ -2086,8 +2340,6 @@ const IPDMeasurement: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Instructions */}
       <div style={styles.instructions}>
         <h3 style={styles.instructionsTitle}>
           <Lightbulb size={16} color="#f59e0b" />
@@ -2120,8 +2372,6 @@ const IPDMeasurement: React.FC = () => {
           </li>
         </ul>
       </div>
-
-      {/* History Section */}
       <div style={styles.historySection}>
         <div style={styles.historyHeader}>
           <h3 style={styles.historyTitle}>
@@ -2155,15 +2405,13 @@ const IPDMeasurement: React.FC = () => {
           )}
         </div>
       </div>
-
-      {/* Results Modal */}
       <div
         style={{
           ...styles.modalOverlay,
           ...(showModal ? styles.modalOverlayShow : {}),
         }}
         onClick={(e) => {
-          if (e.target === e.currentTarget) setShowModal(false);
+          if (e.target === e.currentTarget) handleCloseModal();
         }}
       >
         <div style={{ ...styles.modal, ...(showModal ? styles.modalShow : {}) }}>
@@ -2174,11 +2422,10 @@ const IPDMeasurement: React.FC = () => {
             <h2 style={styles.modalTitle}>Measurement Complete</h2>
             {currentMeasurement && (
               <p style={styles.modalSubtitle}>
-                Based on {currentMeasurement.samples} samples
+                Average of {AUTO_CAPTURE_TOTAL} captures • {currentMeasurement.samples} total samples
               </p>
             )}
           </div>
-          
           <div style={styles.modalResults}>
             <div style={{ ...styles.resultRow, ...styles.resultRowHighlight }}>
               <span style={{ ...styles.resultLabel, fontWeight: 600 }}>
@@ -2207,8 +2454,27 @@ const IPDMeasurement: React.FC = () => {
                 {currentMeasurement ? `${currentMeasurement.confidence.toFixed(0)}%` : '--%'}
               </span>
             </div>
+            {autoCaptureMeasurements.length === AUTO_CAPTURE_TOTAL && (
+              <div style={{
+                ...styles.resultRow,
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                gap: '8px',
+              }}>
+                <span style={{ ...styles.resultLabel, marginBottom: '4px' }}>
+                  Individual Captures:
+                </span>
+                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                  {autoCaptureMeasurements.map((m, i) => (
+                    <div key={i} style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '11px', color: '#6b7280' }}>#{i + 1}</div>
+                      <div style={{ fontSize: '14px', fontWeight: 600 }}>{m.ipd.toFixed(1)}mm</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          
           <button
             style={{ ...styles.modalBtn, ...styles.modalBtnPrimary }}
             onClick={handleSaveResult}
@@ -2218,7 +2484,7 @@ const IPDMeasurement: React.FC = () => {
           </button>
           <button
             style={{ ...styles.modalBtn, ...styles.modalBtnSecondary }}
-            onClick={() => setShowModal(false)}
+            onClick={handleCloseModal}
           >
             <X size={18} />
             Close
