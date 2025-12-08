@@ -24,7 +24,6 @@ import {
   AlertCircle,
   Timer,
   Shield,
-  FlaskConical,
   Loader2,
   SwitchCamera,
   User
@@ -1483,8 +1482,9 @@ const IPDMeasurement: React.FC = () => {
   
       ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.beginPath();
-      ctx.roundRect(midX - 35, midY - 12, 70, 24, 12);
-      ctx.fill();
+      const rect = new Path2D();
+      rect.roundRect(midX - 35, midY - 12, 70, 24, 12);
+      ctx.fill(rect);
   
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 12px -apple-system, sans-serif';
@@ -1660,11 +1660,10 @@ const IPDMeasurement: React.FC = () => {
 
     const init = async () => {
       injectStyles();
-      setLoadingText('Initializing...');
-      setLoadingProgress(10);
       
       try {
         setLoadingText('Requesting camera access...');
+        setLoadingProgress(10);
         const stream = await navigator.mediaDevices.getUserMedia({ 
             video: {
                 facingMode: facingMode,
@@ -2496,4 +2495,3 @@ const IPDMeasurement: React.FC = () => {
 };
 
 export default IPDMeasurement;
-
