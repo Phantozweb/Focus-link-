@@ -3,8 +3,11 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Copy, MessageCircle, Twitter, Construction } from 'lucide-react';
+import { Check, Lightbulb, Rocket, ScanFace, Gauge, Video, Sparkles, Copy, MessageCircle, Twitter, Construction, UserCheck, Loader2, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback } from 'react';
+import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 
 const ipdToolSchema = {
     "@context": "https://schema.org",
@@ -35,6 +38,100 @@ const bestPractices = [
     "Maintain a distance of about 40cm (16 inches) from the screen."
 ];
 
+// Debounce function
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+function LaunchSection() {
+    const [membershipId, setMembershipId] = useState('');
+    const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+    const { toast } = useToast();
+    const router = useRouter();
+
+    const checkIdValidity = useCallback(debounce(async (id: string) => {
+        if (!id || id.trim().length < 5) {
+            setIdStatus('idle');
+            return;
+        }
+        setIdStatus('loading');
+        try {
+            const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
+            if (!response.ok) {
+                throw new Error('Verification request failed');
+            }
+            const data = await response.json();
+            if (data.isValid) {
+                setIdStatus('valid');
+            } else {
+                setIdStatus('invalid');
+                toast({
+                    variant: 'destructive',
+                    title: 'Invalid ID',
+                    description: 'This Membership ID is not valid or does not exist.',
+                });
+            }
+        } catch (error) {
+            console.error('ID validation failed:', error);
+            setIdStatus('invalid');
+            toast({
+                variant: 'destructive',
+                title: 'Verification Failed',
+                description: 'Could not verify ID at this time. Please try again later.',
+            });
+        }
+    }, 500), [toast]);
+
+    const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newId = e.target.value;
+        setMembershipId(newId);
+        checkIdValidity(newId);
+    };
+
+    const handleLaunch = () => {
+        if (idStatus === 'valid') {
+            router.push('/opto-tools/ipd-measuring-tool/launch');
+        } else {
+            toast({
+                variant: 'destructive',
+                title: 'Verification Required',
+                description: 'Please enter a valid Membership ID to launch the tool.',
+            });
+        }
+    };
+
+    return (
+        <div className="text-center">
+            <h2 className="text-3xl font-bold text-slate-800">Member Access</h2>
+            <p className="mt-2 text-lg text-slate-600">Please verify your membership ID to launch the tool.</p>
+            <div className="mt-6 max-w-md mx-auto space-y-4">
+                <div className="relative">
+                    <Input
+                        type="text"
+                        placeholder="Enter your Membership ID"
+                        className="h-14 text-center text-lg"
+                        value={membershipId}
+                        onChange={handleIdChange}
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+                        {idStatus === 'valid' && <Check className="h-5 w-5 text-green-500" />}
+                        {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                    </div>
+                </div>
+                <Button size="lg" className="w-full" onClick={handleLaunch} disabled={idStatus !== 'valid'}>
+                    <Rocket className="mr-2 h-5 w-5" />
+                    Launch IPD Tool
+                </Button>
+            </div>
+        </div>
+    );
+}
+
 export function IpdToolClientPage() {
   const { toast } = useToast();
   
@@ -56,21 +153,14 @@ export function IpdToolClientPage() {
         <header className="hero">
           <h1 className="text-3xl md:text-4xl font-extrabold mb-3">AI IPD Measuring Tool</h1>
           <p className="text-base opacity-90 max-w-xl mx-auto">
-            Get a precise pupillary distance measurement in seconds using your device's camera. Fast, free, and powered by AI.
+            Get a precise pupillary distance measurement in seconds using your device's camera. Fast, free, and exclusive for members.
           </p>
         </header>
 
         <main className="container mx-auto px-4 md:px-6 lg:px-8 py-16 space-y-16">
           <Card className="shadow-lg">
-            <CardContent className="p-8 md:p-12 text-center">
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold text-slate-800">Ready to Get Your Measurement?</h2>
-                <p className="mt-2 text-lg text-slate-600">Our tool uses advanced AI to analyze your camera feed in real-time and calculate your IPD with high accuracy. This feature is currently under development.</p>
-                <Button size="lg" className="mt-6" disabled>
-                  <Construction className="mr-2 h-5 w-5" />
-                  Coming Soon
-                </Button>
-              </div>
+            <CardContent className="p-8 md:p-12">
+              <LaunchSection />
             </CardContent>
           </Card>
 
