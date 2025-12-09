@@ -1,69 +1,46 @@
-
+// src/app/opto-tools/ipd-measuring-tool/launch/page.tsx
 'use client';
 
-import React, { useEffect, useRef, useCallback, useState } from 'react';
-import {
-  ScanFace,
-  Camera,
-  Ruler,
-  Move,
-  Sun,
-  Target,
-  Lightbulb,
-  Check,
-  CheckCircle,
-  Info,
-  History,
-  Trash2,
-  Save,
-  X,
-  Inbox,
-  Zap,
-  Eye,
-  EyeOff,
-  AlertCircle,
-  Timer,
-  Shield,
-  SwitchCamera,
-  User,
-  RefreshCw
-} from 'lucide-react';
-import type { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
-
-// --- Type Definitions ---
-type FaceLandmarkerType = FaceLandmarker;
-type FaceResult = {
-  faceLandmarks: { x: number; y: number; z: number }[][];
-};
+import React, { useEffect, useRef, useCallback } from 'react';
 
 type FaceDetectorAPI = {
-  detectForVideo: (video: HTMLVideoElement, timestamp: number) => FaceResult;
+  // replace with the concrete types you use (FaceLandmarker/FaceDetector etc.)
+  detect: (input: HTMLVideoElement | ImageBitmap | HTMLCanvasElement) => Promise<any>;
   close?: () => void;
 };
 
-// --- Main Component ---
 export default function IPDMeasurementPageClient() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const detectorRef = useRef<FaceDetectorAPI | null>(null);
   const runningRef = useRef(false);
   const lastFrameTsRef = useRef(0);
-  const animationFrameId = useRef<number | null>(null);
-  const [isClient, setIsClient] = useState(false);
 
   // --- SILENCE WASM / Emscripten printing BEFORE loading MediaPipe ---
+  // This must run before the wasm script executes. We set minimal Module print handlers.
   useEffect(() => {
-    setIsClient(true);
+    // If Module already exists (older runtime), patch print functions too.
+    // This prevents Emscripten runtime from writing to console.error which Next overlays.
     try {
-      if (typeof window !== 'undefined') {
+      // set no-op print functions to suppress harmless wasm logs
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (typeof globalThis !== 'undefined') {
+        // Provide minimal Emscripten module hooks used by some mediapipe builds
+        // These are intentionally tiny no-ops — if you want logs, change them.
+        // Set them very early (before importing the mediapipe bundle).
+        // Some bundlers or CDNs will honor these when the wasm module initializes.
+        // We create the object if missing.
         // @ts-ignore
-        window.Module = window.Module || {};
+        globalThis.Module = globalThis.Module || {};
         // @ts-ignore
-        window.Module.print = () => {};
+        globalThis.Module.print = () => {};        // stdout
         // @ts-ignore
-        window.Module.printErr = () => {};
+        globalThis.Module.printErr = () => {};     // stderr (where XNNPACK prints)
       }
     } catch (err) {
-      // Best effort, ignore if it fails (e.g. in a very restrictive environment)
+      // ignore - best effort
+      // If this throws, we'll still proceed to normal initialization below.
+      // Avoid throwing here because this runs during render lifecycle.
     }
   }, []);
 
@@ -71,7 +48,6 @@ export default function IPDMeasurementPageClient() {
   useEffect(() => {
     let cancelled = false;
     async function setupCamera() {
-      if (!isClient) return;
       const video = document.createElement('video');
       video.autoplay = true;
       video.playsInline = true;
@@ -92,6 +68,8 @@ export default function IPDMeasurementPageClient() {
         await video.play();
         if (videoRef.current == null) {
           videoRef.current = video;
+          // append offscreen or hidden to DOM if needed (not required)
+          // document.body.appendChild(video) // avoid unless you want preview
         }
       } catch (e) {
         console.error('Camera init failed', e);
@@ -105,31 +83,35 @@ export default function IPDMeasurementPageClient() {
         s.getTracks().forEach((t) => t.stop());
       }
     };
-  }, [isClient]);
+  }, []);
 
-  // --- Initialize MediaPipe detector safely ---
+  // --- Initialize MediaPipe detector safely (dynamic import) ---
   useEffect(() => {
-    if (!isClient) return;
     let mounted = true;
     let currentDetector: FaceDetectorAPI | null = null;
 
     async function initDetector() {
+      // dynamic import so this runs only on client and after Module print handlers set
+      // Use the official fileset resolver API per MediaPipe docs.
       try {
-        const mp = await import('@mediapipe/tasks-vision');
+        const mp = await import('@mediapipe/tasks-vision'); // dynamic import
+        // Example from docs: FilesetResolver and FaceLandmarker / FaceDetector
+        // NOTE: choose the task you actually want (FaceLandmarker, FaceDetector etc.)
+        // The code below uses a generic flow; adapt to the concrete class you use.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const { FilesetResolver, FaceLandmarker } = mp;
 
-        const visionWasmPath = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm/vision_wasm_internal.wasm';
-        const fileset = await FilesetResolver.forVisionTasks(visionWasmPath);
-        
+        const fileset = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
+        // Example constructor - replace with the exact options & model you use
         const detector = await FaceLandmarker.createFromOptions(fileset, {
           baseOptions: {
             modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
             delegate: 'GPU'
           },
-          outputFaceBlendshapes: false,
-          outputFacialTransformationMatrixes: false,
           runningMode: 'VIDEO',
-          numFaces: 1,
         });
 
         if (!mounted) {
@@ -151,100 +133,87 @@ export default function IPDMeasurementPageClient() {
       currentDetector?.close?.();
       detectorRef.current = null;
     };
-  }, [isClient]);
+  }, []);
 
   // --- Detection loop with throttle and single-active-processing guard ---
   const detectLoop = useCallback(async () => {
-    if (!isClient) return;
     const video = videoRef.current;
     const detector = detectorRef.current;
-
     if (!video || !detector) {
-      if (mountedRef.current) {
-        animationFrameId.current = requestAnimationFrame(detectLoop);
-      }
+      if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
       return;
     }
-    
     if (runningRef.current) {
-      if (mountedRef.current) {
-        animationFrameId.current = requestAnimationFrame(detectLoop);
-      }
-      return;
-    }
+        if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
+        return;
+    } 
 
     const now = performance.now();
+    // throttle to ~10 FPS (100 ms) — tune down/up as needed for your CPU
     if (now - lastFrameTsRef.current < 100) {
-      if (mountedRef.current) {
-        animationFrameId.current = requestAnimationFrame(detectLoop);
-      }
+      if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
       return;
     }
     lastFrameTsRef.current = now;
 
     runningRef.current = true;
     try {
-      const result = detector.detectForVideo(video, now);
-      // Your existing logic to handle `result` (measure IPD, draw overlays, etc.) goes here.
+      // Some MediaPipe APIs expect an ImageBitmap / VideoFrame — adapt if required.
+      // Use try/catch around each single detection to avoid unhandled WASM exceptions.
+      // @ts-ignore
+      const result = await detector.detectForVideo(video, now);
+      // handle result (measure IPD, draw overlays, etc.)
     } catch (err) {
+      // if wasm reported an internal error, we catch it here and avoid crashing the loop
       console.error('Detection error (caught)', err);
+      // wait a short time if errors repeat to avoid tight error loops
       await new Promise((res) => setTimeout(res, 200));
     } finally {
-      runningRef.current = false;
-      if (mountedRef.current) {
-        animationFrameId.current = requestAnimationFrame(detectLoop);
+      // If the Emscripten module needs to be idled, allow it to finish safely.
+      // Many builds expose Module._waitUntilIdle — we call it defensively if present.
+      try {
+        // @ts-ignore
+        if (globalThis.Module && typeof globalThis.Module._waitUntilIdle === 'function') {
+          // don't await forever — give it a small timeout wrapper if necessary
+          // but most builds return quickly
+          // @ts-ignore
+          await Promise.race([
+            // @ts-ignore
+            globalThis.Module._waitUntilIdle(),
+            new Promise((r) => setTimeout(r, 250)),
+          ]);
+        }
+      } catch (e) {
+        // ignore _waitUntilIdle errors — we don't want detection to crash
       }
+      runningRef.current = false;
+      if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
     }
-  }, [isClient]);
-
-  // Ref to track if component is mounted
-  const mountedRef = useRef(false);
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
   }, []);
 
-
-  // --- Start the loop once video + detector are ready ---
+  // start the loop once video + detector are ready
   useEffect(() => {
-    if (!isClient) return;
-
+    let raf: number;
     const startWhenReady = () => {
+      // attempt to start only if video and detector are available
       if (videoRef.current && detectorRef.current) {
-        if (mountedRef.current) {
-          animationFrameId.current = requestAnimationFrame(detectLoop);
-        }
-      } else {
-        if (mountedRef.current) {
-          animationFrameId.current = requestAnimationFrame(startWhenReady);
-        }
+        // start loop
+        raf = requestAnimationFrame(detectLoop);
+        return;
       }
+      // poll until both ready
+      raf = requestAnimationFrame(startWhenReady);
     };
-
-    animationFrameId.current = requestAnimationFrame(startWhenReady);
-
-    return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-    };
-  }, [isClient, detectLoop]);
+    raf = requestAnimationFrame(startWhenReady);
+    return () => cancelAnimationFrame(raf);
+  }, [detectLoop]);
 
   return (
-     <div>
-      {isClient ? (
-        <>
-          <h2>IPD Measurement (client)</h2>
-          <p>Video runs offscreen. Check console for status (errors are suppressed by Module.printErr override).</p>
-          {/* You can add a visible video element here for debugging if needed */}
-          {/* <video ref={el => { if (el && videoRef.current) el.srcObject = videoRef.current.srcObject; }} autoPlay playsInline muted /> */}
-        </>
-      ) : (
-        <div>Loading...</div>
-      )}
+    <div>
+      <h2>IPD Measurement (client)</h2>
+      <p>Video runs offscreen. Check console for status (errors are suppressed by Module.printErr override).</p>
+      {/* If you want to show preview: */}
+      {/* <video ref={(el) => { if (el && !el.srcObject) { if (videoRef.current) el.srcObject = videoRef.current.srcObject; }}} autoPlay muted playsInline /> */}
     </div>
   );
 }
-
