@@ -1,7 +1,8 @@
-// src/app/opto-tools/ipd-measuring-tool/launch/page.tsx
+// src/app/opto-tools/ipd-measuring-tool/launch/page.client.tsx
 'use client';
 
 import React, { useEffect, useRef, useCallback } from 'react';
+import { FilesetResolver, FaceLandmarker } from "@mediapipe/tasks-vision";
 
 type FaceDetectorAPI = {
   // replace with the concrete types you use (FaceLandmarker/FaceDetector etc.)
@@ -11,7 +12,7 @@ type FaceDetectorAPI = {
 
 export default function IPDMeasurementPageClient() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const detectorRef = useRef<FaceDetectorAPI | null>(null);
+  const detectorRef = useRef<FaceLandmarker | null>(null);
   const runningRef = useRef(false);
   const lastFrameTsRef = useRef(0);
 
@@ -88,24 +89,13 @@ export default function IPDMeasurementPageClient() {
   // --- Initialize MediaPipe detector safely (dynamic import) ---
   useEffect(() => {
     let mounted = true;
-    let currentDetector: FaceDetectorAPI | null = null;
+    let currentDetector: FaceLandmarker | null = null;
 
     async function initDetector() {
-      // dynamic import so this runs only on client and after Module print handlers set
-      // Use the official fileset resolver API per MediaPipe docs.
       try {
-        const mp = await import('@mediapipe/tasks-vision'); // dynamic import
-        // Example from docs: FilesetResolver and FaceLandmarker / FaceDetector
-        // NOTE: choose the task you actually want (FaceLandmarker, FaceDetector etc.)
-        // The code below uses a generic flow; adapt to the concrete class you use.
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const { FilesetResolver, FaceLandmarker } = mp;
-
         const fileset = await FilesetResolver.forVisionTasks(
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
         );
-        // Example constructor - replace with the exact options & model you use
         const detector = await FaceLandmarker.createFromOptions(fileset, {
           baseOptions: {
             modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
@@ -119,7 +109,7 @@ export default function IPDMeasurementPageClient() {
           return;
         }
 
-        currentDetector = detector as unknown as FaceDetectorAPI;
+        currentDetector = detector;
         detectorRef.current = currentDetector;
       } catch (err) {
         console.error('MediaPipe init failed', err);
@@ -140,8 +130,8 @@ export default function IPDMeasurementPageClient() {
     const video = videoRef.current;
     const detector = detectorRef.current;
     if (!video || !detector) {
-      if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
-      return;
+        if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
+        return;
     }
     if (runningRef.current) {
         if (typeof window !== 'undefined') requestAnimationFrame(detectLoop);
@@ -158,10 +148,8 @@ export default function IPDMeasurementPageClient() {
 
     runningRef.current = true;
     try {
-      // Some MediaPipe APIs expect an ImageBitmap / VideoFrame — adapt if required.
       // Use try/catch around each single detection to avoid unhandled WASM exceptions.
-      // @ts-ignore
-      const result = await detector.detectForVideo(video, now);
+      const result = detector.detectForVideo(video, now);
       // handle result (measure IPD, draw overlays, etc.)
     } catch (err) {
       // if wasm reported an internal error, we catch it here and avoid crashing the loop
