@@ -1,23 +1,16 @@
 
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, UserPlus, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { Loader2, UserPlus, CheckCircle2, XCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-
-// Debounce function
-function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
-  let timeout: NodeJS.Timeout;
-  return function (this: any, ...args: Parameters<T>) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
-}
+import { useRouter } from 'next/navigation';
+import { Separator } from '@/components/ui/separator';
 
 const SimulatorContent = () => (
     <div dangerouslySetInnerHTML={{ __html: `
@@ -27,8 +20,8 @@ const SimulatorContent = () => (
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>RAPD Video Demo</title>
-        <script src="https://cdn.tailwindcss.com"></script>
         <style>
+            body { margin: 0; background: #0f172a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; }
             .demo-video-container {
                 position: relative;
                 width: 100%;
@@ -47,10 +40,53 @@ const SimulatorContent = () => (
             }
             .pupil-transition { transition: r 0.1s linear; }
             .light-beam-demo { opacity: 0; transition: opacity 0.15s ease-out; transform-origin: bottom center; }
-            .player-ui { background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+            .player-ui { background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 1rem; }
+            .flex { display: flex; }
+            .items-center { align-items: center; }
+            .justify-between { justify-content: space-between; }
+            .justify-center { justify-content: center; }
+            .absolute { position: absolute; }
+            .relative { position: relative; }
+            .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+            .z-10 { z-index: 10; }
+            .z-20 { z-index: 20; }
+            .z-30 { z-index: 30; }
+            .text-white { color: white; }
+            .text-gray-400 { color: #9ca3af; }
+            .font-mono { font-family: monospace; }
+            .text-xs { font-size: 0.75rem; }
+            .text-sm { font-size: 0.875rem; }
+            .font-bold { font-weight: 700; }
+            .w-full { width: 100%; }
+            .h-full { height: 100%; }
+            .max-w-\\[600px\\] { max-width: 600px; }
+            .w-\\[80\\%\\] { width: 80%; }
+            .aspect-\\[3\\/2\\] { aspect-ratio: 3 / 2; }
+            .w-\\[45\\%\\] { width: 45%; }
+            .w-16 { width: 4rem; }
+            .h-32 { height: 8rem; }
+            .w-2 { width: 0.5rem; }
+            .h-2 { height: 0.5rem; }
+            .h-1\\.5 { height: 0.375rem; }
+            .rounded-full { border-radius: 9999px; }
+            .rounded { border-radius: 0.25rem; }
+            .bg-red-500 { background-color: #ef4444; }
+            .bg-blue-500 { background-color: #3b82f6; }
+            .bg-gray-600\\/50 { background-color: rgba(75, 85, 99, 0.5); }
+            .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+            @keyframes pulse { 50% { opacity: .5; } }
+            .will-change-transform { will-change: transform; }
+            .drop-shadow-2xl { filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15)); }
+            .text-right { text-align: right; }
+            .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+            .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+            .bg-yellow-400\\/10 { background-color: rgba(250, 204, 21, 0.1); }
+            .border-yellow-400\\/20 { border-color: rgba(250, 204, 21, 0.2); }
+            .text-yellow-400 { color: #facc15; }
+            .border { border-width: 1px; }
         </style>
     </head>
-    <body class="bg-gray-900 p-0 flex justify-center items-center min-h-screen">
+    <body>
         <div class="demo-video-container group">
             <div class="scanlines absolute inset-0 z-10 opacity-30"></div>
             <div class="absolute inset-0 flex items-center justify-center" id="demoScene">
@@ -100,10 +136,10 @@ const SimulatorContent = () => (
                     </svg>
                 </div>
             </div>
-            <div class="player-ui absolute bottom-0 left-0 right-0 p-4 z-30">
+            <div class="player-ui absolute bottom-0 left-0 right-0 z-30">
                 <div class="flex items-center gap-3 mb-1"><div class="h-1.5 flex-1 bg-gray-600/50 rounded-full overflow-hidden"><div id="demo_progressBar" class="h-full bg-blue-500 w-0"></div></div></div>
                 <div class="flex justify-between items-end">
-                    <div><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div><span class="text-xs font-bold text-white tracking-widest uppercase">Left RAPD Simulation</span></div><p class="text-[10px] text-gray-400 mt-1">Automatic Swinging Flashlight Test Loop</p></div>
+                    <div><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div><span class="text-xs font-bold text-white tracking-widest uppercase">Left RAPD Simulation</span></div><p class="text-xs text-gray-400 mt-1">Automatic Swinging Flashlight Test Loop</p></div>
                     <div class="text-right"><div id="demo_diagnosis" class="text-sm font-bold text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded border border-yellow-400/20">Paradoxical Dilation</div></div>
                 </div>
             </div>
@@ -143,12 +179,12 @@ const SimulatorContent = () => (
                     if (isRight) {
                         targetLeft = CONFIG.constrictedSize; targetRight = CONFIG.constrictedSize;
                         rightIllum.style.opacity = '1'; leftIllum.style.opacity = '0';
-                        diagnosisLabel.innerHTML = "Right Eye Illuminated <br><span class='text-[10px] font-normal text-green-300'>Normal Constriction</span>";
+                        diagnosisLabel.innerHTML = "Right Eye Illuminated <br><span class='text-xs font-normal text-green-300'>Normal Constriction</span>";
                         diagnosisLabel.className = "text-sm font-bold text-green-400 bg-green-900/30 px-2 py-1 rounded border border-green-500/30 text-right";
                     } else if (isLeft) {
                         targetLeft = CONFIG.rapdSize; targetRight = CONFIG.rapdSize;
                         leftIllum.style.opacity = '1'; rightIllum.style.opacity = '0';
-                        diagnosisLabel.innerHTML = "Left Eye Illuminated <br><span class='text-[10px] font-normal text-red-300'>Paradoxical Dilation (RAPD)</span>";
+                        diagnosisLabel.innerHTML = "Left Eye Illuminated <br><span class='text-xs font-normal text-red-300'>Paradoxical Dilation (RAPD)</span>";
                         diagnosisLabel.className = "text-sm font-bold text-red-400 bg-red-900/30 px-2 py-1 rounded border border-red-500/30 text-right";
                     } else { targetLeft = CONFIG.baselineSize; targetRight = CONFIG.baselineSize; }
                     const currentLeft = parseFloat(leftPupil.getAttribute('r'));
@@ -170,88 +206,40 @@ const SimulatorContent = () => (
 
 export default function RapdSimulatorLaunchPage() {
     const [membershipId, setMembershipId] = useState('');
-    const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
     const [isVerified, setIsVerified] = useState(false);
-    const { toast } = useToast();
+    const router = useRouter();
 
-    const checkIdValidity = useCallback(debounce(async (id: string) => {
-        if (!id || id.trim().length < 5) {
-            setIdStatus('idle');
-            return;
-        }
-        setIdStatus('loading');
-        try {
-            const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
-            const data = await response.json();
-            if (data.isValid) {
-                setIdStatus('valid');
-            } else {
-                setIdStatus('invalid');
-            }
-        } catch (error) {
-            console.error('ID validation failed:', error);
-            setIdStatus('invalid');
-            toast({ variant: 'destructive', title: 'Error', description: 'Could not verify ID. Please check your connection.' });
-        }
-    }, 500), [toast]);
-
-    const handleVerify = () => {
-        if (idStatus === 'valid') {
+    useEffect(() => {
+        const verifiedId = sessionStorage.getItem('rapd_simulator_access_id');
+        if (verifiedId) {
+            setMembershipId(verifiedId);
             setIsVerified(true);
-            toast({ title: 'Access Granted', description: 'Welcome to the RAPD Simulator.' });
-        } else {
-            toast({ variant: 'destructive', title: 'Invalid ID', description: 'Please enter a valid membership ID.' });
         }
-    };
+    }, []);
 
-    if (isVerified) {
-        return <SimulatorContent />;
+    if (!isVerified) {
+        // This is a fallback for users who land here directly without verification
+        return (
+            <div className="min-h-screen bg-muted/40 flex items-center justify-center p-4">
+                <Card className="w-full max-w-lg text-center">
+                    <CardHeader>
+                        <CardTitle className="text-3xl font-headline">Access Denied</CardTitle>
+                        <CardDescription className="text-lg">
+                           Please launch the simulator from the main information page.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                       <Button asChild>
+                           <Link href="/opto-tools/rapd-simulator">
+                             <ArrowLeft className="mr-2 h-4 w-4" /> Go Back
+                           </Link>
+                       </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     }
-
-    return (
-        <div className="min-h-screen bg-muted/40 flex items-center justify-center p-4">
-            <Card className="w-full max-w-lg">
-                <CardHeader className="text-center">
-                    <CardTitle className="text-3xl font-headline">Member Access Required</CardTitle>
-                    <CardDescription className="text-lg">
-                        This clinical simulator is an exclusive tool for Focus Links members.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="membershipId">Enter Your Membership ID</Label>
-                        <div className="relative">
-                            <Input
-                                id="membershipId"
-                                placeholder="e.g., IN20251026084533"
-                                className="h-12 text-center text-lg"
-                                value={membershipId}
-                                onChange={(e) => {
-                                    setMembershipId(e.target.value);
-                                    checkIdValidity(e.target.value);
-                                }}
-                            />
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                                {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
-                                {idStatus === 'valid' && <CheckCircle2 className="h-5 w-5 text-green-500" />}
-                                {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
-                            </div>
-                        </div>
-                    </div>
-                    <Button onClick={handleVerify} disabled={idStatus !== 'valid'} className="w-full" size="lg">
-                        Launch Simulator <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                    <Separator />
-                    <div className="text-center">
-                        <p className="text-muted-foreground mb-2">Don't have an ID?</p>
-                        <Button variant="outline" asChild>
-                            <Link href="/membership">
-                                <UserPlus className="mr-2 h-4 w-4" /> Get a Free Membership ID
-                            </Link>
-                        </Button>
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
-    );
+    
+    return <SimulatorContent />;
 }
+

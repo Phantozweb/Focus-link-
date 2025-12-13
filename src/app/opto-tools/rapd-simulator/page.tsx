@@ -1,16 +1,74 @@
 
+'use client';
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Eye, ListChecks, Play, Lightbulb } from 'lucide-react';
+import { Eye, ListChecks, Play, Lightbulb, UserPlus, Loader2, CheckCircle, XCircle, Award, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'RAPD Simulator | Focus Links Opto Tools',
-  description: 'Practice and master the swinging flashlight test for detecting Relative Afferent Pupillary Defects (RAPD) with this interactive clinical simulator.',
-};
+// Debounce function
+function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
 
 export default function RapdSimulatorInfoPage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [membershipId, setMembershipId] = useState('');
+  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const checkIdValidity = useCallback(debounce(async (id: string) => {
+    if (!id || id.trim().length < 5) {
+      setIdStatus('idle');
+      return;
+    }
+    setIdStatus('loading');
+    try {
+      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
+      const data = await response.json();
+      if (data.isValid) {
+        setIdStatus('valid');
+      } else {
+        setIdStatus('invalid');
+      }
+    } catch (error) {
+      console.error('ID validation failed:', error);
+      setIdStatus('invalid');
+      toast({ variant: 'destructive', title: 'Error', description: 'Could not verify ID. Please check your connection.' });
+    }
+  }, 500), [toast]);
+  
+   useEffect(() => {
+    if (membershipId) {
+      checkIdValidity(membershipId);
+    } else {
+      setIdStatus('idle');
+    }
+  }, [membershipId, checkIdValidity]);
+
+  const handleLaunch = () => {
+    if (idStatus === 'valid') {
+        // Store the verified ID to be used by the launch page
+        sessionStorage.setItem('rapd_simulator_access_id', membershipId);
+        router.push('/opto-tools/rapd-simulator/launch');
+    } else {
+        toast({ variant: 'destructive', title: 'Invalid ID', description: 'Please enter a valid membership ID to launch the simulator.' });
+    }
+  };
+
+
   return (
     <div className="bg-brand-bg">
       <header className="hero">
@@ -116,12 +174,51 @@ export default function RapdSimulatorInfoPage() {
         </div>
 
         <div className="mt-8">
-            <Button size="lg" className="w-full text-lg py-6" asChild>
-                <Link href="/opto-tools/rapd-simulator/launch">
-                    <Play className="mr-2 h-6 w-6" />
-                    Launch Full Simulator
-                </Link>
-            </Button>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg" className="w-full text-lg py-6">
+                  <Play className="mr-2 h-6 w-6" />
+                  Launch Full Simulator
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-headline text-center">Member Access</DialogTitle>
+                  <DialogDescription className="text-center">
+                    This clinical simulator is an exclusive tool for Focus Links members. Please verify your ID to continue.
+                  </DialogDescription>
+                </DialogHeader>
+                 <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="membership-id">Membership ID</Label>
+                    <div className="relative">
+                      <Input
+                        id="membership-id"
+                        value={membershipId}
+                        onChange={(e) => setMembershipId(e.target.value)}
+                        placeholder="e.g., IN20251026084533"
+                        className="h-12"
+                      />
+                       <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                          {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+                          {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+                          {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                        </div>
+                    </div>
+                  </div>
+                   <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
+                      Verify & Launch Simulator
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                </div>
+                <DialogDescription className="text-center text-sm">
+                  Don't have an ID?{' '}
+                  <Link href="/membership" className="underline text-primary font-semibold">
+                    Get one for free
+                  </Link>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
         </div>
 
         <Card className="mt-12">
@@ -160,12 +257,51 @@ export default function RapdSimulatorInfoPage() {
             </div>
             
             <div className="text-center pt-6">
-                <Button size="lg" asChild>
-                    <Link href="/opto-tools/rapd-simulator/launch">
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="lg">
                         <Play className="mr-2 h-5 w-5" />
                         Launch Simulator
-                    </Link>
-                </Button>
+                    </Button>
+                  </DialogTrigger>
+                   <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-headline text-center">Member Access</DialogTitle>
+                      <DialogDescription className="text-center">
+                        This clinical simulator is an exclusive tool for Focus Links members. Please verify your ID to continue.
+                      </DialogDescription>
+                    </DialogHeader>
+                     <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="membership-id-2">Membership ID</Label>
+                        <div className="relative">
+                          <Input
+                            id="membership-id-2"
+                            value={membershipId}
+                            onChange={(e) => setMembershipId(e.target.value)}
+                            placeholder="e.g., IN20251026084533"
+                            className="h-12"
+                          />
+                           <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                              {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+                              {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+                              {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                            </div>
+                        </div>
+                      </div>
+                       <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
+                          Verify & Launch Simulator
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                       </Button>
+                    </div>
+                    <DialogDescription className="text-center text-sm">
+                      Don't have an ID?{' '}
+                      <Link href="/membership" className="underline text-primary font-semibold">
+                        Get one for free
+                      </Link>
+                    </DialogDescription>
+                  </DialogContent>
+              </Dialog>
             </div>
           </CardContent>
         </Card>
