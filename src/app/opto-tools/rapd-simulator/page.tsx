@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Eye, ListChecks, Play, Lightbulb, UserPlus, Loader2, CheckCircle, XCircle, Award, ArrowRight, ArrowLeft, MessageSquare, Twitter, Copy } from 'lucide-react';
+import { Eye, ListChecks, Play, Lightbulb, UserPlus, Loader2, CheckCircle, XCircle, Award, ArrowRight, ArrowLeft, MessageSquare, Twitter, Copy, HelpCircle, Sparkles, SlidersHorizontal, BarChart, Palette, TestTube, ChevronsRightLeft, Bot, Orbit } from 'lucide-react';
 import Link from 'next/link';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { sendFeedbackNotification } from '@/lib/webhook';
+import { logFormSubmission } from '@/lib/activity-logger';
 import { Separator } from '@/components/ui/separator';
 
 // Debounce function
@@ -44,11 +44,25 @@ function FeedbackForm() {
   const onSubmit = async (data: FeedbackFormData) => {
     setIsSubmitting(true);
     try {
-      await sendFeedbackNotification({
-        page: 'RAPD Simulator',
-        feedback: data.feedback,
-        contact: data.contact,
+      const response = await fetch('/api/submit-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page: 'RAPD Simulator',
+          feedback: data.feedback,
+          contact: data.contact,
+        }),
       });
+
+      if (!response.ok) throw new Error('Server response not OK');
+
+      logFormSubmission(`📝 **Feedback Submitted**
+*   **Page:** RAPD Simulator
+*   **Feedback:** ${data.feedback}
+*   **Contact:** ${data.contact || 'N/A'}`);
+      
       toast({
         title: 'Feedback Sent!',
         description: 'Thank you for your valuable input.',
@@ -91,6 +105,53 @@ function FeedbackForm() {
     </Card>
   );
 }
+
+const featureCategories = [
+    {
+        title: "Core Features",
+        icon: <Sparkles className="h-5 w-5 text-amber-500" />,
+        items: [
+            "Physics-Based Pupillary Reflex: Simulates realistic physiological responses including latency, constriction velocity, and redilation.",
+            "Accurate Swinging Flashlight Test: Perform the gold-standard examination for detecting Relative Afferent Pupillary Defects (RAPD).",
+            "Direct & Consensual Response: Visualizes how both eyes react simultaneously to unilateral stimulation, essential for understanding neural pathways."
+        ]
+    },
+    {
+        title: "Pathology Simulation",
+        icon: <TestTube className="h-5 w-5 text-red-500" />,
+        items: [
+            "Gradable RAPD Severity: Adjust the defect from Grade 1+ (Mild) to Grade 4+ (Amaurotic) to see how subtle vs. severe defects present clinically.",
+            "Customizable Pathology: Apply defects to either the Left (OS) or Right (OD) eye, or reset to a healthy normal state.",
+        ]
+    },
+     {
+        title: "Advanced Physiological Phenomena",
+        icon: <Orbit className="h-5 w-5 text-purple-500" />,
+        items: [
+            "Pupil Escape: Simulates the subtle dilation after initial constriction in mild RAPD.",
+            "Hippus: Toggles natural physiological pupil unrest (oscillation) for added realism.",
+            "Fixed Pupils: Simulate non-reactive eyes (e.g., pharmacological dilation or nerve palsy).",
+        ]
+    },
+    {
+        title: "Examination Controls",
+        icon: <SlidersHorizontal className="h-5 w-5 text-blue-500" />,
+        items: [
+            "Dynamic Room Lighting: Adjust ambient light from 'Dark' (scotopic) to 'Bright' (photopic) to observe how baseline pupil size changes.",
+            "Automated Testing: 'Auto Swing' mode performs a perfect rhythmic test for you—great for teaching demonstrations.",
+            "Variable Swing Speed: Change the speed of the test (1.2s to 3.0s) to practice identifying subtle defects.",
+            "Visual Customization: Change iris colors (Blue, Brown, Green, Hazel, Gray) to test visibility against different backgrounds."
+        ]
+    },
+    {
+        title: "Real-Time Feedback",
+        icon: <BarChart className="h-5 w-5 text-green-500" />,
+        items: [
+            "Millimeter Precision: Live digital readout of pupil diameter (e.g., 4.2 mm).",
+            "Diagnostic Interpretation: The system automatically classifies the finding (e.g., 'Normal', '3+ RAPD') to help students verify their diagnosis."
+        ]
+    }
+];
 
 
 export default function RapdSimulatorInfoPage() {
@@ -283,89 +344,149 @@ export default function RapdSimulatorInfoPage() {
           </div>
 
           <div className="mt-8">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button size="lg" className="w-full text-lg py-6">
-                    <Play className="mr-2 h-6 w-6" />
-                    Launch Full Simulator
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-headline text-center">Member Access</DialogTitle>
-                    <DialogDescription className="text-center">
-                      This clinical simulator is an exclusive tool for Focus Links members. Please verify your ID to continue.
-                    </DialogDescription>
-                  </DialogHeader>
-                   <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="membership-id">Membership ID</Label>
-                      <div className="relative">
-                        <Input
-                          id="membership-id"
-                          value={membershipId}
-                          onChange={(e) => setMembershipId(e.target.value)}
-                          placeholder="e.g., IN20251026084533"
-                          className="h-12"
-                        />
-                         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                            {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
-                            {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
-                            {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
-                          </div>
-                      </div>
-                    </div>
-                     <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
-                        Verify & Launch Simulator
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                     </Button>
-                  </div>
-                  <DialogDescription className="text-center text-sm">
-                    Don't have an ID?{' '}
-                    <Link href="/membership" className="underline text-primary font-semibold">
-                      Get one for free
-                    </Link>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg" className="w-full text-lg py-6">
+                  <Play className="mr-2 h-6 w-6" />
+                  Launch Full Simulator
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-headline text-center">Member Access</DialogTitle>
+                  <DialogDescription className="text-center">
+                    This clinical simulator is an exclusive tool for Focus Links members. Please verify your ID to continue.
                   </DialogDescription>
-                </DialogContent>
-              </Dialog>
+                </DialogHeader>
+                 <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="membership-id">Membership ID</Label>
+                    <div className="relative">
+                      <Input
+                        id="membership-id"
+                        value={membershipId}
+                        onChange={(e) => setMembershipId(e.target.value)}
+                        placeholder="e.g., IN20251026084533"
+                        className="h-12"
+                      />
+                       <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                          {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
+                          {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+                          {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                        </div>
+                    </div>
+                  </div>
+                   <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
+                      Verify & Launch Simulator
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                </div>
+                <DialogDescription className="text-center text-sm">
+                  Don't have an ID?{' '}
+                  <Link href="/membership" className="underline text-primary font-semibold">
+                    Get one for free
+                  </Link>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
           </div>
 
-          <Card className="mt-12">
+        <Card className="mt-12">
             <CardHeader>
-              <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Eye className="w-8 h-8 text-primary" />
-                  </div>
-                  <div>
-                      <CardTitle className="text-2xl font-headline">Practice the Swinging Flashlight Test</CardTitle>
-                      <CardDescription className="text-base mt-1">Sharpen your diagnostic skills in a safe, repeatable environment.</CardDescription>
-                  </div>
-              </div>
+                <CardTitle className="text-2xl font-headline">Key Simulator Features</CardTitle>
+                <CardDescription>
+                   A comprehensive tool designed for both teaching and self-assessment.
+                </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                      <h3 className="font-semibold text-lg flex items-center gap-2"><ListChecks className="text-primary h-5 w-5" /> Features</h3>
-                      <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-                          <li>Realistic simulation of pupillary responses.</li>
-                          <li>Practice identifying normal, mild, moderate, and severe RAPD.</li>
-                          <li>Interactive flashlight control to simulate the test.</li>
-                          <li>Instant feedback on your observations.</li>
-                          <li>Learn to recognize the key signs of an afferent defect.</li>
-                      </ul>
-                  </div>
-                  <div className="space-y-4">
-                      <h3 className="font-semibold text-lg flex items-center gap-2"><Lightbulb className="text-primary h-5 w-5" /> Learning Objectives</h3>
-                       <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
-                          <li>Master the timing of the swinging flashlight test.</li>
-                          <li>Differentiate between normal constriction and paradoxical dilation.</li>
-                          <li>Build confidence in diagnosing RAPD.</li>
-                          <li>Understand the clinical significance of a positive finding.</li>
-                      </ul>
-                  </div>
-              </div>
+            <CardContent>
+                <div className="space-y-6">
+                    {featureCategories.map((category) => (
+                        <div key={category.title}>
+                            <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
+                                {category.icon}
+                                {category.title}
+                            </h3>
+                            <ul className="list-none space-y-2 text-muted-foreground pl-7">
+                                {category.items.map((item, index) => (
+                                    <li key={index} className="flex items-start gap-2">
+                                        <ChevronsRightLeft className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+                 <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="link" className="mt-4 px-0">
+                        <HelpCircle className="mr-2 h-4 w-4" />
+                        View Full User Manual
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh]">
+                        <DialogHeader>
+                            <DialogTitle className="text-2xl">RAPD Simulator: User Manual</DialogTitle>
+                            <DialogDescription>
+                                An interactive web-based tool designed for ophthalmology and optometry students.
+                            </DialogDescription>
+                        </DialogHeader>
+                         <div className="prose prose-sm max-w-none overflow-y-auto pr-4">
+                            <h4>2. Interaction Controls</h4>
+                            <p><strong>Manual Mode:</strong> Click/Touch and drag the flashlight. The pupils will only react when the "cone" of light directly hits the visual axis.</p>
+                            <p><strong>Mouse & Touch:</strong> Works on both Desktop (click and drag) and Mobile (touch and drag). A "Drag Hint" appears if the flashlight is idle to guide new users.</p>
+
+                            <h4>3. Control Panel Settings</h4>
+                            <h5>A. Room Lighting</h5>
+                            <p>Controls the ambient environment.</p>
+                            <ul>
+                                <li><strong>Dark (0-30%):</strong> Maximizes baseline pupil size. Best for observing subtle RAPD.</li>
+                                <li><strong>Bright (70-100%):</strong> Constricts baseline pupil size, making observation harder.</li>
+                            </ul>
+
+                            <h5>B. RAPD Configuration (Pathology)</h5>
+                            <p>The core educational engine. Set the affected eye and grade:</p>
+                            <ul>
+                                <li><strong>1-2+ (Mild):</strong> Affected eye constricts initially, then escapes (dilates) under direct light.</li>
+                                <li><strong>3+ (Moderate):</strong> Affected eye shows immediate dilation when light swings to it.</li>
+                                <li><strong>4+ (Severe/Amaurotic):</strong> No direct light response, but constricts consensually.</li>
+                            </ul>
+
+                            <h5>C. Pupil Response Settings</h5>
+                            <p>Customize the health of the efferent (motor) pathway.</p>
+                            <ul>
+                                <li><strong>Normal vs. Sluggish:</strong> Simulates brisk vs. slow constriction (e.g., Adie's tonic pupil).</li>
+                                <li><strong>Fixed:</strong> Pupil remains at a specific size regardless of light.</li>
+                                <li><strong>Hippus Toggle:</strong> Adds natural physiological pupil unrest (oscillation).</li>
+                                <li><strong>Pupil Escape Toggle:</strong> Simulates slight re-dilation after prolonged light exposure.</li>
+                            </ul>
+
+                            <h5>D. Auto Swing Test</h5>
+                            <p>Automatically animates the flashlight. Speeds: <strong>Slow (3s)</strong> for beginners, <strong>Normal (2s)</strong> for clinical pace, and <strong>Fast (1.2s)</strong> to challenge quick diagnosis.</p>
+
+                            <h4>4. Understanding the Display Indicators</h4>
+                            <ul>
+                                <li><strong>Status Badges:</strong> "DIRECT" for the illuminated eye, "CONSENSUAL" for the other.</li>
+                                <li><strong>Digital Readout:</strong> Shows the exact pupil diameter in millimeters.</li>
+                                <li><strong>Finding Display:</strong> Automatically classifies the diagnosis (e.g., "Finding: 2+ RAPD (OS)").</li>
+                            </ul>
+                            
+                            <h4>5. Clinical Reference Guide</h4>
+                            <table>
+                                <thead><tr><th>Grade</th><th>Clinical Observation</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Normal</td><td>Both pupils constrict equally and hold constriction.</td></tr>
+                                    <tr><td>Grade 1+</td><td>Weak initial constriction, followed by early redilation (escape).</td></tr>
+                                    <tr><td>Grade 2+</td><td>No initial constriction or dilation; pupil size stays roughly the same.</td></tr>
+                                    <tr><td>Grade 3+</td><td>Immediate dilation when light swings to affected eye.</td></tr>
+                                    <tr><td>Grade 4+</td><td>"Amaurotic Pupil." No direct response to light. Eye is blind.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </CardContent>
-          </Card>
+        </Card>
           <Separator className="my-12" />
           <FeedbackForm />
         </main>
