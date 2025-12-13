@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Eye, ListChecks, Play, Lightbulb, UserPlus, Loader2, CheckCircle, XCircle, Award, ArrowRight, ArrowLeft, MessageSquare, Twitter, Copy, HelpCircle, Sparkles, SlidersHorizontal, BarChart, Palette, TestTube, ChevronsRightLeft, Bot, Orbit } from 'lucide-react';
+import { Eye, ListChecks, Play, Lightbulb, UserPlus, Loader2, CheckCircle, XCircle, Award, ArrowRight, ArrowLeft, MessageSquare, Twitter, Copy, HelpCircle, Sparkles, SlidersHorizontal, BarChart, Palette, TestTube, ChevronsRightLeft, Bot, Orbit, Dot } from 'lucide-react';
 import Link from 'next/link';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -18,6 +18,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { submitFeedback } from '@/app/actions';
 import { Separator } from '@/components/ui/separator';
 import { RapdSimulatorDemo } from '@/components/rapd-simulator-demo';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 
 // Debounce function
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
@@ -310,7 +312,7 @@ export default function RapdSimulatorInfoPage() {
                             <ul className="list-none space-y-2 text-muted-foreground pl-7">
                                 {category.items.map((item, index) => (
                                     <li key={index} className="flex items-start gap-2">
-                                        <ChevronsRightLeft className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
+                                        <Dot className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                                         <span>{item}</span>
                                     </li>
                                 ))}
@@ -318,21 +320,16 @@ export default function RapdSimulatorInfoPage() {
                         </div>
                     ))}
                 </div>
-                 <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="link" className="mt-4 px-0">
-                        <HelpCircle className="mr-2 h-4 w-4" />
+                 <Accordion type="single" collapsible className="w-full mt-6">
+                  <AccordionItem value="user-manual">
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-2 text-base">
+                        <HelpCircle className="h-5 w-5" />
                         View Full User Manual
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh]">
-                        <DialogHeader>
-                            <DialogTitle className="text-2xl">RAPD Simulator: User Manual</DialogTitle>
-                            <DialogDescription>
-                                An interactive web-based tool designed for ophthalmology and optometry students.
-                            </DialogDescription>
-                        </DialogHeader>
-                         <div className="prose prose-sm max-w-none overflow-y-auto pr-4">
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                       <div className="prose prose-sm max-w-none overflow-y-auto pr-4">
                             <h4>2. Interaction Controls</h4>
                             <p><strong>Manual Mode:</strong> Click/Touch and drag the flashlight. The pupils will only react when the "cone" of light directly hits the visual axis.</p>
                             <p><strong>Mouse & Touch:</strong> Works on both Desktop (click and drag) and Mobile (touch and drag). A "Drag Hint" appears if the flashlight is idle to guide new users.</p>
@@ -357,19 +354,25 @@ export default function RapdSimulatorInfoPage() {
                             <p>Customize the health of the efferent (motor) pathway.</p>
                             <ul>
                                 <li><strong>Normal vs. Sluggish:</strong> Simulates brisk vs. slow constriction (e.g., Adie's tonic pupil).</li>
-                                <li><strong>Fixed:</strong> The pupil remains at a specific size regardless of light.</li>
-                                <li><strong>Hippus Toggle:</strong> Adds natural physiological pupil unrest (oscillation).</li>
-                                <li><strong>Pupil Escape Toggle:</strong> Simulates slight re-dilation after prolonged light exposure.</li>
+                                <li><strong>Fixed:</strong> The pupil remains at a specific size regardless of light (e.g., simulating Third Nerve Palsy or Atropine use).</li>
+                                <li><strong>Hippus Toggle:</strong> Adds random "noise" to the pupil size, mimicking the natural unrest of the autonomic nervous system.</li>
+                                <li><strong>Pupil Escape Toggle:</strong> When enabled, allows the pupil to slightly re-dilate after a few seconds of continuous light exposure (physiological adaptation).</li>
                             </ul>
 
                             <h5>D. Auto Swing Test</h5>
-                            <p>Automatically animates the flashlight. Speeds: <strong>Slow (3s)</strong> for beginners, <strong>Normal (2s)</strong> for clinical pace, and <strong>Fast (1.2s)</strong> to challenge quick diagnosis.</p>
+                            <p>Function: Automatically animates the flashlight moving between eyes.</p>
+                            <p>Speed:</p>
+                            <ul>
+                              <li><strong>Slow (3s):</strong> Best for beginners to analyze every phase of the movement.</li>
+                              <li><strong>Normal (2s):</strong> Standard clinical pace.</li>
+                              <li><strong>Fast (1.2s):</strong> Challenges the user to spot defects quickly.</li>
+                            </ul>
 
                             <h4>4. Understanding the Display Indicators</h4>
                             <ul>
                                 <li><strong>Status Badges:</strong> "DIRECT" for the illuminated eye, "CONSENSUAL" for the other.</li>
                                 <li><strong>Digital Readout:</strong> Shows the exact pupil diameter in millimeters.</li>
-                                <li><strong>Finding Display:</strong> Automatically classifies the diagnosis (e.g., "Finding: 2+ RAPD (OS)").</li>
+                                <li><strong>Finding Display:</strong> The simulator automatically classifies the diagnosis (e.g., "Finding: 2+ RAPD (OS)").</li>
                             </ul>
                             
                             <h4>5. Clinical Reference Guide</h4>
@@ -384,8 +387,9 @@ export default function RapdSimulatorInfoPage() {
                                 </tbody>
                             </table>
                         </div>
-                    </DialogContent>
-                </Dialog>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
             </CardContent>
         </Card>
           <Separator className="my-12" />
