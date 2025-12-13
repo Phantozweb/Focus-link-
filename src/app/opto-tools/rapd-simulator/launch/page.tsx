@@ -20,7 +20,16 @@ function SimulatorContent() {
         if (!response.ok) {
           throw new Error(`Failed to load simulator: ${response.statusText}`);
         }
-        const text = await response.text();
+        let text = await response.text();
+        
+        // Inject the viewport meta tag to ensure responsiveness on mobile devices
+        const viewportTag = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+        if (text.includes('<head>')) {
+            text = text.replace('<head>', `<head>\n    ${viewportTag}`);
+        } else {
+            text = `<head>${viewportTag}</head>` + text;
+        }
+
         setHtmlContent(text);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred.');
