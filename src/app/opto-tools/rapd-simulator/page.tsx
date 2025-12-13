@@ -115,7 +115,16 @@ export default function RapdSimulatorInfoPage() {
         />
         </div>
 
-        <Card>
+        <div className="mt-8">
+            <Button size="lg" className="w-full text-lg py-6" asChild>
+                <Link href="/opto-tools/rapd-simulator/launch">
+                    <Play className="mr-2 h-6 w-6" />
+                    Launch Full Simulator
+                </Link>
+            </Button>
+        </div>
+
+        <Card className="mt-12">
           <CardHeader>
             <div className="flex items-center gap-4">
                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
