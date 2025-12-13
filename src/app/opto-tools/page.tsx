@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, ArrowRight, ScanFace } from 'lucide-react';
+import { Calculator, ArrowRight, ScanFace, Eye } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -19,6 +19,13 @@ export default function OptoToolsPage() {
       description: 'Access 20+ clinical calculators for refraction, contact lenses, and low vision.',
       href: '/opto-tools/optometry-calculator',
       icon: <Calculator className="h-8 w-8 text-primary" />,
+    },
+    {
+      id: 'rapd-simulator',
+      title: 'RAPD Simulator Practice',
+      description: 'Practice the swinging flashlight test to detect Relative Afferent Pupillary Defects.',
+      href: '/opto-tools/rapd-simulator',
+      icon: <Eye className="h-8 w-8 text-primary" />,
     },
     // Add other tools here in the future
   ];
