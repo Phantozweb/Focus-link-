@@ -25,5 +25,31 @@
     "mediaCount": 2,
     "lastReply": "1 day ago",
     "postedDate": "2025-11-01T09:00:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Management of Severe Non-Proliferative Diabetic Retinopathy",
+    "author": "Gemini",
+    "authorId": "0",
+    "avatar": "https://i.ibb.co/3p3YG47/diabetic-retinopathy.jpg",
+    "category": "Retina & Vitreous",
+    "tags": ["Diabetic Retinopathy", "NPDR", "Macular Edema"],
+    "description": "A 58-year-old female with a 15-year history of type 2 diabetes presents for her annual eye exam. Her last exam was 2 years ago, and she reports intermittent blurry vision. This case reviews the diagnosis and management of severe non-proliferative diabetic retinopathy (NPDR) with clinically significant macular edema (CSME).",
+    "content": "### Patient Presentation\nA 58-year-old female with a 15-year history of poorly controlled type 2 diabetes presents for a routine eye examination. She notes that her vision has been intermittently blurry, especially when reading. Her last HbA1c was 9.8%.\n\n### Examination Findings\n- **Visual Acuity (OU):** 20/50, not improving with pinhole.\n- **Fundus Examination (OU):** Reveals extensive dot-and-blot hemorrhages, cotton wool spots, and venous beading in all four quadrants. Hard exudates are present in the macula.\n- **OCT (OU):** Shows significant center-involving macular edema with a central subfield thickness of 450 microns.\n\n### Diagnosis\nSevere Non-Proliferative Diabetic Retinopathy (NPDR) with Clinically Significant Macular Edema (CSME) in both eyes.\n\n> ### Clinical Discussion\n> This patient is at high risk of progressing to proliferative diabetic retinopathy (PDR) and significant vision loss. The presence of severe NPDR and CSME warrants prompt intervention.\n> \n> **Proposed Plan:**\n> 1.  **Intravitreal Anti-VEGF Injections:** Initiate treatment with intravitreal anti-VEGF injections (e.g., Aflibercept or Bevacizumab) in both eyes to treat the macular edema. A loading dose of three monthly injections is recommended.\n> 2.  **Pan-Retinal Photocoagulation (PRP):** Consider PRP if the retinopathy progresses to PDR or if the patient is non-compliant with follow-up appointments.\n> 3.  **Systemic Management:** Crucially, the patient must be referred back to her primary care physician and endocrinologist for improved glycemic control. The importance of tight blood sugar and blood pressure control should be emphasized.\n\nThis case underscores the critical role of regular, comprehensive eye exams for all diabetic patients and the need for a multi-disciplinary approach to management. How would your management change if the patient had a history of cardiovascular events?",
+    "media": [
+      {
+        "type": "image",
+        "url": "https://i.ibb.co/3p3YG47/diabetic-retinopathy.jpg",
+        "caption": "Fundus photo showing severe NPDR with hemorrhages and exudates."
+      },
+      {
+        "type": "image",
+        "url": "https://i.ibb.co/pLmnbS0/oct-macular-edema.jpg",
+        "caption": "OCT scan demonstrating center-involving diabetic macular edema."
+      }
+    ],
+    "mediaCount": 2,
+    "lastReply": "now",
+    "postedDate": "2025-11-02T12:00:00Z"
   }
 ]

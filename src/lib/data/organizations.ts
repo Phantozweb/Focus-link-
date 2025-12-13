@@ -3,18 +3,20 @@ import type { UserProfile } from '@/types';
 
 export const organizations: UserProfile[] = [
     {
-    id: '9',
+    id: 'vk-college',
     name: 'VK College of Optometry',
     type: 'College',
-    experience: 'A Unit of VK Institutions focused on Vision Science',
+    experience: 'Leading Optometry College in Madurai | B.Sc & Diploma Programs',
     location: 'Madurai, Tamilnadu, India',
     skills: [
-        'B.Sc Optometry',
+        'B.Sc Optometry Degree',
         'Diploma in Ophthalmic Techniques',
-        'Hands-On Clinical Experience',
-        'Community Outreach Programs',
+        'Clinical Training & Internships',
+        'Community Eye Health',
         'Industry-Integrated Curriculum',
-        'Expert Faculty Mentorship'
+        'Expert Faculty Mentorship',
+        'Vision Science Education',
+        'Ophthalmic Dispensing'
     ],
     interests: [
         'Johnson & Johnson VISION',
@@ -24,18 +26,14 @@ export const organizations: UserProfile[] = [
         'Essilor',
         'ZEISS',
         'Lenskart',
-        'Titan Eyeplus'
+        'Titan Eyeplus',
+        'Optometry Education',
+        'Eye Care Careers'
     ],
-    bio: `To develop the next generation of vision experts and primary eye care professionals. Led by a talented team of Senior Ophthalmology Professors and experienced Optometrists, VK College is dedicated to nurturing students with the passion and skill to light up millions of eyes and combat avoidable blindness.
-
-**Core Strengths & Features:**
-- **100% Placement Focus:** With a commitment to career success, the college provides assured internship and placement opportunities for all students.
-- **Expert Faculty:** The academic team is the college's main strength, comprising highly experienced ophthalmology professors and optometrists who provide exceptional mentorship.
-- **Industry-Integrated Curriculum:** Education is made more relevant through industrial visits, interaction with leading professionals, and participation in eyecare conferences.
-- **Hands-On Clinical Experience:** Students gain invaluable practical skills by participating in community outreach programs, including school vision screenings, diabetic retinopathy camps, and corporate eye health initiatives.`,
+    bio: `VK College of Optometry, a premier institution in Madurai, is dedicated to developing the next generation of vision experts and primary eye care professionals. Our mission is to provide top-tier optometry education and combat avoidable blindness through skilled graduates.\n\nLed by a talented team of Senior Ophthalmology Professors and experienced Optometrists, VK College of Optometry nurtures students with the passion and skill to excel in the field of vision science.\n\n**Why Choose VK College of Optometry?**\n- **100% Placement Focus:** We guarantee internship and placement opportunities, connecting our students with leading eye care hospitals and companies.\n- **Expert Faculty:** Our academic team comprises highly experienced ophthalmology professors and optometrists who provide exceptional, hands-on mentorship.\n- **Industry-Integrated Curriculum:** Stay ahead with an updated curriculum that includes industrial visits, interactions with leading professionals, and participation in national and international eyecare conferences.\n- **Hands-On Clinical Experience:** Students gain invaluable practical skills through extensive community outreach programs, including school vision screenings, diabetic retinopathy camps, and corporate eye health initiatives.`,
     links: {
+      website: 'https://vkinstitutions.in/',
       email: 'vkinstitution@gmail.com',
-      linkedin: 'https://vkinstitutions.in/'
     },
     avatarUrl: 'https://vkinstitutions.in/assets/images/pre-logo.png',
     gallery: [
@@ -70,12 +68,10 @@ export const organizations: UserProfile[] = [
         'Tele-Optometry',
         'Public Health'
     ],
-    bio: `DrishtiKit is a proud Indian innovation, recognized by DPIIT under the Startup India initiative, bringing professional-grade vision screening to every community with the world's most portable and affordable eye testing solution.
-
-Our mission is to make quality eye care accessible everywhere. The DrishtiKit ecosystem enables healthcare workers, NGOs, and eye care professionals to conduct comprehensive vision exams and manage patient data—even offline in remote areas. Weighing only 2kg and costing 90% less than traditional setups, our device has already been trusted by over 50 healthcare organizations to complete more than 15,000 vision screenings.`,
+    bio: `DrishtiKit is a proud Indian innovation, recognized by DPIIT under the Startup India initiative, bringing professional-grade vision screening to every community with the world's most portable and affordable eye testing solution.\n\nOur mission is to make quality eye care accessible everywhere. The DrishtiKit ecosystem enables healthcare workers, NGOs, and eye care professionals to conduct comprehensive vision exams and manage patient data—even offline in remote areas. Weighing only 2kg and costing 90% less than traditional setups, our device has already been trusted by over 50 healthcare organizations to complete more than 15,000 vision screenings.`,
     links: {
+      website: 'https://app.drishtikit.com',
       email: 'contact@drishtikit.com',
-      linkedin: 'https://app.drishtikit.com'
     },
     avatarUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DrishtiKit%20Logo%20%284%29-CcbkbLu47u6ODPXvh4zXmjBxnHZpWd.png',
     gallery: [],

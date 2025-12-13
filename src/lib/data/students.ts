@@ -15,19 +15,7 @@ export const students: UserProfile[] = [
       'Microsoft Excel', 'Pediatric Vision Screening', 'Clinical Patient Counseling', 'Visual Acuity Testing'
     ],
     interests: ['AI in Optometry', 'Visual Telepathy', 'Bionic Eyes', 'Entrepreneurship', 'Student Collaboration'],
-    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student on a mission to make eye care smarter and more accessible. As the founder of FocusLinks and Focus-IN, I am building an ecosystem of AI-powered tools to empower optometry students and practitioners worldwide.
-
-My journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration for the global eye care community.
-
-As the Head of Administration at OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.
-
-I also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.
-
-**"Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact."**
-
-A special thanks to **Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam)**, whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.
-
-Let’s connect and co-create the future of optometry through bold ideas, smart tools, and a vision that empowers everyone.`,
+    bio: `I’m Janarthan Veeramani, a third-year B.Sc. Optometry student on a mission to make eye care smarter and more accessible. As the founder of FocusLinks and Focus-IN, I am building an ecosystem of AI-powered tools to empower optometry students and practitioners worldwide.\n\nMy journey began at LIHSM, Coimbatore, where I discovered that my true strength lies in creative thinking, not just academics. That mindset inspired me to build the tools I once wished I had as a student—tools that support smarter learning, clinical reasoning, and collaboration for the global eye care community.\n\nAs the Head of Administration at OptoBharat, I focus on connecting fellow students, fostering collaboration, and creating opportunities for shared learning and professional growth.\n\nI also authored the research paper “Visual Telepathy: How Bionic Eyes Could Transform Communication,” published in IJFMR, exploring how bionic vision may revolutionize the way we connect.\n\n**"Balancing academics, clinical exposure, and development work is not easy but it's my way of transforming ideas into impact."**\n\nA special thanks to **Mrs. Vijayalakshmi Nivethitha Krishnan (Viji Mam)**, whose mentorship helped transform me from a simple, curious student into someone who thinks with clarity, confidence, and purpose. Her influence continues to shape the vision behind everything I build.\n\nLet’s connect and co-create the future of optometry through bold ideas, smart tools, and a vision that empowers everyone.`,
     links: {
       linkedin: 'https://www.linkedin.com/in/janarthan-v',
       email: 'janarthanv@outlook.com',
@@ -166,11 +154,7 @@ Let’s connect and co-create the future of optometry through bold ideas, smart 
       'Analytical thinking'
     ],
     interests: ['Pediatric Vision Care', 'Binocular Vision Assessment', 'Congenital Ocular Motor Anomalies', 'Concept-based Learning', 'Peer Learning', 'Research Methodology'],
-    bio: `I’m an Optometry student passionate about pediatric vision care, binocular vision assessment, and congenital ocular motor anomalies.
-I love simplifying complex academic topics through concept maps, structured notes, and visual learning aids — making learning accessible and engaging.
-
-Beyond academics, I create interactive quizzes and MCQs to support peer learning and foster curiosity in vision science.
-I’m currently exploring research methodology and the psychological aspects of human behavior, enriching both my clinical and personal development.`,
+    bio: `I’m an Optometry student passionate about pediatric vision care, binocular vision assessment, and congenital ocular motor anomalies.\nI love simplifying complex academic topics through concept maps, structured notes, and visual learning aids — making learning accessible and engaging.\n\nBeyond academics, I create interactive quizzes and MCQs to support peer learning and foster curiosity in vision science.\nI’m currently exploring research methodology and the psychological aspects of human behavior, enriching both my clinical and personal development.`,
     links: {
       linkedin: 'https://linkedin.com/in/braseetha-a-260b60323',
       email: 'brasee66@gmail.com',
@@ -220,11 +204,7 @@ I’m currently exploring research methodology and the psychological aspects of 
       'Myopia Management & Ocular Health Awareness'
     ],
     interests: ['Myopia Management', 'Binocular Vision', 'AI in Eye Care'],
-    bio: `I am a Bachelor of Optometry student at Uttar Pradesh University of Medical Sciences with a growing passion for clinical innovation, patient care, and global vision science.
-
-As the Head of Clinical Development at Focus-IN, I lead and design training initiatives, coordinate clinical research projects, and mentor fellow students in evidence-based optometric practice. My work bridges academic knowledge with real-world applications—helping aspiring clinicians build confidence and competence in diverse areas of optometry.
-
-My goal is to build a career that combines clinical leadership with education and research, creating platforms where future optometrists can learn, share, and grow toward global clinical excellence.`,
+    bio: `I am a Bachelor of Optometry student at Uttar Pradesh University of Medical Sciences with a growing passion for clinical innovation, patient care, and global vision science.\n\nAs the Head of Clinical Development at Focus-IN, I lead and design training initiatives, coordinate clinical research projects, and mentor fellow students in evidence-based optometric practice. My work bridges academic knowledge with real-world applications—helping aspiring clinicians build confidence and competence in diverse areas of optometry.\n\nMy goal is to build a career that combines clinical leadership with education and research, creating platforms where future optometrists can learn, share, and grow toward global clinical excellence.`,
     links: {
       linkedin: 'https://linkedin.com/in/anshi-jha-6a98b0310',
       email: '12anshijha@gmail.com',
@@ -378,9 +358,7 @@ My goal is to build a career that combines clinical leadership with education an
       'Diagnostic Procedures (OCT, Biometry, Fundus Photography, VF Analysis)', 'Patient Counseling', 'Academic Tutoring', 'Low Vision & Rehabilitation'
     ],
     interests: ['Pediatric Optometry', 'Contact Lenses', 'Low Vision', 'Evidence-Based Practice', 'Clinical Research'],
-    bio: `I am Optom. Esakkiammal Iyyappan, passionate about advancing vision care through clinical excellence and continuous learning. With experience as both a Clinical Optometrist and Academic Tutor at the renowned Aravind Eye Hospital, I have a strong foundation in patient care and education.
-
-My goal is to bridge the gap between practice and education. I am currently pursuing a Master of Optometry at The Sankara Nethralaya Academy to further specialize and contribute to improving visual health through evidence-based practice, research, and teaching.`,
+    bio: `I am Optom. Esakkiammal Iyyappan, passionate about advancing vision care through clinical excellence and continuous learning. With experience as both a Clinical Optometrist and Academic Tutor at the renowned Aravind Eye Hospital, I have a strong foundation in patient care and education.\n\nMy goal is to bridge the gap between practice and education. I am currently pursuing a Master of Optometry at The Sankara Nethralaya Academy to further specialize and contribute to improving visual health through evidence-based practice, research, and teaching.`,
     links: {
       linkedin: 'https://www.linkedin.com/in/esakkiammal-iyyappan-263953217',
       email: 'dhanasriiyyappan2020@gmail.com',
@@ -451,5 +429,74 @@ My goal is to bridge the gap between practice and education. I am currently purs
     languages: ['English', 'Hindi', 'Odia'],
     verified: true,
     verifiedRole: 'Head of Outreach',
+  },
+  {
+    id: 'faith-wanjugu',
+    name: 'Faith Wanjugu',
+    type: 'Student',
+    experience: 'College Ambassador | 5th year Bsc Optometry and Vision Science',
+    location: 'Kakamega, Kenya',
+    skills: [
+      'Visual acuity assessment',
+      'Refraction',
+      'Slit-lamp biomicroscopy',
+      'Contact lens fitting',
+      'Fundus evaluation',
+      'Optical dispensing',
+      'Event planning and coordination',
+      'Team leadership and mentoring',
+      'Project management',
+      'Community outreach planning',
+      'Strong communication and interpersonal skills'
+    ],
+    interests: ['Advocacy', 'Research', 'Community Eye Care'],
+    bio: "I'm a passionate optometry student, currently serving as Mmuosa chairperson and AFOS vice president. I would like to venture into the field of advocacy and research in optometry.",
+    links: {
+      email: 'wanjugukimunyu2020@gmail.com'
+    },
+    avatarUrl: '',
+    workExperience: [
+        {
+        title: 'College Ambassador',
+        company: 'Masinde Muliro University of Science and Technology',
+        startDate: '2025',
+        endDate: 'Present',
+        description: 'Serving as a representative for the university\'s optometry program.',
+        },
+      {
+        title: 'President',
+        company: 'Masinde Muliro University Optometry Students Association (MMUOSA)',
+        startDate: '2025',
+        endDate: '2026',
+        description: 'Organized academic workshops, community outreach, and vision-screening events.'
+      },
+      {
+        title: 'Vice President',
+        company: 'AFOS',
+        startDate: '',
+        endDate: '',
+        description: 'Collaborated with executive teams across institutions to promote professional development.'
+      },
+      {
+        title: 'Clinical Attachment',
+        company: 'Embu level 5 hospital',
+        startDate: 'April 2025',
+        endDate: 'August 2025',
+        description: 'Performed refraction, slit-lamp examination, and ocular health screenings under supervision. Assisted in diagnosis and management of refractive errors and common ocular diseases. Educated patients on visual hygiene, lens care, and preventive eye health.'
+      }
+    ],
+    education: [
+      {
+        school: 'Masinde Muliro University of Science and Technology',
+        university: 'Masinde Muliro University of Science and Technology',
+        degree: 'Bsc Optometry and Vision Science',
+        fieldOfStudy: 'Optometry',
+        startYear: '',
+        endYear: 'Present (5th Year)'
+      }
+    ],
+    languages: [],
+    verified: true,
+    verifiedRole: 'College Ambassador',
   }
 ];

@@ -2,54 +2,35 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'RAPD Simulator | Focus Links',
-  description: 'Practice the swinging flashlight test to identify Relative Afferent Pupillary Defects (RAPD) with this interactive clinical simulator for optometrists and students.',
-  keywords: ['RAPD', 'Relative Afferent Pupillary Defect', 'Swinging Flashlight Test', 'Optometry Simulator', 'Clinical Skills', 'Pupil Examination', 'Marcus Gunn Pupil'],
+  title: 'Interactive RAPD Simulator for Optometry Students & Professionals',
+  description: 'Master the swinging flashlight test and enhance your clinical skills with our free, interactive RAPD simulator. Designed for both students and seasoned optometrists.',
+  keywords: ['RAPD', 'Relative Afferent Pupillary Defect', 'Optometry', 'Swinging Flashlight Test', 'Clinical Skills', 'Optometry Student', 'Ophthalmology'],
   openGraph: {
-    title: 'Interactive RAPD Simulator for Eye Care Professionals',
-    description: 'Sharpen your diagnostic skills by practicing the swinging flashlight test in a realistic, virtual environment. Free tool from Focus Links.',
-    type: 'website',
-    url: 'https://focuslinks.in/opto-tools/rapd-simulator',
+    title: 'Interactive RAPD Simulator | Focus Links',
+    description: 'A free, interactive tool for practicing the swinging flashlight test to identify Relative Afferent Pupillary Defects.',
+    url: 'https://focus-links.com/opto-tools/rapd-simulator',
+    siteName: 'Focus Links',
     images: [
       {
-        url: 'https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png',
+        url: 'https://i.ibb.co/bX0vV53/rapd-og-image.png',
         width: 1200,
         height: 630,
-        alt: 'RAPD Simulator Banner',
+        alt: 'RAPD Simulator in Action',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RAPD Simulator | Focus Links',
+    title: 'Interactive RAPD Simulator for Optometry Students & Professionals',
     description: 'Practice identifying RAPD with an interactive swinging flashlight test simulator.',
-    images: ['https://i.ibb.co/wrSQqJHs/1761374303057-019a1a16-ca7a-7521-a225-6359d53e17ba.png'],
+    images: ['https://i.ibb.co/bX0vV53/rapd-og-image.png'],
   },
 };
 
-const rapdSimulatorSchema = {
-    "@context": "https://schema.org",
-    "@type": "EducationalOccupationalProgram",
-    "name": "RAPD Simulator Practice Tool",
-    "description": "An interactive web-based simulator for medical and optometry students to practice the swinging flashlight test for detecting Relative Afferent Pupillary Defects (RAPD).",
-    "provider": {
-        "@type": "Organization",
-        "name": "Focus Links",
-        "url": "https://focuslinks.in"
-    },
-    "educationalCredentialAwarded": "Completion Certificate (for related quiz events)",
-    "learningResourceType": "Simulation",
-    "interactivityType": "expositive"
-};
-
-export default function RapdLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(rapdSimulatorSchema) }}
-      />
-      {children}
-    </>
-  );
+export default function RapdSimulatorLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }
