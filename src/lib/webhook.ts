@@ -23,18 +23,15 @@ interface QuizResultPayload {
 }
 
 interface FeedbackPayload {
+    page: string;
     feedback: string;
-    membershipId: string;
-    userName: string;
-    overallPassed: boolean;
-    finalScore: number;
-    totalPossiblePoints: number;
+    contact?: string;
 }
 
 const START_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433513938867196049/Vj3XRu2e1IttN_mvwdRK9RWv-SaIywdSI_cqlrxZpIuMi9KcvDMp6v759xe2CMRNOHQp';
 const RESULTS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz-6iziIubh3YdvVH53Yhgu2CfZSbe2fZ9tEBu4V96zutJ3f5q_iXkC6L-mG0M_GYEl-w/exec';
 
-const FEEDBACK_WEBHOOK_URL = 'https://discord.com/api/webhooks/1434268343723888763/j01QZVcp_3Q6PeTbLJqIlyZksu9YcQiMPwIXIhyRfv75qVJsOBiDJqhv63RhsZi4WOrd';
+const FEEDBACK_WEBHOOK_URL = 'https://discord.com/api/webhooks/1443283270765641812/33KsSWnUfoBRTNgCogRCCao4VU-dSkUgSBYlGnIkIfRHnMWQUpTDEa-Szh0eUdi6InLy';
 const PASSED_BACKUP_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433514964987150477/7KpL0rAmZIOihjNOMFxbibt-tHeD_M7JNQjKnEuzpm1o101vGCZjgWKw0mJ8Uar2MjA2';
 const FAILED_BACKUP_WEBHOOK_URL = 'https://discord.com/api/webhooks/1433515934475223040/ZMFuaw1Qlv02vhSBujdo1TvdogNQXngfJurDfDORvP02-p4asokLauPysL8xToo6zDu5';
 
@@ -158,25 +155,16 @@ export async function sendQuizResultNotification(payload: QuizResultPayload) {
 
 
 export async function sendFeedbackNotification(payload: FeedbackPayload) {
-    const { feedback, membershipId, userName, overallPassed, finalScore, totalPossiblePoints } = payload;
-    const scorePercentage = totalPossiblePoints > 0 ? (finalScore / totalPossiblePoints * 100).toFixed(1) : 'N/A';
-
+    const { page, feedback, contact } = payload;
     const embed = {
-        title: '📝 New Quiz Feedback Received!',
+        title: `📝 New Feedback for: ${page}`,
         description: `> ${feedback}`,
-        color: overallPassed ? 3066993 : 15158332, // Green for pass, Red for fail
-        fields: [
-            { name: 'Participant', value: `${userName} (\`${membershipId}\`)`, inline: true },
-            { name: 'Status', value: overallPassed ? 'Passed' : 'Failed', inline: true },
-            { name: 'Score', value: `${finalScore}/${totalPossiblePoints} (${scorePercentage}%)`, inline: true },
-        ],
-        footer: {
-            text: 'Eye Q Arena Feedback'
-        },
+        color: 16776960, // Yellow
+        fields: contact ? [{ name: 'Contact Info', value: contact, inline: false }] : [],
+        footer: { text: 'Focus Links Platform Feedback' },
         timestamp: new Date().toISOString()
     };
     
-    // Primary Webhook
     try {
         await fetch(FEEDBACK_WEBHOOK_URL, {
             method: 'POST',
@@ -184,18 +172,7 @@ export async function sendFeedbackNotification(payload: FeedbackPayload) {
             body: JSON.stringify({ embeds: [embed] }),
         });
     } catch (error) {
-        console.error("Failed to send feedback to primary webhook:", error);
-    }
-    
-    // Backup Webhook
-    const backupWebhookUrl = overallPassed ? PASSED_BACKUP_WEBHOOK_URL : FAILED_BACKUP_WEBHOOK_URL;
-     try {
-        await fetch(backupWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ embeds: [embed] }),
-        });
-    } catch (error) {
-        console.error("Failed to send feedback to backup webhook:", error);
+        console.error("Failed to send feedback notification:", error);
+        throw new Error('Could not send feedback.');
     }
 }

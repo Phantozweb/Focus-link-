@@ -1,5 +1,4 @@
 
-
 import { MetadataRoute } from 'next'
 import { allUsers } from '@/lib/data/index';
 import { webinars } from '@/lib/academy';
@@ -28,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/help-center',
     '/terms',
     '/resources/anatomy-of-the-eye-visual-guide',
+    '/opto-tools/rapd-simulator',
   ].map(route => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
