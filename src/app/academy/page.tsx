@@ -443,55 +443,50 @@ export default function AcademyPage() {
         </section>
 
         <section>
-            <div className="section-header">
-                <h2 className="section-title"><Palette className="text-purple-500" /> Visual Learning</h2>
-                <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">New!</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl">
-                    <CardContent className="p-0">
-                        <div className="grid grid-cols-1 md:grid-cols-3">
-                            <div className="md:col-span-2 p-6 md:p-8 flex flex-col justify-center">
-                                <h3 className="text-xl font-bold text-slate-800 mb-2">Anatomy of Eye: Visual Guide</h3>
-                                <p className="text-slate-600 mb-4">An anterior to posterior visual guide covering key structures from the cornea to the retina.</p>
-                                <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
-                                    <span>Posted on Sat Dec 6, 2025</span>
-                                </div>
-                                <div className="flex-shrink-0 mt-auto">
-                                    <Button asChild className="w-full">
-                                        <Link href="/resources/anatomy-of-the-eye-visual-guide">View Details</Link>
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="relative aspect-video md:aspect-auto">
-                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="md:rounded-l-none rounded-b-lg" />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl">
-                    <CardContent className="p-0">
-                        <div className="grid grid-cols-1 md:grid-cols-3">
-                            <div className="md:col-span-2 p-6 md:p-8 flex flex-col justify-center">
-                                <h3 className="text-xl font-bold text-slate-800 mb-2">Physiology of Eye: Visual Guide</h3>
-                                <p className="text-slate-600 mb-4">A visual guide covering the key physiological functions of the eye's structures.</p>
-                                <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
-                                    <span>Posted on Sun Dec 7, 2025</span>
-                                </div>
-                                <div className="flex-shrink-0 mt-auto">
-                                    <Button asChild className="w-full">
-                                        <Link href="/resources/physiology-of-the-eye">View Details</Link>
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="relative aspect-video md:aspect-auto">
-                               <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(1).png" alt="Physiology of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="md:rounded-l-none rounded-b-lg" />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </section>
+          <div className="section-header">
+              <h2 className="section-title"><Palette className="text-purple-500" /> Visual Learning</h2>
+              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">New!</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl group">
+                  <CardContent className="p-0">
+                      <div className="relative aspect-video overflow-hidden">
+                          <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(1).png" alt="Physiology of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" />
+                          <div className="absolute top-2 right-2">
+                              <Badge variant="default" className="bg-primary text-white">New!</Badge>
+                          </div>
+                      </div>
+                      <div className="p-6">
+                          <h3 className="text-xl font-bold text-slate-800 mb-2">Physiology of Eye: Visual Guide</h3>
+                          <p className="text-slate-600 mb-4 h-12">A visual guide covering the key physiological functions of the eye's structures.</p>
+                          <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
+                              <span>Posted on Dec 19, 2025</span>
+                          </div>
+                          <Button asChild className="w-full">
+                              <Link href="/resources/physiology-of-the-eye">View Details</Link>
+                          </Button>
+                      </div>
+                  </CardContent>
+              </Card>
+              <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl group">
+                  <CardContent className="p-0">
+                      <div className="relative aspect-video overflow-hidden">
+                          <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/d5d342fec3746c8788c22ad434333607e447d031/IMG_20251206_044102.png" alt="Anatomy of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" />
+                      </div>
+                      <div className="p-6">
+                          <h3 className="text-xl font-bold text-slate-800 mb-2">Anatomy of Eye: Visual Guide</h3>
+                          <p className="text-slate-600 mb-4 h-12">An anterior to posterior visual guide covering key structures from the cornea to the retina.</p>
+                          <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
+                              <span>Posted on Dec 6, 2025</span>
+                          </div>
+                          <Button asChild className="w-full">
+                              <Link href="/resources/anatomy-of-the-eye-visual-guide">View Details</Link>
+                          </Button>
+                      </div>
+                  </CardContent>
+              </Card>
+          </div>
+      </section>
         
          <section>
             <div className="section-header">
