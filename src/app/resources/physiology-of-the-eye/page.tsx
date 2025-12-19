@@ -31,7 +31,7 @@ export default function PhysiologyOfEyePage() {
     ];
 
     const imageUrls = {
-        eyelid: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/162455f66faf7eee5cac7587cdfc4324c601f277/1764967080329-019af03b-ac50-7563-bc78-93fe003b9122.png",
+        eyelid: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_.png",
         lacrimal: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(1).png",
         conjunctiva: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(2).png",
         sclera: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(3).png",
