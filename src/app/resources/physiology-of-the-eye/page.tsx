@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Eye } from 'lucide-react';
+import Head from 'next/head';
 
 export default function PhysiologyOfEyePage() {
     const physiologyPageSchema = {
@@ -11,6 +12,9 @@ export default function PhysiologyOfEyePage() {
         "@type": "WebPage",
         "name": "Physiology of the Eye: Visual Guide for Optometry Students",
         "description": "An interactive study guide covering the complete physiology of the human eye, designed for students and professionals in eye care.",
+        "url": "https://focuslinks.vercel.app/resources/physiology-of-the-eye",
+        "keywords": "Physiology of the Eye, Optometry, Eye Care, Ocular Structures, Visual Guide, Focus Links",
+        "image": "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Edit_without_mention.png?raw=true"
     };
     
     const structures = [
@@ -30,23 +34,32 @@ export default function PhysiologyOfEyePage() {
     ];
 
     const imageUrls = {
-        eyelid: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_.png",
-        lacrimal: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(1).png",
-        conjunctiva: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(2).png",
-        sclera: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(3).png",
-        cornea: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(4).png",
-        "ant-chamber": "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(6).png",
-        iris: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(5).png",
+        eyelid: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_.png?raw=true",
+        lacrimal: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(1).png?raw=true",
+        conjunctiva: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(2).png?raw=true",
+        sclera: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(3).png?raw=true",
+        cornea: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(4).png?raw=true",
+        "ant-chamber": "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(6).png?raw=true",
+        iris: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(5).png?raw=true",
         pupil: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764965970716-019af02a-d20f-70e2-baa5-7417b2ea57ba.png?raw=true",
-        "post-chamber": "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(8).png",
-        lens: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/1764966042495-019af02b-f0fb-7cf0-958c-cf01cf8288a6.png?raw=true",
-        vitreous: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(10).png",
-        retina: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(11).png",
-        choroid: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(12).png",
+        "post-chamber": "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(8).png?raw=true",
+        lens: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(9).png?raw=true",
+        vitreous: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(10).png?raw=true",
+        retina: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(11).png?raw=true",
+        choroid: "https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Create_a_16_9_ratio_%20(12).png?raw=true",
     };
     
     return (
         <>
+            <Head>
+                <title>Physiology of the Eye: A Visual Guide for Optometry Students</title>
+                <meta name="description" content="An interactive study guide covering the complete physiology of the human eye, designed for students and professionals in eye care." />
+                <meta name="keywords" content="Physiology of the Eye, Optometry, Eye Care, Ocular Structures, Visual Guide, Focus Links" />
+                <meta property="og:title" content="Physiology of the Eye: A Visual Guide for Optometry Students" />
+                <meta property="og:description" content="An interactive study guide covering the complete physiology of the human eye, designed for students and professionals in eye care." />
+                <meta property="og:image" content="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Edit_without_mention.png?raw=true" />
+                <meta property="og:url" content="https://focuslinks.vercel.app/resources/physiology-of-the-eye" />
+            </Head>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(physiologyPageSchema) }}
@@ -58,7 +71,7 @@ export default function PhysiologyOfEyePage() {
                 </div>
 
                 <div className="relative w-full aspect-[16/7] bg-slate-100 shadow-lg border-y mb-16 rounded-lg overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
-                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Change_the_central_t.png" alt="Physiology of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
+                    <Image src={"https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Edit_without_mention.png?raw=true"} alt="Physiology of the Eye Overview - A comprehensive visual guide from Focus Links" fill style={{objectFit:"contain"}} quality={100} />
                 </div>
                 
                  <main className="container mx-auto px-4">
@@ -97,7 +110,7 @@ export default function PhysiologyOfEyePage() {
                                         <h2 className="text-3xl font-bold text-slate-800">{structure.name}</h2>
                                     </div>
                                     <div className="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden shadow-md border mb-6" onContextMenu={(e) => e.preventDefault()}>
-                                        <Image src={imageUrl} alt={`${structure.name} Physiology Mind Map`} layout="fill" objectFit="contain" quality={100} />
+                                        <Image src={imageUrl} alt={`${structure.name} Physiology Mind Map - Visual Guide from Focus Links`} fill style={{objectFit:"contain"}} quality={100} />
                                     </div>
                                 </section>
                             );
