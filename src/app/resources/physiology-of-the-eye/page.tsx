@@ -57,6 +57,10 @@ export default function PhysiologyOfEyePage() {
                     <h1 className="text-4xl font-bold text-slate-800 mb-2">Physiology of the Eye: A Visual Guide</h1>
                      <p className="text-lg text-slate-600">A comprehensive study tool for optometry students and professionals, covering the key physiological functions of ocular structures with detailed mind maps.</p>
                 </div>
+
+                <div className="relative w-full aspect-[16/7] bg-slate-100 shadow-lg border-y mb-16 rounded-lg overflow-hidden" onContextMenu={(e) => e.preventDefault()}>
+                    <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Change_the_central_t.png" alt="Physiology of the Eye Overview" layout="fill" objectFit="contain" quality={100} />
+                </div>
                 
                  <main className="container mx-auto px-4">
                     <section className="mb-16">
