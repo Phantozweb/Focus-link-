@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { webinars } from '@/lib/academy';
@@ -598,3 +597,5 @@ export default function AcademyPage() {
     </div>
   );
 }
+
+    
