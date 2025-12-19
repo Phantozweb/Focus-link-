@@ -451,7 +451,7 @@ export default function AcademyPage() {
               <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl group">
                   <CardContent className="p-0">
                       <div className="relative aspect-video overflow-hidden">
-                          <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)a_Create_a_16_9_ratio%20(1).png" alt="Physiology of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" />
+                          <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/Phy/gemini-3-pro-image-preview-2k%20(nano-banana-pro)_a_Change_the_central_t.png" alt="Physiology of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" />
                           <div className="absolute top-2 right-2">
                               <Badge variant="default" className="bg-primary text-white">New!</Badge>
                           </div>
