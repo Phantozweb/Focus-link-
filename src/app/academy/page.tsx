@@ -474,7 +474,7 @@ export default function AcademyPage() {
                     <Card className="bg-slate-50 border-slate-200 shadow-sm overflow-hidden rounded-3xl group h-full">
                         <CardContent className="p-0">
                             <div className="relative aspect-video overflow-hidden">
-                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/IMG_20251215-WA0018(1).jpg" alt="Anatomy of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" />
+                                <Image src="https://raw.githubusercontent.com/Phantozweb/focuslinks-assets/main/IMG-20251215-WA0018(1).jpg" alt="Anatomy of Eye Visual Guide Cover" layout="fill" objectFit="cover" className="group-hover:scale-105 transition-transform duration-300" />
                             </div>
                             <div className="p-6">
                                 <h3 className="text-xl font-bold text-slate-800 mb-2">Anatomy of Eye: Visual Guide</h3>
@@ -597,5 +597,3 @@ export default function AcademyPage() {
     </div>
   );
 }
-
-    
