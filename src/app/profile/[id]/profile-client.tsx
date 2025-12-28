@@ -10,6 +10,7 @@ import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 
 const SectionTitle = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -76,22 +77,24 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
         </header>
         
         <div className="container mx-auto max-w-5xl -mt-10 relative z-20 px-4">
-             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
-                {user.links?.website && (
-                    <Button size="lg" asChild className="shadow-lg">
-                        <a href={user.links.website} target="_blank" rel="noopener noreferrer">
-                            Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
-                        </a>
-                    </Button>
-                )}
-                {contactEmail && (
-                    <Button size="lg" variant="secondary" asChild className="shadow-lg">
-                        <a href={mailtoLink}>
-                            <Mail className="h-4 w-4 mr-2" /> Contact Us
-                        </a>
-                    </Button>
-                )}
-            </div>
+            <Card className="mb-6 shadow-lg">
+                <CardContent className="p-3 flex flex-col sm:flex-row gap-3 justify-center">
+                    {user.links?.website && (
+                        <Button size="lg" asChild className="flex-grow">
+                            <a href={user.links.website} target="_blank" rel="noopener noreferrer">
+                                Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
+                            </a>
+                        </Button>
+                    )}
+                    {contactEmail && (
+                        <Button size="lg" variant="secondary" asChild className="flex-grow">
+                            <a href={mailtoLink}>
+                                <Mail className="h-4 w-4 mr-2" /> Enquiry
+                            </a>
+                        </Button>
+                    )}
+                </CardContent>
+            </Card>
 
             {isUnclaimed && <UnclaimedProfileBanner />}
         </div>
