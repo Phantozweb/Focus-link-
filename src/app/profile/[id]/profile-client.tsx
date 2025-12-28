@@ -44,7 +44,7 @@ const UnclaimedProfileBanner = () => (
         <AlertCircle className="h-5 w-5 text-amber-600" />
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
-            This is a placeholder profile. Are you part of this organization? Claim your profile to update details and manage your community presence.
+            Are you part of this organization? Claim your profile to update details and manage your community presence.
             <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full sm:w-auto">
                 <Link href="/membership#membership-join">Claim This Profile</Link>
             </Button>
@@ -78,9 +78,10 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
         </header>
 
         <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
+            
             <section>
-                 {isUnclaimed && <UnclaimedProfileBanner />}
-                <div className="flex flex-col sm:flex-row gap-3">
+                {isUnclaimed && <UnclaimedProfileBanner />}
+                 <div className="flex flex-col sm:flex-row gap-3">
                     {user.links?.website && (
                         <Button asChild className="flex-grow" size="lg">
                             <a href={user.links.website} target="_blank" rel="noopener noreferrer">
