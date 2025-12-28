@@ -79,5 +79,24 @@ export const organizations: UserProfile[] = [
     education: [],
     languages: [],
     verified: true,
+  },
+  {
+    id: 'optobharat',
+    name: 'OptoBharat',
+    type: 'Association',
+    experience: "India's Largest Optometry Student Community",
+    location: 'India',
+    skills: ['Student Collaboration', 'Community Outreach', 'Webinars & Events', 'Clinical Workshops', 'Professional Development', 'Leadership Training', 'Eye Health Awareness', 'Global Networking'],
+    interests: ['Student Leadership', 'Optometry Education', 'National Networking', 'Global Collaboration', 'Vision Care Innovation', 'Public Health'],
+    bio: "OPTOBHARAT is India’s largest and most impactful optometry student community, dedicated to empowering the next generation of eye care professionals. We connect students, educators, and professionals to foster education, innovation, and collaboration in optometry, bridging the gap between academic learning and real-world clinical practice through expert-led discussions, workshops, and global interactions. Join us to access exclusive resources, career guidance, and mentorship opportunities designed to foster excellence and leadership in vision care.",
+    links: {
+        website: 'https://optobharat.simdif.com/',
+        email: 'inquiry.optobharat@gmail.com',
+    },
+    avatarUrl: 'https://optobharat.simdif.com/images/public/sd_67d31b9eda24f.png?no_cache=1741890071',
+    workExperience: [],
+    education: [],
+    languages: ['English', 'Hindi'],
+    verified: true,
   }
 ];
