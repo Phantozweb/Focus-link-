@@ -6,8 +6,10 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 
 const SectionTitle = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -35,9 +37,23 @@ const SkillChip = ({ skill }: { skill: string }) => (
     </span>
 );
 
+const UnclaimedProfileBanner = () => (
+    <Alert className="mb-8 bg-amber-50 border-amber-300 text-amber-900">
+        <AlertCircle className="h-5 w-5 text-amber-600" />
+        <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
+        <AlertDescription>
+            This is a placeholder profile. Are you this professional? Claim your profile to update your details, connect with peers, and unlock member benefits.
+            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white">
+                <Link href="/membership#membership-join">Claim This Profile</Link>
+            </Button>
+        </AlertDescription>
+    </Alert>
+);
+
 const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
     const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
     const isTeamMember = user.isFounder || user.verifiedRole;
+    const isUnclaimed = user.verifiedRole === 'Unclaimed';
     
     const getOrgIcon = (type: UserProfile['type']) => {
         switch (type) {
@@ -65,7 +81,7 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                                     <FallbackIcon className="h-20 w-20 text-slate-400" />
                                 </AvatarFallback>
                             </Avatar>
-                             {user.verified && (
+                             {user.verified && !isUnclaimed && (
                                 <div className={cn(
                                     "absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-md",
                                     isTeamMember ? "text-green-500" : "text-blue-500"
@@ -81,7 +97,7 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                         </div>
                         <h1 className="text-2xl font-bold text-[--profile-primary-dark]">{user.name}</h1>
                         <p className="text-sm font-medium text-[--profile-primary] leading-snug">{user.experience}</p>
-                        {user.verifiedRole && (
+                        {user.verifiedRole && !isUnclaimed && (
                             <div className="mt-4">
                                 <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 text-sm font-bold px-4 py-2 rounded-full">
                                     <Star className="h-4 w-4" />
@@ -107,26 +123,30 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                             )}
                         </div>
                         
-                        <div className="flex items-center gap-2">
-                            {user.links.linkedin && (
-                                <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block flex-grow text-center py-3.5 px-4 rounded-xl font-semibold bg-blue-600 text-white shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-blue-700">
-                                    <div className="flex items-center justify-center gap-2">
-                                    {isOrg ? <Globe className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
-                                    <span>{isOrg ? 'Website' : 'LinkedIn'}</span>
-                                    </div>
-                                </a>
-                            )}
-                             {user.links.email && (
-                                <a href={`mailto:${user.links.email}`} className="block flex-shrink-0 w-14 h-14 text-center p-4 rounded-xl font-semibold bg-slate-200 text-slate-600 shadow-lg shadow-slate-900/10 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-slate-300">
-                                    <Mail className="w-full h-full" />
-                                </a>
-                            )}
-                        </div>
+                        {!isUnclaimed && (
+                          <div className="flex items-center gap-2">
+                              {user.links.linkedin && (
+                                  <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block flex-grow text-center py-3.5 px-4 rounded-xl font-semibold bg-blue-600 text-white shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-blue-700">
+                                      <div className="flex items-center justify-center gap-2">
+                                      {isOrg ? <Globe className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
+                                      <span>{isOrg ? 'Website' : 'LinkedIn'}</span>
+                                      </div>
+                                  </a>
+                              )}
+                               {user.links.email && (
+                                  <a href={`mailto:${user.links.email}`} className="block flex-shrink-0 w-14 h-14 text-center p-4 rounded-xl font-semibold bg-slate-200 text-slate-600 shadow-lg shadow-slate-900/10 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-slate-300">
+                                      <Mail className="w-full h-full" />
+                                  </a>
+                              )}
+                          </div>
+                        )}
                     </div>
                 </aside>
 
                 {/* --- RIGHT SIDE: Main Content --- */}
                 <main className="lg:col-span-2 glass-panel p-8">
+                    {isUnclaimed && <UnclaimedProfileBanner />}
+                    
                     <SectionTitle icon={<User className="w-5 h-5" />}>Professional Summary</SectionTitle>
                     <p className="text-[--profile-text-light] leading-relaxed text-sm mb-10">{user.bio}</p>
 

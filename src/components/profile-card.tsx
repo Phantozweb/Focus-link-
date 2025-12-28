@@ -59,18 +59,12 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
       
       {!hideButton && (
         <div className="card-actions">
-          {isUnclaimed ? (
-            <Link href="/membership#membership-join" className="btn-profile bg-amber-500 hover:bg-amber-600">Claim this Profile!</Link>
-          ) : (
-            <>
-              <Link href={`/profile/${user.id}`} className="btn-profile">View Profile</Link>
-              {user.links?.email && (
-                <a href={`mailto:${user.links.email}`} className="btn-icon">
-                  <Mail className="h-5 w-5"/>
-                </a>
-              )}
-            </>
-          )}
+            <Link href={`/profile/${user.id}`} className="btn-profile">View Profile</Link>
+            {user.links?.email && !isUnclaimed && (
+              <a href={`mailto:${user.links.email}`} className="btn-icon">
+                <Mail className="h-5 w-5"/>
+              </a>
+            )}
         </div>
       )}
     </div>
