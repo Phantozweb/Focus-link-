@@ -6,7 +6,7 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -42,13 +42,77 @@ const UnclaimedProfileBanner = () => (
         <AlertCircle className="h-5 w-5 text-amber-600" />
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
-            This is a placeholder profile. Are you this professional? Claim your profile to update your details, connect with peers, and unlock member benefits.
+            This is a placeholder profile. Are you this professional or part of this organization? Claim your profile to update your details, connect with peers, and unlock member benefits.
             <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white">
                 <Link href="/membership#membership-join">Claim This Profile</Link>
             </Button>
         </AlertDescription>
     </Alert>
 );
+
+const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
+  const isUnclaimed = user.verifiedRole === 'Unclaimed';
+  
+  const mission = "Empowering optometry students across India to connect, learn, and collaborate in advancing eye care excellence, while building bridges with national and global experts.";
+  const vision = "To be India’s leading optometry student community, fostering innovation, inclusivity, and continuous learning by connecting students with national and global experts to shape the future of eye care.";
+  
+  return (
+    <div className="bg-slate-50">
+        <header className="relative h-48 md:h-64 bg-gradient-to-r from-cyan-500 to-blue-600 flex flex-col items-center justify-center text-white text-center p-4">
+            <div className="absolute inset-0 bg-black/20"></div>
+            <div className="relative z-10">
+                <Avatar className="h-28 w-28 mx-auto border-4 border-white shadow-lg">
+                    <AvatarImage src={user.avatarUrl} alt={user.name} />
+                    <AvatarFallback className="text-4xl"><Building /></AvatarFallback>
+                </Avatar>
+                <h1 className="text-3xl md:text-4xl font-bold mt-4">{user.name}</h1>
+                <p className="text-lg text-blue-100">{user.experience}</p>
+            </div>
+        </header>
+
+        <main className="container mx-auto max-w-4xl py-12 px-4 space-y-12">
+            {isUnclaimed && <UnclaimedProfileBanner />}
+            <section>
+                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><ShieldQuestion className="h-6 w-6 text-primary" /> About Us</h2>
+                <p className="text-lg text-slate-600 leading-relaxed">{user.bio}</p>
+            </section>
+            
+            <section className="grid md:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Target className="h-5 w-5 text-primary" /> Mission</h3>
+                    <p className="text-slate-600">{mission}</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Eye className="h-5 w-5 text-primary" /> Vision</h3>
+                    <p className="text-slate-600">{vision}</p>
+                </div>
+            </section>
+
+             {user.skills.length > 0 && (
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><Layers className="h-6 w-6 text-primary" /> Key Activities</h2>
+                    <div className="flex flex-wrap gap-3">
+                        {user.skills.map(s => (
+                           <span key={s} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
+                                {s}
+                            </span>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            <section className="text-center">
+                 <h2 className="text-2xl font-bold text-slate-800 mb-4">Join the Community</h2>
+                 <p className="text-slate-600 mb-6 max-w-2xl mx-auto">Connect with passionate optometry students across India. Gain access to educational resources, expert insights, and networking opportunities.</p>
+                 <Button asChild size="lg">
+                    <Link href="/membership#membership-join">Become a Member</Link>
+                 </Button>
+            </section>
+        </main>
+    </div>
+  );
+};
+
 
 const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
     const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
@@ -211,5 +275,11 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
 
 
 export function ProfileClient({ user }: { user: UserProfile }) {
+  const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
+
+  if (isOrg) {
+    return <OrganizationProfileLayout user={user} />;
+  }
+  
   return <ModernProfileLayout user={user} />;
 }
