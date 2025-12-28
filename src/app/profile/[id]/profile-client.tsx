@@ -44,8 +44,8 @@ const UnclaimedProfileBanner = () => (
         <AlertCircle className="h-5 w-5 text-amber-600" />
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
-            Are you part of this organization? Claim your profile to update details and manage your community presence.
-            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full sm:w-auto">
+            <p>Are you part of this organization? Claim your profile to update details and manage your community presence.</p>
+            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
                 <Link href="/membership#membership-join">Claim This Profile</Link>
             </Button>
         </AlertDescription>
@@ -80,24 +80,27 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
         <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
             
             <section>
-                {isUnclaimed && <UnclaimedProfileBanner />}
-                 <div className="flex flex-col sm:flex-row gap-3">
-                    {user.links?.website && (
-                        <Button asChild className="flex-grow" size="lg">
-                            <a href={user.links.website} target="_blank" rel="noopener noreferrer">
-                                Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
-                            </a>
-                        </Button>
-                    )}
-                    {contactEmail && (
-                        <Button variant="secondary" asChild className="flex-grow" size="lg">
-                            <a href={mailtoLink}>
-                                <Mail className="h-4 w-4 mr-2" /> Enquiry
-                            </a>
-                        </Button>
-                    )}
-                </div>
+                 <Card>
+                    <CardContent className="p-4 flex flex-col sm:flex-row gap-3">
+                         {user.links?.website && (
+                            <Button asChild className="flex-grow" size="lg">
+                                <a href={user.links.website} target="_blank" rel="noopener noreferrer">
+                                    Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
+                                </a>
+                            </Button>
+                        )}
+                        {contactEmail && (
+                            <Button variant="secondary" asChild className="flex-grow" size="lg">
+                                <a href={mailtoLink}>
+                                    <Mail className="h-4 w-4 mr-2" /> Enquiry
+                                </a>
+                            </Button>
+                        )}
+                    </CardContent>
+                </Card>
             </section>
+
+             {isUnclaimed && <UnclaimedProfileBanner />}
             
             <Separator />
             
