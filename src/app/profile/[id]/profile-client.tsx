@@ -6,7 +6,7 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion, UserRound, ArrowUpRight } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion, UserRound, ArrowUpRight, Eye } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -72,7 +72,12 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                 </Avatar>
                 <h1 className="text-3xl md:text-4xl font-bold mt-4">{user.name}</h1>
                 <p className="text-lg text-blue-100">{user.experience}</p>
-                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            </div>
+        </header>
+
+        <main className="container mx-auto max-w-4xl py-12 px-4 space-y-12">
+            {!isUnclaimed && (
+                <div className="-mt-24 relative z-20 flex flex-col sm:flex-row gap-3 justify-center">
                     {user.links?.website && (
                          <Button size="lg" asChild>
                             <a href={user.links.website} target="_blank" rel="noopener noreferrer">
@@ -88,10 +93,7 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                         </Button>
                     )}
                 </div>
-            </div>
-        </header>
-
-        <main className="container mx-auto max-w-4xl py-12 px-4 space-y-12">
+            )}
             {isUnclaimed && <UnclaimedProfileBanner />}
             <section>
                 <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><ShieldQuestion className="h-6 w-6 text-primary" /> About Us</h2>
@@ -104,7 +106,7 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                     <p className="text-slate-600">{mission}</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Globe className="h-5 w-5 text-primary" /> Vision</h3>
+                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Eye className="h-5 w-5 text-primary" /> Vision</h3>
                     <p className="text-slate-600">{vision}</p>
                 </div>
             </section>

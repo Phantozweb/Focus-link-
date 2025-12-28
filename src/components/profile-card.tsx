@@ -16,7 +16,7 @@ interface ProfileCardProps {
 export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
   const isTeamMember = user.isFounder || user.verifiedRole;
-  const isUnclaimed = user.verifiedRole === 'Unclaimed';
+  const isUnclaimed = !user.verified || user.verifiedRole === 'Unclaimed';
   
   const getAvatarHint = () => {
     if (isOrg) return "logo building";

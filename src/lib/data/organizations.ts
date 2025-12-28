@@ -97,6 +97,7 @@ export const organizations: UserProfile[] = [
     workExperience: [],
     education: [],
     languages: ['English', 'Hindi'],
-    verified: true,
+    verified: false,
+    verifiedRole: 'Unclaimed',
   }
 ];
