@@ -6,7 +6,7 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion, Eye, UserRound } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -189,7 +189,7 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                         
                         {!isUnclaimed && (
                           <div className="flex items-center gap-2">
-                              {user.links.linkedin && (
+                              {user.links?.linkedin && (
                                   <a href={user.links.linkedin} target="_blank" rel="noopener noreferrer" className="block flex-grow text-center py-3.5 px-4 rounded-xl font-semibold bg-blue-600 text-white shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-blue-700">
                                       <div className="flex items-center justify-center gap-2">
                                       {isOrg ? <Globe className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
@@ -197,12 +197,17 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                                       </div>
                                   </a>
                               )}
-                               {user.links.email && (
+                               {user.links?.email && (
                                   <a href={`mailto:${user.links.email}`} className="block flex-shrink-0 w-14 h-14 text-center p-4 rounded-xl font-semibold bg-slate-200 text-slate-600 shadow-lg shadow-slate-900/10 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-slate-300">
                                       <Mail className="w-full h-full" />
                                   </a>
                               )}
                           </div>
+                        )}
+                         {isUnclaimed && (
+                            <Button asChild className="w-full">
+                                <Link href="/membership#membership-join">Claim This Profile</Link>
+                            </Button>
                         )}
                     </div>
                 </aside>
