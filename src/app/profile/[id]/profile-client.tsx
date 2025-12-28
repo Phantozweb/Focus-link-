@@ -6,7 +6,7 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Eye, ShieldQuestion, UserRound, ArrowUpRight } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Eye, ShieldQuestion, UserRound, ArrowUpRight, UserPlus } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -46,9 +46,9 @@ const UnclaimedProfileBanner = () => (
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
             Are you part of this organization? Claim your profile to update details and manage your community presence.
-            <Dialog>
+             <Dialog>
                 <DialogTrigger asChild>
-                    <Button size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
+                     <Button size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
                         Claim This Profile
                     </Button>
                 </DialogTrigger>
@@ -93,10 +93,9 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
         <header className="relative h-56 md:h-64 bg-gradient-to-r from-cyan-500 to-blue-600 flex flex-col items-center justify-center text-white text-center p-4">
             <div className="absolute inset-0 bg-black/20"></div>
             <div className="relative z-10 flex flex-col items-center">
-                <Avatar className="h-28 w-28 mx-auto border-4 border-white shadow-lg">
-                    <AvatarImage src={user.avatarUrl} alt={user.name} />
-                    <AvatarFallback className="text-4xl bg-slate-200"><Building className="h-12 w-12 text-slate-400"/></AvatarFallback>
-                </Avatar>
+                 <div className="relative h-28 w-28 mx-auto flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-2xl border-4 border-white shadow-lg">
+                    <Image src={user.avatarUrl} alt={`${user.name} logo`} layout="fill" objectFit="contain" className="p-2"/>
+                </div>
                 <h1 className="text-3xl md:text-4xl font-bold mt-4">{user.name}</h1>
                 <p className="text-lg text-blue-100">{user.experience}</p>
             </div>
