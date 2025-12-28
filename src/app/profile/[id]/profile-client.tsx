@@ -44,7 +44,7 @@ const UnclaimedProfileBanner = () => (
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
             This is a placeholder profile. Are you this professional or part of this organization? Claim your profile to update your details and unlock member benefits.
-            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white">
+            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
                 <Link href="/membership#membership-join">Claim This Profile</Link>
             </Button>
         </AlertDescription>
@@ -77,17 +77,17 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
         </header>
         
         <div className="container mx-auto max-w-5xl -mt-10 relative z-20 px-4">
-            <Card className="mb-6 shadow-lg">
-                <CardContent className="p-3 flex flex-col sm:flex-row gap-3 justify-center">
+             <Card className="mb-6 shadow-lg">
+                <CardContent className="p-3 flex flex-col sm:flex-row gap-2 justify-center">
                     {user.links?.website && (
-                        <Button size="lg" asChild className="flex-grow">
+                        <Button asChild className="flex-grow">
                             <a href={user.links.website} target="_blank" rel="noopener noreferrer">
                                 Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
                             </a>
                         </Button>
                     )}
                     {contactEmail && (
-                        <Button size="lg" variant="secondary" asChild className="flex-grow">
+                        <Button variant="secondary" asChild className="flex-grow">
                             <a href={mailtoLink}>
                                 <Mail className="h-4 w-4 mr-2" /> Enquiry
                             </a>
@@ -95,7 +95,6 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                     )}
                 </CardContent>
             </Card>
-
             {isUnclaimed && <UnclaimedProfileBanner />}
         </div>
 
