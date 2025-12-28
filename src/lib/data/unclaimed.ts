@@ -35,5 +35,22 @@ export const unclaimedProfiles: UserProfile[] = [
     languages: ['English'],
     verified: false,
     verifiedRole: 'Unclaimed',
+  },
+  {
+    id: 'optobharat-unclaimed',
+    name: 'OptoBharat',
+    type: 'Association',
+    experience: 'National Student-Led Optometry Organization',
+    location: 'India',
+    skills: ['Student Collaboration', 'Community Outreach', 'Webinars', 'Clinical Workshops', 'Professional Development'],
+    interests: ['Student Leadership', 'Optometry Education', 'National Networking'],
+    bio: 'OptoBharat is a national, student-led initiative dedicated to uniting and empowering optometry students across India. Our mission is to foster a collaborative environment for learning, professional growth, and community engagement. This profile is currently unclaimed.',
+    links: {},
+    avatarUrl: '',
+    workExperience: [],
+    education: [],
+    languages: ['English', 'Hindi'],
+    verified: false,
+    verifiedRole: 'Unclaimed',
   }
 ];
