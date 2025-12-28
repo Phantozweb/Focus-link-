@@ -29,7 +29,6 @@ const directoryLinks = [
     { name: 'Institutions', href: '/directory/institutions', icon: <Building className="h-5 w-5"/> },
     { name: 'Clinics & Opticals', href: '/directory/clinics', icon: <Hospital className="h-5 w-5"/> },
     { name: 'Industry Partners', href: '/directory/industry', icon: <Factory className="h-5 w-5"/> },
-    { name: 'Unclaimed Profiles', href: '/unclaimed', icon: <UserPlus className="h-5 w-5"/> },
 ];
 
 const communityLinks = [
