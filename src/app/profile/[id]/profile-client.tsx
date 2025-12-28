@@ -38,7 +38,7 @@ const SkillChip = ({ skill }: { skill: string }) => (
 );
 
 const UnclaimedProfileBanner = () => (
-    <Alert className="mb-8 bg-amber-50 border-amber-300 text-amber-900">
+    <Alert className="bg-amber-50 border-amber-300 text-amber-900">
         <AlertCircle className="h-5 w-5 text-amber-600" />
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
@@ -57,8 +57,8 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
     const vision = user.id === 'optobharat' ? "To be India’s leading optometry student community, fostering innovation, inclusivity, and continuous learning by connecting students with national and global experts to shape the future of eye care." : "To be a global leader in eye care innovation and education.";
 
     const contactEmail = user.links?.email;
-    const emailSubject = encodeURIComponent(`Connecting via Focus Links`);
-    const emailBody = encodeURIComponent(`Hello ${user.name} team,\n\nI discovered your organization on FocusLinks.in and would love to connect and learn more about your work.\n\nBest regards,`);
+    const emailSubject = encodeURIComponent(`Connecting with ${user.name} via Focus Links`);
+    const emailBody = encodeURIComponent(`Hello ${user.name} team,\n\nI discovered your organization on FocusLinks.in and would love to learn more about your work.\n\nBest regards,`);
     const mailtoLink = `mailto:${contactEmail}?subject=${emailSubject}&body=${emailBody}`;
   
   return (
@@ -75,42 +75,47 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
             </div>
         </header>
 
-        <main className="container mx-auto max-w-4xl py-12 px-4 space-y-12">
+        <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
             
-            <div className="-mt-20 relative z-20 flex flex-col sm:flex-row gap-3 justify-center">
-                {user.links?.website && (
-                     <Button size="lg" asChild>
-                        <a href={user.links.website} target="_blank" rel="noopener noreferrer">
-                            Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
-                        </a>
-                    </Button>
-                )}
-                {contactEmail && (
-                    <Button size="lg" variant="secondary" asChild>
-                        <a href={mailtoLink}>
-                            <Mail className="h-4 w-4 mr-2" /> Contact Us
-                        </a>
-                    </Button>
-                )}
+            <div className="-mt-24 relative z-20 space-y-6">
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    {user.links?.website && (
+                        <Button size="lg" asChild>
+                            <a href={user.links.website} target="_blank" rel="noopener noreferrer">
+                                Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
+                            </a>
+                        </Button>
+                    )}
+                    {contactEmail && (
+                        <Button size="lg" variant="secondary" asChild>
+                            <a href={mailtoLink}>
+                                <Mail className="h-4 w-4 mr-2" /> Contact Us
+                            </a>
+                        </Button>
+                    )}
+                </div>
+
+                {isUnclaimed && <UnclaimedProfileBanner />}
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <section className="lg:col-span-2">
+                    <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><ShieldQuestion className="h-6 w-6 text-primary" /> About Us</h2>
+                    <p className="text-lg text-slate-600 leading-relaxed">{user.bio}</p>
+                </section>
+                
+                <aside className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow-sm border">
+                        <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Target className="h-5 w-5 text-primary" /> Mission</h3>
+                        <p className="text-slate-600">{mission}</p>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-sm border">
+                        <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Eye className="h-5 w-5 text-primary" /> Vision</h3>
+                        <p className="text-slate-600">{vision}</p>
+                    </div>
+                </aside>
             </div>
 
-            {isUnclaimed && <div className="pt-4"><UnclaimedProfileBanner /></div>}
-            
-            <section>
-                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><ShieldQuestion className="h-6 w-6 text-primary" /> About Us</h2>
-                <p className="text-lg text-slate-600 leading-relaxed">{user.bio}</p>
-            </section>
-            
-            <section className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Target className="h-5 w-5 text-primary" /> Mission</h3>
-                    <p className="text-slate-600">{mission}</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Eye className="h-5 w-5 text-primary" /> Vision</h3>
-                    <p className="text-slate-600">{vision}</p>
-                </div>
-            </section>
 
              {user.skills.length > 0 && (
                 <section>
@@ -166,12 +171,12 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                                     "absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center bg-white shadow-md",
                                     isTeamMember ? "text-green-500" : "text-blue-500"
                                 )}>
-                                    <CheckCircle2 className="w-6 h-6" />
+                                    <CheckCircle2 className="w-6 w-6" />
                                 </div>
                             )}
                              {user.isFounder && (
                                 <div className="absolute top-1 right-1 w-8 h-8 rounded-full flex items-center justify-center bg-amber-400 text-white shadow-md">
-                                    <Star className="w-5 h-5" />
+                                    <Star className="w-5 w-5" />
                                 </div>
                             )}
                         </div>
