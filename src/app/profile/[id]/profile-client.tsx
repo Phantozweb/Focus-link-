@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 
 const SectionTitle = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -39,12 +40,12 @@ const SkillChip = ({ skill }: { skill: string }) => (
 );
 
 const UnclaimedProfileBanner = () => (
-    <Alert className="bg-amber-50 border-amber-300 text-amber-900">
+    <Alert className="bg-amber-50 border-amber-300 text-amber-900 mb-8">
         <AlertCircle className="h-5 w-5 text-amber-600" />
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
-            This is a placeholder profile. Are you this professional or part of this organization? Claim your profile to update your details and unlock member benefits.
-            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
+            This is a placeholder profile. Are you part of this organization? Claim your profile to update details and manage your community presence.
+            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full sm:w-auto">
                 <Link href="/membership#membership-join">Claim This Profile</Link>
             </Button>
         </AlertDescription>
@@ -75,31 +76,29 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                 <p className="text-lg text-blue-100">{user.experience}</p>
             </div>
         </header>
-        
-        <div className="container mx-auto max-w-5xl -mt-10 relative z-20 px-4">
-             <Card className="mb-6 shadow-lg">
-                <CardContent className="p-3 flex flex-col sm:flex-row gap-2 justify-center">
+
+        <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
+            <section>
+                 {isUnclaimed && <UnclaimedProfileBanner />}
+                <div className="flex flex-col sm:flex-row gap-3">
                     {user.links?.website && (
-                        <Button asChild className="flex-grow">
+                        <Button asChild className="flex-grow" size="lg">
                             <a href={user.links.website} target="_blank" rel="noopener noreferrer">
                                 Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
                             </a>
                         </Button>
                     )}
                     {contactEmail && (
-                        <Button variant="secondary" asChild className="flex-grow">
+                        <Button variant="secondary" asChild className="flex-grow" size="lg">
                             <a href={mailtoLink}>
                                 <Mail className="h-4 w-4 mr-2" /> Enquiry
                             </a>
                         </Button>
                     )}
-                </CardContent>
-            </Card>
-            {isUnclaimed && <UnclaimedProfileBanner />}
-        </div>
-
-
-        <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
+                </div>
+            </section>
+            
+            <Separator />
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <section className="lg:col-span-2">
@@ -120,7 +119,7 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
             </div>
 
 
-             {user.skills.length > 0 && (
+             {user.skills && user.skills.length > 0 && (
                 <section>
                     <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><Layers className="h-6 w-6 text-primary" /> Key Activities</h2>
                     <div className="flex flex-wrap gap-3">
@@ -243,12 +242,12 @@ const ModernProfileLayout = ({ user }: { user: UserProfile }) => {
                     <SectionTitle icon={<User className="w-5 h-5" />}>Professional Summary</SectionTitle>
                     <p className="text-[--profile-text-light] leading-relaxed text-sm mb-10">{user.bio}</p>
 
-                    {user.skills.length > 0 && (
+                    {user.skills && user.skills.length > 0 && (
                         <>
                             <SectionTitle icon={<Layers className="w-5 h-5" />}>Expertise & Interests</SectionTitle>
                             <div className="flex flex-wrap gap-2 mb-10">
                                 {user.skills.map(s => <SkillChip key={s} skill={s} />)}
-                                {user.interests.map(i => <SkillChip key={i} skill={i} />)}
+                                {user.interests && user.interests.map(i => <SkillChip key={i} skill={i} />)}
                             </div>
                         </>
                     )}
