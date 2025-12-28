@@ -6,7 +6,7 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion, UserRound, ArrowUpRight, Eye } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Eye, ShieldQuestion, UserRound, ArrowUpRight } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -45,8 +45,8 @@ const UnclaimedProfileBanner = () => (
         <AlertCircle className="h-5 w-5 text-amber-600" />
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
-            <p>Are you part of this organization? Claim your profile to update details and manage your community presence.</p>
-             <Dialog>
+            Are you part of this organization? Claim your profile to update details and manage your community presence.
+            <Dialog>
                 <DialogTrigger asChild>
                     <Button size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
                         Claim This Profile
@@ -66,7 +66,7 @@ const UnclaimedProfileBanner = () => (
                     </div>
                     <DialogFooter>
                          <Button asChild className="w-full">
-                            <a href="mailto:team.focuslinks@outlook.com?subject=Profile%20Claim%20Request">
+                            <a href="mailto:team.focuslinks@gmail.com?subject=Profile%20Claim%20Request">
                                 <Mail className="mr-2 h-4 w-4" /> Email Us to Claim
                             </a>
                         </Button>
