@@ -6,7 +6,7 @@ import type { Education, WorkExperience, UserProfile, Achievement } from '@/type
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion, Eye, UserRound } from 'lucide-react';
+import { Briefcase, Building, Check, CheckCircle2, Factory, Globe, GraduationCap, Handshake, History, Hospital, Layers, Linkedin, Mail, MapPin, University, User, Users, FileText, Award, Star, AlertCircle, Target, Users2, ShieldQuestion, UserRound } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -83,7 +83,7 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                     <p className="text-slate-600">{mission}</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Eye className="h-5 w-5 text-primary" /> Vision</h3>
+                    <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2"><Globe className="h-5 w-5 text-primary" /> Vision</h3>
                     <p className="text-slate-600">{vision}</p>
                 </div>
             </section>
@@ -102,10 +102,10 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
             )}
 
             <section className="text-center">
-                 <h2 className="text-2xl font-bold text-slate-800 mb-4">Join the Community</h2>
-                 <p className="text-slate-600 mb-6 max-w-2xl mx-auto">Connect with passionate optometry students across India. Gain access to educational resources, expert insights, and networking opportunities.</p>
+                 <h2 className="text-2xl font-bold text-slate-800 mb-4">Learn More</h2>
+                 <p className="text-slate-600 mb-6 max-w-2xl mx-auto">Explore the official OptoBharat website to learn more about their mission, team, and how to get involved.</p>
                  <Button asChild size="lg">
-                    <Link href="/membership#membership-join">Become a Member</Link>
+                    <a href={user.links?.website} target="_blank" rel="noopener noreferrer">Visit Their Website</a>
                  </Button>
             </section>
         </main>

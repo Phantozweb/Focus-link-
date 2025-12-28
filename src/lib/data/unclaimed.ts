@@ -42,11 +42,13 @@ export const unclaimedProfiles: UserProfile[] = [
     type: 'Association',
     experience: "India's Largest Optometry Student Community",
     location: 'India',
-    skills: ['Student Collaboration', 'Community Outreach', 'Webinars', 'Clinical Workshops', 'Professional Development', 'Leadership Training', 'Eye Health Awareness'],
-    interests: ['Student Leadership', 'Optometry Education', 'National Networking', 'Global Collaboration', 'Vision Care Innovation'],
-    bio: "Welcome to OPTOBHARAT, India’s largest optometry student community, dedicated to uniting future optometrists across the nation and worldwide. We are committed to fostering collaboration, knowledge-sharing, and professional growth, empowering aspiring eye care professionals to shape the future of vision health in India and beyond.\n\nOPTOBHARAT represents \"India’s Vision\"—a movement dedicated to advancing eye care education, awareness, and innovation. At OPTOBHARAT, we believe in learning, leading, and revolutionizing vision care. Through expert-led discussions, skill-building workshops, and networking opportunities, our mission is to equip optometry students with the knowledge and support they need to excel in their careers.",
-    links: {},
-    avatarUrl: 'https://i.ibb.co/bX0vV53/rapd-og-image.png',
+    skills: ['Student Collaboration', 'Community Outreach', 'Webinars & Events', 'Clinical Workshops', 'Professional Development', 'Leadership Training', 'Eye Health Awareness', 'Global Networking'],
+    interests: ['Student Leadership', 'Optometry Education', 'National Networking', 'Global Collaboration', 'Vision Care Innovation', 'Public Health'],
+    bio: "OPTOBHARAT is India’s largest and most impactful optometry student community, dedicated to uniting and empowering the next generation of eye care professionals across the nation and the globe. Our mission is to foster education, innovation, and collaboration in the field of optometry.\n\nOur community serves as a vibrant hub for knowledge-sharing, skill enhancement, and professional networking. We bridge the gap between academic learning and real-world clinical practice through expert-led discussions, hands-on workshops, and global interactions. By joining us, students, practitioners, and educators gain access to exclusive resources, career guidance, and mentorship opportunities designed to foster excellence and leadership in vision care.",
+    links: {
+        website: 'https://optobharat.simdif.com/'
+    },
+    avatarUrl: 'https://optobharat.simdif.com/images/public/sd_67d31b9eda24f.png?no_cache=1741890071',
     workExperience: [],
     education: [],
     languages: ['English', 'Hindi'],
