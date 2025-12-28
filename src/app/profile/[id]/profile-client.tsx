@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 
 const SectionTitle = ({ icon, children }: { icon: React.ReactNode, children: React.ReactNode }) => (
@@ -45,9 +46,33 @@ const UnclaimedProfileBanner = () => (
         <AlertTitle className="font-bold">This Profile is Unclaimed</AlertTitle>
         <AlertDescription>
             <p>Are you part of this organization? Claim your profile to update details and manage your community presence.</p>
-            <Button asChild size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
-                <Link href="/membership#membership-join">Claim This Profile</Link>
-            </Button>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <Button size="sm" className="mt-3 bg-amber-500 hover:bg-amber-600 text-white w-full">
+                        Claim This Profile
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Claim Your Organization's Profile</DialogTitle>
+                        <DialogDescription>
+                            To ensure the integrity of our community, please follow these steps to claim your profile:
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4 space-y-4">
+                        <p><strong>Step 1:</strong> Send an email from your official organization email address (e.g., yourname@yourorganization.com).</p>
+                        <p><strong>Step 2:</strong> In the email, please attach verifiable documents or proofs of your affiliation with the organization.</p>
+                        <p><strong>Step 3:</strong> Our team will review your request and get back to you promptly.</p>
+                    </div>
+                    <DialogFooter>
+                         <Button asChild className="w-full">
+                            <a href="mailto:team.focuslinks@outlook.com?subject=Profile%20Claim%20Request">
+                                <Mail className="mr-2 h-4 w-4" /> Email Us to Claim
+                            </a>
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </AlertDescription>
     </Alert>
 );
@@ -79,26 +104,24 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
 
         <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
             
-            <section>
-                 <Card>
-                    <CardContent className="p-4 flex flex-col sm:flex-row gap-3">
-                         {user.links?.website && (
-                            <Button asChild className="flex-grow" size="lg">
-                                <a href={user.links.website} target="_blank" rel="noopener noreferrer">
-                                    Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
-                                </a>
-                            </Button>
-                        )}
-                        {contactEmail && (
-                            <Button variant="secondary" asChild className="flex-grow" size="lg">
-                                <a href={mailtoLink}>
-                                    <Mail className="h-4 w-4 mr-2" /> Enquiry
-                                </a>
-                            </Button>
-                        )}
-                    </CardContent>
-                </Card>
-            </section>
+            <Card>
+                <CardContent className="p-4 flex flex-col sm:flex-row gap-3">
+                     {user.links?.website && (
+                        <Button asChild className="flex-grow" size="lg">
+                            <a href={user.links.website} target="_blank" rel="noopener noreferrer">
+                                Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
+                            </a>
+                        </Button>
+                    )}
+                    {contactEmail && (
+                        <Button variant="secondary" asChild className="flex-grow" size="lg">
+                            <a href={mailtoLink}>
+                                <Mail className="h-4 w-4 mr-2" /> Enquiry
+                            </a>
+                        </Button>
+                    )}
+                </CardContent>
+            </Card>
 
              {isUnclaimed && <UnclaimedProfileBanner />}
             
