@@ -74,29 +74,30 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
                 <p className="text-lg text-blue-100">{user.experience}</p>
             </div>
         </header>
+        
+        <div className="container mx-auto max-w-5xl -mt-10 relative z-20 px-4">
+             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+                {user.links?.website && (
+                    <Button size="lg" asChild className="shadow-lg">
+                        <a href={user.links.website} target="_blank" rel="noopener noreferrer">
+                            Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
+                        </a>
+                    </Button>
+                )}
+                {contactEmail && (
+                    <Button size="lg" variant="secondary" asChild className="shadow-lg">
+                        <a href={mailtoLink}>
+                            <Mail className="h-4 w-4 mr-2" /> Contact Us
+                        </a>
+                    </Button>
+                )}
+            </div>
+
+            {isUnclaimed && <UnclaimedProfileBanner />}
+        </div>
+
 
         <main className="container mx-auto max-w-5xl py-12 px-4 space-y-12">
-            
-            <div className="-mt-24 relative z-20 space-y-6">
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    {user.links?.website && (
-                        <Button size="lg" asChild>
-                            <a href={user.links.website} target="_blank" rel="noopener noreferrer">
-                                Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
-                            </a>
-                        </Button>
-                    )}
-                    {contactEmail && (
-                        <Button size="lg" variant="secondary" asChild>
-                            <a href={mailtoLink}>
-                                <Mail className="h-4 w-4 mr-2" /> Contact Us
-                            </a>
-                        </Button>
-                    )}
-                </div>
-
-                {isUnclaimed && <UnclaimedProfileBanner />}
-            </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <section className="lg:col-span-2">
