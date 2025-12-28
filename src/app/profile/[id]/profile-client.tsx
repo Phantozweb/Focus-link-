@@ -76,25 +76,26 @@ const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
         </header>
 
         <main className="container mx-auto max-w-4xl py-12 px-4 space-y-12">
-            {!isUnclaimed && (
-                <div className="-mt-24 relative z-20 flex flex-col sm:flex-row gap-3 justify-center">
-                    {user.links?.website && (
-                         <Button size="lg" asChild>
-                            <a href={user.links.website} target="_blank" rel="noopener noreferrer">
-                                Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
-                            </a>
-                        </Button>
-                    )}
-                    {contactEmail && (
-                        <Button size="lg" variant="secondary" asChild>
-                            <a href={mailtoLink}>
-                                <Mail className="h-4 w-4 mr-2" /> Contact Us
-                            </a>
-                        </Button>
-                    )}
-                </div>
-            )}
-            {isUnclaimed && <UnclaimedProfileBanner />}
+            
+            <div className="-mt-20 relative z-20 flex flex-col sm:flex-row gap-3 justify-center">
+                {user.links?.website && (
+                     <Button size="lg" asChild>
+                        <a href={user.links.website} target="_blank" rel="noopener noreferrer">
+                            Visit Website <ArrowUpRight className="h-4 w-4 ml-2" />
+                        </a>
+                    </Button>
+                )}
+                {contactEmail && (
+                    <Button size="lg" variant="secondary" asChild>
+                        <a href={mailtoLink}>
+                            <Mail className="h-4 w-4 mr-2" /> Contact Us
+                        </a>
+                    </Button>
+                )}
+            </div>
+
+            {isUnclaimed && <div className="pt-4"><UnclaimedProfileBanner /></div>}
+            
             <section>
                 <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3"><ShieldQuestion className="h-6 w-6 text-primary" /> About Us</h2>
                 <p className="text-lg text-slate-600 leading-relaxed">{user.bio}</p>
