@@ -11,9 +11,10 @@ interface ProfileCardProps {
   user: UserProfile;
   hideButton?: boolean;
   isFeatured?: boolean;
+  isUnclaimed?: boolean;
 }
 
-export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) {
+export function ProfileCard({ user, hideButton, isFeatured, isUnclaimed }: ProfileCardProps) {
   const isOrg = ['Association', 'College', 'Hospital', 'Optical', 'Industry'].includes(user.type);
   const isTeamMember = user.isFounder || user.verifiedRole;
   
@@ -42,7 +43,7 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
                 {getFallbackIcon()}
             </AvatarFallback>
         </Avatar>
-        {user.verified && (
+        {user.verified && !isUnclaimed && (
           <div className={cn(
             "absolute bottom-0 right-0 w-6 h-6 rounded-full flex items-center justify-center bg-white shadow-md",
             isTeamMember ? "text-green-500" : "text-blue-500"
@@ -58,16 +59,20 @@ export function ProfileCard({ user, hideButton, isFeatured }: ProfileCardProps) 
       
       {!hideButton && (
         <div className="card-actions">
-          <Link href={`/profile/${user.id}`} className="btn-profile">View Profile</Link>
-          {user.links?.email && (
-            <a href={`mailto:${user.links.email}`} className="btn-icon">
-              <Mail className="h-5 w-5"/>
-            </a>
+          {isUnclaimed ? (
+            <Link href="/membership#membership-join" className="btn-profile bg-amber-500 hover:bg-amber-600">Claim this Profile!</Link>
+          ) : (
+            <>
+              <Link href={`/profile/${user.id}`} className="btn-profile">View Profile</Link>
+              {user.links?.email && (
+                <a href={`mailto:${user.links.email}`} className="btn-icon">
+                  <Mail className="h-5 w-5"/>
+                </a>
+              )}
+            </>
           )}
         </div>
       )}
     </div>
   );
 }
-
-    
