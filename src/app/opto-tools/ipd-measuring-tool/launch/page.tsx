@@ -1,11 +1,23 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { IpdToolClient } from '../ipd-tool-client';
+
+function IpdToolEmbed() {
+  return (
+    <div className="fixed inset-0 bg-slate-800 flex items-center justify-center">
+      <iframe
+        id="ipd-frame"
+        src="https://ipdtester.netlify.app/?embed=true"
+        className="w-full h-full md:w-[90%] md:h-[90%] md:max-w-4xl md:max-h-[800px] md:rounded-2xl shadow-2xl bg-white"
+        allow="camera; microphone"
+        frameBorder="0"
+      ></iframe>
+    </div>
+  );
+}
 
 export default function IpdToolLaunchPage() {
     const [isVerified, setIsVerified] = useState(false);
@@ -39,5 +51,5 @@ export default function IpdToolLaunchPage() {
         );
     }
     
-    return <IpdToolClient />;
+    return <IpdToolEmbed />;
 }
