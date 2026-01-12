@@ -76,12 +76,6 @@ const nextConfig: NextConfig = {
         hostname: 'raw.githubusercontent.com',
         port: '',
         pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'optobharat.simdif.com',
-        port: '',
-        pathname: '/**',
       }
     ],
   },

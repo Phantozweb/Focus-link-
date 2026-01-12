@@ -79,9 +79,8 @@ const UnclaimedProfileBanner = () => (
 
 const OrganizationProfileLayout = ({ user }: { user: UserProfile }) => {
     const isUnclaimed = !user.verified || user.verifiedRole === 'Unclaimed';
-  
-    const mission = user.id === 'optobharat' ? "Empowering optometry students across India to connect, learn, and collaborate in advancing eye care excellence, while building bridges with national and global experts." : "Our mission is to advance the field of vision science and provide exceptional care.";
-    const vision = user.id === 'optobharat' ? "To be India’s leading optometry student community, fostering innovation, inclusivity, and continuous learning by connecting students with national and global experts to shape the future of eye care." : "To be a global leader in eye care innovation and education.";
+    const mission = "Our mission is to advance the field of vision science and provide exceptional care.";
+    const vision = "To be a global leader in eye care innovation and education.";
 
     const contactEmail = user.links?.email;
     const emailSubject = encodeURIComponent(`Connecting with ${user.name} via Focus Links`);
