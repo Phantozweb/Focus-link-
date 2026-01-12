@@ -85,10 +85,7 @@ export default function IpdToolInfoPage() {
                     </Link>
                 </Button>
           </div>
-          <div className="relative rounded-xl shadow-2xl overflow-hidden border-4 border-slate-200 aspect-video bg-slate-800 flex items-center justify-center text-slate-400">
-            <p>[IPD Tool Demo Video Placeholder]</p>
-          </div>
-
+          
           <div className="mt-8">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
@@ -149,7 +146,7 @@ export default function IpdToolInfoPage() {
                     <ScanFace className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
                     <div>
                         <h4 className="font-semibold">AI Face Landmark Detection</h4>
-                        <p className="text-sm text-muted-foreground">Utilizes MediaPipe's Face Landmarker model to accurately detect pupil positions in real-time.</p>
+                        <p className="text-sm text-muted-foreground">Utilizes advanced AI to accurately detect pupil positions in real-time.</p>
                     </div>
                 </div>
                  <div className="flex items-start gap-4">
