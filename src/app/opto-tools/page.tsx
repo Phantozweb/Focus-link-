@@ -21,6 +21,13 @@ export default function OptoToolsPage() {
       icon: <Calculator className="h-8 w-8 text-primary" />,
     },
     {
+      id: 'ipd-measuring-tool',
+      title: 'IPD Measure Pro',
+      description: 'An AI-powered tool to accurately measure interpupillary distance using your webcam.',
+      href: '/opto-tools/ipd-measuring-tool',
+      icon: <ScanFace className="h-8 w-8 text-primary" />,
+    },
+    {
       id: 'rapd-simulator',
       title: 'RAPD Simulator Practice',
       description: 'Practice the swinging flashlight test to detect Relative Afferent Pupillary Defects.',
