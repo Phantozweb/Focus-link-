@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, ArrowRight, ScanFace, Eye } from 'lucide-react';
+import { Calculator, ArrowRight, ScanFace, Eye, Library } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -33,6 +33,13 @@ export default function OptoToolsPage() {
       description: 'Practice the swinging flashlight test to detect Relative Afferent Pupillary Defects.',
       href: '/opto-tools/rapd-simulator',
       icon: <Eye className="h-8 w-8 text-primary" />,
+    },
+    {
+      id: 'optoscholor',
+      title: 'OptoScholar',
+      description: 'Search over 1 million indexed optometry articles, journals, and case studies.',
+      href: '/opto-tools/optoscholor',
+      icon: <Library className="h-8 w-8 text-primary" />,
     },
     // Add other tools here in the future
   ];
