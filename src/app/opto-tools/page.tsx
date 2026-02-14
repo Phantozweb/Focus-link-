@@ -14,6 +14,13 @@ export const metadata: Metadata = {
 export default function OptoToolsPage() {
   const tools = [
     {
+      id: 'optoscholor',
+      title: 'OptoScholar Research Engine',
+      description: 'Specialized clinical search for optometry. 1M+ indexed articles.',
+      href: '/opto-tools/optoscholar-clinical-research-engine',
+      icon: <Library className="h-8 w-8 text-primary" />,
+    },
+    {
       id: 'optometry-calculator',
       title: 'Optometry Calculator Suite',
       description: 'Access 20+ clinical calculators for refraction, contact lenses, and low vision.',
@@ -33,13 +40,6 @@ export default function OptoToolsPage() {
       description: 'Practice the swinging flashlight test to detect Relative Afferent Pupillary Defects.',
       href: '/opto-tools/rapd-simulator',
       icon: <Eye className="h-8 w-8 text-primary" />,
-    },
-    {
-      id: 'optoscholor',
-      title: 'OptoScholar Research Engine',
-      description: 'Specialized clinical search for optometry. 1M+ indexed articles.',
-      href: '/opto-tools/optoscholor',
-      icon: <Library className="h-8 w-8 text-primary" />,
     },
     // Add other tools here in the future
   ];

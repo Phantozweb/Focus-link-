@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 function SimulatorContent() {
   const [htmlContent, setHtmlContent] = useState('');
@@ -73,36 +72,5 @@ function SimulatorContent() {
 }
 
 export default function RapdSimulatorLaunchPage() {
-    const [isVerified, setIsVerified] = useState(false);
-    const router = useRouter();
-
-    useEffect(() => {
-        const verifiedId = sessionStorage.getItem('rapd_simulator_access_id');
-        if (verifiedId) {
-            setIsVerified(true);
-        } else {
-            router.replace('/opto-tools/rapd-simulator');
-        }
-    }, [router]);
-
-    if (!isVerified) {
-        // This is a fallback while redirecting
-        return (
-            <div className="min-h-screen bg-muted/40 flex items-center justify-center p-4">
-                <Card className="w-full max-w-lg text-center">
-                    <CardHeader>
-                        <CardTitle className="text-3xl font-headline">Redirecting...</CardTitle>
-                        <CardDescription className="text-lg">
-                           Verifying access...
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                       <Loader2 className="h-8 w-8 mx-auto animate-spin text-primary" />
-                    </CardContent>
-                </Card>
-            </div>
-        );
-    }
-    
     return <SimulatorContent />;
 }

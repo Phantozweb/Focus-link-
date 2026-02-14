@@ -20,7 +20,6 @@ import { Separator } from '@/components/ui/separator';
 import { RapdSimulatorDemo } from '@/components/rapd-simulator-demo';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-
 // Debounce function
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number) {
   let timeout: NodeJS.Timeout;
@@ -147,48 +146,11 @@ const featureCategories = [
 
 
 export default function RapdSimulatorInfoPage() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [membershipId, setMembershipId] = useState('');
-  const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
   const { toast } = useToast();
   const router = useRouter();
 
-  const checkIdValidity = useCallback(debounce(async (id: string) => {
-    if (!id || id.trim().length < 5) {
-      setIdStatus('idle');
-      return;
-    }
-    setIdStatus('loading');
-    try {
-      const response = await fetch(`/api/verify-id?id=${encodeURIComponent(id)}`);
-      const data = await response.json();
-      if (data.isValid) {
-        setIdStatus('valid');
-      } else {
-        setIdStatus('invalid');
-      }
-    } catch (error) {
-      console.error('ID validation failed:', error);
-      setIdStatus('invalid');
-      toast({ variant: 'destructive', title: 'Error', description: 'Could not verify ID. Please check your connection.' });
-    }
-  }, 500), [toast]);
-  
-   useEffect(() => {
-    if (membershipId) {
-      checkIdValidity(membershipId);
-    } else {
-      setIdStatus('idle');
-    }
-  }, [membershipId, checkIdValidity]);
-
   const handleLaunch = () => {
-    if (idStatus === 'valid') {
-        sessionStorage.setItem('rapd_simulator_access_id', membershipId);
-        router.push('/opto-tools/rapd-simulator/launch');
-    } else {
-        toast({ variant: 'destructive', title: 'Invalid ID', description: 'Please enter a valid membership ID to launch the simulator.' });
-    }
+    router.push('/opto-tools/rapd-simulator/launch');
   };
 
   const handleShare = (platform: 'whatsapp' | 'twitter' | 'copy') => {
@@ -208,7 +170,6 @@ export default function RapdSimulatorInfoPage() {
       });
     }
   };
-
 
   return (
     <>
@@ -247,51 +208,10 @@ export default function RapdSimulatorInfoPage() {
           </div>
 
           <div className="mt-8">
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button size="lg" className="w-full text-lg py-6">
-                  <Play className="mr-2 h-6 w-6" />
-                  Launch Full Simulator
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                 <DialogHeader className="text-center items-center">
-                    <DialogTitle className="text-2xl font-headline">Member Access</DialogTitle>
-                    <DialogDescription>
-                        This clinical simulator is an exclusive tool for Focus Links members. Please verify your ID to continue.
-                    </DialogDescription>
-                </DialogHeader>
-                 <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="membership-id">Membership ID</Label>
-                    <div className="relative">
-                      <Input
-                        id="membership-id"
-                        value={membershipId}
-                        onChange={(e) => setMembershipId(e.target.value)}
-                        placeholder="e.g., IN20251026084533"
-                        className="h-12"
-                      />
-                       <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                          {idStatus === 'loading' && <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />}
-                          {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
-                          {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
-                        </div>
-                    </div>
-                  </div>
-                   <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
-                      Verify & Launch Simulator
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                </div>
-                <DialogDescription className="text-center text-sm">
-                  Don't have an ID?{' '}
-                  <Link href="/membership" className="underline text-primary font-semibold">
-                    Get one for free
-                  </Link>
-                </DialogDescription>
-              </DialogContent>
-            </Dialog>
+            <Button size="lg" className="w-full text-lg py-6" onClick={handleLaunch}>
+              <Play className="mr-2 h-6 w-6" />
+              Launch Full Simulator
+            </Button>
           </div>
 
         <Card className="mt-12">
@@ -347,7 +267,7 @@ export default function RapdSimulatorInfoPage() {
                             <ul>
                                 <li><strong>1-2+ (Mild):</strong> Affected eye constricts initially, then escapes (dilates) under direct light.</li>
                                 <li><strong>3+ (Moderate):</strong> Affected eye shows immediate dilation when light swings to it.</li>
-                                <li><strong>4+ (Severe/Amaurotic):</strong> No direct light response, but constricts consensually.</li>
+                                <li><strong>4+ (Severe/Amaurotic):</strong> No direct response to light, but constricts consensually.</li>
                             </ul>
 
                             <h5>C. Pupil Response Settings</h5>
