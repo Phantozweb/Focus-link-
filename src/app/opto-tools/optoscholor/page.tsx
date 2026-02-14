@@ -1,8 +1,16 @@
 
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Search, UserPlus, GraduationCap, Stethoscope, Microscope } from 'lucide-react';
+import { Check, Search, UserPlus, GraduationCap, Stethoscope, Microscope, AlertTriangle, ArrowRight, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const faqSchema = {
     "@context": "https://schema.org",
@@ -57,6 +65,47 @@ const softwareSchema = {
 
 
 export default function OptoScholarPage() {
+    const router = useRouter();
+    const { toast } = useToast();
+    const [membershipId, setMembershipId] = useState('');
+    const [idStatus, setIdStatus] = useState<'idle' | 'loading' | 'valid' | 'invalid'>('idle');
+
+    const handleVerify = async () => {
+        if (!membershipId) {
+            toast({ variant: 'destructive', title: 'Error', description: 'Please enter a membership ID.' });
+            return;
+        }
+        setIdStatus('loading');
+        try {
+            const response = await fetch('/api/verify-id', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ membershipId }),
+            });
+            const data = await response.json();
+            if (data.isValid) {
+                setIdStatus('valid');
+                toast({ title: 'Success', description: 'Membership ID verified.' });
+            } else {
+                setIdStatus('invalid');
+                toast({ variant: 'destructive', title: 'Error', description: 'Invalid or expired membership ID.' });
+            }
+        } catch (error) {
+            setIdStatus('invalid');
+            toast({ variant: 'destructive', title: 'Error', description: 'An error occurred during verification.' });
+        }
+    };
+    
+    const handleLaunch = () => {
+        if (idStatus === 'valid') {
+            sessionStorage.setItem('optoscholar_access_id', membershipId);
+            router.push('/opto-tools/optoscholor/launch');
+        } else {
+            toast({ variant: 'destructive', title: 'Verification Required', description: 'Please verify your membership ID to launch the tool.' });
+        }
+    };
+
+
     return (
         <>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
@@ -126,11 +175,55 @@ export default function OptoScholarPage() {
                              <p className="mt-2 text-slate-300">
                                 Cut through academic clutter and access clinically structured research designed specifically for the eye-care discipline.
                             </p>
-                            <Button size="lg" className="mt-6" asChild>
-                               <Link href="/opto-tools/optoscholor">
-                                    <Search className="mr-2 h-5 w-5" /> Launch OptoScholar
-                               </Link>
-                            </Button>
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button size="lg" className="mt-6">
+                                        <Search className="mr-2 h-5 w-5" /> Launch OptoScholar
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Membership Verification</DialogTitle>
+                                        <DialogDescription>
+                                            Please enter your FocusLinks membership ID to access OptoScholar.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-4">
+                                      <div className="flex items-center space-x-2">
+                                        <div className="grid flex-1 gap-2">
+                                          <Input
+                                            id="membershipId"
+                                            placeholder="Enter your membership ID"
+                                            value={membershipId}
+                                            onChange={(e) => {
+                                              setMembershipId(e.target.value)
+                                              setIdStatus('idle');
+                                            }}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
+                                          />
+                                        </div>
+                                        <Button type="submit" size="sm" className="px-3" onClick={handleVerify} disabled={idStatus === 'loading'}>
+                                          <span className="sr-only">Verify ID</span>
+                                          {idStatus === 'loading' ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                                        </Button>
+                                        <div className="h-5 w-5">
+                                          {idStatus === 'valid' && <CheckCircle className="h-5 w-5 text-green-500" />}
+                                          {idStatus === 'invalid' && <XCircle className="h-5 w-5 text-destructive" />}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <Button onClick={handleLaunch} disabled={idStatus !== 'valid'} className="w-full">
+                                       Verify & Launch
+                                       <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                    <DialogDescription className="text-center text-sm">
+                                      Don't have an ID?{' '}
+                                      <Link href="/membership" className="underline text-primary font-semibold">
+                                        Get one for free
+                                      </Link>
+                                    </DialogDescription>
+                                  </DialogContent>
+                            </Dialog>
                         </Card>
                     </section>
 
