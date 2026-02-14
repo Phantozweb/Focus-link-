@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Mail, User, Loader2, PartyPopper, KeySquare, ShieldCheck } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Mail, User, Loader2, PartyPopper, KeySquare, ShieldCheck, Search } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 function WaitlistForm() {
   const [name, setName] = useState('');
@@ -94,7 +95,6 @@ function AccessForm() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    // In a real app, this would involve a server-side check.
     const VALID_ACCESS_CODE = "EARLYACCESS";
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -139,27 +139,44 @@ function AccessForm() {
 
 export function OptoScholarAccess() {
     return (
-        <div className="p-8 bg-slate-100 dark:bg-slate-800 rounded-lg max-w-md mx-auto">
-            <Tabs defaultValue="waitlist">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="waitlist">Join Waitlist</TabsTrigger>
-                    <TabsTrigger value="access">Have a Code?</TabsTrigger>
-                </TabsList>
-                <TabsContent value="waitlist">
-                    <div className="text-center mb-4 pt-4">
-                        <h3 className="text-lg font-semibold">Be the first to know</h3>
-                        <p className="text-sm text-muted-foreground">Sign up now to get early access to OptoScholar.</p>
-                    </div>
-                    <WaitlistForm />
-                </TabsContent>
-                <TabsContent value="access">
-                    <div className="text-center mb-4 pt-4">
-                        <h3 className="text-lg font-semibold">Already have access?</h3>
-                        <p className="text-sm text-muted-foreground">Enter your access code below to launch the tool.</p>
-                    </div>
-                    <AccessForm />
-                </TabsContent>
-            </Tabs>
-        </div>
+        <Card className="max-w-lg mx-auto border-2 border-primary/20 shadow-lg">
+            <CardHeader className="text-center">
+                <div className="mx-auto bg-primary/10 rounded-full p-3 w-fit mb-4">
+                    <Search className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-2xl font-bold">OptoScholar Access</CardTitle>
+                <CardDescription className="text-base">
+                    The clinical research engine is currently in a limited-access phase.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Tabs defaultValue="waitlist" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 bg-muted/80">
+                        <TabsTrigger value="waitlist">
+                            <Mail className="mr-2 h-4 w-4" />
+                            Join Waitlist
+                        </TabsTrigger>
+                        <TabsTrigger value="access">
+                             <KeySquare className="mr-2 h-4 w-4" />
+                            Enter Code
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="waitlist" className="pt-6">
+                        <div className="text-center mb-4">
+                            <h3 className="text-lg font-semibold">Be the first to know</h3>
+                            <p className="text-sm text-muted-foreground">Sign up to get notified when OptoScholar is publicly available.</p>
+                        </div>
+                        <WaitlistForm />
+                    </TabsContent>
+                    <TabsContent value="access" className="pt-6">
+                        <div className="text-center mb-4">
+                            <h3 className="text-lg font-semibold">Already have access?</h3>
+                            <p className="text-sm text-muted-foreground">Enter your early-access code below to launch the tool.</p>
+                        </div>
+                        <AccessForm />
+                    </TabsContent>
+                </Tabs>
+            </CardContent>
+        </Card>
     );
 }
