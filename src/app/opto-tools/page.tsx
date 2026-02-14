@@ -36,8 +36,8 @@ export default function OptoToolsPage() {
     },
     {
       id: 'optoscholor',
-      title: 'OptoScholar',
-      description: 'Search over 1 million indexed optometry articles, journals, and case studies.',
+      title: 'OptoScholar Research Engine',
+      description: 'Specialized clinical search for optometry. 1M+ indexed articles.',
       href: '/opto-tools/optoscholor',
       icon: <Library className="h-8 w-8 text-primary" />,
     },
