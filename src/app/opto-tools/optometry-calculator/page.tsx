@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { OptoToolsClient } from '../opto-tools-client';
+import OptoToolsClient from '../opto-tools-client';
 
 export const metadata: Metadata = {
   title: 'Optometry Calculator Suite | Focus Links',
