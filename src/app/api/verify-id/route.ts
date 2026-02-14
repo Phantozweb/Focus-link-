@@ -1,34 +1,51 @@
 
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export async function GET(request: Request) {
+// The URL for the Google Apps Script that handles ID verification
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwI2FYx1p9hP0c3vhsxG1k35vj2_G0fmc9Iu-Nlcs2-H2s4DDLpDC0T2LcsdJws4Ko/exec';
+
+/**
+ * Handles GET requests to verify a membership ID.
+ * It forwards the ID to a Google Apps Script which checks for its validity in a Google Sheet.
+ * @param {NextRequest} request - The incoming request, expected to have an 'id' query parameter.
+ * @returns {NextResponse} - A JSON response indicating whether the ID is valid.
+ */
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
 
   if (!id) {
-    return NextResponse.json({ error: 'Membership ID is required' }, { status: 400 });
+    return NextResponse.json({ isValid: false, message: 'Membership ID is required.' }, { status: 400 });
   }
 
-  // IMPORTANT: This is your actual Google Apps Script URL for verification
-  const scriptUrl = 'https://script.google.com/macros/s/AKfycbw1_uyCNh2H4zS7lx4GJBnhxczD3qR8wVebQr7qS_ljo-FkROmgWpICAcs51O27Zv9D/exec';
-  
+  // Construct the URL for the Google Apps Script, including the ID as a query parameter.
+  const verificationUrl = `${SCRIPT_URL}?id=${encodeURIComponent(id)}`;
+
   try {
-    const validationResponse = await fetch(`${scriptUrl}?id=${encodeURIComponent(id)}`, {
-        method: 'GET',
-        redirect: 'follow',
+    // Make a request to the Google Apps Script.
+    const response = await fetch(verificationUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    if (!validationResponse.ok) {
-      throw new Error(`Google Script execution failed with status: ${validationResponse.statusText}`);
+    if (!response.ok) {
+      // If the script itself returns an error, forward that.
+      const errorText = await response.text();
+      console.error(`Google Apps Script error: ${errorText}`);
+      return NextResponse.json({ isValid: false, message: `Verification service failed with status: ${response.status}` }, { status: 502 }); // Bad Gateway
     }
 
-    const result = await validationResponse.json();
-    
-    return NextResponse.json({ isValid: result.isValid });
+    // The Apps Script is expected to return a JSON object, e.g., { isValid: true } or { isValid: false, message: "..." }
+    const result = await response.json();
+
+    // Return the result from the Apps Script to the client.
+    return NextResponse.json(result);
 
   } catch (error) {
-    console.error('API Route Error during ID verification:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unknown server error occurred.';
-    return NextResponse.json({ isValid: false, error: errorMessage }, { status: 500 });
+    console.error('Error contacting verification service:', error);
+    return NextResponse.json({ isValid: false, message: 'An internal server error occurred.' }, { status: 500 });
   }
 }
