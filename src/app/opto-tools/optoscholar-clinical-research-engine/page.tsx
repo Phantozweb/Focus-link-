@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Play, ArrowLeft, Search, CheckCircle, BookOpen, UserCheck, Microscope, FlaskConical, Globe, Link2 } from 'lucide-react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { WaitlistForm } from '@/components/opto-tools/WaitlistForm';
+import { OptoScholarAccess } from '@/components/opto-tools/OptoScholarAccess';
 
 export const metadata: Metadata = {
   title: 'OptoScholar – Optometry & Ophthalmology Research Engine',
@@ -25,7 +25,7 @@ export default function OptoScholarPage() {
 
         <main className="container mx-auto max-w-5xl px-4 md:px-6 lg:px-8 py-16 space-y-12">
           
-          <WaitlistForm />
+          <OptoScholarAccess />
 
           <Card>
             <CardHeader>
